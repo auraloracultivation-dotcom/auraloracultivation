@@ -1,0 +1,64 @@
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; height: 100%; overflow: hidden; background: #0f1a14;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #f3ead6;
+  -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent;
+}
+#game { display: block; touch-action: none; image-rendering: pixelated; }
+#ui { position: fixed; inset: 0; pointer-events: none; }
+#ui > * { pointer-events: auto; }
+
+.panel {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: min(340px, calc(100% - 32px)); padding: 24px 20px;
+  background: rgba(20, 30, 24, 0.94); border: 1px solid #c9a24a; border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,.5);
+}
+.panel h1 { margin: 0 0 4px; font-size: 22px; color: #e8c66a; text-align: center; letter-spacing: 1px; }
+.panel p { margin: 0 0 16px; font-size: 13px; color: #b9b19d; text-align: center; }
+.panel input {
+  width: 100%; margin-bottom: 10px; padding: 12px; font-size: 16px;
+  background: #0d1510; color: #f3ead6; border: 1px solid #47604f; border-radius: 8px;
+  -webkit-user-select: text; user-select: text;
+}
+.row { display: flex; gap: 8px; }
+.btn {
+  flex: 1; padding: 12px; font-size: 15px; font-weight: 600; border-radius: 8px; border: 0;
+  background: #c9a24a; color: #1b1408; cursor: pointer;
+}
+.btn.ghost { background: transparent; color: #e8c66a; border: 1px solid #c9a24a; }
+.btn:disabled { opacity: .5; }
+.msg { min-height: 18px; margin-top: 10px; font-size: 13px; text-align: center; color: #f0a07a; }
+.msg.ok { color: #9fd59a; }
+
+.hud {
+  position: absolute; top: max(10px, env(safe-area-inset-top)); left: 10px; right: 10px;
+  display: flex; justify-content: space-between; align-items: flex-start; pointer-events: none;
+}
+.hud .tag {
+  padding: 6px 10px; font-size: 13px; border-radius: 8px; background: rgba(0,0,0,.5); pointer-events: auto;
+}
+.hud .tag b { color: #e8c66a; }
+.hud .small { font-size: 11px; color: #b9b19d; }
+.hud button {
+  padding: 6px 10px; font-size: 12px; border-radius: 8px; border: 1px solid #c9a24a;
+  background: rgba(0,0,0,.5); color: #e8c66a; pointer-events: auto;
+}
+
+.chatbar {
+  position: absolute; right: 12px; bottom: max(16px, env(safe-area-inset-bottom));
+  display: flex; gap: 6px; align-items: center;
+}
+.chatbar .open {
+  width: 52px; height: 52px; border-radius: 50%; border: 1px solid #c9a24a;
+  background: rgba(0,0,0,.55); color: #e8c66a; font-size: 22px;
+}
+.chatbar input {
+  width: min(240px, 60vw); padding: 10px; font-size: 16px; border-radius: 8px;
+  border: 1px solid #c9a24a; background: rgba(0,0,0,.75); color: #fff;
+  -webkit-user-select: text; user-select: text;
+}
+.toast {
+  position: absolute; left: 50%; bottom: 90px; transform: translateX(-50%);
+  padding: 8px 14px; border-radius: 8px; background: rgba(0,0,0,.7); font-size: 13px;
+}

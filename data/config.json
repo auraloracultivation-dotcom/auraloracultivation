@@ -2,17 +2,23 @@
   "version": 1,
   "player": {
     "max_speed_px_per_s": 200,
-    "_note_max_speed": "Đồng bộ với hằng c_max_speed trong hàm SQL public.save_position"
+    "walk_speed_px_per_s": 170,
+    "radius_px": 6,
+    "_note_max_speed": "max_speed đồng bộ với c_max_speed trong hàm SQL public.save_position; walk_speed phải nhỏ hơn"
   },
   "tile_size": 16,
   "start_zone": "zone.start",
+  "zone": {
+    "max_players": 20,
+    "max_lines": 50,
+    "_note": "Đầy thì sang tuyến tiếp theo"
+  },
   "net": {
     "position_broadcast_hz": 4,
     "broadcast_only_when_moving": true,
-    "position_save_interval_s": 5
-  },
-  "zone": {
-    "max_players": 20,
-    "_note": "Đầy thì mở tuyến mới; đồng bộ với logic phân tuyến máy chủ"
+    "position_save_interval_s": 2,
+    "_note_save": "Lưu khi bắt đầu đi, mỗi 2 giây, và khi dừng — khớp c_max_elapsed = 3 giây ở máy chủ",
+    "chat_max_chars": 60,
+    "chat_bubble_s": 5
   }
 }
