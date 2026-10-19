@@ -1,5 +1,17 @@
 # 04 — Quy chuẩn asset
 
+## Phân vai (quyết định 2026-10-20)
+- **Thiết kế và nội dung hình ảnh: chủ dự án.** Claude không tự vẽ đồ hoạ; chỉ tách nền, cắt, nén, ghép vào game và làm hiệu ứng nhẹ (phát sáng, mờ dần, ánh chạy).
+- Game chơi **màn hình ngang**. Điện thoại dọc sẽ hiện lời nhắc xoay ngang.
+- Giao diện: **khung tím–vàng** (tấm 1–4) kết hợp **icon đen–vàng** (tấm 5).
+
+## Quy trình đưa tấm UI vào game
+1. Ảnh gốc (nền hồng #FA03FB hoặc nền đen) lưu vào `assets/ui/_source/` — không sửa, để cắt lại khi cần.
+2. Chạy `python3 -I tools/ui_slice.py <ảnh> assets/ui/pieces/<tên-tấm> --bg magenta|black`
+   → mỗi mảnh liền một file PNG trong suốt, đánh số theo hàng, nén bảng màu 128 màu, kèm `manifest.json` (toạ độ gốc).
+3. Mảnh nào dùng trong game thì **chép sang tên có nghĩa**: `assets/ui/frames/`, `assets/ui/icons/`. Code chỉ dùng tên có nghĩa, không dùng số.
+4. Ảnh nền màn hình (vẽ sẵn ô nhập, nút) lưu `.webp` trong `assets/ui/bg/`. Code đặt ô nhập/nút thật đè đúng toạ độ đã vẽ (`src/ui/stage.js`).
+
 ## Phong cách
 - Pixel art chibi tu tiên, góc nhìn **3/4 (chéo)** cho nhân vật, trang phục, thú cưỡi, pet.
 - Nhân vật trần cơ sở: **24×32 px**, tông kem trắng đơn giản. Trang bị là **lớp rời** chồng lên đúng khung đó.

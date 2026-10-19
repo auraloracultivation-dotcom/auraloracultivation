@@ -1,64 +1,163 @@
+/* Giao diện dùng ảnh trong assets/ui (thiết kế của chủ dự án). CSS chỉ lo vị trí và hiệu ứng nhẹ. */
 * { box-sizing: border-box; }
+:root {
+  --gold: #f2c77f;
+  --gold-dark: #b8894a;
+  --navy: #10192d;
+  --text: #f3ead6;
+  --muted: #b9b19d;
+}
 html, body {
-  margin: 0; height: 100%; overflow: hidden; background: #0f1a14;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: #f3ead6;
+  margin: 0; height: 100%; overflow: hidden; background: #070b16;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--text);
   -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent;
 }
 #game { display: block; touch-action: none; image-rendering: pixelated; }
 #ui { position: fixed; inset: 0; pointer-events: none; }
 #ui > * { pointer-events: auto; }
+img { image-rendering: pixelated; }
 
-.panel {
-  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  width: min(340px, calc(100% - 32px)); padding: 24px 20px;
-  background: rgba(20, 30, 24, 0.94); border: 1px solid #c9a24a; border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0,0,0,.5);
+/* ---------- Sân khấu ảnh nền ---------- */
+.stage-wrap {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  overflow: hidden; background: #070b16; animation: fade-in .35s ease-out;
 }
-.panel h1 { margin: 0 0 4px; font-size: 22px; color: #e8c66a; text-align: center; letter-spacing: 1px; }
-.panel p { margin: 0 0 16px; font-size: 13px; color: #b9b19d; text-align: center; }
-.panel input {
-  width: 100%; margin-bottom: 10px; padding: 12px; font-size: 16px;
-  background: #0d1510; color: #f3ead6; border: 1px solid #47604f; border-radius: 8px;
+.stage-wrap::before { /* phần thừa hai bên: chính ảnh nền, làm mờ */
+  content: ""; position: absolute; inset: -40px;
+  background: var(--bg) center / cover no-repeat; filter: blur(14px) brightness(.55);
+}
+.stage {
+  position: relative; container-type: size;
+  width: min(100vw, calc(100dvh * var(--ar))); max-height: 100dvh;
+  background: var(--bg) center / 100% 100% no-repeat; image-rendering: pixelated;
+}
+.stage-wrap.dim .stage { filter: brightness(.45) blur(1px); }
+.fade-out { animation: fade-out .25s ease-in forwards; }
+@keyframes fade-in { from { opacity: 0 } }
+@keyframes fade-out { to { opacity: 0 } }
+
+/* ---------- Màn hình tải ---------- */
+.load-bar { background: var(--navy); border-radius: 999px; overflow: hidden; }
+.load-fill {
+  height: 100%; width: 0; border-radius: 999px; transition: width .35s ease-out;
+  background: linear-gradient(#f7d7a8, #f2b782 55%, #c98a55);
+  position: relative; overflow: hidden;
+}
+.load-fill::after { /* ánh sáng chạy qua */
+  content: ""; position: absolute; inset: 0; width: 30%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
+  animation: shimmer 1.4s linear infinite;
+}
+@keyframes shimmer { from { transform: translateX(-120%) } to { transform: translateX(380%) } }
+.load-pct {
+  position: absolute; right: 3%; top: 50%; transform: translateY(-50%);
+  font-weight: 700; font-size: 3.4cqh; color: var(--text); text-shadow: 0 1px 2px #000;
+}
+.load-text {
+  font-size: 3.4cqh; text-align: center; color: var(--text);
+  text-shadow: 0 1px 3px #000, 0 0 8px rgba(0,0,0,.8);
+}
+
+/* ---------- Đăng nhập ---------- */
+.login-form { position: absolute; inset: 0; }
+.field {
+  background: var(--navy); color: var(--text); border: 0; outline: none;
+  font-size: 4.2cqh; padding: 0 2%; border-radius: 4px;
   -webkit-user-select: text; user-select: text;
 }
-.row { display: flex; gap: 8px; }
-.btn {
-  flex: 1; padding: 12px; font-size: 15px; font-weight: 600; border-radius: 8px; border: 0;
-  background: #c9a24a; color: #1b1408; cursor: pointer;
+.field::placeholder { color: #8b8fa6; }
+.field:focus { box-shadow: 0 0 0 1px var(--gold), 0 0 10px rgba(242,199,127,.45); }
+.hot { background: transparent; border: 0; padding: 0; cursor: pointer; border-radius: 6px; }
+.hot:disabled { opacity: .6; }
+.glow { transition: filter .15s, transform .1s; }
+.glow:hover { filter: brightness(1.15) drop-shadow(0 0 6px rgba(242,199,127,.6)); }
+.hot.glow:hover { background: rgba(242,199,127,.08); box-shadow: 0 0 12px rgba(242,199,127,.35); }
+.glow:active { transform: scale(.97); filter: brightness(.9); }
+.check.off::before { /* che dấu tích vẽ sẵn khi tắt Ghi nhớ */
+  content: ""; position: absolute; left: 2.5%; top: 15%; width: 12.3%; height: 72%;
+  background: var(--navy); border: 1px solid var(--gold-dark); border-radius: 2px;
 }
-.btn.ghost { background: transparent; color: #e8c66a; border: 1px solid #c9a24a; }
-.btn:disabled { opacity: .5; }
-.msg { min-height: 18px; margin-top: 10px; font-size: 13px; text-align: center; color: #f0a07a; }
-.msg.ok { color: #9fd59a; }
+.login-msg {
+  font-size: 3.4cqh; text-align: center; color: #ffb38a;
+  text-shadow: 0 1px 3px #000, 0 0 6px #000;
+}
+.login-msg.ok { color: #b7e6a8; }
 
+/* ---------- Bảng khung mây (tạo nhân vật, xác nhận…) ---------- */
+.frame-panel {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: min(460px, 72vw, calc(80dvh * 323 / 194)); aspect-ratio: 323 / 194;
+  background: url("../../assets/ui/frames/bang-may.png") center / 100% 100% no-repeat;
+  image-rendering: pixelated;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 17% 12% 11%; gap: 5%; container-type: inline-size; animation: pop-in .25s ease-out;
+}
+@keyframes pop-in { from { transform: translate(-50%, -50%) scale(.92); opacity: 0 } }
+.frame-panel h2 { margin: 0; font-size: 7cqw; color: var(--gold); text-shadow: 0 2px 0 #000; letter-spacing: .05em; }
+.frame-panel p { margin: 0; font-size: 4.6cqw; text-align: center; color: var(--text); }
+.frame-panel form { display: flex; flex-direction: column; align-items: center; gap: 6cqw; width: 100%; }
+.field.framed { width: 100%; height: 11cqw; font-size: 5cqw; border: 1px solid var(--gold-dark); border-radius: 6px; padding: 0 4%; }
+.panel-msg { min-height: 1.2em; font-size: 4cqw; color: #ffb38a; text-align: center; }
+.btn-row { display: flex; gap: 5cqw; }
+.btn-gold, .btn-dark {
+  width: 36cqw; aspect-ratio: 157 / 48; border: 0; cursor: pointer;
+  background: url("../../assets/ui/frames/nut-vang.png") center / 100% 100% no-repeat;
+  color: #2a1a08; font-weight: 800; font-size: 5cqw; image-rendering: pixelated;
+  transition: filter .15s, transform .1s;
+}
+.btn-dark { background-image: url("../../assets/ui/frames/nut-toi.png"); color: var(--gold); }
+.btn-gold:hover, .btn-dark:hover { filter: brightness(1.12) drop-shadow(0 0 6px rgba(242,199,127,.55)); }
+.btn-gold:active, .btn-dark:active { transform: scale(.96); }
+.btn-gold:disabled { opacity: .6; }
+
+/* ---------- Trong game ---------- */
 .hud {
-  position: absolute; top: max(10px, env(safe-area-inset-top)); left: 10px; right: 10px;
+  position: absolute; top: max(8px, env(safe-area-inset-top)); left: max(8px, env(safe-area-inset-left));
+  right: max(8px, env(safe-area-inset-right));
   display: flex; justify-content: space-between; align-items: flex-start; pointer-events: none;
 }
-.hud .tag {
-  padding: 6px 10px; font-size: 13px; border-radius: 8px; background: rgba(0,0,0,.5); pointer-events: auto;
+.zone-tag {
+  pointer-events: auto; width: 270px; aspect-ratio: 308 / 62; padding: 0 64px 0 30px;
+  display: flex; align-items: center; gap: 6px; white-space: nowrap;
+  background: url("../../assets/ui/frames/bang-ten-khu.png") center / 100% 100% no-repeat;
+  image-rendering: pixelated; font-size: 12px; text-shadow: 0 1px 2px #000;
 }
-.hud .tag b { color: #e8c66a; }
-.hud .small { font-size: 11px; color: #b9b19d; }
-.hud button {
-  padding: 6px 10px; font-size: 12px; border-radius: 8px; border: 1px solid #c9a24a;
-  background: rgba(0,0,0,.5); color: #e8c66a; pointer-events: auto;
-}
+.zone-tag b { color: var(--gold); }
+.zone-tag span { color: var(--muted); }
+.icon-btn { pointer-events: auto; width: 52px; height: 40px; padding: 0; border: 0; background: none; cursor: pointer; }
+.icon-btn img { width: 100%; height: 100%; display: block; }
 
 .chatbar {
-  position: absolute; right: 12px; bottom: max(16px, env(safe-area-inset-bottom));
-  display: flex; gap: 6px; align-items: center;
+  position: absolute; right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom));
+  display: flex; gap: 8px; align-items: center;
 }
-.chatbar .open {
-  width: 52px; height: 52px; border-radius: 50%; border: 1px solid #c9a24a;
-  background: rgba(0,0,0,.55); color: #e8c66a; font-size: 22px;
+.chatbar .field.framed { width: min(260px, 45vw); height: 40px; font-size: 16px; }
+.round-btn {
+  width: 62px; height: 62px; border: 0; cursor: pointer;
+  background: url("../../assets/ui/frames/nut-tron-may.png") center / 100% 100% no-repeat;
+  color: var(--gold); font-weight: 800; font-size: 13px; text-shadow: 0 1px 2px #000;
+  image-rendering: pixelated;
 }
-.chatbar input {
-  width: min(240px, 60vw); padding: 10px; font-size: 16px; border-radius: 8px;
-  border: 1px solid #c9a24a; background: rgba(0,0,0,.75); color: #fff;
-  -webkit-user-select: text; user-select: text;
-}
+
 .toast {
-  position: absolute; left: 50%; bottom: 90px; transform: translateX(-50%);
-  padding: 8px 14px; border-radius: 8px; background: rgba(0,0,0,.7); font-size: 13px;
+  position: fixed; left: 50%; top: 18%; transform: translateX(-50%);
+  padding: 8px 16px; border-radius: 8px; font-size: 13px; pointer-events: none;
+  background: rgba(16,25,45,.9); border: 1px solid var(--gold-dark); animation: fade-in .2s;
 }
+
+/* ---------- Nhắc xoay ngang ---------- */
+.rotate-hint { display: none; }
+@media (orientation: portrait) and (max-width: 900px) {
+  .rotate-hint {
+    display: flex; position: fixed; inset: 0; z-index: 100; pointer-events: auto;
+    flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+    background: linear-gradient(rgba(7,11,22,.35), rgba(7,11,22,.9) 55%),
+      #070b16 url("../../assets/ui/bg/tim-dang-tai.webp") 30% 0 / auto 60% no-repeat;
+    text-align: center; font-size: 19px; font-weight: 700; padding: 0 24px;
+    color: var(--gold); text-shadow: 0 2px 4px #000;
+  }
+  .rotate-hint::before { content: "⟲"; font-size: 56px; animation: tilt 1.6s ease-in-out infinite; }
+}
+@keyframes tilt { 50% { transform: rotate(-90deg) } }
+
+.bar-cover { background: var(--navy); border-radius: 999px; }

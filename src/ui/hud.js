@@ -1,24 +1,24 @@
-// Thanh thông tin trên cùng và nút chat.
+// Thanh thông tin khu, nút cài đặt và nút chat trong game.
 import { escapeHtml } from './screens.js';
 
-export function createHud({ zoneName, line, onChat, onLogout, maxChars }) {
+export function createHud({ zoneName, line, onChat, onSettings, maxChars }) {
   const root = document.getElementById('ui');
   const hud = document.createElement('div');
   hud.className = 'hud';
   hud.innerHTML = `
-    <div class="tag"><b>${escapeHtml(zoneName)}</b> · Tuyến ${line}<br><span class="small" data-online></span></div>
-    <button type="button" data-logout>Thoát</button>`;
+    <div class="zone-tag"><b>${escapeHtml(zoneName)}</b> · T${line} <span data-online></span></div>
+    <button type="button" class="icon-btn glow" data-settings aria-label="Cài đặt"><img src="assets/ui/icons/cai-dat.png" alt=""></button>`;
   root.appendChild(hud);
   const online = hud.querySelector('[data-online]');
-  hud.querySelector('[data-logout]').addEventListener('click', onLogout);
+  hud.querySelector('[data-settings]').addEventListener('click', onSettings);
 
   const bar = document.createElement('div');
   bar.className = 'chatbar';
-  bar.innerHTML = `<input type="text" maxlength="${maxChars}" placeholder="Nói gì đó…" hidden>
-    <button class="open" type="button" aria-label="Chat">💬</button>`;
+  bar.innerHTML = `<input class="field framed" type="text" maxlength="${maxChars}" placeholder="Nói gì đó…" hidden>
+    <button class="round-btn glow" type="button" aria-label="Chat">Chat</button>`;
   root.appendChild(bar);
   const input = bar.querySelector('input');
-  const open = bar.querySelector('.open');
+  const open = bar.querySelector('button');
 
   const send = () => {
     const text = input.value.trim().slice(0, maxChars);
@@ -41,6 +41,6 @@ export function createHud({ zoneName, line, onChat, onLogout, maxChars }) {
   });
 
   return {
-    setOnline(count, max) { online.textContent = `${count}/${max} đạo hữu trong tuyến`; },
+    setOnline(count, max) { online.textContent = `· ${count}/${max}`; },
   };
 }
