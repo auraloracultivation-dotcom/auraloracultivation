@@ -1,4 +1,4 @@
-import { supabase } from './client.js';
+import { supabase, openedFromRecovery } from './client.js';
 
 export async function getSession() {
   const { data } = await supabase.auth.getSession();
@@ -24,6 +24,24 @@ export async function signUp(email, password) {
 
 export async function signOut() {
   await supabase.auth.signOut();
+}
+
+export async function requestPasswordReset(email) {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: location.origin + location.pathname,
+  });
+  if (error) throw translate(error);
+}
+
+export async function updatePassword(password) {
+  if (!password || password.length < 6) throw new Error('Mật khẩu cần ít nhất 6 ký tự.');
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) throw translate(error);
+}
+
+// Người dùng mở link "đặt lại mật khẩu" trong email
+export function isPasswordRecovery() {
+  return openedFromRecovery;
 }
 
 function translate(error) {

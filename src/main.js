@@ -1,19 +1,45 @@
 // Điểm khởi động: nối các module lại với nhau. Không chứa luật gameplay chi tiết.
 import { loadJSON, startLoop, createScreen, createCamera, followCamera, createInput, drawStick } from './core/index.js';
-import * as net from './net/index.js';
 import { createMap, drawObstacle } from './map/index.js';
 import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel } from './entity/index.js';
-import { showLogin, showCreateCharacter, showFatal, toast, createHud } from './ui/index.js';
+import {
+  showLoading, showLogin, shouldForgetSession, showCreateCharacter, showNewPassword,
+  showConfirm, showFatal, toast, createHud,
+} from './ui/index.js';
 
 async function boot() {
+  let loading = showLoading('Đang mở cổng Tu Chân giới…');
+  loading.set(10);
+  // Nạp mạng sau khi màn hình tải đã hiện, để mạng chậm không thấy màn đen
+  const net = await import('./net/index.js');
   const config = await loadJSON('data/config.json');
   const screen = createScreen(document.getElementById('game'));
+  loading.set(30, 'Kiểm tra đạo tịch…');
 
   let session = await net.getSession();
-  if (!session) session = await showLogin({ onSignIn: net.signIn, onSignUp: net.signUp });
+  if (session && shouldForgetSession()) { await net.signOut(); session = null; }
+  if (session && net.isPasswordRecovery()) {
+    loading.hide();
+    await showNewPassword({ onSave: net.updatePassword });
+    toast('Đã đổi mật khẩu');
+    loading = showLoading('Đang vào game…');
+  }
+  if (!session) {
+    loading.hide();
+    session = await showLogin({
+      onSignIn: net.signIn, onSignUp: net.signUp, onResetPassword: net.requestPasswordReset,
+    });
+    loading = showLoading('Đang vào game…');
+  }
+  loading.set(50, 'Tìm nhân vật…');
 
   let character = await net.getMyCharacter(session.user.id);
-  if (!character) character = await showCreateCharacter({ onCreate: net.createCharacter });
+  if (!character) {
+    loading.hide();
+    character = await showCreateCharacter({ onCreate: net.createCharacter });
+    loading = showLoading('Nhập thế…');
+  }
+  loading.set(65, 'Dựng bản đồ…');
 
   const zoneDef = await loadJSON(`data/zones/${character.zone_id}.json`);
   const map = createMap(zoneDef);
@@ -23,6 +49,7 @@ async function boot() {
   const input = createInput(screen.canvas);
   const maxPlayers = config.zone.max_players;
   let hud = null;
+  loading.set(80, 'Kết nối đạo hữu trong khu…');
 
   const zone = await net.joinZone({
     zoneId: zoneDef.id,
@@ -48,7 +75,8 @@ async function boot() {
       me.chatUntil = performance.now() + config.net.chat_bubble_s * 1000;
       zone.sendChat(text);
     },
-    async onLogout() {
+    async onSettings() {
+      if (!(await showConfirm('Rời Tu Chân giới', 'Thoát game và đăng xuất?'))) return;
       await saver.flush();
       await zone.leave();
       await net.signOut();
@@ -56,9 +84,11 @@ async function boot() {
     },
   });
   hud.setOnline(others.list.size + 1, maxPlayers);
+  loading.set(100, 'Hoàn tất');
+  setTimeout(() => loading.hide(), 300);
   toast(`Chào mừng ${me.name} đến ${zoneDef.name}`);
 
-  const saver = createSaver(me, config.net.position_save_interval_s);
+  const saver = createSaver(me, config.net.position_save_interval_s, net.savePosition);
   const speed = config.player.walk_speed_px_per_s;
   const radius = config.player.radius_px;
   const sendEvery = 1 / config.net.position_broadcast_hz;
@@ -114,7 +144,7 @@ async function boot() {
 
 // Lưu vị trí lên máy chủ: khi bắt đầu đi, định kỳ khi đang đi, và khi dừng.
 // Nếu máy chủ từ chối (đi quá nhanh) thì kéo nhân vật về vị trí máy chủ giữ.
-function createSaver(me, intervalS) {
+function createSaver(me, intervalS, savePosition) {
   let timer = 0;
   let inFlight = null;
   let pending = false;
@@ -122,7 +152,7 @@ function createSaver(me, intervalS) {
   async function save() {
     if (inFlight) { pending = true; return inFlight; }
     const sentX = me.x, sentY = me.y;
-    inFlight = net.savePosition(sentX, sentY)
+    inFlight = savePosition(sentX, sentY)
       .then((row) => {
         if (row && Math.hypot(row.x - sentX, row.y - sentY) > 2) {
           me.x = row.x; me.y = row.y;
