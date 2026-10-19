@@ -9,7 +9,14 @@
 ## Luật
 1. Không ai đẩy thẳng vào `main`. Mỗi việc một nhánh `feat/...`, `fix/...`, `asset/...`.
 2. Một Pull Request = một việc nhỏ, có mô tả: làm gì, kiểm tra thế nào, ảnh chụp nếu có hình.
-3. Pull Request chỉ được gộp khi kiểm tra tự động xanh và chủ dự án đồng ý.
+3. **Claude được tự duyệt và tự gộp** Pull Request (quyết định của chủ dự án, 2026-10-20) khi:
+   - kiểm tra tự động (GitHub Actions) xanh;
+   - Claude đã tự rà lại thay đổi và ghi trong mô tả: làm gì, kiểm tra thế nào.
+   **Phải hỏi chủ dự án trước khi gộp** nếu thay đổi:
+   - đụng tới cơ sở dữ liệu thật (migration mới, xoá/sửa dữ liệu người chơi, RLS, quyền);
+   - xoá tính năng hoặc nội dung đã có;
+   - đổi kiến trúc, quy tắc ID, hoặc phạm vi mốc.
+   Mỗi mốc vẫn kết thúc bằng việc chủ dự án thử thật trên điện thoại.
 4. Đổi kiến trúc, đổi schema, đổi quy tắc ID → phải sửa docs trong cùng Pull Request.
 5. Mỗi mốc kết thúc bằng bằng chứng kiểm thử (video/ảnh hai máy), không chỉ lời "đã xong".
 
