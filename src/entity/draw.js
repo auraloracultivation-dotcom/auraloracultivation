@@ -1,0 +1,60 @@
+// Nhân vật chibi tạm vẽ bằng code (khung 24×32, neo ở chân). Sẽ thay bằng sprite theo docs/04-ASSET.md.
+export function drawPlayer(ctx, p) {
+  const x = Math.round(p.x);
+  const bob = p.walkT ? Math.round(Math.sin(p.walkT * 14)) : 0;
+  const y = Math.round(p.y) + bob;
+  const robe = p.isLocal ? '#d9b24a' : '#4f7fc4';
+  const robeDark = p.isLocal ? '#a8862f' : '#355b94';
+
+  ctx.fillStyle = 'rgba(0,0,0,0.3)';
+  ctx.beginPath(); ctx.ellipse(x, Math.round(p.y) + 1, 7, 3, 0, 0, Math.PI * 2); ctx.fill();
+
+  // chân
+  const step = p.walkT ? Math.round(Math.sin(p.walkT * 14) * 2) : 0;
+  ctx.fillStyle = '#3a2a1e';
+  ctx.fillRect(x - 4, y - 4 + step, 3, 4);
+  ctx.fillRect(x + 1, y - 4 - step, 3, 4);
+  // áo bào
+  ctx.fillStyle = robe;
+  ctx.fillRect(x - 6, y - 15, 12, 12);
+  ctx.fillStyle = robeDark;
+  ctx.fillRect(x - 6, y - 6, 12, 2);
+  ctx.fillRect(x - 1, y - 15, 2, 9);
+  // đầu
+  ctx.fillStyle = '#f2dfc4';
+  ctx.fillRect(x - 6, y - 27, 12, 12);
+  // tóc + búi tóc
+  ctx.fillStyle = '#2b2320';
+  ctx.fillRect(x - 6, y - 28, 12, 4);
+  ctx.fillRect(x - 2, y - 31, 4, 3);
+  ctx.fillRect(p.facing > 0 ? x - 6 : x + 4, y - 25, 2, 5);
+  // mắt
+  ctx.fillStyle = '#1b1b1b';
+  const ex = p.facing > 0 ? 1 : -3;
+  ctx.fillRect(x + ex, y - 21, 1, 2);
+  ctx.fillRect(x + ex + 3, y - 21, 1, 2);
+}
+
+export function drawLabel(ctx, p, now) {
+  const x = Math.round(p.x);
+  const y = Math.round(p.y);
+  ctx.font = '6px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'bottom';
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = 'rgba(0,0,0,0.75)';
+  ctx.fillStyle = p.isLocal ? '#ffe9a8' : '#ffffff';
+  ctx.strokeText(p.name, x, y - 33);
+  ctx.fillText(p.name, x, y - 33);
+
+  if (p.chat && now < p.chatUntil) {
+    const w = Math.min(90, ctx.measureText(p.chat).width + 8);
+    const bx = x - w / 2, by = y - 52;
+    ctx.fillStyle = 'rgba(255,255,255,0.95)';
+    ctx.fillRect(bx, by, w, 11);
+    ctx.fillRect(x - 1, by + 11, 2, 2);
+    ctx.fillStyle = '#222';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(p.chat, x, by + 6, w - 4);
+  }
+}
