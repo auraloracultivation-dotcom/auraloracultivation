@@ -30,9 +30,9 @@ export function showLogin({ onSignIn, onSignUp, onResetPassword }) {
     const s = createStage(BG_LOGIN.src, BG_LOGIN.w, BG_LOGIN.h).mount();
     const form = el(`<form class="login-form" autocomplete="on"></form>`);
     s.stage.appendChild(form);
-    const email = s.place(el(`<input class="field" name="email" type="email" placeholder="Email" autocomplete="email">`), 292, 165, 216, 26);
+    const account = s.place(el(`<input class="field" name="account" type="text" placeholder="Tài khoản" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="40">`), 292, 165, 216, 26);
     const pass = s.place(el(`<input class="field" name="password" type="password" placeholder="Mật khẩu" autocomplete="current-password">`), 292, 206, 216, 27);
-    form.append(email, pass);
+    form.append(account, pass);
     const remember = s.place(el(`<button type="button" class="hot check" aria-label="Ghi nhớ đăng nhập"></button>`), 304, 250, 122, 20);
     const btnIn = s.place(el(`<button type="submit" class="hot glow" aria-label="Đăng nhập"></button>`), 252, 287, 265, 46);
     const btnUp = s.place(el(`<button type="button" class="hot glow" aria-label="Đăng ký"></button>`), 185, 346, 118, 32);
@@ -50,8 +50,8 @@ export function showLogin({ onSignIn, onSignUp, onResetPassword }) {
     const all = [btnIn, btnUp, btnReset, btnServer];
 
     async function run(fn) {
-      const e = email.value.trim(), p = pass.value;
-      if (!e || p.length < 6) { say('Nhập email và mật khẩu từ 6 ký tự.'); return; }
+      const e = account.value.trim(), p = pass.value;
+      if (!e || p.length < 6) { say('Nhập tài khoản và mật khẩu từ 6 ký tự.'); return; }
       all.forEach((b) => (b.disabled = true));
       say('Đang kết nối…', true);
       try {
@@ -70,8 +70,8 @@ export function showLogin({ onSignIn, onSignUp, onResetPassword }) {
     form.addEventListener('submit', (ev) => { ev.preventDefault(); run(onSignIn); });
     btnUp.addEventListener('click', () => run(onSignUp));
     btnReset.addEventListener('click', async () => {
-      const e = email.value.trim();
-      if (!e) { say('Nhập email trước rồi bấm Quên mật khẩu.'); return; }
+      const e = account.value.trim();
+      if (!e) { say('Nhập tài khoản trước rồi bấm Quên mật khẩu.'); return; }
       try { await onResetPassword(e); say('Đã gửi thư đặt lại mật khẩu.', true); } catch (err) { say(err.message); }
     });
     btnServer.addEventListener('click', () => say('Máy chủ: Thanh Vân (hiện chỉ có một máy chủ).', true));
