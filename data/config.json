@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "player": {
+    "max_speed_px_per_s": 200,
+    "_note_max_speed": "Đồng bộ với hằng c_max_speed trong hàm SQL public.save_position"
+  },
+  "tile_size": 16,
+  "start_zone": "zone.start",
+  "net": {
+    "position_broadcast_hz": 10,
+    "position_save_interval_s": 5
+  }
+}
