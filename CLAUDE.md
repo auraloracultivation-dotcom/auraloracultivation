@@ -9,3 +9,4 @@ Trước mọi thay đổi, đọc toàn bộ `docs/01` → `docs/05`. Các lu�
 - Schema chỉ đổi bằng migration mới trong `supabase/migrations/`.
 - Không đưa secret/service_role key vào repo.
 - Làm trên nhánh riêng, mở Pull Request, không đẩy thẳng `main`.
+- Được tự gộp Pull Request khi kiểm tra xanh, TRỪ thay đổi cơ sở dữ liệu thật, xoá nội dung, đổi kiến trúc — những việc đó phải hỏi chủ dự án (xem docs/05).
