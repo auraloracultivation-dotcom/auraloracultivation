@@ -2,7 +2,7 @@
 
 ## Phân vai (quyết định 2026-10-20)
 - **Thiết kế và nội dung hình ảnh: chủ dự án.** Claude không tự vẽ đồ hoạ; chỉ tách nền, cắt, nén, ghép vào game và làm hiệu ứng nhẹ (phát sáng, mờ dần, ánh chạy).
-- Game chơi **màn hình ngang**. Điện thoại dọc sẽ hiện lời nhắc xoay ngang.
+- Thiết kế chính cho **màn hình ngang**. Cầm dọc vẫn chơi được, không chặn: ảnh nền thu nhỏ vừa khung (tạm thời, đến khi có bố cục dọc riêng).
 - Giao diện: **khung tím–vàng** (tấm 1–4) kết hợp **icon đen–vàng** (tấm 5).
 
 ## Quy trình đưa tấm UI vào game

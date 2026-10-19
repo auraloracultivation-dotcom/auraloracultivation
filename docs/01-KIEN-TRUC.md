@@ -15,6 +15,14 @@
 | Sát thương, hồi chiêu, kết quả trận | Máy chủ (từ Mốc 3) | Edge Function / RPC |
 | Kinh nghiệm, rơi đồ, đột phá, giao dịch | Máy chủ | RPC / Edge Function, không có ngoại lệ |
 
+## Tài khoản (quyết định 2026-10-20)
+- Người chơi đăng nhập bằng **tên tài khoản + mật khẩu**, không cần email.
+- Tên tài khoản: 3–20 ký tự `a-z 0-9 _`, không phân biệt hoa thường. Khác với **đạo hiệu** (tên nhân vật, có dấu).
+- Supabase bắt buộc có email nên máy chủ sinh **email ẩn** `<tài khoản>@nguoichoi.invalid`. Không gửi thư nào tới địa chỉ này.
+- Đăng ký đi qua Edge Function `dang-ky` (`supabase/functions/dang-ky/`): kiểm tra tên, tạo tài khoản bằng quyền quản trị, đã xác nhận sẵn. Đăng nhập thì máy khách tự ghép email ẩn.
+- Tài khoản tạo bằng email thật trước đây vẫn đăng nhập được bằng cách gõ đủ email.
+- Quên mật khẩu: chỉ tài khoản có email thật tự lấy lại được; tài khoản tên thì liên hệ quản trị. Sau này có thể cho gắn email/số điện thoại để tự lấy lại.
+
 ## Luật bảo mật cơ sở dữ liệu
 - Mọi bảng bật RLS.
 - Máy khách chỉ có quyền **đọc** (SELECT). Không tạo policy INSERT/UPDATE/DELETE cho người chơi.
