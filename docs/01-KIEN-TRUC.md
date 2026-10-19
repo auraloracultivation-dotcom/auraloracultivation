@@ -21,5 +21,14 @@
 - Mọi thao tác ghi đi qua hàm `security definer`, có `set search_path = ''`, kiểm tra `auth.uid()` và kiểm tra tính hợp lý.
 - Thay đổi schema chỉ qua file migration trong `supabase/migrations/`, đánh số tăng dần.
 
+## Khu (zone) và phân tuyến — quyết định 2026-10-20
+- Mục tiêu: **tối thiểu 2 người tương tác được, tối đa 20 người / khu**. Ưu tiên **mượt** hơn đông.
+- Mỗi khu là một kênh Realtime riêng: `zone:<zone_id>:<tuyến>` (ví dụ `zone:zone.start:1`).
+- Khu đầy 20 người → máy chủ xếp người mới vào tuyến tiếp theo (`:2`, `:3`…). Hai tuyến cùng bản đồ nhưng không thấy nhau.
+- Vị trí chỉ gửi **khi đang di chuyển**, 4 lần/giây; máy nhận **nội suy** để chuyển động mượt. Đứng yên không gửi.
+- Lưu vị trí xuống cơ sở dữ liệu mỗi ~5 giây và khi thoát (RPC `save_position`).
+- **NPC lấp chỗ trống**: khu ít người thì có NPC đi lại, tu luyện, buôn bán cho có không khí. NPC trang trí do máy khách tự chạy theo kịch bản trong `data/` (không tốn mạng). NPC/quái có liên quan phần thưởng thì do máy chủ quản lý (từ Mốc 3).
+- Ngân sách mạng: gói miễn phí Supabase giới hạn 100 tin/giây và 200 kết nối (gói Pro 500/500). 20 người × 4 tin/giây khi di chuyển nằm trong mức thử nghiệm; khi có người chơi thật đông thì lên Pro hoặc chuyển máy chủ game riêng.
+
 ## Ghi chú
 Supabase Realtime đủ cho Mốc 1–2. Khi chiến đấu thời gian thực nhiều người cần độ trễ thấp, đánh giá máy chủ game riêng (ghi quyết định vào file này).

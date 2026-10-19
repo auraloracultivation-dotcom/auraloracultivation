@@ -7,7 +7,12 @@
   "tile_size": 16,
   "start_zone": "zone.start",
   "net": {
-    "position_broadcast_hz": 10,
+    "position_broadcast_hz": 4,
+    "broadcast_only_when_moving": true,
     "position_save_interval_s": 5
+  },
+  "zone": {
+    "max_players": 20,
+    "_note": "Đầy thì mở tuyến mới; đồng bộ với logic phân tuyến máy chủ"
   }
 }
