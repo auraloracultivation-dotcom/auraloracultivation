@@ -30,7 +30,7 @@ SRC = {
     'thien-kiep': '4319fc54-image.png', 'truong-hoa': 'f62d16ac-image.png', 'canh-vat': 'e9c03de6-image.png',
     'linh-chau': 'bc746396-image.png', 'cong-phap': '9e3eeb69-image.png', 'truc-cuon': 'd9c48738-image.png',
     'dan-phuong': '51e27582-image.png', 'doi-lua': '0c95c49b-image.gif', 'quai-nho': '0ed12cb1-image.jpg',
-    'khoi': '2c28dace-image.gif',
+    'khoi': '2c28dace-image.gif', 'kien-truc': '83c561a8-image.png', 'dao-noi': 'eb4afdd1-image.png',
 }
 src = lambda k: os.path.join(SRC_DIR, SRC[k])
 pack = lambda pat: glob.glob(os.path.join(SRC_DIR, '**', pat), recursive=True)[0]
@@ -257,9 +257,44 @@ def run_icons():
     return {'src': 'assets/items/icons.png', 'size': S, 'cols': cols, 'map': idx}
 
 
+# ---------------- Công trình thành (Thanh Vân Thành) ----------------
+# (khoá, tấm, ô cắt trên ảnh gốc, cao trên bản đồ tính bằng điểm). Ảnh ra cao gấp đôi để sắc khi phóng.
+PROPS = [
+    ('dien-chinh', 'kien-truc', (5, 5, 650, 305), 170), ('kho-hang', 'kien-truc', (655, 15, 1050, 295), 105),
+    ('te-dan', 'kien-truc', (1065, 0, 1535, 305), 120), ('cong-thanh', 'kien-truc', (5, 305, 300, 495), 110),
+    ('tuong-thanh', 'kien-truc', (300, 310, 718, 495), 62), ('cau-da', 'kien-truc', (728, 375, 958, 500), 50),
+    ('ho-sen', 'kien-truc', (962, 320, 1170, 500), 66), ('dai-thien-van', 'kien-truc', (1180, 320, 1315, 505), 88),
+    ('tuong-tien-nhan', 'kien-truc', (1320, 300, 1515, 510), 92), ('nha-nho', 'kien-truc', (5, 495, 195, 665), 70),
+    ('kho-go', 'kien-truc', (200, 505, 380, 660), 58), ('lo-luyen-dan', 'kien-truc', (385, 495, 565, 660), 66),
+    ('dai-linh-chau', 'kien-truc', (565, 505, 745, 660), 54), ('cot-co', 'kien-truc', (760, 495, 870, 660), 56),
+    ('bia-da', 'kien-truc', (885, 525, 1005, 660), 34), ('co-treo', 'kien-truc', (1115, 515, 1245, 660), 48),
+    ('den-da', 'kien-truc', (1250, 545, 1305, 660), 28), ('cay-tung', 'kien-truc', (1310, 540, 1530, 665), 46),
+    ('phap-tran', 'kien-truc', (15, 830, 255, 1015), 60), ('truyen-tong', 'dao-noi', (1295, 290, 1520, 515), 92),
+    ('cay-anh-dao', 'dao-noi', (112, 625, 205, 728), 44), ('cay-bonsai', 'dao-noi', (15, 625, 105, 728), 44),
+]
+
+
+def run_props():
+    out_dir = os.path.join(ROOT, 'assets/town')
+    os.makedirs(out_dir, exist_ok=True)
+    keyed = {}
+    P = {}
+    for key, sheet_key, box, h in PROPS:
+        if sheet_key not in keyed:
+            keyed[sheet_key] = load_keyed(src(sheet_key), 'magenta')
+        rgb, a = keyed[sheet_key]
+        im = main_blob(tight(crop(rgb, a, box)), 0.05)
+        k = min(1, (h * 2) / im.height)
+        im = im.resize((round(im.width * k), round(im.height * k)), Image.LANCZOS)
+        path = os.path.join(out_dir, f'{key}.png')
+        im.save(path, optimize=True)
+        P[key] = {'src': os.path.relpath(path, ROOT), 'w': round(im.width / im.height * h), 'h': h}
+    return P
+
+
 if __name__ == '__main__':
     data = {'_ghi_chu': 'Sinh bằng tools/asset_build.py — KHÔNG sửa tay. Hình thử nghiệm, chủ dự án sẽ thay.',
-            'sheets': run_monsters(), 'fx': run_fx(), 'icons': run_icons()}
+            'sheets': run_monsters(), 'fx': run_fx(), 'icons': run_icons(), 'props': run_props()}
     os.makedirs(os.path.join(ROOT, 'data/art'), exist_ok=True)
     with open(os.path.join(ROOT, 'data/art/sprites.json'), 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=1)

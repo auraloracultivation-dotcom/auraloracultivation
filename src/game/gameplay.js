@@ -40,6 +40,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
   let ps = null; // chỉ số hiện tại
   const buffs = {}; // tên → { mul, until }
   const cds = {}; // hồi chiêu theo id
+  let wasInTown = null;
   let hp = 0, dead = false, reviveT = 0, hurtAt = -99, attackCd = 0, auto = false, targetUid = null, pet = null, now = 0;
   const fx = [], bolts = [];
 
@@ -221,7 +222,9 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     attackCd = Math.max(0, attackCd - dt);
     for (const [k, v] of Object.entries(buffs)) if (v.until <= now) { delete buffs[k]; recompute(); }
     if (dead) { reviveT -= dt; if (reviveT <= 0) { dead = false; hp = ps.hp; toast('Đã hồi phục', 1200); } }
-    else if (now - hurtAt > PL.regen_after_s) hp = Math.min(ps.hp, hp + ps.hp * PL.regen_hp_per_s * dt);
+    const inTown = map.safeAt(me.x, me.y);
+    if (inTown !== wasInTown) { wasInTown = inTown; toast(inTown ? `Vào ${map.town.name} — vùng an toàn, quái không vào được` : `Rời ${map.town.name}`, 1800); }
+    if (!dead && (inTown || now - hurtAt > PL.regen_after_s)) hp = Math.min(ps.hp, hp + ps.hp * PL.regen_hp_per_s * (inTown ? map.town.regenMul : 1) * dt);
     env.alive = !dead;
     mobs.update(dt, env);
     for (const n of gather.update(dt, me, !dead)) { gain(n.item.id, n.n); say(n.x, n.y - 10, `+${n.n} ${n.item.name}`, n.group === 'thao' ? '#9dff8a' : '#d6dbe8'); progress.changed(); }

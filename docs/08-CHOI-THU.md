@@ -31,6 +31,13 @@ Phím máy tính: Space đánh, 1–5 kỹ năng, Q uống đan hồi máu.
 - Đồ luyện từ phôi: thức tỉnh có chỉ số, chưa có hình (chờ ảnh của chủ dự án).
 - Mỗi ô chỉ mặc một món: mặc đồ Kho thì tháo đồ phôi cùng ô, và ngược lại.
 
+## Thanh Vân Thành (vùng an toàn giữa bản đồ)
+- Bố cục ở `data/zones/zone.start.json` → `town`: `stamp` tô quảng trường đá + hào nước + 3 lối vào (cổng nam, cầu đông, cầu tây) lên bản đồ lúc tải (ảnh bản đồ gốc giữ nguyên);
+  `props` đặt công trình (dx/dy = chân công trình so với tâm thành), `block` = vùng không đi xuyên.
+- Trong thành (`safe.half_px`): quái không sinh, không bước vào, không đuổi/đánh người đứng trong; hồi máu ×`regen_mul`.
+- Hình công trình: tấm kiến trúc chủ dự án gửi, cắt bằng `tools/asset_build.py` → `assets/town/`. Code: `src/map/town.js`.
+- Mới là trang trí + vùng an toàn: chạm Lò luyện đan / Kho hàng / Tế đàn chưa mở bảng tương ứng.
+
 ## Camera
 `data/config.json` → `camera.zoom` (đang 0,5 = thấy rộng gấp đôi). Chữ/thanh máu trên đầu tự phóng để vẫn đọc được.
 

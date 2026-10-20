@@ -1,7 +1,10 @@
 // Bản đồ ô vòng lặp: mỗi điểm ảnh của ảnh bản đồ là một ô; đi qua mép phải sẽ ra mép trái.
 // Địa hình (đi được, tốc độ, ô dùng để vẽ) lấy từ data/terrain.json; ô vẽ lấy từ atlas data/tiles.json.
 
-export async function createMap(def, terrainDef, tilesDef) {
+import { stampTown, createTown } from './town.js';
+
+// props: hình công trình (data/art/sprites.json → props) cho thành trì trong khu, nếu có
+export async function createMap(def, terrainDef, tilesDef, props = {}) {
   const [mapImg, atlas] = await Promise.all([loadImage(def.map_image), loadImage(tilesDef.atlas)]);
   const W = def.width_tiles, H = def.height_tiles, T = def.tile_size;
   const width = W * T, height = H * T;
@@ -11,6 +14,7 @@ export async function createMap(def, terrainDef, tilesDef) {
   c.width = W; c.height = H;
   const g = c.getContext('2d', { willReadFrequently: true });
   g.drawImage(mapImg, 0, 0);
+  stampTown(g, def.town, terrainDef.types); // quảng trường + hào nước của thành (ảnh gốc giữ nguyên)
   const px = g.getImageData(0, 0, W, H).data;
   const types = terrainDef.types;
   const byColor = new Map(types.map((t, i) => [t.color.join(','), i]));
@@ -33,6 +37,7 @@ export async function createMap(def, terrainDef, tilesDef) {
   const isWater = types.map((t) => t.id.startsWith('nuoc'));
   const subdiv = types.map((t) => t.grid || 1);
 
+  const town = await createTown(def.town, props, T);
   const wrapX = (x) => ((x % width) + width) % width;
   const wrapY = (y) => ((y % height) + height) % height;
   const typeAt = (x, y) => types[grid[Math.floor(wrapY(y) / T) * W + Math.floor(wrapX(x) / T)]];
@@ -41,7 +46,7 @@ export async function createMap(def, terrainDef, tilesDef) {
     for (const [ox, oy] of [[-r, 0], [r, 0], [0, -r], [0, r / 2]]) {
       if (!typeAt(x + ox, y + oy).walk) return true;
     }
-    return false;
+    return !!town?.blockedAt(x, y, r); // chân công trình trong thành
   }
 
   // Đi từng trục để trượt dọc bờ nước thay vì kẹt cứng; toạ độ luôn quấn trong thế giới
@@ -119,7 +124,7 @@ export async function createMap(def, terrainDef, tilesDef) {
     }
   }
 
-  return { def, width, height, typeAt, blocked, canStand, move, drawGround, drawMinimap, overview: c, wrapX, wrapY };
+  return { def, town, safeAt: (x, y) => !!town?.safeAt(x, y), width, height, typeAt, blocked, canStand, move, drawGround, drawMinimap, overview: c, wrapX, wrapY };
 }
 
 // Khoảng cách ngắn nhất trên thế giới vòng lặp (âm/dương), dùng để vẽ và nội suy người khác
