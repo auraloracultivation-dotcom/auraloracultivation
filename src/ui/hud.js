@@ -76,6 +76,7 @@ export function createHud(opts) {
     const id = b.dataset.menu;
     if (id === 'map') opts.onOpenMap();
     else if (id === 'settings') opts.onSettings();
+    else if (opts.onMenu?.(id)) return; // Nhiệm vụ, Kỹ năng (Tu luyện)… do main.js quyết
     else toast(`${b.getAttribute('aria-label')}: sắp có`);
   });
   right.querySelector('.minimap').addEventListener('click', opts.onOpenMap);
@@ -99,7 +100,7 @@ export function createHud(opts) {
     let state = 0; // nút bật/tắt (vd. Bay ↔ Chạy): đổi ảnh + tên theo trạng thái
     btn.addEventListener('pointerdown', (e) => {
       e.preventDefault();
-      if (a.locked) { toast(`${a.name}: chưa mở`, 1200); return; }
+      if (btn.classList.contains('locked')) { toast(`${a.name}: chưa mở${a.lockedHint ? ` — ${a.lockedHint}` : ''}`, 1400); return; }
       btn.classList.remove('pulse'); void btn.offsetWidth; btn.classList.add('pulse');
       if (a.icons) {
         const prev = state;
@@ -218,6 +219,9 @@ export function createHud(opts) {
       g.restore();
     },
     setOnline(count, max) { online.textContent = `· ${count}/${max}`; },
+    setRealm(text) { info.querySelector('[data-realm]').textContent = text; },
+    // Khoá / mở nút kỹ năng theo cảnh giới
+    setLocked(id, on) { pad.querySelector(`[data-act="${id}"]`)?.classList.toggle('locked', !!on); },
     // Nút đang bật (vd. pháp tướng đang hiện): sáng viền
     setActive(id, on) { pad.querySelector(`[data-act="${id}"]`)?.classList.toggle('on', !!on); },
     // value/max: số thật khi có dữ liệu chỉ số; chưa có thì max = 0 → hiện thanh đầy, không ghi số

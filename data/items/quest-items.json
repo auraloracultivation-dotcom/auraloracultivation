@@ -1,0 +1,26 @@
+{
+ "_status": "design",
+ "_nguon": "Lab v3.1",
+ "_ghi_chu": "Vật phẩm nhiệm vụ: không bán, không dùng chế tạo.",
+ "items": [
+  {
+   "id": "item.nhiemvu.dau-an-huyet-sai.001",
+   "name": "Dấu ấn Huyết Sài",
+   "cat": "khac",
+   "drop": {
+    "from": "monster.cam.huyet-sai.001",
+    "chance": 0.35,
+    "only_when_quest": "q.combat.002"
+   }
+  },
+  {
+   "id": "item.nhiemvu.manh-truyen-thua.001",
+   "name": "Mảnh truyền thừa",
+   "cat": "khac",
+   "drop": {
+    "from_rank": "boss",
+    "chance": 0.3
+   }
+  }
+ ]
+}

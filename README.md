@@ -12,7 +12,8 @@ Chưa làm chiến đấu, trang bị, tông môn cho tới khi Mốc 1 có bằ
 3. [docs/03-THU-MUC.md](docs/03-THU-MUC.md) — mỗi hệ thống ở đâu, ai được sửa gì
 4. [docs/04-ASSET.md](docs/04-ASSET.md) — quy chuẩn hình ảnh
 5. [docs/05-QUY-TRINH.md](docs/05-QUY-TRINH.md) — nhánh, Pull Request, kiểm thử
-6. [docs/07-NOI-DUNG-LAB.md](docs/07-NOI-DUNG-LAB.md) — nội dung thiết kế từ Lab (chưa triển khai)
+6. [docs/07-NOI-DUNG-LAB.md](docs/07-NOI-DUNG-LAB.md) — nội dung thiết kế từ Lab
+7. [docs/08-CHOI-THU.md](docs/08-CHOI-THU.md) — bản chơi thử: quái, chiến đấu, nhiệm vụ, chế tạo (`?offline` để chơi không cần mạng)
 
 ## Hạ tầng
 - Máy khách: HTML Canvas + JavaScript (ES modules), chạy trên GitHub Pages.

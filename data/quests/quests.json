@@ -2,7 +2,7 @@
  "_status": "design",
  "_nguon": "Auralora Lab v3 (21/10/2026)",
  "_ghi_chu": "THIẾT KẾ từ Lab — CHƯA triển khai trong game, CHƯA kiểm thử cân bằng. Số liệu là baseline để thử nghiệm.",
- "_ghi_chu_rieng": "Mục tiêu dạng NPC/địa điểm/cờ mở khoá (road_keeper, forest_edge, quest_board…) là PLACEHOLDER — chưa có thực thể trong game. ID quái/đan/khoáng Lab viết tắt đã đổi sang ID chuẩn, giữ bản gốc ở 'lab_target'/'lab_id'. 'boss.bing-ho' (Lab) không khớp quái nào — Băng Hồ là quái thường, boss Vùng Trắng là Tuyết Sơn Lão Tổ — chờ chủ dự án chọn.",
+ "_ghi_chu_rieng": "Lab v3.1. Mục tiêu talk/reach/discover trỏ tới NPC/địa điểm CHƯA có trong game (placeholders) — bảng Nhiệm vụ có nút 'Hoàn thành tạm'. choiceReward/title/cosmetic/milestones là phần thưởng thiết kế, chưa có hệ thống.",
  "reward_budget": {
   "exp": "phút × EXP/phút × độ khó × khám phá",
   "difficulty": {
@@ -27,20 +27,13 @@
   "alchemy_tutorial",
   "awakening_guide",
   "awakening_reminder",
-  "boss",
-  "boss.bing-ho",
   "daily_system",
-  "equipment.blank_item",
   "forest_edge",
-  "herb",
   "herb_codex",
   "hidden_legacy_branch",
-  "legacy.fragment",
   "legacy.secret_shrine",
   "legacy.stone_tablet.001",
   "legacy_build_option",
-  "pill.recovery",
-  "quest.huyet-sai-mark",
   "quest_board",
   "realm.tc_path",
   "road_keeper",
@@ -231,9 +224,14 @@
    ],
    "rewards": {
     "exp": 220,
-    "legacyFragment": 1,
     "unlock": [
      "hidden_legacy_branch"
+    ],
+    "items": [
+     {
+      "id": "item.nhiemvu.manh-truyen-thua.001",
+      "count": 1
+     }
     ]
    },
    "next": [
@@ -484,8 +482,9 @@
     },
     {
      "type": "collect",
-     "target": "quest.huyet-sai-mark",
-     "count": 1
+     "target": "item.nhiemvu.dau-an-huyet-sai.001",
+     "count": 1,
+     "lab_target": "quest.huyet-sai-mark"
     }
    ],
    "rewards": {
@@ -502,22 +501,24 @@
   },
   {
    "id": "q.combat.003",
-   "title": "Thử thách băng hồ",
+   "title": "Thử thách Tuyết Sơn",
    "type": "combat",
    "realm": "kd",
    "time": 25,
    "level": 20,
-   "desc": "Chuẩn bị đan và chọn thời điểm đánh trước khi đấu Băng Hồ.",
+   "desc": "Chuẩn bị đan và chọn thời điểm đánh trước khi đấu Tuyết Sơn Lão Tổ (boss Vùng Trắng).",
    "goals": [
     {
      "type": "use",
-     "target": "pill.recovery",
-     "count": 2
+     "target": "item.dan.tieu-hoi-huyet.001",
+     "count": 2,
+     "lab_target": "pill.recovery"
     },
     {
      "type": "boss",
-     "target": "boss.bing-ho",
-     "count": 1
+     "target": "monster.trang.tuyet-son-lao-to.001",
+     "count": 1,
+     "lab_target": "boss.bing-ho"
     }
    ],
    "rewards": {
@@ -619,8 +620,9 @@
    "goals": [
     {
      "type": "collect",
-     "target": "legacy.fragment",
-     "count": 10
+     "target": "item.nhiemvu.manh-truyen-thua.001",
+     "count": 10,
+     "lab_target": "legacy.fragment"
     },
     {
      "type": "discover",
@@ -651,5 +653,11 @@
    },
    "next": []
   }
- ]
+ ],
+ "wildcards": {
+  "any": "bất kỳ",
+  "boss": "bất kỳ boss (mỗi boss tính một lần)",
+  "equipment.blank_item": "bất kỳ phôi pháp bảo",
+  "herb": "mỗi loại linh thảo khác nhau từng nhặt được"
+ }
 }

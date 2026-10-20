@@ -7,6 +7,8 @@ data/        Định nghĩa nội dung (JSON) — nguồn sự thật
 src/
   core/      Vòng lặp game, input, camera, nạp dữ liệu. Không chứa luật gameplay.
   net/       Toàn bộ giao tiếp Supabase (đăng nhập, RPC, Realtime). Module khác KHÔNG gọi Supabase trực tiếp.
+             Hai cửa: index.js (thật) và offline.js (chơi thử một mình với ?offline, không mạng).
+  game/      Luật chơi THỬ NGHIỆM phía máy khách: quái, chiến đấu, tu vi, chế tạo, nhiệm vụ (docs/08). Mốc 3–4 chuyển lên máy chủ.
   map/       Bản đồ, ô, va chạm, zone.
   entity/    Nhân vật trên màn hình: người chơi (mình + người khác, nội suy), sau này NPC/quái.
   combat/    Hiển thị chiến đấu. Kết quả lấy từ máy chủ. (Tạm: trạng thái kỹ năng Pháp tướng phía máy khách.)
