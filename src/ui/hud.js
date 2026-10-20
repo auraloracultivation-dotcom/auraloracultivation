@@ -40,7 +40,7 @@ export function createHud(opts) {
     <div class="pi-name" data-name></div>
     <div class="pi-frame">
       <button type="button" class="pi-avatar glow" style="${pct(80, 50, 192, 192)}" aria-label="Thông tin nhân vật">
-        <canvas width="64" height="64"></canvas></button>
+        <canvas width="128" height="128"></canvas></button>
       <div class="pi-bar" style="${pct(382, 87, 404, 36)}"><i class="fill hp" data-hp></i><span>Khí huyết</span><b data-hp-t></b></div>
       <div class="pi-bar" style="${pct(382, 155, 404, 36)}"><i class="fill mp" data-mp></i><span>Linh lực</span><b data-mp-t></b></div>
       <div class="pi-bar" style="${pct(382, 224, 321, 38)}"><i class="fill xp" data-xp></i><span>Tu vi</span><b data-xp-t></b></div>
@@ -102,10 +102,11 @@ export function createHud(opts) {
       if (a.locked) { toast(`${a.name}: chưa mở`, 1200); return; }
       btn.classList.remove('pulse'); void btn.offsetWidth; btn.classList.add('pulse');
       if (a.icons) {
+        const prev = state;
         state = (state + 1) % a.icons.length;
+        if (a.onUse?.(state) === 'keep') state = prev; // không đổi được (vd. đang bay trên nước) → giữ nguyên
         btn.querySelector('img').src = a.icons[state];
         btn.setAttribute('aria-label', a.names[state]);
-        a.onUse?.(state);
       } else a.onUse?.();
     });
   }
@@ -206,6 +207,16 @@ export function createHud(opts) {
   return {
     miniCanvas,
     addChatLine,
+    // Ảnh đại diện: lấy nửa trên của chân dung (đầu + vai), cắt tròn trong khung
+    setPortrait(img) {
+      const cv = info.querySelector('.pi-avatar canvas'), g = cv.getContext('2d'), S = cv.width;
+      g.clearRect(0, 0, S, S);
+      g.save(); g.beginPath(); g.arc(S / 2, S / 2, S / 2, 0, Math.PI * 2); g.clip();
+      const cropH = img.height * 0.62, k = Math.min(S / img.width, S / cropH) * 1.05;
+      g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
+      g.drawImage(img, 0, 0, img.width, cropH, (S - img.width * k) / 2, S - cropH * k + S * 0.04, img.width * k, cropH * k);
+      g.restore();
+    },
     setOnline(count, max) { online.textContent = `· ${count}/${max}`; },
     // value/max: số thật khi có dữ liệu chỉ số; chưa có thì max = 0 → hiện thanh đầy, không ghi số
     setBar(kind, value, max) {
@@ -221,8 +232,8 @@ function drawAvatar(canvas, draw) {
   const ctx = canvas.getContext('2d');
   ctx.imageSmoothingEnabled = false;
   ctx.save();
-  ctx.translate(32, 62);
-  ctx.scale(1.9, 1.9);
+  ctx.translate(64, 124);
+  ctx.scale(3.8, 3.8);
   draw(ctx);
   ctx.restore();
 }

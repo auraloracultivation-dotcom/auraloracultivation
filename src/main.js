@@ -1,7 +1,7 @@
 // Điểm khởi động: nối các module lại với nhau. Không chứa luật gameplay chi tiết.
 import { loadJSON, startLoop, createScreen, createCamera, followCamera, createInput, drawStick } from './core/index.js';
 import { createMap, wrapDelta } from './map/index.js';
-import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, loadRig, rigAttack, artInfo } from './entity/index.js';
+import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, loadRig, rigAttack, artInfo, renderPortrait } from './entity/index.js';
 
 // Luôn lấy code mới nhất (xem sw.js) — tránh lẫn code cũ với dữ liệu mới sau mỗi lần cập nhật
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
@@ -81,15 +81,15 @@ async function boot() {
   });
 
   const realmName = character.realm > 0 ? `Cảnh giới ${character.realm}` : 'Phàm nhân'; // tạm, chờ dữ liệu cảnh giới
-  const drawMe = (ctx) => drawPlayer(ctx, { x: 0, y: 0, facing: 1, walkT: 0, isLocal: true, look: me.look }, 1);
+  const drawMe = (ctx) => drawPlayer(ctx, { x: 0, y: 0, facing: 1, walkT: 0, isLocal: true }, 1); // ảnh đại diện lúc mới vào (trước khi nạp chân dung)
   const SLOT_ORDER = ['mat-na', 'trang-phuc', 'vu-khi', 'nhan', 'canh', 'phap-tuong', 'linh-thu', 'day-chuyen']; // thứ tự ô bảng Nhân vật
   const S = (n) => `assets/ui/skills/${n}.png`;
   const fan = (deg, r = 122) => ({ dx: Math.round(Math.cos((deg * Math.PI) / 180) * r), dy: -Math.round(Math.sin((deg * Math.PI) / 180) * r) });
   const markers = () => [{ x: me.x, y: me.y, self: true }, ...[...others.list.values()].map((p) => ({ x: p.x, y: p.y }))];
 
   function attack() {
-    if (me.look?.weapon) rigAttack(me); // có vũ khí: kiếm xoay sau lưng thay cho vệt chém
-    else me.slashT = 0.22;
+    if (me.look?.outfit || me.look?.weapon) rigAttack(me); // nhân vật ghép lớp: đưa tay (và xoay kiếm nếu có)
+    if (!me.look?.weapon) me.slashT = 0.22; // tay không: vẫn có vệt chém nhỏ
   }
   // Mã quà tặng: so dấu SHA-256 với data/codes.json (mã gốc không nằm trong mã nguồn)
   function openCode() {
@@ -125,7 +125,7 @@ async function boot() {
     },
     onOpenCharacter() {
       showCharacterPanel({
-        name: me.name, realmName, drawAvatar: drawMe,
+        name: me.name, realmName, portrait: () => renderPortrait(me.look),
         equipment: SLOT_ORDER.map((sl) => { const it = bag.equippedItem(sl); return it && { name: it.name, icon: artInfo(it.art)?.file }; }),
       });
     },
@@ -134,7 +134,7 @@ async function boot() {
       showBag({
         categories: itemsDef.categories, getEntries: bag.entries, isEquipped: bag.isEquipped,
         thumb: (it) => artInfo(it.art)?.file || '', note: 'Đồ thử nghiệm: chỉ lưu trên máy này, chưa lưu máy chủ.',
-        onToggle(it) { bag.toggle(it); me.look = bag.look(); zone.setLook(me.look); },
+        onToggle(it) { bag.toggle(it); me.look = bag.look(); zone.setLook(me.look); refreshAvatar(); },
       });
     },
     onBreakthrough() { toast('Đột phá: chờ quy tắc cảnh giới'); },
@@ -161,6 +161,9 @@ async function boot() {
         id: 'bay', name: 'Bay', icons: [S('bay'), S('chay')], names: ['Bay', 'Chạy bộ'], dx: -34, dy: -200, size: 50,
         onUse: (state) => { // hiện chỉ là hình ảnh, chưa đổi tốc độ / va chạm
           me.flying = state === 1;
+          if (!me.flying && !map.canStand(me.x, me.y, radius)) { // đang trên nước/núi: chưa hạ được
+            me.flying = true; toast('Không thể hạ xuống ở đây', 1400); return 'keep';
+          }
           zone.sendMove(me.x, me.y, me.moving, me.flying);
           toast(me.flying ? 'Ngự khí phi hành' : 'Hạ xuống mặt đất', 1200);
         },
@@ -169,6 +172,8 @@ async function boot() {
     ],
   });
   hud.setOnline(others.list.size + 1, maxPlayers);
+  const refreshAvatar = () => hud.setPortrait(renderPortrait(me.look, { body: true }));
+  refreshAvatar();
   createStatsDock({ getValue: () => null }); // chờ bảng chỉ số cơ bản (đợt 1)
   enableFastTap(); // nút bấm được cả khi tay kia đang giữ cần điều khiển
   let targetId = null; // đạo hữu đang được chọn (chạm vào nhân vật bằng tay phải)
@@ -183,6 +188,7 @@ async function boot() {
 
   const saver = createSaver(me, config.net.position_save_interval_s, net.savePosition);
   const speed = config.player.walk_speed_px_per_s;
+  const flySpeed = config.player.fly_speed_px_per_s || speed;
   const radius = config.player.radius_px;
   const sprite = config.player.sprite_scale;
   const sendEvery = 1 / config.net.position_broadcast_hz;
@@ -195,7 +201,8 @@ async function boot() {
     if (me.moving) {
       if (!wasMoving) saver.saveNow(); // mốc thời gian mới cho máy chủ trước khi đi
       if (dir.x) me.facing = dir.x > 0 ? 1 : -1;
-      map.move(me, dir.x * speed * dt, dir.y * speed * dt, radius);
+      const v = me.flying ? flySpeed : speed;
+      map.move(me, dir.x * v * dt, dir.y * v * dt, radius, !!me.flying);
       me.walkT += dt;
       sendTimer += dt;
       if (sendTimer >= sendEvery) { sendTimer = 0; zone.sendMove(me.x, me.y, true, me.flying); }

@@ -45,7 +45,11 @@ export async function createMap(def, terrainDef, tilesDef) {
   }
 
   // Đi từng trục để trượt dọc bờ nước thay vì kẹt cứng; toạ độ luôn quấn trong thế giới
-  function move(entity, dx, dy, r) {
+  const canStand = (x, y, r) => !blocked(x, y, r);
+
+  // fly = true: đang ngự kiếm → bay qua nước, núi, mọi địa hình, không bị chậm (yêu cầu chủ dự án 2026-10-21)
+  function move(entity, dx, dy, r, fly = false) {
+    if (fly) { entity.x = wrapX(entity.x + dx); entity.y = wrapY(entity.y + dy); return; }
     const speed = typeAt(entity.x, entity.y).speed || 1;
     dx *= speed; dy *= speed;
     if (dx && !blocked(entity.x + dx, entity.y, r)) entity.x = wrapX(entity.x + dx);
@@ -115,7 +119,7 @@ export async function createMap(def, terrainDef, tilesDef) {
     }
   }
 
-  return { def, width, height, typeAt, blocked, move, drawGround, drawMinimap, overview: c, wrapX, wrapY };
+  return { def, width, height, typeAt, blocked, canStand, move, drawGround, drawMinimap, overview: c, wrapX, wrapY };
 }
 
 // Khoảng cách ngắn nhất trên thế giới vòng lặp (âm/dương), dùng để vẽ và nội suy người khác
