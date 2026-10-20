@@ -219,7 +219,7 @@ async function boot() {
   const refreshAvatar = () => hud.setPortrait(renderPortrait(me.look, { body: true }));
   refreshAvatar();
   loading.set(90, 'Thả yêu thú vào rừng…');
-  game = await createGameplay({ loadJSON, map, me, hud, pt, toast, audio, userId: me.id });
+  game = await createGameplay({ loadJSON, map, me, hud, pt, toast, audio, userId: me.id, onRealm: (r) => zone.setRealm(r) });
   me.onAutoSwing = swing;
   const dock = createStatsDock({ getValue: (id) => game.statValue(id) });
   game.setDock(dock);

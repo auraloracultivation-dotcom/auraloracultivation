@@ -26,7 +26,7 @@ function tryJoin(topic, me, h, maxPlayers) {
         resolve(null);
         return;
       }
-      await ch.track({ id: me.id, name: me.name, x: me.x, y: me.y, look: me.look || null });
+      await ch.track({ id: me.id, name: me.name, x: me.x, y: me.y, look: me.look || null, realm: me.realm || null });
       resolve(ch);
     };
 
@@ -55,7 +55,13 @@ function createZoneLink(channel, line, me) {
     // Đổi trang bị đang mặc: cập nhật Presence để người khác thấy (chỉ là hình ảnh, mã hình art.*)
     setLook(look) {
       me.look = look;
-      channel.track({ id: me.id, name: me.name, x: me.x, y: me.y, look });
+      channel.track({ id: me.id, name: me.name, x: me.x, y: me.y, look, realm: me.realm || null });
+    },
+    // Đổi cảnh giới: người khác thấy dòng cảnh giới trên đầu (chỉ là chữ hiển thị, máy nhận tự lọc)
+    setRealm(realm) {
+      if (me.realm === realm) return;
+      me.realm = realm;
+      channel.track({ id: me.id, name: me.name, x: me.x, y: me.y, look: me.look || null, realm });
     },
     sendChat(text) {
       channel.send({ type: 'broadcast', event: 'chat', payload: { id: me.id, text } });
