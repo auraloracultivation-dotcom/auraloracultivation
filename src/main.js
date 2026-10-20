@@ -134,7 +134,7 @@ async function boot() {
           toast(me.flying ? 'Ngự khí phi hành' : 'Hạ xuống mặt đất', 1200);
         },
       },
-      { id: 'auto', name: 'Tự động', icon: S('auto'), dx: -64, dy: -254, size: 44, locked: true },
+      { id: 'auto', name: 'Tự động', icon: S('auto'), dx: 26, dy: -192, size: 50, locked: true }, // cùng hàng Lướt, sát phải
     ],
   });
   hud.setOnline(others.list.size + 1, maxPlayers);
