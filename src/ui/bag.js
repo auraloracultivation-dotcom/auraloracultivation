@@ -112,3 +112,22 @@ export function showCodeDialog({ onSubmit }) {
   });
   setTimeout(() => input.focus({ preventScroll: true }), 50);
 }
+
+// Bảng nhỏ nằm ngang chọn đồ trong kho cho một ô trống (bảng Nhân vật). items: [{ key, name, thumb, sub, tier }]
+export function showSlotPicker({ title, items, onPick }) {
+  const { wrap, close } = overlay('code-wrap');
+  const box = el(`<div class="bag code-box slot-pick" role="dialog">
+    <div class="bag-head"><b>${escapeHtml(title)}</b><button type="button" class="bag-x" aria-label="Đóng">✕</button></div>
+    ${items.length ? `<div class="pick-row">${items.map((it) => `<button type="button" class="pick ${it.tier ? `tier-${it.tier}` : ''}" data-key="${escapeHtml(it.key)}">
+      <img src="${it.thumb || ''}" alt=""><span>${escapeHtml(it.name)}</span></button>`).join('')}</div>`
+    : '<p class="bag-empty">Kho chưa có món nào cho ô này</p>'}
+  </div>`);
+  wrap.appendChild(box);
+  box.querySelector('.bag-x').addEventListener('click', close);
+  box.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-key]');
+    if (!b) return;
+    close(); onPick(b.dataset.key);
+  });
+  return close;
+}

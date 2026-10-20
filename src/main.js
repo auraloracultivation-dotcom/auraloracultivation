@@ -1,5 +1,5 @@
 // Điểm khởi động: nối các module lại với nhau. Không chứa luật gameplay chi tiết.
-import { loadJSON, startLoop, createScreen, createCamera, followCamera, createInput, drawStick } from './core/index.js';
+import { loadJSON, startLoop, createScreen, createCamera, followCamera, createInput, drawStick, createSaver, sha256 } from './core/index.js';
 import { createMap, wrapDelta } from './map/index.js';
 import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, setTextScale, loadRig, rigAttack, artInfo, renderPortrait, avatarFx } from './entity/index.js';
 import { createAudio } from './audio/index.js';
@@ -11,7 +11,7 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catc
 import {
   showLoading, showLogin, shouldForgetSession, showCreateCharacter, showNewPassword,
   showConfirm, showFatal, toast, createHud, showCharacterPanel, showSettings, showWorldMap, drawRoundMap, createStatsDock, enableFastTap,
-  showBag, showItemActions, loadSettings, createTestBag,
+  showBag, showItemActions, showSlotPicker, loadSettings, createTestBag,
 } from './ui/index.js';
 
 async function boot() {
@@ -132,6 +132,19 @@ async function boot() {
     hud.setActive('phap-tuong', false); setLook();
     if (msg) toast(msg, 1600);
   }
+  // Bảng Nhân vật: ô có đồ → Tháo / Thức tỉnh / Phân rã / Vứt; ô trống → bảng ngang chọn đồ trong kho. Đổi xong vẽ lại bảng.
+  let closeChar = null;
+  function openCharacter() {
+    closeChar?.();
+    const reopen = () => setTimeout(openCharacter, 200);
+    closeChar = showCharacterPanel({
+      name: me.name, realmName: game.realmName(), portrait: () => ({ full: renderPortrait(me.look), body: renderPortrait(me.look, { body: true }) }),
+      equipment: SLOT_ORDER.map((sl) => { const it = game.slotItem(sl); return it && { name: it.name, icon: it.thumb }; }),
+      onSlot: (i) => showItemActions({ getItem: () => game.slotItem(SLOT_ORDER[i]), onAction: (it, a) => { game.itemAction(it.key, a); reopen(); } }),
+      onEmpty: (i, slotName) => showSlotPicker({ title: `Chọn ${slotName}`, items: game.slotCandidates(SLOT_ORDER[i]),
+        onPick: (key) => { game.itemAction(key, 'equip'); reopen(); } }),
+    });
+  }
   function onLookChanged() { // đồ trên người đổi từ bảng Tu luyện
     if (pt.active && !bag.equippedItem('phap-tuong')) { pt.cancel(); phapTuongOff(); } else setLook();
   }
@@ -162,13 +175,7 @@ async function boot() {
       zone.sendChat(text);
       hud.addChatLine(me.name, text, true);
     },
-    onOpenCharacter() {
-      showCharacterPanel({
-        name: me.name, realmName: game.realmName(), portrait: () => ({ full: renderPortrait(me.look), body: renderPortrait(me.look, { body: true }) }),
-        equipment: SLOT_ORDER.map((sl) => { const it = game.slotItem(sl); return it && { name: it.name, icon: it.thumb }; }),
-        onSlot: (i) => showItemActions({ getItem: () => game.slotItem(SLOT_ORDER[i]), onAction: (it, a) => game.itemAction(it.key, a) }),
-      });
-    },
+    onOpenCharacter: () => openCharacter(),
     onSettings() { showSettings({ onLogout: logout, onRedeem: redeemCode, onChange: (st) => audio.apply(st) }); },
     onOpenBag() {
       showBag({
@@ -240,7 +247,7 @@ async function boot() {
   setTimeout(() => loading.hide(), 300);
   toast(gift ? `Quà tân thủ: ${gift.name} (hệ ${gift.he}) đã mặc sẵn — xem trong Kho` : `Chào mừng ${me.name} đến ${zoneDef.name}`, gift ? 4000 : 2500);
 
-  const saver = createSaver(me, config.net.position_save_interval_s, net.savePosition);
+  const saver = createSaver(me, config.net.position_save_interval_s, net.savePosition, toast);
   const speed = config.player.walk_speed_px_per_s;
   const flySpeed = config.player.fly_speed_px_per_s || speed;
   const radius = config.player.radius_px;
@@ -347,47 +354,6 @@ async function boot() {
   addEventListener('pagehide', () => saver.flush());
   document.addEventListener('visibilitychange', () => { if (document.hidden) saver.flush(); });
   startLoop(update, render);
-}
-
-// Lưu vị trí lên máy chủ: khi bắt đầu đi, định kỳ khi đang đi, và khi dừng.
-// Nếu máy chủ từ chối (đi quá nhanh) thì kéo nhân vật về vị trí máy chủ giữ.
-function createSaver(me, intervalS, savePosition) {
-  let timer = 0;
-  let inFlight = null;
-  let pending = false;
-
-  async function save() {
-    if (inFlight) { pending = true; return inFlight; }
-    const sentX = me.x, sentY = me.y;
-    inFlight = savePosition(sentX, sentY)
-      .then((row) => {
-        if (row && Math.hypot(row.x - sentX, row.y - sentY) > 2) {
-          me.x = row.x; me.y = row.y;
-          toast('Vị trí được máy chủ điều chỉnh');
-        }
-      })
-      .catch((e) => console.warn('Lưu vị trí lỗi', e))
-      .finally(() => {
-        inFlight = null;
-        if (pending) { pending = false; save(); }
-      });
-    return inFlight;
-  }
-
-  return {
-    saveNow() { timer = 0; save(); },
-    tick(dt, moving) {
-      if (!moving) return;
-      timer += dt;
-      if (timer >= intervalS) { timer = 0; save(); }
-    },
-    flush: () => save(),
-  };
-}
-
-async function sha256(text) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
-  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
 boot().catch((e) => {

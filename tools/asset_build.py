@@ -31,7 +31,7 @@ SRC = {
     'linh-chau': 'bc746396-image.png', 'cong-phap': '9e3eeb69-image.png', 'truc-cuon': 'd9c48738-image.png',
     'dan-phuong': '51e27582-image.png', 'doi-lua': '0c95c49b-image.gif', 'quai-nho': '0ed12cb1-image.jpg',
     'khoi': '2c28dace-image.gif', 'kien-truc': '83c561a8-image.png', 'dao-noi': 'eb4afdd1-image.png',
-    'canh-vat-2': '66f9bd2c-image.png',
+    'canh-vat-2': '66f9bd2c-image.png', 'npc-ao': '70e9bb27-image.png', 'npc-vu-khi': '2030e619-image.png',
 }
 src = lambda k: os.path.join(SRC_DIR, SRC[k])
 pack = lambda pat: glob.glob(os.path.join(SRC_DIR, '**', pat), recursive=True)[0]
@@ -361,9 +361,54 @@ def run_decor():
     return {'src': 'assets/decor/atlas.png', 'items': out}
 
 
+# ---------------- 50 NPC (trang phục + vũ khí RIÊNG của NPC, không phải vật phẩm game) ----------------
+NPC_WEAPON_ROWS = [((470, 775), [(11, 123), (118, 206), (204, 295), (302, 363), (371, 521), (525, 608), (610, 746), (749, 868), (873, 970),
+                                 (974, 1042), (1048, 1137), (1142, 1238), (1232, 1327), (1331, 1406), (1411, 1525)]),
+                   ((770, 1024), [(10, 141), (147, 284), (284, 374), (376, 524), (503, 609), (599, 715), (714, 816), (818, 911), (910, 1041),
+                                  (1036, 1144), (1118, 1242), (1248, 1336), (1323, 1412), (1408, 1528)])]
+
+
+def pack_shelf(ims, W=1024):
+    x = y = rh = 0
+    pos = []
+    for im in ims:
+        if x + im.width > W:
+            x, y, rh = 0, y + rh + 2, 0
+        pos.append((x, y)); x += im.width + 2; rh = max(rh, im.height)
+    atlas = Image.new('RGBA', (W, y + rh))
+    for im, p in zip(ims, pos):
+        atlas.alpha_composite(im, p)
+    return atlas, [{'x': p[0], 'y': p[1], 'w': im.width, 'h': im.height} for im, p in zip(ims, pos)]
+
+
+def run_npcs():
+    rgb, a = load_keyed(src('npc-ao'), 'magenta')
+    cw, ch = 1536 / 10, 1024 / 5
+    outfits = []
+    for r in range(5):
+        for c in range(10):
+            im = main_blob(tight(crop(rgb, a, (int(c * cw), int(r * ch), int((c + 1) * cw), int((r + 1) * ch)))), 0.2)
+            k = 112 / im.height
+            outfits.append(im.resize((max(1, round(im.width * k)), 112), Image.LANCZOS))
+    rgb, a = load_keyed(src('npc-vu-khi'), 'magenta')
+    weapons = []
+    for (y0, y1), cols in NPC_WEAPON_ROWS:
+        for x0, x1 in cols:
+            im = main_blob(tight(crop(rgb, a, (x0, y0, x1, y1))), 0.3)
+            k = 128 / im.height
+            weapons.append(im.resize((max(1, round(im.width * k)), 128), Image.LANCZOS))
+    os.makedirs(os.path.join(ROOT, 'assets/npcs'), exist_ok=True)
+    out = {}
+    for name, ims in (('outfits', outfits), ('weapons', weapons)):
+        atlas, cells = pack_shelf(ims)
+        atlas.save(os.path.join(ROOT, f'assets/npcs/{name}.png'), optimize=True)
+        out[name] = {'src': f'assets/npcs/{name}.png', 'cells': cells}
+    return out
+
+
 if __name__ == '__main__':
     data = {'_ghi_chu': 'Sinh bằng tools/asset_build.py — KHÔNG sửa tay. Hình thử nghiệm, chủ dự án sẽ thay.',
-            'sheets': run_monsters(), 'fx': run_fx(), 'icons': run_icons(), 'props': run_props(), 'decor': run_decor()}
+            'sheets': run_monsters(), 'fx': run_fx(), 'icons': run_icons(), 'props': run_props(), 'decor': run_decor(), 'npc': run_npcs()}
     os.makedirs(os.path.join(ROOT, 'data/art'), exist_ok=True)
     with open(os.path.join(ROOT, 'data/art/sprites.json'), 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=1)

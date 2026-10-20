@@ -2,7 +2,8 @@
 // Nhận đối tượng từ main.js (map, me, hud, pt…) và trả về các hàm main.js gọi mỗi khung hình.
 // Mọi con số nằm trong data/ (stats.json = Lab, gameplay.json = thông số chơi thử). Mốc 3–4: chuyển kết quả lên máy chủ.
 import { wrapDelta } from '../map/index.js';
-import { drawMonster, drawMonsterLabel, drawFx, drawNode, loadSprites, fxDuration } from '../entity/index.js';
+import { drawMonster, drawMonsterLabel, drawFx, drawNode, loadSprites, fxDuration, loadNpcArt, drawNpc, drawNpcLabel } from '../entity/index.js';
+import { createNpcs } from './npcs.js';
 import { createProgress } from './progress.js';
 import { createStats } from './stats.js';
 import { createMonsters } from './monsters.js';
@@ -26,7 +27,8 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     'data/equipment/blanks.json', 'data/equipment/awaken.json', 'data/skills/cong-phap.json', 'data/quests/quests.json',
     'data/items/quest-items.json', 'data/realms.json'].map((p) => loadJSON(p)));
   const [recipes, shop] = await Promise.all([loadJSON('data/items/recipes.json'), loadJSON('data/shop.json')]);
-  await loadSprites(await loadJSON('data/art/sprites.json')); // hình quái, hiệu ứng, icon (thử nghiệm)
+  const artDef = await loadJSON('data/art/sprites.json');
+  await Promise.all([loadSprites(artDef), loadNpcArt(artDef.npc)]); // hình quái, hiệu ứng, icon, NPC (thử nghiệm)
   const progress = createProgress(userId, gp);
   const stats = createStats(statsDef, gp);
   const mobs = createMonsters({ gp, defs: monDef.monsters, map });
@@ -36,6 +38,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
   const owns = (id) => !teacher.has(id) || progress.count(teacher.get(id)) > 0;
   const craft = createCraft({ progress, pills, blanks, awaken, skills: cp, gp, owns });
   const gather = createGather({ gp, mats, map });
+  const npcs = createNpcs({ def: await loadJSON('data/npcs.json'), map, mobs });
   gather.seed(me);
   const SLOTS = ['mat-na', 'trang-phuc', 'vu-khi', 'nhan', 'canh', 'phap-tuong', 'linh-thu', 'day-chuyen'];
   // Trang bị đang tính chỉ số: đồ luyện ra đang mặc + đồ Kho đang mặc đã thức tỉnh
@@ -241,6 +244,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     if (!dead && (inTown || now - hurtAt > PL.regen_after_s)) hp = Math.min(ps.hp, hp + ps.hp * PL.regen_hp_per_s * (inTown ? map.town.regenMul : 1) * dt);
     env.alive = !dead;
     mobs.update(dt, env);
+    npcs.update(dt, me);
     for (const n of gather.update(dt, me, !dead)) { gain(n.item.id, n.n); say(n.x, n.y - 10, `+${n.n} ${n.item.name}`, n.group === 'thao' ? '#9dff8a' : '#d6dbe8'); progress.changed(); }
     if (auto && !dead && target(PL.attack_range_px) && attackCd <= 0) { attack(); me.onAutoSwing?.(); }
     for (let i = bolts.length - 1; i >= 0; i--) {
@@ -276,6 +280,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
   const at = (o) => ({ x: me.x + wrapDelta(o.x - me.x, map.width), y: me.y + wrapDelta(o.y - me.y, map.height) });
   function renderBelow(ctx, t) {
     for (const n of gather.list) { const p = at(n); drawNode(ctx, n, p.x, p.y, t); }
+    for (const n of npcs.list) { const p = at(n); if (Math.abs(p.x - me.x) < 700 && Math.abs(p.y - me.y) < 700) drawNpc(ctx, n, p.x, p.y, npcs.height); }
     const list = mobs.list.map((m) => ({ m, ...at(m) })).sort((a, b) => a.y - b.y);
     for (const { m, x, y } of list) {
       if (m.state === 'windup') { const w = at({ x: m.wx, y: m.wy }); m.wrx = w.x; m.wry = w.y; m.heavyR = gp.monster.heavy.radius_px; }
@@ -285,6 +290,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
   }
   function renderAbove(ctx, t) {
     for (const m of mobs.list) { const p = at(m); drawMonsterLabel(ctx, m, p.x, p.y, m.uid === targetUid, t); }
+    for (const n of npcs.list) { const p = at(n); if (Math.abs(p.x - me.x) < 700 && Math.abs(p.y - me.y) < 700) drawNpcLabel(ctx, n, p.x, p.y, npcs.height, performance.now()); }
     drawFx(ctx, [...bolts, ...fx].map((f) => ({ ...f, ...at(f) })), 0, 0);
   }
 
@@ -296,7 +302,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
       const p = at(m), d = Math.hypot(p.x - wx, p.y - m.r - wy);
       if (d < bd + m.r) { bd = d; best = m; }
     }
-    if (!best) return false;
+    if (!best) return npcs.tap(wx, wy, at); // chạm NPC → NPC chào
     targetUid = best.uid === targetUid ? null : best.uid;
     if (targetUid) toast(`Mục tiêu: ${best.def.name}`, 900);
     return true;
@@ -334,7 +340,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     healPill: () => usePill('item.dan.tieu-hoi-huyet.001'),
     statValue: views.statValue, openQuests: views.openQuests, openCultivate: views.openCultivate,
     setDock(d) { views.refreshDock = d.refresh; },
-    bagEntries: inv.entries, slotItem: inv.slotItem, itemAction,
+    bagEntries: inv.entries, slotItem: inv.slotItem, slotCandidates: inv.slotCandidates, itemAction,
     openShop() { if (!map.safeAt(me.x, me.y)) return toast(`${shop.name} ở ${map.town?.name || 'trong thành'} — hãy vào thành`, 1800); views.openShop(); },
     onProp(id) { // chạm công trình trong thành
       if (id === 'kho-hang') { views.openShop(); return true; }

@@ -1,0 +1,734 @@
+{
+ "_ghi_chu": "50 NPC trang trí do MÁY KHÁCH tự chạy (docs/01: NPC lấp chỗ trống). Trang phục/vũ khí của NPC là hình RIÊNG (assets/npcs, data/art/sprites.json → npc), KHÔNG phải vật phẩm trong game. home: town = trong thành (dx/dy so với tâm thành), road = dọc đường chính ngoài thành. brave = thấy quái gần thì ra đánh (chỉ hình, không gây sát thương, không lấy thưởng).",
+ "height_px": 28,
+ "speed_px_per_s": 45,
+ "active_range_px": 1600,
+ "talk_range_px": 70,
+ "talk_line_s": 2.6,
+ "fight_range_px": 110,
+ "swing_every_s": 1.1,
+ "npcs": [
+  {
+   "id": "npc.001",
+   "name": "Độc Cô Phi",
+   "outfit": 0,
+   "weapon": 0,
+   "home": {
+    "area": "town",
+    "dx": -111,
+    "dy": 24
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.002",
+   "name": "Hàn Yên",
+   "outfit": 1,
+   "weapon": 17,
+   "home": {
+    "area": "town",
+    "dx": -231,
+    "dy": 94
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.003",
+   "name": "Tiêu Kiếm Tâm",
+   "outfit": 2,
+   "weapon": 18,
+   "home": {
+    "area": "town",
+    "dx": -2,
+    "dy": 192
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.004",
+   "name": "Cố Phi",
+   "outfit": 3,
+   "weapon": 4,
+   "home": {
+    "area": "town",
+    "dx": -54,
+    "dy": 367
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.005",
+   "name": "Mộ Dung Trần Tâm",
+   "outfit": 4,
+   "weapon": 16,
+   "home": {
+    "area": "town",
+    "dx": 327,
+    "dy": 319
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.006",
+   "name": "Tô Phi",
+   "outfit": 5,
+   "weapon": 21,
+   "home": {
+    "area": "town",
+    "dx": 252,
+    "dy": 215
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.007",
+   "name": "Hàn Minh",
+   "outfit": 6,
+   "weapon": 14,
+   "home": {
+    "area": "town",
+    "dx": 377,
+    "dy": -93
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.008",
+   "name": "Lục Trần Tâm",
+   "outfit": 7,
+   "weapon": 17,
+   "home": {
+    "area": "town",
+    "dx": 316,
+    "dy": 288
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.009",
+   "name": "Nam Cung Phi",
+   "outfit": 8,
+   "weapon": 12,
+   "home": {
+    "area": "town",
+    "dx": 21,
+    "dy": 83
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.010",
+   "name": "Tô Tịch",
+   "outfit": 9,
+   "weapon": 15,
+   "home": {
+    "area": "town",
+    "dx": 23,
+    "dy": -67
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.011",
+   "name": "Độc Cô Thiên",
+   "outfit": 10,
+   "weapon": 1,
+   "home": {
+    "area": "town",
+    "dx": 269,
+    "dy": 85
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.012",
+   "name": "Tiêu Hạo",
+   "outfit": 11,
+   "weapon": 6,
+   "home": {
+    "area": "town",
+    "dx": -185,
+    "dy": -86
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.013",
+   "name": "Hoa Phi",
+   "outfit": 12,
+   "weapon": 3,
+   "home": {
+    "area": "town",
+    "dx": 71,
+    "dy": -37
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.014",
+   "name": "Vân Tuyết",
+   "outfit": 13,
+   "weapon": 1,
+   "home": {
+    "area": "town",
+    "dx": -32,
+    "dy": 187
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.015",
+   "name": "Tô Thanh Y",
+   "outfit": 14,
+   "weapon": 18,
+   "home": {
+    "area": "town",
+    "dx": -276,
+    "dy": -120
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.016",
+   "name": "Mộ Dung Tinh Hà",
+   "outfit": 15,
+   "weapon": 3,
+   "home": {
+    "area": "town",
+    "dx": -226,
+    "dy": 154
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.017",
+   "name": "Độc Cô Ngọc Lan",
+   "outfit": 16,
+   "weapon": 0,
+   "home": {
+    "area": "town",
+    "dx": -8,
+    "dy": 194
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.018",
+   "name": "Thẩm Thanh Y",
+   "outfit": 17,
+   "weapon": 6,
+   "home": {
+    "area": "town",
+    "dx": -308,
+    "dy": 327
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.019",
+   "name": "Thượng Quan Vô Ảnh",
+   "outfit": 18,
+   "weapon": 4,
+   "home": {
+    "area": "town",
+    "dx": 248,
+    "dy": 72
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.020",
+   "name": "Hàn Hàn Băng",
+   "outfit": 19,
+   "weapon": 11,
+   "home": {
+    "area": "town",
+    "dx": 269,
+    "dy": 9
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.021",
+   "name": "Mạc Nguyệt",
+   "outfit": 20,
+   "weapon": 15,
+   "home": {
+    "area": "town",
+    "dx": 236,
+    "dy": 66
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.022",
+   "name": "Nam Cung Trần Tâm",
+   "outfit": 21,
+   "weapon": 27,
+   "home": {
+    "area": "town",
+    "dx": -255,
+    "dy": -61
+   },
+   "wander_px": 120,
+   "brave": false
+  },
+  {
+   "id": "npc.023",
+   "name": "Lý Huyền",
+   "outfit": 22,
+   "weapon": 2,
+   "home": {
+    "area": "road",
+    "dx": -1649,
+    "dy": 1
+   },
+   "wander_px": 220,
+   "brave": true
+  },
+  {
+   "id": "npc.024",
+   "name": "Hoa Hồng Liên",
+   "outfit": 23,
+   "weapon": 26,
+   "home": {
+    "area": "road",
+    "dx": -2185,
+    "dy": 34
+   },
+   "wander_px": 220,
+   "brave": true
+  },
+  {
+   "id": "npc.025",
+   "name": "Cố Tuyết",
+   "outfit": 24,
+   "weapon": 16,
+   "home": {
+    "area": "road",
+    "dx": -34,
+    "dy": 1707
+   },
+   "wander_px": 220,
+   "brave": true
+  },
+  {
+   "id": "npc.026",
+   "name": "Lục Minh",
+   "outfit": 25,
+   "weapon": 20,
+   "home": {
+    "area": "road",
+    "dx": 37,
+    "dy": 2063
+   },
+   "wander_px": 220,
+   "brave": false
+  },
+  {
+   "id": "npc.027",
+   "name": "Nam Cung Vũ",
+   "outfit": 26,
+   "weapon": 5,
+   "home": {
+    "area": "road",
+    "dx": -2075,
+    "dy": 6
+   },
+   "wander_px": 220,
+   "brave": true
+  },
+  {
+   "id": "npc.028",
+   "name": "Liễu Thanh Y",
+   "outfit": 27,
+   "weapon": 25,
+   "home": {
+    "area": "road",
+    "dx": -1106,
+    "dy": 21
+   },
+   "wander_px": 220,
+   "brave": false
+  },
+  {
+   "id": "npc.029",
+   "name": "Tiêu Tuyết",
+   "outfit": 28,
+   "weapon": 25,
+   "home": {
+    "area": "road",
+    "dx": 1049,
+    "dy": 44
+   },
+   "wander_px": 220,
+   "brave": true
+  },
+  {
+   "id": "npc.030",
+   "name": "Mộ Dung Tử Yên",
+   "outfit": 29,
+   "weapon": 0,
+   "home": {
+    "area": "road",
+    "dx": -15,
+    "dy": -1710
+   },
+   "wander_px": 220,
+   "brave": false
+  },
+  {
+   "id": "npc.031",
+   "name": "Diệp Minh",
+   "outfit": 30,
+   "weapon": 11,
+   "home": {
+    "area": "road",
+    "dx": -36,
+    "dy": -1617
+   },
+   "wander_px": 220,
+   "brave": true
+  },
+  {
+   "id": "npc.032",
+   "name": "Tần Tuyết",
+   "outfit": 31,
+   "weapon": 3,
+   "home": {
+    "area": "road",
+    "dx": -2130,
+    "dy": -14
+   },
+   "wander_px": 220,
+   "brave": true
+  },
+  {
+   "id": "npc.033",
+   "name": "Liễu Thiên",
+   "outfit": 32,
+   "weapon": 28,
+   "home": {
+    "area": "road",
+    "dx": -1052,
+    "dy": -34
+   },
+   "wander_px": 220,
+   "brave": true
+  },
+  {
+   "id": "npc.034",
+   "name": "Cố Vô Ảnh",
+   "outfit": 33,
+   "weapon": 25,
+   "home": {
+    "area": "road",
+    "dx": 56,
+    "dy": -653
+   },
+   "wander_px": 220,
+   "brave": true
+  },
+  {
+   "id": "npc.035",
+   "name": "Thượng Quan Vũ",
+   "outfit": 34,
+   "weapon": 22,
+   "home": {
+    "area": "road",
+    "dx": 2002,
+    "dy": 56
+   },
+   "wander_px": 220,
+   "brave": false
+  },
+  {
+   "id": "npc.036",
+   "name": "Hoa Trần Tâm",
+   "outfit": 35,
+   "weapon": 10,
+   "home": {
+    "area": "road",
+    "dx": -5,
+    "dy": 1629
+   },
+   "wander_px": 220,
+   "brave": true
+  },
+  {
+   "id": "npc.037",
+   "name": "Hàn Phi",
+   "outfit": 36,
+   "weapon": 2,
+   "home": {
+    "area": "road",
+    "dx": -2128,
+    "dy": -1
+   },
+   "wander_px": 220,
+   "brave": false
+  },
+  {
+   "id": "npc.038",
+   "name": "Tô Yên",
+   "outfit": 37,
+   "weapon": 28,
+   "home": {
+    "area": "road",
+    "dx": 998,
+    "dy": -57
+   },
+   "wander_px": 220,
+   "brave": true
+  },
+  {
+   "id": "npc.039",
+   "name": "Thượng Quan Mặc",
+   "outfit": 38,
+   "weapon": 15,
+   "home": {
+    "area": "road",
+    "dx": 18,
+    "dy": 1993
+   },
+   "wander_px": 220,
+   "brave": true
+  },
+  {
+   "id": "npc.040",
+   "name": "Cố Thiên",
+   "outfit": 39,
+   "weapon": 0,
+   "home": {
+    "area": "road",
+    "dx": 10,
+    "dy": 1367
+   },
+   "wander_px": 220,
+   "brave": true
+  },
+  {
+   "id": "npc.041",
+   "name": "Mộ Dung Tuyết",
+   "outfit": 40,
+   "weapon": 4,
+   "home": {
+    "area": "road",
+    "dx": 7,
+    "dy": 2137
+   },
+   "wander_px": 220,
+   "brave": true
+  },
+  {
+   "id": "npc.042",
+   "name": "Nam Cung Huyền",
+   "outfit": 41,
+   "weapon": 9,
+   "home": {
+    "area": "road",
+    "dx": 1048,
+    "dy": -57
+   },
+   "wander_px": 220,
+   "brave": true
+  },
+  {
+   "id": "npc.043",
+   "name": "Mạc Thanh Y",
+   "outfit": 42,
+   "weapon": 26,
+   "home": {
+    "area": "road",
+    "dx": -27,
+    "dy": -1851
+   },
+   "wander_px": 220,
+   "brave": true
+  },
+  {
+   "id": "npc.044",
+   "name": "Thượng Quan Dao",
+   "outfit": 43,
+   "weapon": 18,
+   "home": {
+    "area": "road",
+    "dx": -2165,
+    "dy": 54
+   },
+   "wander_px": 220,
+   "brave": false
+  },
+  {
+   "id": "npc.045",
+   "name": "Vân Nguyệt",
+   "outfit": 44,
+   "weapon": 16,
+   "home": {
+    "area": "road",
+    "dx": 45,
+    "dy": -1708
+   },
+   "wander_px": 220,
+   "brave": true
+  },
+  {
+   "id": "npc.046",
+   "name": "Tô Ngọc Lan",
+   "outfit": 45,
+   "weapon": 5,
+   "home": {
+    "area": "road",
+    "dx": 960,
+    "dy": 51
+   },
+   "wander_px": 220,
+   "brave": true
+  },
+  {
+   "id": "npc.047",
+   "name": "Tần Thần",
+   "outfit": 46,
+   "weapon": 23,
+   "home": {
+    "area": "road",
+    "dx": 956,
+    "dy": -42
+   },
+   "wander_px": 220,
+   "brave": true
+  },
+  {
+   "id": "npc.048",
+   "name": "Mộ Dung Phi",
+   "outfit": 47,
+   "weapon": 17,
+   "home": {
+    "area": "road",
+    "dx": 27,
+    "dy": -776
+   },
+   "wander_px": 220,
+   "brave": true
+  },
+  {
+   "id": "npc.049",
+   "name": "Vân Thanh Y",
+   "outfit": 48,
+   "weapon": 1,
+   "home": {
+    "area": "road",
+    "dx": 867,
+    "dy": -29
+   },
+   "wander_px": 220,
+   "brave": false
+  },
+  {
+   "id": "npc.050",
+   "name": "Âu Dương Hạo",
+   "outfit": 49,
+   "weapon": 28,
+   "home": {
+    "area": "road",
+    "dx": -1689,
+    "dy": 11
+   },
+   "wander_px": 220,
+   "brave": false
+  }
+ ],
+ "chat": [
+  [
+   "Hôm nay Thanh Vân Trấn đông vui quá.",
+   "Nghe nói có đạo hữu mới nhập thế."
+  ],
+  [
+   "Đạo hữu tu luyện tới tầng mấy rồi?",
+   "Mới Luyện Khí tầng ba, còn xa lắm."
+  ],
+  [
+   "Vạn Bảo Lâu vừa nhập đan phương mới.",
+   "Linh thạch đâu mà mua, haizz."
+  ],
+  [
+   "Ngoài bìa rừng Yêu Hồ lại quấy phá.",
+   "Để ta ra đó luyện kiếm một phen."
+  ],
+  [
+   "Bãi đá phía đông có Tinh Sa.",
+   "Tối nay ta đi đào thử."
+  ],
+  [
+   "Sơn Động Lão Yêu mạnh lắm đấy.",
+   "Phải chuẩn bị đan dược mới dám đánh."
+  ],
+  [
+   "Lò luyện đan hôm nay nổ ba lần.",
+   "Chắc lửa quá mạnh rồi, hahaha."
+  ],
+  [
+   "Ngươi có thấy Pháp tướng của trưởng lão chưa?",
+   "Thấy rồi, uy áp kinh người!"
+  ],
+  [
+   "Trúc Cơ Đan tỷ lệ thành công tám phần.",
+   "Thêm Bảo hộ phù cho chắc."
+  ],
+  [
+   "Mai lên vùng Cam săn Huyết Sài không?",
+   "Đi! Hẹn ở cầu đông."
+  ],
+  [
+   "Tuyết Sơn lạnh thấu xương.",
+   "Mang theo Hồi Linh Đan nhé."
+  ],
+  [
+   "Kiếm của đạo hữu đẹp thật.",
+   "Thức tỉnh ba lần mới ra phẩm Tím đó."
+  ],
+  [
+   "Thiên kiếp hôm qua sấm chớp ầm ầm.",
+   "Có người vừa đột phá Trúc Cơ."
+  ],
+  [
+   "Ta muốn gia nhập tông môn.",
+   "Chờ tông môn mở đã, nghe nói sắp rồi."
+  ],
+  [
+   "Hồ sen trong thành đẹp quá.",
+   "Ngồi đây tĩnh tu một lát cũng tốt."
+  ]
+ ],
+ "greet": [
+  "Đạo hữu khỏe chứ?",
+  "Thanh Vân Thành chào đón ngươi!",
+  "Ra ngoài nhớ cẩn thận yêu thú.",
+  "Muốn mua đan phương thì ghé Vạn Bảo Lâu.",
+  "Tu đạo gian nan, cố lên!",
+  "Đi theo đường lớn sẽ an toàn hơn.",
+  "Rừng phía nam nhiều linh thảo lắm.",
+  "Hôm nay trời đẹp, thích hợp luyện kiếm."
+ ]
+}

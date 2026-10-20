@@ -100,5 +100,7 @@ export function createInventory({ progress, bag, craft, itemDefs, awaken, gp, ar
     }
     return null;
   }
-  return { entries, find, slotItem, act };
+  // Đồ trong kho mặc được vào ô `slot` (đồ phôi phải thức tỉnh rồi)
+  const slotCandidates = (slot) => entries().map((e) => e.item).filter((it) => it.slot === slot && !it.equipped && (it.key.startsWith('bag:') || it.tier));
+  return { entries, find, slotItem, slotCandidates, act };
 }

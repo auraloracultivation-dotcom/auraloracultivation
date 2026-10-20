@@ -481,3 +481,13 @@ img { image-rendering: pixelated; }
 .bag-cell.tier-cam { border-color: #ff9a3d; } .bag-cell.tier-vang { border-color: #ffd23a; } .bag-cell.tier-do, .bag-cell.tier-den { border-color: #ff3b30; }
 .sheet .row.locked { opacity: .8; }
 .sheet .lock { color: #ffb38a !important; font-size: 12px; }
+
+/* Chọn đồ cho ô trống — bảng nhỏ nằm ngang, vuốt ngang */
+.slot-pick { width: min(94vw, 520px); }
+.pick-row { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 8px; touch-action: pan-x; -webkit-overflow-scrolling: touch; }
+.pick-row .pick { flex: 0 0 auto; width: 78px; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 4px;
+  border-radius: 8px; border: 1.5px solid #4a3a5e; background: rgba(0,0,0,.25); cursor: pointer; touch-action: manipulation !important; }
+.pick-row .pick img { width: 60px; height: 60px; object-fit: contain; }
+.pick-row .pick span { font-size: 10px; color: var(--text); text-align: center; line-height: 1.2; }
+.pick.tier-luc { border-color: #4caf50; } .pick.tier-lam { border-color: #3d8bff; } .pick.tier-tim { border-color: #b05cff; }
+.pick.tier-cam { border-color: #ff9a3d; } .pick.tier-vang { border-color: #ffd23a; } .pick.tier-do, .pick.tier-den { border-color: #ff3b30; }

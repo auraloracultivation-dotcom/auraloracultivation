@@ -7,7 +7,7 @@ export { showCharacterPanel, showSettings, showWorldMap, loadSettings } from './
 export { drawRoundMap } from './compass.js';
 export { createStatsDock, STATS } from './stats.js';
 export { enableFastTap } from './fasttap.js';
-export { showBag, showCodeDialog, showItemActions } from './bag.js';
+export { showBag, showCodeDialog, showItemActions, showSlotPicker } from './bag.js';
 export { createTestBag } from './testbag.js';
 export { showSheet, placeholderIcon } from './sheet.js';
 export { escapeHtml } from './screens.js';

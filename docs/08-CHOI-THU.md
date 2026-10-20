@@ -55,6 +55,15 @@ Phím máy tính: Space đánh, 1–5 kỹ năng, Q uống đan hồi máu.
 - Linh thảo mọc nhiều trong rừng, khoáng nhiều ở bãi đá; ai thích farm đâu thì farm đó (rừng / đá / dọc đường).
 - Chỉ là hình + va chạm phía máy khách: máy chủ chưa biết cây đá (chỉ kiểm tốc độ).
 
+## 50 NPC
+- `data/npcs.json`: tên, trang phục, vũ khí, nhà (22 trong thành, 28 dọc đường chính), lời tán gẫu, lời chào. Máy khách tự chạy (docs/01: NPC lấp chỗ trống).
+- Đi lại quanh nhà, đứng tán gẫu với nhau (bong bóng chat), luyện kiếm tại chỗ; NPC gan dạ ra vung vũ khí vào quái gần — chỉ hình, không sát thương, không lấy thưởng. Chạm NPC → chào.
+- Trang phục/vũ khí NPC là hình RIÊNG (`assets/npcs`), **không phải vật phẩm game** — trang bị của người chơi hiện chỉ có 6 bộ hệ.
+- Chỉ NPC trong ~1600 điểm quanh người chơi mới chạy (nhẹ máy). Code: `src/game/npcs.js`, `src/entity/npc-draw.js`.
+
+## Bảng Nhân vật: chạm ô trống
+Hiện bảng nhỏ nằm ngang các món trong kho mặc được vào ô đó; chọn là mặc ngay, bảng Nhân vật vẽ lại.
+
 ## Camera
 `data/config.json` → `camera.zoom` (đang 0,75). Chữ/thanh máu trên đầu tự phóng để vẫn đọc được.
 
