@@ -1,10 +1,22 @@
 // Nhân vật chibi tạm vẽ bằng code (khung 24×32, neo ở chân). Sẽ thay bằng sprite theo docs/04-ASSET.md.
 // scale: tỉ lệ thu nhỏ nhân vật (data/config.json player.sprite_scale); neo ở chân
+export const FLY_LIFT = 12; // độ cao khi bay (điểm ảnh khung nhân vật)
+export function liftOf(p) {
+  return p.flying ? FLY_LIFT + Math.sin(performance.now() / 260) * 1.5 : 0;
+}
+
 export function drawPlayer(ctx, p, scale = 1) {
   ctx.save();
   ctx.translate(p.x, p.y);
   ctx.scale(scale, scale);
-  drawBody(ctx, { ...p, x: 0, y: 0 });
+  const lift = liftOf(p);
+  if (lift) { // bóng nhỏ, mờ dưới đất + vệt linh khí
+    ctx.fillStyle = 'rgba(0,0,0,0.22)';
+    ctx.beginPath(); ctx.ellipse(0, 1, 5, 2, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(160,220,255,0.35)';
+    ctx.beginPath(); ctx.ellipse(0, -lift + 1, 8, 2.5, 0, 0, Math.PI * 2); ctx.fill();
+  }
+  drawBody(ctx, { ...p, x: 0, y: -lift, noShadow: !!lift });
   ctx.restore();
 }
 
@@ -15,8 +27,10 @@ function drawBody(ctx, p) {
   const robe = p.isLocal ? '#d9b24a' : '#4f7fc4';
   const robeDark = p.isLocal ? '#a8862f' : '#355b94';
 
-  ctx.fillStyle = 'rgba(0,0,0,0.3)';
-  ctx.beginPath(); ctx.ellipse(x, Math.round(p.y) + 1, 7, 3, 0, 0, Math.PI * 2); ctx.fill();
+  if (!p.noShadow) {
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.beginPath(); ctx.ellipse(x, Math.round(p.y) + 1, 7, 3, 0, 0, Math.PI * 2); ctx.fill();
+  }
 
   // chân
   const step = p.walkT ? Math.round(Math.sin(p.walkT * 14) * 2) : 0;
@@ -46,7 +60,7 @@ function drawBody(ctx, p) {
 
 export function drawLabel(ctx, p, now, scale = 1) {
   const x = Math.round(p.x);
-  const y = Math.round(p.y + 33 - 33 * scale); // bám theo đầu nhân vật đã thu nhỏ
+  const y = Math.round(p.y + 33 - 33 * scale - liftOf(p) * scale); // bám theo đầu nhân vật đã thu nhỏ
   ctx.font = '6px sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'bottom';

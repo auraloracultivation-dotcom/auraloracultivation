@@ -74,8 +74,11 @@ export function showCharacterPanel({ name, realmName, stats, equipment, drawAvat
       const slot = at(`<button type="button" class="eq-slot ${item ? 'filled' : ''}" aria-label="Ô trang bị ${i + 1}"></button>`, x, y, SLOT, SLOT);
       slot.addEventListener('click', () => toast(item ? item.name : 'Chưa trang bị'));
     });
-    at(`<div class="char-line gold">${escapeHtml(name)}</div>`, 96, 247, 90, 12);
-    at(`<div class="char-line">${escapeHtml(realmName)}</div>`, 96, 267, 90, 12);
+    // đè lên biểu tượng nhỏ vẽ sẵn: người = đạo hiệu, sen = cảnh giới
+    at(`<img class="char-ico" src="${ICON('nguoi')}" alt="">`, 83, 245, 12, 13);
+    at(`<img class="char-ico" src="${ICON('sen')}" alt="">`, 83, 265, 12, 13);
+    at(`<div class="char-line gold">${escapeHtml(name)}</div>`, 98, 247, 88, 12);
+    at(`<div class="char-line">${escapeHtml(realmName)}</div>`, 98, 267, 88, 12);
 
     // Lớp chỉ số nằm sẵn dưới đáy lòng khung; vuốt lên để trượt ra, vuốt xuống để thu lại
     const view = at('<div class="stats-view"></div>', ...INNER);

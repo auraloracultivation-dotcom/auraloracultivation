@@ -33,3 +33,9 @@ Dự phòng: `bg/den-vang-dang-nhap.webp`, `bg/den-vang-dang-tai.webp` (bộ đe
 
 ## Độ sắc nét
 Khung hiển thị theo **bội số nguyên điểm ảnh gốc** (`crispWidth` trong `src/ui/stage.js`); nút nhỏ hơn bội số thì thu nhỏ mượt.
+
+## Bổ sung 2026-10-20 (mẫu `mau-hud-doc`, khung `khung-nhan-vat-moi`)
+- `frames/khung-nhan-vat-v2.png` — khung nhân vật HUD mới, sinh bằng `tools/hud_frame.py` (xoá chữ, màu thanh, nhân vật, biểu tượng xoắn để game tự vẽ)
+- `icons/tui-do.png`, `ky-nang.png`, `nhiem-vu.png`, `tong-mon.png`, `cai-dat-v2.png`, `ban-do-v2.png` — menu góc trên
+- `icons/bay-len.png`, `icons/ha-xuong.png` — một nút Bay lên ↔ Hạ xuống
+- `icons/sen.png` (cảnh giới / Tu vi), `icons/nguoi.png` (đạo hiệu)

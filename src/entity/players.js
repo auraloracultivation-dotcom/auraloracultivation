@@ -43,11 +43,11 @@ export function createRemotePlayers(worldW, worldH) {
       }
       for (const id of list.keys()) if (!present.has(id)) list.delete(id);
     },
-    onMove({ id, x, y, moving }) {
+    onMove({ id, x, y, moving, flying }) {
       const p = ensure(id, null, x, y);
       const dx = wrap(x - p.tx, worldW);
       if (dx) p.facing = dx > 0 ? 1 : -1;
-      p.tx = x; p.ty = y; p.moving = moving;
+      p.tx = x; p.ty = y; p.moving = moving; p.flying = !!flying;
     },
     onChat({ id, text }, now, seconds) {
       const p = list.get(id);
