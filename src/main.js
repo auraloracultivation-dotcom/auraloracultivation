@@ -1,7 +1,7 @@
 // Điểm khởi động: nối các module lại với nhau. Không chứa luật gameplay chi tiết.
 import { loadJSON, startLoop, createScreen, createCamera, followCamera, createInput, drawStick } from './core/index.js';
 import { createMap, wrapDelta } from './map/index.js';
-import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, loadRig, rigAttack, artInfo, renderPortrait, avatarFx } from './entity/index.js';
+import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, setTextScale, loadRig, rigAttack, artInfo, renderPortrait, avatarFx } from './entity/index.js';
 import { createAudio } from './audio/index.js';
 import { createPhapTuong } from './combat/index.js';
 import { createGameplay } from './game/index.js';
@@ -21,7 +21,7 @@ async function boot() {
   // ?offline: chơi thử một mình không cần mạng (src/net/offline.js) — để thử luật chơi và kiểm thử tự động
   const net = await import(new URLSearchParams(location.search).has('offline') ? './net/offline.js' : './net/index.js');
   const config = await loadJSON('data/config.json');
-  const screen = createScreen(document.getElementById('game'));
+  const screen = createScreen(document.getElementById('game'), config.camera?.zoom || 1);
   loading.set(30, 'Kiểm tra đạo tịch…');
 
   let session = await net.getSession();
@@ -130,6 +130,9 @@ async function boot() {
     hud.setActive('phap-tuong', false); setLook();
     if (msg) toast(msg, 1600);
   }
+  function onLookChanged() { // đồ trên người đổi từ bảng Tu luyện
+    if (pt.active && !bag.equippedItem('phap-tuong')) { pt.cancel(); phapTuongOff(); } else setLook();
+  }
   function usePhapTuong() {
     const r = pt.toggle(!!bag.equippedItem('phap-tuong'));
     if (r === 'off') return phapTuongOff();
@@ -170,7 +173,7 @@ async function boot() {
         thumb: (it) => it.icon || artInfo(it.art)?.file || '', note: 'Đồ thử nghiệm: chỉ lưu trên máy này, chưa lưu máy chủ.',
         onUse: (it) => game.onBagUse(it),
         onToggle(it) {
-          bag.toggle(it);
+          bag.toggle(it); game.onBagEquip(it);
           if (pt.active && !bag.equippedItem('phap-tuong')) { pt.cancel(); phapTuongOff(); } else setLook(); // tháo pháp tướng → thu lại
         },
       });
@@ -219,7 +222,7 @@ async function boot() {
   const refreshAvatar = () => hud.setPortrait(renderPortrait(me.look, { body: true }));
   refreshAvatar();
   loading.set(90, 'Thả yêu thú vào rừng…');
-  game = await createGameplay({ loadJSON, map, me, hud, pt, toast, audio, userId: me.id, onRealm: (r) => zone.setRealm(r) });
+  game = await createGameplay({ loadJSON, map, me, hud, pt, toast, audio, userId: me.id, bag, onLook: () => onLookChanged(), onRealm: (r) => zone.setRealm(r) });
   me.onAutoSwing = swing;
   const dock = createStatsDock({ getValue: (id) => game.statValue(id) });
   game.setDock(dock);
@@ -293,6 +296,7 @@ async function boot() {
 
   function render() {
     const { ctx, dpr, scale } = screen;
+    setTextScale(screen.textScale);
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.fillStyle = '#0f1a14';
     ctx.fillRect(0, 0, screen.canvas.width, screen.canvas.height);

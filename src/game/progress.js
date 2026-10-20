@@ -11,6 +11,7 @@ export function createProgress(userId, gp) {
     if (saved && saved.v === VERSION) st = { ...st, ...saved };
   } catch { /* hỏng thì làm lại từ đầu */ }
   st.stage = Math.max(0, Math.min(stages.length - 1, st.stage | 0));
+  st.itemAw ||= {}; // thức tỉnh của đồ trong Kho (6 hệ): mã vật phẩm → { tier, lines, spent }
 
   let dirty = false, timer = 0;
   const save = () => { try { localStorage.setItem(key, JSON.stringify(st)); } catch { /* chặn lưu */ } dirty = false; };
@@ -19,7 +20,7 @@ export function createProgress(userId, gp) {
 
   function fresh() {
     return { v: VERSION, stage: 0, exp: 0, hp: null, stone: 0, inv: {}, gear: [], eq: {}, cp: {}, uid: 1,
-      quests: { active: {}, done: {} }, herbs: [], bosses: [], dailyDone: {}, flags: [] };
+      quests: { active: {}, done: {} }, herbs: [], bosses: [], dailyDone: {}, flags: [], itemAw: {} };
   }
 
   return {
@@ -73,12 +74,15 @@ export function createProgress(userId, gp) {
       for (const [sl, u] of Object.entries(st.eq)) if (u === uid) delete st.eq[sl];
       touch();
     },
+    // Trả về true nếu vừa MẶC vào (để nơi gọi tháo đồ Kho cùng ô)
     toggleEquip(uid) {
       const g = st.gear.find((x) => x.uid === uid);
       if (!g || !g.tier) return false;
-      if (st.eq[g.slot] === uid) delete st.eq[g.slot]; else st.eq[g.slot] = uid;
-      touch(); return true;
+      if (st.eq[g.slot] === uid) { delete st.eq[g.slot]; touch(); return false; }
+      st.eq[g.slot] = uid; touch(); return true;
     },
+    unequipSlot(slot) { if (st.eq[slot]) { delete st.eq[slot]; touch(); } },
+    itemAw: (id) => (st.itemAw[id] ||= { tier: null, lines: [], spent: 0 }),
     equipped: () => Object.values(st.eq).map((u) => st.gear.find((g) => g.uid === u)).filter(Boolean),
   };
 }

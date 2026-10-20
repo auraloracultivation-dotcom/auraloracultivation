@@ -93,10 +93,21 @@ export function createViews(o) {
         <p class="need">${need(b.inputs)}</p>${btn('forge', b.id, 'Luyện phôi', ok && progress.has(b.inputs))}</div>`;
     }).join('');
   }
+  const linesText = (a) => a.lines.map((l) => `${STAT[l.k]} +${l.v}`).join(' · ');
+  // Đồ trong Kho (6 hệ, có hình): thức tỉnh để có chỉ số, mặc/tháo như trong Kho
+  function bagGearRows() {
+    return o.bag.entries().map((e) => e.item).filter((it) => it.slot).map((it) => {
+      const a = st().itemAw[it.id] || { tier: null, lines: [], spent: 0 }, eq = o.bag.isEquipped(it), cost = craft.awakenCost(a);
+      return `<div class="row ${a.tier ? `tier-${a.tier}` : ''}"><div class="row-h"><b>${E(it.name)}</b><em>${SLOT[it.slot]}${a.tier ? ` · ${tierName(a.tier)}` : ''}${eq ? ' · đang mặc' : ''}</em></div>
+        <p>${a.tier ? linesText(a) : 'Chưa thức tỉnh — chưa có chỉ số'}</p>${btn('awakenItem', it.id, `${a.tier ? 'Thức tỉnh lại' : 'Thức tỉnh'} (${cost} LT)`, st().stone >= cost)}
+        ${btn('wearItem', it.id, eq ? 'Tháo' : 'Mặc')}</div>`;
+    }).join('');
+  }
   function gearTab() {
-    const list = st().gear;
-    if (!list.length) return '<p class="bag-empty">Chưa có trang bị. Luyện phôi trước, rồi Thức tỉnh để có chỉ số.</p>';
-    return list.map((g) => {
+    const list = st().gear, kho = bagGearRows();
+    const head = `<div class="row"><p>Đồ trong Kho (có hình) và đồ luyện từ phôi đều thức tỉnh được. Mỗi ô chỉ mặc một món. Linh thạch: <b>${st().stone}</b></p></div>`;
+    if (!list.length && !kho) return `${head}<p class="bag-empty">Chưa có trang bị. Nhập mã quà trong Cài đặt để nhận đồ 6 hệ, hoặc luyện phôi.</p>`;
+    return head + kho + list.map((g) => {
       const eq = st().eq[g.slot] === g.uid, cost = craft.awakenCost(g);
       const lines = g.lines.map((l) => `${STAT[l.k]} +${l.v}`).join(' · ') || 'Phôi trắng — chưa có chỉ số';
       return `<div class="row ${g.tier ? `tier-${g.tier}` : ''}"><div class="row-h"><b>${E(g.name)}</b><em>${SLOT[g.slot]}${g.tier ? ` · ${tierName(g.tier)}` : ''}${eq ? ' · đang mặc' : ''}</em></div>
@@ -129,7 +140,18 @@ export function createViews(o) {
         if (act === 'use') o.usePill(arg);
         if (act === 'forge') msg(craft.forgeBlank(arg));
         if (act === 'awaken') msg(craft.awakenGear(+arg));
-        if (act === 'equip') { progress.toggleEquip(+arg); o.recompute(); }
+        if (act === 'equip') {
+          const g = progress.gear(+arg);
+          if (progress.toggleEquip(+arg)) { o.bag.unequip(g.slot); o.onLook(); }
+          o.recompute();
+        }
+        if (act === 'awakenItem') msg(craft.awakenItem(arg));
+        if (act === 'wearItem') {
+          const it = o.bag.entries().map((e) => e.item).find((x) => x.id === arg);
+          o.bag.toggle(it);
+          if (o.bag.isEquipped(it)) progress.unequipSlot(it.slot);
+          o.onLook(); o.recompute();
+        }
         if (act === 'dismantle') msg(craft.dismantle(+arg));
         if (act === 'train') msg(craft.trainSkill(arg));
         progress.changed();

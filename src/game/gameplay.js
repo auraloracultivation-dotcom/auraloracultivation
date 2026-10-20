@@ -2,20 +2,22 @@
 // Nhận đối tượng từ main.js (map, me, hud, pt…) và trả về các hàm main.js gọi mỗi khung hình.
 // Mọi con số nằm trong data/ (stats.json = Lab, gameplay.json = thông số chơi thử). Mốc 3–4: chuyển kết quả lên máy chủ.
 import { wrapDelta } from '../map/index.js';
-import { drawMonster, drawMonsterLabel, drawFx } from '../entity/index.js';
+import { drawMonster, drawMonsterLabel, drawFx, drawNode } from '../entity/index.js';
 import { createProgress } from './progress.js';
 import { createStats } from './stats.js';
 import { createMonsters } from './monsters.js';
 import { createQuests } from './quests.js';
 import { createCraft } from './craft.js';
 import { createViews } from './views.js';
+import { createGather } from './gather.js';
 
 const SKILL_OF_CP = { attack: 'skill.tamphap.luyen-khi.001', 'kiem-khi': 'skill.chieu.kiem-khi.001', 'linh-thu': 'skill.khe.linh-thu.001',
   'nguyen-anh': 'skill.than.canh-phong.001', 'phap-tuong': 'skill.phap-tuong.thien-thu.001' };
 const MAJOR_OF = (id) => ({ lk: 0, tc: 1, kd: 2, na: 3, ht: 4 }[id.slice(0, 2)] ?? 0);
 const rint = (a, b) => Math.round(a + Math.random() * (b - a));
 
-export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio, userId, onRealm = () => {} }) {
+// bag: Kho đồ 6 hệ (src/ui/testbag.js) — đồ trong Kho thức tỉnh được; onLook(): báo main.js cập nhật hình mặc trên người
+export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio, userId, bag, onLook = () => {}, onRealm = () => {} }) {
   const [statsDef, gp, monDef, mats, pills, blanks, awaken, cp, questDef, qItems, realms] = await Promise.all([
     'data/stats.json', 'data/gameplay.json', 'data/monsters/monsters.json', 'data/items/materials.json', 'data/items/pills.json',
     'data/equipment/blanks.json', 'data/equipment/awaken.json', 'data/skills/cong-phap.json', 'data/quests/quests.json',
@@ -25,6 +27,12 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
   const mobs = createMonsters({ gp, defs: monDef.monsters, map });
   const quests = createQuests(questDef, progress, () => MAJOR_OF(progress.stageDef.id));
   const craft = createCraft({ progress, pills, blanks, awaken, skills: cp, gp });
+  const gather = createGather({ gp, mats, map });
+  gather.seed(me);
+  const SLOTS = ['mat-na', 'trang-phuc', 'vu-khi', 'nhan', 'canh', 'phap-tuong', 'linh-thu', 'day-chuyen'];
+  // Trang bị đang tính chỉ số: đồ luyện ra đang mặc + đồ Kho đang mặc đã thức tỉnh
+  const wornGear = () => [...progress.equipped(),
+    ...SLOTS.map((sl) => bag.equippedItem(sl)).filter(Boolean).map((it) => progress.state.itemAw[it.id]).filter((a) => a?.tier)];
   const itemDefs = new Map([...mats.materials, ...pills.pills, ...qItems.items].map((d) => [d.id, d]));
   const S = gp.skills, PL = gp.player;
 
@@ -37,7 +45,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
   function recompute() {
     const b = {};
     for (const [k, v] of Object.entries(buffs)) if (v.until > now) b[k] = v.mul;
-    ps = stats.player(progress.stageDef, progress.equipped(), b);
+    ps = stats.player(progress.stageDef, wornGear(), b);
     pt.setMax(ps.mp);
     hp = Math.min(hp, ps.hp);
     hud.setRealm(progress.stageDef.name + (progress.atPeak() ? ' · đỉnh' : ''));
@@ -198,6 +206,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     else if (now - hurtAt > PL.regen_after_s) hp = Math.min(ps.hp, hp + ps.hp * PL.regen_hp_per_s * dt);
     env.alive = !dead;
     mobs.update(dt, env);
+    for (const n of gather.update(dt, me, !dead)) { gain(n.item.id, n.n); say(n.x, n.y - 10, `+${n.n} ${n.item.name}`, n.group === 'thao' ? '#9dff8a' : '#d6dbe8'); progress.changed(); }
     if (auto && !dead && target(PL.attack_range_px) && attackCd <= 0) { attack(); me.onAutoSwing?.(); }
     for (let i = bolts.length - 1; i >= 0; i--) {
       const b = bolts[i], step = Math.hypot(b.vx, b.vy) * dt;
@@ -225,6 +234,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
 
   const at = (o) => ({ x: me.x + wrapDelta(o.x - me.x, map.width), y: me.y + wrapDelta(o.y - me.y, map.height) });
   function renderBelow(ctx, t) {
+    for (const n of gather.list) { const p = at(n); drawNode(ctx, n, p.x, p.y, t); }
     const list = mobs.list.map((m) => ({ m, ...at(m) })).sort((a, b) => a.y - b.y);
     for (const { m, x, y } of list) {
       if (m.state === 'windup') { const w = at({ x: m.wx, y: m.wy }); m.wrx = w.x; m.wry = w.y; m.heavyR = gp.monster.heavy.radius_px; }
@@ -251,7 +261,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     return true;
   }
 
-  const views = createViews({ monsters: monDef.monsters, progress, quests, craft, itemDefs, mats, pills, blanks, awaken, cp, realms, gp, toast,
+  const views = createViews({ bag, onLook, monsters: monDef.monsters, progress, quests, craft, itemDefs, mats, pills, blanks, awaken, cp, realms, gp, toast,
     getStats: () => ps, getHp: () => hp, onReward: (r) => { if (r.exp) addExp(r.exp); if (r.spiritStone) progress.addStone(r.spiritStone);
       for (const i of r.items || []) progress.add(i.id, i.count); }, recompute, usePill, emit: quests.emit });
 
@@ -263,12 +273,14 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
   return {
     update, renderBelow, renderAbove, tap, attack, skill, breakthrough, usePill,
     get dead() { return dead; },
-    _debug: { progress, mobs, get hp() { return hp; }, get ps() { return ps; } }, // chỉ cho kiểm thử (?debug)
+    _debug: { progress, mobs, bag, gather, get hp() { return hp; }, get ps() { return ps; } }, // chỉ cho kiểm thử (?debug)
     speed: () => buffs.speed?.mul || null,
     toggleAuto() { auto = !auto; hud.setActive('auto', auto); toast(auto ? 'Tự động đánh: bật' : 'Tự động đánh: tắt', 1000); },
     healPill: () => usePill('item.dan.tieu-hoi-huyet.001'),
     statValue: views.statValue, openQuests: views.openQuests, openCultivate: views.openCultivate,
     setDock(d) { views.refreshDock = d.refresh; },
+    // Mặc đồ Kho vào ô nào thì tháo đồ luyện ra ở ô đó (một ô một món)
+    onBagEquip(it) { if (bag.isEquipped(it)) progress.unequipSlot(it.slot); recompute(); },
     bagEntries: views.bagEntries, onBagUse: views.onBagUse, realmName: () => progress.stageDef.name,
     markers: () => mobs.list.filter((m) => m.def.rank !== 'thuong' && m.state !== 'dead').map((m) => ({ x: m.x, y: m.y, boss: true })),
   };
