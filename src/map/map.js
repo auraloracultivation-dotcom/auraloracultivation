@@ -99,16 +99,19 @@ export async function createMap(def, terrainDef, tilesDef) {
     for (let i = bx; i <= bx + 1; i++) for (let j = by; j <= by + 1; j++) {
       ctx.drawImage(c, (i * W - ox) * k, (j * H - oy) * k, W * k, H * k);
     }
+    // Dấu định vị: chấm nhỏ vừa đủ nhận ra (mình vàng có viền, người khác trắng nhỏ hơn)
+    const dot = Math.max(2, size / 70);
     for (const m of markers) {
       const dx = wrapDelta(m.x - x, width) / T, dy = wrapDelta(m.y - y, height) / T;
       if (Math.abs(dx) > radiusTiles || Math.abs(dy) > radiusTiles) continue;
-      ctx.fillStyle = m.self ? '#ffe36a' : '#ffffff';
-      ctx.strokeStyle = '#000';
-      ctx.lineWidth = 1.5;
+      const px = size / 2 + dx * k, py = size / 2 + dy * k;
       ctx.beginPath();
-      const dot = Math.max(3, size / 32);
-      ctx.arc(size / 2 + dx * k, size / 2 + dy * k, m.self ? dot * 1.3 : dot, 0, Math.PI * 2);
-      ctx.fill(); ctx.stroke();
+      ctx.arc(px, py, m.self ? dot * 1.2 : dot * 0.85, 0, Math.PI * 2);
+      ctx.fillStyle = m.self ? '#ffe36a' : '#ffffff';
+      ctx.fill();
+      ctx.lineWidth = Math.max(1, dot * 0.45);
+      ctx.strokeStyle = '#1b1208';
+      ctx.stroke();
     }
   }
 

@@ -276,7 +276,7 @@ img { image-rendering: pixelated; }
 .set-logout { background: linear-gradient(#b8505a, #7e2730); color: #fff; border-radius: 4px; }
 .world-map { display: block; }
 .map-title {
-  position: absolute; left: 50%; bottom: 100%; transform: translateX(-50%); margin-bottom: 4px;
+  position: absolute; left: 50%; bottom: 100%; transform: translateX(-50%); margin-bottom: 2px;
   width: min(220px, 70vw); aspect-ratio: 308 / 62; display: flex; align-items: center; justify-content: center;
   padding: 0 14% 0 10%; background: url("../../assets/ui/frames/bang-ten-khu.png") center / 100% 100% no-repeat;
   image-rendering: pixelated;
@@ -313,3 +313,6 @@ img { image-rendering: pixelated; }
   background: linear-gradient(#2b3556, #1b2340); box-shadow: inset 0 0 0 2px #8a7a55;
 }
 .set-hot.off span { display: block; color: #b9b19d; font-weight: 800; font-size: 4.6cqw; text-shadow: 0 1px 2px #000; }
+.modal-map .modal-close { right: 0; top: 0; }
+.modal-map .modal-close img { image-rendering: auto; }
+.map-zoom img { image-rendering: auto; }

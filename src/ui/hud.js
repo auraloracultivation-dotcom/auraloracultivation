@@ -82,7 +82,7 @@ export function createHud(opts) {
   });
   right.querySelector('.minimap').addEventListener('click', opts.onOpenMap);
   const online = right.querySelector('[data-online]');
-  const miniCanvas = setupRoundCanvas(right.querySelector('.minimap canvas'), portrait ? 78 : 84);
+  const miniCanvas = setupRoundCanvas(right.querySelector('.minimap canvas'), portrait ? 86 : 92);
   crisp(right.querySelector('.zone-tag'), 308, 130);
 
   // ---- Dưới phải: tấn công + kỹ năng ----

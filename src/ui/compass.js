@@ -1,47 +1,43 @@
-// Bản đồ tròn kiểu la bàn, vẽ bằng code nên sắc nét ở mọi kích thước (bản đồ nhỏ và bản đồ thế giới
-// dùng chung một kiểu viền). Màu theo bảng màu khung của chủ dự án: xanh đêm, vàng, tím.
-const NAVY = '#10192d', GOLD = '#f2c77f', GOLD_DARK = '#b8894a', PURPLE = '#7a5cc4';
+// Bản đồ tròn: game vẽ bản đồ thật vào lòng tròn, rồi đặt khung la bàn của chủ dự án
+// (frames/khung-ban-do.png, sinh bằng tools/map_frame.py) đè lên trên. Dùng chung cho bản đồ nhỏ và bản đồ thế giới.
+const FRAME_SRC = 'assets/ui/frames/khung-ban-do.png';
+const FRAME = { w: 995, h: 980, cx: 497, cy: 500, r: 376 }; // toạ độ lòng tròn trên ảnh khung
 
-export function setupRoundCanvas(canvas, cssSize) {
+const frameImg = new Image();
+frameImg.src = FRAME_SRC;
+
+// cssWidth: chiều rộng hiển thị của cả khung; canvas có cùng tỉ lệ với ảnh khung
+export function setupRoundCanvas(canvas, cssWidth) {
   const dpr = window.devicePixelRatio || 1;
-  canvas.style.width = canvas.style.height = `${cssSize}px`;
-  canvas.width = canvas.height = Math.round(cssSize * dpr);
+  const cssH = (cssWidth * FRAME.h) / FRAME.w;
+  canvas.style.width = `${cssWidth}px`;
+  canvas.style.height = `${cssH}px`;
+  canvas.width = Math.round(cssWidth * dpr);
+  canvas.height = Math.round(cssH * dpr);
   return canvas;
 }
 
-// drawMap(offCtx, size): vẽ bản đồ vào ô vuông size×size; hàm này cắt tròn và thêm viền + N/E/S/W
+// drawMap(offCanvas, size): vẽ bản đồ vào ô vuông size×size (tâm = vị trí mình)
 export function drawRoundMap(canvas, drawMap) {
-  const S = canvas.width;
+  const k = canvas.width / FRAME.w;
+  const cx = FRAME.cx * k, cy = FRAME.cy * k, R = FRAME.r * k;
+  const size = Math.max(16, Math.round(R * 2));
   const off = (canvas._off ||= document.createElement('canvas'));
-  const inner = Math.round(S * 0.78);
-  if (off.width !== inner) { off.width = off.height = inner; }
-  drawMap(off, inner);
+  if (off.width !== size) { off.width = off.height = size; }
+  drawMap(off, size);
 
   const ctx = canvas.getContext('2d');
-  const c = S / 2, R = S * 0.42, ring = Math.max(2, S * 0.035);
-  ctx.clearRect(0, 0, S, S);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.save();
-  ctx.beginPath(); ctx.arc(c, c, R, 0, Math.PI * 2); ctx.clip();
+  ctx.beginPath(); ctx.arc(cx, cy, R + 1, 0, Math.PI * 2); ctx.clip();
+  ctx.fillStyle = '#10192d';
+  ctx.fillRect(cx - R, cy - R, R * 2, R * 2);
   ctx.imageSmoothingEnabled = false;
-  ctx.drawImage(off, c - R, c - R, R * 2, R * 2);
+  ctx.drawImage(off, cx - R, cy - R, R * 2, R * 2);
   ctx.restore();
-
-  // viền: xanh đêm dày, chỉ vàng, chỉ tím bên trong
-  ctx.lineWidth = ring * 1.8; ctx.strokeStyle = NAVY;
-  ctx.beginPath(); ctx.arc(c, c, R + ring * 0.6, 0, Math.PI * 2); ctx.stroke();
-  ctx.lineWidth = ring * 0.55; ctx.strokeStyle = GOLD;
-  ctx.beginPath(); ctx.arc(c, c, R + ring * 0.6, 0, Math.PI * 2); ctx.stroke();
-  ctx.lineWidth = Math.max(1, ring * 0.35); ctx.strokeStyle = PURPLE;
-  ctx.beginPath(); ctx.arc(c, c, R - ring * 0.1, 0, Math.PI * 2); ctx.stroke();
-
-  // chữ hướng trong ô tròn nhỏ
-  const badge = Math.max(6, S * 0.06);
-  ctx.font = `800 ${Math.round(badge * 1.15)}px system-ui, sans-serif`;
-  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  for (const [t, a] of [['N', -Math.PI / 2], ['E', 0], ['S', Math.PI / 2], ['W', Math.PI]]) {
-    const x = c + Math.cos(a) * (R + ring * 0.6), y = c + Math.sin(a) * (R + ring * 0.6);
-    ctx.fillStyle = NAVY; ctx.strokeStyle = GOLD_DARK; ctx.lineWidth = Math.max(1, ring * 0.4);
-    ctx.beginPath(); ctx.arc(x, y, badge, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-    ctx.fillStyle = GOLD; ctx.fillText(t, x, y + badge * 0.05);
+  if (frameImg.complete && frameImg.naturalWidth) {
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(frameImg, 0, 0, canvas.width, canvas.height);
   }
 }
