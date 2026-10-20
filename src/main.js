@@ -10,7 +10,7 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catc
 import {
   showLoading, showLogin, shouldForgetSession, showCreateCharacter, showNewPassword,
   showConfirm, showFatal, toast, createHud, showCharacterPanel, showSettings, showWorldMap, drawRoundMap, createStatsDock, enableFastTap,
-  showBag, showCodeDialog, loadSettings, createTestBag,
+  showBag, loadSettings, createTestBag,
 } from './ui/index.js';
 
 async function boot() {
@@ -110,16 +110,12 @@ async function boot() {
     if (!me.look?.weapon) me.slashT = 0.22; // tay không: vẫn có vệt chém nhỏ
   }
   // Mã quà tặng: so dấu SHA-256 với data/codes.json (mã gốc không nằm trong mã nguồn)
-  function openCode() {
-    showCodeDialog({
-      async onSubmit(code) {
-        const hex = await sha256(code.trim().toLowerCase());
-        const c = codesDef.codes.find((x) => x.sha256 === hex);
-        if (!c) throw new Error('Mã không đúng hoặc đã hết hạn.');
-        const n = bag.grantAll();
-        return `${c.message}: ${n} vật phẩm vào Kho`;
-      },
-    });
+  async function redeemCode(code) {
+    const hex = await sha256(code.trim().toLowerCase());
+    const c = codesDef.codes.find((x) => x.sha256 === hex);
+    if (!c) throw new Error('Mã không đúng hoặc đã hết hạn.');
+    const n = bag.grantAll();
+    return `${c.message}: ${n} vật phẩm vào Kho`;
   }
 
   const setLook = () => { me.look = lookNow(); zone.setLook(me.look); refreshAvatar(); };
@@ -163,7 +159,7 @@ async function boot() {
         equipment: SLOT_ORDER.map((sl) => { const it = bag.equippedItem(sl); return it && { name: it.name, icon: artInfo(it.art)?.file }; }),
       });
     },
-    onSettings() { showSettings({ onLogout: logout, onCode: openCode, onChange: (st) => audio.apply(st) }); },
+    onSettings() { showSettings({ onLogout: logout, onRedeem: redeemCode, onChange: (st) => audio.apply(st) }); },
     onOpenBag() {
       showBag({
         categories: itemsDef.categories, getEntries: bag.entries, isEquipped: bag.isEquipped,

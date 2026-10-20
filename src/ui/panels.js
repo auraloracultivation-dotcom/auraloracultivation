@@ -139,7 +139,7 @@ function saveSettings(s) {
   try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); } catch { /* trình duyệt chặn lưu: bỏ qua */ }
 }
 
-export function showSettings({ onLogout, onCode, onChange }) {
+export function showSettings({ onLogout, onRedeem, onChange }) {
   const s = loadSettings();
   const maxW = () => Math.min(vw() * 0.94, 460, (vh() * 0.8 * SET_FRAME.w) / SET_FRAME.h);
   openModal('modal-settings', SET_FRAME, maxW, ({ at, close, col }) => {
@@ -158,10 +158,50 @@ export function showSettings({ onLogout, onCode, onChange }) {
       .addEventListener('click', () => toast('Hiện chỉ có Tiếng Việt'));
     at('<button type="button" class="set-hot" aria-label="Đăng xuất"></button>', ...SET_SPOTS.logout)
       .addEventListener('click', () => { close(); onLogout(); }); // đóng Cài đặt trước để hộp xác nhận hiện trên cùng
-    if (onCode) { // mục Nhập mã: nút dưới khung (khung vẽ sẵn không có chỗ cho nút này)
-      const b = el('<button type="button" class="set-code">Nhập mã</button>');
-      b.addEventListener('click', onCode);
-      col.appendChild(b);
+    if (onRedeem) codeDrawer(col, onRedeem); // khung vẽ sẵn không có chỗ → ngăn kéo vuốt lên bên dưới
+  });
+}
+
+// Ngăn "Nhập mã" dưới bảng Cài đặt: vuốt lên trên bảng (hoặc chạm dòng gợi ý) để mở, vuốt xuống để đóng.
+function codeDrawer(col, onRedeem) {
+  const d = el(`<div class="set-drawer">
+    <button type="button" class="set-pull" aria-expanded="false"><i></i><span>Vuốt lên để nhập mã</span></button>
+    <form class="set-code-form" autocomplete="off">
+      <input class="code-in" type="text" maxlength="40" placeholder="Nhập mã quà tặng" autocapitalize="none" autocorrect="off" spellcheck="false">
+      <button type="submit" class="bag-act">Xác nhận</button>
+      <p class="code-msg" role="status"></p>
+    </form></div>`);
+  col.appendChild(d);
+  const pull = d.querySelector('.set-pull'), form = d.querySelector('form'), input = d.querySelector('input'), msg = d.querySelector('.code-msg');
+  const setOpen = (open) => {
+    d.classList.toggle('open', open);
+    pull.setAttribute('aria-expanded', String(open));
+    pull.querySelector('span').textContent = open ? 'Vuốt xuống để đóng' : 'Vuốt lên để nhập mã';
+    if (!open) input.blur();
+  };
+  pull.addEventListener('click', () => setOpen(!d.classList.contains('open')));
+  // vuốt: theo dõi trên cả cột (bảng + ngăn). Vừa vuốt xong thì chặn cú "click" để không bật/tắt nhầm nút
+  let y0 = null, swiped = false;
+  col.addEventListener('pointerdown', (e) => { if (e.target !== input) { y0 = e.clientY; swiped = false; } });
+  col.addEventListener('pointermove', (e) => {
+    if (y0 === null) return;
+    const dy = e.clientY - y0;
+    if (Math.abs(dy) > 36) { setOpen(dy < 0); swiped = true; y0 = null; }
+  });
+  for (const ev of ['pointerup', 'pointercancel']) col.addEventListener(ev, () => { y0 = null; });
+  col.addEventListener('click', (e) => { if (swiped) { e.stopPropagation(); e.preventDefault(); swiped = false; } }, true);
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const code = input.value.trim();
+    msg.classList.remove('ok');
+    if (!code) { msg.textContent = 'Hãy nhập mã.'; return; }
+    try {
+      const text = await onRedeem(code);
+      msg.textContent = text; msg.classList.add('ok');
+      input.value = ''; input.blur();
+      toast(text, 2200);
+    } catch (err) {
+      msg.textContent = err.message || 'Mã không đúng.';
     }
   });
 }

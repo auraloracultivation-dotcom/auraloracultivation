@@ -394,11 +394,34 @@ img { image-rendering: pixelated; }
   background: #0f0a1a; color: var(--text); -webkit-user-select: text; user-select: text;
 }
 .code-msg { margin: 0; min-height: 1.2em; font-size: 13px; color: #ff9a9a; text-align: center; }
-.set-code {
-  margin-top: 10px; padding: 10px 26px; border-radius: 999px; border: 1px solid var(--gold); cursor: pointer;
-  background: linear-gradient(#3a2a5a, #241838); color: var(--gold); font-weight: 800; font-size: 14px;
-  box-shadow: 0 0 10px rgba(242,199,127,.25);
+.modal-settings-col { touch-action: none; } /* để vuốt lên/xuống không bị trình duyệt giành làm cuộn trang */
+.set-drawer { /* ngăn Nhập mã dưới bảng Cài đặt: thu gọn chỉ còn dòng gợi ý, vuốt lên thì trượt ra */
+  width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 4px;
 }
+.set-pull {
+  display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 18px 6px; border: 0; background: none;
+  color: var(--gold); font-size: 13px; font-weight: 700; text-shadow: 0 1px 3px #000; cursor: pointer;
+}
+.set-pull i { /* mũi tên ^ nhún lên xuống */
+  width: 12px; height: 12px; border-left: 3px solid var(--gold); border-top: 3px solid var(--gold);
+  transform: rotate(45deg); animation: pull-bob 1.2s ease-in-out infinite; margin-top: 4px;
+}
+.set-drawer.open .set-pull i { transform: rotate(225deg); animation: none; margin: 0 0 4px; }
+@keyframes pull-bob { 50% { translate: 0 -4px; } }
+.set-code-form {
+  width: min(88vw, 400px); display: grid; grid-template-columns: 1fr auto; gap: 8px; box-sizing: border-box;
+  max-height: 0; opacity: 0; overflow: hidden; padding: 0 12px; transform: translateY(16px);
+  background: linear-gradient(#24163a, #120c1f); border: 2px solid var(--gold-dark); border-radius: 12px;
+  box-shadow: 0 0 0 2px #3b2a14, 0 10px 30px rgba(0,0,0,.6); visibility: hidden;
+  transition: max-height .28s ease, opacity .2s ease, transform .28s ease, padding .28s ease, visibility 0s .28s;
+}
+.set-drawer.open .set-code-form {
+  max-height: 160px; opacity: 1; padding: 12px; transform: none; visibility: visible;
+  transition: max-height .28s ease, opacity .2s ease, transform .28s ease, padding .28s ease;
+}
+.set-code-form .code-msg { grid-column: 1 / -1; }
+.set-code-form .bag-act { white-space: nowrap; }
+.code-msg.ok { color: #9dffa8; }
 .eq-slot img { width: 78%; height: 78%; object-fit: contain; image-rendering: auto; pointer-events: none; }
 /* Nút Kho: ngay dưới nút Chat, thẳng hàng bên trái */
 .bag-btn {
