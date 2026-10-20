@@ -60,34 +60,33 @@ function openModal(className, frame, maxW, build) {
 
 const vw = () => window.innerWidth, vh = () => window.innerHeight;
 
-// ---------- Nhân vật: trang bị + chỉ số trượt lên trong cùng khung ----------
-const CHAR_FRAME = { src: 'assets/ui/frames/bang-nhan-vat.png', w: 270, h: 302 };
-const SLOT = 45;
+// ---------- Nhân vật: trang bị đang đeo (khung v3 của chủ dự án, sinh bằng tools/char_panel.py) ----------
+// Ô trống hiện biểu tượng mờ vẽ sẵn (chưa đeo). Thứ tự ô: trái mũ, áo, vũ khí, nhẫn; phải cánh, pháp bảo, linh thú, dây chuyền.
+const CHAR_FRAME = { src: 'assets/ui/frames/bang-nhan-vat-v3.png', w: 996, h: 1103, close: [886, 101, 86, 78] };
+const SLOT = [178, 162];
 const SLOTS = [
-  [32, 60], [32, 110], [32, 160], [32, 210],
-  [194, 60], [194, 110], [194, 160], [194, 210],
+  { x: 122, y: 258, name: 'Mũ' }, { x: 122, y: 429, name: 'Áo giáp' }, { x: 122, y: 604, name: 'Vũ khí' },
+  { x: 122, y: 776, name: 'Nhẫn' }, { x: 696, y: 258, name: 'Cánh' }, { x: 696, y: 429, name: 'Pháp bảo' },
+  { x: 696, y: 604, name: 'Linh thú' }, { x: 696, y: 776, name: 'Dây chuyền' },
 ];
+const NAME_BARS = [[392, 819, 270, 57], [392, 886, 270, 58]]; // phần chữ của 2 thanh (sau biểu tượng người / sen)
 
 export function showCharacterPanel({ name, realmName, equipment, drawAvatar }) {
-  const maxW = () => Math.min(vw() * 0.94, 440, (vh() * 0.82 * CHAR_FRAME.w) / CHAR_FRAME.h);
-  openModal('modal-char', CHAR_FRAME, maxW, ({ box, at }) => {
-    const av = at('<canvas class="char-avatar" width="96" height="128"></canvas>', 85, 66, 100, 176);
+  const maxW = () => Math.min(vw() * 0.96, 460, (vh() * 0.84 * CHAR_FRAME.w) / CHAR_FRAME.h);
+  openModal('modal-char', CHAR_FRAME, maxW, ({ at }) => {
+    const av = at('<canvas class="char-avatar" width="96" height="128"></canvas>', 400, 470, 190, 253);
     const ctx = av.getContext('2d');
     ctx.imageSmoothingEnabled = false;
     ctx.translate(48, 124); ctx.scale(3.2, 3.2);
     drawAvatar(ctx);
 
-    SLOTS.forEach(([x, y], i) => {
+    SLOTS.forEach((s, i) => {
       const item = equipment[i];
-      const slot = at(`<button type="button" class="eq-slot ${item ? 'filled' : ''}" aria-label="Ô trang bị ${i + 1}"></button>`, x, y, SLOT, SLOT);
-      slot.addEventListener('click', () => toast(item ? item.name : 'Chưa trang bị'));
+      const slot = at(`<button type="button" class="eq-slot ${item ? 'filled' : ''}" aria-label="${s.name}"></button>`, s.x, s.y, ...SLOT);
+      slot.addEventListener('click', () => toast(item ? item.name : `${s.name}: chưa trang bị`));
     });
-    // đè lên biểu tượng nhỏ vẽ sẵn: người = đạo hiệu, sen = cảnh giới
-    at(`<img class="char-ico" src="${ICON('nguoi')}" alt="">`, 83, 245, 12, 13);
-    at(`<img class="char-ico" src="${ICON('sen')}" alt="">`, 83, 265, 12, 13);
-    at(`<div class="char-line gold">${escapeHtml(name)}</div>`, 98, 247, 88, 12);
-    at(`<div class="char-line">${escapeHtml(realmName)}</div>`, 98, 267, 88, 12);
-
+    at(`<div class="char-line gold">${escapeHtml(name)}</div>`, ...NAME_BARS[0]);
+    at(`<div class="char-line">${escapeHtml(realmName)}</div>`, ...NAME_BARS[1]);
   });
 }
 
