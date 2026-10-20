@@ -159,7 +159,7 @@ async function boot() {
     },
     onOpenCharacter() {
       showCharacterPanel({
-        name: me.name, realmName, portrait: () => renderPortrait(me.look),
+        name: me.name, realmName, portrait: () => ({ full: renderPortrait(me.look), body: renderPortrait(me.look, { body: true }) }),
         equipment: SLOT_ORDER.map((sl) => { const it = bag.equippedItem(sl); return it && { name: it.name, icon: artInfo(it.art)?.file }; }),
       });
     },

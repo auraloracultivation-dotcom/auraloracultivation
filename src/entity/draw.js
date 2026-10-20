@@ -135,5 +135,6 @@ export function renderPortrait(look, { body = false, zoom = 4 } = {}) {
   const out = document.createElement('canvas');
   out.width = x1 - x0 + 3; out.height = y1 - y0 + 3;
   out.getContext('2d').drawImage(c, -x0 + 1, -y0 + 1);
+  out.foot = [size / 2 - x0 + 1, size * 0.78 - y0 + 1]; // vị trí chân trong ảnh đã cắt (để ghép cùng tỉ lệ)
   return out;
 }

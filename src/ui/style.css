@@ -343,7 +343,8 @@ img { image-rendering: pixelated; }
 .bag-wrap, .code-wrap { z-index: 30; }
 .code-wrap { z-index: 45; }
 .bag {
-  width: min(94vw, 520px); max-height: 86dvh; display: flex; flex-direction: column; gap: 8px; padding: 12px;
+  /* cỡ CỐ ĐỊNH (yêu cầu chủ dự án 21/10): kho trống vẫn to như cũ, nhiều đồ thì vuốt trong lưới */
+  width: min(94vw, 520px); height: min(78dvh, 680px); display: flex; flex-direction: column; gap: 8px; padding: 12px;
   background: linear-gradient(#24163a, #120c1f); border: 2px solid var(--gold-dark); border-radius: 12px;
   box-shadow: 0 0 0 2px #3b2a14, 0 10px 40px rgba(0,0,0,.6); animation: pop-in2 .2s ease-out;
 }
@@ -360,7 +361,7 @@ img { image-rendering: pixelated; }
 .bag-tabs button[aria-pressed="true"] { color: #2a1a08; background: linear-gradient(#f7d7a8, #d9a35d); border-color: var(--gold); }
 .bag-grid {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 6px; overflow-y: auto;
-  min-height: 120px; padding: 6px; border-radius: 8px; background: radial-gradient(#2c1d48, #140d22);
+  flex: 1 1 0; min-height: 0; align-content: start; padding: 6px; border-radius: 8px; background: radial-gradient(#2c1d48, #140d22);
   -webkit-overflow-scrolling: touch; overscroll-behavior: contain; touch-action: pan-y;
 }
 .bag-cell {
@@ -376,6 +377,8 @@ img { image-rendering: pixelated; }
   color: #0d2a12; background: #7dff8a; border-radius: 0 0 6px 6px; pointer-events: none;
 }
 .bag-empty { grid-column: 1 / -1; text-align: center; color: var(--muted); font-size: 13px; margin: 30px 0; }
+.bag-head, .bag-detail, .bag-note { flex-shrink: 0; }
+.code-box { height: auto; }
 .bag-detail { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px 10px; border-radius: 8px; background: #1b1430; }
 .bag-detail div { display: flex; flex-direction: column; min-width: 0; }
 .bag-detail b { color: var(--gold); font-size: 14px; }
