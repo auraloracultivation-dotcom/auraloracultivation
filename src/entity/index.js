@@ -3,3 +3,4 @@ export { drawPlayer, drawLabel, drawSlash, renderPortrait, setTextScale } from '
 export { loadRig, rigReady, rigAttack, artInfo, artImage, avatarFx } from './rig.js';
 export { drawMonster, drawMonsterLabel, drawFx, drawNode } from './mobs.js';
 export { loadSprites, iconUrl, fxDuration } from './sprites.js';
+export { loadNpcArt, drawNpc, drawNpcLabel } from './npc-draw.js';
