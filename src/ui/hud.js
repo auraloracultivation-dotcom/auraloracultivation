@@ -77,6 +77,7 @@ export function createHud(opts) {
     const id = b.dataset.menu;
     if (id === 'map') opts.onOpenMap();
     else if (id === 'settings') opts.onSettings();
+    else if (id === 'bag' && opts.onOpenBag) opts.onOpenBag();
     else toast(`${b.getAttribute('aria-label')}: sắp có`);
   });
   right.querySelector('.minimap').addEventListener('click', opts.onOpenMap);

@@ -48,3 +48,10 @@ Danh sách 8 ô và thứ tự trên bảng Nhân vật: `data/equipment/slots.j
 - Pháp tướng thuộc ô nào hay là kỹ năng bật lên.
 - Tóc/miện: kiểu tóc chọn lúc tạo nhân vật hay thuộc ô Mặt nạ (hiện tóc nằm sẵn trong hình trang phục).
 - Bảng vũ khí hàng 3 là đôi vũ khí bắt chéo (`pair`), nên vẽ lại thành từng món.
+
+## Bộ 6 hệ trong game (21/10/2026)
+- Hình + thông số từng bộ: `data/equipment/he6.json` (sinh từ 6 bộ chủ dự án lưu trong Tủ Đồ Tu Chân). Vẽ bằng `src/entity/rig.js`.
+- Thông số của mỗi phần lấy theo bộ chứa hình đó (vũ khí bộ Hỏa dùng thông số vũ khí của bộ Hỏa), thân/tay/giày/bóng theo bộ của đạo bào.
+- Vật phẩm: `data/items/items.json` (24 món: đạo bào, pháp kiếm, linh dực, pháp tướng × 6 hệ). Mục Kho: Tất cả, Linh dược, Linh đan, Đan phương, Pháp khí, Công pháp, Trang bị, Khác.
+- Người khác thấy trang bị qua Presence (`look` = mã hình art.*, máy nhận lọc chỉ giữ mã hợp lệ).
+- **Mã thử nghiệm** (Cài đặt → Nhập mã): `data/codes.json` chỉ lưu dấu SHA-256. Đồ nhận được nằm trong kho trên máy (localStorage), CHƯA lưu máy chủ — Mốc 4 chuyển lên máy chủ qua RPC.

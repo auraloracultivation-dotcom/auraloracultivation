@@ -82,7 +82,8 @@ export function showCharacterPanel({ name, realmName, equipment, drawAvatar }) {
 
     SLOTS.forEach((s, i) => {
       const item = equipment[i];
-      const slot = at(`<button type="button" class="eq-slot ${item ? 'filled' : ''}" aria-label="${s.name}"></button>`, s.x, s.y, ...SLOT);
+      const slot = at(`<button type="button" class="eq-slot ${item ? 'filled' : ''}" aria-label="${s.name}">${item?.icon ? `<img src="${item.icon}" alt="">` : ''}</button>`, s.x, s.y, ...SLOT);
+      if (item?.icon) Object.assign(slot.style, { display: 'flex', alignItems: 'center', justifyContent: 'center' });
       slot.addEventListener('click', () => toast(item ? item.name : `${s.name}: chưa trang bị`));
     });
     at(`<div class="char-line gold">${escapeHtml(name)}</div>`, ...NAME_BARS[0]);
@@ -109,10 +110,10 @@ function saveSettings(s) {
   try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); } catch { /* trình duyệt chặn lưu: bỏ qua */ }
 }
 
-export function showSettings({ onLogout }) {
+export function showSettings({ onLogout, onCode }) {
   const s = loadSettings();
   const maxW = () => Math.min(vw() * 0.94, 460, (vh() * 0.8 * SET_FRAME.w) / SET_FRAME.h);
-  openModal('modal-settings', SET_FRAME, maxW, ({ at, close }) => {
+  openModal('modal-settings', SET_FRAME, maxW, ({ at, close, col }) => {
     const toggle = (key, label) => {
       const btn = at(`<button type="button" class="set-hot" aria-label="${label}"><span>Tắt</span></button>`, ...SET_SPOTS[key]);
       const paint = () => {
@@ -128,6 +129,11 @@ export function showSettings({ onLogout }) {
       .addEventListener('click', () => toast('Hiện chỉ có Tiếng Việt'));
     at('<button type="button" class="set-hot" aria-label="Đăng xuất"></button>', ...SET_SPOTS.logout)
       .addEventListener('click', () => { close(); onLogout(); }); // đóng Cài đặt trước để hộp xác nhận hiện trên cùng
+    if (onCode) { // mục Nhập mã: nút dưới khung (khung vẽ sẵn không có chỗ cho nút này)
+      const b = el('<button type="button" class="set-code">Nhập mã</button>');
+      b.addEventListener('click', onCode);
+      col.appendChild(b);
+    }
   });
 }
 
