@@ -2,6 +2,9 @@
 import { loadJSON, startLoop, createScreen, createCamera, followCamera, createInput, drawStick } from './core/index.js';
 import { createMap, wrapDelta } from './map/index.js';
 import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel } from './entity/index.js';
+
+// Luôn lấy code mới nhất (xem sw.js) — tránh lẫn code cũ với dữ liệu mới sau mỗi lần cập nhật
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 import {
   showLoading, showLogin, shouldForgetSession, showCreateCharacter, showNewPassword,
   showConfirm, showFatal, toast, createHud,
@@ -77,8 +80,14 @@ async function boot() {
       me.chatUntil = performance.now() + config.net.chat_bubble_s * 1000;
       zone.sendChat(text);
     },
-    async onSettings() {
-      if (!(await showConfirm('Rời Tu Chân giới', 'Thoát game và đăng xuất?'))) return;
+    player: {
+      name: me.name,
+      realmName: character.realm > 0 ? `Cảnh giới ${character.realm}` : 'Phàm nhân', // tạm, chờ dữ liệu cảnh giới
+      drawAvatar: (ctx) => drawPlayer(ctx, { x: 0, y: 0, facing: 1, walkT: 0, isLocal: true }, 1),
+    },
+    onSettings() { toast('Cài đặt sắp có'); },
+    async onLogout() {
+      if (!(await showConfirm('Đăng xuất', 'Rời Tu Chân giới và đăng xuất?', { yes: 'Đăng xuất' }))) return;
       await saver.flush();
       await zone.leave();
       await net.signOut();
@@ -86,6 +95,7 @@ async function boot() {
     },
   });
   hud.setOnline(others.list.size + 1, maxPlayers);
+  hud.setBars(1, 1); // tạm đầy — nối chỉ số thật khi có dữ liệu chỉ số nhân vật
   loading.set(100, 'Hoàn tất');
   setTimeout(() => loading.hide(), 300);
   toast(`Chào mừng ${me.name} đến ${zoneDef.name}`);

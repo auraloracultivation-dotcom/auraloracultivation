@@ -1,17 +1,47 @@
-// Thanh thông tin khu, nút cài đặt và nút chat trong game.
+// Giao diện trong game: khung thông tin nhân vật (trên trái), tên khu (trên giữa),
+// cài đặt + đăng xuất (trên phải), chat (dưới phải). Khung lấy từ assets/ui (thiết kế chủ dự án).
 import { escapeHtml } from './screens.js';
 
-export function createHud({ zoneName, line, onChat, onSettings, maxChars }) {
-  const root = document.getElementById('ui');
-  const hud = document.createElement('div');
-  hud.className = 'hud';
-  hud.innerHTML = `
-    <div class="zone-tag"><b>${escapeHtml(zoneName)}</b> · T${line} <span data-online></span></div>
-    <button type="button" class="icon-btn glow" data-settings aria-label="Cài đặt"><img src="assets/ui/icons/cai-dat.png" alt=""></button>`;
-  root.appendChild(hud);
-  const online = hud.querySelector('[data-online]');
-  hud.querySelector('[data-settings]').addEventListener('click', onSettings);
+// Toạ độ trong ảnh khung gốc frames/khung-nhan-vat.png (495×190) → đổi ra %
+const FRAME = { w: 495, h: 190 };
+const pct = (x, y, w, h) =>
+  `left:${(x / FRAME.w) * 100}%;top:${(y / FRAME.h) * 100}%;width:${(w / FRAME.w) * 100}%;height:${(h / FRAME.h) * 100}%`;
 
+export function createHud({ zoneName, line, player, onChat, onSettings, onLogout, maxChars }) {
+  const root = document.getElementById('ui');
+
+  // ---- Khung thông tin nhân vật ----
+  const info = document.createElement('div');
+  info.className = 'player-info';
+  info.innerHTML = `
+    <canvas class="pi-avatar" width="64" height="64" style="${pct(52, 22, 120, 120)}"></canvas>
+    <div class="pi-bar pi-name" style="${pct(204, 56, 244, 21)}"><span data-name></span></div>
+    <div class="pi-bar" style="${pct(204, 94, 244, 22)}"><i class="fill hp" data-hp></i><span>Khí huyết</span></div>
+    <div class="pi-bar" style="${pct(204, 132, 244, 20)}"><i class="fill mp" data-mp></i><span>Linh lực</span></div>
+    <div class="pi-realm" style="${pct(30, 160, 164, 26)}" data-realm></div>`;
+  root.appendChild(info);
+  info.querySelector('[data-name]').textContent = player.name;
+  info.querySelector('[data-realm]').textContent = player.realmName;
+  drawAvatar(info.querySelector('.pi-avatar'), player.drawAvatar);
+
+  // ---- Tên khu ----
+  const zone = document.createElement('div');
+  zone.className = 'zone-tag';
+  zone.innerHTML = `<b>${escapeHtml(zoneName)}</b><span>T${line} <em data-online></em></span>`;
+  root.appendChild(zone);
+  const online = zone.querySelector('[data-online]');
+
+  // ---- Cài đặt + Đăng xuất ----
+  const right = document.createElement('div');
+  right.className = 'top-right';
+  right.innerHTML = `
+    <button type="button" class="btn-small glow" data-logout>Đăng xuất</button>
+    <button type="button" class="icon-btn glow" data-settings aria-label="Cài đặt"><img src="assets/ui/icons/cai-dat.png" alt=""></button>`;
+  root.appendChild(right);
+  right.querySelector('[data-settings]').addEventListener('click', onSettings);
+  right.querySelector('[data-logout]').addEventListener('click', onLogout);
+
+  // ---- Chat ----
   const bar = document.createElement('div');
   bar.className = 'chatbar';
   bar.innerHTML = `<input class="field framed" type="text" maxlength="${maxChars}" placeholder="Nói gì đó…" hidden>
@@ -40,7 +70,23 @@ export function createHud({ zoneName, line, onChat, onSettings, maxChars }) {
     }
   });
 
+  const hp = info.querySelector('[data-hp]'), mp = info.querySelector('[data-mp]');
   return {
     setOnline(count, max) { online.textContent = `· ${count}/${max}`; },
+    // ratio 0..1 — chỉ số thật sẽ nối vào khi có dữ liệu chỉ số nhân vật
+    setBars(hpRatio, mpRatio) {
+      hp.style.width = `${Math.max(0, Math.min(1, hpRatio)) * 100}%`;
+      mp.style.width = `${Math.max(0, Math.min(1, mpRatio)) * 100}%`;
+    },
   };
+}
+
+function drawAvatar(canvas, draw) {
+  const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
+  ctx.save();
+  ctx.translate(32, 62);
+  ctx.scale(1.9, 1.9);
+  draw(ctx);
+  ctx.restore();
 }
