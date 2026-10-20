@@ -2,7 +2,7 @@
 // Nhận đối tượng từ main.js (map, me, hud, pt…) và trả về các hàm main.js gọi mỗi khung hình.
 // Mọi con số nằm trong data/ (stats.json = Lab, gameplay.json = thông số chơi thử). Mốc 3–4: chuyển kết quả lên máy chủ.
 import { wrapDelta } from '../map/index.js';
-import { drawMonster, drawMonsterLabel, drawFx, drawNode } from '../entity/index.js';
+import { drawMonster, drawMonsterLabel, drawFx, drawNode, loadSprites, fxDuration } from '../entity/index.js';
 import { createProgress } from './progress.js';
 import { createStats } from './stats.js';
 import { createMonsters } from './monsters.js';
@@ -22,6 +22,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     'data/stats.json', 'data/gameplay.json', 'data/monsters/monsters.json', 'data/items/materials.json', 'data/items/pills.json',
     'data/equipment/blanks.json', 'data/equipment/awaken.json', 'data/skills/cong-phap.json', 'data/quests/quests.json',
     'data/items/quest-items.json', 'data/realms.json'].map((p) => loadJSON(p)));
+  await loadSprites(await loadJSON('data/art/sprites.json')); // hình quái, hiệu ứng, icon (thử nghiệm)
   const progress = createProgress(userId, gp);
   const stats = createStats(statsDef, gp);
   const mobs = createMonsters({ gp, defs: monDef.monsters, map });
@@ -56,12 +57,21 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
   const cpBonus = (skill) => 1 + (progress.state.cp[SKILL_OF_CP[skill]] || 0) * S.cong_phap_bonus_per_level;
   const ptMul = () => (pt.active ? S['phap-tuong'].atk_mul : 1);
   const say = (x, y, text, color, big = false) => fx.push({ kind: 'text', x, y, text, color, big, t: 0.9, life: 0.9 });
+  // Hiệu ứng hình (data/art/sprites.json → fx). ground: hình mọc từ mặt đất (đặt đáy ở chân). delay: chờ rồi mới chạy
+  const play = (id, x, y, h, { ground = false, delay = 0, rot = 0 } = {}) => {
+    const life = fxDuration(id);
+    fx.push({ kind: 'sprite', fx: id, x, y, h, lift: ground ? h / 2 : 0, rot, t: life, life, delay });
+  };
+  const midY = (m) => m.y - (m.def.art?.h || m.r * 2) / 2;
+  const HIT_FX = { attack: ['chem-x', 18], 'kiem-khi': ['kiem-bang-no', 28], 'linh-thu': ['chem-x', 14] };
 
   // ---------- Người chơi đánh quái ----------
   function strike(m, mul, skill) {
     const r = stats.hit(ps, stats.monster(m), { atkMul: mul * ptMul() * cpBonus(skill) });
     if (r.miss) { say(m.x, m.y - m.r * 2, 'Trượt', '#cfd6e6'); return; }
     say(m.x, m.y - m.r * 2, r.crit ? `${r.dmg}!` : `${r.dmg}`, r.crit ? '#ffd23a' : '#ffffff', r.crit);
+    const hf = HIT_FX[skill];
+    if (hf) play(hf[0], m.x, midY(m), hf[1] * (r.crit ? 1.4 : 1));
     if (r.heal) hp = Math.min(ps.hp, hp + r.heal);
     if (mobs.damage(m, r.dmg)) onKill(m);
   }
@@ -86,6 +96,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
   }
   function onKill(m) {
     if (targetUid === m.uid) targetUid = null;
+    play('khoi', m.x, m.y, Math.max(16, (m.def.art?.h || 20) * 0.7), { ground: true, delay: 0.4 });
     const rank = m.def.rank, k = gp.monster.exp_mul[rank];
     const exp = Math.round((m.maxHp / 10) * k), stone = Math.max(1, Math.round(m.maxHp * gp.monster.stone_per_hp * k));
     addExp(exp); progress.addStone(stone);
@@ -111,7 +122,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
   }
   function addExp(n) {
     const ups = progress.addExp(n);
-    if (ups.length) { hp = Infinity; toast(`Đột phá tầng: ${ups[ups.length - 1].name}`, 2200); }
+    if (ups.length) { hp = Infinity; play('vong-lua', me.x, me.y - 8, 40); toast(`Đột phá tầng: ${ups[ups.length - 1].name}`, 2200); }
     if (progress.atPeak()) toast('Tu vi đã đến đỉnh — chạm nút Đột phá', 2200);
     recompute(); hp = Math.min(hp, ps.hp);
   }
@@ -125,6 +136,8 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
       if (r.miss) { say(me.x, me.y - 22, 'Né', '#9fe8ff'); return; }
       hp -= r.dmg;
       say(me.x, me.y - 22, `-${r.dmg}`, mul > 1 ? '#ff5a3a' : '#ff9a8a', mul > 1);
+      if (mul > 1) play(m.def.rank === 'boss' ? 'hoa-cot' : 'sao-den', me.x, me.y, m.def.rank === 'boss' ? 46 : 34, { ground: m.def.rank === 'boss' });
+      else play('cham-mau', me.x, me.y - 12, 16);
       if (r.reflect && mobs.damage(m, r.reflect)) onKill(m);
       if (hp <= 0) die();
     },
@@ -154,15 +167,18 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
       bolts.push({ kind: 'bolt', x: me.x, y: me.y - 10, vx: dx * s.speed_px_per_s, vy: dy * s.speed_px_per_s, left: s.range_px });
     } else if (id === 'khong-che') {
       const m = target(s.range_px);
-      if (m) { m.stun = s.stun_s; say(m.x, m.y - m.r * 2, 'Choáng', '#ffe36a'); } else toast('Không có mục tiêu gần', 900);
+      if (m) { m.stun = s.stun_s; say(m.x, m.y - m.r * 2, 'Choáng', '#ffe36a'); play('moc-troi', m.x, m.y, 30, { ground: true }); }
+      else toast('Không có mục tiêu gần', 900);
     } else if (id === 'linh-thu') {
-      pet = { until: now + s.last_s, next: now, x: me.x - 14, y: me.y };
+      pet = { until: now + s.last_s, next: now, x: me.x - 14, y: me.y, t: 0, face: 1, moving: false };
+      play('vong-lua', me.x - 14, me.y - 6, 34);
       toast('Linh thú hiện thân', 1000);
     } else if (id === 'luot') {
       buffs.ne = { mul: s.ne_mul, until: now + s.last_s }; buffs.speed = { mul: s.speed_px_per_s, until: now + s.last_s };
       recompute(); toast('Lăng Ba Vi Bộ', 900);
     } else if (id === 'nguyen-anh') {
       fx.push({ kind: 'ring', x: me.x, y: me.y, r: s.radius_px, color: '#c9a6ff', t: 0.5, life: 0.5 });
+      play('tho-vong', me.x, me.y + 4, s.radius_px * 1.1, { ground: true });
       for (const m of mobs.within(me, s.radius_px)) strike(m, s.mul, 'nguyen-anh');
     }
   }
@@ -190,6 +206,8 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     const realm = realms.realms.find((r) => r.id === gp.major_realm_first_stage[next.id]);
     const pill = itemDefs.get(realm.breakthrough.pill);
     if (!progress.take(pill.id, 1)) return toast(`Cần ${pill.name} (luyện ở Tu luyện → Luyện đan)`, 2200);
+    play('may-kiep', me.x, me.y - 70, 60); // thiên kiếp: mây tụ trên đầu rồi sét đánh xuống
+    play('set-danh', me.x, me.y, 70, { ground: true, delay: 0.7 });
     if (Math.random() < realm.breakthrough.rate) {
       progress.advanceStage(); hp = Infinity; recompute(); hp = ps.hp;
       toast(`Đột phá thành công: ${progress.stageDef.name}!`, 3000);
@@ -218,12 +236,18 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     if (pet) {
       if (now > pet.until || dead) pet = null;
       else {
+        const px = pet.x, py = pet.y;
         pet.x += (me.x - 14 * me.facing - pet.x) * Math.min(1, dt * 4); pet.y += (me.y + 4 - pet.y) * Math.min(1, dt * 4);
+        pet.t += dt; pet.moving = Math.hypot(pet.x - px, pet.y - py) > 10 * dt; if (Math.abs(pet.x - px) > 0.05) pet.face = pet.x > px ? 1 : -1;
         const m = target(120);
         if (m && now >= pet.next) { pet.next = now + S['linh-thu'].every_s; strike(m, S['linh-thu'].mul, 'linh-thu'); }
       }
     }
-    for (let i = fx.length - 1; i >= 0; i--) { fx[i].t -= dt; if (fx[i].t <= 0) fx.splice(i, 1); }
+    for (let i = fx.length - 1; i >= 0; i--) {
+      const f = fx[i];
+      if (f.delay > 0) { f.delay -= dt; continue; }
+      f.t -= dt; if (f.t <= 0) fx.splice(i, 1);
+    }
     if (!Number.isFinite(hp)) hp = ps.hp;
     hud.setBar('hp', Math.max(0, Math.round(hp)), ps.hp);
     me.hpR = hp / ps.hp; // thanh máu trên đầu
@@ -240,7 +264,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
       if (m.state === 'windup') { const w = at({ x: m.wx, y: m.wy }); m.wrx = w.x; m.wry = w.y; m.heavyR = gp.monster.heavy.radius_px; }
       drawMonster(ctx, m, x, y, t);
     }
-    if (pet) drawFx(ctx, [{ kind: 'pet', ...at(pet) }], 0, 0);
+    if (pet) drawFx(ctx, [{ ...pet, kind: 'pet', ...at(pet) }], 0, 0);
   }
   function renderAbove(ctx, t) {
     for (const m of mobs.list) { const p = at(m); drawMonsterLabel(ctx, m, p.x, p.y, m.uid === targetUid, t); }

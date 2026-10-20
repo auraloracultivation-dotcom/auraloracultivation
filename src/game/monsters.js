@@ -62,14 +62,15 @@ export function createMonsters({ gp, defs, map }) {
       const def = arr[i];
       const hp = rint(...def.hp);
       list.push({ uid: uid++, def, x, y, hx: x, hy: y, hp, maxHp: hp, atk: rint(...def.atk), dfn: rint(...def.def),
-        r: P.radius_px[rank], state: 'idle', cd: 0, n: 0, stun: 0, facing: 1, wt: 0, tx: x, ty: y, hitT: 0, walkT: 0 });
+        r: P.radius_px[rank], state: 'idle', cd: 0, atkT: 0, moving: false, n: 0, stun: 0, facing: 1, wt: 0, tx: x, ty: y, hitT: 0, walkT: 0 });
       return;
     }
   }
 
   function step(m, tx, ty, speed, dt) {
     const dx = wrapDelta(tx - m.x, map.width), dy = wrapDelta(ty - m.y, map.height), d = Math.hypot(dx, dy);
-    if (d < 1) return d;
+    if (d < 1) { m.moving = false; return d; }
+    m.moving = true;
     const s = Math.min(d, speed * dt);
     if (dx) m.facing = dx > 0 ? 1 : -1;
     map.move(m, (dx / d) * s, (dy / d) * s, m.r * 0.6);
@@ -88,6 +89,8 @@ export function createMonsters({ gp, defs, map }) {
       if (m.state === 'dead') { m.deadT -= dt; if (m.deadT <= 0) list.splice(i, 1); continue; }
       if (d > P.despawn_px) { list.splice(i, 1); continue; }
       if (m.hitT > 0) m.hitT -= dt;
+      if (m.atkT > 0) m.atkT -= dt;
+      m.moving = false;
       if (m.stun > 0) { m.stun -= dt; continue; }
       const rank = m.def.rank, speed = P.speed_px_per_s[rank];
       m.cd = Math.max(0, m.cd - dt);
@@ -105,6 +108,7 @@ export function createMonsters({ gp, defs, map }) {
         if (d > P.attack_range_px + m.r * 0.5) step(m, me.x, me.y, speed, dt);
         else if (m.cd <= 0) {
           m.cd = P.attack_every_s; m.n++;
+          m.atkT = 0.5;
           if (m.n % P.heavy.every_n_attacks === 0) { m.state = 'windup'; m.wind = P.heavy.windup_s; m.wx = me.x; m.wy = me.y; }
           else env.hitPlayer(m, 1);
         }
@@ -127,7 +131,7 @@ export function createMonsters({ gp, defs, map }) {
     if (m.state === 'dead') return false;
     m.hp -= dmg; m.hitT = 0.15;
     if (m.state === 'idle' || m.state === 'return') m.state = 'chase';
-    if (m.hp <= 0) { m.hp = 0; m.state = 'dead'; m.deadT = 0.6; return true; }
+    if (m.hp <= 0) { m.hp = 0; m.state = 'dead'; m.deadT = 0.9; return true; }
     return false;
   }
 

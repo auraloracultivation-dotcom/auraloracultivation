@@ -37,7 +37,8 @@ Phím máy tính: Space đánh, 1–5 kỹ năng, Q uống đan hồi máu.
 ## Giới hạn — phải biết
 - **Chạy phía máy khách, lưu localStorage** (`tc.progress.<id>`): người chơi sửa được, đổi máy là mất. Không dùng để xếp hạng/giao dịch.
 - **Mỗi người thấy quái riêng**: hai người đứng cạnh nhau không đánh cùng một con. Mốc 3 chuyển quái + sát thương lên máy chủ.
-- Hình quái là **hình khối vẽ bằng code**. Có ảnh thật thì đổi `src/entity/mobs.js`, không đụng AI.
+- Hình quái/hiệu ứng/icon là **tài nguyên thử nghiệm** (assets/CREDITS.md): đóng gói bằng `tools/asset_build.py` → `data/art/sprites.json`.
+  Đổi hình một con quái: sửa `art` trong `data/monsters/monsters.json` (sheet, h = cao, hue = đổi màu). Không đụng AI.
 - NPC/địa điểm nhiệm vụ chưa có → nút **Hoàn thành tạm** trong bảng Nhiệm vụ.
 
 ## Chơi thử không cần mạng

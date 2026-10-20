@@ -1,5 +1,6 @@
 // Nội dung các bảng Nhiệm vụ / Tu luyện / Kho cho phần chơi thử. Chỉ dựng HTML + gọi luật trong craft/quests.
 import { showSheet, placeholderIcon, escapeHtml as E } from '../ui/index.js';
+import { iconUrl } from '../entity/index.js';
 
 const GOAL = { talk: 'Nói chuyện', reach: 'Đến', collect: 'Thu thập', craft: 'Luyện', kill: 'Hạ', boss: 'Hạ boss', dodge_heavy: 'Né đòn nặng',
   discover: 'Khám phá', complete_daily: 'Hoàn thành nhiệm vụ ngày', awaken: 'Thức tỉnh trang bị', use: 'Dùng',
@@ -11,6 +12,7 @@ const STAT = { hp: 'Khí huyết', mp: 'Linh lực (MP)', linh: 'Tấn công (Li
   ne: 'Né tránh', crit: 'Bạo kích %', hut: 'Hút máu %', tocdanh: 'Tốc đánh', tocchay: 'Tốc chạy', phan: 'Phản đòn %' };
 const DOCK = { mau: 'hp', 'linh-khi': 'mp', 'tan-cong': 'linh', 'phong-thu': 'def', 'toc-chay': 'tocchay', 'chinh-xac': 'chinh',
   'toc-danh': 'tocdanh', 'bao-kich': 'crit', 'hut-mau': 'hut', 'phan-don': 'phan', 'ne-tranh': 'ne', 'xuyen-giap': 'xuyen' };
+const ico = (id) => { const u = iconUrl(id); return u ? `<img class="ico" src="${u}" alt="">` : ''; };
 const btn = (act, arg, label, on = true) => `<button type="button" class="bag-act sm" data-act="${act}" data-arg="${E(arg)}" ${on ? '' : 'disabled'}>${E(label)}</button>`;
 
 export function createViews(o) {
@@ -82,14 +84,14 @@ export function createViews(o) {
   function danTab() {
     return pills.pills.map((p) => {
       const inp = craft.pickInputs(p) || p.recipe.inputs, have = progress.count(p.id), usable = gp.pills[p.id];
-      return `<div class="row"><div class="row-h"><b>${E(p.name)}</b><em>có ${have} · ${Math.round(p.recipe.rate * 100)}%</em></div>
+      return `<div class="row"><div class="row-h"><b>${ico(p.id)}${E(p.name)}</b><em>có ${have} · ${Math.round(p.recipe.rate * 100)}%</em></div>
         <p class="need">${need(inp)}</p>${btn('brew', p.id, 'Luyện', progress.has(inp))} ${usable ? btn('use', p.id, 'Dùng', have > 0) : ''}</div>`;
     }).join('');
   }
   function phoiTab() {
     return blanks.blanks.map((b) => {
       const ok = craft.stageOk(b.unlock);
-      return `<div class="row"><div class="row-h"><b>Phôi ${SLOT[b.slot]}</b><em>${ok ? `${Math.round(b.rate * 100)}%` : `mở ở ${E(stageName(b.unlock))}`}</em></div>
+      return `<div class="row"><div class="row-h"><b>${ico(`slot.${b.slot}`)}Phôi ${SLOT[b.slot]}</b><em>${ok ? `${Math.round(b.rate * 100)}%` : `mở ở ${E(stageName(b.unlock))}`}</em></div>
         <p class="need">${need(b.inputs)}</p>${btn('forge', b.id, 'Luyện phôi', ok && progress.has(b.inputs))}</div>`;
     }).join('');
   }
@@ -110,7 +112,7 @@ export function createViews(o) {
     return head + kho + list.map((g) => {
       const eq = st().eq[g.slot] === g.uid, cost = craft.awakenCost(g);
       const lines = g.lines.map((l) => `${STAT[l.k]} +${l.v}`).join(' · ') || 'Phôi trắng — chưa có chỉ số';
-      return `<div class="row ${g.tier ? `tier-${g.tier}` : ''}"><div class="row-h"><b>${E(g.name)}</b><em>${SLOT[g.slot]}${g.tier ? ` · ${tierName(g.tier)}` : ''}${eq ? ' · đang mặc' : ''}</em></div>
+      return `<div class="row ${g.tier ? `tier-${g.tier}` : ''}"><div class="row-h"><b>${ico(`slot.${g.slot}`)}${E(g.name)}</b><em>${SLOT[g.slot]}${g.tier ? ` · ${tierName(g.tier)}` : ''}${eq ? ' · đang mặc' : ''}</em></div>
         <p>${lines}</p>${btn('awaken', g.uid, `${g.tier ? 'Thức tỉnh lại' : 'Thức tỉnh'} (${cost} LT)`, st().stone >= cost)}
         ${g.tier ? btn('equip', g.uid, eq ? 'Tháo' : 'Trang bị') : ''} ${btn('dismantle', g.uid, 'Rã')}</div>`;
     }).join('');
@@ -119,13 +121,13 @@ export function createViews(o) {
     return cp.skills.map((s) => {
       const lv = st().cp[s.id] || 0, ok = craft.stageOk(s.unlock);
       const inp = s.learn && s.learn.inputs.map((i) => ({ id: i.id, count: i.count * (lv + 1) }));
-      return `<div class="row"><div class="row-h"><b>${E(s.name)}</b><em>cấp ${lv}/${s.max_level}${ok ? '' : ` · mở ở ${E(stageName(s.unlock))}`}</em></div>
+      return `<div class="row"><div class="row-h"><b>${ico(s.id)}${E(s.name)}</b><em>cấp ${lv}/${s.max_level}${ok ? '' : ` · mở ở ${E(stageName(s.unlock))}`}</em></div>
         <p>${E(s.desc)}${lv ? ` · +${Math.round(lv * gp.skills.cong_phap_bonus_per_level * 100)}% sát thương kỹ năng liên quan` : ''}</p>
         ${inp ? `<p class="need">${need(inp)}</p>${btn('train', s.id, lv ? 'Nâng cấp' : 'Luyện', ok && lv < s.max_level && progress.has(inp))}` : '<p><i>Lab chưa ghi nguyên liệu</i></p>'}</div>`;
     }).join('');
   }
   function matsTab() {
-    const rows = Object.entries(st().inv).map(([id, n]) => `<span>${E(name(id))}</span><b>${n}</b>`).join('');
+    const rows = Object.entries(st().inv).map(([id, n]) => `<span>${ico(id)}${E(name(id))}</span><b>${n}</b>`).join('');
     return `<div class="row"><p>Linh thạch: <b>${st().stone}</b></p></div><div class="row grid2">${rows || '<span>Túi trống — hạ quái để nhặt nguyên liệu</span>'}</div>`;
   }
   function openCultivate(start) {
@@ -164,7 +166,7 @@ export function createViews(o) {
   function bagEntries() {
     return Object.entries(st().inv).filter(([id]) => itemDefs.has(id)).map(([id, count]) => {
       const d = itemDefs.get(id);
-      return { item: { ...d, icon: placeholderIcon(d.name, ICON_GROUP(d)), usable: !!gp.pills[id] }, count };
+      return { item: { ...d, icon: iconUrl(id) || placeholderIcon(d.name, ICON_GROUP(d)), usable: !!gp.pills[id] }, count };
     });
   }
   function statValue(id) {
