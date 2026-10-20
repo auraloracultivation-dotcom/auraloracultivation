@@ -15,6 +15,7 @@ supabase/
   migrations/  SQL đánh số 0001_, 0002_… — chỉ thêm file mới, không sửa file cũ đã chạy
 tools/       Script kiểm tra (chạy trong GitHub Actions)
 docs/        Hiến pháp dự án
+sw.js        Service worker: luôn lấy bản mới nhất khi có mạng (tránh lẫn code cũ + dữ liệu mới)
 ```
 
 ## Luật giao tiếp giữa module

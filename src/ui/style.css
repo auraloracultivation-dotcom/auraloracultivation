@@ -111,20 +111,57 @@ img { image-rendering: pixelated; }
 .btn-gold:disabled { opacity: .6; }
 
 /* ---------- Trong game ---------- */
-.hud {
-  position: absolute; top: max(8px, env(safe-area-inset-top)); left: max(8px, env(safe-area-inset-left));
-  right: max(8px, env(safe-area-inset-right));
-  display: flex; justify-content: space-between; align-items: flex-start; pointer-events: none;
+.overlay {
+  position: fixed; inset: 0; background: rgba(7, 11, 22, .35); animation: fade-in .15s;
 }
+
+/* Khung thông tin nhân vật (trên trái) */
+.player-info {
+  position: absolute; top: max(6px, env(safe-area-inset-top)); left: max(6px, env(safe-area-inset-left));
+  width: min(250px, 42vw); aspect-ratio: 495 / 190; container-type: inline-size;
+  background: url("../../assets/ui/frames/khung-nhan-vat.png") center / 100% 100% no-repeat;
+  image-rendering: pixelated;
+}
+.player-info > * { position: absolute; }
+.pi-avatar { border-radius: 50%; image-rendering: pixelated; }
+.pi-bar { overflow: hidden; border-radius: 3px; display: flex; align-items: center; padding-left: 3cqw; }
+.pi-bar span {
+  position: relative; font-size: 4.2cqw; line-height: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  color: var(--text); text-shadow: 0 1px 2px #000;
+}
+.pi-name span { color: var(--gold); font-weight: 700; }
+.pi-realm {
+  display: flex; align-items: center; justify-content: center; border-radius: 6px;
+  background: rgba(16, 25, 45, .9); border: 1px solid var(--gold-dark);
+  font-size: 3.8cqw; color: var(--text); white-space: nowrap; text-shadow: 0 1px 2px #000;
+}
+.pi-bar .fill { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; transition: width .3s; }
+.fill.hp { background: linear-gradient(#e0606a, #a8323c); }
+.fill.mp { background: linear-gradient(#6fa8ff, #3a63c4); }
+
+/* Tên khu (trên giữa, cỡ nhỏ) */
 .zone-tag {
-  pointer-events: auto; width: 270px; aspect-ratio: 308 / 62; padding: 0 64px 0 30px;
-  display: flex; align-items: center; gap: 6px; white-space: nowrap;
+  position: absolute; top: max(4px, env(safe-area-inset-top)); left: 50%; transform: translateX(-50%);
+  width: 150px; aspect-ratio: 308 / 62; padding: 1px 34px 0 18px;
+  display: flex; flex-direction: column; justify-content: center; line-height: 1; gap: 1px; white-space: nowrap;
   background: url("../../assets/ui/frames/bang-ten-khu.png") center / 100% 100% no-repeat;
-  image-rendering: pixelated; font-size: 12px; text-shadow: 0 1px 2px #000;
+  image-rendering: pixelated; font-size: 8.5px; text-shadow: 0 1px 2px #000; pointer-events: none;
 }
 .zone-tag b { color: var(--gold); }
-.zone-tag span { color: var(--muted); }
-.icon-btn { pointer-events: auto; width: 52px; height: 40px; padding: 0; border: 0; background: none; cursor: pointer; }
+.zone-tag span { color: var(--muted); font-size: 7.5px; }
+.zone-tag em { font-style: normal; }
+
+/* Trên phải: đăng xuất + cài đặt */
+.top-right {
+  position: absolute; top: max(8px, env(safe-area-inset-top)); right: max(8px, env(safe-area-inset-right));
+  display: flex; gap: 6px; align-items: center;
+}
+.btn-small {
+  height: 30px; padding: 0 12px; border: 0; cursor: pointer; white-space: nowrap;
+  background: url("../../assets/ui/frames/nut-toi.png") center / 100% 100% no-repeat;
+  color: var(--gold); font-weight: 700; font-size: 12px; image-rendering: pixelated;
+}
+.icon-btn { pointer-events: auto; width: 44px; height: 34px; padding: 0; border: 0; background: none; cursor: pointer; }
 .icon-btn img { width: 100%; height: 100%; display: block; }
 
 .chatbar {

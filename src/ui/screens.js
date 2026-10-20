@@ -83,7 +83,16 @@ export function shouldForgetSession() {
   return localStorage.getItem(REMEMBER_KEY) === '0' && !sessionStorage.getItem('tc.tab');
 }
 
-function framedPanel(title, bodyHtml) {
+// overlay = true: chỉ hiện khung đè lên màn hình hiện tại (trong game), không thay nền.
+function framedPanel(title, bodyHtml, { overlay = false } = {}) {
+  if (overlay) {
+    const wrap = el('<div class="overlay"></div>');
+    document.getElementById('ui').appendChild(wrap);
+    const panel = el(`<div class="frame-panel"><h2>${escapeHtml(title)}</h2>${bodyHtml}<div class="panel-msg"></div></div>`);
+    wrap.appendChild(panel);
+    const back = { remove() { wrap.classList.add('fade-out'); setTimeout(() => wrap.remove(), 200); } };
+    return { back, panel, msg: panel.querySelector('.panel-msg') };
+  }
   const back = createStage(BG_LOAD.src, BG_LOAD.w, BG_LOAD.h).mount();
   back.wrap.classList.add('dim');
   back.place(el('<div class="bar-cover"></div>'), 117, 348, 467, 23); // che thanh 73% vẽ sẵn
@@ -125,10 +134,10 @@ export function showNewPassword({ onSave }) {
   });
 }
 
-export function showConfirm(title, text) {
+export function showConfirm(title, text, { yes = 'Đồng ý', no = 'Ở lại', overlay = true } = {}) {
   return new Promise((resolve) => {
     const { back, panel } = framedPanel(title, `<p>${escapeHtml(text)}</p>
-      <div class="btn-row"><button class="btn-dark" data-v="0">Ở lại</button><button class="btn-gold" data-v="1">Đồng ý</button></div>`);
+      <div class="btn-row"><button class="btn-dark" data-v="0">${escapeHtml(no)}</button><button class="btn-gold" data-v="1">${escapeHtml(yes)}</button></div>`, { overlay });
     panel.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => {
       back.remove(); resolve(b.dataset.v === '1');
     }));
