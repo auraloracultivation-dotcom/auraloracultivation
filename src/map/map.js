@@ -31,6 +31,7 @@ export async function createMap(def, terrainDef, tilesDef) {
     return list;
   });
   const isWater = types.map((t) => t.id.startsWith('nuoc'));
+  const subdiv = types.map((t) => t.grid || 1);
 
   const wrapX = (x) => ((x % width) + width) % width;
   const wrapY = (y) => ((y % height) + height) % height;
@@ -62,17 +63,24 @@ export async function createMap(def, terrainDef, tilesDef) {
         const gx = ((tx % W) + W) % W;
         const kind = grid[gy * W + gx];
         const opts = pickers[kind];
-        const h = hash(gx, gy);
-        const [sx, sy] = opts[Math.floor(h * opts.length)];
-        const flip = !isWater[kind] && hash(gy, gx) > 0.5;
-        if (flip) {
-          ctx.save();
-          ctx.translate(tx * T + T, ty * T);
-          ctx.scale(-1, 1);
-          ctx.drawImage(atlas, sx, sy, S, S, 0, 0, T + 0.5, T + 0.5);
-          ctx.restore();
-        } else {
-          ctx.drawImage(atlas, sx, sy, S, S, tx * T, ty * T, T + 0.5, T + 0.5); // chồng 0.5 để không hở khe trên màn hình mật độ lẻ
+        const g = subdiv[kind];
+        const st = T / g; // cạnh ô vẽ: đất chia 2×2 (ô nhỏ có viền đen), nước 1 ô liền
+        for (let j = 0; j < g; j++) {
+          for (let i = 0; i < g; i++) {
+            const hx = gx * g + i, hy = gy * g + j;
+            const [sx, sy] = opts[Math.floor(hash(hx, hy) * opts.length)];
+            const dx = tx * T + i * st, dy = ty * T + j * st;
+            // chồng 0.5 để không hở khe trên màn hình mật độ lẻ
+            if (!isWater[kind] && hash(hy, hx) > 0.5) {
+              ctx.save();
+              ctx.translate(dx + st, dy);
+              ctx.scale(-1, 1);
+              ctx.drawImage(atlas, sx, sy, S, S, 0, 0, st + 0.5, st + 0.5);
+              ctx.restore();
+            } else {
+              ctx.drawImage(atlas, sx, sy, S, S, dx, dy, st + 0.5, st + 0.5);
+            }
+          }
         }
       }
     }

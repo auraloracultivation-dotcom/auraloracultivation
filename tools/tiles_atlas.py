@@ -3,7 +3,8 @@
 Dùng: python3 -I tools/tiles_atlas.py
 Vào:  assets/tiles/_source-o-dat-nuoc.png (nền hồng, trái 5×7 ô đất, phải 5×6 ô nước)
 Ra:   assets/tiles/atlas.webp + data/tiles.json (tên ô → vị trí trong atlas)
-Mỗi ô bỏ viền đen và mép trang trí rồi chuẩn hoá về 128×128 để xếp liền không lộ đường kẻ.
+Ô ĐẤT giữ nguyên viền đen (thiết kế của chủ dự án — tạo lưới ô); ô NƯỚC bỏ viền để nước liền mạch.
+Mỗi ô chuẩn hoá về 128×128.
 """
 import json
 from pathlib import Path
@@ -20,9 +21,8 @@ COLS = 8
 
 GROUND_ROWS = ['co', 'cat', 'da-lat', 'tuyet', 'soi', 'dat-kho', 'dat-den']
 WATER_ROWS = ['nuoc-sau', 'nuoc-lam', 'nuoc-vua', 'nuoc-ngoc', 'nuoc-nong', 'nuoc-ven-bo']
-BOTTOM_FRINGE = {'co', 'tuyet'}  # hàng có mép trang trí ở đáy
-INSET = 6
-INSET_BOTTOM_FRINGE = 13
+INSET_GROUND = 1  # chỉ bỏ 1 điểm ảnh lẫn nền hồng, giữ viền đen
+INSET_WATER = 6   # bỏ viền đen cho nước liền
 
 
 def find_cells(rgb):
@@ -57,11 +57,10 @@ def main():
     assert len(left) == len(GROUND_ROWS) and len(right) == len(WATER_ROWS), (len(left), len(right))
 
     tiles = []
-    for names, rows in ((GROUND_ROWS, left), (WATER_ROWS, right)):
+    for names, rows, inset in ((GROUND_ROWS, left, INSET_GROUND), (WATER_ROWS, right, INSET_WATER)):
         for name, row in zip(names, rows):
             for i, (x, y, w, h) in enumerate(row, start=1):
-                bottom = INSET_BOTTOM_FRINGE if name in BOTTOM_FRINGE else INSET
-                crop = img.crop((x + INSET, y + INSET, x + w - INSET, y + h - bottom))
+                crop = img.crop((x + inset, y + inset, x + w - inset, y + h - inset))
                 tiles.append((f'{name}-{i}', crop.resize((SIZE, SIZE), Image.LANCZOS)))
 
     rows_n = -(-len(tiles) // COLS)

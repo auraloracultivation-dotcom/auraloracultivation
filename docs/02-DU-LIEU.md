@@ -26,6 +26,7 @@ Cấp độ hiếm (không phải màu): `luc, lam, tim, vang, cam, do, nau, den
 ## Bản đồ (từ 2026-10-20)
 - Mỗi khu có `data/zones/<id>.json` (thông số) và `data/zones/<id>.map.png` (ảnh bản đồ: **mỗi điểm ảnh = 1 ô**).
 - Màu điểm ảnh ↔ loại địa hình nằm ở `data/terrain.json` (đi được, tốc độ, cấp quái `tier`, ô dùng để vẽ).
+- Ô đất **giữ viền đen** và vẽ nhỏ: mỗi ô bản đồ (32 điểm) chia 2×2 ô đất 16 điểm (`grid: 2` trong `terrain.json`); nước 1 ô liền, không viền.
 - Ô vẽ lấy từ atlas `assets/tiles/atlas.webp`, chỉ mục ở `data/tiles.json` (sinh bằng `tools/tiles_atlas.py`).
 - Bản đồ sinh bằng `tools/gen_map.py`; cũng có thể **sửa tay bằng app vẽ** — chỉ cần tô đúng màu trong `terrain.json`.
 - Bản đồ vòng lặp: kích thước thế giới (`data/config.json` → `world`) phải khớp hằng `c_world` trong hàm SQL `save_position`.
