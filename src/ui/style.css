@@ -12,7 +12,7 @@ html, body {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--text);
   -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent;
 }
-#game { display: block; touch-action: none; image-rendering: pixelated; }
+#game { position: fixed; left: 0; top: 0; display: block; touch-action: none; image-rendering: pixelated; }
 #ui { position: fixed; inset: 0; pointer-events: none; }
 #ui > * { pointer-events: auto; }
 img { image-rendering: pixelated; }
@@ -210,8 +210,10 @@ img { image-rendering: pixelated; }
 /* ---- Dưới trái: Chat ---- */
 .chatbar {
   position: absolute; left: max(10px, env(safe-area-inset-left)); bottom: max(120px, calc(env(safe-area-inset-bottom) + 120px));
-  display: flex; gap: 8px; align-items: center;
+  display: flex; gap: 8px; align-items: center; margin: 0; z-index: 30; transition: transform .12s ease-out;
 }
+.chatbar.above-keyboard { transition: none; }
+.chatbar.typing .field.framed { box-shadow: 0 0 0 1px var(--gold), 0 0 14px rgba(242,199,127,.4); }
 .chatbar .field.framed { width: min(260px, 50vw); height: 38px; font-size: 16px; }
 .round-btn {
   border: 0; cursor: pointer;
