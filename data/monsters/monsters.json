@@ -84,7 +84,11 @@
     6,
     10
    ],
-   "art": null,
+   "art": {
+    "sheet": "slime",
+    "h": 16,
+    "still": true
+   },
    "behavior": null
   },
   {
@@ -106,7 +110,11 @@
     8,
     14
    ],
-   "art": null,
+   "art": {
+    "sheet": "ran",
+    "h": 20,
+    "still": true
+   },
    "behavior": null
   },
   {
@@ -128,7 +136,11 @@
     15,
     25
    ],
-   "art": null,
+   "art": {
+    "sheet": "gai-dat",
+    "h": 20,
+    "still": true
+   },
    "behavior": null
   },
   {
@@ -150,7 +162,10 @@
     22,
     32
    ],
-   "art": null,
+   "art": {
+    "sheet": "orc",
+    "h": 30
+   },
    "behavior": null
   },
   {
@@ -172,7 +187,11 @@
     30,
     42
    ],
-   "art": null,
+   "art": {
+    "sheet": "orc",
+    "h": 46,
+    "hue": 40
+   },
    "behavior": null
   },
   {
@@ -194,7 +213,10 @@
     28,
     40
    ],
-   "art": null,
+   "art": {
+    "sheet": "blood",
+    "h": 24
+   },
    "behavior": null
   },
   {
@@ -216,7 +238,10 @@
     32,
     48
    ],
-   "art": null,
+   "art": {
+    "sheet": "doi-lua",
+    "h": 30
+   },
    "behavior": null
   },
   {
@@ -238,7 +263,11 @@
     50,
     70
    ],
-   "art": null,
+   "art": {
+    "sheet": "oc-gai",
+    "h": 22,
+    "still": true
+   },
    "behavior": null
   },
   {
@@ -260,7 +289,10 @@
     55,
     75
    ],
-   "art": null,
+   "art": {
+    "sheet": "demon",
+    "h": 32
+   },
    "behavior": null
   },
   {
@@ -282,7 +314,11 @@
     70,
     95
    ],
-   "art": null,
+   "art": {
+    "sheet": "demon",
+    "h": 50,
+    "hue": 25
+   },
    "behavior": null
   },
   {
@@ -304,7 +340,11 @@
     65,
     90
    ],
-   "art": null,
+   "art": {
+    "sheet": "ca-quai",
+    "h": 22,
+    "still": true
+   },
    "behavior": null
   },
   {
@@ -326,7 +366,12 @@
     70,
     100
    ],
-   "art": null,
+   "art": {
+    "sheet": "ruoi",
+    "h": 24,
+    "hue": 180,
+    "still": true
+   },
    "behavior": null
   },
   {
@@ -348,7 +393,12 @@
     110,
     150
    ],
-   "art": null,
+   "art": {
+    "sheet": "gai-dat",
+    "h": 24,
+    "hue": 170,
+    "still": true
+   },
    "behavior": null
   },
   {
@@ -370,7 +420,11 @@
     130,
     180
    ],
-   "art": null,
+   "art": {
+    "sheet": "soldier",
+    "h": 30,
+    "hue": 180
+   },
    "behavior": null
   },
   {
@@ -392,7 +446,11 @@
     160,
     220
    ],
-   "art": null,
+   "art": {
+    "sheet": "knight",
+    "h": 52,
+    "hue": 180
+   },
    "behavior": null
   },
   {
@@ -414,7 +472,11 @@
     150,
     210
    ],
-   "art": null,
+   "art": {
+    "sheet": "dau-lau",
+    "h": 22,
+    "still": true
+   },
    "behavior": null
   },
   {
@@ -436,7 +498,11 @@
     160,
     230
    ],
-   "art": null,
+   "art": {
+    "sheet": "nhen",
+    "h": 24,
+    "still": true
+   },
    "behavior": null
   },
   {
@@ -458,7 +524,12 @@
     220,
     300
    ],
-   "art": null,
+   "art": {
+    "sheet": "oc-gai",
+    "h": 26,
+    "hue": 200,
+    "still": true
+   },
    "behavior": null
   },
   {
@@ -480,7 +551,10 @@
     250,
     350
    ],
-   "art": null,
+   "art": {
+    "sheet": "knight",
+    "h": 38
+   },
    "behavior": null
   },
   {
@@ -502,7 +576,10 @@
     320,
     420
    ],
-   "art": null,
+   "art": {
+    "sheet": "xuc-tu",
+    "h": 58
+   },
    "behavior": null
   },
   {
@@ -524,7 +601,10 @@
     320,
     450
    ],
-   "art": null,
+   "art": {
+    "sheet": "soi-loi",
+    "h": 34
+   },
    "behavior": null
   },
   {
@@ -546,7 +626,12 @@
     360,
     500
    ],
-   "art": null,
+   "art": {
+    "sheet": "nhan-cau",
+    "h": 26,
+    "hue": 250,
+    "still": true
+   },
    "behavior": null
   },
   {
@@ -568,7 +653,10 @@
     480,
     650
    ],
-   "art": null,
+   "art": {
+    "sheet": "ran-ba-dau",
+    "h": 42
+   },
    "behavior": null
   },
   {
@@ -590,7 +678,10 @@
     550,
     750
    ],
-   "art": null,
+   "art": {
+    "sheet": "thu-tim",
+    "h": 46
+   },
    "behavior": null
   },
   {
@@ -612,8 +703,12 @@
     700,
     950
    ],
-   "art": null,
+   "art": {
+    "sheet": "ky-lan-loi",
+    "h": 66
+   },
    "behavior": null
   }
- ]
+ ],
+ "_ghi_chu_art": "art: hình THỬ NGHIỆM (data/art/sprites.json). sheet = bộ hình, h = cao trên bản đồ (điểm), hue = đổi màu (độ) khi dùng chung hình, still = hình tĩnh (code tự nhún). Chủ dự án có ảnh mới thì đổi ở đây."
 }

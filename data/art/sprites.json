@@ -1,0 +1,652 @@
+{
+ "_ghi_chu": "Sinh bằng tools/asset_build.py — KHÔNG sửa tay. Hình thử nghiệm, chủ dự án sẽ thay.",
+ "sheets": {
+  "orc": {
+   "src": "assets/sprites/orc.png",
+   "fw": 31,
+   "fh": 28,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 6
+    },
+    "walk": {
+     "row": 1,
+     "n": 8
+    },
+    "attack": {
+     "row": 2,
+     "n": 6
+    },
+    "hurt": {
+     "row": 3,
+     "n": 4
+    },
+    "death": {
+     "row": 4,
+     "n": 4
+    }
+   }
+  },
+  "soldier": {
+   "src": "assets/sprites/soldier.png",
+   "fw": 36,
+   "fh": 26,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 6
+    },
+    "walk": {
+     "row": 1,
+     "n": 8
+    },
+    "attack": {
+     "row": 2,
+     "n": 6
+    },
+    "hurt": {
+     "row": 3,
+     "n": 4
+    },
+    "death": {
+     "row": 4,
+     "n": 4
+    }
+   }
+  },
+  "demon": {
+   "src": "assets/sprites/demon.png",
+   "fw": 36,
+   "fh": 22,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 6
+    },
+    "walk": {
+     "row": 1,
+     "n": 8
+    },
+    "attack": {
+     "row": 2,
+     "n": 7
+    },
+    "hurt": {
+     "row": 3,
+     "n": 4
+    },
+    "death": {
+     "row": 4,
+     "n": 4
+    }
+   }
+  },
+  "blood": {
+   "src": "assets/sprites/blood.png",
+   "fw": 33,
+   "fh": 27,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 6
+    },
+    "walk": {
+     "row": 1,
+     "n": 8
+    },
+    "attack": {
+     "row": 2,
+     "n": 8
+    },
+    "hurt": {
+     "row": 3,
+     "n": 4
+    },
+    "death": {
+     "row": 4,
+     "n": 4
+    }
+   }
+  },
+  "knight": {
+   "src": "assets/sprites/knight.png",
+   "fw": 62,
+   "fh": 38,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 14
+    },
+    "walk": {
+     "row": 1,
+     "n": 8
+    },
+    "attack": {
+     "row": 2,
+     "n": 8
+    },
+    "hurt": {
+     "row": 3,
+     "n": 8
+    },
+    "death": {
+     "row": 4,
+     "n": 15
+    }
+   }
+  },
+  "doi-lua": {
+   "src": "assets/sprites/doi-lua.png",
+   "fw": 82,
+   "fh": 98,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 9
+    },
+    "walk": {
+     "row": 1,
+     "n": 9
+    },
+    "attack": {
+     "row": 2,
+     "n": 9
+    }
+   }
+  },
+  "soi-loi": {
+   "src": "assets/sprites/soi-loi.png",
+   "fw": 214,
+   "fh": 126,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 7
+    },
+    "walk": {
+     "row": 1,
+     "n": 7
+    },
+    "attack": {
+     "row": 2,
+     "n": 6
+    },
+    "death": {
+     "row": 3,
+     "n": 1
+    }
+   }
+  },
+  "ran-ba-dau": {
+   "src": "assets/sprites/ran-ba-dau.png",
+   "fw": 162,
+   "fh": 130,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 4
+    },
+    "walk": {
+     "row": 1,
+     "n": 8
+    },
+    "attack": {
+     "row": 2,
+     "n": 6
+    },
+    "death": {
+     "row": 3,
+     "n": 2
+    }
+   }
+  },
+  "xuc-tu": {
+   "src": "assets/sprites/xuc-tu.png",
+   "fw": 143,
+   "fh": 130,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 4
+    },
+    "walk": {
+     "row": 1,
+     "n": 4
+    },
+    "attack": {
+     "row": 2,
+     "n": 3
+    },
+    "death": {
+     "row": 3,
+     "n": 1
+    }
+   }
+  },
+  "ky-lan-loi": {
+   "src": "assets/sprites/ky-lan-loi.png",
+   "fw": 170,
+   "fh": 156,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 12
+    },
+    "walk": {
+     "row": 1,
+     "n": 12
+    },
+    "attack": {
+     "row": 2,
+     "n": 12
+    },
+    "death": {
+     "row": 3,
+     "n": 9
+    }
+   }
+  },
+  "thu-tim": {
+   "src": "assets/sprites/thu-tim.png",
+   "fw": 163,
+   "fh": 130,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 7
+    },
+    "walk": {
+     "row": 1,
+     "n": 8
+    },
+    "attack": {
+     "row": 2,
+     "n": 7
+    }
+   }
+  },
+  "gai-dat": {
+   "src": "assets/sprites/gai-dat.png",
+   "fw": 60,
+   "fh": 50,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 1
+    }
+   }
+  },
+  "sach-yeu": {
+   "src": "assets/sprites/sach-yeu.png",
+   "fw": 29,
+   "fh": 50,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 1
+    }
+   }
+  },
+  "dau-lau": {
+   "src": "assets/sprites/dau-lau.png",
+   "fw": 36,
+   "fh": 50,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 1
+    }
+   }
+  },
+  "oc-gai": {
+   "src": "assets/sprites/oc-gai.png",
+   "fw": 60,
+   "fh": 50,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 1
+    }
+   }
+  },
+  "nhan-cau": {
+   "src": "assets/sprites/nhan-cau.png",
+   "fw": 48,
+   "fh": 50,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 1
+    }
+   }
+  },
+  "nam": {
+   "src": "assets/sprites/nam.png",
+   "fw": 38,
+   "fh": 50,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 1
+    }
+   }
+  },
+  "nhen": {
+   "src": "assets/sprites/nhen.png",
+   "fw": 59,
+   "fh": 50,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 1
+    }
+   }
+  },
+  "slime": {
+   "src": "assets/sprites/slime.png",
+   "fw": 54,
+   "fh": 34,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 1
+    }
+   }
+  },
+  "ca-quai": {
+   "src": "assets/sprites/ca-quai.png",
+   "fw": 69,
+   "fh": 50,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 1
+    }
+   }
+  },
+  "ruoi": {
+   "src": "assets/sprites/ruoi.png",
+   "fw": 82,
+   "fh": 46,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 1
+    }
+   }
+  },
+  "ran": {
+   "src": "assets/sprites/ran.png",
+   "fw": 48,
+   "fh": 50,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 1
+    }
+   }
+  },
+  "bach-tuoc": {
+   "src": "assets/sprites/bach-tuoc.png",
+   "fw": 42,
+   "fh": 50,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 1
+    }
+   }
+  },
+  "cho-trang": {
+   "src": "assets/sprites/cho-trang.png",
+   "fw": 55,
+   "fh": 50,
+   "anims": {
+    "idle": {
+     "row": 0,
+     "n": 6
+    },
+    "walk": {
+     "row": 1,
+     "n": 6
+    }
+   },
+   "face": -1
+  }
+ },
+ "fx": {
+  "kiem-bang-bay": {
+   "src": "assets/effects/kiem-bang-bay.png",
+   "fw": 119,
+   "fh": 66,
+   "anims": {
+    "play": {
+     "row": 0,
+     "n": 1
+    }
+   },
+   "fps": 14
+  },
+  "kiem-bang-no": {
+   "src": "assets/effects/kiem-bang-no.png",
+   "fw": 116,
+   "fh": 98,
+   "anims": {
+    "play": {
+     "row": 0,
+     "n": 4
+    }
+   },
+   "fps": 14
+  },
+  "moc-troi": {
+   "src": "assets/effects/moc-troi.png",
+   "fw": 144,
+   "fh": 98,
+   "anims": {
+    "play": {
+     "row": 0,
+     "n": 5
+    }
+   },
+   "fps": 10
+  },
+  "tho-vong": {
+   "src": "assets/effects/tho-vong.png",
+   "fw": 182,
+   "fh": 130,
+   "anims": {
+    "play": {
+     "row": 0,
+     "n": 6
+    }
+   },
+   "fps": 12
+  },
+  "hoa-cot": {
+   "src": "assets/effects/hoa-cot.png",
+   "fw": 156,
+   "fh": 114,
+   "anims": {
+    "play": {
+     "row": 0,
+     "n": 5
+    }
+   },
+   "fps": 12
+  },
+  "may-kiep": {
+   "src": "assets/effects/may-kiep.png",
+   "fw": 165,
+   "fh": 98,
+   "anims": {
+    "play": {
+     "row": 0,
+     "n": 9
+    }
+   },
+   "fps": 8
+  },
+  "set-danh": {
+   "src": "assets/effects/set-danh.png",
+   "fw": 82,
+   "fh": 114,
+   "anims": {
+    "play": {
+     "row": 0,
+     "n": 16
+    }
+   },
+   "fps": 18
+  },
+  "chem-x": {
+   "src": "assets/effects/chem-x.png",
+   "fw": 66,
+   "fh": 66,
+   "anims": {
+    "play": {
+     "row": 0,
+     "n": 7
+    }
+   },
+   "fps": 20
+  },
+  "cham-mau": {
+   "src": "assets/effects/cham-mau.png",
+   "fw": 50,
+   "fh": 50,
+   "anims": {
+    "play": {
+     "row": 0,
+     "n": 8
+    }
+   },
+   "fps": 20
+  },
+  "mat-quy": {
+   "src": "assets/effects/mat-quy.png",
+   "fw": 50,
+   "fh": 50,
+   "anims": {
+    "play": {
+     "row": 0,
+     "n": 6
+    }
+   },
+   "fps": 10
+  },
+  "sao-den": {
+   "src": "assets/effects/sao-den.png",
+   "fw": 82,
+   "fh": 82,
+   "anims": {
+    "play": {
+     "row": 0,
+     "n": 10
+    }
+   },
+   "fps": 16
+  },
+  "vong-lua": {
+   "src": "assets/effects/vong-lua.png",
+   "fw": 82,
+   "fh": 82,
+   "anims": {
+    "play": {
+     "row": 0,
+     "n": 12
+    }
+   },
+   "fps": 16
+  },
+  "no-lua": {
+   "src": "assets/effects/no-lua.png",
+   "fw": 66,
+   "fh": 66,
+   "anims": {
+    "play": {
+     "row": 0,
+     "n": 7
+    }
+   },
+   "fps": 16
+  },
+  "khoi": {
+   "src": "assets/effects/khoi.png",
+   "fw": 34,
+   "fh": 42,
+   "anims": {
+    "play": {
+     "row": 0,
+     "n": 4
+    }
+   },
+   "fps": 10
+  }
+ },
+ "icons": {
+  "src": "assets/items/icons.png",
+  "size": 64,
+  "cols": 16,
+  "map": {
+   "item.thao.thanh-tam.001": 0,
+   "item.thao.linh-chi-non.001": 1,
+   "item.thao.bat-nha.001": 2,
+   "item.thao.huyet-linh.001": 3,
+   "item.thao.diem-chi.001": 4,
+   "item.thao.xich-qua.001": 5,
+   "item.thao.han-linh.001": 6,
+   "item.thao.bang-chi.001": 7,
+   "item.thao.tuyet-lien.001": 8,
+   "item.thao.huyen-linh.001": 9,
+   "item.thao.u-minh.001": 10,
+   "item.thao.co-lien.001": 11,
+   "item.thao.hac-linh.001": 12,
+   "item.thao.tan-the.001": 13,
+   "item.thao.hu-khong.001": 14,
+   "item.khoang.huyen-thiet-vun.001": 15,
+   "item.khoang.tinh-sa.001": 16,
+   "item.khoang.xich-thiet.001": 17,
+   "item.khoang.huyet-ngoc.001": 18,
+   "item.khoang.han-thiet.001": 19,
+   "item.khoang.bang-ngoc.001": 20,
+   "item.khoang.huyen-thiet.001": 21,
+   "item.khoang.u-ngoc.001": 22,
+   "item.khoang.hac-thiet.001": 23,
+   "item.khoang.hu-ngoc.001": 24,
+   "item.dacbiet.huyet-yeu-tinh.001": 25,
+   "item.dacbiet.hon-thu-tinh.001": 26,
+   "item.dacbiet.tinh-hon.001": 27,
+   "item.dacbiet.tinh-hon-co.001": 28,
+   "skill.tamphap.luyen-khi.001": 29,
+   "skill.chieu.kiem-khi.001": 30,
+   "skill.khe.linh-thu.001": 31,
+   "skill.than.canh-phong.001": 32,
+   "skill.phap-tuong.thien-thu.001": 33,
+   "skill.tamphap.thanh-tam.001": 34,
+   "skill.chieu.hoi-linh.001": 35,
+   "skill.than.lang-ba.001": 36,
+   "item.nhiemvu.dau-an-huyet-sai.001": 37,
+   "item.nhiemvu.manh-truyen-thua.001": 38,
+   "item.dan.truc-co.001": 39,
+   "item.dan.ket-dan.001": 40,
+   "item.dan.nguyen-anh.001": 41,
+   "item.dan.hoa-than.001": 42,
+   "item.dan.tieu-hoi-huyet.001": 43,
+   "item.dan.hoi-linh.001": 44,
+   "item.dan.cuong-cong.001": 45,
+   "item.dan.cuong-the.001": 46,
+   "item.dan.duy-tri.001": 47,
+   "slot.vu-khi": 48,
+   "slot.trang-phuc": 49,
+   "slot.nhan": 50,
+   "slot.day-chuyen": 51,
+   "slot.mat-na": 52,
+   "slot.canh": 53,
+   "slot.phap-tuong": 54,
+   "slot.linh-thu": 55,
+   "linh-thach": 56
+  }
+ }
+}

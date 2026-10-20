@@ -462,3 +462,6 @@ img { image-rendering: pixelated; }
 .sheet .tier-luc { border-color: #4caf50; } .sheet .tier-lam { border-color: #3d8bff; } .sheet .tier-tim { border-color: #b05cff; }
 .sheet .tier-cam { border-color: #ff9a3d; } .sheet .tier-vang { border-color: #ffd23a; } .sheet .tier-do { border-color: #ff3b30; }
 .sheet .tier-den { border-color: #ff3b30; background: #0d0a10; }
+
+.sheet .ico { width: 26px; height: 26px; object-fit: contain; vertical-align: middle; margin-right: 6px; }
+.sheet .grid2 span .ico { width: 20px; height: 20px; }
