@@ -38,5 +38,11 @@ nên nhiều vật phẩm (cấp khác nhau) dùng chung một hình được.
 - Các frame phải thực sự khác nhau; không cắt một ảnh tĩnh thành frame giả.
 - Icon phải khớp đúng hình trang bị khi mặc lên người.
 
+## Âm thanh (từ 21/10/2026)
+- File gốc chủ dự án gửi (WAV) giữ ở `assets/audio/_source/`; bản dùng trong game ở `assets/audio/`:
+  nhạc nền → MP3 (nhẹ), tiếng dài → MP3, tiếng rất ngắn (≤0,2 giây) → WAV 16-bit (MP3 thêm khoảng lặng đầu, lệch nhịp chém).
+- Đăng ký id + âm lượng trong `data/audio.json`; code chỉ gọi id (`sfx.kiem.chem`, `sfx.phaptuong.hoahinh`, `bgm.tuchan`).
+- Tiếng chỉ phát sau lần chạm đầu tiên (luật trình duyệt điện thoại). Bật/tắt trong Cài đặt → Âm thanh / Nhạc nền.
+
 ## Nguồn
 Ghi tác giả và giấy phép của asset tải ngoài vào `assets/CREDITS.md`.

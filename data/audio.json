@@ -1,0 +1,13 @@
+{
+  "_ghi_chu": "Âm thanh do chủ dự án cung cấp (gốc WAV trong assets/audio/_source/). volume 0–1. Code chỉ gọi theo id.",
+  "music": {
+    "bgm.tuchan": { "file": "assets/audio/nhac-nen-tu-chan.mp3", "volume": 0.4, "loop": true }
+  },
+  "sfx": {
+    "sfx.kiem.chem": { "file": "assets/audio/kiem-chem.wav", "volume": 0.7, "_note": "0,1 giây — kiếm chém ra (Đánh thường khi cầm vũ khí)" },
+    "sfx.phaptuong.hoahinh": { "file": "assets/audio/phap-tuong-hoa-hinh.mp3", "volume": 0.9, "_note": "3,8 giây — bấm kỹ năng Pháp tướng; cao trào ở giây 2,1" }
+  },
+  "remote_sfx_volume": 0.45,
+  "remote_sfx_range_px": 420,
+  "_note_remote": "Người khác hoá pháp tướng gần mình (trong remote_sfx_range_px) thì nghe nhỏ hơn"
+}
