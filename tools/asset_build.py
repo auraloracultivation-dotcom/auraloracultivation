@@ -31,6 +31,7 @@ SRC = {
     'linh-chau': 'bc746396-image.png', 'cong-phap': '9e3eeb69-image.png', 'truc-cuon': 'd9c48738-image.png',
     'dan-phuong': '51e27582-image.png', 'doi-lua': '0c95c49b-image.gif', 'quai-nho': '0ed12cb1-image.jpg',
     'khoi': '2c28dace-image.gif', 'kien-truc': '83c561a8-image.png', 'dao-noi': 'eb4afdd1-image.png',
+    'canh-vat-2': '66f9bd2c-image.png',
 }
 src = lambda k: os.path.join(SRC_DIR, SRC[k])
 pack = lambda pat: glob.glob(os.path.join(SRC_DIR, '**', pat), recursive=True)[0]
@@ -300,9 +301,69 @@ def run_props():
     return P
 
 
+# ---------------- Cây cối, đá, hoa cỏ rải trên bản đồ ----------------
+# (khoá, ô cắt trên tấm canh-vat-2, cao trên bản đồ, loại: tree = cây (chặn ở gốc), rock = đá/tinh thể (chặn), small = cỏ hoa (đi xuyên))
+DECOR = [
+    ('anh-dao', (20, 9, 190, 171), 58, 'tree'), ('hoa-trang', (215, 11, 387, 173), 58, 'tree'), ('cay-xanh', (401, 10, 551, 174), 58, 'tree'),
+    ('cay-do', (571, 11, 721, 173), 58, 'tree'), ('cay-vang', (743, 10, 894, 173), 58, 'tree'), ('lieu', (912, 9, 1063, 174), 60, 'tree'),
+    ('tu-dang', (1091, 10, 1254, 173), 60, 'tree'), ('tung-cong', (1264, 10, 1413, 175), 54, 'tree'), ('thong', (1434, 16, 1524, 173), 60, 'tree'),
+    ('truc', (13, 179, 125, 293), 48, 'tree'), ('truc-2', (177, 180, 265, 292), 48, 'tree'), ('chuoi', (463, 188, 576, 295), 42, 'tree'),
+    ('dua', (560, 181, 696, 296), 50, 'tree'), ('co-thu', (15, 384, 154, 542), 62, 'tree'), ('cay-hoc', (150, 386, 287, 543), 58, 'tree'),
+    ('cay-con', (417, 396, 487, 482), 34, 'tree'), ('cay-con-2', (509, 397, 575, 482), 34, 'tree'), ('cay-tron', (604, 386, 694, 482), 40, 'tree'),
+    ('bui-1', (701, 196, 782, 295), 26, 'small'), ('bui-2', (794, 193, 868, 293), 26, 'small'), ('bui-3', (879, 193, 951, 294), 26, 'small'),
+    ('hoa-1', (964, 202, 1039, 297), 18, 'small'), ('hoa-2', (1043, 194, 1111, 297), 18, 'small'), ('hoa-3', (1116, 194, 1182, 297), 18, 'small'),
+    ('lau-1', (1366, 190, 1434, 297), 26, 'small'), ('lau-2', (1437, 189, 1520, 298), 26, 'small'), ('co-1', (16, 316, 98, 371), 12, 'small'),
+    ('co-2', (103, 316, 181, 372), 12, 'small'), ('hoa-nho-1', (195, 308, 242, 373), 12, 'small'), ('hoa-nho-2', (251, 309, 296, 373), 12, 'small'),
+    ('hoa-nho-3', (301, 309, 347, 373), 12, 'small'), ('hoa-nho-4', (356, 311, 400, 373), 12, 'small'), ('hoa-nho-5', (407, 312, 449, 373), 12, 'small'),
+    ('hoa-nho-6', (455, 312, 497, 373), 12, 'small'), ('la', (504, 316, 564, 376), 12, 'small'), ('nam-do', (738, 311, 808, 380), 16, 'small'),
+    ('nam-tim', (817, 310, 891, 380), 16, 'small'), ('nam-xanh', (904, 311, 973, 384), 16, 'small'), ('hoa-cam', (984, 310, 1049, 383), 16, 'small'),
+    ('hoa-bang', (1059, 307, 1128, 383), 18, 'small'), ('da-lon', (722, 386, 808, 469), 34, 'rock'), ('da-2', (817, 392, 904, 470), 30, 'rock'),
+    ('da-3', (914, 399, 985, 469), 24, 'rock'), ('da-reu', (990, 401, 1069, 469), 22, 'rock'), ('da-vun', (1072, 422, 1130, 467), 10, 'small'),
+    ('da-vun-2', (1134, 424, 1177, 465), 10, 'small'), ('da-nhon', (1220, 387, 1282, 467), 32, 'rock'), ('da-nhon-2', (1286, 394, 1360, 468), 30, 'rock'),
+    ('da-nhon-3', (1365, 407, 1435, 470), 24, 'rock'), ('nui-da', (15, 630, 137, 734), 48, 'rock'), ('hang-da', (142, 637, 275, 734), 46, 'rock'),
+    ('hang-da-2', (277, 628, 435, 734), 46, 'rock'), ('bia-co', (438, 637, 515, 735), 32, 'rock'), ('bia-co-2', (520, 637, 603, 735), 30, 'rock'),
+    ('tang-da', (608, 650, 709, 735), 28, 'rock'), ('cot-da', (715, 635, 781, 735), 34, 'rock'), ('cot-da-2', (835, 637, 898, 731), 32, 'rock'),
+    ('phe-tich', (899, 636, 1016, 734), 32, 'rock'), ('phe-tich-2', (1018, 649, 1079, 731), 28, 'rock'), ('da-cum', (15, 743, 119, 811), 26, 'rock'),
+    ('da-den', (127, 745, 195, 812), 24, 'rock'), ('da-dung', (205, 747, 270, 814), 24, 'rock'), ('da-dung-2', (277, 743, 349, 815), 26, 'rock'),
+    ('da-dung-3', (358, 742, 409, 815), 24, 'rock'), ('tinh-den', (722, 474, 805, 549), 24, 'rock'), ('tinh-trang', (816, 481, 905, 550), 24, 'rock'),
+    ('tinh-cam', (909, 481, 984, 551), 24, 'rock'), ('tinh-vang', (991, 481, 1072, 553), 24, 'rock'), ('tinh-luc', (1074, 476, 1218, 557), 26, 'rock'),
+    ('tinh-tim', (1219, 474, 1298, 559), 28, 'rock'), ('tinh-do', (1299, 474, 1377, 559), 28, 'rock'), ('tinh-lam', (1378, 477, 1453, 560), 28, 'rock'),
+    ('tinh-bang', (1456, 476, 1520, 557), 30, 'rock'), ('go-1', (17, 564, 122, 626), 14, 'small'), ('go-2', (130, 563, 221, 630), 14, 'small'),
+    ('go-3', (225, 568, 310, 629), 14, 'small'), ('goc-cay', (688, 558, 788, 632), 22, 'rock'), ('re-kho', (793, 556, 934, 635), 22, 'small'),
+    ('re-kho-2', (939, 562, 1039, 636), 22, 'small'), ('goc-nho', (407, 494, 497, 547), 18, 'small'), ('den-dat', (1468, 645, 1518, 728), 22, 'rock'),
+    ('den-dat-2', (495, 737, 542, 817), 24, 'rock'),
+]
+
+
+def run_decor():
+    rgb, a = load_keyed(src('canh-vat-2'), 'magenta')
+    ims = []
+    for key, box, h, kind in DECOR:
+        im = main_blob(tight(crop(rgb, a, box)), 0.15)
+        k = min(1, (h * 2) / im.height)
+        ims.append((key, im.resize((max(1, round(im.width * k)), max(1, round(im.height * k))), Image.LANCZOS), h, kind))
+    W = 1024
+    x = y = row_h = 0
+    pos = []
+    for key, im, h, kind in ims:  # xếp kệ đơn giản
+        if x + im.width > W:
+            x, y, row_h = 0, y + row_h + 2, 0
+        pos.append((x, y)); x += im.width + 2; row_h = max(row_h, im.height)
+    atlas = Image.new('RGBA', (W, y + row_h))
+    out = {}
+    for (key, im, h, kind), (px, py) in zip(ims, pos):
+        atlas.alpha_composite(im, (px, py))
+        w = round(im.width / im.height * h)
+        r = 4 if kind == 'tree' else round(w * 0.32) if kind == 'rock' else 0
+        out[key] = {'x': px, 'y': py, 'sw': im.width, 'sh': im.height, 'w': w, 'h': h, 'kind': kind, 'r': r}
+    os.makedirs(os.path.join(ROOT, 'assets/decor'), exist_ok=True)
+    atlas.save(os.path.join(ROOT, 'assets/decor/atlas.png'), optimize=True)
+    return {'src': 'assets/decor/atlas.png', 'items': out}
+
+
 if __name__ == '__main__':
     data = {'_ghi_chu': 'Sinh bằng tools/asset_build.py — KHÔNG sửa tay. Hình thử nghiệm, chủ dự án sẽ thay.',
-            'sheets': run_monsters(), 'fx': run_fx(), 'icons': run_icons(), 'props': run_props()}
+            'sheets': run_monsters(), 'fx': run_fx(), 'icons': run_icons(), 'props': run_props(), 'decor': run_decor()}
     os.makedirs(os.path.join(ROOT, 'data/art'), exist_ok=True)
     with open(os.path.join(ROOT, 'data/art/sprites.json'), 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=1)

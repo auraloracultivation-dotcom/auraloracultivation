@@ -8,6 +8,7 @@
 Ảnh gốc không đưa vào repo; chỉ có bản đã cắt/thu nhỏ trong assets/sprites, assets/effects, assets/items.
 | Nguồn | Dùng cho | Giấy phép |
 |---|---|---|
+| Chủ dự án (tấm cảnh vật 2 → assets/decor) | Cây, đá, hoa cỏ trên bản đồ | Của dự án |
 | Chủ dự án (tấm kiến trúc thành + đảo nổi → assets/town) | Thanh Vân Thành | Của dự án |
 | Chủ dự án (tấm nền hồng / xanh lá: sói lôi, rắn ba đầu, quái xúc tu, kỳ lân lôi, thú tím; kiếm băng, trượng mộc, rìu thổ, trượng hoả, thiên kiếp; cảnh vật, linh châu, sách công pháp, trục cuộn, đan phương) | Quái mạnh, hiệu ứng kỹ năng, icon | Của dự án |
 | Tiny RPG Character Asset Pack 01 (Soldier & Orc), Pack 02 (Demon_A & Blood Monster_A) — Zerie | Quái vùng Xanh/Cam, tinh anh Vùng Trắng | Miễn phí, dùng trong game |

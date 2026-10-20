@@ -16,7 +16,9 @@ export function createGather({ gp, mats, map }) {
       const x = map.wrapX(me.x + Math.cos(a) * d), y = map.wrapY(me.y + Math.sin(a) * d);
       const t = map.typeAt(x, y), pool = t.zone && byZone[t.zone];
       if (!pool || !map.canStand(x, y, 4) || map.safeAt(x, y)) continue;
-      const group = Math.random() < G.herb_ratio ? 'thao' : 'khoang';
+      const f = map.decor?.field(x, y) || { forest: 0, rock: 0 }; // rừng → nhiều linh thảo, bãi đá → nhiều khoáng
+      const herbP = f.forest > f.rock ? G.herb_ratio + (1 - G.herb_ratio) * f.forest * 0.8 : G.herb_ratio * (1 - f.rock * 0.8);
+      const group = Math.random() < herbP ? 'thao' : 'khoang';
       // món đầu danh sách mỗi vùng là món phổ biến nhất → hay gặp hơn
       const arr = pool[group], w = arr.map((_, i) => 1 / (i + 1)), sum = w.reduce((s, v) => s + v, 0);
       let r = Math.random() * sum, i = 0;
