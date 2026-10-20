@@ -1,6 +1,6 @@
 // Giao diện trong game, bố cục kiểu MOBA:
 //   trên trái  — đạo hiệu + khung nhân vật (chạm ảnh đại diện mở bảng Nhân vật)
-//   trên phải  — nút Bản đồ, Cài đặt, bản đồ nhỏ, tên khu
+//   trên phải  — menu (Bản đồ, Túi đồ, Kỹ năng, Nhiệm vụ, Tông môn, Cài đặt), bản đồ nhỏ, tên khu
 //   dưới trái  — cần điều khiển (chạm nền), nút Chat
 //   dưới phải  — nút tấn công + ô kỹ năng, Phi hành, Tốc biến
 // Khung lấy từ assets/ui (thiết kế chủ dự án).
@@ -16,7 +16,17 @@ const crisp = (node, srcW, maxCss, square = false) => {
   node.style.imageRendering = pixelated ? 'pixelated' : 'auto';
 };
 
-const FRAME = { w: 495, h: 190 }; // frames/khung-nhan-vat.png
+const FRAME = { w: 887, h: 394 }; // frames/khung-nhan-vat-v2.png (sinh bằng tools/hud_frame.py)
+const ICON = (n) => `assets/ui/icons/${n}.png`;
+// Menu góc trên phải. id 'map' / 'settings' mở bảng; còn lại chưa có hệ thống → báo "sắp có"
+const MENU = [
+  { id: 'map', name: 'Bản đồ', icon: 'ban-do-v2' },
+  { id: 'bag', name: 'Túi đồ', icon: 'tui-do' },
+  { id: 'skills', name: 'Kỹ năng', icon: 'ky-nang' },
+  { id: 'quests', name: 'Nhiệm vụ', icon: 'nhiem-vu' },
+  { id: 'sect', name: 'Tông môn', icon: 'tong-mon' },
+  { id: 'settings', name: 'Cài đặt', icon: 'cai-dat-v2' },
+];
 const pct = (x, y, w, h) =>
   `left:${(x / FRAME.w) * 100}%;top:${(y / FRAME.h) * 100}%;width:${(w / FRAME.w) * 100}%;height:${(h / FRAME.h) * 100}%`;
 
@@ -30,60 +40,75 @@ export function createHud(opts) {
   info.innerHTML = `
     <div class="pi-name" data-name></div>
     <div class="pi-frame">
-      <button type="button" class="pi-avatar glow" style="${pct(52, 22, 120, 120)}" aria-label="Thông tin nhân vật">
+      <button type="button" class="pi-avatar glow" style="${pct(80, 50, 192, 192)}" aria-label="Thông tin nhân vật">
         <canvas width="64" height="64"></canvas></button>
-      <div class="pi-bar" style="${pct(204, 56, 244, 21)}"><i class="fill hp" data-hp></i><span>Khí huyết</span><b data-hp-t></b></div>
-      <div class="pi-bar" style="${pct(204, 94, 244, 22)}"><i class="fill mp" data-mp></i><span>Linh lực</span><b data-mp-t></b></div>
-      <div class="pi-bar" style="${pct(204, 132, 244, 20)}"><i class="fill xp" data-xp></i><span>Tu vi</span><b data-xp-t></b></div>
-      <div class="pi-realm" style="${pct(30, 160, 164, 26)}" data-realm></div>
+      <div class="pi-bar" style="${pct(382, 87, 404, 36)}"><i class="fill hp" data-hp></i><span>Khí huyết</span><b data-hp-t></b></div>
+      <div class="pi-bar" style="${pct(382, 155, 404, 36)}"><i class="fill mp" data-mp></i><span>Linh lực</span><b data-mp-t></b></div>
+      <div class="pi-bar" style="${pct(382, 224, 321, 38)}"><i class="fill xp" data-xp></i><span>Tu vi</span><b data-xp-t></b></div>
+      <img class="pi-icon" src="${ICON('sen')}" alt="" style="${pct(317, 216, 50, 50)}">
+      <button type="button" class="pi-up" style="${pct(723, 198, 84, 84)}" aria-label="Đột phá"></button>
+      <div class="pi-realm" style="${pct(61, 282, 212, 39)}" data-realm></div>
     </div>`;
   root.appendChild(info);
-  crisp(info, 495, Math.min(250, window.innerWidth * 0.44));
+  const portrait = window.innerHeight > window.innerWidth;
+  info.style.width = `${Math.min(270, window.innerWidth * (portrait ? 0.42 : 0.3))}px`; // khung độ phân giải cao, thu nhỏ mượt
   info.querySelector('[data-name]').textContent = player.name;
   info.querySelector('[data-realm]').textContent = player.realmName;
   drawAvatar(info.querySelector('.pi-avatar canvas'), player.drawAvatar);
+  info.querySelector('.pi-up').addEventListener('click', opts.onBreakthrough);
   info.querySelector('.pi-avatar').addEventListener('click', opts.onOpenCharacter);
 
   // ---- Trên phải: Bản đồ, Cài đặt, bản đồ nhỏ, tên khu ----
   const right = document.createElement('div');
   right.className = 'top-right';
   right.innerHTML = `
-    <div class="tr-buttons">
-      <button type="button" class="icon-round glow" data-map aria-label="Bản đồ"><img src="assets/ui/icons/ban-do.png" alt=""></button>
-      <button type="button" class="icon-btn glow" data-settings aria-label="Cài đặt"><img src="assets/ui/icons/cai-dat.png" alt=""></button>
+    <div class="tr-buttons">${MENU.map((m) => `
+      <button type="button" class="menu-btn glow" data-menu="${m.id}" aria-label="${m.name}" title="${m.name}">
+        <img src="${ICON(m.icon)}" alt=""></button>`).join('')}
     </div>
     <div class="tr-mini">
       <button type="button" class="minimap" aria-label="Mở bản đồ"><canvas></canvas></button>
       <div class="zone-tag"><b>${escapeHtml(zoneName)}</b><span>Tuyến ${line} <em data-online></em></span></div>
     </div>`;
   root.appendChild(right);
-  right.querySelector('[data-settings]').addEventListener('click', opts.onSettings);
-  right.querySelector('[data-map]').addEventListener('click', opts.onOpenMap);
+  right.querySelector('.tr-buttons').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-menu]');
+    if (!b) return;
+    const id = b.dataset.menu;
+    if (id === 'map') opts.onOpenMap();
+    else if (id === 'settings') opts.onSettings();
+    else toast(`${b.getAttribute('aria-label')}: sắp có`);
+  });
   right.querySelector('.minimap').addEventListener('click', opts.onOpenMap);
   const online = right.querySelector('[data-online]');
-  const miniCanvas = setupRoundCanvas(right.querySelector('.minimap canvas'), 84);
+  const miniCanvas = setupRoundCanvas(right.querySelector('.minimap canvas'), portrait ? 78 : 84);
   crisp(right.querySelector('.zone-tag'), 308, 130);
-  right.querySelectorAll('.icon-btn, .icon-round').forEach((b) => crisp(b, 65, 36, true));
 
   // ---- Dưới phải: tấn công + kỹ năng ----
   const pad = document.createElement('div');
   pad.className = 'action-pad';
   pad.innerHTML = actions.map((a) => `
-    <button type="button" class="act act-${a.slot} ${a.locked ? 'locked' : ''}" data-act="${a.id}" aria-label="${escapeHtml(a.name)}">
-      ${a.icon ? `<img src="${a.icon}" alt="">` : ''}
+    <button type="button" class="act act-${a.slot} ${a.locked ? 'locked' : ''} ${a.full ? 'full' : ''}" data-act="${a.id}" aria-label="${escapeHtml(a.name)}">
+      ${a.icon || a.icons ? `<img src="${a.icon || a.icons[0]}" alt="">` : ''}
       ${a.locked ? '<img class="lock" src="assets/ui/icons/khoa.png" alt="">' : ''}
       <span>${escapeHtml(a.name)}</span>
     </button>`).join('');
   root.appendChild(pad);
-  const SIZE = { attack: 92, s1: 56, s2: 56, s3: 56, fly: 46, blink: 46 };
+  const SIZE = { attack: 92, s1: 56, s2: 56, s3: 56, fly: 58, blink: 46 };
   for (const a of actions) {
     const btn = pad.querySelector(`[data-act="${a.id}"]`);
-    crisp(btn, 84, SIZE[a.slot], true); // khung tròn frames/o-tron.png 84×84
+    crisp(btn, a.full ? 164 : 84, SIZE[a.slot], true); // khung tròn frames/o-tron.png 84×84; nút ảnh đầy đủ 164
+    let state = 0; // nút bật/tắt (vd. Bay lên ↔ Hạ xuống): đổi ảnh + tên theo trạng thái
     btn.addEventListener('pointerdown', (e) => {
       e.preventDefault();
       if (a.locked) { toast(`${a.name}: chưa mở`); return; }
       btn.classList.remove('pulse'); void btn.offsetWidth; btn.classList.add('pulse');
-      a.onUse?.();
+      if (a.icons) {
+        state = (state + 1) % a.icons.length;
+        btn.querySelector('img').src = a.icons[state];
+        btn.setAttribute('aria-label', a.names[state]);
+        a.onUse?.(state);
+      } else a.onUse?.();
     });
   }
 

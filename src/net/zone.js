@@ -49,8 +49,8 @@ function tryJoin(topic, me, h, maxPlayers) {
 function createZoneLink(channel, line, me) {
   return {
     line,
-    sendMove(x, y, moving) {
-      channel.send({ type: 'broadcast', event: 'move', payload: { id: me.id, x, y, moving, t: Date.now() } });
+    sendMove(x, y, moving, flying = false) {
+      channel.send({ type: 'broadcast', event: 'move', payload: { id: me.id, x, y, moving, flying, t: Date.now() } });
     },
     sendChat(text) {
       channel.send({ type: 'broadcast', event: 'chat', payload: { id: me.id, text } });

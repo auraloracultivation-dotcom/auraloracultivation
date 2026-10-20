@@ -104,6 +104,7 @@ async function boot() {
       });
     },
     onSettings() { showSettings({ onLogout: logout }); },
+    onBreakthrough() { toast('Đột phá: chờ quy tắc cảnh giới'); },
     onOpenMap() {
       showWorldMap({
         zoneName: zoneDef.name,
@@ -116,7 +117,15 @@ async function boot() {
       { id: 'skill1', slot: 's1', name: 'Kỹ năng 1', locked: true },
       { id: 'skill2', slot: 's2', name: 'Kỹ năng 2', locked: true },
       { id: 'skill3', slot: 's3', name: 'Kỹ năng 3', locked: true },
-      { id: 'fly', slot: 'fly', name: 'Phi hành', icon: 'assets/ui/icons/phi-hanh.png', locked: true },
+      { // một nút: bấm để Bay lên, bấm lần nữa để Hạ xuống (hiện chỉ là hình ảnh, chưa đổi tốc độ / va chạm)
+        id: 'fly', slot: 'fly', name: 'Bay lên', full: true,
+        icons: ['assets/ui/icons/bay-len.png', 'assets/ui/icons/ha-xuong.png'], names: ['Bay lên', 'Hạ xuống'],
+        onUse: (state) => {
+          me.flying = state === 1;
+          zone.sendMove(me.x, me.y, me.moving, me.flying);
+          toast(me.flying ? 'Ngự khí phi hành' : 'Hạ xuống mặt đất', 1200);
+        },
+      },
       { id: 'blink', slot: 'blink', name: 'Tốc biến', icon: 'assets/ui/icons/toc-bien.png', locked: true },
     ],
   });
@@ -147,10 +156,10 @@ async function boot() {
       map.move(me, dir.x * speed * dt, dir.y * speed * dt, radius);
       me.walkT += dt;
       sendTimer += dt;
-      if (sendTimer >= sendEvery) { sendTimer = 0; zone.sendMove(me.x, me.y, true); }
+      if (sendTimer >= sendEvery) { sendTimer = 0; zone.sendMove(me.x, me.y, true, me.flying); }
     } else {
       me.walkT = 0;
-      if (wasMoving) { zone.sendMove(me.x, me.y, false); saver.saveNow(); sendTimer = sendEvery; }
+      if (wasMoving) { zone.sendMove(me.x, me.y, false, me.flying); saver.saveNow(); sendTimer = sendEvery; }
     }
     saver.tick(dt, me.moving);
     others.update(dt);
