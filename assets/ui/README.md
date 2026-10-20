@@ -29,7 +29,7 @@ Dự phòng: `bg/den-vang-dang-nhap.webp`, `bg/den-vang-dang-tai.webp` (bộ đe
 - `icons/dong.png` (✕ đóng bảng), `icons/dong-y.png` (✓), `icons/cong.png` (+), `icons/tru.png` (−)
 - `icons/am-thanh.png`, `icons/nhac-nen.png`, `icons/ngon-ngu.png`, `icons/dang-xuat.png` — cắt từ ảnh mẫu Cài đặt
 - `frames/o-tron.png` — ô tròn nút tấn công / kỹ năng
-- Bản đồ nhỏ và bản đồ thế giới: viền la bàn vẽ bằng code (`src/ui/compass.js`) cho sắc nét mọi cỡ; `frames/minimap-tron.png` không còn dùng.
+- Bản đồ nhỏ và bản đồ thế giới: khung la bàn của chủ dự án `frames/khung-ban-do.png` (sinh bằng `tools/map_frame.py`, lòng tròn trong suốt); nút `icons/ban-do-dong.png`, `ban-do-cong.png`, `ban-do-tru.png`. `frames/minimap-tron.png` không còn dùng.
 
 ## Độ sắc nét
 Khung hiển thị theo **bội số nguyên điểm ảnh gốc** (`crispWidth` trong `src/ui/stage.js`); nút nhỏ hơn bội số thì thu nhỏ mượt.
