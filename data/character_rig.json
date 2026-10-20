@@ -59,7 +59,7 @@
  },
  "hands": {
   "_ghi_chu": "Bàn tay GPT đặt vào ô tay trái/phải (vị trí lấy từ 'hands' của trang phục).",
-  "size_cw": 0.2,
+  "size_cw": 0.12,
   "idle_pose": "nam",
   "attack_pose": "tung-chieu",
   "magic_pose": "mo",
@@ -77,6 +77,8 @@
   },
   "attack_hand": "tay-phia-truoc",
   "attack_raise_ch": 0.035,
-  "attack_glow": false
+  "attack_glow": false,
+  "rotate_idle_deg": 0,
+  "rotate_attack_deg": 0
  }
 }
