@@ -61,7 +61,7 @@
   "_ghi_chu": "Bàn tay GPT đặt vào ô tay trái/phải (vị trí lấy từ 'hands' của trang phục).",
   "size_cw": 0.2,
   "idle_pose": "nam",
-  "attack_pose": "chi",
+  "attack_pose": "tung-chieu",
   "magic_pose": "mo",
   "breath_scale": 0.05,
   "step_scale": 0.08,
@@ -72,7 +72,8 @@
    "nam-chat": "phai",
    "nam-nghieng": "phai",
    "chi": "phai",
-   "mo": "phai"
+   "mo": "phai",
+   "tung-chieu": "phai"
   },
   "attack_hand": "tay-phia-truoc",
   "attack_raise_ch": 0.035,
