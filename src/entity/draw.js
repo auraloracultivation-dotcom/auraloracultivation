@@ -1,5 +1,14 @@
 // Nhân vật chibi tạm vẽ bằng code (khung 24×32, neo ở chân). Sẽ thay bằng sprite theo docs/04-ASSET.md.
-export function drawPlayer(ctx, p) {
+// scale: tỉ lệ thu nhỏ nhân vật (data/config.json player.sprite_scale); neo ở chân
+export function drawPlayer(ctx, p, scale = 1) {
+  ctx.save();
+  ctx.translate(p.x, p.y);
+  ctx.scale(scale, scale);
+  drawBody(ctx, { ...p, x: 0, y: 0 });
+  ctx.restore();
+}
+
+function drawBody(ctx, p) {
   const x = Math.round(p.x);
   const bob = p.walkT ? Math.round(Math.sin(p.walkT * 14)) : 0;
   const y = Math.round(p.y) + bob;
@@ -35,9 +44,9 @@ export function drawPlayer(ctx, p) {
   ctx.fillRect(x + ex + 3, y - 21, 1, 2);
 }
 
-export function drawLabel(ctx, p, now) {
+export function drawLabel(ctx, p, now, scale = 1) {
   const x = Math.round(p.x);
-  const y = Math.round(p.y);
+  const y = Math.round(p.y + 33 - 33 * scale); // bám theo đầu nhân vật đã thu nhỏ
   ctx.font = '6px sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'bottom';

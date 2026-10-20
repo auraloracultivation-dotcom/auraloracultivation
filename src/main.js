@@ -1,6 +1,6 @@
 // Điểm khởi động: nối các module lại với nhau. Không chứa luật gameplay chi tiết.
 import { loadJSON, startLoop, createScreen, createCamera, followCamera, createInput, drawStick } from './core/index.js';
-import { createMap, drawObstacle } from './map/index.js';
+import { createMap, wrapDelta } from './map/index.js';
 import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel } from './entity/index.js';
 import {
   showLoading, showLogin, shouldForgetSession, showCreateCharacter, showNewPassword,
@@ -42,9 +42,11 @@ async function boot() {
   loading.set(65, 'Dựng bản đồ…');
 
   const zoneDef = await loadJSON(`data/zones/${character.zone_id}.json`);
-  const map = createMap(zoneDef);
+  const [terrainDef, tilesDef] = await Promise.all([loadJSON('data/terrain.json'), loadJSON('data/tiles.json')]);
+  const map = await createMap(zoneDef, terrainDef, tilesDef);
   const me = createLocalPlayer(character);
-  const others = createRemotePlayers();
+  me.x = map.wrapX(me.x); me.y = map.wrapY(me.y);
+  const others = createRemotePlayers(map.width, map.height);
   const cam = createCamera();
   const input = createInput(screen.canvas);
   const maxPlayers = config.zone.max_players;
@@ -91,6 +93,7 @@ async function boot() {
   const saver = createSaver(me, config.net.position_save_interval_s, net.savePosition);
   const speed = config.player.walk_speed_px_per_s;
   const radius = config.player.radius_px;
+  const sprite = config.player.sprite_scale;
   const sendEvery = 1 / config.net.position_broadcast_hz;
   let sendTimer = 0;
 
@@ -111,7 +114,7 @@ async function boot() {
     }
     saver.tick(dt, me.moving);
     others.update(dt);
-    followCamera(cam, me, screen, map.width, map.height);
+    followCamera(cam, me, screen, map.width, map.height, zoneDef.wrap);
   }
 
   function render() {
@@ -122,19 +125,27 @@ async function boot() {
     ctx.imageSmoothingEnabled = false;
     const s = dpr * scale;
     ctx.setTransform(s, 0, 0, s, Math.round(-cam.x * s), Math.round(-cam.y * s));
-    ctx.drawImage(map.ground, 0, 0);
+    ctx.imageSmoothingEnabled = true; // ô đất vẽ ở độ phân giải cao, thu nhỏ mượt
+    map.drawGround(ctx, cam);
+    ctx.imageSmoothingEnabled = false;
 
-    // Vẽ theo chiều sâu: vật ở thấp hơn (y lớn) vẽ sau
+    // Người khác vẽ ở vị trí gần mình nhất trên thế giới vòng lặp; thấp hơn (y lớn) vẽ sau
     const now = performance.now();
-    const people = [me, ...others.list.values()];
-    const drawables = [
-      ...map.visibleObstacles(cam).map((o) => ({ y: o.y, draw: () => drawObstacle(ctx, o) })),
-      ...people.map((p) => ({ y: p.y, draw: () => drawPlayer(ctx, p) })),
-    ].sort((a, b) => a.y - b.y);
-    for (const d of drawables) d.draw();
-    for (const p of people) drawLabel(ctx, p, now);
+    const people = [me, ...[...others.list.values()].map((p) => ({
+      ...p,
+      x: me.x + wrapDelta(p.x - me.x, map.width),
+      y: me.y + wrapDelta(p.y - me.y, map.height),
+    }))].sort((a, b) => a.y - b.y);
+    for (const p of people) drawPlayer(ctx, p, sprite);
+    for (const p of people) drawLabel(ctx, p, now, sprite);
 
     drawStick(ctx, input.stick, dpr);
+  }
+
+  // Chế độ thử (?debug): dịch chuyển để soi bản đồ. Chỉ phía máy khách — máy chủ vẫn từ chối vị trí sai.
+  if (new URLSearchParams(location.search).has('debug')) {
+    window.__tp = (x, y) => { me.x = map.wrapX(x); me.y = map.wrapY(y); };
+    window.__me = () => ({ x: me.x, y: me.y });
   }
 
   addEventListener('pagehide', () => saver.flush());

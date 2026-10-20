@@ -1,2 +1,1 @@
-export { createMap } from './map.js';
-export { drawObstacle } from './draw.js';
+export { createMap, wrapDelta } from './map.js';

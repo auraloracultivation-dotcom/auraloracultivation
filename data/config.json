@@ -3,10 +3,12 @@
   "player": {
     "max_speed_px_per_s": 200,
     "walk_speed_px_per_s": 170,
-    "radius_px": 6,
-    "_note_max_speed": "max_speed đồng bộ với c_max_speed trong hàm SQL public.save_position; walk_speed phải nhỏ hơn"
+    "radius_px": 5,
+    "_note_max_speed": "max_speed đồng bộ với c_max_speed trong hàm SQL public.save_position; walk_speed phải nhỏ hơn",
+    "sprite_scale": 0.75,
+    "_note_sprite": "Nhân vật vẽ ở 75% kích thước gốc (yêu cầu chủ dự án 2026-10-20)"
   },
-  "tile_size": 16,
+  "tile_size": 32,
   "start_zone": "zone.start",
   "zone": {
     "max_players": 20,
@@ -20,5 +22,10 @@
     "_note_save": "Lưu khi bắt đầu đi, mỗi 2 giây, và khi dừng — khớp c_max_elapsed = 3 giây ở máy chủ",
     "chat_max_chars": 60,
     "chat_bubble_s": 5
+  },
+  "world": {
+    "width_px": 16000,
+    "height_px": 16000,
+    "_note": "Đồng bộ với hằng c_world trong hàm SQL public.save_position"
   }
 }
