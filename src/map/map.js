@@ -2,9 +2,11 @@
 // Địa hình (đi được, tốc độ, ô dùng để vẽ) lấy từ data/terrain.json; ô vẽ lấy từ atlas data/tiles.json.
 
 import { stampTown, createTown } from './town.js';
+import { stampRoads, createDecor } from './decor.js';
 
-// props: hình công trình (data/art/sprites.json → props) cho thành trì trong khu, nếu có
-export async function createMap(def, terrainDef, tilesDef, props = {}) {
+// art: data/art/sprites.json (props = công trình thành, decor = cây đá)
+export async function createMap(def, terrainDef, tilesDef, art = {}) {
+  const props = art.props || {};
   const [mapImg, atlas] = await Promise.all([loadImage(def.map_image), loadImage(tilesDef.atlas)]);
   const W = def.width_tiles, H = def.height_tiles, T = def.tile_size;
   const width = W * T, height = H * T;
@@ -14,6 +16,7 @@ export async function createMap(def, terrainDef, tilesDef, props = {}) {
   c.width = W; c.height = H;
   const g = c.getContext('2d', { willReadFrequently: true });
   g.drawImage(mapImg, 0, 0);
+  stampRoads(g, W, H, def.roads, terrainDef.types); // đường đất, qua nước thành cầu gỗ
   stampTown(g, def.town, terrainDef.types); // quảng trường + hào nước của thành (ảnh gốc giữ nguyên)
   const px = g.getImageData(0, 0, W, H).data;
   const types = terrainDef.types;
@@ -38,6 +41,9 @@ export async function createMap(def, terrainDef, tilesDef, props = {}) {
   const subdiv = types.map((t) => t.grid || 1);
 
   const town = await createTown(def.town, props, T);
+  const decor = await createDecor({ grid, W, H, T, types, rules: terrainDef.decor_rules, art: art.decor, safeAt: (x, y) => !!town?.safeAt(x, y) });
+  const isBridge = types.map((t) => !!t.bridge);
+  const isPath = types.map((t) => !!t.bridge || t.id === 'duong');
   const wrapX = (x) => ((x % width) + width) % width;
   const wrapY = (y) => ((y % height) + height) % height;
   const typeAt = (x, y) => types[grid[Math.floor(wrapY(y) / T) * W + Math.floor(wrapX(x) / T)]];
@@ -46,11 +52,20 @@ export async function createMap(def, terrainDef, tilesDef, props = {}) {
     for (const [ox, oy] of [[-r, 0], [r, 0], [0, -r], [0, r / 2]]) {
       if (!typeAt(x + ox, y + oy).walk) return true;
     }
-    return !!town?.blockedAt(x, y, r); // chân công trình trong thành
+    return !!town?.blockedAt(x, y, r) || !!decor?.blockedAt(x, y, r); // chân công trình trong thành, gốc cây, tảng đá
   }
 
   // Đi từng trục để trượt dọc bờ nước thay vì kẹt cứng; toạ độ luôn quấn trong thế giới
   const canStand = (x, y, r) => !blocked(x, y, r);
+  // Chỗ đứng được gần nhất (vd. vị trí cũ nay là gốc cây / hào nước): dò xoắn ốc tối đa `max` ô
+  function nearestStand(x, y, r, max = 6) {
+    if (canStand(x, y, r)) return { x, y };
+    for (let d = 1; d <= max * 2; d++) for (let a = 0; a < 16; a++) {
+      const nx = wrapX(x + Math.cos((a / 16) * Math.PI * 2) * d * T / 2), ny = wrapY(y + Math.sin((a / 16) * Math.PI * 2) * d * T / 2);
+      if (canStand(nx, ny, r)) return { x: nx, y: ny };
+    }
+    return { x, y };
+  }
 
   // fly = true: đang ngự kiếm → bay qua nước, núi, mọi địa hình, không bị chậm (yêu cầu chủ dự án 2026-10-21)
   function move(entity, dx, dy, r, fly = false) {
@@ -91,6 +106,7 @@ export async function createMap(def, terrainDef, tilesDef, props = {}) {
             }
           }
         }
+        if (isBridge[kind]) drawPlanks(ctx, tx * T, ty * T, T, isPath[grid[gy * W + ((gx + 1) % W)]] || isPath[grid[gy * W + ((gx - 1 + W) % W)]]);
       }
     }
   }
@@ -124,7 +140,18 @@ export async function createMap(def, terrainDef, tilesDef, props = {}) {
     }
   }
 
-  return { def, town, safeAt: (x, y) => !!town?.safeAt(x, y), width, height, typeAt, blocked, canStand, move, drawGround, drawMinimap, overview: c, wrapX, wrapY };
+  return { def, town, decor, safeAt: (x, y) => !!town?.safeAt(x, y), width, height, typeAt, blocked, canStand, nearestStand, move, drawGround, drawMinimap, overview: c, wrapX, wrapY };
+}
+
+// Cầu gỗ trên một ô nước: ván ngang dọc theo hướng đi, hai mép có lan can
+function drawPlanks(ctx, x, y, T, horizontal) {
+  ctx.save();
+  if (!horizontal) { ctx.translate(x + T, y); ctx.rotate(Math.PI / 2); } else ctx.translate(x, y);
+  ctx.fillStyle = '#8a5a34'; ctx.fillRect(0, 3, T + 0.5, T - 6);
+  ctx.fillStyle = '#6b4226';
+  for (let i = 0; i < T; i += 6) ctx.fillRect(i, 3, 1, T - 6); // khe ván
+  ctx.fillStyle = '#4a2c18'; ctx.fillRect(0, 2, T + 0.5, 2); ctx.fillRect(0, T - 4, T + 0.5, 2); // lan can
+  ctx.restore();
 }
 
 // Khoảng cách ngắn nhất trên thế giới vòng lặp (âm/dương), dùng để vẽ và nội suy người khác

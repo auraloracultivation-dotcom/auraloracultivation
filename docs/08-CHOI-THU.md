@@ -47,6 +47,14 @@ Phím máy tính: Space đánh, 1–5 kỹ năng, Q uống đan hồi máu.
 - Kho / ô trang bị bảng Nhân vật: chạm món → Sử dụng / Tháo / Thức tỉnh / Phân rã (hoàn 50% Linh thạch đã thức tỉnh) / Vứt; đan: Dùng; công thức: Luyện. Code: `src/game/inventory.js`.
 - Chạm Lò luyện đan → Luyện đan; Tế đàn → Cảnh giới.
 
+## Đường, rừng, bãi đá
+- Đường đất (`data/zones/zone.start.json` → roads): trục Đông–Tây + Bắc–Nam xuyên bản đồ (quấn mép), 5 vành đường vuông (mỗi vùng một vành), 4 đường chéo.
+  Qua nước tự thành **cầu gỗ** → đi tới mọi vùng không bị nước chặn. Trên đường không có quái, cây, đá.
+- Cây / đá / hoa cỏ (`data/terrain.json` → `decor` mỗi loại đất + `decor_rules`): mọc thành **rừng** và **bãi đá** theo cụm, cố định theo toạ độ (mọi máy thấy giống nhau).
+  Cây chặn ở gốc, đá chặn cả khối, cỏ hoa đi xuyên. Hình: tấm cảnh vật chủ dự án → `assets/decor/atlas.png`. Code: `src/map/decor.js`.
+- Linh thảo mọc nhiều trong rừng, khoáng nhiều ở bãi đá; ai thích farm đâu thì farm đó (rừng / đá / dọc đường).
+- Chỉ là hình + va chạm phía máy khách: máy chủ chưa biết cây đá (chỉ kiểm tốc độ).
+
 ## Camera
 `data/config.json` → `camera.zoom` (đang 0,5 = thấy rộng gấp đôi). Chữ/thanh máu trên đầu tự phóng để vẫn đọc được.
 

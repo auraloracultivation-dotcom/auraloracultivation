@@ -1,308 +1,561 @@
 {
- "_note": "Loại địa hình. 'color' là màu điểm ảnh trong ảnh bản đồ data/zones/*.map.png (mỗi điểm = 1 ô). 'tier' = cấp quái sau này (1 yếu nhất). 'tiles' = [tên ô trong data/tiles.json, trọng số xuất hiện]. 'grid' = mỗi ô bản đồ chia thành grid×grid ô vẽ (đất 2 → ô nhỏ 1/4, nước 1).",
- "types": [
-  {
-   "id": "co",
-   "name": "Đồng cỏ",
-   "color": [
-    110,
-    190,
-    80
-   ],
-   "walk": true,
-   "speed": 1,
-   "tier": 1,
-   "grid": 2,
-   "tiles": [
-    [
-     "co-1",
-     10
-    ],
-    [
-     "co-2",
-     1
-    ],
-    [
-     "co-3",
-     2
-    ],
-    [
-     "co-4",
-     1
-    ],
-    [
-     "co-5",
-     1
-    ]
-   ],
-   "zone": "xanh"
-  },
-  {
-   "id": "cat",
-   "name": "Cát vàng",
-   "color": [
-    232,
-    196,
-    130
-   ],
-   "walk": true,
-   "speed": 1,
-   "tier": 2,
-   "grid": 2,
-   "tiles": [
-    [
-     "cat-1",
-     3
-    ],
-    [
-     "cat-2",
-     4
-    ],
-    [
-     "cat-3",
-     3
-    ],
-    [
-     "cat-4",
-     1
-    ],
-    [
-     "cat-5",
-     1
-    ]
-   ],
-   "zone": "cam"
-  },
-  {
-   "id": "da_lat",
-   "name": "Đá lát cổ",
-   "color": [
-    200,
-    200,
-    205
-   ],
-   "walk": true,
-   "speed": 1,
-   "tier": 3,
-   "grid": 2,
-   "tiles": [
-    [
-     "da-lat-1",
-     6
-    ],
-    [
-     "da-lat-2",
-     2
-    ],
-    [
-     "da-lat-3",
-     2
-    ],
-    [
-     "da-lat-4",
-     1
-    ],
-    [
-     "da-lat-5",
-     2
-    ]
-   ],
-   "zone": "cam"
-  },
-  {
-   "id": "tuyet",
-   "name": "Băng tuyết",
-   "color": [
-    235,
-    245,
-    255
-   ],
-   "walk": true,
-   "speed": 1,
-   "tier": 4,
-   "grid": 2,
-   "tiles": [
-    [
-     "tuyet-1",
-     4
-    ],
-    [
-     "tuyet-2",
-     3
-    ],
-    [
-     "tuyet-3",
-     2
-    ],
-    [
-     "tuyet-4",
-     2
-    ],
-    [
-     "tuyet-5",
-     1
-    ]
-   ],
-   "zone": "trang"
-  },
-  {
-   "id": "soi",
-   "name": "Sỏi đá",
-   "color": [
-    140,
-    140,
-    145
-   ],
-   "walk": true,
-   "speed": 1,
-   "tier": 5,
-   "grid": 2,
-   "tiles": [
-    [
-     "soi-1",
-     4
-    ],
-    [
-     "soi-2",
-     3
-    ],
-    [
-     "soi-3",
-     3
-    ],
-    [
-     "soi-4",
-     1
-    ],
-    [
-     "soi-5",
-     1
-    ]
-   ],
-   "zone": "xam"
-  },
-  {
-   "id": "dat_den",
-   "name": "Hắc thổ",
-   "color": [
-    80,
-    65,
-    65
-   ],
-   "walk": true,
-   "speed": 1,
-   "tier": 6,
-   "grid": 2,
-   "tiles": [
-    [
-     "dat-den-1",
-     5
-    ],
-    [
-     "dat-den-2",
-     4
-    ],
-    [
-     "dat-den-3",
-     4
-    ],
-    [
-     "dat-den-5",
-     1
-    ]
-   ],
-   "zone": "than"
-  },
-  {
-   "id": "dung_nham",
-   "name": "Dung nham",
-   "color": [
-    220,
-    70,
-    30
-   ],
-   "walk": true,
-   "speed": 0.7,
-   "tier": 6,
-   "grid": 2,
-   "tiles": [
-    [
-     "dat-den-4",
-     1
-    ]
-   ],
-   "zone": "than"
-  },
-  {
-   "id": "nuoc_sau",
-   "name": "Nước sâu",
-   "color": [
-    40,
-    110,
-    220
-   ],
-   "walk": false,
-   "speed": 0,
-   "tier": 0,
-   "grid": 1,
-   "tiles": [
-    [
-     "nuoc-sau-1",
-     5
-    ],
-    [
-     "nuoc-sau-2",
-     5
-    ],
-    [
-     "nuoc-sau-3",
-     3
-    ],
-    [
-     "nuoc-sau-4",
-     1
-    ],
-    [
-     "nuoc-sau-5",
-     1
-    ]
-   ]
-  },
-  {
-   "id": "nuoc_nong",
-   "name": "Nước nông",
-   "color": [
-    90,
-    210,
-    210
-   ],
-   "walk": true,
-   "speed": 0.5,
-   "tier": 0,
-   "grid": 1,
-   "tiles": [
-    [
-     "nuoc-ngoc-2",
-     5
-    ],
-    [
-     "nuoc-ngoc-1",
-     2
-    ],
-    [
-     "nuoc-ngoc-3",
-     2
-    ],
-    [
-     "nuoc-ngoc-4",
-     1
-    ],
-    [
-     "nuoc-ngoc-5",
-     1
-    ]
-   ]
+  "_note": "Loại địa hình. 'color' là màu điểm ảnh trong ảnh bản đồ data/zones/*.map.png (mỗi điểm = 1 ô). 'tier' = cấp quái sau này (1 yếu nhất). 'tiles' = [tên ô trong data/tiles.json, trọng số xuất hiện]. 'grid' = mỗi ô bản đồ chia thành grid×grid ô vẽ (đất 2 → ô nhỏ 1/4, nước 1).",
+  "types": [
+    {
+      "id": "co",
+      "name": "Đồng cỏ",
+      "color": [
+        110,
+        190,
+        80
+      ],
+      "walk": true,
+      "speed": 1,
+      "tier": 1,
+      "grid": 2,
+      "tiles": [
+        [
+          "co-1",
+          10
+        ],
+        [
+          "co-2",
+          1
+        ],
+        [
+          "co-3",
+          2
+        ],
+        [
+          "co-4",
+          1
+        ],
+        [
+          "co-5",
+          1
+        ]
+      ],
+      "zone": "xanh",
+      "decor": {
+        "tree": [
+          "cay-xanh",
+          "co-thu",
+          "cay-hoc",
+          "anh-dao",
+          "hoa-trang",
+          "cay-con",
+          "cay-con-2",
+          "cay-tron",
+          "tung-cong",
+          "truc",
+          "truc-2"
+        ],
+        "rock": [
+          "da-3",
+          "da-reu",
+          "da-cum",
+          "goc-cay"
+        ],
+        "small": [
+          "bui-1",
+          "bui-2",
+          "bui-3",
+          "hoa-1",
+          "hoa-2",
+          "hoa-3",
+          "co-1",
+          "co-2",
+          "hoa-nho-1",
+          "hoa-nho-2",
+          "hoa-nho-3",
+          "hoa-nho-4",
+          "hoa-nho-5",
+          "hoa-nho-6",
+          "la",
+          "nam-do",
+          "go-1",
+          "goc-nho"
+        ]
+      }
+    },
+    {
+      "id": "cat",
+      "name": "Cát vàng",
+      "color": [
+        232,
+        196,
+        130
+      ],
+      "walk": true,
+      "speed": 1,
+      "tier": 2,
+      "grid": 2,
+      "tiles": [
+        [
+          "cat-1",
+          3
+        ],
+        [
+          "cat-2",
+          4
+        ],
+        [
+          "cat-3",
+          3
+        ],
+        [
+          "cat-4",
+          1
+        ],
+        [
+          "cat-5",
+          1
+        ]
+      ],
+      "zone": "cam",
+      "decor": {
+        "tree": [
+          "chuoi",
+          "dua",
+          "cay-vang",
+          "cay-do"
+        ],
+        "rock": [
+          "da-lon",
+          "da-2",
+          "da-3",
+          "tang-da",
+          "da-cum",
+          "goc-cay",
+          "tinh-vang",
+          "tinh-cam"
+        ],
+        "small": [
+          "lau-1",
+          "lau-2",
+          "co-1",
+          "co-2",
+          "hoa-cam",
+          "re-kho",
+          "go-2",
+          "go-3",
+          "da-vun"
+        ]
+      }
+    },
+    {
+      "id": "da_lat",
+      "name": "Đá lát cổ",
+      "color": [
+        200,
+        200,
+        205
+      ],
+      "walk": true,
+      "speed": 1,
+      "tier": 3,
+      "grid": 2,
+      "tiles": [
+        [
+          "da-lat-1",
+          6
+        ],
+        [
+          "da-lat-2",
+          2
+        ],
+        [
+          "da-lat-3",
+          2
+        ],
+        [
+          "da-lat-4",
+          1
+        ],
+        [
+          "da-lat-5",
+          2
+        ]
+      ],
+      "zone": "cam",
+      "decor": {
+        "tree": [
+          "tung-cong",
+          "thong",
+          "lieu",
+          "cay-tron"
+        ],
+        "rock": [
+          "bia-co",
+          "bia-co-2",
+          "cot-da",
+          "cot-da-2",
+          "phe-tich",
+          "phe-tich-2",
+          "tang-da",
+          "da-dung",
+          "da-dung-2",
+          "da-dung-3",
+          "da-nhon",
+          "den-dat",
+          "den-dat-2"
+        ],
+        "small": [
+          "co-1",
+          "co-2",
+          "la",
+          "da-vun",
+          "da-vun-2",
+          "hoa-nho-2"
+        ]
+      }
+    },
+    {
+      "id": "tuyet",
+      "name": "Băng tuyết",
+      "color": [
+        235,
+        245,
+        255
+      ],
+      "walk": true,
+      "speed": 1,
+      "tier": 4,
+      "grid": 2,
+      "tiles": [
+        [
+          "tuyet-1",
+          4
+        ],
+        [
+          "tuyet-2",
+          3
+        ],
+        [
+          "tuyet-3",
+          2
+        ],
+        [
+          "tuyet-4",
+          2
+        ],
+        [
+          "tuyet-5",
+          1
+        ]
+      ],
+      "zone": "trang",
+      "decor": {
+        "tree": [
+          "hoa-trang",
+          "thong"
+        ],
+        "rock": [
+          "tinh-bang",
+          "tinh-lam",
+          "tinh-trang",
+          "da-nhon-2",
+          "da-2"
+        ],
+        "small": [
+          "hoa-bang",
+          "hoa-nho-1",
+          "da-vun",
+          "da-vun-2"
+        ]
+      }
+    },
+    {
+      "id": "soi",
+      "name": "Sỏi đá",
+      "color": [
+        140,
+        140,
+        145
+      ],
+      "walk": true,
+      "speed": 1,
+      "tier": 5,
+      "grid": 2,
+      "tiles": [
+        [
+          "soi-1",
+          4
+        ],
+        [
+          "soi-2",
+          3
+        ],
+        [
+          "soi-3",
+          3
+        ],
+        [
+          "soi-4",
+          1
+        ],
+        [
+          "soi-5",
+          1
+        ]
+      ],
+      "zone": "xam",
+      "decor": {
+        "tree": [
+          "thong",
+          "tung-cong"
+        ],
+        "rock": [
+          "da-lon",
+          "da-2",
+          "da-nhon",
+          "da-nhon-2",
+          "da-nhon-3",
+          "nui-da",
+          "hang-da",
+          "hang-da-2",
+          "tinh-den",
+          "tinh-trang",
+          "da-cum"
+        ],
+        "small": [
+          "nam-xanh",
+          "nam-tim",
+          "da-vun",
+          "da-vun-2",
+          "re-kho"
+        ]
+      }
+    },
+    {
+      "id": "dat_den",
+      "name": "Hắc thổ",
+      "color": [
+        80,
+        65,
+        65
+      ],
+      "walk": true,
+      "speed": 1,
+      "tier": 6,
+      "grid": 2,
+      "tiles": [
+        [
+          "dat-den-1",
+          5
+        ],
+        [
+          "dat-den-2",
+          4
+        ],
+        [
+          "dat-den-3",
+          4
+        ],
+        [
+          "dat-den-5",
+          1
+        ]
+      ],
+      "zone": "than",
+      "decor": {
+        "tree": [
+          "tu-dang",
+          "re-kho-2"
+        ],
+        "rock": [
+          "tinh-den",
+          "tinh-tim",
+          "tinh-do",
+          "nui-da",
+          "hang-da",
+          "da-den",
+          "goc-cay"
+        ],
+        "small": [
+          "nam-tim",
+          "nam-xanh",
+          "re-kho",
+          "re-kho-2",
+          "hoa-cam"
+        ]
+      }
+    },
+    {
+      "id": "dung_nham",
+      "name": "Dung nham",
+      "color": [
+        220,
+        70,
+        30
+      ],
+      "walk": true,
+      "speed": 0.7,
+      "tier": 6,
+      "grid": 2,
+      "tiles": [
+        [
+          "dat-den-4",
+          1
+        ]
+      ],
+      "zone": "than",
+      "decor": {
+        "tree": [],
+        "rock": [
+          "tinh-do",
+          "tinh-cam",
+          "da-den"
+        ],
+        "small": [
+          "re-kho"
+        ]
+      }
+    },
+    {
+      "id": "nuoc_sau",
+      "name": "Nước sâu",
+      "color": [
+        40,
+        110,
+        220
+      ],
+      "walk": false,
+      "speed": 0,
+      "tier": 0,
+      "grid": 1,
+      "tiles": [
+        [
+          "nuoc-sau-1",
+          5
+        ],
+        [
+          "nuoc-sau-2",
+          5
+        ],
+        [
+          "nuoc-sau-3",
+          3
+        ],
+        [
+          "nuoc-sau-4",
+          1
+        ],
+        [
+          "nuoc-sau-5",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "nuoc_nong",
+      "name": "Nước nông",
+      "color": [
+        90,
+        210,
+        210
+      ],
+      "walk": true,
+      "speed": 0.5,
+      "tier": 0,
+      "grid": 1,
+      "tiles": [
+        [
+          "nuoc-ngoc-2",
+          5
+        ],
+        [
+          "nuoc-ngoc-1",
+          2
+        ],
+        [
+          "nuoc-ngoc-3",
+          2
+        ],
+        [
+          "nuoc-ngoc-4",
+          1
+        ],
+        [
+          "nuoc-ngoc-5",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "duong",
+      "name": "Đường đất",
+      "color": [
+        176,
+        134,
+        92
+      ],
+      "walk": true,
+      "speed": 1,
+      "tier": 0,
+      "grid": 2,
+      "tiles": [
+        [
+          "dat-kho-1",
+          5
+        ],
+        [
+          "dat-kho-2",
+          3
+        ],
+        [
+          "dat-kho-3",
+          3
+        ],
+        [
+          "dat-kho-4",
+          1
+        ],
+        [
+          "dat-kho-5",
+          1
+        ]
+      ]
+    },
+    {
+      "id": "cau",
+      "name": "Cầu gỗ",
+      "color": [
+        150,
+        96,
+        58
+      ],
+      "walk": true,
+      "speed": 1,
+      "tier": 0,
+      "grid": 1,
+      "bridge": true,
+      "tiles": [
+        [
+          "nuoc-ngoc-2",
+          5
+        ],
+        [
+          "nuoc-ngoc-1",
+          2
+        ]
+      ]
+    }
+  ],
+  "_note_zone": "zone = vùng quái theo Lab v3.1 (xanh/cam/trang/xam/than, xem data/monsters/monsters.json). Đá lát cổ là vành ngoài Vùng Cam. Nước không có quái.",
+  "_note_road": "duong / cau: đường nối các vùng (data/zones/*.json → roads). Đường qua nước thành cầu gỗ (vẽ ván trên nước). Không có quái, cây, đá trên đường.",
+  "decor_rules": {
+    "_ghi_chu": "Cây/đá/hoa cỏ rải theo ô, cố định (mọi máy thấy giống nhau). Rừng & bãi đá mọc thành cụm theo 2 trường nhiễu (cell = cỡ cụm, ô). Xác suất mỗi ô: cây = tree_base + tree_forest × độ rừng; đá = rock_base + rock_field × độ đá; small = cỏ hoa. Tên hình: data/art/sprites.json → decor.",
+    "forest_cell": 16,
+    "rock_cell": 20,
+    "forest_cut": 0.55,
+    "rock_cut": 0.62,
+    "tree_base": 0.006,
+    "tree_forest": 0.55,
+    "rock_base": 0.004,
+    "rock_field": 0.35,
+    "small": 0.05,
+    "road_margin": 1,
+    "center_clear_tiles": 9
   }
- ],
- "_note_zone": "zone = vùng quái theo Lab v3.1 (xanh/cam/trang/xam/than, xem data/monsters/monsters.json). Đá lát cổ là vành ngoài Vùng Cam. Nước không có quái."
 }
