@@ -2,7 +2,8 @@
 
 ## Phân vai (quyết định 2026-10-20)
 - **Thiết kế và nội dung hình ảnh: chủ dự án.** Claude không tự vẽ đồ hoạ; chỉ tách nền, cắt, nén, ghép vào game và làm hiệu ứng nhẹ (phát sáng, mờ dần, ánh chạy).
-- Thiết kế chính cho **màn hình ngang**. Cầm dọc vẫn chơi được, không chặn: ảnh nền thu nhỏ vừa khung (tạm thời, đến khi có bố cục dọc riêng).
+- **Ưu tiên màn hình dọc** (quyết định 2026-10-20); ngang vẫn hỗ trợ. Mọi bảng mới phải kiểm tra trên 390×844 trước.
+- Sửa nhẹ hình theo yêu cầu chủ dự án được phép (ví dụ đã xoá hình bóng người giữa `frames/bang-nhan-vat.png`); ảnh gốc giữ nguyên trong `_source/`.
 - Giao diện: **khung tím–vàng** (tấm 1–4) kết hợp **icon đen–vàng** (tấm 5).
 
 ## Quy trình đưa tấm UI vào game
