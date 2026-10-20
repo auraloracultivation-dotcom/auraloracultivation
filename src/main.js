@@ -68,6 +68,7 @@ async function boot() {
     return Object.keys(l).length ? l : null;
   };
   me.look = lookNow();
+  const gift = bag.starterGift(); // tân thủ: thông báo bộ trang phục vừa nhận
   me.x = map.wrapX(me.x); me.y = map.wrapY(me.y);
   ({ x: me.x, y: me.y } = map.nearestStand(me.x, me.y, config.player.radius_px)); // đứng kẹt trong gốc cây / hào nước → bước ra
   const others = createRemotePlayers(map.width, map.height);
@@ -237,7 +238,7 @@ async function boot() {
   });
   loading.set(100, 'Hoàn tất');
   setTimeout(() => loading.hide(), 300);
-  toast(`Chào mừng ${me.name} đến ${zoneDef.name}`);
+  toast(gift ? `Quà tân thủ: ${gift.name} (hệ ${gift.he}) đã mặc sẵn — xem trong Kho` : `Chào mừng ${me.name} đến ${zoneDef.name}`, gift ? 4000 : 2500);
 
   const saver = createSaver(me, config.net.position_save_interval_s, net.savePosition);
   const speed = config.player.walk_speed_px_per_s;
