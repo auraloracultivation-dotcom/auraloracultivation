@@ -50,6 +50,7 @@ export function createMonsters({ gp, defs, map }) {
       const x = map.wrapX(me.x + Math.cos(a) * d), y = map.wrapY(me.y + Math.sin(a) * d);
       const t = map.typeAt(x, y);
       if (!t.zone || !byZone[t.zone]) continue;
+      if (map.safeAt(x, y) || map.safeAt(x + 80, y) || map.safeAt(x - 80, y) || map.safeAt(x, y + 80) || map.safeAt(x, y - 80)) continue; // không sinh sát thành
       const r = P.radius_px.boss;
       if (!map.canStand(x, y, r)) continue;
       const zone = byZone[t.zone];
@@ -73,6 +74,8 @@ export function createMonsters({ gp, defs, map }) {
     m.moving = true;
     const s = Math.min(d, speed * dt);
     if (dx) m.facing = dx > 0 ? 1 : -1;
+    const nx = m.x + (dx / d) * s, ny = m.y + (dy / d) * s;
+    if (map.safeAt(nx, ny)) { m.moving = false; return d; } // quái không bước vào thành
     map.move(m, (dx / d) * s, (dy / d) * s, m.r * 0.6);
     m.walkT += dt;
     return d;
@@ -81,6 +84,7 @@ export function createMonsters({ gp, defs, map }) {
   // env: { me, alive (người chơi còn sống), hitPlayer(m, mul), dodged(m) }
   function update(dt, env) {
     const { me } = env;
+    const inTown = map.safeAt(me.x, me.y); // trong thành: quái coi như không thấy người chơi
     spawnT -= dt;
     if (spawnT <= 0 && list.length < P.max_alive) { spawnT = P.spawn_every_s; spawn(me); }
     for (let i = list.length - 1; i >= 0; i--) {
@@ -102,9 +106,9 @@ export function createMonsters({ gp, defs, map }) {
           m.tx = map.wrapX(m.hx + Math.cos(a) * r); m.ty = map.wrapY(m.hy + Math.sin(a) * r);
         }
         step(m, m.tx, m.ty, speed * 0.35, dt);
-        if (env.alive && d < P.aggro_px[rank]) m.state = 'chase';
+        if (env.alive && !inTown && d < P.aggro_px[rank]) m.state = 'chase';
       } else if (m.state === 'chase') {
-        if (!env.alive || homeDist(m) > P.leash_px) { m.state = 'return'; continue; }
+        if (!env.alive || inTown || homeDist(m) > P.leash_px) { m.state = 'return'; continue; }
         if (d > P.attack_range_px + m.r * 0.5) step(m, me.x, me.y, speed, dt);
         else if (m.cd <= 0) {
           m.cd = P.attack_every_s; m.n++;
@@ -116,7 +120,7 @@ export function createMonsters({ gp, defs, map }) {
         m.wind -= dt;
         if (m.wind <= 0) {
           const off = Math.hypot(wrapDelta(me.x - m.wx, map.width), wrapDelta(me.y - m.wy, map.height));
-          if (env.alive && off < P.heavy.radius_px) env.hitPlayer(m, P.heavy.mul); else if (env.alive) env.dodged(m);
+          if (env.alive && !inTown && off < P.heavy.radius_px) env.hitPlayer(m, P.heavy.mul); else if (env.alive && !inTown) env.dodged(m);
           m.state = 'chase';
         }
       } else if (m.state === 'return') {

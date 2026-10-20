@@ -7,6 +7,271 @@
   "height_tiles": 500,
   "tile_size": 32,
   "wrap": true,
-  "spawn": { "x": 8016, "y": 8016 },
-  "max_players": 20
+  "spawn": {
+    "x": 8016,
+    "y": 8016
+  },
+  "max_players": 20,
+  "town": {
+    "_ghi_chu": "Thanh Vân Thành ở giữa bản đồ (quyết định chủ dự án 21/10/2026). center_tile = ô giữa; stamp tô địa hình lên ảnh bản đồ lúc tải (ảnh gốc giữ nguyên). dx/dy = điểm đặt CHÂN công trình so với tâm thành (điểm ảnh). layer ground = nằm sát đất (người đi đè lên). block = vùng không đi qua được [x0,y0,x1,y1] tính từ chân; không ghi thì tự lấy đáy công trình. Hình ở data/art/sprites.json → props.",
+    "name": "Thanh Vân Thành",
+    "center_tile": [
+      250,
+      250
+    ],
+    "safe": {
+      "half_px": 500,
+      "_ghi_chu": "Vùng an toàn hình vuông ±half_px quanh tâm: quái không sinh, không đánh, không đuổi vào; hồi máu nhanh hơn",
+      "regen_mul": 4
+    },
+    "stamp": [
+      {
+        "terrain": "nuoc_sau",
+        "rect": [
+          -15,
+          -15,
+          15,
+          15
+        ]
+      },
+      {
+        "terrain": "da_lat",
+        "rect": [
+          -13,
+          -13,
+          13,
+          13
+        ]
+      },
+      {
+        "terrain": "da_lat",
+        "rect": [
+          -2,
+          13,
+          2,
+          15
+        ],
+        "_ghi_chu": "lối cổng nam"
+      },
+      {
+        "terrain": "da_lat",
+        "rect": [
+          14,
+          -1,
+          15,
+          1
+        ],
+        "_ghi_chu": "cầu đông"
+      },
+      {
+        "terrain": "da_lat",
+        "rect": [
+          -15,
+          -1,
+          -14,
+          1
+        ],
+        "_ghi_chu": "cầu tây"
+      }
+    ],
+    "props": [
+      {
+        "id": "phap-tran",
+        "dx": 0,
+        "dy": 30,
+        "layer": "ground"
+      },
+      {
+        "id": "cau-da",
+        "dx": 465,
+        "dy": 26,
+        "layer": "ground"
+      },
+      {
+        "id": "cau-da",
+        "dx": -465,
+        "dy": 26,
+        "layer": "ground"
+      },
+      {
+        "id": "dien-chinh",
+        "dx": 0,
+        "dy": -230
+      },
+      {
+        "id": "tuong-thanh",
+        "dx": -300,
+        "dy": -345
+      },
+      {
+        "id": "tuong-thanh",
+        "dx": 300,
+        "dy": -345
+      },
+      {
+        "id": "truyen-tong",
+        "dx": -330,
+        "dy": -230
+      },
+      {
+        "id": "te-dan",
+        "dx": 290,
+        "dy": -200
+      },
+      {
+        "id": "kho-hang",
+        "dx": -270,
+        "dy": -40
+      },
+      {
+        "id": "dai-thien-van",
+        "dx": 300,
+        "dy": -20
+      },
+      {
+        "id": "co-treo",
+        "dx": -110,
+        "dy": -150
+      },
+      {
+        "id": "co-treo",
+        "dx": 110,
+        "dy": -150
+      },
+      {
+        "id": "den-da",
+        "dx": -70,
+        "dy": -80
+      },
+      {
+        "id": "den-da",
+        "dx": 70,
+        "dy": -80
+      },
+      {
+        "id": "den-da",
+        "dx": -70,
+        "dy": 110
+      },
+      {
+        "id": "den-da",
+        "dx": 70,
+        "dy": 110
+      },
+      {
+        "id": "den-da",
+        "dx": -70,
+        "dy": 260
+      },
+      {
+        "id": "den-da",
+        "dx": 70,
+        "dy": 260
+      },
+      {
+        "id": "lo-luyen-dan",
+        "dx": -300,
+        "dy": 160
+      },
+      {
+        "id": "nha-nho",
+        "dx": -170,
+        "dy": 170
+      },
+      {
+        "id": "kho-go",
+        "dx": -330,
+        "dy": 300
+      },
+      {
+        "id": "bia-da",
+        "dx": -200,
+        "dy": 300
+      },
+      {
+        "id": "tuong-tien-nhan",
+        "dx": 200,
+        "dy": 170
+      },
+      {
+        "id": "dai-linh-chau",
+        "dx": 320,
+        "dy": 170
+      },
+      {
+        "id": "ho-sen",
+        "dx": 300,
+        "dy": 320
+      },
+      {
+        "id": "cay-anh-dao",
+        "dx": -390,
+        "dy": -390
+      },
+      {
+        "id": "cay-bonsai",
+        "dx": 390,
+        "dy": -390
+      },
+      {
+        "id": "cay-anh-dao",
+        "dx": 390,
+        "dy": 60
+      },
+      {
+        "id": "cay-bonsai",
+        "dx": -400,
+        "dy": 60
+      },
+      {
+        "id": "cay-tung",
+        "dx": -150,
+        "dy": 390
+      },
+      {
+        "id": "cay-tung",
+        "dx": 160,
+        "dy": 390
+      },
+      {
+        "id": "cong-thanh",
+        "dx": 0,
+        "dy": 470,
+        "block": [
+          [
+            -85,
+            -22,
+            -42,
+            0
+          ],
+          [
+            42,
+            -22,
+            85,
+            0
+          ]
+        ]
+      },
+      {
+        "id": "tuong-thanh",
+        "dx": -170,
+        "dy": 420
+      },
+      {
+        "id": "tuong-thanh",
+        "dx": -310,
+        "dy": 420
+      },
+      {
+        "id": "tuong-thanh",
+        "dx": 170,
+        "dy": 420
+      },
+      {
+        "id": "tuong-thanh",
+        "dx": 310,
+        "dy": 420
+      }
+    ]
+  }
 }

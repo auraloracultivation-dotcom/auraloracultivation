@@ -648,5 +648,117 @@
    "slot.linh-thu": 55,
    "linh-thach": 56
   }
+ },
+ "props": {
+  "dien-chinh": {
+   "src": "assets/town/dien-chinh.png",
+   "w": 364,
+   "h": 170
+  },
+  "kho-hang": {
+   "src": "assets/town/kho-hang.png",
+   "w": 150,
+   "h": 105
+  },
+  "te-dan": {
+   "src": "assets/town/te-dan.png",
+   "w": 184,
+   "h": 120
+  },
+  "cong-thanh": {
+   "src": "assets/town/cong-thanh.png",
+   "w": 169,
+   "h": 110
+  },
+  "tuong-thanh": {
+   "src": "assets/town/tuong-thanh.png",
+   "w": 145,
+   "h": 62
+  },
+  "cau-da": {
+   "src": "assets/town/cau-da.png",
+   "w": 98,
+   "h": 50
+  },
+  "ho-sen": {
+   "src": "assets/town/ho-sen.png",
+   "w": 78,
+   "h": 66
+  },
+  "dai-thien-van": {
+   "src": "assets/town/dai-thien-van.png",
+   "w": 62,
+   "h": 88
+  },
+  "tuong-tien-nhan": {
+   "src": "assets/town/tuong-tien-nhan.png",
+   "w": 85,
+   "h": 92
+  },
+  "nha-nho": {
+   "src": "assets/town/nha-nho.png",
+   "w": 78,
+   "h": 70
+  },
+  "kho-go": {
+   "src": "assets/town/kho-go.png",
+   "w": 75,
+   "h": 58
+  },
+  "lo-luyen-dan": {
+   "src": "assets/town/lo-luyen-dan.png",
+   "w": 76,
+   "h": 66
+  },
+  "dai-linh-chau": {
+   "src": "assets/town/dai-linh-chau.png",
+   "w": 70,
+   "h": 54
+  },
+  "cot-co": {
+   "src": "assets/town/cot-co.png",
+   "w": 38,
+   "h": 56
+  },
+  "bia-da": {
+   "src": "assets/town/bia-da.png",
+   "w": 31,
+   "h": 34
+  },
+  "co-treo": {
+   "src": "assets/town/co-treo.png",
+   "w": 42,
+   "h": 48
+  },
+  "den-da": {
+   "src": "assets/town/den-da.png",
+   "w": 12,
+   "h": 28
+  },
+  "cay-tung": {
+   "src": "assets/town/cay-tung.png",
+   "w": 84,
+   "h": 46
+  },
+  "phap-tran": {
+   "src": "assets/town/phap-tran.png",
+   "w": 80,
+   "h": 60
+  },
+  "truyen-tong": {
+   "src": "assets/town/truyen-tong.png",
+   "w": 92,
+   "h": 92
+  },
+  "cay-anh-dao": {
+   "src": "assets/town/cay-anh-dao.png",
+   "w": 40,
+   "h": 44
+  },
+  "cay-bonsai": {
+   "src": "assets/town/cay-bonsai.png",
+   "w": 38,
+   "h": 44
+  }
  }
 }

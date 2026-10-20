@@ -51,7 +51,7 @@ async function boot() {
 
   const zoneDef = await loadJSON(`data/zones/${character.zone_id}.json`);
   const [terrainDef, tilesDef] = await Promise.all([loadJSON('data/terrain.json'), loadJSON('data/tiles.json')]);
-  const map = await createMap(zoneDef, terrainDef, tilesDef);
+  const map = await createMap(zoneDef, terrainDef, tilesDef, (await loadJSON('data/art/sprites.json')).props);
   loading.set(72, 'Nạp trang bị…');
   const [itemsDef, codesDef, , audioDef, ptDef] = await Promise.all([loadJSON('data/items/items.json'), loadJSON('data/codes.json'),
     loadRig(loadJSON), loadJSON('data/audio.json'), loadJSON('data/skills/phap-tuong.json')]);
@@ -305,6 +305,8 @@ async function boot() {
     ctx.setTransform(s, 0, 0, s, Math.round(-cam.x * s), Math.round(-cam.y * s));
     ctx.imageSmoothingEnabled = true; // ô đất vẽ ở độ phân giải cao, thu nhỏ mượt
     map.drawGround(ctx, cam);
+    map.town?.drawGround(ctx, cam); // pháp trận, cầu đá
+    map.town?.drawBehind(ctx, cam, me.y); // công trình sau lưng nhân vật
     ctx.imageSmoothingEnabled = false;
 
     // Người khác vẽ ở vị trí gần mình nhất trên thế giới vòng lặp; thấp hơn (y lớn) vẽ sau
@@ -324,6 +326,8 @@ async function boot() {
     game.renderBelow(ctx, now); // quái + linh thú (hình tạm)
     for (const p of people) drawPlayer(ctx, p, sprite);
     if (!me.look?.weapon) drawSlash(ctx, me, sprite);
+    map.town?.drawFront(ctx, cam, me.y); // công trình che trước nhân vật
+    ctx.imageSmoothingEnabled = false;
     for (const p of people) drawLabel(ctx, p, now, sprite);
     game.renderAbove(ctx, now); // tên/máu quái, số sát thương, kiếm khí
 
