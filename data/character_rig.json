@@ -67,7 +67,13 @@
   "step_scale": 0.08,
   "attack_scale": 0.7,
   "attack_reach_cw": 0.16,
-  "drawn_as": "trai",
-  "attack_hand": "trai"
+  "drawn_as": {
+   "nam": "trai",
+   "nam-chat": "phai",
+   "nam-nghieng": "phai",
+   "chi": "phai",
+   "mo": "phai"
+  },
+  "attack_hand": "tay-phia-sau"
  }
 }
