@@ -9,8 +9,8 @@ Chốt qua bản thử chuyển động ngày 2026-10-20. Thông số số học
 | Cánh | ô **Cánh** | hào quang/cánh sau lưng, đáy ở chân |
 | Vũ khí | ô **Vũ khí** | ~2,3 lần chiều cao người; chuôi ở hông sau, mũi chĩa lên, ngả 40° ra sau |
 | Chân | code | 2 ô vuông nhỏ, bước so le |
+| Tay | code + `assets/characters/base/ban-tay.*` | nằm **sau áo**, lộ chỗ nào thì lộ; không bao giờ cao hơn mép trên của áo |
 | Thân | ô **Trang phục** (phần dưới cổ) | nhún trước |
-| Tay | code + `assets/characters/base/ban-tay.*` | 2 bàn tay tròn đặt đúng chỗ tay cũ (`hands`) |
 | Đầu | ô **Trang phục** (phần trên cổ, cắt dư xuống để che khe) | nhún theo sau thân nửa nhịp |
 | Mặt nạ | ô **Mặt nạ** | đè lên mặt |
 
