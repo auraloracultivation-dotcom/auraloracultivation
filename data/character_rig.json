@@ -75,7 +75,7 @@
    "mo": "phai",
    "tung-chieu": "phai"
   },
-  "attack_hand": "tay-phia-sau",
+  "attack_hand": "tay-phia-truoc",
   "attack_raise_ch": 0.035,
   "attack_glow": false
  }
