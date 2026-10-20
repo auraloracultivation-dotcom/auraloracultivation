@@ -10,7 +10,7 @@ Chốt qua bản thử chuyển động ngày 2026-10-20. Thông số số học
 | Vũ khí | ô **Vũ khí** | ~2,3 lần chiều cao người; chuôi ở hông sau, mũi chĩa lên, ngả 40° ra sau |
 | Chân | code | 2 ô vuông nhỏ, bước so le |
 | Thân | ô **Trang phục** (phần dưới cổ) | nhún trước |
-| Tay | code + `assets/characters/base/ban-tay.*` | 2 bàn tay tròn đặt đúng chỗ tay cũ (`hands`) |
+| Tay | code + `assets/characters/base/ban-tay.*` | **chốt**: bàn tay GPT cỡ 0,45 (0,09 bề ngang áo), tay nắm xoay −36°, tay xoè xoay 7°; đặt đúng chỗ tay cũ (`hands`), vẽ trước áo |
 | Đầu | ô **Trang phục** (phần trên cổ, cắt dư xuống để che khe) | nhún theo sau thân nửa nhịp |
 | Mặt nạ | ô **Mặt nạ** | đè lên mặt |
 
@@ -19,7 +19,8 @@ Danh sách 8 ô và thứ tự trên bảng Nhân vật: `data/equipment/slots.j
 
 ## Chuyển động
 - **Đi**: thân nhún thấp, đầu theo sau nửa nhịp; chân bước so le; tay đánh ngược nhịp chân.
-- **Chém**: thân nhún sâu, kiếm xoay **nửa vòng quanh chuôi**, luôn nằm **sau** người; tay phía đang đánh chỉ về trước một nhịp (linh khí dẫn kiếm).
+- **Chém**: thân nhún sâu, kiếm xoay **nửa vòng quanh chuôi**, luôn nằm **sau** người; tay phía trước (cùng hướng chém) vươn nhẹ, phóng to rồi **xoè tung chiêu** (`ban-tay.tung-chieu`), không quầng sáng.
+- **Bàn tay**: thở to nhỏ khi đứng, to theo nhịp bước khi đi. Tay xoè luôn hướng ra ngoài thân.
 - **Phi hành = ngự kiếm**: kiếm nằm ngang dưới chân, chuôi sau mũi trước; nhanh gấp 1,5 đi bộ.
 
 ## Hình (art) và vật phẩm (item) tách riêng
