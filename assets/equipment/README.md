@@ -13,7 +13,7 @@ Mỗi thư mục = một ô hành trang ở bảng Nhân vật (8 ô). Ảnh g�
 | `linh-thu/` | Linh thú | phải 3 |
 | `day-chuyen/` | Dây chuyền | phải 4 |
 
-Cách ghép lên người, điểm neo, quy trình cắt: `docs/06-TRANG-BI.md`. Thêm `phap-tuong/` (pháp tướng, chưa thuộc ô nào).
+Cách ghép lên người, điểm neo, quy trình cắt: `docs/06-TRANG-BI.md`. Hình pháp tướng nằm ở `phap-tuong/` và mặc vào ô **Pháp bảo** (chủ dự án chốt 21/10/2026).
 
 ## Tên file (mã đã phát hành không bao giờ đổi)
 `<thư mục>/art.<loại>.<số>.webp` — mã hình; vật phẩm `item.*` trỏ tới mã hình (xem `docs/06-TRANG-BI.md`).

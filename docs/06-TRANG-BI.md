@@ -5,7 +5,7 @@ Chốt qua bản thử chuyển động ngày 2026-10-20. Thông số số học
 ## Ghép nhân vật — các lớp từ sau ra trước
 | Lớp | Nguồn | Ghi chú |
 |---|---|---|
-| Pháp tướng | `phap-tuong` | to ~2,4 lần người, đáy ở chân. Chưa chốt thuộc ô nào |
+| Pháp tướng | ô **Pháp bảo** (hình ở `phap-tuong/`) | to, đáy ở chân, sau cùng |
 | Cánh | ô **Cánh** | hào quang/cánh sau lưng, đáy ở chân |
 | Vũ khí | ô **Vũ khí** | ~2,3 lần chiều cao người; chuôi ở hông sau, mũi chĩa lên, ngả 40° ra sau |
 | Chân | code | 2 ô vuông nhỏ, bước so le |
@@ -14,7 +14,7 @@ Chốt qua bản thử chuyển động ngày 2026-10-20. Thông số số học
 | Đầu | ô **Trang phục** (phần trên cổ, cắt dư xuống để che khe) | nhún theo sau thân nửa nhịp |
 | Mặt nạ | ô **Mặt nạ** | đè lên mặt |
 
-Nhẫn, Dây chuyền, Pháp bảo, Linh thú: không vẽ lên người (chỉ icon + chỉ số; linh thú đi bên cạnh).
+Nhẫn, Dây chuyền, Linh thú: không vẽ lên người (chỉ icon + chỉ số; linh thú đi bên cạnh).
 Danh sách 8 ô và thứ tự trên bảng Nhân vật: `data/equipment/slots.json`.
 
 ## Chuyển động
@@ -45,13 +45,12 @@ Danh sách 8 ô và thứ tự trên bảng Nhân vật: `data/equipment/slots.j
 - Mặt nạ: thêm bản **nhìn chính diện, đúng cỡ mặt, không hiệu ứng** để đeo; bản có hiệu ứng dùng làm icon.
 
 ## Còn mở
-- Pháp tướng thuộc ô nào hay là kỹ năng bật lên.
 - Tóc/miện: kiểu tóc chọn lúc tạo nhân vật hay thuộc ô Mặt nạ (hiện tóc nằm sẵn trong hình trang phục).
 - Bảng vũ khí hàng 3 là đôi vũ khí bắt chéo (`pair`), nên vẽ lại thành từng món.
 
 ## Bộ 6 hệ trong game (21/10/2026)
 - Hình + thông số từng bộ: `data/equipment/he6.json` (sinh từ 6 bộ chủ dự án lưu trong Tủ Đồ Tu Chân). Vẽ bằng `src/entity/rig.js`.
 - Thông số của mỗi phần lấy theo bộ chứa hình đó (vũ khí bộ Hỏa dùng thông số vũ khí của bộ Hỏa), thân/tay/giày/bóng theo bộ của đạo bào.
-- Vật phẩm: `data/items/items.json` (24 món: đạo bào, pháp kiếm, linh dực, pháp tướng × 6 hệ). Mục Kho: Tất cả, Linh dược, Linh đan, Đan phương, Pháp khí, Công pháp, Trang bị, Khác.
+- Vật phẩm: `data/items/items.json` (24 món: đạo bào, pháp kiếm, linh dực, pháp tướng (ô Pháp bảo) × 6 hệ). Mục Kho: Tất cả, Linh dược, Linh đan, Đan phương, Pháp khí, Công pháp, Trang bị, Khác.
 - Người khác thấy trang bị qua Presence (`look` = mã hình art.*, máy nhận lọc chỉ giữ mã hợp lệ).
 - **Mã thử nghiệm** (Cài đặt → Nhập mã): `data/codes.json` chỉ lưu dấu SHA-256. Đồ nhận được nằm trong kho trên máy (localStorage), CHƯA lưu máy chủ — Mốc 4 chuyển lên máy chủ qua RPC.

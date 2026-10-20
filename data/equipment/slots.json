@@ -40,8 +40,9 @@
    "id": "phap-bao",
    "name": "Pháp bảo",
    "panel": 5,
-   "art": "phap-bao",
-   "worn": false
+   "art": "phap-tuong",
+   "worn": true,
+   "_ghi_chu": "Pháp bảo = pháp tướng hiện sau lưng nhân vật (hình ở assets/equipment/phap-tuong/)"
   },
   {
    "id": "linh-thu",
@@ -59,15 +60,7 @@
    "worn": false
   }
  ],
- "extra": [
-  {
-   "id": "phap-tuong",
-   "name": "Pháp tướng",
-   "art": "phap-tuong",
-   "worn": true,
-   "_ghi_chu": "chưa chốt thuộc ô nào / bật khi dùng kỹ năng — chờ chủ dự án"
-  }
- ],
+ "extra": [],
  "layers_back_to_front": [
   "phap-tuong",
   "canh",

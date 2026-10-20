@@ -312,7 +312,7 @@ async function sha256(text) {
 }
 
 // Kho THỬ NGHIỆM (Mốc 4 sẽ chuyển lên máy chủ): danh sách mã vật phẩm + đồ đang mặc, lưu localStorage theo tài khoản.
-const LOOK_OF = { 'trang-phuc': 'outfit', 'vu-khi': 'weapon', canh: 'wing', 'phap-tuong': 'avatar' };
+const LOOK_OF = { 'trang-phuc': 'outfit', 'vu-khi': 'weapon', canh: 'wing', 'phap-bao': 'avatar' }; // ô Pháp bảo = pháp tướng sau lưng
 function createTestBag(userId, defs) {
   const key = `tc.bag.${userId}`;
   const byId = new Map(defs.map((d) => [d.id, d]));

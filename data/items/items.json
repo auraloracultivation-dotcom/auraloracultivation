@@ -66,7 +66,7 @@
    "id": "item.avatar.he.1",
    "name": "Kim Quang Pháp tướng",
    "cat": "trang-bi",
-   "slot": "phap-tuong",
+   "slot": "phap-bao",
    "art": "art.avatar.he.1",
    "set": "he.1",
    "he": "Kim"
@@ -102,7 +102,7 @@
    "id": "item.avatar.he.2",
    "name": "U Minh Pháp tướng",
    "cat": "trang-bi",
-   "slot": "phap-tuong",
+   "slot": "phap-bao",
    "art": "art.avatar.he.2",
    "set": "he.2",
    "he": "Ám"
@@ -138,7 +138,7 @@
    "id": "item.avatar.he.3",
    "name": "Thương Hải Pháp tướng",
    "cat": "trang-bi",
-   "slot": "phap-tuong",
+   "slot": "phap-bao",
    "art": "art.avatar.he.3",
    "set": "he.3",
    "he": "Thủy"
@@ -174,7 +174,7 @@
    "id": "item.avatar.he.4",
    "name": "Xích Diệm Pháp tướng",
    "cat": "trang-bi",
-   "slot": "phap-tuong",
+   "slot": "phap-bao",
    "art": "art.avatar.he.4",
    "set": "he.4",
    "he": "Hỏa"
@@ -210,7 +210,7 @@
    "id": "item.avatar.he.5",
    "name": "Thanh Mộc Pháp tướng",
    "cat": "trang-bi",
-   "slot": "phap-tuong",
+   "slot": "phap-bao",
    "art": "art.avatar.he.5",
    "set": "he.5",
    "he": "Mộc"
@@ -246,7 +246,7 @@
    "id": "item.avatar.he.6",
    "name": "Hậu Thổ Pháp tướng",
    "cat": "trang-bi",
-   "slot": "phap-tuong",
+   "slot": "phap-bao",
    "art": "art.avatar.he.6",
    "set": "he.6",
    "he": "Thổ"
