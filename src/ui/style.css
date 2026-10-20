@@ -297,3 +297,19 @@ img { image-rendering: pixelated; }
 
 .set-icon { image-rendering: auto; border-radius: 3px; pointer-events: none; }
 .char-ico { pointer-events: none; object-fit: contain; border-radius: 2px; }
+
+/* Hộp xác nhận luôn ở trên cùng (trên cả bảng Cài đặt, Nhân vật…) */
+.confirm-wrap { z-index: 50; }
+.hot-close { position: absolute; padding: 0; border: 0; background: none; border-radius: 10px; cursor: pointer; }
+.hot-close:active { background: rgba(255,255,255,.12); }
+/* Nút trong suốt đè lên nút vẽ sẵn của khung Cài đặt */
+.set-hot {
+  padding: 0; border: 0; background: none; cursor: pointer; border-radius: 999px;
+  display: flex; align-items: center; justify-content: center; transition: background .12s;
+}
+.set-hot:active { background: rgba(255,255,255,.14); }
+.set-hot span { display: none; }
+.set-hot.off { /* phủ nút "Bật" vẽ sẵn bằng nút "Tắt" cùng hình dạng */
+  background: linear-gradient(#2b3556, #1b2340); box-shadow: inset 0 0 0 2px #8a7a55;
+}
+.set-hot.off span { display: block; color: #b9b19d; font-weight: 800; font-size: 4.6cqw; text-shadow: 0 1px 2px #000; }

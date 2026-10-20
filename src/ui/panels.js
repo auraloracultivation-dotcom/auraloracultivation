@@ -14,8 +14,17 @@ function openModal(className, frame, maxW, build) {
   const col = el(`<div class="modal-col ${className}-col"></div>`);
   const box = el(`<div class="modal ${className}" style="aspect-ratio:${frame.w}/${frame.h}"></div>`);
   if (frame.src) box.style.backgroundImage = `url("${new URL(frame.src, location.href).href}")`;
-  const close = el(`<button type="button" class="modal-close glow" aria-label="Đóng"><img src="${ICON('dong')}" alt=""></button>`);
-  close.style.width = close.style.height = `${crispWidth(56, 38).width}px`;
+  // Khung có sẵn nút ✕ vẽ trong ảnh (frame.close) → đặt nút bấm trong suốt đè lên; không thì dùng icon ✕
+  const close = frame.close
+    ? el('<button type="button" class="modal-close hot-close" aria-label="Đóng"></button>')
+    : el(`<button type="button" class="modal-close glow" aria-label="Đóng"><img src="${ICON('dong')}" alt=""></button>`);
+  if (frame.close) {
+    const [cx, cy, cw, ch] = frame.close;
+    Object.assign(close.style, {
+      left: `${(cx / frame.w) * 100}%`, top: `${(cy / frame.h) * 100}%`,
+      width: `${(cw / frame.w) * 100}%`, height: `${(ch / frame.h) * 100}%`, right: 'auto',
+    });
+  } else close.style.width = close.style.height = `${crispWidth(56, 38).width}px`;
   box.appendChild(close);
   col.appendChild(box);
   wrap.appendChild(col);
@@ -128,9 +137,15 @@ function attachSlide(area, page, tab) {
   set(false);
 }
 
-// ---------- Cài đặt: âm thanh, nhạc nền, ngôn ngữ, đăng xuất ----------
-const SET_FRAME = { src: 'assets/ui/frames/bang-cai-dat.png', w: 155, h: 148 };
-const ROWS_Y = [41, 67, 93, 119];
+// ---------- Cài đặt: khung + nút vẽ sẵn của chủ dự án (frames/bang-cai-dat-v2.png, tách bằng tools/panel_from_mockup.py) ----------
+// Toạ độ trên ảnh khung 920×894. Nút "Bật" vẽ sẵn; khi tắt thì phủ một nút "Tắt" lên đúng chỗ đó.
+const SET_FRAME = { src: 'assets/ui/frames/bang-cai-dat-v2.png', w: 920, h: 894, close: [825, 34, 88, 88] };
+const SET_SPOTS = {
+  sound: [621, 244, 148, 82],
+  music: [621, 398, 148, 81],
+  lang: [619, 553, 156, 81],
+  logout: [275, 704, 513, 97],
+};
 
 export function loadSettings() {
   try { return { sound: true, music: true, lang: 'vi', ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') }; } catch {
@@ -143,26 +158,23 @@ function saveSettings(s) {
 
 export function showSettings({ onLogout }) {
   const s = loadSettings();
-  const maxW = () => Math.min(vw() * 0.92, 420, (vh() * 0.8 * SET_FRAME.w) / SET_FRAME.h);
-  openModal('modal-settings', SET_FRAME, maxW, ({ at }) => {
-    const row = (y, icon, label, value, onClick, kind = 'toggle') => {
-      at(`<img class="set-icon" src="${ICON(icon)}" alt="">`, 21, y - 2, 19, 19);
-      at(`<div class="set-label">${escapeHtml(label)}</div>`, 48, y + 1, 62, 12);
-      const btn = at(`<button type="button" class="set-${kind} glow"></button>`, 112, y, 21, 15);
+  const maxW = () => Math.min(vw() * 0.94, 460, (vh() * 0.8 * SET_FRAME.w) / SET_FRAME.h);
+  openModal('modal-settings', SET_FRAME, maxW, ({ at, close }) => {
+    const toggle = (key, label) => {
+      const btn = at(`<button type="button" class="set-hot" aria-label="${label}"><span>Tắt</span></button>`, ...SET_SPOTS[key]);
       const paint = () => {
-        const v = value();
-        btn.textContent = kind === 'toggle' ? (v ? 'Bật' : 'Tắt') : v;
-        btn.classList.toggle('off', kind === 'toggle' && !v);
+        btn.classList.toggle('off', !s[key]);
+        btn.setAttribute('aria-pressed', String(s[key]));
       };
-      btn.addEventListener('click', () => { onClick(); paint(); });
+      btn.addEventListener('click', () => { s[key] = !s[key]; saveSettings(s); paint(); });
       paint();
     };
-    row(ROWS_Y[0], 'am-thanh', 'Âm thanh', () => s.sound, () => { s.sound = !s.sound; saveSettings(s); });
-    row(ROWS_Y[1], 'nhac-nen', 'Nhạc nền', () => s.music, () => { s.music = !s.music; saveSettings(s); });
-    row(ROWS_Y[2], 'ngon-ngu', 'Ngôn ngữ', () => 'VI ▾', () => toast('Hiện chỉ có Tiếng Việt'), 'select');
-    at(`<img class="set-icon" src="${ICON('dang-xuat')}" alt="">`, 21, ROWS_Y[3] - 2, 19, 19);
-    const out = at('<button type="button" class="set-logout glow">Đăng xuất</button>', 48, ROWS_Y[3], 85, 15);
-    out.addEventListener('click', onLogout);
+    toggle('sound', 'Âm thanh');
+    toggle('music', 'Nhạc nền');
+    at('<button type="button" class="set-hot" aria-label="Ngôn ngữ"></button>', ...SET_SPOTS.lang)
+      .addEventListener('click', () => toast('Hiện chỉ có Tiếng Việt'));
+    at('<button type="button" class="set-hot" aria-label="Đăng xuất"></button>', ...SET_SPOTS.logout)
+      .addEventListener('click', () => { close(); onLogout(); }); // đóng Cài đặt trước để hộp xác nhận hiện trên cùng
   });
 }
 
