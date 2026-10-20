@@ -69,15 +69,19 @@ const SLOTS = [
   { x: 122, y: 776, name: 'Nhẫn' }, { x: 696, y: 258, name: 'Cánh' }, { x: 696, y: 429, name: 'Pháp tướng' },
   { x: 696, y: 604, name: 'Linh thú' }, { x: 696, y: 776, name: 'Dây chuyền' },
 ];
-const CHAR_AREA = [322, 205, 352, 600]; // vùng giữa giữa hai cột ô, dưới tiêu đề, trên hai thanh tên
+const CHAR_AREA = [322, 205, 352, 535]; // cỡ thân nhân vật (chỉ đạo bào) vừa khít vùng này — to như bản đầu
+const CHAR_FOOT = [497, 740]; // chân đặt giữa vòng pháp trận
+const CHAR_CLIP = [92, 212, 812, 600]; // vùng trong khung (trên hai thanh tên): vũ khí/cánh được tràn ra đây
 const NAME_BARS = [[392, 819, 270, 57], [392, 886, 270, 58]]; // phần chữ của 2 thanh (sau biểu tượng người / sen)
 
 export function showCharacterPanel({ name, realmName, equipment, portrait }) {
   const maxW = () => Math.min(vw() * 0.96, 460, (vh() * 0.84 * CHAR_FRAME.w) / CHAR_FRAME.h);
   openModal('modal-char', CHAR_FRAME, maxW, ({ at }) => {
-    // Lớp: nền khung (dưới cùng) → nhân vật (giới hạn trong vùng giữa, không tràn ra khung) → ô trang bị (trên cùng)
-    const av = at('<canvas class="char-avatar"></canvas>', CHAR_AREA[0], CHAR_AREA[1], CHAR_AREA[2], CHAR_AREA[3]);
-    requestAnimationFrame(() => fitPortrait(av, portrait()));
+    // Lớp: nền khung → nhân vật (to theo thân; vũ khí, cánh tràn ra nhưng nằm SAU các ô trang bị) → ô trang bị
+    const av = at('<canvas class="char-avatar"></canvas>', 0, 0, CHAR_FRAME.w, CHAR_FRAME.h);
+    const frameImg = new Image();
+    frameImg.onload = () => requestAnimationFrame(() => drawCharacter(av, portrait(), frameImg));
+    frameImg.src = CHAR_FRAME.src;
 
     SLOTS.forEach((s, i) => {
       const item = equipment[i];
@@ -90,15 +94,30 @@ export function showCharacterPanel({ name, realmName, equipment, portrait }) {
   });
 }
 
-// Vẽ ảnh nhân vật vừa khít canvas (giữ tỉ lệ, chân đặt ở đáy, căn giữa), nét theo mật độ điểm ảnh
-function fitPortrait(cv, img) {
+// Vẽ nhân vật trên canvas phủ cả khung. Tỉ lệ lấy theo THÂN (body) cho vừa CHAR_AREA, rồi vẽ ảnh đầy đủ (full: có vũ khí, cánh)
+// cùng tỉ lệ, chân ở CHAR_FOOT. Sau đó vẽ lại các ô trang bị từ ảnh khung đè lên → đồ tràn ra nằm sau ô.
+function drawCharacter(cv, { full, body }, frameImg) {
   const r = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
   cv.width = Math.max(1, Math.round(r.width * dpr)); cv.height = Math.max(1, Math.round(r.height * dpr));
-  const g = cv.getContext('2d');
-  const k = Math.min(cv.width / img.width, cv.height / img.height);
-  const w = img.width * k, h = img.height * k;
+  const g = cv.getContext('2d'), u = cv.width / CHAR_FRAME.w; // điểm ảnh canvas / điểm ảnh khung
+  const k = Math.min(CHAR_AREA[2] / body.width, CHAR_AREA[3] / body.height) * u;
+  const foot = full.foot || [full.width / 2, full.height];
   g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
-  g.drawImage(img, (cv.width - w) / 2, cv.height - h, w, h);
+  g.save();
+  g.beginPath(); g.rect(CHAR_CLIP[0] * u, CHAR_CLIP[1] * u, CHAR_CLIP[2] * u, CHAR_CLIP[3] * u); g.clip();
+  g.drawImage(full, CHAR_FOOT[0] * u - foot[0] * k, CHAR_FOOT[1] * u - foot[1] * k, full.width * k, full.height * k);
+  // mờ dần ở mép trên/trái/phải để đồ tràn ra không bị cắt cứng
+  const [cx, cy, cw] = CHAR_CLIP.map((v) => v * u), F = 28 * u;
+  g.globalCompositeOperation = 'destination-out';
+  for (const [x0, y0, x1, y1, rx, ry, rw, rh] of [
+    [0, cy, 0, cy + F, cx, cy, cw, F], [cx, 0, cx + F, 0, cx, cy, F, cv.height], [cx + cw, 0, cx + cw - F, 0, cx + cw - F, cy, F, cv.height],
+  ]) {
+    const gr = g.createLinearGradient(x0, y0, x1, y1);
+    gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = gr; g.fillRect(rx, ry, rw, rh);
+  }
+  g.restore();
+  for (const s of SLOTS) g.drawImage(frameImg, s.x, s.y, SLOT[0], SLOT[1], s.x * u, s.y * u, SLOT[0] * u, SLOT[1] * u);
 }
 
 // ---------- Cài đặt: khung + nút vẽ sẵn của chủ dự án (frames/bang-cai-dat-v2.png, tách bằng tools/panel_from_mockup.py) ----------
