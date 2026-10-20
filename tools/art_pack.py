@@ -14,7 +14,7 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parent.parent
 EQ = ROOT / 'assets' / 'equipment'
 SLOTS = ['trang-phuc', 'mat-na', 'vu-khi', 'canh', 'phap-tuong', 'nhan', 'day-chuyen', 'phap-bao', 'linh-thu']
-KEEP = {'id', 'w', 'h', 'anchor', 'angle', 'hands', 'hem', 'flip', 'pair', 'limbs'}
+KEEP = {'id', 'w', 'h', 'anchor', 'angle', 'hands', 'hem', 'flip', 'pair', 'limbs', 'neck'}
 
 
 def main():

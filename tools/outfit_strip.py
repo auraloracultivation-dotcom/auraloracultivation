@@ -6,7 +6,8 @@ Mỗi ảnh:
 - Khử viền hồng (mép còn ám nền hồng → đổi về màu viền tối).
 - Xoá 2 bàn tay tròn vẽ sẵn (khối màu da ở 2 bên, nửa dưới) và vá lại bằng màu xung quanh;
   ghi vị trí tay vào manifest (`hands`) để code đặt tay đúng chỗ cũ.
-- Xoá 2 bàn chân vẽ sẵn dưới gấu áo (code vẽ 2 ô chân riêng); ghi `hem` = đáy gấu áo.
+- Xoá 2 bàn chân vẽ sẵn dưới gấu áo (code vẽ giày riêng); ghi `hem` = đáy gấu áo.
+- Ghi `neck` = đường cắt đầu/áo (tỉ lệ theo gấu áo), ngay dưới cằm.
 Cần opencv (chỉ dùng khi chuẩn bị asset, không chạy trong game/CI).
 """
 import json
@@ -26,6 +27,25 @@ def defringe(a):
     pink = edge & (r > g + 35) & (b > g + 35)
     a[pink, :3] = (34, 22, 30)
     return a
+
+
+def find_neck(path, hem):
+    """Đường cắt đầu/áo = ngay dưới cằm: đáy khối màu da lớn nhất (mặt) ở nửa trên, tỉ lệ theo gấu áo.
+    Ngoài khoảng 0,70–0,80 (tóc hồng, áo trắng bị nhầm là da) thì dùng giá trị chung 0,755."""
+    a = np.array(Image.open(path).convert('RGBA')).astype(int)
+    H, W = a.shape[:2]
+    r, g, b, al = (a[..., i] for i in range(4))
+    skin = (al > 0) & (r > 215) & (g > 165) & (b > 130) & (r - b < 100) & (r - g > 12)
+    skin[:, :int(W * .2)] = False
+    skin[:, int(W * .8):] = False
+    lab, _ = ndimage.label(skin)
+    best = None
+    for i, sl in enumerate(ndimage.find_objects(lab), 1):
+        s = (lab[sl] == i).sum()
+        if (sl[0].start + sl[0].stop) / 2 < hem * .8 and (best is None or s > best[0]):
+            best = (s, sl)
+    neck = (best[1][0].stop + 1) / hem if best else None
+    return round(neck, 3) if neck and .70 <= neck <= .80 else 0.755
 
 
 def strip(path):
@@ -89,13 +109,17 @@ def main():
     man = json.loads((d / 'manifest.json').read_text())
     for it in man:
         if 'hem' in it:  # đã chuẩn hoá
+            if 'neck' not in it:
+                it['neck'] = 0.64 if it.get('limbs') else find_neck(d / it['file'], it['hem'])
             continue
         if '.tan-thu.' in it['id']:  # mẫu tân thủ vẽ sẵn tay chân: giữ nguyên, code không vẽ tay/chân
-            it.update({'limbs': True, 'hands': [], 'hem': it['h'], 'anchor': [round(it['w'] / 2, 1), it['h']]})
+            it.update({'limbs': True, 'hands': [], 'hem': it['h'], 'anchor': [round(it['w'] / 2, 1), it['h']],
+                       'neck': 0.64})
             continue
         info = strip(d / it['file'])
         it.update(info)
         it['anchor'] = [round(it['w'] / 2, 1), info['hem']]
+        it['neck'] = find_neck(d / it['file'], info['hem'])
         if len(info['hands']) != 2:
             print('⚠ không thấy đủ 2 tay:', it['file'], info['hands'])
     (d / 'manifest.json').write_text(json.dumps(man, ensure_ascii=False, indent=1))
