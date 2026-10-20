@@ -136,7 +136,7 @@ function crispPanel(panel) {
 // overlay = true: chỉ hiện khung đè lên màn hình hiện tại (trong game), không thay nền.
 function framedPanel(title, bodyHtml, { overlay = false } = {}) {
   if (overlay) {
-    const wrap = el('<div class="overlay"></div>');
+    const wrap = el('<div class="overlay confirm-wrap"></div>'); // luôn nằm trên mọi bảng khác
     document.getElementById('ui').appendChild(wrap);
     const panel = el(`<div class="frame-panel"><h2>${escapeHtml(title)}</h2>${bodyHtml}<div class="panel-msg"></div></div>`);
     wrap.appendChild(panel);

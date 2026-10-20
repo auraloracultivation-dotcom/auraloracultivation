@@ -39,3 +39,4 @@ Khung hiển thị theo **bội số nguyên điểm ảnh gốc** (`crispWidth`
 - `icons/tui-do.png`, `ky-nang.png`, `nhiem-vu.png`, `tong-mon.png`, `cai-dat-v2.png`, `ban-do-v2.png` — menu góc trên
 - `icons/bay-len.png`, `icons/ha-xuong.png` — một nút Bay lên ↔ Hạ xuống
 - `icons/sen.png` (cảnh giới / Tu vi), `icons/nguoi.png` (đạo hiệu)
+- `frames/bang-cai-dat-v2.png` — khung Cài đặt mới (tách từ ảnh mẫu chụp trong game bằng `tools/panel_from_mockup.py`); nút Bật/Ngôn ngữ/Đăng xuất/✕ vẽ sẵn, game đặt nút trong suốt đè lên
