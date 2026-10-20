@@ -1,1 +1,26 @@
+name: Tự gộp
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+permissions:
+  contents: write
+  pull-requests: write
+  pages: write
+jobs:
+  gop:
+    if: github.event.pull_request.head.repo.full_name == github.repository && !contains(github.event.pull_request.labels.*.name, 'can-duyet')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: node tools/check.mjs
+      - id: db
+        run: git diff --name-only origin/${{ github.base_ref }}...HEAD | grep -q '^supabase/' && echo "touch=1" >> $GITHUB_OUTPUT || true
+      - if: steps.db.outputs.touch != '1'
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: |
+          gh pr merge ${{ github.event.pull_request.number }} --squash --delete-branch --repo ${{ github.repository }}
+          gh api -X POST repos/${{ github.repository }}/pages/builds || true
 
