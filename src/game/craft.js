@@ -57,8 +57,10 @@ export function createCraft({ progress, pills, blanks, awaken, skills, gp }) {
   }
   const awakenCost = (g) => (g.tier ? A.reroll_cost[g.tier] : A.first_cost);
 
-  function awakenGear(uid) {
-    const g = progress.gear(uid);
+  // Đồ trong Kho (6 hệ, có hình): lưu dòng thức tỉnh theo mã vật phẩm
+  const awakenItem = (id) => awakenTarget(progress.itemAw(id));
+  const awakenGear = (uid) => awakenTarget(progress.gear(uid));
+  function awakenTarget(g) {
     if (!g) return { ok: false, msg: 'Không thấy trang bị' };
     const cost = awakenCost(g);
     if (progress.state.stone < cost) return { ok: false, msg: `Cần ${cost} Linh thạch` };
@@ -100,5 +102,5 @@ export function createCraft({ progress, pills, blanks, awaken, skills, gp }) {
     return { ok: true, msg: `${s.name} lên cấp ${lv + 1}` };
   }
 
-  return { brewPill, forgeBlank, awakenGear, dismantle, trainSkill, awakenCost, gearQ, pickInputs, stageOk };
+  return { brewPill, forgeBlank, awakenGear, awakenItem, dismantle, trainSkill, awakenCost, gearQ, pickInputs, stageOk };
 }

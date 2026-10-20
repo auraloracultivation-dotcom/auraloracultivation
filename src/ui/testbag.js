@@ -17,6 +17,7 @@ export function createTestBag(userId, defs) {
       if (st.equipped[it.slot] === it.id) delete st.equipped[it.slot]; else st.equipped[it.slot] = it.id;
       save();
     },
+    unequip(slot) { if (st.equipped[slot]) { delete st.equipped[slot]; save(); } },
     grantAll() {
       const before = st.items.length;
       for (const d of defs) if (!st.items.includes(d.id)) st.items.push(d.id);

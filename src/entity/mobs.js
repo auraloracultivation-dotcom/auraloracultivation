@@ -1,5 +1,7 @@
 // Vẽ quái HÌNH TẠM bằng code (chưa có sprite chính thức trong assets/monsters/).
 // Khi có ảnh thật: thêm "art" vào data/monsters/monsters.json và đổi hàm này sang vẽ ảnh — không phải sửa AI.
+import { textScale } from './draw.js';
+
 const ZONE_COLOR = { xanh: '#5fbf5a', cam: '#e08a3a', trang: '#cfe6f2', xam: '#8d8f99', than: '#4a3b46' };
 
 export function drawMonster(ctx, m, x, y, now) {
@@ -54,19 +56,20 @@ export function drawMonsterLabel(ctx, m, x, y, selected, now) {
     ctx.strokeStyle = '#ff6a5a'; ctx.lineWidth = 1.2; ctx.globalAlpha = 0.6 + Math.sin(now / 180) * 0.3;
     ctx.beginPath(); ctx.ellipse(x, y + 1, r + 3, r * 0.45 + 2, 0, 0, Math.PI * 2); ctx.stroke(); ctx.globalAlpha = 1;
   }
+  ctx.translate(x, top); ctx.scale(textScale(), textScale()); // chữ giữ cỡ đọc được khi camera thu nhỏ
   const w = Math.max(22, r * 2.6);
-  ctx.fillStyle = 'rgba(0,0,0,.65)'; ctx.fillRect(x - w / 2 - 0.5, top - 0.5, w + 1, 3.5);
+  ctx.fillStyle = 'rgba(0,0,0,.65)'; ctx.fillRect(-w / 2 - 0.5, -0.5, w + 1, 3.5);
   ctx.fillStyle = m.def.rank === 'boss' ? '#ffb03a' : '#e2483d';
-  ctx.fillRect(x - w / 2, top, (w * m.hp) / m.maxHp, 2.5);
+  ctx.fillRect(-w / 2, 0, (w * m.hp) / m.maxHp, 2.5);
   ctx.textAlign = 'center'; ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(0,0,0,.8)';
   ctx.font = '600 5.5px sans-serif';
   const tag = m.def.rank === 'boss' ? '【Boss】' : m.def.rank === 'elite' ? '【Tinh anh】' : '';
   const label = `${tag}${m.def.name}`;
   ctx.fillStyle = m.def.rank === 'boss' ? '#ffd36a' : m.def.rank === 'elite' ? '#d9b8ff' : '#f2efe6';
-  ctx.strokeText(label, x, top - 2); ctx.fillText(label, x, top - 2);
+  ctx.strokeText(label, 0, -2); ctx.fillText(label, 0, -2);
   ctx.font = '600 4.5px sans-serif'; ctx.fillStyle = '#9fe8ff';
   const rt = realmText(m.def.realm);
-  ctx.strokeText(rt, x, top - 8); ctx.fillText(rt, x, top - 8);
+  ctx.strokeText(rt, 0, -8); ctx.fillText(rt, 0, -8);
   ctx.restore();
 }
 
@@ -76,11 +79,13 @@ export function drawFx(ctx, fx, ox, oy) {
   for (const f of fx) {
     const x = f.x + ox, y = f.y + oy;
     if (f.kind === 'text') {
+      ctx.save();
       ctx.globalAlpha = Math.min(1, f.t * 2);
+      ctx.translate(x, y - (1 - f.t / f.life) * 18 * textScale()); ctx.scale(textScale(), textScale());
       ctx.font = `bold ${f.big ? 9 : 7}px sans-serif`; ctx.textAlign = 'center';
       ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(0,0,0,.85)'; ctx.fillStyle = f.color;
-      const yy = y - (1 - f.t / f.life) * 18;
-      ctx.strokeText(f.text, x, yy); ctx.fillText(f.text, x, yy);
+      ctx.strokeText(f.text, 0, 0); ctx.fillText(f.text, 0, 0);
+      ctx.restore();
     } else if (f.kind === 'bolt') {
       ctx.globalAlpha = 0.9; ctx.strokeStyle = '#9ff3ff'; ctx.lineWidth = 3; ctx.lineCap = 'round';
       ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x - f.vx * 0.04, y - f.vy * 0.04); ctx.stroke();
@@ -92,6 +97,34 @@ export function drawFx(ctx, fx, ox, oy) {
       ctx.beginPath(); ctx.ellipse(x, y - 5, 5, 4, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
       ctx.fillStyle = '#1b1208'; ctx.fillRect(x + 1, y - 6, 1.2, 1.2);
     }
+  }
+  ctx.restore();
+}
+
+// Điểm hái HÌNH TẠM: linh thảo = cụm lá + nụ hoa theo màu vùng; khoáng = tảng đá có vân sáng
+const HERB_TIP = { xanh: '#b8ffb0', cam: '#ff7a4a', trang: '#e8f6ff', xam: '#c7a6ff', than: '#ff3b6b' };
+export function drawNode(ctx, n, x0, y0, now) {
+  ctx.save();
+  ctx.translate(x0, y0); ctx.scale(1.7, 1.7); // to hơn cho dễ thấy khi camera thu nhỏ
+  const x = 0, y = 0;
+  ctx.fillStyle = 'rgba(0,0,0,.25)';
+  ctx.beginPath(); ctx.ellipse(x, y + 1, 5, 2, 0, 0, Math.PI * 2); ctx.fill();
+  const glow = 0.5 + 0.5 * Math.sin(now / 300 + n.sway);
+  if (n.group === 'thao') {
+    const sw = Math.sin(now / 500 + n.sway) * 0.15;
+    ctx.strokeStyle = '#1b3a14'; ctx.lineWidth = 0.8; ctx.fillStyle = '#3fae4a';
+    for (const a of [-0.7, 0, 0.7]) {
+      ctx.save(); ctx.translate(x, y); ctx.rotate(a + sw);
+      ctx.beginPath(); ctx.ellipse(0, -4, 1.6, 4, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.restore();
+    }
+    ctx.fillStyle = HERB_TIP[n.item.zone] || '#fff'; ctx.globalAlpha = 0.7 + glow * 0.3;
+    ctx.beginPath(); ctx.arc(x, y - 8, 1.8, 0, Math.PI * 2); ctx.fill();
+  } else {
+    ctx.fillStyle = '#6b6f80'; ctx.strokeStyle = '#2a2a33'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x - 6, y); ctx.lineTo(x - 4, y - 5); ctx.lineTo(x + 1, y - 7); ctx.lineTo(x + 6, y - 3); ctx.lineTo(x + 5, y);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = HERB_TIP[n.item.zone] || '#fff'; ctx.globalAlpha = 0.5 + glow * 0.5;
+    ctx.fillRect(x - 2, y - 4, 1.5, 1.5); ctx.fillRect(x + 2, y - 3, 1.2, 1.2);
   }
   ctx.restore();
 }

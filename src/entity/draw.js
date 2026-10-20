@@ -66,41 +66,50 @@ function drawBody(ctx, p) {
   ctx.fillRect(x + ex + 3, y - 21, 1, 2);
 }
 
+// Cỡ chữ/thanh trên đầu (tên, cảnh giới, máu, chat): camera thu nhỏ thì phóng chữ lên để vẫn đọc được
+let TS = 1;
+export const setTextScale = (k) => { TS = k; };
+export const textScale = () => TS;
+
 export function drawLabel(ctx, p, now, scale = 1) {
   const x = Math.round(p.x);
   const head = hasLook(p.look) ? rigHeadHeight(knownLook(p.look)) : 33;
   const y = Math.round(p.y + 33 - head * scale - (p.look?.outfit ? (p.rig?.flyT || 0) * 8 : liftOf(p)) * scale); // bám theo đầu
+  ctx.save();
+  ctx.translate(x, y - 31); // mốc ngay trên đầu; mọi thứ bên dưới tính từ mốc này
+  ctx.scale(TS, TS);
   ctx.font = '6px sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'bottom';
   ctx.lineWidth = 2;
   ctx.strokeStyle = 'rgba(0,0,0,0.75)';
   ctx.fillStyle = p.isLocal ? '#ffe9a8' : '#ffffff';
-  ctx.strokeText(p.name, x, y - 33);
-  ctx.fillText(p.name, x, y - 33);
+  ctx.strokeText(p.name, 0, -2);
+  ctx.fillText(p.name, 0, -2);
   // Cảnh giới phía trên tên; thanh khí huyết giữa tên và đầu (người khác chưa gửi HP → chỉ hiện cảnh giới)
   if (p.realm) {
     ctx.font = '600 5px sans-serif';
     ctx.fillStyle = '#9fe8ff';
-    ctx.strokeText(p.realm, x, y - 40);
-    ctx.fillText(p.realm, x, y - 40);
+    ctx.strokeText(p.realm, 0, -9);
+    ctx.fillText(p.realm, 0, -9);
   }
   if (p.hpR !== undefined && p.hpR !== null) {
-    const w = 26, by = y - 31.5;
-    ctx.fillStyle = 'rgba(0,0,0,.65)'; ctx.fillRect(x - w / 2 - 0.5, by - 0.5, w + 1, 3.5);
-    ctx.fillStyle = p.hpR > 0.3 ? '#4cd964' : '#ff453a'; ctx.fillRect(x - w / 2, by, w * Math.max(0, Math.min(1, p.hpR)), 2.5);
+    const w = 26, by = -0.5;
+    ctx.fillStyle = 'rgba(0,0,0,.65)'; ctx.fillRect(-w / 2 - 0.5, by - 0.5, w + 1, 3.5);
+    ctx.fillStyle = p.hpR > 0.3 ? '#4cd964' : '#ff453a'; ctx.fillRect(-w / 2, by, w * Math.max(0, Math.min(1, p.hpR)), 2.5);
   }
-
   if (p.chat && now < p.chatUntil) {
+    ctx.font = '6px sans-serif';
     const w = Math.min(90, ctx.measureText(p.chat).width + 8);
-    const bx = x - w / 2, by = y - 52;
+    const by = p.realm ? -27 : -21;
     ctx.fillStyle = 'rgba(255,255,255,0.95)';
-    ctx.fillRect(bx, by, w, 11);
-    ctx.fillRect(x - 1, by + 11, 2, 2);
+    ctx.fillRect(-w / 2, by, w, 11);
+    ctx.fillRect(-1, by + 11, 2, 2);
     ctx.fillStyle = '#222';
     ctx.textBaseline = 'middle';
-    ctx.fillText(p.chat, x, by + 6, w - 4);
+    ctx.fillText(p.chat, 0, by + 6, w - 4);
   }
+  ctx.restore();
 }
 
 // Hiệu ứng chém thường (nhẹ, chỉ hình ảnh — sát thương do máy chủ quyết định từ Mốc 3)

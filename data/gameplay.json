@@ -238,10 +238,10 @@
   "ht_hau": 1.0
  },
  "monster": {
-  "max_alive": 12,
-  "spawn_min_px": 260,
-  "spawn_max_px": 620,
-  "despawn_px": 1100,
+  "max_alive": 18,
+  "spawn_min_px": 460,
+  "spawn_max_px": 820,
+  "despawn_px": 1400,
   "spawn_every_s": 1.2,
   "rank_weight": {
    "thuong": 0.86,
@@ -436,5 +436,19 @@
   ]
  },
  "breakthrough_fail_loss": 0.4,
- "daily_reset": "theo ngày trên máy"
+ "daily_reset": "theo ngày trên máy",
+ "gather": {
+  "_ghi_chu": "Linh thảo / mỏ khoáng mọc trên bản đồ; đi sát (pick_px) là hái. Không hái khi đang bay.",
+  "max_nodes": 16,
+  "spawn_min_px": 120,
+  "spawn_max_px": 700,
+  "despawn_px": 1300,
+  "spawn_every_s": 2,
+  "herb_ratio": 0.65,
+  "amount": [
+   1,
+   2
+  ],
+  "pick_px": 16
+ }
 }
