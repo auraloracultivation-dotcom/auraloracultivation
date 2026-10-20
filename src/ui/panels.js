@@ -185,15 +185,15 @@ export function showWorldMap({ zoneName, draw }) {
   let raf = 0;
   let zi = 0;
   const frame = { w: 995, h: 980, close: null };
-  const maxW = () => Math.min(vw() * 0.94, vh() * 0.72, 520);
-  const done = openModal('modal-map', frame, maxW, ({ box }) => {
+  const maxW = () => Math.min(vw() * 0.96 - 52, vh() * 0.72, 520); // chừa chỗ cột +/− bên phải
+  const done = openModal('modal-map', frame, maxW, ({ box, col }) => {
     const cv = setupRoundCanvas(el('<canvas class="world-map"></canvas>'), parseFloat(box.style.width));
     box.appendChild(cv);
     box.insertAdjacentHTML('afterbegin', `<div class="map-title"><span>${escapeHtml(zoneName)}</span></div>`);
     const zoom = el(`<div class="map-zoom">
       <button type="button" class="glow" data-z="1" aria-label="Phóng to"><img src="${ICON('ban-do-cong')}" alt=""></button>
       <button type="button" class="glow" data-z="-1" aria-label="Thu nhỏ"><img src="${ICON('ban-do-tru')}" alt=""></button></div>`);
-    box.appendChild(zoom);
+    col.appendChild(zoom); // cột +/− nằm bên phải khung
     zoom.querySelectorAll('button').forEach((b) => { b.style.width = b.style.height = '42px'; });
     const x = box.querySelector('.modal-close img');
     if (x) x.src = ICON('ban-do-dong'); // nút ✕ cùng bộ với khung bản đồ
