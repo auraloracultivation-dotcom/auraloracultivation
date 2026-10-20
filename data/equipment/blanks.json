@@ -2,7 +2,7 @@
  "_status": "design",
  "_nguon": "Auralora Lab v3 (21/10/2026)",
  "_ghi_chu": "THIẾT KẾ từ Lab — CHƯA triển khai trong game, CHƯA kiểm thử cân bằng. Số liệu là baseline để thử nghiệm.",
- "_ghi_chu_rieng": "Dây chuyền: Lab ghi 'Huyền Thiết ×18' ở LK3 nhưng Huyền Thiết là khoáng Vùng Xám — CÓ THỂ Lab muốn ghi 'Huyền Thiết Vụn'. Giữ nguyên Lab, chờ chủ dự án xác nhận.",
+ "_ghi_chu_rieng": "Lab v3.1: phôi Dây chuyền dùng Huyền Thiết VỤN (khoáng Vùng Xanh), không phải Huyền Thiết Vùng Xám.",
  "_luong": "Farm → luyện PHÔI (0 chỉ số, chỉ có hình) → Thức tỉnh (tốn Linh thạch) → phẩm + dòng chỉ số → Rã (hoàn một phần) hoặc Thức tỉnh lại",
  "blanks": [
   {
@@ -73,7 +73,7 @@
    "unlock": "lk3",
    "inputs": [
     {
-     "id": "item.khoang.huyen-thiet.001",
+     "id": "item.khoang.huyen-thiet-vun.001",
      "count": 18
     },
     {

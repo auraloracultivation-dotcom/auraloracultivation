@@ -4,6 +4,7 @@ import { createMap, wrapDelta } from './map/index.js';
 import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, loadRig, rigAttack, artInfo, renderPortrait, avatarFx } from './entity/index.js';
 import { createAudio } from './audio/index.js';
 import { createPhapTuong } from './combat/index.js';
+import { createGameplay } from './game/index.js';
 
 // Luôn lấy code mới nhất (xem sw.js) — tránh lẫn code cũ với dữ liệu mới sau mỗi lần cập nhật
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
@@ -17,7 +18,8 @@ async function boot() {
   let loading = showLoading('Đang mở cổng Tu Chân giới…');
   loading.set(10);
   // Nạp mạng sau khi màn hình tải đã hiện, để mạng chậm không thấy màn đen
-  const net = await import('./net/index.js');
+  // ?offline: chơi thử một mình không cần mạng (src/net/offline.js) — để thử luật chơi và kiểm thử tự động
+  const net = await import(new URLSearchParams(location.search).has('offline') ? './net/offline.js' : './net/index.js');
   const config = await loadJSON('data/config.json');
   const screen = createScreen(document.getElementById('game'));
   loading.set(30, 'Kiểm tra đạo tịch…');
@@ -104,7 +106,9 @@ async function boot() {
   const fan = (deg, r = 122) => ({ dx: Math.round(Math.cos((deg * Math.PI) / 180) * r), dy: -Math.round(Math.sin((deg * Math.PI) / 180) * r) });
   const markers = () => [{ x: me.x, y: me.y, self: true }, ...[...others.list.values()].map((p) => ({ x: p.x, y: p.y }))];
 
-  function attack() {
+  let game = null; // luật chơi thử nghiệm: quái, chiến đấu, tu vi, nhiệm vụ (src/game)
+  function attack() { if (game.attack()) swing(); }
+  function swing() {
     if (me.look?.outfit || me.look?.weapon) rigAttack(me); // nhân vật ghép lớp: đưa tay (và xoay kiếm nếu có)
     if (me.look?.weapon) audio.play('sfx.kiem.chem'); // tiếng kiếm 0,1 giây lúc chém ra
     if (!me.look?.weapon) me.slashT = 0.22; // tay không: vẫn có vệt chém nhỏ
@@ -155,22 +159,29 @@ async function boot() {
     },
     onOpenCharacter() {
       showCharacterPanel({
-        name: me.name, realmName, portrait: () => ({ full: renderPortrait(me.look), body: renderPortrait(me.look, { body: true }) }),
+        name: me.name, realmName: game.realmName(), portrait: () => ({ full: renderPortrait(me.look), body: renderPortrait(me.look, { body: true }) }),
         equipment: SLOT_ORDER.map((sl) => { const it = bag.equippedItem(sl); return it && { name: it.name, icon: artInfo(it.art)?.file }; }),
       });
     },
     onSettings() { showSettings({ onLogout: logout, onRedeem: redeemCode, onChange: (st) => audio.apply(st) }); },
     onOpenBag() {
       showBag({
-        categories: itemsDef.categories, getEntries: bag.entries, isEquipped: bag.isEquipped,
-        thumb: (it) => artInfo(it.art)?.file || '', note: 'Đồ thử nghiệm: chỉ lưu trên máy này, chưa lưu máy chủ.',
+        categories: itemsDef.categories, getEntries: () => [...bag.entries(), ...game.bagEntries()], isEquipped: bag.isEquipped,
+        thumb: (it) => it.icon || artInfo(it.art)?.file || '', note: 'Đồ thử nghiệm: chỉ lưu trên máy này, chưa lưu máy chủ.',
+        onUse: (it) => game.onBagUse(it),
         onToggle(it) {
           bag.toggle(it);
           if (pt.active && !bag.equippedItem('phap-tuong')) { pt.cancel(); phapTuongOff(); } else setLook(); // tháo pháp tướng → thu lại
         },
       });
     },
-    onBreakthrough() { toast('Đột phá: chờ quy tắc cảnh giới'); },
+    onBreakthrough: () => game.breakthrough(),
+    onMenu(id) {
+      if (id === 'quests') game.openQuests();
+      else if (id === 'skills') game.openCultivate();
+      else return false;
+      return true;
+    },
     onOpenMap() {
       showWorldMap({
         zoneName: zoneDef.name,
@@ -181,15 +192,15 @@ async function boot() {
     actions: [
       { id: 'attack', name: 'Đánh thường', icon: S('tan-cong'), dx: 0, dy: 0, size: 96, onUse: () => attack() },
       // vòng quạt 4 kỹ năng (từ trái lên trên)
-      { id: 'kiem-khi', name: 'Kiếm khí', icon: S('kiem-khi'), ...fan(184), size: 60, locked: true },
-      { id: 'linh-thu', name: 'Kỹ năng linh thú', icon: S('linh-thu'), ...fan(151), size: 60, locked: true },
+      { id: 'kiem-khi', name: 'Kiếm khí', icon: S('kiem-khi'), ...fan(184), size: 60, locked: true, lockedHint: 'mở ở Trúc Cơ', onUse: () => game.skill('kiem-khi') },
+      { id: 'linh-thu', name: 'Kỹ năng linh thú', icon: S('linh-thu'), ...fan(151), size: 60, locked: true, lockedHint: 'mở ở Kết Đan', onUse: () => game.skill('linh-thu') },
       { id: 'phap-tuong', name: 'Kỹ năng pháp tướng', icon: S('phap-tuong'), ...fan(118), size: 60, onUse: () => usePhapTuong() },
-      { id: 'khong-che', name: 'Khống chế (Trúc Cơ)', icon: S('khong-che'), ...fan(85), size: 60, locked: true },
+      { id: 'khong-che', name: 'Khống chế (Trúc Cơ)', icon: S('khong-che'), ...fan(85), size: 60, locked: true, lockedHint: 'mở ở Trúc Cơ', onUse: () => game.skill('khong-che') },
       // bên trái bộ kỹ năng
-      { id: 'nguyen-anh', name: 'Nguyên Anh: tấn công diện rộng', icon: S('nguyen-anh'), dx: -200, dy: -66, size: 54, locked: true },
-      { id: 'dan-duoc', name: 'Đan dược trị thương', icon: S('dan-duoc'), dx: -200, dy: 4, size: 54, locked: true },
+      { id: 'nguyen-anh', name: 'Nguyên Anh: tấn công diện rộng', icon: S('nguyen-anh'), dx: -200, dy: -66, size: 54, locked: true, lockedHint: 'mở ở Nguyên Anh', onUse: () => game.skill('nguyen-anh') },
+      { id: 'dan-duoc', name: 'Đan dược trị thương', icon: S('dan-duoc'), dx: -200, dy: 4, size: 54, onUse: () => game.healPill() },
       // phía trên: Lướt + Bay/Chạy song song, trên cùng: Tự động
-      { id: 'luot', name: 'Lướt', icon: S('luot'), dx: -92, dy: -192, size: 50, locked: true },
+      { id: 'luot', name: 'Lướt', icon: S('luot'), dx: -92, dy: -192, size: 50, locked: true, lockedHint: 'mở ở Kết Đan', onUse: () => game.skill('luot') },
       {
         id: 'bay', name: 'Bay', icons: [S('bay'), S('chay')], names: ['Bay', 'Chạy bộ'], dx: -34, dy: -200, size: 50,
         onUse: (state) => { // hiện chỉ là hình ảnh, chưa đổi tốc độ / va chạm
@@ -201,20 +212,27 @@ async function boot() {
           toast(me.flying ? 'Ngự khí phi hành' : 'Hạ xuống mặt đất', 1200);
         },
       },
-      { id: 'auto', name: 'Tự động', icon: S('auto'), dx: 26, dy: -192, size: 50, locked: true }, // cùng hàng Lướt, sát phải
+      { id: 'auto', name: 'Tự động đánh', icon: S('auto'), dx: 26, dy: -192, size: 50, onUse: () => game.toggleAuto() }, // cùng hàng Lướt, sát phải
     ],
   });
   hud.setOnline(others.list.size + 1, maxPlayers);
   const refreshAvatar = () => hud.setPortrait(renderPortrait(me.look, { body: true }));
   refreshAvatar();
-  createStatsDock({ getValue: () => null }); // chờ bảng chỉ số cơ bản (đợt 1)
+  loading.set(90, 'Thả yêu thú vào rừng…');
+  game = await createGameplay({ loadJSON, map, me, hud, pt, toast, audio, userId: me.id });
+  me.onAutoSwing = swing;
+  const dock = createStatsDock({ getValue: (id) => game.statValue(id) });
+  game.setDock(dock);
   enableFastTap(); // nút bấm được cả khi tay kia đang giữ cần điều khiển
   let targetId = null; // đạo hữu đang được chọn (chạm vào nhân vật bằng tay phải)
-  hud.setBar('hp', 0, 0); hud.setBar('xp', 0, 0); // chờ dữ liệu chỉ số (linh lực: tạm theo kỹ năng Pháp tướng)
   let shownMp = -1;
   let miniTimer = 0;
   window.addEventListener('keydown', (e) => { // máy tính: phím cách = tấn công
-    if (e.code === 'Space' && !(e.target instanceof HTMLInputElement)) { e.preventDefault(); attack(); }
+    if (e.target instanceof HTMLInputElement) return;
+    if (e.code === 'Space') { e.preventDefault(); attack(); }
+    const k = { Digit1: 'kiem-khi', Digit2: 'khong-che', Digit3: 'linh-thu', Digit4: 'luot', Digit5: 'nguyen-anh' }[e.code]; // phím tắt máy tính
+    if (k) document.querySelector(`[data-act="${k}"]`)?.dispatchEvent(new PointerEvent('pointerdown'));
+    if (e.code === 'KeyQ') game.healPill();
   });
   loading.set(100, 'Hoàn tất');
   setTimeout(() => loading.hide(), 300);
@@ -229,13 +247,13 @@ async function boot() {
   let sendTimer = 0;
 
   function update(dt) {
-    const dir = input.getMove();
+    const dir = game.dead ? { x: 0, y: 0 } : input.getMove(); // trọng thương: đứng yên chờ hồi phục
     const wasMoving = me.moving;
     me.moving = dir.x !== 0 || dir.y !== 0;
     if (me.moving) {
       if (!wasMoving) saver.saveNow(); // mốc thời gian mới cho máy chủ trước khi đi
       if (dir.x) me.facing = dir.x > 0 ? 1 : -1;
-      const v = me.flying ? flySpeed : speed;
+      const v = me.flying ? flySpeed : game.speed() || speed; // Lướt: nhanh hơn nhưng vẫn dưới max_speed máy chủ
       map.move(me, dir.x * v * dt, dir.y * v * dt, radius, !!me.flying);
       me.walkT += dt;
       sendTimer += dt;
@@ -248,9 +266,11 @@ async function boot() {
     if (pt.tick(dt) === 'empty') phapTuongOff('Linh lực cạn — pháp tướng tan biến');
     const mpNow = Math.round(pt.mp);
     if (mpNow !== shownMp) { shownMp = mpNow; hud.setBar('mp', mpNow, pt.max); }
+    game.update(dt);
     others.update(dt);
     for (const tap of input.takeTaps()) { // chạm vào nhân vật khác → chọn / bỏ chọn
       const wx = cam.x + tap.x / screen.scale, wy = cam.y + tap.y / screen.scale;
+      if (game.tap(wx, wy)) continue; // chạm trúng quái → chọn quái
       let best = null, bestD = 22;
       for (const p of others.list.values()) {
         const px = me.x + wrapDelta(p.x - me.x, map.width), py = me.y + wrapDelta(p.y - me.y, map.height) - 12 * sprite;
@@ -266,6 +286,7 @@ async function boot() {
     if (miniTimer <= 0) {
       miniTimer = 0.25;
       drawRoundMap(hud.miniCanvas, (off) => map.drawMinimap(off, me.x, me.y, 40, markers()));
+      dock.refresh();
     }
     followCamera(cam, me, screen, map.width, map.height, zoneDef.wrap);
   }
@@ -296,9 +317,11 @@ async function boot() {
       ctx.beginPath(); ctx.ellipse(tgt.x, tgt.y + 1, 9 * sprite + 2, 4 * sprite + 1, 0, 0, Math.PI * 2); ctx.stroke();
       ctx.restore();
     }
+    game.renderBelow(ctx, now); // quái + linh thú (hình tạm)
     for (const p of people) drawPlayer(ctx, p, sprite);
     if (!me.look?.weapon) drawSlash(ctx, me, sprite);
     for (const p of people) drawLabel(ctx, p, now, sprite);
+    game.renderAbove(ctx, now); // tên/máu quái, số sát thương, kiếm khí
 
     drawStick(ctx, input.stick, dpr);
   }
@@ -307,6 +330,7 @@ async function boot() {
   if (new URLSearchParams(location.search).has('debug')) {
     window.__tp = (x, y) => { me.x = map.wrapX(x); me.y = map.wrapY(y); };
     window.__me = () => ({ x: me.x, y: me.y });
+    window.__game = game; // kiểm thử tự động
   }
 
   addEventListener('pagehide', () => saver.flush());

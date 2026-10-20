@@ -17,7 +17,8 @@ function overlay(cls) {
 
 // categories: [[id, tên]], getEntries(): [{ item, count }], isEquipped(item), onToggle(item) → cập nhật trạng thái
 // thumb(item): đường dẫn ảnh. note: dòng ghi chú cuối kho (vd. "Đồ thử nghiệm, chỉ lưu trên máy này").
-export function showBag({ categories, getEntries, isEquipped, onToggle, thumb, note }) {
+// onUse(item): vật phẩm dùng được (item.usable, vd. đan dược) → nút "Dùng"
+export function showBag({ categories, getEntries, isEquipped, onToggle, onUse, thumb, note }) {
   const { wrap, close } = overlay('bag-wrap');
   const box = el(`<div class="bag" role="dialog" aria-label="Kho">
     <div class="bag-head"><b>Kho</b><button type="button" class="bag-x" aria-label="Đóng">✕</button></div>
@@ -43,9 +44,11 @@ export function showBag({ categories, getEntries, isEquipped, onToggle, thumb, n
     detail.hidden = !it;
     if (it) {
       const eq = isEquipped(it);
-      detail.innerHTML = `<div><b>${escapeHtml(it.name)}</b><span>${escapeHtml(SLOT_NAME[it.slot] || '')}${it.he ? ` · hệ ${escapeHtml(it.he)}` : ''}</span></div>
-        ${it.slot ? `<button type="button" class="bag-act">${eq ? 'Tháo ra' : 'Trang bị'}</button>` : ''}`;
-      detail.querySelector('.bag-act')?.addEventListener('click', () => {
+      detail.innerHTML = `<div><b>${escapeHtml(it.name)}</b><span>${escapeHtml(SLOT_NAME[it.slot] || it.use || '')}${it.he ? ` · hệ ${escapeHtml(it.he)}` : ''}</span></div>
+        ${it.slot ? `<button type="button" class="bag-act">${eq ? 'Tháo ra' : 'Trang bị'}</button>` : ''}
+        ${it.usable && onUse ? '<button type="button" class="bag-act bag-use">Dùng</button>' : ''}`;
+      detail.querySelector('.bag-use')?.addEventListener('click', () => { onUse(it); render(); });
+      detail.querySelector('.bag-act:not(.bag-use)')?.addEventListener('click', () => {
         onToggle(it);
         toast(isEquipped(it) ? `Đã trang bị ${it.name}` : `Đã tháo ${it.name}`, 1200);
         render();

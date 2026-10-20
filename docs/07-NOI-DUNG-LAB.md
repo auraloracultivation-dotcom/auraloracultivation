@@ -31,9 +31,12 @@ Mọi file dưới đây có `"_status": "design"`. Nghĩa là:
 `tools/check_refs.mjs` (chạy trong `tools/check.mjs`): ID không trùng, đúng dạng, mọi nguyên liệu/đan/quái/nhiệm vụ được trỏ tới phải tồn tại.
 Mục tiêu nhiệm vụ chưa có thực thể (NPC, địa điểm, cờ mở khoá) phải khai báo trong `placeholders` của `quests.json`.
 
-## Chênh lệch Lab ↔ repo, chờ chủ dự án quyết
-1. **Vùng ↔ địa hình**: Lab có 5 vùng quái; `data/terrain.json` có 6 bậc (cỏ, cát, đá lát, tuyết, sỏi, hắc thổ). Chưa ghép.
-2. **Huyền Thiết** (khoáng Vùng Xám) xuất hiện ở công thức cấp thấp: phôi Dây chuyền (LK3) và Luyện Khí Quyết. Có thể ý là *Huyền Thiết Vụn*.
-3. Nhiệm vụ trỏ `boss.bing-ho`: Băng Hồ là quái thường; boss Vùng Trắng là Tuyết Sơn Lão Tổ.
-4. Còn thiếu số: dòng thức tỉnh Chính Xác/Né/Tốc Đánh/Tốc Chạy; hiệu quả các đan hồi/cường hoá; hệ số LK2–4, LK6–9; nguyên liệu 3 công pháp cuối; giới hạn bảo hộ phù/ngày; giá shop.
-5. Màn hình: Lab và docs/04 ghi **ưu tiên dọc 390×844**.
+## Chênh lệch Lab ↔ repo — đã chốt ở Lab v3.1 (21/10/2026)
+1. **Vùng ↔ địa hình**: cỏ = Xanh, cát + đá lát cổ = Cam, tuyết = Trắng, sỏi = Xám, hắc thổ + dung nham = Than (`data/terrain.json` → `zone`).
+2. **Huyền Thiết Vụn** (không phải Huyền Thiết) trong phôi Dây chuyền và Luyện Khí Quyết.
+3. Nhiệm vụ "Thử thách Tuyết Sơn": boss Vùng Trắng là **Tuyết Sơn Lão Tổ**.
+4. Vật phẩm nhiệm vụ có ID chuẩn: `data/items/quest-items.json`.
+
+## Còn thiếu trong Lab (game đang dùng số tạm ở data/gameplay.json)
+Dòng thức tỉnh Chính Xác/Né/Tốc Đánh/Tốc Chạy; hiệu quả đan hồi/cường hoá; tu vi cần mỗi tầng; nguyên liệu 3 công pháp cuối;
+giới hạn bảo hộ phù/ngày; giá shop. Trạng thái các file Lab vẫn là `design` — luật đang chạy là bản thử (docs/08).

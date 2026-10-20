@@ -2,7 +2,7 @@
  "_status": "design",
  "_nguon": "Auralora Lab v3 (21/10/2026)",
  "_ghi_chu": "THIẾT KẾ từ Lab — CHƯA triển khai trong game, CHƯA kiểm thử cân bằng. Số liệu là baseline để thử nghiệm.",
- "_ghi_chu_rieng": "Luyện/nâng công pháp CHỈ tốn nguyên liệu, KHÔNG tốn Linh thạch; cấp 1→5. 3 công pháp cuối Lab chưa ghi nguyên liệu. Luyện Khí Quyết: Lab ghi 'Huyền Thiết ×5' (khoáng Vùng Xám) — có thể là Huyền Thiết Vụn, chờ xác nhận. skill.phaptuong.basic.001 (phap-tuong.json) là kỹ năng hoá hình đang chạy thử, khác với công pháp này.",
+ "_ghi_chu_rieng": "Luyện/nâng công pháp CHỈ tốn nguyên liệu, KHÔNG tốn Linh thạch; cấp 1→5. 3 công pháp cuối Lab chưa ghi nguyên liệu. Lab v3.1: Luyện Khí Quyết dùng Huyền Thiết VỤN. skill.phaptuong.basic.001 (phap-tuong.json) là kỹ năng hoá hình đang chạy thử. Lab v3.1: Luyện Khí Quyết dùng Huyền Thiết VỤN. skill.phaptuong.basic.001 (phap-tuong.json) là kỹ năng hoá hình đang chạy thử.",
  "skills": [
   {
    "id": "skill.tamphap.luyen-khi.001",
@@ -18,7 +18,7 @@
       "count": 20
      },
      {
-      "id": "item.khoang.huyen-thiet.001",
+      "id": "item.khoang.huyen-thiet-vun.001",
       "count": 5
      }
     ],

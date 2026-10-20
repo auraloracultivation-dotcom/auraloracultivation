@@ -20,6 +20,10 @@
 4. Đổi kiến trúc, đổi schema, đổi quy tắc ID → phải sửa docs trong cùng Pull Request.
 5. Mỗi mốc kết thúc bằng bằng chứng kiểm thử (video/ảnh hai máy), không chỉ lời "đã xong".
 
+## Bản chơi thử (quyết định chủ dự án 21/10/2026)
+Đưa toàn bộ Lab vào game dạng **thử nghiệm phía máy khách** (docs/08) để hình dung game, song song với Mốc 1.
+Không thay thế các mốc dưới: quái/sát thương/túi đồ vẫn phải chuyển lên máy chủ ở Mốc 3–4 trước khi chơi thật nhiều người.
+
 ## Lộ trình mốc
 1. Hai người thấy nhau di chuyển, lưu vị trí. ← đang ở đây
 2. Danh sách người chơi gần, tên, trạng thái online.

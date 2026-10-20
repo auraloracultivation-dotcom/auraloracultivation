@@ -11,14 +11,15 @@ export function checkRefs() {
     ids.set(id, file);
   };
   const lists = [
-    ['data/items/items.json', 'items'], ['data/items/materials.json', 'materials'], ['data/items/pills.json', 'pills'],
+    ['data/items/items.json', 'items'], ['data/items/materials.json', 'materials'], ['data/items/pills.json', 'pills'], ['data/items/quest-items.json', 'items'],
     ['data/monsters/monsters.json', 'monsters'], ['data/skills/cong-phap.json', 'skills'],
     ['data/equipment/blanks.json', 'blanks'], ['data/quests/quests.json', 'quests'], ['data/realms.json', 'realms'],
   ];
   const data = {};
   for (const [file, key] of lists) {
-    data[key] = load(file)[key];
-    for (const x of data[key]) {
+    const arr = load(file)[key];
+    data[key] = [...(data[key] || []), ...arr];
+    for (const x of arr) {
       if (!/^[a-z0-9-]+(\.[a-z0-9_-]+)+$/.test(x.id)) errors.push(`${file}: ID sai quy tắc "${x.id}"`);
       add(x.id, file);
     }
@@ -39,9 +40,10 @@ export function checkRefs() {
 
   const qfile = load('data/quests/quests.json');
   const placeholders = new Set(qfile.placeholders);
+  const wild = new Set(Object.keys(qfile.wildcards || {}));
   for (const q of data.quests) {
     for (const g of q.goals) {
-      if (g.target !== 'any' && !ids.has(g.target) && !placeholders.has(g.target)) {
+      if (!wild.has(g.target) && !ids.has(g.target) && !placeholders.has(g.target)) {
         errors.push(`${q.id}: mục tiêu "${g.target}" không tồn tại và không nằm trong placeholders`);
       }
     }
@@ -49,5 +51,14 @@ export function checkRefs() {
     (q.rewards.unlock || []).forEach((u) => { if (!placeholders.has(u)) errors.push(`${q.id}: cờ mở khoá "${u}" chưa khai báo`); });
     q.next.forEach((n) => must(n, q.id));
   }
+  // Thông số chơi thử phải trỏ đúng
+  const gp = load('data/gameplay.json');
+  for (const id of Object.keys(gp.pills)) if (id.startsWith('item.')) must(id, 'gameplay.json pills');
+  const stageIds = new Set(gp.player.stages.map((s) => s.id));
+  for (const [st, realm] of Object.entries(gp.major_realm_first_stage)) {
+    if (!stageIds.has(st)) errors.push(`gameplay.json: tầng "${st}" không có`);
+    must(realm, 'gameplay.json major_realm_first_stage');
+  }
+  for (const q of load('data/items/quest-items.json').items) if (q.drop.from) must(q.drop.from, q.id);
   return errors;
 }

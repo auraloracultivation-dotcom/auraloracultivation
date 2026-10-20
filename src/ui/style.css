@@ -434,3 +434,31 @@ img { image-rendering: pixelated; }
   color: var(--gold); text-shadow: 0 1px 2px #000, 0 0 3px #000; pointer-events: none;
 }
 .bag [hidden] { display: none !important; }
+
+/* ---- Bảng Nhiệm vụ / Tu luyện (giao diện tạm, cùng kiểu Kho) ---- */
+.sheet .bag-tabs button { font-size: 12px; padding: 7px 2px; }
+.sheet-body {
+  flex: 1 1 0; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 2px;
+  -webkit-overflow-scrolling: touch; overscroll-behavior: contain; touch-action: pan-y;
+}
+.sheet-body button { touch-action: manipulation !important; }
+.sheet .row { padding: 9px 10px; border-radius: 8px; background: #1b1430; border: 1px solid #3a2c52; color: var(--text); font-size: 13px; }
+.sheet .row p { margin: 4px 0; color: #d9d0e6; line-height: 1.35; }
+.sheet .row ul { margin: 4px 0; padding-left: 18px; }
+.sheet .row li { margin: 3px 0; }
+.sheet .row li.ok { color: #7dff8a; }
+.sheet .row-h { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.sheet .row-h b { color: var(--gold); font-size: 14px; }
+.sheet .row-h em { font-style: normal; font-size: 11px; color: var(--muted); text-align: right; }
+.sheet .rw { font-size: 12px; color: #f2d9a8 !important; }
+.sheet .need span { white-space: nowrap; }
+.sheet .need .ok { color: #7dff8a; }
+.sheet .need .no { color: #ff8a7a; }
+.sheet .grid2 { display: grid; grid-template-columns: 1fr auto; gap: 3px 12px; }
+.sheet .grid2 b { color: var(--gold); text-align: right; }
+.sheet .row.done { opacity: .7; }
+.bag-act.sm { padding: 6px 12px; font-size: 12px; margin-top: 4px; }
+.bag-act:disabled { filter: grayscale(1); opacity: .45; cursor: default; }
+.sheet .tier-luc { border-color: #4caf50; } .sheet .tier-lam { border-color: #3d8bff; } .sheet .tier-tim { border-color: #b05cff; }
+.sheet .tier-cam { border-color: #ff9a3d; } .sheet .tier-vang { border-color: #ffd23a; } .sheet .tier-do { border-color: #ff3b30; }
+.sheet .tier-den { border-color: #ff3b30; background: #0d0a10; }
