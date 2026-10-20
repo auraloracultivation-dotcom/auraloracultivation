@@ -7,7 +7,7 @@ import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlas
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 import {
   showLoading, showLogin, shouldForgetSession, showCreateCharacter, showNewPassword,
-  showConfirm, showFatal, toast, createHud, showCharacterPanel, showSettings, showWorldMap,
+  showConfirm, showFatal, toast, createHud, showCharacterPanel, showSettings, showWorldMap, drawRoundMap,
 } from './ui/index.js';
 
 async function boot() {
@@ -107,7 +107,7 @@ async function boot() {
     onOpenMap() {
       showWorldMap({
         zoneName: zoneDef.name,
-        draw: (canvas, radiusTiles) => map.drawMinimap(canvas, me.x, me.y, radiusTiles, markers()),
+        draw: (off, radiusTiles) => map.drawMinimap(off, me.x, me.y, radiusTiles, markers()),
       });
     },
     // Nút hành động. Chỉ "Chém thường" mở; còn lại khoá tới khi có hệ thống kỹ năng.
@@ -156,7 +156,10 @@ async function boot() {
     others.update(dt);
     if (me.slashT > 0) me.slashT -= dt;
     miniTimer -= dt;
-    if (miniTimer <= 0) { miniTimer = 0.25; map.drawMinimap(hud.miniCanvas, me.x, me.y, 40, markers()); }
+    if (miniTimer <= 0) {
+      miniTimer = 0.25;
+      drawRoundMap(hud.miniCanvas, (off) => map.drawMinimap(off, me.x, me.y, 40, markers()));
+    }
     followCamera(cam, me, screen, map.width, map.height, zoneDef.wrap);
   }
 

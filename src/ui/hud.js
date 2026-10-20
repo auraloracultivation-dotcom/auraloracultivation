@@ -5,6 +5,16 @@
 //   dưới phải  — nút tấn công + ô kỹ năng, Phi hành, Tốc biến
 // Khung lấy từ assets/ui (thiết kế chủ dự án).
 import { escapeHtml, toast } from './screens.js';
+import { crispWidth } from './stage.js';
+import { setupRoundCanvas } from './compass.js';
+
+// Đặt kích thước nút/khung theo bội số nguyên điểm ảnh gốc → viền sắc, đều
+const crisp = (node, srcW, maxCss, square = false) => {
+  const { width, pixelated } = crispWidth(srcW, maxCss);
+  node.style.width = `${width}px`;
+  if (square) node.style.height = `${width}px`;
+  node.style.imageRendering = pixelated ? 'pixelated' : 'auto';
+};
 
 const FRAME = { w: 495, h: 190 }; // frames/khung-nhan-vat.png
 const pct = (x, y, w, h) =>
@@ -28,6 +38,7 @@ export function createHud(opts) {
       <div class="pi-realm" style="${pct(30, 160, 164, 26)}" data-realm></div>
     </div>`;
   root.appendChild(info);
+  crisp(info, 495, Math.min(250, window.innerWidth * 0.44));
   info.querySelector('[data-name]').textContent = player.name;
   info.querySelector('[data-realm]').textContent = player.realmName;
   drawAvatar(info.querySelector('.pi-avatar canvas'), player.drawAvatar);
@@ -42,7 +53,7 @@ export function createHud(opts) {
       <button type="button" class="icon-btn glow" data-settings aria-label="Cài đặt"><img src="assets/ui/icons/cai-dat.png" alt=""></button>
     </div>
     <div class="tr-mini">
-      <button type="button" class="minimap" aria-label="Mở bản đồ"><canvas width="96" height="96"></canvas></button>
+      <button type="button" class="minimap" aria-label="Mở bản đồ"><canvas></canvas></button>
       <div class="zone-tag"><b>${escapeHtml(zoneName)}</b><span>Tuyến ${line} <em data-online></em></span></div>
     </div>`;
   root.appendChild(right);
@@ -50,7 +61,9 @@ export function createHud(opts) {
   right.querySelector('[data-map]').addEventListener('click', opts.onOpenMap);
   right.querySelector('.minimap').addEventListener('click', opts.onOpenMap);
   const online = right.querySelector('[data-online]');
-  const miniCanvas = right.querySelector('.minimap canvas');
+  const miniCanvas = setupRoundCanvas(right.querySelector('.minimap canvas'), 84);
+  crisp(right.querySelector('.zone-tag'), 308, 130);
+  right.querySelectorAll('.icon-btn, .icon-round').forEach((b) => crisp(b, 65, 36, true));
 
   // ---- Dưới phải: tấn công + kỹ năng ----
   const pad = document.createElement('div');
@@ -62,8 +75,10 @@ export function createHud(opts) {
       <span>${escapeHtml(a.name)}</span>
     </button>`).join('');
   root.appendChild(pad);
+  const SIZE = { attack: 92, s1: 56, s2: 56, s3: 56, fly: 46, blink: 46 };
   for (const a of actions) {
     const btn = pad.querySelector(`[data-act="${a.id}"]`);
+    crisp(btn, 84, SIZE[a.slot], true); // khung tròn frames/o-tron.png 84×84
     btn.addEventListener('pointerdown', (e) => {
       e.preventDefault();
       if (a.locked) { toast(`${a.name}: chưa mở`); return; }
@@ -78,6 +93,7 @@ export function createHud(opts) {
   bar.innerHTML = `<button class="round-btn glow" type="button" aria-label="Chat">Chat</button>
     <input class="field framed" type="text" maxlength="${maxChars}" placeholder="Nói gì đó…" hidden>`;
   root.appendChild(bar);
+  crisp(bar.querySelector('.round-btn'), 122, 56, true);
   const input = bar.querySelector('input');
   const open = bar.querySelector('button');
   const send = () => {

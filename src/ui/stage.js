@@ -35,3 +35,22 @@ export function el(html) {
   t.innerHTML = html.trim();
   return t.content.firstElementChild;
 }
+
+// Kích thước hiển thị sắc nét cho ảnh khung pixel: mỗi điểm ảnh gốc = số nguyên điểm màn hình.
+// Trả về chiều rộng CSS lớn nhất ≤ maxCss thoả điều đó; nếu ảnh gốc to hơn chỗ trống thì thu nhỏ mượt.
+export function crispWidth(srcW, maxCss) {
+  const dpr = window.devicePixelRatio || 1;
+  const k = Math.floor((maxCss * dpr) / srcW);
+  const w = (k * srcW) / dpr;
+  // bội số nguyên nhỏ hơn hẳn chỗ trống (nút nhỏ) → thu nhỏ mượt cho đúng cỡ thay vì quá bé
+  return k >= 1 && w >= maxCss * 0.8 ? { width: w, pixelated: true } : { width: maxCss, pixelated: false };
+}
+
+export function applyCrisp(node, srcW, maxCss) {
+  const { width, pixelated } = crispWidth(srcW, maxCss);
+  node.style.width = `${width}px`;
+  node.style.imageRendering = pixelated ? 'pixelated' : 'auto';
+  return width;
+}
+
+export const isPortrait = () => window.innerHeight > window.innerWidth;

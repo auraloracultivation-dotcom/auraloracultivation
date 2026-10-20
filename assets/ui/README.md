@@ -23,3 +23,13 @@
 - `icons/tan-cong.png`, `icons/phi-hanh.png`, `icons/toc-bien.png`, `icons/khoa.png`, `icons/ban-do.png`
 
 Dự phòng: `bg/den-vang-dang-nhap.webp`, `bg/den-vang-dang-tai.webp` (bộ đen–vàng).
+
+## Bổ sung 2026-10-20 (tấm dọc `sheet6-doc-tim`, mẫu `mau-cai-dat`)
+- `bg/tim-dang-nhap-doc.webp`, `bg/tim-dang-tai-doc.webp` — nền đăng nhập / tải cho màn dọc
+- `icons/dong.png` (✕ đóng bảng), `icons/dong-y.png` (✓), `icons/cong.png` (+), `icons/tru.png` (−)
+- `icons/am-thanh.png`, `icons/nhac-nen.png`, `icons/ngon-ngu.png`, `icons/dang-xuat.png` — cắt từ ảnh mẫu Cài đặt
+- `frames/o-tron.png` — ô tròn nút tấn công / kỹ năng
+- Bản đồ nhỏ và bản đồ thế giới: viền la bàn vẽ bằng code (`src/ui/compass.js`) cho sắc nét mọi cỡ; `frames/minimap-tron.png` không còn dùng.
+
+## Độ sắc nét
+Khung hiển thị theo **bội số nguyên điểm ảnh gốc** (`crispWidth` trong `src/ui/stage.js`); nút nhỏ hơn bội số thì thu nhỏ mượt.
