@@ -1,23 +1,23 @@
 {
-  "_note": "Loại địa hình. 'color' là màu điểm ảnh trong ảnh bản đồ data/zones/*.map.png (mỗi điểm = 1 ô). 'tier' = cấp quái sau này (1 yếu nhất). 'tiles' = [tên ô trong data/tiles.json, trọng số xuất hiện].",
+  "_note": "Loại địa hình. 'color' là màu điểm ảnh trong ảnh bản đồ data/zones/*.map.png (mỗi điểm = 1 ô). 'tier' = cấp quái sau này (1 yếu nhất). 'tiles' = [tên ô trong data/tiles.json, trọng số xuất hiện]. 'grid' = mỗi ô bản đồ chia thành grid×grid ô vẽ (đất 2 → ô nhỏ 1/4, nước 1).",
   "types": [
-    { "id": "co", "name": "Đồng cỏ", "color": [110, 190, 80], "walk": true, "speed": 1, "tier": 1,
+    { "id": "co", "name": "Đồng cỏ", "color": [110, 190, 80], "walk": true, "speed": 1, "tier": 1, "grid": 2,
       "tiles": [["co-1", 10], ["co-2", 1], ["co-3", 2], ["co-4", 1], ["co-5", 1]] },
-    { "id": "cat", "name": "Cát vàng", "color": [232, 196, 130], "walk": true, "speed": 1, "tier": 2,
+    { "id": "cat", "name": "Cát vàng", "color": [232, 196, 130], "walk": true, "speed": 1, "tier": 2, "grid": 2,
       "tiles": [["cat-1", 3], ["cat-2", 4], ["cat-3", 3], ["cat-4", 1], ["cat-5", 1]] },
-    { "id": "da_lat", "name": "Đá lát cổ", "color": [200, 200, 205], "walk": true, "speed": 1, "tier": 3,
+    { "id": "da_lat", "name": "Đá lát cổ", "color": [200, 200, 205], "walk": true, "speed": 1, "tier": 3, "grid": 2,
       "tiles": [["da-lat-1", 6], ["da-lat-2", 2], ["da-lat-3", 2], ["da-lat-4", 1], ["da-lat-5", 2]] },
-    { "id": "tuyet", "name": "Băng tuyết", "color": [235, 245, 255], "walk": true, "speed": 1, "tier": 4,
+    { "id": "tuyet", "name": "Băng tuyết", "color": [235, 245, 255], "walk": true, "speed": 1, "tier": 4, "grid": 2,
       "tiles": [["tuyet-1", 4], ["tuyet-2", 3], ["tuyet-3", 2], ["tuyet-4", 2], ["tuyet-5", 1]] },
-    { "id": "soi", "name": "Sỏi đá", "color": [140, 140, 145], "walk": true, "speed": 1, "tier": 5,
+    { "id": "soi", "name": "Sỏi đá", "color": [140, 140, 145], "walk": true, "speed": 1, "tier": 5, "grid": 2,
       "tiles": [["soi-1", 4], ["soi-2", 3], ["soi-3", 3], ["soi-4", 1], ["soi-5", 1]] },
-    { "id": "dat_den", "name": "Hắc thổ", "color": [80, 65, 65], "walk": true, "speed": 1, "tier": 6,
+    { "id": "dat_den", "name": "Hắc thổ", "color": [80, 65, 65], "walk": true, "speed": 1, "tier": 6, "grid": 2,
       "tiles": [["dat-den-1", 5], ["dat-den-2", 4], ["dat-den-3", 4], ["dat-den-5", 1]] },
-    { "id": "dung_nham", "name": "Dung nham", "color": [220, 70, 30], "walk": true, "speed": 0.7, "tier": 6,
+    { "id": "dung_nham", "name": "Dung nham", "color": [220, 70, 30], "walk": true, "speed": 0.7, "tier": 6, "grid": 2,
       "tiles": [["dat-den-4", 1]] },
-    { "id": "nuoc_sau", "name": "Nước sâu", "color": [40, 110, 220], "walk": false, "speed": 0, "tier": 0,
+    { "id": "nuoc_sau", "name": "Nước sâu", "color": [40, 110, 220], "walk": false, "speed": 0, "tier": 0, "grid": 1,
       "tiles": [["nuoc-sau-1", 5], ["nuoc-sau-2", 5], ["nuoc-sau-3", 3], ["nuoc-sau-4", 1], ["nuoc-sau-5", 1]] },
-    { "id": "nuoc_nong", "name": "Nước nông", "color": [90, 210, 210], "walk": true, "speed": 0.5, "tier": 0,
+    { "id": "nuoc_nong", "name": "Nước nông", "color": [90, 210, 210], "walk": true, "speed": 0.5, "tier": 0, "grid": 1,
       "tiles": [["nuoc-ngoc-2", 5], ["nuoc-ngoc-1", 2], ["nuoc-ngoc-3", 2], ["nuoc-ngoc-4", 1], ["nuoc-ngoc-5", 1]] }
   ]
 }
