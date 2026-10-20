@@ -66,7 +66,7 @@
   "breath_scale": 0.05,
   "step_scale": 0.08,
   "attack_scale": 0.7,
-  "attack_reach_cw": 0.16,
+  "attack_reach_cw": 0.1,
   "drawn_as": {
    "nam": "trai",
    "nam-chat": "phai",
@@ -74,6 +74,8 @@
    "chi": "phai",
    "mo": "phai"
   },
-  "attack_hand": "tay-phia-truoc"
+  "attack_hand": "tay-phia-truoc",
+  "attack_raise_ch": 0.035,
+  "attack_glow": false
  }
 }
