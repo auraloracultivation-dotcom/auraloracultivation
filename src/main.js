@@ -7,7 +7,7 @@ import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlas
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 import {
   showLoading, showLogin, shouldForgetSession, showCreateCharacter, showNewPassword,
-  showConfirm, showFatal, toast, createHud, showCharacterPanel, showSettings, showWorldMap, drawRoundMap,
+  showConfirm, showFatal, toast, createHud, showCharacterPanel, showSettings, showWorldMap, drawRoundMap, createStatsDock,
 } from './ui/index.js';
 
 async function boot() {
@@ -96,10 +96,6 @@ async function boot() {
     onOpenCharacter() {
       showCharacterPanel({
         name: me.name, realmName, drawAvatar: drawMe,
-        stats: [ // chờ bảng chỉ số cơ bản (đợt 1) — hiện "—"
-          { label: 'Khí huyết' }, { label: 'Linh lực' }, { label: 'Tu vi' },
-          { label: 'Công' }, { label: 'Thủ' }, { label: 'Tốc độ' }, { label: 'Bạo kích' }, { label: 'Né tránh' },
-        ],
         equipment: [],
       });
     },
@@ -130,6 +126,7 @@ async function boot() {
     ],
   });
   hud.setOnline(others.list.size + 1, maxPlayers);
+  createStatsDock({ getValue: () => null }); // chờ bảng chỉ số cơ bản (đợt 1)
   hud.setBar('hp', 0, 0); hud.setBar('mp', 0, 0); hud.setBar('xp', 0, 0); // chờ dữ liệu chỉ số
   let miniTimer = 0;
   window.addEventListener('keydown', (e) => { // máy tính: phím cách = tấn công

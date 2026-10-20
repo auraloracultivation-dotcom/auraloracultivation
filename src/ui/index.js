@@ -5,3 +5,4 @@ export {
 export { createHud } from './hud.js';
 export { showCharacterPanel, showSettings, showWorldMap } from './panels.js';
 export { drawRoundMap } from './compass.js';
+export { createStatsDock, STATS } from './stats.js';
