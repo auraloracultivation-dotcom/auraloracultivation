@@ -1,0 +1,15 @@
+{
+ "_ghi_chu": "Sửa tay sau khi cắt tự động (art_pack.py áp vào art.json). flip = chuôi vũ khí nằm ở đầu ngược với đoán tự động. pair = hình gồm 2 vũ khí bắt chéo.",
+ "art.weapon.001": {"flip": true},
+ "art.weapon.007": {"flip": true},
+ "art.weapon.021": {"flip": true, "pair": true},
+ "art.weapon.022": {"flip": true, "pair": true},
+ "art.weapon.023": {"flip": true, "pair": true},
+ "art.weapon.024": {"pair": true},
+ "art.weapon.025": {"pair": true},
+ "art.weapon.026": {"flip": true, "pair": true},
+ "art.weapon.027": {"pair": true},
+ "art.weapon.028": {"pair": true},
+ "art.weapon.029": {"pair": true},
+ "art.weapon.030": {"pair": true}
+}

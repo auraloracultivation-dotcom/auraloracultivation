@@ -13,7 +13,7 @@ Mỗi thư mục = một ô hành trang ở bảng Nhân vật (8 ô). Ảnh g�
 | `linh-thu/` | Linh thú | phải 3 |
 | `day-chuyen/` | Dây chuyền | phải 4 |
 
-Thiết kế, tỉ lệ, cách mặc lên người: theo chủ dự án, sẽ ghi vào đây khi chốt.
+Cách ghép lên người, điểm neo, quy trình cắt: `docs/06-TRANG-BI.md`. Thêm `phap-tuong/` (pháp tướng, chưa thuộc ô nào).
 
-## Tên file (trùng ID dữ liệu, ID đã phát hành không bao giờ đổi)
-`<thư mục>/<id>.png` (hình) + `<thư mục>/<id>.icon.png` (icon).
+## Tên file (mã đã phát hành không bao giờ đổi)
+`<thư mục>/art.<loại>.<số>.webp` — mã hình; vật phẩm `item.*` trỏ tới mã hình (xem `docs/06-TRANG-BI.md`).

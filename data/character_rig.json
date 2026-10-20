@@ -1,0 +1,60 @@
+{
+ "_ghi_chu": "Thông số lắp ráp + chuyển động nhân vật kiểu My Heroes (đã duyệt trên bản thử 20/10/2026). Đơn vị: tỉ lệ theo chiều cao nhân vật (CH) hoặc bề ngang hình trang phục (CW), góc = độ (0 = chỉ lên, dương = theo chiều kim đồng hồ), thời gian = giây.",
+ "body": {
+  "neck": 0.72,
+  "head_overlap": 0.81,
+  "feet_size_cw": 0.075,
+  "feet_spread_cw": 0.095,
+  "hand_scale": 1.0
+ },
+ "walk": {
+  "step_rate": 7.4,
+  "body_bob_ch": 0.023,
+  "head_bob_ch": 0.037,
+  "head_lag": 0.55,
+  "squash": 0.05,
+  "hand_swing_px": 2.2
+ },
+ "idle": {
+  "rate": 2.2,
+  "body_bob_ch": 0.005,
+  "head_bob_ch": 0.011,
+  "head_lag": 0.6
+ },
+ "weapon": {
+  "length_ch": 2.29,
+  "grip_x_cw": -0.22,
+  "grip_y_body": 0.25,
+  "rest_deg": -40,
+  "edge_forward": true
+ },
+ "attack": {
+  "duration": 0.42,
+  "spin": "half",
+  "pivot": "grip",
+  "stay_behind": true,
+  "body_dip": 0.14,
+  "head_drop_px": 8,
+  "hand": "phia-dang-danh-chi-ve-truoc"
+ },
+ "fly": {
+  "mode": "ngu-kiem",
+  "speed_mul": 1.5,
+  "lift_ch": 0.19,
+  "weapon_deg": 90,
+  "blend_rate": 4
+ },
+ "wing": {
+  "width_cw": 1.55,
+  "anchor": "bottom-at-feet"
+ },
+ "phap_tuong": {
+  "height_ch": 2.4,
+  "alpha": 0.9,
+  "anchor": "bottom-at-feet"
+ },
+ "mask": {
+  "width_cw": 0.62,
+  "face_y": 0.55
+ }
+}
