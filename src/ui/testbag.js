@@ -7,8 +7,22 @@ export function createTestBag(userId, defs) {
   try { st = { ...st, ...JSON.parse(localStorage.getItem(key) || '{}') }; } catch { /* hỏng thì bỏ */ }
   st.items = st.items.filter((id) => byId.has(id));
   for (const [sl, id] of Object.entries(st.equipped)) if (!byId.has(id)) delete st.equipped[sl];
+  // Tân thủ: lần đầu vào game nhận ngẫu nhiên 1 trong 6 bộ hệ (đạo bào + pháp kiếm) và mặc sẵn
+  if (!st.starter) {
+    const he = 1 + Math.floor(Math.random() * 6);
+    for (const kind of ['outfit', 'weapon']) {
+      const id = `item.${kind}.he.${he}`, it = byId.get(id);
+      if (!it) continue;
+      if (!st.items.includes(id)) st.items.push(id);
+      if (!st.equipped[it.slot]) st.equipped[it.slot] = id;
+    }
+    st.starter = he;
+    st.justGot = he;
+  }
   const save = () => { try { localStorage.setItem(key, JSON.stringify(st)); } catch { /* chặn lưu: bỏ qua */ } };
+  save();
   return {
+    starterGift() { const he = st.justGot; if (he) { delete st.justGot; save(); } return he ? byId.get(`item.outfit.he.${he}`) : null; },
     entries: () => st.items.map((id) => ({ item: byId.get(id), count: 1 })),
     isEquipped: (it) => st.equipped[it.slot] === it.id,
     equippedItem: (slot) => byId.get(st.equipped[slot]),
