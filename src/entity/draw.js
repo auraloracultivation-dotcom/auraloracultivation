@@ -67,3 +67,27 @@ export function drawLabel(ctx, p, now, scale = 1) {
     ctx.fillText(p.chat, x, by + 6, w - 4);
   }
 }
+
+// Hiệu ứng chém thường (nhẹ, chỉ hình ảnh — sát thương do máy chủ quyết định từ Mốc 3)
+export function drawSlash(ctx, p, scale = 1) {
+  if (!p.slashT || p.slashT <= 0) return;
+  const k = 1 - p.slashT / 0.22; // 0 → 1
+  const r = 20 * scale;
+  const cx = p.x + p.facing * 6 * scale, cy = p.y - 12 * scale;
+  const a0 = p.facing > 0 ? -1.2 : Math.PI + 1.2;
+  const sweep = 2.2 * k * (p.facing > 0 ? 1 : -1);
+  ctx.save();
+  ctx.globalAlpha = 1 - k * 0.7;
+  ctx.strokeStyle = '#fff6d6';
+  ctx.lineWidth = 3 * scale;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, a0, a0 + sweep, p.facing < 0);
+  ctx.stroke();
+  ctx.strokeStyle = 'rgba(242,199,127,.8)';
+  ctx.lineWidth = 1.2 * scale;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r - 3 * scale, a0, a0 + sweep, p.facing < 0);
+  ctx.stroke();
+  ctx.restore();
+}

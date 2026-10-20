@@ -16,5 +16,10 @@
 - `frames/nut-vang.png`, `frames/nut-toi.png` — nút chính / phụ
 - `frames/nut-tron-may.png` — nút tròn (Chat)
 - `icons/cai-dat.png` — nút cài đặt
+- `frames/khung-nhan-vat.png` — khung nhân vật trên trái (ảnh đại diện + 3 thanh)
+- `frames/minimap-tron.png` — bản đồ nhỏ (cắt bằng `tools/ui_crop.py`)
+- `frames/bang-nhan-vat.png`, `frames/bang-cai-dat.png`, `frames/bang-ban-do.png` — bảng Nhân vật, Cài đặt, Bản đồ
+- `frames/o-ky-nang-003.png` — ô nút tấn công / kỹ năng
+- `icons/tan-cong.png`, `icons/phi-hanh.png`, `icons/toc-bien.png`, `icons/khoa.png`, `icons/ban-do.png`
 
 Dự phòng: `bg/den-vang-dang-nhap.webp`, `bg/den-vang-dang-tai.webp` (bộ đen–vàng).
