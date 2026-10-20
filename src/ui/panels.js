@@ -69,16 +69,15 @@ const SLOTS = [
   { x: 122, y: 776, name: 'Nhẫn' }, { x: 696, y: 258, name: 'Cánh' }, { x: 696, y: 429, name: 'Pháp tướng' },
   { x: 696, y: 604, name: 'Linh thú' }, { x: 696, y: 776, name: 'Dây chuyền' },
 ];
+const CHAR_AREA = [322, 205, 352, 600]; // vùng giữa giữa hai cột ô, dưới tiêu đề, trên hai thanh tên
 const NAME_BARS = [[392, 819, 270, 57], [392, 886, 270, 58]]; // phần chữ của 2 thanh (sau biểu tượng người / sen)
 
-export function showCharacterPanel({ name, realmName, equipment, drawAvatar }) {
+export function showCharacterPanel({ name, realmName, equipment, portrait }) {
   const maxW = () => Math.min(vw() * 0.96, 460, (vh() * 0.84 * CHAR_FRAME.w) / CHAR_FRAME.h);
   openModal('modal-char', CHAR_FRAME, maxW, ({ at }) => {
-    const av = at('<canvas class="char-avatar" width="96" height="128"></canvas>', 400, 470, 190, 253);
-    const ctx = av.getContext('2d');
-    ctx.imageSmoothingEnabled = false;
-    ctx.translate(48, 124); ctx.scale(3.2, 3.2);
-    drawAvatar(ctx);
+    // Lớp: nền khung (dưới cùng) → nhân vật (giới hạn trong vùng giữa, không tràn ra khung) → ô trang bị (trên cùng)
+    const av = at('<canvas class="char-avatar"></canvas>', CHAR_AREA[0], CHAR_AREA[1], CHAR_AREA[2], CHAR_AREA[3]);
+    requestAnimationFrame(() => fitPortrait(av, portrait()));
 
     SLOTS.forEach((s, i) => {
       const item = equipment[i];
@@ -89,6 +88,17 @@ export function showCharacterPanel({ name, realmName, equipment, drawAvatar }) {
     at(`<div class="char-line gold">${escapeHtml(name)}</div>`, ...NAME_BARS[0]);
     at(`<div class="char-line">${escapeHtml(realmName)}</div>`, ...NAME_BARS[1]);
   });
+}
+
+// Vẽ ảnh nhân vật vừa khít canvas (giữ tỉ lệ, chân đặt ở đáy, căn giữa), nét theo mật độ điểm ảnh
+function fitPortrait(cv, img) {
+  const r = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+  cv.width = Math.max(1, Math.round(r.width * dpr)); cv.height = Math.max(1, Math.round(r.height * dpr));
+  const g = cv.getContext('2d');
+  const k = Math.min(cv.width / img.width, cv.height / img.height);
+  const w = img.width * k, h = img.height * k;
+  g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
+  g.drawImage(img, (cv.width - w) / 2, cv.height - h, w, h);
 }
 
 // ---------- Cài đặt: khung + nút vẽ sẵn của chủ dự án (frames/bang-cai-dat-v2.png, tách bằng tools/panel_from_mockup.py) ----------

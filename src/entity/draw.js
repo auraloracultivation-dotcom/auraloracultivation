@@ -114,3 +114,26 @@ export function drawSlash(ctx, p, scale = 1) {
   ctx.stroke();
   ctx.restore();
 }
+
+// Ảnh chân dung tĩnh của nhân vật (bảng Nhân vật, ảnh đại diện): vẽ ra canvas tạm rồi cắt sát phần có hình.
+// body = true: chỉ người (bỏ pháp tướng, cánh, vũ khí) — dùng cho ảnh đại diện tròn.
+export function renderPortrait(look, { body = false, zoom = 4 } = {}) {
+  const l = body && look ? { outfit: look.outfit } : look;
+  const size = 220 * zoom;
+  const c = document.createElement('canvas');
+  c.width = size; c.height = size;
+  const g = c.getContext('2d');
+  g.translate(size / 2, size * 0.78);
+  g.scale(zoom, zoom);
+  drawPlayer(g, { x: 0, y: 0, facing: 1, walkT: 0, moving: false, isLocal: true, look: l?.outfit || l?.weapon || l?.wing || l?.avatar ? l : null, rig: { T: 0, ph: 0, flyT: 0, atk: -1, last: performance.now() / 1000 } }, 1);
+  const d = g.getImageData(0, 0, size, size).data;
+  let x0 = size, y0 = size, x1 = -1, y1 = -1;
+  for (let y = 0; y < size; y += 2) for (let x = 0; x < size; x += 2) {
+    if (d[(y * size + x) * 4 + 3] > 8) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+  }
+  if (x1 < 0) return c;
+  const out = document.createElement('canvas');
+  out.width = x1 - x0 + 3; out.height = y1 - y0 + 3;
+  out.getContext('2d').drawImage(c, -x0 + 1, -y0 + 1);
+  return out;
+}

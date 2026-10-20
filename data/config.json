@@ -6,7 +6,9 @@
     "radius_px": 5,
     "_note_max_speed": "max_speed đồng bộ với c_max_speed trong hàm SQL public.save_position; walk_speed phải nhỏ hơn",
     "sprite_scale": 0.75,
-    "_note_sprite": "Nhân vật vẽ ở 75% kích thước gốc (yêu cầu chủ dự án 2026-10-20)"
+    "_note_sprite": "Nhân vật vẽ ở 75% kích thước gốc (yêu cầu chủ dự án 2026-10-20)",
+    "fly_speed_px_per_s": 195,
+    "_note_fly": "Ngự kiếm: bay qua mọi địa hình. Phải nhỏ hơn max_speed (máy chủ kiểm tốc độ, không kiểm địa hình)"
   },
   "tile_size": 32,
   "start_zone": "zone.start",
