@@ -120,7 +120,7 @@ function saveSettings(s) {
   try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); } catch { /* trình duyệt chặn lưu: bỏ qua */ }
 }
 
-export function showSettings({ onLogout, onCode }) {
+export function showSettings({ onLogout, onCode, onChange }) {
   const s = loadSettings();
   const maxW = () => Math.min(vw() * 0.94, 460, (vh() * 0.8 * SET_FRAME.w) / SET_FRAME.h);
   openModal('modal-settings', SET_FRAME, maxW, ({ at, close, col }) => {
@@ -130,7 +130,7 @@ export function showSettings({ onLogout, onCode }) {
         btn.classList.toggle('off', !s[key]);
         btn.setAttribute('aria-pressed', String(s[key]));
       };
-      btn.addEventListener('click', () => { s[key] = !s[key]; saveSettings(s); paint(); });
+      btn.addEventListener('click', () => { s[key] = !s[key]; saveSettings(s); paint(); onChange?.(s); });
       paint();
     };
     toggle('sound', 'Âm thanh');

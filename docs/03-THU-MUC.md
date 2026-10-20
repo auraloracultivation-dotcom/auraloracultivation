@@ -2,13 +2,14 @@
 
 ```
 data/        Định nghĩa nội dung (JSON) — nguồn sự thật
-  config.json, items/, monsters/, skills/, zones/
+  config.json, audio.json, items/, monsters/, skills/, zones/
 src/
   core/      Vòng lặp game, input, camera, nạp dữ liệu. Không chứa luật gameplay.
   net/       Toàn bộ giao tiếp Supabase (đăng nhập, RPC, Realtime). Module khác KHÔNG gọi Supabase trực tiếp.
   map/       Bản đồ, ô, va chạm, zone.
   entity/    Nhân vật trên màn hình: người chơi (mình + người khác, nội suy), sau này NPC/quái.
-  combat/    Hiển thị chiến đấu. Kết quả lấy từ máy chủ.
+  combat/    Hiển thị chiến đấu. Kết quả lấy từ máy chủ. (Tạm: trạng thái kỹ năng Pháp tướng phía máy khách.)
+  audio/     Nhạc nền + tiếng hiệu ứng (Web Audio). Danh sách file ở data/audio.json.
   ui/        Màn hình, menu, túi đồ.
 assets/      Sprite theo loại (xem 04-ASSET.md)
 supabase/

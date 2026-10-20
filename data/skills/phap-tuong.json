@@ -1,0 +1,16 @@
+{
+  "id": "skill.phaptuong.basic.001",
+  "name": "Pháp tướng hoá hình",
+  "_ghi_chu": "Phải đeo pháp tướng (ô Pháp tướng) mới dùng được. Bấm để hiện pháp tướng, bấm lần nữa để thu lại. Khi hiện, linh lực giảm liên tục; cạn thì pháp tướng tự tan. THỬ NGHIỆM phía máy khách: linh lực chưa do máy chủ quản lý (Mốc 3 chuyển lên máy chủ).",
+  "mp_max_test": 100,
+  "_note_mp": "Linh lực tối đa tạm thời, chờ bảng chỉ số cơ bản",
+  "mp_drain_per_s": 12,
+  "mp_regen_per_s": 4,
+  "_note_regen": "Hồi linh lực khi KHÔNG hiện pháp tướng",
+  "mp_min_to_activate": 20,
+  "cooldown_s": 1,
+  "appear_s": 2.1,
+  "_note_appear": "Thời gian hoá hình (hiện dần) — khớp cao trào của tiếng hoá hình ở giây 2,1",
+  "vanish_s": 0.5,
+  "sound": "sfx.phaptuong.hoahinh"
+}

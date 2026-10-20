@@ -5,7 +5,7 @@ Chốt qua bản thử chuyển động ngày 2026-10-20. Thông số số học
 ## Ghép nhân vật — các lớp từ sau ra trước
 | Lớp | Nguồn | Ghi chú |
 |---|---|---|
-| Pháp tướng | ô **Pháp tướng** | to, đáy ở chân, sau cùng |
+| Pháp tướng | ô **Pháp tướng** | to, đáy ở chân, sau cùng. **Chỉ hiện khi bấm kỹ năng Pháp tướng** (xem dưới) |
 | Cánh | ô **Cánh** | hào quang/cánh sau lưng, đáy ở chân |
 | Vũ khí | ô **Vũ khí** | ~2,3 lần chiều cao người; chuôi ở hông sau, mũi chĩa lên, ngả 40° ra sau |
 | Chân | code | 2 ô vuông nhỏ, bước so le |
@@ -54,3 +54,12 @@ Danh sách 8 ô và thứ tự trên bảng Nhân vật: `data/equipment/slots.j
 - Vật phẩm: `data/items/items.json` (24 món: đạo bào, pháp kiếm, linh dực, pháp tướng × 6 hệ). Mục Kho: Tất cả, Linh dược, Linh đan, Đan phương, Pháp khí, Công pháp, Trang bị, Khác.
 - Người khác thấy trang bị qua Presence (`look` = mã hình art.*, máy nhận lọc chỉ giữ mã hợp lệ).
 - **Mã thử nghiệm** (Cài đặt → Nhập mã): `data/codes.json` chỉ lưu dấu SHA-256. Đồ nhận được nằm trong kho trên máy (localStorage), CHƯA lưu máy chủ — Mốc 4 chuyển lên máy chủ qua RPC.
+
+## Kỹ năng Pháp tướng (21/10/2026)
+- Đeo pháp tướng vào ô **Pháp tướng** thì chưa hiện. Bấm nút kỹ năng **Pháp tướng** (vòng quạt) → hoá hình: tiếng `sfx.phaptuong.hoahinh`,
+  pháp tướng hiện dần trong `appear_s` (2,1 giây, khớp cao trào của tiếng) rồi loé sáng; nút sáng viền khi đang bật.
+- Khi hiện, **linh lực giảm liên tục** (`mp_drain_per_s`); cạn thì pháp tướng tự tan. Bấm lần nữa để thu lại; tháo pháp tướng cũng thu lại.
+  Khi tắt, linh lực hồi dần (`mp_regen_per_s`); phải có tối thiểu `mp_min_to_activate` mới hoá hình được.
+- Thông số: `data/skills/phap-tuong.json`. Người khác thấy qua Presence (`look.avatar` chỉ gửi khi đang bật) và nghe tiếng nhỏ hơn nếu ở gần.
+- **Thử nghiệm phía máy khách**: linh lực tạm (`mp_max_test`), chưa có bảng chỉ số và chưa do máy chủ quản lý — Mốc 3 chuyển lên máy chủ.
+- Đánh thường khi cầm vũ khí phát tiếng kiếm 0,1 giây `sfx.kiem.chem`.

@@ -1,14 +1,16 @@
 // Điểm khởi động: nối các module lại với nhau. Không chứa luật gameplay chi tiết.
 import { loadJSON, startLoop, createScreen, createCamera, followCamera, createInput, drawStick } from './core/index.js';
 import { createMap, wrapDelta } from './map/index.js';
-import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, loadRig, rigAttack, artInfo, renderPortrait } from './entity/index.js';
+import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, loadRig, rigAttack, artInfo, renderPortrait, avatarFx } from './entity/index.js';
+import { createAudio } from './audio/index.js';
+import { createPhapTuong } from './combat/index.js';
 
 // Luôn lấy code mới nhất (xem sw.js) — tránh lẫn code cũ với dữ liệu mới sau mỗi lần cập nhật
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 import {
   showLoading, showLogin, shouldForgetSession, showCreateCharacter, showNewPassword,
   showConfirm, showFatal, toast, createHud, showCharacterPanel, showSettings, showWorldMap, drawRoundMap, createStatsDock, enableFastTap,
-  showBag, showCodeDialog,
+  showBag, showCodeDialog, loadSettings, createTestBag,
 } from './ui/index.js';
 
 async function boot() {
@@ -49,11 +51,21 @@ async function boot() {
   const [terrainDef, tilesDef] = await Promise.all([loadJSON('data/terrain.json'), loadJSON('data/tiles.json')]);
   const map = await createMap(zoneDef, terrainDef, tilesDef);
   loading.set(72, 'Nạp trang bị…');
-  const [itemsDef, codesDef] = await Promise.all([loadJSON('data/items/items.json'), loadJSON('data/codes.json'), loadRig(loadJSON)]);
+  const [itemsDef, codesDef, , audioDef, ptDef] = await Promise.all([loadJSON('data/items/items.json'), loadJSON('data/codes.json'),
+    loadRig(loadJSON), loadJSON('data/audio.json'), loadJSON('data/skills/phap-tuong.json')]);
+  const audio = createAudio(audioDef, loadSettings()); // tiếng chỉ phát sau lần chạm đầu (luật trình duyệt)
+  audio.music('bgm.tuchan');
+  const pt = createPhapTuong(ptDef); // kỹ năng Pháp tướng: đeo rồi phải bấm mới hiện, hiện thì hao linh lực
+  avatarFx(ptDef);
   const me = createLocalPlayer(character);
   me.rig = {};
   const bag = createTestBag(character.user_id, itemsDef.items);
-  me.look = bag.look();
+  const lookNow = () => { // đồ đang mặc + pháp tướng (chỉ khi kỹ năng đang bật)
+    const l = { ...bag.look() }, av = bag.equippedItem('phap-tuong');
+    if (pt.active && av) l.avatar = av.art;
+    return Object.keys(l).length ? l : null;
+  };
+  me.look = lookNow();
   me.x = map.wrapX(me.x); me.y = map.wrapY(me.y);
   const others = createRemotePlayers(map.width, map.height);
   const cam = createCamera();
@@ -69,7 +81,12 @@ async function boot() {
     me: { id: me.id, name: me.name, x: me.x, y: me.y, look: me.look },
     handlers: {
       onPresence(state) {
+        const hadAv = new Map([...others.list].map(([id, p]) => [id, !!p.look?.avatar]));
         others.syncPresence(state, me.id);
+        for (const [id, p] of others.list) { // đạo hữu gần mình vừa hoá pháp tướng → nghe nhỏ hơn
+          const near = Math.hypot(wrapDelta(p.x - me.x, map.width), wrapDelta(p.y - me.y, map.height)) < audioDef.remote_sfx_range_px;
+          if (p.look?.avatar && hadAv.get(id) === false && near) audio.play(ptDef.sound, audioDef.remote_sfx_volume);
+        }
         hud?.setOnline(Object.keys(state).length, maxPlayers);
       },
       onMove: (p) => others.onMove(p),
@@ -89,6 +106,7 @@ async function boot() {
 
   function attack() {
     if (me.look?.outfit || me.look?.weapon) rigAttack(me); // nhân vật ghép lớp: đưa tay (và xoay kiếm nếu có)
+    if (me.look?.weapon) audio.play('sfx.kiem.chem'); // tiếng kiếm 0,1 giây lúc chém ra
     if (!me.look?.weapon) me.slashT = 0.22; // tay không: vẫn có vệt chém nhỏ
   }
   // Mã quà tặng: so dấu SHA-256 với data/codes.json (mã gốc không nằm trong mã nguồn)
@@ -102,6 +120,22 @@ async function boot() {
         return `${c.message}: ${n} vật phẩm vào Kho`;
       },
     });
+  }
+
+  const setLook = () => { me.look = lookNow(); zone.setLook(me.look); refreshAvatar(); };
+  let stopPtSound = null;
+  const PT_MSG = { 'no-avatar': 'Chưa đeo pháp tướng (Kho → Trang bị)', cooldown: 'Pháp tướng đang hồi', 'no-mp': 'Linh lực không đủ để hoá hình' };
+  function phapTuongOff(msg) {
+    stopPtSound?.(); stopPtSound = null; // thu lại giữa chừng: tắt dần tiếng hoá hình
+    hud.setActive('phap-tuong', false); setLook();
+    if (msg) toast(msg, 1600);
+  }
+  function usePhapTuong() {
+    const r = pt.toggle(!!bag.equippedItem('phap-tuong'));
+    if (r === 'off') return phapTuongOff();
+    if (r !== 'on') return toast(PT_MSG[r], 1400);
+    stopPtSound = audio.play(ptDef.sound);
+    hud.setActive('phap-tuong', true); setLook();
   }
 
   async function logout() {
@@ -129,12 +163,15 @@ async function boot() {
         equipment: SLOT_ORDER.map((sl) => { const it = bag.equippedItem(sl); return it && { name: it.name, icon: artInfo(it.art)?.file }; }),
       });
     },
-    onSettings() { showSettings({ onLogout: logout, onCode: openCode }); },
+    onSettings() { showSettings({ onLogout: logout, onCode: openCode, onChange: (st) => audio.apply(st) }); },
     onOpenBag() {
       showBag({
         categories: itemsDef.categories, getEntries: bag.entries, isEquipped: bag.isEquipped,
         thumb: (it) => artInfo(it.art)?.file || '', note: 'Đồ thử nghiệm: chỉ lưu trên máy này, chưa lưu máy chủ.',
-        onToggle(it) { bag.toggle(it); me.look = bag.look(); zone.setLook(me.look); refreshAvatar(); },
+        onToggle(it) {
+          bag.toggle(it);
+          if (pt.active && !bag.equippedItem('phap-tuong')) { pt.cancel(); phapTuongOff(); } else setLook(); // tháo pháp tướng → thu lại
+        },
       });
     },
     onBreakthrough() { toast('Đột phá: chờ quy tắc cảnh giới'); },
@@ -150,7 +187,7 @@ async function boot() {
       // vòng quạt 4 kỹ năng (từ trái lên trên)
       { id: 'kiem-khi', name: 'Kiếm khí', icon: S('kiem-khi'), ...fan(184), size: 60, locked: true },
       { id: 'linh-thu', name: 'Kỹ năng linh thú', icon: S('linh-thu'), ...fan(151), size: 60, locked: true },
-      { id: 'phap-tuong', name: 'Kỹ năng pháp tướng', icon: S('phap-tuong'), ...fan(118), size: 60, locked: true },
+      { id: 'phap-tuong', name: 'Kỹ năng pháp tướng', icon: S('phap-tuong'), ...fan(118), size: 60, onUse: () => usePhapTuong() },
       { id: 'khong-che', name: 'Khống chế (Trúc Cơ)', icon: S('khong-che'), ...fan(85), size: 60, locked: true },
       // bên trái bộ kỹ năng
       { id: 'nguyen-anh', name: 'Nguyên Anh: tấn công diện rộng', icon: S('nguyen-anh'), dx: -200, dy: -66, size: 54, locked: true },
@@ -177,7 +214,8 @@ async function boot() {
   createStatsDock({ getValue: () => null }); // chờ bảng chỉ số cơ bản (đợt 1)
   enableFastTap(); // nút bấm được cả khi tay kia đang giữ cần điều khiển
   let targetId = null; // đạo hữu đang được chọn (chạm vào nhân vật bằng tay phải)
-  hud.setBar('hp', 0, 0); hud.setBar('mp', 0, 0); hud.setBar('xp', 0, 0); // chờ dữ liệu chỉ số
+  hud.setBar('hp', 0, 0); hud.setBar('xp', 0, 0); // chờ dữ liệu chỉ số (linh lực: tạm theo kỹ năng Pháp tướng)
+  let shownMp = -1;
   let miniTimer = 0;
   window.addEventListener('keydown', (e) => { // máy tính: phím cách = tấn công
     if (e.code === 'Space' && !(e.target instanceof HTMLInputElement)) { e.preventDefault(); attack(); }
@@ -211,6 +249,9 @@ async function boot() {
       if (wasMoving) { zone.sendMove(me.x, me.y, false, me.flying); saver.saveNow(); sendTimer = sendEvery; }
     }
     saver.tick(dt, me.moving);
+    if (pt.tick(dt) === 'empty') phapTuongOff('Linh lực cạn — pháp tướng tan biến');
+    const mpNow = Math.round(pt.mp);
+    if (mpNow !== shownMp) { shownMp = mpNow; hud.setBar('mp', mpNow, pt.max); }
     others.update(dt);
     for (const tap of input.takeTaps()) { // chạm vào nhân vật khác → chọn / bỏ chọn
       const wx = cam.x + tap.x / screen.scale, wy = cam.y + tap.y / screen.scale;
@@ -316,39 +357,6 @@ function createSaver(me, intervalS, savePosition) {
 async function sha256(text) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
   return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
-}
-
-// Kho THỬ NGHIỆM (Mốc 4 sẽ chuyển lên máy chủ): danh sách mã vật phẩm + đồ đang mặc, lưu localStorage theo tài khoản.
-const LOOK_OF = { 'trang-phuc': 'outfit', 'vu-khi': 'weapon', canh: 'wing', 'phap-tuong': 'avatar' }; // ô Pháp tướng: hiện sau lưng
-function createTestBag(userId, defs) {
-  const key = `tc.bag.${userId}`;
-  const byId = new Map(defs.map((d) => [d.id, d]));
-  let st = { items: [], equipped: {} };
-  try { st = { ...st, ...JSON.parse(localStorage.getItem(key) || '{}') }; } catch { /* hỏng thì bỏ */ }
-  st.items = st.items.filter((id) => byId.has(id));
-  for (const [sl, id] of Object.entries(st.equipped)) if (!byId.has(id)) delete st.equipped[sl];
-  const save = () => { try { localStorage.setItem(key, JSON.stringify(st)); } catch { /* chặn lưu: bỏ qua */ } };
-  return {
-    entries: () => st.items.map((id) => ({ item: byId.get(id), count: 1 })),
-    isEquipped: (it) => st.equipped[it.slot] === it.id,
-    equippedItem: (slot) => byId.get(st.equipped[slot]),
-    toggle(it) {
-      if (!it.slot || !st.items.includes(it.id)) return;
-      if (st.equipped[it.slot] === it.id) delete st.equipped[it.slot]; else st.equipped[it.slot] = it.id;
-      save();
-    },
-    grantAll() {
-      const before = st.items.length;
-      for (const d of defs) if (!st.items.includes(d.id)) st.items.push(d.id);
-      save();
-      return st.items.length - before || st.items.length;
-    },
-    look() {
-      const l = {};
-      for (const [sl, k] of Object.entries(LOOK_OF)) { const it = byId.get(st.equipped[sl]); if (it) l[k] = it.art; }
-      return Object.keys(l).length ? l : null;
-    },
-  };
 }
 
 boot().catch((e) => {

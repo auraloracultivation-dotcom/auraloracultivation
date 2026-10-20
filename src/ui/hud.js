@@ -218,6 +218,8 @@ export function createHud(opts) {
       g.restore();
     },
     setOnline(count, max) { online.textContent = `· ${count}/${max}`; },
+    // Nút đang bật (vd. pháp tướng đang hiện): sáng viền
+    setActive(id, on) { pad.querySelector(`[data-act="${id}"]`)?.classList.toggle('on', !!on); },
     // value/max: số thật khi có dữ liệu chỉ số; chưa có thì max = 0 → hiện thanh đầy, không ghi số
     setBar(kind, value, max) {
       const e = els[kind];

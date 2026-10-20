@@ -8,6 +8,8 @@ const ATTACK_S = 0.42;
 const ease = (t) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
 
 let R = null; // { art, sets, setOfArt, img, built, open }
+const FX = { appear: 2.1, vanish: 0.5 }; // thời gian hoá hình / tan của pháp tướng (giây), lấy từ data/skills/phap-tuong.json
+export function avatarFx(def) { FX.appear = def.appear_s || FX.appear; FX.vanish = def.vanish_s || FX.vanish; }
 
 export async function loadRig(loadJSON) {
   const def = await loadJSON('data/equipment/he6.json');
@@ -150,10 +152,31 @@ export function drawRig(ctx, p, look, drawFallbackBody) {
   }
   ctx.scale(p.facing < 0 ? -1 : 1, 1);
   const hem = it ? it.hem : 1, base0 = it ? -(it.h - it.hem) * k : 0, by = base0 - bL;
-  if (look.avatar) { // pháp tướng
-    const a = R.art[look.avatar], Q = pw(look.avatar).phaptuong;
-    const h = CH * Q.s * Q.sh, w = CH * Q.s * (a.w / a.h) * Q.sw;
-    ctx.globalAlpha = Q.a; ctx.drawImage(R.img[a.id], Q.x * cw - w / 2, Q.y * CH - h + 6 * f - bL * 0.5, w, h); ctx.globalAlpha = 1;
+  // pháp tướng: chỉ hiện khi bật kỹ năng; hoá hình hiện dần + loé sáng, thu lại thì tan dần (xem avatarFx)
+  if (look.avatar) {
+    if (st.avId !== look.avatar) { st.avId = look.avatar; st.avK = st.avK || 0; st.avFlash = 0; }
+    const before = st.avK;
+    st.avK = Math.min(1, st.avK + dt / FX.appear);
+    if (before < 1 && st.avK >= 1) st.avFlash = 1; // đúng cao trào tiếng hoá hình
+    st.avOut = false;
+  } else if (st.avId) {
+    st.avOut = true;
+    st.avK -= dt / FX.vanish;
+    if (st.avK <= 0) { st.avId = null; st.avK = 0; }
+  }
+  if (st.avId) {
+    const a = R.art[st.avId], Q = pw(st.avId).phaptuong, kA = st.avK;
+    const grow = st.avOut ? 1 + (1 - kA) * 0.15 : 0.6 + 0.4 * (1 - (1 - kA) ** 3);
+    const h = CH * Q.s * Q.sh * grow, w = CH * Q.s * (a.w / a.h) * Q.sw * grow;
+    const x = Q.x * cw - w / 2, y = Q.y * CH - h + 6 * f - bL * 0.5;
+    ctx.globalAlpha = Q.a * Math.min(1, kA * 1.3); ctx.drawImage(R.img[a.id], x, y, w, h);
+    const glow = st.avOut ? 0 : Math.max(st.avFlash * 0.8, kA < 1 ? (0.25 + Math.sin(st.T * 14) * 0.15) * kA : 0);
+    if (glow > 0.01) { // ánh sáng cộng màu: lấp lánh khi đang hoá hình, loé mạnh lúc thành hình
+      ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = glow; ctx.drawImage(R.img[a.id], x, y, w, h);
+      ctx.globalCompositeOperation = 'source-over';
+    }
+    st.avFlash = Math.max(0, st.avFlash - dt / 0.45);
+    ctx.globalAlpha = 1;
   }
   if (look.wing) { // cánh
     const a = R.art[look.wing], Q = pw(look.wing).canh;
