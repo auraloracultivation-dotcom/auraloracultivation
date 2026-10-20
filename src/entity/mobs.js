@@ -36,7 +36,16 @@ export function drawMonster(ctx, m, x, y, now) {
   ctx.restore();
 }
 
-// Tên + thanh máu phía trên quái; chọn mục tiêu thì có vòng dưới chân
+// Cảnh giới quái dạng chữ: "lk1–3" → "Luyện Khí 1–3", "tc_so–trung" → "Trúc Cơ Sơ–Trung"
+const REALM = { lk: 'Luyện Khí', tc: 'Trúc Cơ', kd: 'Kết Đan', na: 'Nguyên Anh', ht: 'Hóa Thần' };
+const KY = { so: 'Sơ', trung: 'Trung', hau: 'Hậu' };
+const realmText = (r) => {
+  const big = REALM[r.slice(0, 2)] || r;
+  const rest = r.slice(2).replace(/^_/, '').split('–').map((s) => KY[s] || s).join('–');
+  return `${big} ${rest}`;
+};
+
+// Trên đầu quái: cảnh giới · tên · thanh máu (luôn hiện). Chọn mục tiêu thì có vòng dưới chân.
 export function drawMonsterLabel(ctx, m, x, y, selected, now) {
   if (m.state === 'dead') return;
   const r = m.r, top = y - r * 1.9 - (m.def.rank === 'boss' ? r * 0.5 : 0);
@@ -45,18 +54,19 @@ export function drawMonsterLabel(ctx, m, x, y, selected, now) {
     ctx.strokeStyle = '#ff6a5a'; ctx.lineWidth = 1.2; ctx.globalAlpha = 0.6 + Math.sin(now / 180) * 0.3;
     ctx.beginPath(); ctx.ellipse(x, y + 1, r + 3, r * 0.45 + 2, 0, 0, Math.PI * 2); ctx.stroke(); ctx.globalAlpha = 1;
   }
-  const show = selected || m.hp < m.maxHp || m.def.rank !== 'thuong';
-  if (show) {
-    const w = Math.max(18, r * 2.4);
-    ctx.fillStyle = 'rgba(0,0,0,.6)'; ctx.fillRect(x - w / 2, top, w, 2.5);
-    ctx.fillStyle = m.def.rank === 'boss' ? '#ffb03a' : '#e2483d';
-    ctx.fillRect(x - w / 2, top, (w * m.hp) / m.maxHp, 2.5);
-  }
-  ctx.font = '600 5.5px sans-serif'; ctx.textAlign = 'center'; ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(0,0,0,.8)';
+  const w = Math.max(22, r * 2.6);
+  ctx.fillStyle = 'rgba(0,0,0,.65)'; ctx.fillRect(x - w / 2 - 0.5, top - 0.5, w + 1, 3.5);
+  ctx.fillStyle = m.def.rank === 'boss' ? '#ffb03a' : '#e2483d';
+  ctx.fillRect(x - w / 2, top, (w * m.hp) / m.maxHp, 2.5);
+  ctx.textAlign = 'center'; ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(0,0,0,.8)';
+  ctx.font = '600 5.5px sans-serif';
   const tag = m.def.rank === 'boss' ? '【Boss】' : m.def.rank === 'elite' ? '【Tinh anh】' : '';
   const label = `${tag}${m.def.name}`;
   ctx.fillStyle = m.def.rank === 'boss' ? '#ffd36a' : m.def.rank === 'elite' ? '#d9b8ff' : '#f2efe6';
   ctx.strokeText(label, x, top - 2); ctx.fillText(label, x, top - 2);
+  ctx.font = '600 4.5px sans-serif'; ctx.fillStyle = '#9fe8ff';
+  const rt = realmText(m.def.realm);
+  ctx.strokeText(rt, x, top - 8); ctx.fillText(rt, x, top - 8);
   ctx.restore();
 }
 

@@ -19,5 +19,5 @@ export const savePosition = async () => null;
 
 export async function joinZone({ me, handlers }) {
   setTimeout(() => handlers.onPresence({ [me.id]: [me] }), 0);
-  return { line: 1, sendMove() {}, sendChat() {}, setLook() {}, async leave() {} };
+  return { line: 1, sendMove() {}, sendChat() {}, setLook() {}, setRealm() {}, async leave() {} };
 }

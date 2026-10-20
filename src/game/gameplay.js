@@ -15,7 +15,7 @@ const SKILL_OF_CP = { attack: 'skill.tamphap.luyen-khi.001', 'kiem-khi': 'skill.
 const MAJOR_OF = (id) => ({ lk: 0, tc: 1, kd: 2, na: 3, ht: 4 }[id.slice(0, 2)] ?? 0);
 const rint = (a, b) => Math.round(a + Math.random() * (b - a));
 
-export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio, userId }) {
+export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio, userId, onRealm = () => {} }) {
   const [statsDef, gp, monDef, mats, pills, blanks, awaken, cp, questDef, qItems, realms] = await Promise.all([
     'data/stats.json', 'data/gameplay.json', 'data/monsters/monsters.json', 'data/items/materials.json', 'data/items/pills.json',
     'data/equipment/blanks.json', 'data/equipment/awaken.json', 'data/skills/cong-phap.json', 'data/quests/quests.json',
@@ -41,6 +41,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     pt.setMax(ps.mp);
     hp = Math.min(hp, ps.hp);
     hud.setRealm(progress.stageDef.name + (progress.atPeak() ? ' · đỉnh' : ''));
+    me.realm = progress.stageDef.name; onRealm(me.realm); // hiện trên đầu + gửi cho người khác
     for (const [id, s] of Object.entries(S)) if (s.unlock) hud.setLocked(id, progress.stageIndex(s.unlock) > progress.state.stage);
     views.refreshDock?.();
   }
@@ -216,6 +217,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     for (let i = fx.length - 1; i >= 0; i--) { fx[i].t -= dt; if (fx[i].t <= 0) fx.splice(i, 1); }
     if (!Number.isFinite(hp)) hp = ps.hp;
     hud.setBar('hp', Math.max(0, Math.round(hp)), ps.hp);
+    me.hpR = hp / ps.hp; // thanh máu trên đầu
     hud.setBar('xp', progress.state.exp, progress.stageDef.exp_need);
     progress.state.hp = Math.round(hp);
     progress.tick(dt);

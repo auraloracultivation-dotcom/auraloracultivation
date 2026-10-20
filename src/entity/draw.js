@@ -78,6 +78,18 @@ export function drawLabel(ctx, p, now, scale = 1) {
   ctx.fillStyle = p.isLocal ? '#ffe9a8' : '#ffffff';
   ctx.strokeText(p.name, x, y - 33);
   ctx.fillText(p.name, x, y - 33);
+  // Cảnh giới phía trên tên; thanh khí huyết giữa tên và đầu (người khác chưa gửi HP → chỉ hiện cảnh giới)
+  if (p.realm) {
+    ctx.font = '600 5px sans-serif';
+    ctx.fillStyle = '#9fe8ff';
+    ctx.strokeText(p.realm, x, y - 40);
+    ctx.fillText(p.realm, x, y - 40);
+  }
+  if (p.hpR !== undefined && p.hpR !== null) {
+    const w = 26, by = y - 31.5;
+    ctx.fillStyle = 'rgba(0,0,0,.65)'; ctx.fillRect(x - w / 2 - 0.5, by - 0.5, w + 1, 3.5);
+    ctx.fillStyle = p.hpR > 0.3 ? '#4cd964' : '#ff453a'; ctx.fillRect(x - w / 2, by, w * Math.max(0, Math.min(1, p.hpR)), 2.5);
+  }
 
   if (p.chat && now < p.chatUntil) {
     const w = Math.min(90, ctx.measureText(p.chat).width + 8);

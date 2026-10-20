@@ -50,7 +50,9 @@ export function createRemotePlayers(worldW, worldH) {
         if (key === myId || !metas.length) continue;
         const m = metas[metas.length - 1];
         present.add(key);
-        ensure(key, m.name, m.x, m.y).look = sanitizeLook(m.look);
+        const p = ensure(key, m.name, m.x, m.y);
+        p.look = sanitizeLook(m.look);
+        p.realm = typeof m.realm === 'string' ? m.realm.slice(0, 24) : null; // chỉ hiển thị
       }
       for (const id of list.keys()) if (!present.has(id)) list.delete(id);
     },
