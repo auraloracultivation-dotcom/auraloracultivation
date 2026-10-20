@@ -122,8 +122,8 @@ async function boot() {
       { id: 'phap-tuong', name: 'Kỹ năng pháp tướng', icon: S('phap-tuong'), ...fan(118), size: 60, locked: true },
       { id: 'khong-che', name: 'Khống chế (Trúc Cơ)', icon: S('khong-che'), ...fan(85), size: 60, locked: true },
       // bên trái bộ kỹ năng
-      { id: 'nguyen-anh', name: 'Nguyên Anh: tấn công diện rộng', icon: S('nguyen-anh'), dx: -206, dy: -70, size: 56, locked: true },
-      { id: 'dan-duoc', name: 'Đan dược trị thương', icon: S('dan-duoc'), dx: -196, dy: 4, size: 52, locked: true },
+      { id: 'nguyen-anh', name: 'Nguyên Anh: tấn công diện rộng', icon: S('nguyen-anh'), dx: -200, dy: -66, size: 54, locked: true },
+      { id: 'dan-duoc', name: 'Đan dược trị thương', icon: S('dan-duoc'), dx: -200, dy: 4, size: 54, locked: true },
       // phía trên: Lướt + Bay/Chạy song song, trên cùng: Tự động
       { id: 'luot', name: 'Lướt', icon: S('luot'), dx: -92, dy: -192, size: 50, locked: true },
       {
