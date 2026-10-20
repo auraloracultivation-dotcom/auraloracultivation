@@ -17,6 +17,11 @@ export function createTestBag(userId, defs) {
       if (st.equipped[it.slot] === it.id) delete st.equipped[it.slot]; else st.equipped[it.slot] = it.id;
       save();
     },
+    // Vứt / phân rã: bỏ khỏi kho (đang mặc thì tháo trước)
+    remove(id) {
+      for (const [sl, x] of Object.entries(st.equipped)) if (x === id) delete st.equipped[sl];
+      st.items = st.items.filter((x) => x !== id); save();
+    },
     unequip(slot) { if (st.equipped[slot]) { delete st.equipped[slot]; save(); } },
     grantAll() {
       const before = st.items.length;

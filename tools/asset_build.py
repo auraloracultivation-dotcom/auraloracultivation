@@ -220,20 +220,28 @@ def run_icons():
         cw, ch = (x1 - x0) / cols, (y1 - y0) / rows
         return lambda r, c: tight(crop(rgb, a, (int(x0 + c * cw), int(y0 + r * ch), int(x0 + (c + 1) * cw), int(y0 + (r + 1) * ch - label_h))))
     orb = cells('linh-chau', 7, 5, (0, 0, 1536, 1024))
-    for slug, rc in {'huyet-yeu-tinh': (0, 4), 'hon-thu-tinh': (2, 2), 'tinh-hon': (0, 5), 'tinh-hon-co': (2, 0)}.items():
+    for slug, rc in {'huyet-yeu-tinh': (4, 2), 'hon-thu-tinh': (4, 1), 'tinh-hon': (4, 5), 'tinh-hon-co': (4, 0)}.items():
         icons[f'item.dacbiet.{slug}.001'] = orb(*rc)
+    # Đan dược = linh châu; đan phương / công thức phôi = trục cuộn; sách công pháp = sách
+    for slug, rc in {'truc-co': (0, 2), 'ket-dan': (1, 5), 'nguyen-anh': (2, 2), 'hoa-than': (3, 6), 'tieu-hoi-huyet': (3, 2),
+                     'hoi-linh': (0, 3), 'cuong-cong': (0, 4), 'cuong-the': (0, 1), 'duy-tri': (1, 6)}.items():
+        icons[f'item.dan.{slug}.001'] = orb(*rc)
+    icons['item.phu.bao-ho.001'] = orb(3, 0)
     book = cells('cong-phap', 5, 4, (0, 0, 1536, 1024))
     for sid, rc in {'skill.tamphap.luyen-khi.001': (1, 2), 'skill.chieu.kiem-khi.001': (0, 0), 'skill.khe.linh-thu.001': (3, 3),
                     'skill.than.canh-phong.001': (3, 1), 'skill.phap-tuong.thien-thu.001': (0, 4), 'skill.tamphap.thanh-tam.001': (2, 3),
                     'skill.chieu.hoi-linh.001': (0, 2), 'skill.than.lang-ba.001': (3, 4)}.items():
         icons[sid] = book(*rc)
+        icons['item.congphap.' + sid.split('.', 1)[1]] = book(*rc)
     scroll = cells('truc-cuon', 5, 4, (0, 0, 1536, 1024), 66)
     icons['item.nhiemvu.dau-an-huyet-sai.001'] = scroll(1, 0)
     icons['item.nhiemvu.manh-truyen-thua.001'] = scroll(2, 2)
     dp = cells('dan-phuong', 5, 4, (0, 0, 1536, 1024), 52)  # đan phương → icon đan (Luyện đan + Kho)
     for slug, n in {'truc-co': 1, 'ket-dan': 12, 'nguyen-anh': 7, 'hoa-than': 20, 'tieu-hoi-huyet': 13, 'hoi-linh': 15,
                     'cuong-cong': 3, 'cuong-the': 10, 'duy-tri': 16}.items():
-        icons[f'item.dan.{slug}.001'] = dp(*divmod(n - 1, 5))
+        icons[f'item.danphuong.{slug}.001'] = dp(*divmod(n - 1, 5))
+    for slot, n in {'vu-khi': 18, 'trang-phuc': 10, 'nhan': 15, 'day-chuyen': 5, 'mat-na': 6, 'linh-thu': 13, 'canh': 8, 'phap-tuong': 20}.items():
+        icons[f'item.congthuc.{slot}.001'] = scroll(*divmod(n - 1, 5))
     shik = Image.open(pack("#1 - Transparent Icons.png")).convert('RGBA')
     si = lambda i: tight(shik.crop(((i % 16) * 32, (i // 16) * 32, (i % 16) * 32 + 32, (i // 16) * 32 + 32)))
     for slot, i in {'vu-khi': 82, 'trang-phuc': 117, 'nhan': 133, 'day-chuyen': 134, 'mat-na': 115, 'canh': 60, 'phap-tuong': 62, 'linh-thu': 314}.items():

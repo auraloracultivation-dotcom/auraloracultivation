@@ -67,6 +67,12 @@
     "unlock": [
      "quest_board",
      "safe_area_guide"
+    ],
+    "items": [
+     {
+      "id": "item.congphap.tamphap.luyen-khi.001",
+      "count": 1
+     }
     ]
    },
    "next": [
@@ -99,6 +105,10 @@
      {
       "id": "item.thao.bat-nha.001",
       "count": 2
+     },
+     {
+      "id": "item.danphuong.tieu-hoi-huyet.001",
+      "count": 1
      }
     ],
     "spiritStone": 25
@@ -201,6 +211,12 @@
     ],
     "unlock": [
      "realm.tc_path"
+    ],
+    "items": [
+     {
+      "id": "item.danphuong.truc-co.001",
+      "count": 1
+     }
     ]
    },
    "next": [

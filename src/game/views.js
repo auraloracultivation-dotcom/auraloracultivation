@@ -1,5 +1,5 @@
 // Nội dung các bảng Nhiệm vụ / Tu luyện / Kho cho phần chơi thử. Chỉ dựng HTML + gọi luật trong craft/quests.
-import { showSheet, placeholderIcon, escapeHtml as E } from '../ui/index.js';
+import { showSheet, escapeHtml as E } from '../ui/index.js';
 import { iconUrl } from '../entity/index.js';
 
 const GOAL = { talk: 'Nói chuyện', reach: 'Đến', collect: 'Thu thập', craft: 'Luyện', kill: 'Hạ', boss: 'Hạ boss', dodge_heavy: 'Né đòn nặng',
@@ -83,16 +83,18 @@ export function createViews(o) {
   }
   function danTab() {
     return pills.pills.map((p) => {
-      const inp = craft.pickInputs(p) || p.recipe.inputs, have = progress.count(p.id), usable = gp.pills[p.id];
-      return `<div class="row"><div class="row-h"><b>${ico(p.id)}${E(p.name)}</b><em>có ${have} · ${Math.round(p.recipe.rate * 100)}%</em></div>
-        <p class="need">${need(inp)}</p>${btn('brew', p.id, 'Luyện', progress.has(inp))} ${usable ? btn('use', p.id, 'Dùng', have > 0) : ''}</div>`;
+      const inp = craft.pickInputs(p) || p.recipe.inputs, have = progress.count(p.id), usable = gp.pills[p.id], own = o.owns(p.id);
+      return `<div class="row ${own ? '' : 'locked'}"><div class="row-h"><b>${ico(p.id)}${E(p.name)}</b><em>có ${have} · ${Math.round(p.recipe.rate * 100)}%</em></div>
+        ${own ? '' : `<p class="lock">🔒 Cần ${E(name(o.teacher.get(p.id)))} trong kho (mua ở Vạn Bảo Lâu hoặc rơi từ boss)</p>`}
+        <p class="need">${need(inp)}</p>${btn('brew', p.id, 'Luyện', own && progress.has(inp))} ${usable ? btn('use', p.id, 'Dùng', have > 0) : ''}</div>`;
     }).join('');
   }
   function phoiTab() {
     return blanks.blanks.map((b) => {
-      const ok = craft.stageOk(b.unlock);
-      return `<div class="row"><div class="row-h"><b>${ico(`slot.${b.slot}`)}Phôi ${SLOT[b.slot]}</b><em>${ok ? `${Math.round(b.rate * 100)}%` : `mở ở ${E(stageName(b.unlock))}`}</em></div>
-        <p class="need">${need(b.inputs)}</p>${btn('forge', b.id, 'Luyện phôi', ok && progress.has(b.inputs))}</div>`;
+      const ok = craft.stageOk(b.unlock), own = o.owns(b.id);
+      return `<div class="row ${own ? '' : 'locked'}"><div class="row-h"><b>${ico(`slot.${b.slot}`)}Phôi ${SLOT[b.slot]}</b><em>${ok ? `${Math.round(b.rate * 100)}%` : `mở ở ${E(stageName(b.unlock))}`}</em></div>
+        ${own ? '' : `<p class="lock">🔒 Cần ${E(name(o.teacher.get(b.id)))} trong kho</p>`}
+        <p class="need">${need(b.inputs)}</p>${btn('forge', b.id, 'Luyện phôi', own && ok && progress.has(b.inputs))}</div>`;
     }).join('');
   }
   const linesText = (a) => a.lines.map((l) => `${STAT[l.k]} +${l.v}`).join(' · ');
@@ -119,11 +121,12 @@ export function createViews(o) {
   }
   function cpTab() {
     return cp.skills.map((s) => {
-      const lv = st().cp[s.id] || 0, ok = craft.stageOk(s.unlock);
+      const lv = st().cp[s.id] || 0, ok = craft.stageOk(s.unlock), own = o.owns(s.id);
+      const lock = own ? '' : `<p class="lock">🔒 Cần ${E(name(o.teacher.get(s.id)))} trong kho</p>`;
       const inp = s.learn && s.learn.inputs.map((i) => ({ id: i.id, count: i.count * (lv + 1) }));
       return `<div class="row"><div class="row-h"><b>${ico(s.id)}${E(s.name)}</b><em>cấp ${lv}/${s.max_level}${ok ? '' : ` · mở ở ${E(stageName(s.unlock))}`}</em></div>
-        <p>${E(s.desc)}${lv ? ` · +${Math.round(lv * gp.skills.cong_phap_bonus_per_level * 100)}% sát thương kỹ năng liên quan` : ''}</p>
-        ${inp ? `<p class="need">${need(inp)}</p>${btn('train', s.id, lv ? 'Nâng cấp' : 'Luyện', ok && lv < s.max_level && progress.has(inp))}` : '<p><i>Lab chưa ghi nguyên liệu</i></p>'}</div>`;
+        <p>${E(s.desc)}${lv ? ` · +${Math.round(lv * gp.skills.cong_phap_bonus_per_level * 100)}% sát thương kỹ năng liên quan` : ''}</p>${lock}
+        ${inp ? `<p class="need">${need(inp)}</p>${btn('train', s.id, lv ? 'Nâng cấp' : 'Luyện', own && ok && lv < s.max_level && progress.has(inp))}` : '<p><i>Lab chưa ghi nguyên liệu</i></p>'}</div>`;
     }).join('');
   }
   function matsTab() {
@@ -162,13 +165,6 @@ export function createViews(o) {
   }
 
   // ---------- Kho + thanh chỉ số ----------
-  const ICON_GROUP = (d) => d.group || (d.id.startsWith('item.dan') ? 'dan' : 'nhiemvu');
-  function bagEntries() {
-    return Object.entries(st().inv).filter(([id]) => itemDefs.has(id)).map(([id, count]) => {
-      const d = itemDefs.get(id);
-      return { item: { ...d, icon: iconUrl(id) || placeholderIcon(d.name, ICON_GROUP(d)), usable: !!gp.pills[id] }, count };
-    });
-  }
   function statValue(id) {
     const ps = o.getStats();
     if (!ps) return null;
@@ -178,5 +174,39 @@ export function createViews(o) {
     const k = DOCK[id];
     return k ? ps[k] : null;
   }
-  return { openQuests, openCultivate, bagEntries, onBagUse: (it) => o.usePill(it.id), statValue, refreshDock: null };
+  // ---------- Vạn Bảo Lâu (cửa hàng) ----------
+  const today = () => new Date().toLocaleDateString('sv');
+  function shopRow(s) {
+    const d = itemDefs.get(s.id), n = s.stack || 1, isRecipe = !!d.teaches, owned = isRecipe && progress.count(s.id) > 0;
+    const bought = st().shopDay?.date === today() ? (st().shopDay.n[s.id] || 0) : 0;
+    const left = s.daily_limit ? s.daily_limit - bought : Infinity;
+    const can = !owned && left > 0 && st().stone >= s.price;
+    const note = owned ? 'Đã có trong kho' : s.daily_limit ? `Hôm nay còn ${left}/${s.daily_limit}` : isRecipe ? 'Giữ trong kho để luyện' : `có ${progress.count(s.id)}`;
+    return `<div class="row"><div class="row-h"><b>${ico(s.id)}${E(d.name)}${n > 1 ? ` ×${n}` : ''}</b><em>${note}</em></div>
+      ${btn('buy', s.id, owned ? 'Đã có' : `Mua · ${s.price} LT`, can)}</div>`;
+  }
+  const SHOP_TABS = { dp: (d) => d.cat === 'dan-phuong', ct: (d) => d.cat === 'phap-khi', cp: (d) => d.cat === 'cong-phap', nl: (d) => !d.teaches };
+  function openShop() {
+    const { shop } = o;
+    showSheet({
+      title: shop.name, note: `Giá tạm (Lab chưa có giá). Không bán: Hóa Thần Đan phương, công thức Cánh / Pháp tướng, Tinh Hồn Cổ, phôi Đỏ+ — chỉ rơi từ boss.`,
+      tabs: [{ id: 'dp', name: 'Đan phương' }, { id: 'ct', name: 'Công thức' }, { id: 'cp', name: 'Công pháp' }, { id: 'nl', name: 'Nguyên liệu' }],
+      render: (tab) => `<div class="row"><p>Linh thạch: <b>${st().stone}</b></p></div>`
+        + shop.stock.filter((s) => SHOP_TABS[tab](itemDefs.get(s.id))).map(shopRow).join(''),
+      onAction(act, id) {
+        if (act !== 'buy') return;
+        const s = shop.stock.find((x) => x.id === id), d = itemDefs.get(id);
+        if (d.teaches && progress.count(id) > 0) return toast('Đã có trong kho', 1200);
+        if (st().stone < s.price) return toast('Không đủ Linh thạch', 1200);
+        if (st().shopDay?.date !== today()) st().shopDay = { date: today(), n: {} };
+        if (s.daily_limit && (st().shopDay.n[id] || 0) >= s.daily_limit) return toast('Hết lượt mua hôm nay', 1200);
+        progress.addStone(-s.price); progress.add(id, s.stack || 1);
+        st().shopDay.n[id] = (st().shopDay.n[id] || 0) + 1;
+        o.emit('gain', { id, n: s.stack || 1 }); progress.changed();
+        toast(`Đã mua ${d.name}`, 1200);
+      },
+    });
+  }
+
+  return { openQuests, openCultivate, openShop, statValue, refreshDock: null };
 }

@@ -11,7 +11,7 @@ export function checkRefs() {
     ids.set(id, file);
   };
   const lists = [
-    ['data/items/items.json', 'items'], ['data/items/materials.json', 'materials'], ['data/items/pills.json', 'pills'], ['data/items/quest-items.json', 'items'],
+    ['data/items/items.json', 'items'], ['data/items/materials.json', 'materials'], ['data/items/pills.json', 'pills'], ['data/items/quest-items.json', 'items'], ['data/items/recipes.json', 'items'],
     ['data/monsters/monsters.json', 'monsters'], ['data/skills/cong-phap.json', 'skills'],
     ['data/equipment/blanks.json', 'blanks'], ['data/quests/quests.json', 'quests'], ['data/realms.json', 'realms'],
   ];
@@ -60,5 +60,7 @@ export function checkRefs() {
     must(realm, 'gameplay.json major_realm_first_stage');
   }
   for (const q of load('data/items/quest-items.json').items) if (q.drop.from) must(q.drop.from, q.id);
+  for (const r of load('data/items/recipes.json').items) if (r.teaches) must(r.teaches, r.id);
+  for (const s of load('data/shop.json').stock) must(s.id, 'shop.json');
   return errors;
 }

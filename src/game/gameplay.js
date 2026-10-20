@@ -10,6 +10,9 @@ import { createQuests } from './quests.js';
 import { createCraft } from './craft.js';
 import { createViews } from './views.js';
 import { createGather } from './gather.js';
+import { createInventory } from './inventory.js';
+import { placeholderIcon } from '../ui/index.js';
+import { artInfo, iconUrl } from '../entity/index.js';
 
 const SKILL_OF_CP = { attack: 'skill.tamphap.luyen-khi.001', 'kiem-khi': 'skill.chieu.kiem-khi.001', 'linh-thu': 'skill.khe.linh-thu.001',
   'nguyen-anh': 'skill.than.canh-phong.001', 'phap-tuong': 'skill.phap-tuong.thien-thu.001' };
@@ -22,19 +25,23 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     'data/stats.json', 'data/gameplay.json', 'data/monsters/monsters.json', 'data/items/materials.json', 'data/items/pills.json',
     'data/equipment/blanks.json', 'data/equipment/awaken.json', 'data/skills/cong-phap.json', 'data/quests/quests.json',
     'data/items/quest-items.json', 'data/realms.json'].map((p) => loadJSON(p)));
+  const [recipes, shop] = await Promise.all([loadJSON('data/items/recipes.json'), loadJSON('data/shop.json')]);
   await loadSprites(await loadJSON('data/art/sprites.json')); // hình quái, hiệu ứng, icon (thử nghiệm)
   const progress = createProgress(userId, gp);
   const stats = createStats(statsDef, gp);
   const mobs = createMonsters({ gp, defs: monDef.monsters, map });
   const quests = createQuests(questDef, progress, () => MAJOR_OF(progress.stageDef.id));
-  const craft = createCraft({ progress, pills, blanks, awaken, skills: cp, gp });
+  // Đan phương / công thức / bí kíp: món id được dạy bởi vật phẩm nào; có trong kho mới luyện được
+  const teacher = new Map(recipes.items.filter((r) => r.teaches).map((r) => [r.teaches, r.id]));
+  const owns = (id) => !teacher.has(id) || progress.count(teacher.get(id)) > 0;
+  const craft = createCraft({ progress, pills, blanks, awaken, skills: cp, gp, owns });
   const gather = createGather({ gp, mats, map });
   gather.seed(me);
   const SLOTS = ['mat-na', 'trang-phuc', 'vu-khi', 'nhan', 'canh', 'phap-tuong', 'linh-thu', 'day-chuyen'];
   // Trang bị đang tính chỉ số: đồ luyện ra đang mặc + đồ Kho đang mặc đã thức tỉnh
   const wornGear = () => [...progress.equipped(),
     ...SLOTS.map((sl) => bag.equippedItem(sl)).filter(Boolean).map((it) => progress.state.itemAw[it.id]).filter((a) => a?.tier)];
-  const itemDefs = new Map([...mats.materials, ...pills.pills, ...qItems.items].map((d) => [d.id, d]));
+  const itemDefs = new Map([...mats.materials, ...pills.pills, ...qItems.items, ...recipes.items].map((d) => [d.id, d]));
   const S = gp.skills, PL = gp.player;
 
   let ps = null; // chỉ số hiện tại
@@ -114,6 +121,10 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
       const d = q.drop;
       const match = d.from ? d.from === m.def.id : d.from_rank === rank;
       if (match && (!d.only_when_quest || progress.state.quests.active[d.only_when_quest]) && Math.random() < d.chance) { gain(q.id, 1); got.push(q.name); }
+    }
+    for (const r of recipes.items) { // đan phương / bí kíp hiếm rơi từ boss (chỉ khi chưa có)
+      const d = r.drop;
+      if (d && d.zone === m.def.zone && d.rank === rank && progress.count(r.id) === 0 && Math.random() < d.chance) { gain(r.id, 1); got.push(r.name); }
     }
     if (rank === 'boss' && !progress.state.bosses.includes(m.def.id)) progress.state.bosses.push(m.def.id);
     quests.emit('kill', { id: m.def.id, rank });
@@ -209,10 +220,13 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     if (!progress.take(pill.id, 1)) return toast(`Cần ${pill.name} (luyện ở Tu luyện → Luyện đan)`, 2200);
     play('may-kiep', me.x, me.y - 70, 60); // thiên kiếp: mây tụ trên đầu rồi sét đánh xuống
     play('set-danh', me.x, me.y, 70, { ground: true, delay: 0.7 });
-    if (Math.random() < realm.breakthrough.rate) {
+    const charm = progress.take('item.phu.bao-ho.001', 1); // bảo hộ phù: +15 điểm %, tự dùng nếu có
+    const rate = Math.min(1, realm.breakthrough.rate + (charm ? realms.breakthrough_rules.protect_charm.add_rate_points : 0));
+    if (charm) toast('Dùng Bảo hộ phù: +15% tỷ lệ', 1500);
+    if (Math.random() < rate) {
       progress.advanceStage(); hp = Infinity; recompute(); hp = ps.hp;
       toast(`Đột phá thành công: ${progress.stageDef.name}!`, 3000);
-    } else toast(`Đột phá thất bại (${Math.round(realm.breakthrough.rate * 100)}%) — mất ${pill.name}, tu vi giữ nguyên`, 3000);
+    } else toast(`Đột phá thất bại (${Math.round(rate * 100)}%) — mất ${pill.name}, tu vi giữ nguyên`, 3000);
     progress.changed();
   }
 
@@ -288,10 +302,24 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     return true;
   }
 
-  const views = createViews({ bag, onLook, monsters: monDef.monsters, progress, quests, craft, itemDefs, mats, pills, blanks, awaken, cp, realms, gp, toast,
+  const views = createViews({ shop, owns, teacher, bag, onLook, monsters: monDef.monsters, progress, quests, craft, itemDefs, mats, pills, blanks, awaken, cp, realms, gp, toast,
     getStats: () => ps, getHp: () => hp, onReward: (r) => { if (r.exp) addExp(r.exp); if (r.spiritStone) progress.addStone(r.spiritStone);
       for (const i of r.items || []) progress.add(i.id, i.count); }, recompute, usePill, emit: quests.emit });
 
+  const inv = createInventory({ progress, bag, craft, itemDefs, awaken, gp, art: (a) => artInfo(a)?.file, icon: iconUrl, fallbackIcon: placeholderIcon,
+    onLook, recompute, usePill, openCultivate: (tab) => views.openCultivate(tab) });
+  function itemAction(key, action) {
+    const r = inv.act(key, action);
+    if (r && typeof r === 'object') { toast(r.msg, 1600); if (r.event) quests.emit(...r.event); } else if (r) toast(r, 1500);
+    progress.changed();
+  }
+  // Người chơi cũ đã xong nhiệm vụ trước khi có đan phương/bí kíp trong phần thưởng → bù một lần
+  if (!progress.state.migrRecipes) {
+    for (const q of questDef.quests) if (progress.state.quests.done[q.id] && q.type !== 'daily') {
+      for (const i of q.rewards.items || []) if (teacher.has(itemDefs.get(i.id)?.teaches) && !progress.count(i.id)) progress.add(i.id, 1);
+    }
+    progress.state.migrRecipes = true; progress.changed();
+  }
   hp = progress.state.hp ?? Infinity;
   recompute(); if (!Number.isFinite(hp) || hp <= 0) hp = ps.hp;
   progress.onChange(() => views.refreshDock?.());
@@ -306,9 +334,15 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     healPill: () => usePill('item.dan.tieu-hoi-huyet.001'),
     statValue: views.statValue, openQuests: views.openQuests, openCultivate: views.openCultivate,
     setDock(d) { views.refreshDock = d.refresh; },
-    // Mặc đồ Kho vào ô nào thì tháo đồ luyện ra ở ô đó (một ô một món)
-    onBagEquip(it) { if (bag.isEquipped(it)) progress.unequipSlot(it.slot); recompute(); },
-    bagEntries: views.bagEntries, onBagUse: views.onBagUse, realmName: () => progress.stageDef.name,
+    bagEntries: inv.entries, slotItem: inv.slotItem, itemAction,
+    openShop() { if (!map.safeAt(me.x, me.y)) return toast(`${shop.name} ở ${map.town?.name || 'trong thành'} — hãy vào thành`, 1800); views.openShop(); },
+    onProp(id) { // chạm công trình trong thành
+      if (id === 'kho-hang') { views.openShop(); return true; }
+      if (id === 'lo-luyen-dan') { views.openCultivate('dan'); return true; }
+      if (id === 'te-dan') { views.openCultivate('realm'); return true; }
+      return false;
+    },
+    realmName: () => progress.stageDef.name,
     markers: () => mobs.list.filter((m) => m.def.rank !== 'thuong' && m.state !== 'dead').map((m) => ({ x: m.x, y: m.y, boss: true })),
   };
 }
