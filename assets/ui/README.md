@@ -42,3 +42,6 @@ Khung hiển thị theo **bội số nguyên điểm ảnh gốc** (`crispWidth`
 - `frames/bang-cai-dat-v2.png` — khung Cài đặt mới (tách từ ảnh mẫu chụp trong game bằng `tools/panel_from_mockup.py`); nút Bật/Ngôn ngữ/Đăng xuất/✕ vẽ sẵn, game đặt nút trong suốt đè lên
 - `frames/chi-so-gon.png` (thanh chỉ số gọn cạnh trái), `frames/chi-so-day-du.png` (bảng 16 chỉ số), `icons/cs-*.png` (16 biểu tượng) — sinh bằng `tools/stats_ui.py`
 - `frames/bang-nhan-vat-v3.png` — bảng Nhân vật v3 (tách từ ảnh chụp màn hình bằng `tools/char_panel.py`: bỏ nền thẻ, dựng lại góc bị nút chia sẻ che, xoá nhân vật mẫu). Ô trống hiện biểu tượng mờ vẽ sẵn = chưa đeo.
+- `skills/*.png` — nút kỹ năng 256×256 (đã gồm khung tròn của chủ dự án, cắt từ `_source/ky-nang-1..3.png`):
+  tan-cong (đánh thường, từ mẫu HUD), kiem-khi, linh-thu, phap-tuong, khong-che, nguyen-anh, dan-duoc, luot, bay, chay, auto.
+  Bố cục quạt ở `actions` trong `src/main.js` (dx/dy tính từ tâm nút Đánh thường). Bỏ ô kỹ năng cũ `frames/o-tron.png` (viền vỡ).

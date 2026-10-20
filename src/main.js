@@ -76,6 +76,8 @@ async function boot() {
 
   const realmName = character.realm > 0 ? `Cảnh giới ${character.realm}` : 'Phàm nhân'; // tạm, chờ dữ liệu cảnh giới
   const drawMe = (ctx) => drawPlayer(ctx, { x: 0, y: 0, facing: 1, walkT: 0, isLocal: true }, 1);
+  const S = (n) => `assets/ui/skills/${n}.png`;
+  const fan = (deg, r = 122) => ({ dx: Math.round(Math.cos((deg * Math.PI) / 180) * r), dy: -Math.round(Math.sin((deg * Math.PI) / 180) * r) });
   const markers = () => [{ x: me.x, y: me.y, self: true }, ...[...others.list.values()].map((p) => ({ x: p.x, y: p.y }))];
 
   async function logout() {
@@ -111,22 +113,28 @@ async function boot() {
         draw: (off, radiusTiles) => map.drawMinimap(off, me.x, me.y, radiusTiles, markers()),
       });
     },
-    // Nút hành động. Chỉ "Chém thường" mở; còn lại khoá tới khi có hệ thống kỹ năng.
+    // Bộ kỹ năng hình quạt (yêu cầu chủ dự án 2026-10-20). dx/dy tính từ tâm nút Tấn công; chưa có hệ thống → khoá.
     actions: [
-      { id: 'attack', slot: 'attack', name: 'Tấn công', icon: 'assets/ui/icons/tan-cong.png', onUse: () => { me.slashT = 0.22; } },
-      { id: 'skill1', slot: 's1', name: 'Kỹ năng 1', locked: true },
-      { id: 'skill2', slot: 's2', name: 'Kỹ năng 2', locked: true },
-      { id: 'skill3', slot: 's3', name: 'Kỹ năng 3', locked: true },
-      { // một nút: bấm để Bay lên, bấm lần nữa để Hạ xuống (hiện chỉ là hình ảnh, chưa đổi tốc độ / va chạm)
-        id: 'fly', slot: 'fly', name: 'Bay lên', full: true,
-        icons: ['assets/ui/icons/bay-len.png', 'assets/ui/icons/ha-xuong.png'], names: ['Bay lên', 'Hạ xuống'],
-        onUse: (state) => {
+      { id: 'attack', name: 'Đánh thường', icon: S('tan-cong'), dx: 0, dy: 0, size: 96, onUse: () => { me.slashT = 0.22; } },
+      // vòng quạt 4 kỹ năng (từ trái lên trên)
+      { id: 'kiem-khi', name: 'Kiếm khí', icon: S('kiem-khi'), ...fan(184), size: 60, locked: true },
+      { id: 'linh-thu', name: 'Kỹ năng linh thú', icon: S('linh-thu'), ...fan(151), size: 60, locked: true },
+      { id: 'phap-tuong', name: 'Kỹ năng pháp tướng', icon: S('phap-tuong'), ...fan(118), size: 60, locked: true },
+      { id: 'khong-che', name: 'Khống chế (Trúc Cơ)', icon: S('khong-che'), ...fan(85), size: 60, locked: true },
+      // bên trái bộ kỹ năng
+      { id: 'nguyen-anh', name: 'Nguyên Anh: tấn công diện rộng', icon: S('nguyen-anh'), dx: -206, dy: -70, size: 56, locked: true },
+      { id: 'dan-duoc', name: 'Đan dược trị thương', icon: S('dan-duoc'), dx: -196, dy: 4, size: 52, locked: true },
+      // phía trên: Lướt + Bay/Chạy song song, trên cùng: Tự động
+      { id: 'luot', name: 'Lướt', icon: S('luot'), dx: -92, dy: -192, size: 50, locked: true },
+      {
+        id: 'bay', name: 'Bay', icons: [S('bay'), S('chay')], names: ['Bay', 'Chạy bộ'], dx: -34, dy: -200, size: 50,
+        onUse: (state) => { // hiện chỉ là hình ảnh, chưa đổi tốc độ / va chạm
           me.flying = state === 1;
           zone.sendMove(me.x, me.y, me.moving, me.flying);
           toast(me.flying ? 'Ngự khí phi hành' : 'Hạ xuống mặt đất', 1200);
         },
       },
-      { id: 'blink', slot: 'blink', name: 'Tốc biến', icon: 'assets/ui/icons/toc-bien.png', locked: true },
+      { id: 'auto', name: 'Tự động', icon: S('auto'), dx: -64, dy: -254, size: 44, locked: true },
     ],
   });
   hud.setOnline(others.list.size + 1, maxPlayers);

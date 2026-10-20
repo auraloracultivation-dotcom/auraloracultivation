@@ -84,24 +84,23 @@ export function createHud(opts) {
   const miniCanvas = setupRoundCanvas(right.querySelector('.minimap canvas'), portrait ? 86 : 92);
   crisp(right.querySelector('.zone-tag'), 308, 130);
 
-  // ---- Dưới phải: tấn công + kỹ năng ----
+  // ---- Dưới phải: bộ kỹ năng hình quạt kiểu MOBA ----
+  // Mỗi nút đặt theo (dx, dy) tính từ TÂM nút Tấn công (góc dưới phải), cỡ `size` (px). Ảnh nút: assets/ui/skills/*.png
+  // (đã gồm khung tròn của chủ dự án, 256×256). Xem bố cục ở FAN_LAYOUT trong src/main.js.
   const pad = document.createElement('div');
   pad.className = 'action-pad';
   pad.innerHTML = actions.map((a) => `
-    <button type="button" class="act act-${a.slot} ${a.locked ? 'locked' : ''} ${a.full ? 'full' : ''}" data-act="${a.id}" aria-label="${escapeHtml(a.name)}">
-      ${a.icon || a.icons ? `<img src="${a.icon || a.icons[0]}" alt="">` : ''}
-      ${a.locked ? '<img class="lock" src="assets/ui/icons/khoa.png" alt="">' : ''}
-      <span>${escapeHtml(a.name)}</span>
+    <button type="button" class="act ${a.locked ? 'locked' : ''}" data-act="${a.id}" aria-label="${escapeHtml(a.name)}"
+      style="width:${a.size}px;height:${a.size}px;left:${a.dx - a.size / 2}px;top:${a.dy - a.size / 2}px">
+      <img src="${a.icon || a.icons[0]}" alt=""><span>${escapeHtml(a.name)}</span>
     </button>`).join('');
   root.appendChild(pad);
-  const SIZE = { attack: 92, s1: 56, s2: 56, s3: 56, fly: 58, blink: 46 };
   for (const a of actions) {
     const btn = pad.querySelector(`[data-act="${a.id}"]`);
-    crisp(btn, a.full ? 188 : 84, SIZE[a.slot], true); // khung tròn frames/o-tron.png 84×84; nút ảnh đầy đủ 188 (tools/fly_buttons.py)
-    let state = 0; // nút bật/tắt (vd. Bay lên ↔ Hạ xuống): đổi ảnh + tên theo trạng thái
+    let state = 0; // nút bật/tắt (vd. Bay ↔ Chạy): đổi ảnh + tên theo trạng thái
     btn.addEventListener('pointerdown', (e) => {
       e.preventDefault();
-      if (a.locked) { toast(`${a.name}: chưa mở`); return; }
+      if (a.locked) { toast(`${a.name}: chưa mở`, 1200); return; }
       btn.classList.remove('pulse'); void btn.offsetWidth; btn.classList.add('pulse');
       if (a.icons) {
         state = (state + 1) % a.icons.length;
