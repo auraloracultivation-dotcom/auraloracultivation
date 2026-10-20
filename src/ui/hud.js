@@ -7,6 +7,7 @@
 import { escapeHtml, toast } from './screens.js';
 import { crispWidth } from './stage.js';
 import { setupRoundCanvas } from './compass.js';
+import { watchKeyboard } from './keyboard.js';
 
 // Đặt kích thước nút/khung theo bội số nguyên điểm ảnh gốc → viền sắc, đều
 const crisp = (node, srcW, maxCss, square = false) => {
@@ -113,32 +114,45 @@ export function createHud(opts) {
   }
 
   // ---- Dưới trái: Chat ----
-  const bar = document.createElement('div');
+  // Gõ phím Enter / nút "Gửi" trên bàn phím → gửi và đóng. Chạm ra ngoài / "Xong" → đóng, giữ nháp.
+  // Dùng <form> để bắt Enter ổn định cả khi gõ tiếng Việt (Telex/VNI) trên iPhone.
+  const bar = document.createElement('form');
   bar.className = 'chatbar';
+  bar.setAttribute('action', '');
   bar.innerHTML = `<button class="round-btn glow" type="button" aria-label="Chat">Chat</button>
-    <input class="field framed" type="text" maxlength="${maxChars}" placeholder="Nói gì đó…" hidden>`;
+    <input class="field framed" type="text" maxlength="${maxChars}" placeholder="Nói gì đó…" enterkeyhint="send" autocomplete="off" hidden>`;
   root.appendChild(bar);
   crisp(bar.querySelector('.round-btn'), 122, 56, true);
   const input = bar.querySelector('input');
   const open = bar.querySelector('button');
+  const close = () => {
+    input.hidden = true;
+    bar.classList.remove('typing');
+    input.blur();
+  };
   const send = () => {
     const text = input.value.trim().slice(0, maxChars);
     if (text) opts.onChat(text);
     input.value = '';
-    input.hidden = true;
-    input.blur();
+    close();
   };
+  // giữ tiêu điểm ở ô nhập khi chạm nút Chat (nếu không, ô nhập mất tiêu điểm và tự đóng trước khi kịp gửi)
+  open.addEventListener('pointerdown', (e) => { if (!input.hidden) e.preventDefault(); });
   open.addEventListener('click', () => {
-    if (input.hidden) { input.hidden = false; input.focus(); } else send();
+    if (input.hidden) { input.hidden = false; bar.classList.add('typing'); input.focus(); } else send();
   });
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') send();
-    if (e.key === 'Escape') { input.value = ''; input.hidden = true; }
-  });
+  bar.addEventListener('submit', (e) => { e.preventDefault(); send(); });
+  input.addEventListener('keydown', (e) => { if (e.key === 'Escape') { input.value = ''; close(); } });
+  input.addEventListener('blur', () => setTimeout(() => { if (document.activeElement !== input) close(); }, 0));
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && input.hidden && document.activeElement === document.body) {
-      input.hidden = false; input.focus();
+      input.hidden = false; bar.classList.add('typing'); input.focus();
     }
+  });
+  // bàn phím mở: chỉ thanh chat nổi lên ngay trên bàn phím
+  watchKeyboard(({ covered }) => {
+    bar.style.transform = covered > 40 ? `translateY(${-(covered - chatBottom(bar)) - 8}px)` : '';
+    bar.classList.toggle('above-keyboard', covered > 40);
   });
 
   const els = Object.fromEntries(['hp', 'mp', 'xp'].map((k) => [k, {
@@ -165,4 +179,9 @@ function drawAvatar(canvas, draw) {
   ctx.scale(1.9, 1.9);
   draw(ctx);
   ctx.restore();
+}
+
+// khoảng cách từ đáy thanh chat tới đáy lớp HUD (giá trị CSS bottom, không phụ thuộc phép dịch)
+function chatBottom(bar) {
+  return parseFloat(getComputedStyle(bar).bottom) || 0;
 }
