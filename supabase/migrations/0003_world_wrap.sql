@@ -1,10 +1,11 @@
 -- 0003 — Bản đồ vòng lặp 500×500 ô × 32 = 16000 điểm (đồng bộ data/config.json world)
 -- Khoảng cách tính theo đường ngắn nhất qua mép, để đi qua mép không bị coi là dịch chuyển.
--- Điểm xuất hiện mới: giữa đồng cỏ (8016, 8016). Nhân vật cũ chuyển về đó.
+-- Điểm xuất hiện mới: giữa đồng cỏ (8016, 8016). Nhân vật còn ở vùng bản đồ cũ chuyển về đó.
+-- (Đã chạy 2026-10-20; phần chuyển nhân vật chạy riêng với điều kiện lọc.)
 
 alter table public.characters alter column x set default 8016;
 alter table public.characters alter column y set default 8016;
-update public.characters set x = 8016, y = 8016, last_move_at = now();
+update public.characters set x = 8016, y = 8016, last_move_at = now() where x < 1280 and y < 960;
 
 create or replace function public.save_position(p_x real, p_y real)
 returns public.characters
