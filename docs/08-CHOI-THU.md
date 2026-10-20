@@ -56,7 +56,7 @@ Phím máy tính: Space đánh, 1–5 kỹ năng, Q uống đan hồi máu.
 - Chỉ là hình + va chạm phía máy khách: máy chủ chưa biết cây đá (chỉ kiểm tốc độ).
 
 ## Camera
-`data/config.json` → `camera.zoom` (đang 0,5 = thấy rộng gấp đôi). Chữ/thanh máu trên đầu tự phóng để vẫn đọc được.
+`data/config.json` → `camera.zoom` (đang 0,75). Chữ/thanh máu trên đầu tự phóng để vẫn đọc được.
 
 ## Giới hạn — phải biết
 - **Chạy phía máy khách, lưu localStorage** (`tc.progress.<id>`): người chơi sửa được, đổi máy là mất. Không dùng để xếp hạng/giao dịch.

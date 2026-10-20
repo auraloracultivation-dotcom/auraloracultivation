@@ -31,7 +31,7 @@
     "_note": "Đồng bộ với hằng c_world trong hàm SQL public.save_position"
   },
   "camera": {
-    "zoom": 0.5,
-    "_note": "Thu nhỏ camera (1 = như cũ, 0.5 = thấy rộng gấp đôi; yêu cầu chủ dự án 21/10). Chữ trên đầu tự phóng để vẫn đọc được."
+    "zoom": 0.75,
+    "_note": "Thu nhỏ camera (1 = như cũ; 0.75 theo yêu cầu chủ dự án 21/10 — từ 0.5 phóng thêm 50%). Chữ trên đầu tự phóng để vẫn đọc được."
   }
 }
