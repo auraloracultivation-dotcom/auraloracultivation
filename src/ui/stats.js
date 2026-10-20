@@ -92,7 +92,7 @@ export function createStatsDock({ getValue = () => null } = {}) {
     const top = (info ? info.getBoundingClientRect().bottom : 100) + 8;
     const portrait = window.innerHeight > window.innerWidth;
     const bottomLimit = portrait && chat ? chat.getBoundingClientRect().top - 10 : window.innerHeight - 12;
-    const h = Math.max(90, Math.min(200, bottomLimit - top));
+    const h = Math.max(70, Math.min(100, bottomLimit - top)); // nửa cỡ cũ (theo yêu cầu chủ dự án)
     const w = (h * GON.w) / GON.h;
     Object.assign(dock.style, { top: `${top}px`, width: `${w}px` });
     if (chat) chat.style.left = portrait ? '' : `${dock.getBoundingClientRect().right + 8}px`; // ngang: Chat dời sang phải thanh

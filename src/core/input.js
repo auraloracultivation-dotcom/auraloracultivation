@@ -1,5 +1,10 @@
 // Điều khiển: bàn phím (WASD / mũi tên) và cần điều khiển ảo khi chạm màn hình.
+// Đa chạm: cần điều khiển chỉ bắt đầu ở nửa trái màn hình (tay trái); chạm nửa phải bản đồ = chọn mục tiêu
+// (tay phải), nên vừa đi vừa bấm kỹ năng / nhân vật / bản đồ được cùng lúc.
+const STICK_ZONE = 0.55; // phần màn hình (từ trái) dùng cho cần điều khiển
+
 export function createInput(canvas) {
+  const taps = [];
   const keys = new Set();
   const stick = { active: false, id: null, ox: 0, oy: 0, dx: 0, dy: 0, radius: 48 };
 
@@ -10,8 +15,12 @@ export function createInput(canvas) {
   window.addEventListener('keyup', (e) => keys.delete(e.key.toLowerCase()));
   window.addEventListener('blur', () => keys.clear());
 
+  const downs = new Map(); // chạm không thuộc cần điều khiển → xét là "chạm chọn" khi nhấc tay
   canvas.addEventListener('pointerdown', (e) => {
-    if (stick.active) return;
+    if (stick.active || e.clientX > window.innerWidth * STICK_ZONE) {
+      downs.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      return;
+    }
     stick.active = true;
     stick.id = e.pointerId;
     stick.ox = e.clientX;
@@ -29,15 +38,25 @@ export function createInput(canvas) {
     stick.dy = dy;
   });
   const end = (e) => {
+    const d = downs.get(e.pointerId);
+    if (d) {
+      downs.delete(e.pointerId);
+      if (e.type === 'pointerup' && Math.hypot(e.clientX - d.x, e.clientY - d.y) < 14) taps.push({ x: e.clientX, y: e.clientY });
+      return;
+    }
     if (e.pointerId !== stick.id) return;
     stick.active = false;
     stick.dx = stick.dy = 0;
   };
-  canvas.addEventListener('pointerup', end);
-  canvas.addEventListener('pointercancel', end);
+  // nghe cả ở window: nhấc tay trên một bảng vừa mở đè lên vẫn nhả được cần điều khiển
+  window.addEventListener('pointerup', end, true);
+  window.addEventListener('pointercancel', end, true);
+  window.addEventListener('blur', () => { stick.active = false; stick.dx = stick.dy = 0; downs.clear(); });
 
   return {
     stick,
+    // các lần chạm chọn (toạ độ màn hình) kể từ lần gọi trước
+    takeTaps() { return taps.splice(0); },
     // Vector hướng đi, độ dài 0..1
     getMove() {
       let x = 0, y = 0;

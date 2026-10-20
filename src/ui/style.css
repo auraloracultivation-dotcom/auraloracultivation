@@ -15,6 +15,7 @@ html, body {
 #game { position: fixed; left: 0; top: 0; display: block; touch-action: none; image-rendering: pixelated; }
 #ui { position: fixed; inset: 0; pointer-events: none; }
 #ui > * { pointer-events: auto; }
+#ui button { touch-action: none; } /* không để trình duyệt giữ chạm cho cuộn/thu phóng → bấm nhanh khi đa chạm */
 img { image-rendering: pixelated; }
 
 /* ---------- Sân khấu ảnh nền ---------- */
@@ -304,7 +305,7 @@ img { image-rendering: pixelated; }
 .stats-dock > button { position: absolute; padding: 0; border: 0; background: none; cursor: pointer; }
 .sd-slot { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2%; }
 .sd-slot img { width: 64%; aspect-ratio: 1; object-fit: contain; image-rendering: auto; pointer-events: none; }
-.sd-slot b { font-size: 15cqw; line-height: 1; color: #fff7e2; text-shadow: 0 1px 2px #000; pointer-events: none; }
+.sd-slot b { font-size: max(8px, 15cqw); line-height: 1; color: #fff7e2; text-shadow: 0 1px 2px #000; pointer-events: none; }
 .sd-slot:active, .sd-arrow:active { background: rgba(255,255,255,.12) !important; border-radius: 6px; }
 .stats-full-wrap {
   position: fixed; inset: 0; z-index: 40; display: flex; align-items: center; justify-content: flex-start;
@@ -312,14 +313,14 @@ img { image-rendering: pixelated; }
 }
 .stats-full-wrap.open { background: rgba(7,11,22,.35); }
 .stats-full {
-  position: relative; height: min(88dvh, 640px); max-width: 94vw; container-type: inline-size;
+  position: relative; height: min(46dvh, 330px); max-width: 60vw; container-type: inline-size; /* nửa cỡ cũ */
   background: url("../../assets/ui/frames/chi-so-day-du.png") center / 100% 100% no-repeat;
   transform-origin: left center; transform: scale(.25); opacity: 0; transition: transform .2s ease-out, opacity .2s;
 }
 .stats-full-wrap.open .stats-full { transform: none; opacity: 1; }
 .sf-num {
   position: absolute; display: flex; align-items: center; justify-content: center;
-  font-size: 4cqw; color: #fff7e2; text-shadow: 0 1px 2px #000; pointer-events: none;
+  font-size: max(8px, 4cqw); color: #fff7e2; text-shadow: 0 1px 2px #000; pointer-events: none;
 }
 .sf-close { position: absolute; right: -2%; top: 2%; width: 11%; aspect-ratio: 1; padding: 0; border: 0; background: none; cursor: pointer; }
 .sf-close img { width: 100%; height: 100%; }

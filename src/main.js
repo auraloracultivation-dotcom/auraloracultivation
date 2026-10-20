@@ -7,7 +7,7 @@ import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlas
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 import {
   showLoading, showLogin, shouldForgetSession, showCreateCharacter, showNewPassword,
-  showConfirm, showFatal, toast, createHud, showCharacterPanel, showSettings, showWorldMap, drawRoundMap, createStatsDock,
+  showConfirm, showFatal, toast, createHud, showCharacterPanel, showSettings, showWorldMap, drawRoundMap, createStatsDock, enableFastTap,
 } from './ui/index.js';
 
 async function boot() {
@@ -127,6 +127,8 @@ async function boot() {
   });
   hud.setOnline(others.list.size + 1, maxPlayers);
   createStatsDock({ getValue: () => null }); // chờ bảng chỉ số cơ bản (đợt 1)
+  enableFastTap(); // nút bấm được cả khi tay kia đang giữ cần điều khiển
+  let targetId = null; // đạo hữu đang được chọn (chạm vào nhân vật bằng tay phải)
   hud.setBar('hp', 0, 0); hud.setBar('mp', 0, 0); hud.setBar('xp', 0, 0); // chờ dữ liệu chỉ số
   let miniTimer = 0;
   window.addEventListener('keydown', (e) => { // máy tính: phím cách = tấn công
@@ -160,6 +162,18 @@ async function boot() {
     }
     saver.tick(dt, me.moving);
     others.update(dt);
+    for (const tap of input.takeTaps()) { // chạm vào nhân vật khác → chọn / bỏ chọn
+      const wx = cam.x + tap.x / screen.scale, wy = cam.y + tap.y / screen.scale;
+      let best = null, bestD = 22;
+      for (const p of others.list.values()) {
+        const px = me.x + wrapDelta(p.x - me.x, map.width), py = me.y + wrapDelta(p.y - me.y, map.height) - 12 * sprite;
+        const d = Math.hypot(px - wx, py - wy);
+        if (d < bestD) { best = p; bestD = d; }
+      }
+      targetId = best ? (best.id === targetId ? null : best.id) : null;
+      if (best && targetId) toast(`Chọn: ${best.name}`, 1000);
+    }
+    if (targetId && !others.list.has(targetId)) targetId = null;
     if (me.slashT > 0) me.slashT -= dt;
     miniTimer -= dt;
     if (miniTimer <= 0) {
@@ -188,6 +202,13 @@ async function boot() {
       x: me.x + wrapDelta(p.x - me.x, map.width),
       y: me.y + wrapDelta(p.y - me.y, map.height),
     }))].sort((a, b) => a.y - b.y);
+    const tgt = targetId && people.find((p) => p.id === targetId);
+    if (tgt) { // vòng chọn mục tiêu dưới chân
+      ctx.save();
+      ctx.strokeStyle = '#ffd36a'; ctx.lineWidth = 1.5; ctx.globalAlpha = 0.6 + Math.sin(now / 180) * 0.3;
+      ctx.beginPath(); ctx.ellipse(tgt.x, tgt.y + 1, 9 * sprite + 2, 4 * sprite + 1, 0, 0, Math.PI * 2); ctx.stroke();
+      ctx.restore();
+    }
     for (const p of people) drawPlayer(ctx, p, sprite);
     drawSlash(ctx, me, sprite);
     for (const p of people) drawLabel(ctx, p, now, sprite);
