@@ -98,7 +98,7 @@ export function createHud(opts) {
   const SIZE = { attack: 92, s1: 56, s2: 56, s3: 56, fly: 58, blink: 46 };
   for (const a of actions) {
     const btn = pad.querySelector(`[data-act="${a.id}"]`);
-    crisp(btn, a.full ? 164 : 84, SIZE[a.slot], true); // khung tròn frames/o-tron.png 84×84; nút ảnh đầy đủ 164
+    crisp(btn, a.full ? 188 : 84, SIZE[a.slot], true); // khung tròn frames/o-tron.png 84×84; nút ảnh đầy đủ 188 (tools/fly_buttons.py)
     let state = 0; // nút bật/tắt (vd. Bay lên ↔ Hạ xuống): đổi ảnh + tên theo trạng thái
     btn.addEventListener('pointerdown', (e) => {
       e.preventDefault();
