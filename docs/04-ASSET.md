@@ -13,19 +13,25 @@
 3. Mảnh nào dùng trong game thì **chép sang tên có nghĩa**: `assets/ui/frames/`, `assets/ui/icons/`. Code chỉ dùng tên có nghĩa, không dùng số.
 4. Ảnh nền màn hình (vẽ sẵn ô nhập, nút) lưu `.webp` trong `assets/ui/bg/`. Code đặt ô nhập/nút thật đè đúng toạ độ đã vẽ (`src/ui/stage.js`).
 
-## Phong cách
-- Pixel art chibi tu tiên, góc nhìn **3/4 (chéo)** cho nhân vật, trang phục, thú cưỡi, pet.
-- Nhân vật trần cơ sở: **24×32 px**, tông kem trắng đơn giản. Trang bị là **lớp rời** chồng lên đúng khung đó.
+## Phong cách (quyết định 2026-10-20, thay quy tắc cũ 3/4 – 24×32)
+- Nhân vật kiểu **My Heroes: Dungeon Raid**: nhìn **chính diện**, đầu to + thân tròn, **không vẽ tay/chân trong hình**
+  (code vẽ 2 ô chân và 2 bàn tay), vũ khí to vác sau lưng. Đổi hướng = lật gương.
+- Mỗi món chỉ cần **1 hình tĩnh**; mọi chuyển động (nhún, chém xoay kiếm, ngự kiếm) là code — xem `docs/06-TRANG-BI.md`.
+- Thú cưỡi bỏ; linh thú chỉ đi theo hỗ trợ đánh.
 
 ## Kích thước và điểm neo
-| Loại | Khung | Điểm neo |
-|---|---|---|
-| Nhân vật / trang bị | 24×32 | giữa chân (12, 31) |
-| Thú cưỡi | 48×40 | giữa chân |
-| Ô bản đồ | 16×16 | góc trên trái |
+Hình trang bị không cần khung cố định: game co theo chiều cao nhân vật. Điểm neo ghi trong `data/equipment/art.json`.
+| Loại | Điểm neo |
+|---|---|
+| Trang phục (đầu + thân) | giữa gấu áo (`hem`) — đáy thân, chân code vẽ bên dưới |
+| Vũ khí | chuôi (điểm cầm) + góc lưỡi `angle` |
+| Cánh, pháp tướng | giữa đáy, đặt ở chân nhân vật |
+| Mặt nạ | tâm hình, đặt lên mặt |
+| Ô bản đồ | 16×16, góc trên trái |
 
 ## Đặt tên file
-Trùng mã ID dữ liệu: `assets/equipment/item.sword.luc.001.png`. Icon túi đồ: `...001.icon.png`.
+Hình: `assets/equipment/<ô>/art.<loại>.<số>.webp` (mã hình, không phải mã vật phẩm). Vật phẩm `item.*` trỏ tới mã hình,
+nên nhiều vật phẩm (cấp khác nhau) dùng chung một hình được.
 
 ## Hoạt ảnh
 - Sprite sheet theo hàng: hàng = hướng/hành động, cột = frame.

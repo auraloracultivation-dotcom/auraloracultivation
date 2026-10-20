@@ -61,12 +61,12 @@ function openModal(className, frame, maxW, build) {
 const vw = () => window.innerWidth, vh = () => window.innerHeight;
 
 // ---------- Nhân vật: trang bị đang đeo (khung v3 của chủ dự án, sinh bằng tools/char_panel.py) ----------
-// Ô trống hiện biểu tượng mờ vẽ sẵn (chưa đeo). Thứ tự ô: trái mũ, áo, vũ khí, nhẫn; phải cánh, pháp bảo, linh thú, dây chuyền.
+// Ô trống hiện biểu tượng mờ vẽ sẵn (chưa đeo). Thứ tự ô: trái mũ, áo, vũ khí, nhẫn; phải cánh, pháp tướng, linh thú, dây chuyền.
 const CHAR_FRAME = { src: 'assets/ui/frames/bang-nhan-vat-v3.png', w: 996, h: 1103, close: [886, 101, 86, 78] };
 const SLOT = [178, 162];
 const SLOTS = [
   { x: 122, y: 258, name: 'Mũ' }, { x: 122, y: 429, name: 'Áo giáp' }, { x: 122, y: 604, name: 'Vũ khí' },
-  { x: 122, y: 776, name: 'Nhẫn' }, { x: 696, y: 258, name: 'Cánh' }, { x: 696, y: 429, name: 'Pháp bảo' },
+  { x: 122, y: 776, name: 'Nhẫn' }, { x: 696, y: 258, name: 'Cánh' }, { x: 696, y: 429, name: 'Pháp tướng' },
   { x: 696, y: 604, name: 'Linh thú' }, { x: 696, y: 776, name: 'Dây chuyền' },
 ];
 const NAME_BARS = [[392, 819, 270, 57], [392, 886, 270, 58]]; // phần chữ của 2 thanh (sau biểu tượng người / sen)
@@ -82,7 +82,8 @@ export function showCharacterPanel({ name, realmName, equipment, drawAvatar }) {
 
     SLOTS.forEach((s, i) => {
       const item = equipment[i];
-      const slot = at(`<button type="button" class="eq-slot ${item ? 'filled' : ''}" aria-label="${s.name}"></button>`, s.x, s.y, ...SLOT);
+      const slot = at(`<button type="button" class="eq-slot ${item ? 'filled' : ''}" aria-label="${s.name}">${item?.icon ? `<img src="${item.icon}" alt="">` : ''}</button>`, s.x, s.y, ...SLOT);
+      if (item?.icon) Object.assign(slot.style, { display: 'flex', alignItems: 'center', justifyContent: 'center' });
       slot.addEventListener('click', () => toast(item ? item.name : `${s.name}: chưa trang bị`));
     });
     at(`<div class="char-line gold">${escapeHtml(name)}</div>`, ...NAME_BARS[0]);
@@ -109,10 +110,10 @@ function saveSettings(s) {
   try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); } catch { /* trình duyệt chặn lưu: bỏ qua */ }
 }
 
-export function showSettings({ onLogout }) {
+export function showSettings({ onLogout, onCode }) {
   const s = loadSettings();
   const maxW = () => Math.min(vw() * 0.94, 460, (vh() * 0.8 * SET_FRAME.w) / SET_FRAME.h);
-  openModal('modal-settings', SET_FRAME, maxW, ({ at, close }) => {
+  openModal('modal-settings', SET_FRAME, maxW, ({ at, close, col }) => {
     const toggle = (key, label) => {
       const btn = at(`<button type="button" class="set-hot" aria-label="${label}"><span>Tắt</span></button>`, ...SET_SPOTS[key]);
       const paint = () => {
@@ -128,6 +129,11 @@ export function showSettings({ onLogout }) {
       .addEventListener('click', () => toast('Hiện chỉ có Tiếng Việt'));
     at('<button type="button" class="set-hot" aria-label="Đăng xuất"></button>', ...SET_SPOTS.logout)
       .addEventListener('click', () => { close(); onLogout(); }); // đóng Cài đặt trước để hộp xác nhận hiện trên cùng
+    if (onCode) { // mục Nhập mã: nút dưới khung (khung vẽ sẵn không có chỗ cho nút này)
+      const b = el('<button type="button" class="set-code">Nhập mã</button>');
+      b.addEventListener('click', onCode);
+      col.appendChild(b);
+    }
   });
 }
 

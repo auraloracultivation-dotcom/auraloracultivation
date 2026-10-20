@@ -26,7 +26,7 @@ function tryJoin(topic, me, h, maxPlayers) {
         resolve(null);
         return;
       }
-      await ch.track({ id: me.id, name: me.name, x: me.x, y: me.y });
+      await ch.track({ id: me.id, name: me.name, x: me.x, y: me.y, look: me.look || null });
       resolve(ch);
     };
 
@@ -51,6 +51,11 @@ function createZoneLink(channel, line, me) {
     line,
     sendMove(x, y, moving, flying = false) {
       channel.send({ type: 'broadcast', event: 'move', payload: { id: me.id, x, y, moving, flying, t: Date.now() } });
+    },
+    // Đổi trang bị đang mặc: cập nhật Presence để người khác thấy (chỉ là hình ảnh, mã hình art.*)
+    setLook(look) {
+      me.look = look;
+      channel.track({ id: me.id, name: me.name, x: me.x, y: me.y, look });
     },
     sendChat(text) {
       channel.send({ type: 'broadcast', event: 'chat', payload: { id: me.id, text } });

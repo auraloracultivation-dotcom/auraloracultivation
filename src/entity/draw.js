@@ -5,10 +5,18 @@ export function liftOf(p) {
   return p.flying ? FLY_LIFT + Math.sin(performance.now() / 260) * 1.5 : 0;
 }
 
+import { hasLook, knownLook, drawRig, rigHeadHeight } from './rig.js';
+
 export function drawPlayer(ctx, p, scale = 1) {
   ctx.save();
   ctx.translate(p.x, p.y);
   ctx.scale(scale, scale);
+  const look = knownLook(p.look);
+  if (look) { // đã mặc trang bị: nhân vật ghép lớp (rig.js) tự lo bóng, nhún, bay
+    drawRig(ctx, p, look, (c) => drawBody(c, { ...p, x: 0, y: 0, facing: 1, noShadow: true }));
+    ctx.restore();
+    return;
+  }
   const lift = liftOf(p);
   if (lift) { // bóng nhỏ, mờ dưới đất + vệt linh khí
     ctx.fillStyle = 'rgba(0,0,0,0.22)';
@@ -60,7 +68,8 @@ function drawBody(ctx, p) {
 
 export function drawLabel(ctx, p, now, scale = 1) {
   const x = Math.round(p.x);
-  const y = Math.round(p.y + 33 - 33 * scale - liftOf(p) * scale); // bám theo đầu nhân vật đã thu nhỏ
+  const head = hasLook(p.look) ? rigHeadHeight(knownLook(p.look)) : 33;
+  const y = Math.round(p.y + 33 - head * scale - (p.look?.outfit ? (p.rig?.flyT || 0) * 8 : liftOf(p)) * scale); // bám theo đầu
   ctx.font = '6px sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'bottom';

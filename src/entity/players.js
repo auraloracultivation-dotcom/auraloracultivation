@@ -11,7 +11,18 @@ export function createLocalPlayer(character) {
     chat: null,
     chatUntil: 0,
     isLocal: true,
+    rig: null, // trạng thái hoạt ảnh nhân vật ghép lớp (rig.js)
+    look: null,
   };
+}
+
+// Trang bị người khác gửi qua Presence: chỉ nhận mã hình dạng art.<loại>.<…>, bỏ mọi thứ khác
+const LOOK_KEYS = ['outfit', 'weapon', 'wing', 'avatar'];
+function sanitizeLook(l) {
+  if (!l || typeof l !== 'object') return null;
+  const out = {};
+  for (const k of LOOK_KEYS) if (typeof l[k] === 'string' && /^art\.[a-z]+\.[a-z0-9.-]{1,30}$/.test(l[k])) out[k] = l[k];
+  return Object.keys(out).length ? out : null;
 }
 
 // worldW/worldH: kích thước thế giới vòng lặp để nội suy đi qua mép không bị kéo ngược cả bản đồ
@@ -22,7 +33,7 @@ export function createRemotePlayers(worldW, worldH) {
   function ensure(id, name, x, y) {
     let p = list.get(id);
     if (!p) {
-      p = { id, name: name || '…', x, y, tx: x, ty: y, facing: 1, moving: false, walkT: 0, chat: null, chatUntil: 0 };
+      p = { id, name: name || '…', x, y, tx: x, ty: y, facing: 1, moving: false, walkT: 0, chat: null, chatUntil: 0, rig: {}, look: null };
       list.set(id, p);
     } else if (name) {
       p.name = name;
@@ -39,7 +50,7 @@ export function createRemotePlayers(worldW, worldH) {
         if (key === myId || !metas.length) continue;
         const m = metas[metas.length - 1];
         present.add(key);
-        ensure(key, m.name, m.x, m.y);
+        ensure(key, m.name, m.x, m.y).look = sanitizeLook(m.look);
       }
       for (const id of list.keys()) if (!present.has(id)) list.delete(id);
     },

@@ -1,7 +1,7 @@
 // Giao diện trong game, bố cục kiểu MOBA:
 //   trên trái  — đạo hiệu + khung nhân vật (chạm ảnh đại diện mở bảng Nhân vật)
-//   trên phải  — menu (Bản đồ, Túi đồ, Kỹ năng, Nhiệm vụ, Tông môn, Cài đặt), bản đồ nhỏ, tên khu
-//   dưới trái  — cần điều khiển (chạm nền), nút Chat
+//   trên phải  — menu (Bản đồ, Kỹ năng, Nhiệm vụ, Tông môn, Cài đặt), bản đồ nhỏ, tên khu
+//   dưới trái  — cần điều khiển (chạm nền), nút Chat, nút Kho ngay dưới
 //   dưới phải  — nút tấn công + ô kỹ năng, Phi hành, Tốc biến
 // Khung lấy từ assets/ui (thiết kế chủ dự án).
 import { escapeHtml, toast } from './screens.js';
@@ -21,7 +21,6 @@ const ICON = (n) => `assets/ui/icons/${n}.png`;
 // Menu góc trên phải. id 'map' / 'settings' mở bảng; còn lại chưa có hệ thống → báo "sắp có"
 const MENU = [
   { id: 'map', name: 'Bản đồ', icon: 'ban-do-v2' },
-  { id: 'bag', name: 'Túi đồ', icon: 'tui-do' },
   { id: 'skills', name: 'Kỹ năng', icon: 'ky-nang' },
   { id: 'quests', name: 'Nhiệm vụ', icon: 'nhiem-vu' },
   { id: 'sect', name: 'Tông môn', icon: 'tong-mon' },
@@ -177,6 +176,15 @@ export function createHud(opts) {
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && input.hidden && document.activeElement === document.body) startTyping();
   });
+
+  // Kho (túi trữ vật): ngay dưới nút Chat (yêu cầu chủ dự án 2026-10-21)
+  const bagBtn = document.createElement('button');
+  bagBtn.type = 'button';
+  bagBtn.className = 'bag-btn glow';
+  bagBtn.setAttribute('aria-label', 'Kho');
+  bagBtn.innerHTML = `<img src="${ICON('tui-do')}" alt=""><span>Kho</span>`;
+  bagBtn.addEventListener('click', () => (opts.onOpenBag ? opts.onOpenBag() : toast('Kho: sắp có')));
+  root.appendChild(bagBtn);
 
   // Nhật ký chat: vài dòng gần nhất phía trên nút Chat, mờ dần sau một lúc
   const log = document.createElement('div');

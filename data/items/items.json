@@ -1,0 +1,255 @@
+{
+ "_ghi_chu": "Danh mục vật phẩm. cat = mục trong Kho: linh-duoc, linh-dan, dan-phuong, phap-khi, cong-phap, trang-bi, khac.",
+ "categories": [
+  [
+   "tat-ca",
+   "Tất cả"
+  ],
+  [
+   "linh-duoc",
+   "Linh dược"
+  ],
+  [
+   "linh-dan",
+   "Linh đan"
+  ],
+  [
+   "dan-phuong",
+   "Đan phương"
+  ],
+  [
+   "phap-khi",
+   "Pháp khí"
+  ],
+  [
+   "cong-phap",
+   "Công pháp"
+  ],
+  [
+   "trang-bi",
+   "Trang bị"
+  ],
+  [
+   "khac",
+   "Khác"
+  ]
+ ],
+ "items": [
+  {
+   "id": "item.outfit.he.1",
+   "name": "Kim Quang Đạo bào",
+   "cat": "trang-bi",
+   "slot": "trang-phuc",
+   "art": "art.outfit.he.1",
+   "set": "he.1",
+   "he": "Kim"
+  },
+  {
+   "id": "item.weapon.he.1",
+   "name": "Kim Quang Pháp kiếm",
+   "cat": "trang-bi",
+   "slot": "vu-khi",
+   "art": "art.weapon.he.1",
+   "set": "he.1",
+   "he": "Kim"
+  },
+  {
+   "id": "item.wing.he.1",
+   "name": "Kim Quang Linh dực",
+   "cat": "trang-bi",
+   "slot": "canh",
+   "art": "art.wing.he.1",
+   "set": "he.1",
+   "he": "Kim"
+  },
+  {
+   "id": "item.avatar.he.1",
+   "name": "Kim Quang Pháp tướng",
+   "cat": "trang-bi",
+   "slot": "phap-tuong",
+   "art": "art.avatar.he.1",
+   "set": "he.1",
+   "he": "Kim"
+  },
+  {
+   "id": "item.outfit.he.2",
+   "name": "U Minh Đạo bào",
+   "cat": "trang-bi",
+   "slot": "trang-phuc",
+   "art": "art.outfit.he.2",
+   "set": "he.2",
+   "he": "Ám"
+  },
+  {
+   "id": "item.weapon.he.2",
+   "name": "U Minh Pháp kiếm",
+   "cat": "trang-bi",
+   "slot": "vu-khi",
+   "art": "art.weapon.he.2",
+   "set": "he.2",
+   "he": "Ám"
+  },
+  {
+   "id": "item.wing.he.2",
+   "name": "U Minh Linh dực",
+   "cat": "trang-bi",
+   "slot": "canh",
+   "art": "art.wing.he.2",
+   "set": "he.2",
+   "he": "Ám"
+  },
+  {
+   "id": "item.avatar.he.2",
+   "name": "U Minh Pháp tướng",
+   "cat": "trang-bi",
+   "slot": "phap-tuong",
+   "art": "art.avatar.he.2",
+   "set": "he.2",
+   "he": "Ám"
+  },
+  {
+   "id": "item.outfit.he.3",
+   "name": "Thương Hải Đạo bào",
+   "cat": "trang-bi",
+   "slot": "trang-phuc",
+   "art": "art.outfit.he.3",
+   "set": "he.3",
+   "he": "Thủy"
+  },
+  {
+   "id": "item.weapon.he.3",
+   "name": "Thương Hải Pháp kiếm",
+   "cat": "trang-bi",
+   "slot": "vu-khi",
+   "art": "art.weapon.he.3",
+   "set": "he.3",
+   "he": "Thủy"
+  },
+  {
+   "id": "item.wing.he.3",
+   "name": "Thương Hải Linh dực",
+   "cat": "trang-bi",
+   "slot": "canh",
+   "art": "art.wing.he.3",
+   "set": "he.3",
+   "he": "Thủy"
+  },
+  {
+   "id": "item.avatar.he.3",
+   "name": "Thương Hải Pháp tướng",
+   "cat": "trang-bi",
+   "slot": "phap-tuong",
+   "art": "art.avatar.he.3",
+   "set": "he.3",
+   "he": "Thủy"
+  },
+  {
+   "id": "item.outfit.he.4",
+   "name": "Xích Diệm Đạo bào",
+   "cat": "trang-bi",
+   "slot": "trang-phuc",
+   "art": "art.outfit.he.4",
+   "set": "he.4",
+   "he": "Hỏa"
+  },
+  {
+   "id": "item.weapon.he.4",
+   "name": "Xích Diệm Pháp kiếm",
+   "cat": "trang-bi",
+   "slot": "vu-khi",
+   "art": "art.weapon.he.4",
+   "set": "he.4",
+   "he": "Hỏa"
+  },
+  {
+   "id": "item.wing.he.4",
+   "name": "Xích Diệm Linh dực",
+   "cat": "trang-bi",
+   "slot": "canh",
+   "art": "art.wing.he.4",
+   "set": "he.4",
+   "he": "Hỏa"
+  },
+  {
+   "id": "item.avatar.he.4",
+   "name": "Xích Diệm Pháp tướng",
+   "cat": "trang-bi",
+   "slot": "phap-tuong",
+   "art": "art.avatar.he.4",
+   "set": "he.4",
+   "he": "Hỏa"
+  },
+  {
+   "id": "item.outfit.he.5",
+   "name": "Thanh Mộc Đạo bào",
+   "cat": "trang-bi",
+   "slot": "trang-phuc",
+   "art": "art.outfit.he.5",
+   "set": "he.5",
+   "he": "Mộc"
+  },
+  {
+   "id": "item.weapon.he.5",
+   "name": "Thanh Mộc Pháp kiếm",
+   "cat": "trang-bi",
+   "slot": "vu-khi",
+   "art": "art.weapon.he.5",
+   "set": "he.5",
+   "he": "Mộc"
+  },
+  {
+   "id": "item.wing.he.5",
+   "name": "Thanh Mộc Linh dực",
+   "cat": "trang-bi",
+   "slot": "canh",
+   "art": "art.wing.he.5",
+   "set": "he.5",
+   "he": "Mộc"
+  },
+  {
+   "id": "item.avatar.he.5",
+   "name": "Thanh Mộc Pháp tướng",
+   "cat": "trang-bi",
+   "slot": "phap-tuong",
+   "art": "art.avatar.he.5",
+   "set": "he.5",
+   "he": "Mộc"
+  },
+  {
+   "id": "item.outfit.he.6",
+   "name": "Hậu Thổ Đạo bào",
+   "cat": "trang-bi",
+   "slot": "trang-phuc",
+   "art": "art.outfit.he.6",
+   "set": "he.6",
+   "he": "Thổ"
+  },
+  {
+   "id": "item.weapon.he.6",
+   "name": "Hậu Thổ Pháp kiếm",
+   "cat": "trang-bi",
+   "slot": "vu-khi",
+   "art": "art.weapon.he.6",
+   "set": "he.6",
+   "he": "Thổ"
+  },
+  {
+   "id": "item.wing.he.6",
+   "name": "Hậu Thổ Linh dực",
+   "cat": "trang-bi",
+   "slot": "canh",
+   "art": "art.wing.he.6",
+   "set": "he.6",
+   "he": "Thổ"
+  },
+  {
+   "id": "item.avatar.he.6",
+   "name": "Hậu Thổ Pháp tướng",
+   "cat": "trang-bi",
+   "slot": "phap-tuong",
+   "art": "art.avatar.he.6",
+   "set": "he.6",
+   "he": "Thổ"
+  }
+ ]
+}

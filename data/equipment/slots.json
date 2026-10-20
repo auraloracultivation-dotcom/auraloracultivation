@@ -1,0 +1,75 @@
+{
+ "_ghi_chu": "8 ô hành trang ở bảng Nhân vật (thứ tự = vị trí ô: trái 1-4, phải 1-4). 'art' = thư mục hình trong data/equipment/art.json; 'worn' = có hiện lên người không.",
+ "slots": [
+  {
+   "id": "mat-na",
+   "name": "Mặt nạ",
+   "panel": 0,
+   "art": "mat-na",
+   "worn": true
+  },
+  {
+   "id": "trang-phuc",
+   "name": "Trang phục",
+   "panel": 1,
+   "art": "trang-phuc",
+   "worn": true
+  },
+  {
+   "id": "vu-khi",
+   "name": "Vũ khí",
+   "panel": 2,
+   "art": "vu-khi",
+   "worn": true
+  },
+  {
+   "id": "nhan",
+   "name": "Nhẫn",
+   "panel": 3,
+   "art": "nhan",
+   "worn": false
+  },
+  {
+   "id": "canh",
+   "name": "Cánh",
+   "panel": 4,
+   "art": "canh",
+   "worn": true
+  },
+  {
+   "id": "phap-tuong",
+   "name": "Pháp tướng",
+   "panel": 5,
+   "art": "phap-tuong",
+   "worn": true,
+   "_ghi_chu": "Pháp tướng hiện to sau lưng nhân vật (ô phải 2; trước đây ghi nhầm là Pháp bảo)"
+  },
+  {
+   "id": "linh-thu",
+   "name": "Linh thú",
+   "panel": 6,
+   "art": "linh-thu",
+   "worn": false,
+   "_ghi_chu": "đi theo bên cạnh, hỗ trợ đánh; không cưỡi"
+  },
+  {
+   "id": "day-chuyen",
+   "name": "Dây chuyền",
+   "panel": 7,
+   "art": "day-chuyen",
+   "worn": false
+  }
+ ],
+ "extra": [],
+ "layers_back_to_front": [
+  "phap-tuong",
+  "canh",
+  "vu-khi",
+  "chan",
+  "than",
+  "tay",
+  "dau",
+  "mat-na"
+ ],
+ "default_outfit": "art.outfit.tan-thu.001"
+}
