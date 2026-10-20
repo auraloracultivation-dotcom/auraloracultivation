@@ -95,34 +95,33 @@ export function showSettings({ onLogout }) {
   });
 }
 
-// ---------- Bản đồ thế giới ----------
-const MAP_FRAME = { src: 'assets/ui/frames/bang-ban-do.png', w: 310, h: 201 };
+// ---------- Bản đồ thế giới (khung tròn, xoay quanh vị trí mình vì thế giới vòng lặp) ----------
+const MAP_FRAME = { src: 'assets/ui/frames/minimap-tron.png', w: 70, h: 75 };
+const ZOOMS = [250, 125, 60]; // bán kính hiển thị (ô): 250 = thấy trọn thế giới 500×500
 
-export function showWorldMap({ overview, zoneName, getMarkers }) {
+export function showWorldMap({ zoneName, draw }) {
   let raf = 0;
-  const done = openModal('modal-map', MAP_FRAME, ({ at }) => {
-    at(`<div class="map-title">${escapeHtml(zoneName)}</div>`, 70, 34, 170, 12);
-    const cv = at('<canvas class="world-map" width="300" height="300"></canvas>', 82, 48, 145, 145);
-    const ctx = cv.getContext('2d');
-    ctx.imageSmoothingEnabled = false;
+  let zi = 0;
+  const done = openModal('modal-map', MAP_FRAME, ({ box, at }) => {
+    // vòng tròn trong khung vẽ sẵn: tâm (35,40), bán kính ~27
+    const cv = at('<canvas class="world-map" width="420" height="420"></canvas>', 8.4, 13.2, 53.2, 53.2);
+    box.insertAdjacentHTML('afterbegin', `<div class="map-title"><span>${escapeHtml(zoneName)}</span></div>`);
+    const zoom = el(`<div class="map-zoom">
+      <button type="button" class="glow" data-z="1" aria-label="Phóng to">+</button>
+      <button type="button" class="glow" data-z="-1" aria-label="Thu nhỏ">−</button></div>`);
+    box.appendChild(zoom);
+    zoom.addEventListener('click', (e) => {
+      const d = Number(e.target.dataset.z || 0);
+      zi = Math.max(0, Math.min(ZOOMS.length - 1, zi + d));
+    });
     const frame = () => {
-      ctx.drawImage(overview, 0, 0, cv.width, cv.height);
-      for (const m of getMarkers()) {
-        ctx.fillStyle = m.self ? '#ffe36a' : '#ffffff';
-        ctx.strokeStyle = '#000';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(m.u * cv.width, m.v * cv.height, m.self ? 5 : 3.5, 0, Math.PI * 2);
-        ctx.fill(); ctx.stroke();
-      }
+      draw(cv, ZOOMS[zi]);
       raf = requestAnimationFrame(frame);
     };
     frame();
   });
-  const stop = () => cancelAnimationFrame(raf);
-  // dừng vẽ khi bảng đóng
   const obs = new MutationObserver(() => {
-    if (!document.querySelector('.modal-map')) { stop(); obs.disconnect(); }
+    if (!document.querySelector('.modal-map')) { cancelAnimationFrame(raf); obs.disconnect(); }
   });
   obs.observe(document.getElementById('ui'), { childList: true });
   return done;
