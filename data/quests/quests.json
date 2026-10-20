@@ -1,0 +1,655 @@
+{
+ "_status": "design",
+ "_nguon": "Auralora Lab v3 (21/10/2026)",
+ "_ghi_chu": "THIẾT KẾ từ Lab — CHƯA triển khai trong game, CHƯA kiểm thử cân bằng. Số liệu là baseline để thử nghiệm.",
+ "_ghi_chu_rieng": "Mục tiêu dạng NPC/địa điểm/cờ mở khoá (road_keeper, forest_edge, quest_board…) là PLACEHOLDER — chưa có thực thể trong game. ID quái/đan/khoáng Lab viết tắt đã đổi sang ID chuẩn, giữ bản gốc ở 'lab_target'/'lab_id'. 'boss.bing-ho' (Lab) không khớp quái nào — Băng Hồ là quái thường, boss Vùng Trắng là Tuyết Sơn Lão Tổ — chờ chủ dự án chọn.",
+ "reward_budget": {
+  "exp": "phút × EXP/phút × độ khó × khám phá",
+  "difficulty": {
+   "de": 0.7,
+   "vua": 1.0,
+   "kho": 1.5,
+   "noi-bat": 1.6,
+   "boss": 2.2
+  },
+  "explore": {
+   "thuong": 1.0,
+   "tim-toi": 1.15,
+   "an-hiem": 1.4
+  },
+  "daily_mul": 1.0,
+  "featured_mul": [
+   1.4,
+   1.6
+  ]
+ },
+ "placeholders": [
+  "alchemy_tutorial",
+  "awakening_guide",
+  "awakening_reminder",
+  "boss",
+  "boss.bing-ho",
+  "daily_system",
+  "equipment.blank_item",
+  "forest_edge",
+  "herb",
+  "herb_codex",
+  "hidden_legacy_branch",
+  "legacy.fragment",
+  "legacy.secret_shrine",
+  "legacy.stone_tablet.001",
+  "legacy_build_option",
+  "pill.recovery",
+  "quest.huyet-sai-mark",
+  "quest_board",
+  "realm.tc_path",
+  "road_keeper",
+  "safe_area_guide",
+  "streak_7_light"
+ ],
+ "quests": [
+  {
+   "id": "q.main.001",
+   "title": "Dấu chân bên bìa rừng",
+   "type": "main",
+   "realm": "lk",
+   "time": 5,
+   "level": 1,
+   "desc": "Tìm người giữ đường và đến rìa khu rừng an toàn.",
+   "goals": [
+    {
+     "type": "talk",
+     "target": "road_keeper",
+     "count": 1
+    },
+    {
+     "type": "reach",
+     "target": "forest_edge",
+     "count": 1
+    }
+   ],
+   "rewards": {
+    "exp": 60,
+    "spiritStone": 20,
+    "unlock": [
+     "quest_board",
+     "safe_area_guide"
+    ]
+   },
+   "next": [
+    "q.explore.001"
+   ]
+  },
+  {
+   "id": "q.explore.001",
+   "title": "Thảo dược cứu người",
+   "type": "explore",
+   "realm": "lk",
+   "time": 8,
+   "level": 1,
+   "desc": "Thu thập nguyên liệu hồi phục từ vùng xanh.",
+   "goals": [
+    {
+     "type": "collect",
+     "target": "item.thao.thanh-tam.001",
+     "count": 5
+    },
+    {
+     "type": "collect",
+     "target": "item.thao.linh-chi-non.001",
+     "count": 3
+    }
+   ],
+   "rewards": {
+    "exp": 100,
+    "items": [
+     {
+      "id": "item.thao.bat-nha.001",
+      "count": 2
+     }
+    ],
+    "spiritStone": 25
+   },
+   "next": [
+    "q.craft.001"
+   ]
+  },
+  {
+   "id": "q.craft.001",
+   "title": "Lò thuốc đầu tiên",
+   "type": "craft",
+   "realm": "lk",
+   "time": 7,
+   "level": 1,
+   "desc": "Học cách biến nguyên liệu thành đồ hồi phục.",
+   "goals": [
+    {
+     "type": "craft",
+     "target": "item.dan.tieu-hoi-huyet.001",
+     "count": 2,
+     "lab_target": "pill.recovery.basic"
+    }
+   ],
+   "rewards": {
+    "exp": 120,
+    "spiritStone": 20,
+    "unlock": [
+     "alchemy_tutorial"
+    ]
+   },
+   "next": [
+    "q.combat.001"
+   ]
+  },
+  {
+   "id": "q.combat.001",
+   "title": "Yêu Hồ quấy phá",
+   "type": "combat",
+   "realm": "lk",
+   "time": 10,
+   "level": 1,
+   "desc": "Đánh bại Yêu Hồ và luyện né đòn nặng.",
+   "goals": [
+    {
+     "type": "kill",
+     "target": "monster.xanh.yeu-ho.001",
+     "count": 3,
+     "lab_target": "monster.yeu-ho"
+    },
+    {
+     "type": "dodge_heavy",
+     "target": "any",
+     "count": 1
+    }
+   ],
+   "rewards": {
+    "exp": 180,
+    "spiritStone": 45,
+    "items": [
+     {
+      "id": "item.dan.tieu-hoi-huyet.001",
+      "count": 2,
+      "lab_id": "pill.recovery.basic"
+     }
+    ]
+   },
+   "next": [
+    "q.main.002"
+   ]
+  },
+  {
+   "id": "q.main.002",
+   "title": "Tiếng động trong sơn động",
+   "type": "main",
+   "realm": "lk",
+   "time": 18,
+   "level": 3,
+   "desc": "Hạ Thanh Xà và Sơn Động Lão Yêu để tìm nguồn dị động.",
+   "goals": [
+    {
+     "type": "kill",
+     "target": "monster.xanh.thanh-xa.001",
+     "count": 1,
+     "lab_target": "monster.thanh-xa"
+    },
+    {
+     "type": "boss",
+     "target": "monster.xanh.son-dong-lao-yeu.001",
+     "count": 1,
+     "lab_target": "boss.son-dong-lao-yeu"
+    }
+   ],
+   "rewards": {
+    "exp": 350,
+    "spiritStone": 100,
+    "choiceReward": [
+     "weapon_blueprint",
+     "alchemy_bundle"
+    ],
+    "unlock": [
+     "realm.tc_path"
+    ]
+   },
+   "next": [
+    "q.explore.002"
+   ]
+  },
+  {
+   "id": "q.explore.002",
+   "title": "Bia đá vô danh",
+   "type": "explore",
+   "realm": "lk",
+   "time": 12,
+   "level": 3,
+   "desc": "Tìm và đọc bia đá được lộ ra sau trận Boss.",
+   "goals": [
+    {
+     "type": "discover",
+     "target": "legacy.stone_tablet.001",
+     "count": 1
+    }
+   ],
+   "rewards": {
+    "exp": 220,
+    "legacyFragment": 1,
+    "unlock": [
+     "hidden_legacy_branch"
+    ]
+   },
+   "next": [
+    "q.daily.intro"
+   ]
+  },
+  {
+   "id": "q.daily.intro",
+   "title": "Ngày đầu tiên của đạo",
+   "type": "main",
+   "realm": "lk",
+   "time": 8,
+   "level": 3,
+   "desc": "Hoàn thành bất kỳ 1 nhiệm vụ hàng ngày để mở hệ Daily và chuỗi 7 ngày nhẹ.",
+   "goals": [
+    {
+     "type": "complete_daily",
+     "target": "any",
+     "count": 1
+    }
+   ],
+   "rewards": {
+    "exp": 150,
+    "spiritStone": 40,
+    "unlock": [
+     "daily_system",
+     "streak_7_light"
+    ]
+   },
+   "next": []
+  },
+  {
+   "id": "q.daily.lk.collect",
+   "title": "[Daily] Thu thập Thanh Tâm",
+   "type": "daily",
+   "realm": "lk",
+   "time": 6,
+   "level": 1,
+   "desc": "Thu thập 8 Thanh Tâm Thảo vùng xanh.",
+   "goals": [
+    {
+     "type": "collect",
+     "target": "item.thao.thanh-tam.001",
+     "count": 8
+    }
+   ],
+   "rewards": {
+    "exp": 80,
+    "spiritStone": 15,
+    "items": [
+     {
+      "id": "item.thao.thanh-tam.001",
+      "count": 2
+     }
+    ]
+   },
+   "next": []
+  },
+  {
+   "id": "q.daily.lk.craft",
+   "title": "[Daily] Luyện đan hồi phục",
+   "type": "daily",
+   "realm": "lk",
+   "time": 5,
+   "level": 1,
+   "desc": "Luyện 2 đan hồi phục cơ bản.",
+   "goals": [
+    {
+     "type": "craft",
+     "target": "item.dan.tieu-hoi-huyet.001",
+     "count": 2,
+     "lab_target": "pill.recovery.basic"
+    }
+   ],
+   "rewards": {
+    "exp": 70,
+    "spiritStone": 12
+   },
+   "next": []
+  },
+  {
+   "id": "q.daily.lk.combat",
+   "title": "[Daily] Săn Yêu Hồ",
+   "type": "daily",
+   "realm": "lk",
+   "time": 8,
+   "level": 1,
+   "desc": "Hạ 5 Yêu Hồ hoặc Thanh Xà.",
+   "goals": [
+    {
+     "type": "kill",
+     "target": "monster.xanh.yeu-ho.001",
+     "count": 5,
+     "lab_target": "monster.yeu-ho"
+    }
+   ],
+   "rewards": {
+    "exp": 90,
+    "spiritStone": 20
+   },
+   "next": []
+  },
+  {
+   "id": "q.daily.lk.hot",
+   "title": "[Nổi bật] Sơn Động Lão Yêu",
+   "type": "daily",
+   "realm": "lk",
+   "time": 12,
+   "level": 3,
+   "desc": "Hạ Sơn Động Lão Yêu hoặc Elite vùng xanh 1 lần. Thưởng cao hơn daily thường.",
+   "goals": [
+    {
+     "type": "boss",
+     "target": "monster.xanh.son-dong-lao-yeu.001",
+     "count": 1,
+     "lab_target": "boss.son-dong-lao-yeu"
+    }
+   ],
+   "rewards": {
+    "exp": 220,
+    "spiritStone": 60,
+    "items": [
+     {
+      "id": "item.dan.tieu-hoi-huyet.001",
+      "count": 3,
+      "lab_id": "pill.recovery.basic"
+     }
+    ]
+   },
+   "next": []
+  },
+  {
+   "id": "q.daily.tc.collect",
+   "title": "[Daily] Huyết Linh & Xích Thiết",
+   "type": "daily",
+   "realm": "tc",
+   "time": 8,
+   "level": 10,
+   "desc": "Thu thập 6 Huyết Linh Thảo + 3 Xích Thiết.",
+   "goals": [
+    {
+     "type": "collect",
+     "target": "item.thao.huyet-linh.001",
+     "count": 6
+    },
+    {
+     "type": "collect",
+     "target": "item.khoang.xich-thiet.001",
+     "count": 3,
+     "lab_target": "ore.xich-thiet"
+    }
+   ],
+   "rewards": {
+    "exp": 140,
+    "spiritStone": 35
+   },
+   "next": []
+  },
+  {
+   "id": "q.daily.tc.craft",
+   "title": "[Daily] Luyện phôi",
+   "type": "daily",
+   "realm": "tc",
+   "time": 10,
+   "level": 10,
+   "desc": "Luyện 1 phôi trang bị bất kỳ.",
+   "goals": [
+    {
+     "type": "craft",
+     "target": "equipment.blank_item",
+     "count": 1
+    }
+   ],
+   "rewards": {
+    "exp": 160,
+    "spiritStone": 40,
+    "unlock": [
+     "awakening_reminder"
+    ]
+   },
+   "next": []
+  },
+  {
+   "id": "q.daily.tc.hot",
+   "title": "[Nổi bật] Thức tỉnh hoặc Elite Cam",
+   "type": "daily",
+   "realm": "tc",
+   "time": 15,
+   "level": 10,
+   "desc": "Thức tỉnh 1 phôi hoặc hạ Elite vùng Cam.",
+   "goals": [
+    {
+     "type": "awaken",
+     "target": "any",
+     "count": 1
+    }
+   ],
+   "rewards": {
+    "exp": 280,
+    "spiritStone": 80
+   },
+   "next": []
+  },
+  {
+   "id": "q.craft.002",
+   "title": "Tự tay luyện phôi",
+   "type": "craft",
+   "realm": "tc",
+   "time": 15,
+   "level": 10,
+   "desc": "Luyện một phôi trang bị bằng thảo dược và khoáng phù hợp.",
+   "goals": [
+    {
+     "type": "craft",
+     "target": "equipment.blank_item",
+     "count": 1
+    },
+    {
+     "type": "collect",
+     "target": "item.khoang.huyen-thiet.001",
+     "count": 5,
+     "lab_target": "ore.huyen-thiet"
+    }
+   ],
+   "rewards": {
+    "exp": 450,
+    "spiritStone": 120,
+    "unlock": [
+     "awakening_guide"
+    ]
+   },
+   "next": []
+  },
+  {
+   "id": "q.combat.002",
+   "title": "Dấu ấn của Huyết Sài",
+   "type": "combat",
+   "realm": "tc",
+   "time": 20,
+   "level": 10,
+   "desc": "Đánh bại Huyết Sài và mang về dấu ấn chứng minh.",
+   "goals": [
+    {
+     "type": "kill",
+     "target": "monster.cam.huyet-sai.001",
+     "count": 5,
+     "lab_target": "monster.huyet-sai"
+    },
+    {
+     "type": "collect",
+     "target": "quest.huyet-sai-mark",
+     "count": 1
+    }
+   ],
+   "rewards": {
+    "exp": 600,
+    "spiritStone": 180,
+    "items": [
+     {
+      "id": "item.thao.xich-qua.001",
+      "count": 1
+     }
+    ]
+   },
+   "next": []
+  },
+  {
+   "id": "q.combat.003",
+   "title": "Thử thách băng hồ",
+   "type": "combat",
+   "realm": "kd",
+   "time": 25,
+   "level": 20,
+   "desc": "Chuẩn bị đan và chọn thời điểm đánh trước khi đấu Băng Hồ.",
+   "goals": [
+    {
+     "type": "use",
+     "target": "pill.recovery",
+     "count": 2
+    },
+    {
+     "type": "boss",
+     "target": "boss.bing-ho",
+     "count": 1
+    }
+   ],
+   "rewards": {
+    "exp": 1000,
+    "spiritStone": 300,
+    "choiceReward": [
+     "cold_resist_gear",
+     "technique_fragment"
+    ]
+   },
+   "next": []
+  },
+  {
+   "id": "q.long.001",
+   "title": "Bách thảo ký",
+   "type": "long",
+   "realm": "lk",
+   "time": 60,
+   "level": 1,
+   "desc": "Ghi nhận 12 loại linh thảo. Tiến độ giữ giữa các lần chơi. Milestone: 25% / 50% / 75% / 100%.",
+   "goals": [
+    {
+     "type": "discover_unique",
+     "target": "herb",
+     "count": 12
+    }
+   ],
+   "rewards": {
+    "title": "Người hiểu thảo mộc",
+    "exp": 500,
+    "unlock": [
+     "herb_codex"
+    ],
+    "milestones": [
+     {
+      "at": 0.25,
+      "reward": "exp_small"
+     },
+     {
+      "at": 0.5,
+      "reward": "title_temp"
+     },
+     {
+      "at": 0.75,
+      "reward": "herb_boost"
+     },
+     {
+      "at": 1,
+      "reward": "full"
+     }
+    ]
+   },
+   "next": []
+  },
+  {
+   "id": "q.long.002",
+   "title": "Kẻ săn Boss",
+   "type": "long",
+   "realm": "tc",
+   "time": 120,
+   "level": 10,
+   "desc": "Hạ 5 Boss vùng đã mở khóa. Không cần hoàn thành trong một ngày. Có milestone trung gian.",
+   "goals": [
+    {
+     "type": "boss_unique",
+     "target": "boss",
+     "count": 5
+    }
+   ],
+   "rewards": {
+    "title": "Thợ săn tinh anh",
+    "exp": 1200,
+    "cosmetic": "boss_hunter_aura",
+    "milestones": [
+     {
+      "at": 0.4,
+      "reward": "spirit_stone"
+     },
+     {
+      "at": 0.8,
+      "reward": "cosmetic_partial"
+     },
+     {
+      "at": 1,
+      "reward": "full"
+     }
+    ]
+   },
+   "next": []
+  },
+  {
+   "id": "q.long.003",
+   "title": "Con đường truyền thừa",
+   "type": "long",
+   "realm": "na",
+   "time": 180,
+   "level": 30,
+   "desc": "Tìm 10 mảnh truyền thừa + 3 điện thờ bí mật. Milestone mở dần.",
+   "goals": [
+    {
+     "type": "collect",
+     "target": "legacy.fragment",
+     "count": 10
+    },
+    {
+     "type": "discover",
+     "target": "legacy.secret_shrine",
+     "count": 3
+    }
+   ],
+   "rewards": {
+    "title": "Người kế thừa",
+    "exp": 2000,
+    "unlock": [
+     "legacy_build_option"
+    ],
+    "milestones": [
+     {
+      "at": 0.3,
+      "reward": "fragment_bonus"
+     },
+     {
+      "at": 0.6,
+      "reward": "title_temp"
+     },
+     {
+      "at": 1,
+      "reward": "full"
+     }
+    ]
+   },
+   "next": []
+  }
+ ]
+}

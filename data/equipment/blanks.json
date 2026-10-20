@@ -1,0 +1,202 @@
+{
+ "_status": "design",
+ "_nguon": "Auralora Lab v3 (21/10/2026)",
+ "_ghi_chu": "THIẾT KẾ từ Lab — CHƯA triển khai trong game, CHƯA kiểm thử cân bằng. Số liệu là baseline để thử nghiệm.",
+ "_ghi_chu_rieng": "Dây chuyền: Lab ghi 'Huyền Thiết ×18' ở LK3 nhưng Huyền Thiết là khoáng Vùng Xám — CÓ THỂ Lab muốn ghi 'Huyền Thiết Vụn'. Giữ nguyên Lab, chờ chủ dự án xác nhận.",
+ "_luong": "Farm → luyện PHÔI (0 chỉ số, chỉ có hình) → Thức tỉnh (tốn Linh thạch) → phẩm + dòng chỉ số → Rã (hoàn một phần) hoặc Thức tỉnh lại",
+ "blanks": [
+  {
+   "id": "recipe.phoi.vu-khi.001",
+   "slot": "vu-khi",
+   "unlock": "lk1",
+   "inputs": [
+    {
+     "id": "item.khoang.huyen-thiet-vun.001",
+     "count": 12
+    },
+    {
+     "id": "item.thao.thanh-tam.001",
+     "count": 6
+    }
+   ],
+   "rate": 0.95,
+   "sample_names": [
+    "Thanh Phong Kiếm",
+    "Huyết Ảnh Kiếm",
+    "Huyền Thiên Kiếm"
+   ]
+  },
+  {
+   "id": "recipe.phoi.trang-phuc.001",
+   "slot": "trang-phuc",
+   "unlock": "lk1",
+   "inputs": [
+    {
+     "id": "item.khoang.huyen-thiet-vun.001",
+     "count": 15
+    },
+    {
+     "id": "item.thao.thanh-tam.001",
+     "count": 8
+    }
+   ],
+   "rate": 0.95,
+   "sample_names": [
+    "Thanh Vân Đạo Bào",
+    "Huyết Chiến Y",
+    "Huyền Giáp"
+   ]
+  },
+  {
+   "id": "recipe.phoi.nhan.001",
+   "slot": "nhan",
+   "unlock": "lk1",
+   "inputs": [
+    {
+     "id": "item.khoang.tinh-sa.001",
+     "count": 10
+    },
+    {
+     "id": "item.thao.linh-chi-non.001",
+     "count": 5
+    }
+   ],
+   "rate": 0.92,
+   "sample_names": [
+    "Linh Giới Chỉ",
+    "Huyết Ngọc Giới"
+   ]
+  },
+  {
+   "id": "recipe.phoi.day-chuyen.001",
+   "slot": "day-chuyen",
+   "unlock": "lk3",
+   "inputs": [
+    {
+     "id": "item.khoang.huyen-thiet.001",
+     "count": 18
+    },
+    {
+     "id": "item.khoang.tinh-sa.001",
+     "count": 8
+    },
+    {
+     "id": "item.thao.linh-chi-non.001",
+     "count": 10
+    }
+   ],
+   "rate": 0.9,
+   "sample_names": [
+    "Thanh Tâm Hạng Liên",
+    "Huyền Ngọc Liên"
+   ]
+  },
+  {
+   "id": "recipe.phoi.mat-na.001",
+   "slot": "mat-na",
+   "unlock": "lk5",
+   "inputs": [
+    {
+     "id": "item.khoang.xich-thiet.001",
+     "count": 20
+    },
+    {
+     "id": "item.thao.huyet-linh.001",
+     "count": 12
+    }
+   ],
+   "rate": 0.88,
+   "sample_names": [
+    "Hồ Diện",
+    "Băng Phách Mặt Nạ",
+    "Hắc Vực Diện"
+   ]
+  },
+  {
+   "id": "recipe.phoi.linh-thu.001",
+   "slot": "linh-thu",
+   "unlock": "kd_so",
+   "inputs": [
+    {
+     "id": "item.khoang.han-thiet.001",
+     "count": 40
+    },
+    {
+     "id": "item.khoang.bang-ngoc.001",
+     "count": 12
+    },
+    {
+     "id": "item.thao.han-linh.001",
+     "count": 25
+    },
+    {
+     "id": "item.dacbiet.hon-thu-tinh.001",
+     "count": 1
+    }
+   ],
+   "rate": 0.75,
+   "sample_names": [
+    "Linh Hồ Ấn",
+    "Huyết Lang Khế",
+    "Huyền Thú Phù"
+   ]
+  },
+  {
+   "id": "recipe.phoi.canh.001",
+   "slot": "canh",
+   "unlock": "na_so",
+   "inputs": [
+    {
+     "id": "item.khoang.huyen-thiet.001",
+     "count": 55
+    },
+    {
+     "id": "item.khoang.u-ngoc.001",
+     "count": 15
+    },
+    {
+     "id": "item.thao.huyen-linh.001",
+     "count": 35
+    },
+    {
+     "id": "item.dacbiet.tinh-hon.001",
+     "count": 1
+    }
+   ],
+   "rate": 0.65,
+   "sample_names": [
+    "Thanh Phong Dực",
+    "Huyết Diễm Dực",
+    "Hư Không Dực"
+   ]
+  },
+  {
+   "id": "recipe.phoi.phap-tuong.001",
+   "slot": "phap-tuong",
+   "unlock": "ht_so",
+   "inputs": [
+    {
+     "id": "item.khoang.hac-thiet.001",
+     "count": 80
+    },
+    {
+     "id": "item.khoang.hu-ngoc.001",
+     "count": 20
+    },
+    {
+     "id": "item.thao.hac-linh.001",
+     "count": 50
+    },
+    {
+     "id": "item.dacbiet.tinh-hon-co.001",
+     "count": 1
+    }
+   ],
+   "rate": 0.5,
+   "sample_names": [
+    "Thiên Tôn Pháp Tướng",
+    "Hắc Vực Pháp Tướng"
+   ]
+  }
+ ]
+}

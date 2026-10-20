@@ -1,0 +1,174 @@
+{
+ "_status": "design",
+ "_nguon": "Auralora Lab v3 (21/10/2026)",
+ "_ghi_chu": "THIẾT KẾ từ Lab — CHƯA triển khai trong game, CHƯA kiểm thử cân bằng. Số liệu là baseline để thử nghiệm.",
+ "_ghi_chu_rieng": "LK2–4, LK6–9 chưa có hệ số trong Lab: nội suy khi cần, phải ghi rõ là nội suy.",
+ "realms": [
+  {
+   "id": "realm.luyen-khi",
+   "name": "Luyện Khí",
+   "short": "LK",
+   "stages": [
+    "lk1",
+    "lk2",
+    "lk3",
+    "lk4",
+    "lk5",
+    "lk6",
+    "lk7",
+    "lk8",
+    "lk9",
+    "lk10"
+   ],
+   "unlock_skill": "danh-thuong",
+   "zone": "xanh",
+   "target_hours": "4–8 (LK1→LK10)"
+  },
+  {
+   "id": "realm.truc-co",
+   "name": "Trúc Cơ",
+   "short": "TC",
+   "stages": [
+    "so",
+    "trung",
+    "hau"
+   ],
+   "unlock_skill": "skill.chieu.kiem-khi.001",
+   "zone": "cam",
+   "breakthrough": {
+    "rate": 0.85,
+    "pill": "item.dan.truc-co.001"
+   },
+   "target_hours": "15–25 (hoàn thành)"
+  },
+  {
+   "id": "realm.ket-dan",
+   "name": "Kết Đan",
+   "short": "KD",
+   "stages": [
+    "so",
+    "trung",
+    "hau"
+   ],
+   "unlock_skill": "skill.khe.linh-thu.001",
+   "zone": "trang",
+   "breakthrough": {
+    "rate": 0.7,
+    "pill": "item.dan.ket-dan.001"
+   },
+   "target_hours": "40–60"
+  },
+  {
+   "id": "realm.nguyen-anh",
+   "name": "Nguyên Anh",
+   "short": "NA",
+   "stages": [
+    "so",
+    "trung",
+    "hau"
+   ],
+   "unlock_skill": "skill.than.canh-phong.001",
+   "zone": "xam",
+   "breakthrough": {
+    "rate": 0.5,
+    "pill": "item.dan.nguyen-anh.001"
+   },
+   "target_hours": "80–120"
+  },
+  {
+   "id": "realm.hoa-than",
+   "name": "Hóa Thần",
+   "short": "HT",
+   "stages": [
+    "so",
+    "trung",
+    "hau"
+   ],
+   "unlock_skill": "skill.phap-tuong.thien-thu.001",
+   "zone": "than",
+   "breakthrough": {
+    "rate": 0.3,
+    "pill": "item.dan.hoa-than.001"
+   },
+   "target_hours": "150–250 (tới HT Sơ)"
+  }
+ ],
+ "power_mul": {
+  "lk1": 1.0,
+  "lk5": 1.58,
+  "lk10": 2.9,
+  "tc_so": 3.4,
+  "tc_trung": 4.0,
+  "tc_hau": 4.7,
+  "kd_so": 5.6,
+  "kd_trung": 6.6,
+  "kd_hau": 7.8,
+  "na_so": 9.5,
+  "na_trung": 11.2,
+  "na_hau": 13.3,
+  "ht_so": 16.5,
+  "ht_trung": 19.5,
+  "ht_hau": 23.5
+ },
+ "lab_duel_build": {
+  "_ghi_chu": "Chỉ dùng cho Lab Đấu: [số ô trang bị random, gearQ]",
+  "lk1": [
+   3,
+   0.15
+  ],
+  "lk5": [
+   4,
+   0.25
+  ],
+  "lk10": [
+   5,
+   0.35
+  ],
+  "tc_so": [
+   5,
+   0.45
+  ],
+  "tc_hau": [
+   5,
+   0.55
+  ],
+  "kd_so": [
+   6,
+   0.6
+  ],
+  "kd_hau": [
+   6,
+   0.7
+  ],
+  "na_so": [
+   7,
+   0.75
+  ],
+  "na_hau": [
+   7,
+   0.85
+  ],
+  "ht_so": [
+   8,
+   0.9
+  ],
+  "ht_hau": [
+   8,
+   1.0
+  ]
+ },
+ "breakthrough_rules": {
+  "require": "đỉnh cảnh giới hiện tại + đủ đan đột phá",
+  "fail_material_loss": [
+   0.3,
+   0.5
+  ],
+  "fail_cultivation_loss": "không tụt (hoặc tụt nhẹ — CHƯA chốt)",
+  "protect_charm": {
+   "id": "item.phu.bao-ho.001",
+   "add_rate_points": 0.15,
+   "_ghi_chu": "cộng 15 điểm %, không nhân; giới hạn lần/ngày (số lần CHƯA chốt)"
+  },
+  "_ghi_chu": "Tỷ lệ là giả thuyết thiết kế, chưa mô phỏng."
+ }
+}

@@ -1,0 +1,137 @@
+{
+ "_status": "design",
+ "_nguon": "Auralora Lab v3 (21/10/2026)",
+ "_ghi_chu": "THIẾT KẾ từ Lab — CHƯA triển khai trong game, CHƯA kiểm thử cân bằng. Số liệu là baseline để thử nghiệm.",
+ "_ghi_chu_rieng": "Luyện/nâng công pháp CHỈ tốn nguyên liệu, KHÔNG tốn Linh thạch; cấp 1→5. 3 công pháp cuối Lab chưa ghi nguyên liệu. Luyện Khí Quyết: Lab ghi 'Huyền Thiết ×5' (khoáng Vùng Xám) — có thể là Huyền Thiết Vụn, chờ xác nhận. skill.phaptuong.basic.001 (phap-tuong.json) là kỹ năng hoá hình đang chạy thử, khác với công pháp này.",
+ "skills": [
+  {
+   "id": "skill.tamphap.luyen-khi.001",
+   "name": "Luyện Khí Quyết",
+   "type": "tam-phap",
+   "unlock": "lk1",
+   "desc": "Kinh văn sơ cấp, khí trong đan điền",
+   "max_level": 5,
+   "learn": {
+    "inputs": [
+     {
+      "id": "item.thao.thanh-tam.001",
+      "count": 20
+     },
+     {
+      "id": "item.khoang.huyen-thiet.001",
+      "count": 5
+     }
+    ],
+    "how": "Shop / nhiệm vụ đầu"
+   }
+  },
+  {
+   "id": "skill.chieu.kiem-khi.001",
+   "name": "Kiếm Khí Quyết",
+   "type": "chieu-thuc",
+   "unlock": "tc_so",
+   "desc": "Sóng kiếm khí bắn xa",
+   "max_level": 5,
+   "learn": {
+    "inputs": [
+     {
+      "id": "item.thao.huyet-linh.001",
+      "count": 40
+     },
+     {
+      "id": "item.khoang.xich-thiet.001",
+      "count": 15
+     }
+    ],
+    "how": "Shop + Boss Vùng Cam"
+   }
+  },
+  {
+   "id": "skill.khe.linh-thu.001",
+   "name": "Linh Thú Khế Ước",
+   "type": "chieu-thuc",
+   "unlock": "kd_so",
+   "desc": "Gọi linh thú đồng hành",
+   "max_level": 5,
+   "learn": {
+    "inputs": [
+     {
+      "id": "item.thao.han-linh.001",
+      "count": 60
+     },
+     {
+      "id": "item.dacbiet.hon-thu-tinh.001",
+      "count": 2
+     }
+    ],
+    "how": "Boss Vùng Trắng"
+   }
+  },
+  {
+   "id": "skill.than.canh-phong.001",
+   "name": "Thiên Phong Dực Quyết",
+   "type": "than-phap-aoe",
+   "unlock": "na_so",
+   "desc": "Đôi cánh linh lực, quét diện rộng",
+   "max_level": 5,
+   "learn": {
+    "inputs": [
+     {
+      "id": "item.thao.huyen-linh.001",
+      "count": 80
+     },
+     {
+      "id": "item.dacbiet.tinh-hon.001",
+      "count": 2
+     }
+    ],
+    "how": "Boss Vùng Xám"
+   }
+  },
+  {
+   "id": "skill.phap-tuong.thien-thu.001",
+   "name": "Pháp Tướng Thiên Thư",
+   "type": "duy-tri",
+   "unlock": "ht_so",
+   "desc": "+60% dame Linh Lực, +25% DEF, tiêu hao 12 LL/tick",
+   "max_level": 5,
+   "learn": {
+    "inputs": [
+     {
+      "id": "item.thao.hac-linh.001",
+      "count": 100
+     },
+     {
+      "id": "item.dacbiet.tinh-hon-co.001",
+      "count": 2
+     }
+    ],
+    "how": "Boss Hắc Vực / ẩn"
+   }
+  },
+  {
+   "id": "skill.tamphap.thanh-tam.001",
+   "name": "Thanh Tâm Tĩnh Khí Quyết",
+   "type": "tam-phap",
+   "unlock": "lk1",
+   "desc": "Tăng tốc tu luyện nhẹ",
+   "max_level": 5
+  },
+  {
+   "id": "skill.chieu.hoi-linh.001",
+   "name": "Hồi Linh Thuật",
+   "type": "chieu-ho-tro",
+   "unlock": "tc_so",
+   "desc": "Hồi một phần Linh Lực",
+   "max_level": 5
+  },
+  {
+   "id": "skill.than.lang-ba.001",
+   "name": "Lăng Ba Vi Bộ",
+   "type": "than-phap",
+   "unlock": "kd_so",
+   "desc": "Tăng Né + Tốc Chạy ngắn hạn",
+   "max_level": 5
+  }
+ ]
+}

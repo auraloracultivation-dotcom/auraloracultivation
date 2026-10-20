@@ -1,0 +1,240 @@
+{
+ "_status": "design",
+ "_nguon": "Auralora Lab v3 (21/10/2026)",
+ "_ghi_chu": "THIẾT KẾ từ Lab — CHƯA triển khai trong game, CHƯA kiểm thử cân bằng. Số liệu là baseline để thử nghiệm.",
+ "_ghi_chu_rieng": "Linh thảo + khoáng dùng chung cho luyện đan, luyện phôi và công pháp. ID linh thảo giữ đúng Lab; khoáng/đặc biệt Lab chưa có ID nên đặt theo quy tắc docs/02.",
+ "materials": [
+  {
+   "id": "item.thao.thanh-tam.001",
+   "name": "Thanh Tâm Thảo",
+   "cat": "linh-duoc",
+   "group": "thao",
+   "zone": "xanh",
+   "use": "Hồi HP, Trúc Cơ Đan · phụ phôi Kiếm/Đạo bào"
+  },
+  {
+   "id": "item.thao.linh-chi-non.001",
+   "name": "Linh Chi Non",
+   "cat": "linh-duoc",
+   "group": "thao",
+   "zone": "xanh",
+   "use": "Hồi Linh Lực · phụ phôi Nhẫn/Dây chuyền"
+  },
+  {
+   "id": "item.thao.bat-nha.001",
+   "name": "Bát Nhã Cỏ",
+   "cat": "linh-duoc",
+   "group": "thao",
+   "zone": "xanh",
+   "use": "Đan tăng chỉ số · phụ phôi sơ"
+  },
+  {
+   "id": "item.thao.huyet-linh.001",
+   "name": "Huyết Linh Thảo",
+   "cat": "linh-duoc",
+   "group": "thao",
+   "zone": "cam",
+   "use": "Kết Đan Đan, Cường Công · phụ phôi Mặt nạ"
+  },
+  {
+   "id": "item.thao.diem-chi.001",
+   "name": "Diễm Chi",
+   "cat": "linh-duoc",
+   "group": "thao",
+   "zone": "cam",
+   "use": "Hồi LL trung · phụ phôi"
+  },
+  {
+   "id": "item.thao.xich-qua.001",
+   "name": "Xích Quả",
+   "cat": "linh-duoc",
+   "group": "thao",
+   "zone": "cam",
+   "use": "Bảo hộ đột phá"
+  },
+  {
+   "id": "item.thao.han-linh.001",
+   "name": "Hàn Linh Thảo",
+   "cat": "linh-duoc",
+   "group": "thao",
+   "zone": "trang",
+   "use": "Nguyên Anh Đan, Cường Thể · phụ phôi Linh thú"
+  },
+  {
+   "id": "item.thao.bang-chi.001",
+   "name": "Băng Chi",
+   "cat": "linh-duoc",
+   "group": "thao",
+   "zone": "trang",
+   "use": "Hồi LL cao · phụ phôi"
+  },
+  {
+   "id": "item.thao.tuyet-lien.001",
+   "name": "Tuyết Liên",
+   "cat": "linh-duoc",
+   "group": "thao",
+   "zone": "trang",
+   "use": "Bảo hộ cao cấp"
+  },
+  {
+   "id": "item.thao.huyen-linh.001",
+   "name": "Huyền Linh Thảo",
+   "cat": "linh-duoc",
+   "group": "thao",
+   "zone": "xam",
+   "use": "Hóa Thần Đan, Duy Trì · phụ phôi Cánh"
+  },
+  {
+   "id": "item.thao.u-minh.001",
+   "name": "U Minh Chi",
+   "cat": "linh-duoc",
+   "group": "thao",
+   "zone": "xam",
+   "use": "Giảm tiêu hao Pháp Tướng"
+  },
+  {
+   "id": "item.thao.co-lien.001",
+   "name": "Cổ Liên",
+   "cat": "linh-duoc",
+   "group": "thao",
+   "zone": "xam",
+   "use": "Bảo hộ tối cao"
+  },
+  {
+   "id": "item.thao.hac-linh.001",
+   "name": "Hắc Linh Thảo",
+   "cat": "linh-duoc",
+   "group": "thao",
+   "zone": "than",
+   "use": "Đan end-game · phụ phôi Pháp Tướng"
+  },
+  {
+   "id": "item.thao.tan-the.001",
+   "name": "Tận Thế Chi",
+   "cat": "linh-duoc",
+   "group": "thao",
+   "zone": "than",
+   "use": "Giảm tiêu hao PT mạnh"
+  },
+  {
+   "id": "item.thao.hu-khong.001",
+   "name": "Hư Không Hoa",
+   "cat": "linh-duoc",
+   "group": "thao",
+   "zone": "than",
+   "use": "Đan tối thượng"
+  },
+  {
+   "id": "item.khoang.huyen-thiet-vun.001",
+   "name": "Huyền Thiết Vụn",
+   "cat": "khac",
+   "group": "khoang",
+   "zone": "xanh",
+   "use": "Khoáng chính phôi Kiếm/Đạo bào · phụ Trúc Cơ Đan"
+  },
+  {
+   "id": "item.khoang.tinh-sa.001",
+   "name": "Tinh Sa Thô",
+   "cat": "khac",
+   "group": "khoang",
+   "zone": "xanh",
+   "use": "Khoáng chính phôi Nhẫn, Dây chuyền"
+  },
+  {
+   "id": "item.khoang.xich-thiet.001",
+   "name": "Xích Thiết",
+   "cat": "khac",
+   "group": "khoang",
+   "zone": "cam",
+   "use": "Khoáng chính phôi Tím–Cam · phụ Kết Đan Đan"
+  },
+  {
+   "id": "item.khoang.huyet-ngoc.001",
+   "name": "Huyết Ngọc Thô",
+   "cat": "khac",
+   "group": "khoang",
+   "zone": "cam",
+   "use": "Phôi trang sức Cam"
+  },
+  {
+   "id": "item.khoang.han-thiet.001",
+   "name": "Hàn Thiết",
+   "cat": "khac",
+   "group": "khoang",
+   "zone": "trang",
+   "use": "Khoáng chính phôi Linh thú / Cam–Vàng"
+  },
+  {
+   "id": "item.khoang.bang-ngoc.001",
+   "name": "Băng Ngọc",
+   "cat": "khac",
+   "group": "khoang",
+   "zone": "trang",
+   "use": "Phôi trang sức Vàng · phụ Linh thú"
+  },
+  {
+   "id": "item.khoang.huyen-thiet.001",
+   "name": "Huyền Thiết",
+   "cat": "khac",
+   "group": "khoang",
+   "zone": "xam",
+   "use": "Khoáng chính phôi Cánh / Vàng–Đỏ"
+  },
+  {
+   "id": "item.khoang.u-ngoc.001",
+   "name": "U Ngọc",
+   "cat": "khac",
+   "group": "khoang",
+   "zone": "xam",
+   "use": "Phôi đồ Đỏ"
+  },
+  {
+   "id": "item.khoang.hac-thiet.001",
+   "name": "Hắc Thiết",
+   "cat": "khac",
+   "group": "khoang",
+   "zone": "than",
+   "use": "Khoáng chính phôi Pháp Tướng / Đỏ–Đen"
+  },
+  {
+   "id": "item.khoang.hu-ngoc.001",
+   "name": "Hư Ngọc",
+   "cat": "khac",
+   "group": "khoang",
+   "zone": "than",
+   "use": "Phôi đồ Đen viền đỏ"
+  },
+  {
+   "id": "item.dacbiet.huyet-yeu-tinh.001",
+   "name": "Huyết Yêu Tinh",
+   "cat": "khac",
+   "group": "dacbiet",
+   "zone": "cam",
+   "use": "Kết Đan Đan (bắt buộc) · bonus phôi Cam"
+  },
+  {
+   "id": "item.dacbiet.hon-thu-tinh.001",
+   "name": "Hồn Thú Tinh",
+   "cat": "khac",
+   "group": "dacbiet",
+   "zone": "trang",
+   "use": "Nguyên Anh Đan · bắt buộc phôi Linh thú"
+  },
+  {
+   "id": "item.dacbiet.tinh-hon.001",
+   "name": "Tinh Hồn",
+   "cat": "khac",
+   "group": "dacbiet",
+   "zone": "xam",
+   "use": "Hóa Thần Đan · bắt buộc phôi Cánh"
+  },
+  {
+   "id": "item.dacbiet.tinh-hon-co.001",
+   "name": "Tinh Hồn Cổ",
+   "cat": "khac",
+   "group": "dacbiet",
+   "zone": "than",
+   "use": "Hóa Thần Đan · bắt buộc phôi Pháp Tướng / đồ Đen (rơi 0.5–0.8%)"
+  }
+ ]
+}

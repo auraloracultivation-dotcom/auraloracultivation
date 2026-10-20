@@ -1,0 +1,123 @@
+{
+ "_status": "design",
+ "_nguon": "Auralora Lab v3 (21/10/2026)",
+ "_ghi_chu": "THIẾT KẾ từ Lab — CHƯA triển khai trong game, CHƯA kiểm thử cân bằng. Số liệu là baseline để thử nghiệm.",
+ "_ghi_chu_rieng": "base/coef lấy từ Lab Đấu (điểm phân bổ): giá trị = base + điểm × coef; crit/hut/phan dùng lợi ích giảm dần.",
+ "stats": [
+  {
+   "key": "hp",
+   "name": "HP",
+   "base": 400,
+   "coef": 8
+  },
+  {
+   "key": "def",
+   "name": "DEF",
+   "base": 20,
+   "coef": 1.2
+  },
+  {
+   "key": "linh",
+   "name": "Linh Lực",
+   "base": 50,
+   "coef": 2.5
+  },
+  {
+   "key": "xuyen",
+   "name": "Xuyên Giáp",
+   "base": 5,
+   "coef": 1.5
+  },
+  {
+   "key": "chinh",
+   "name": "Chính Xác",
+   "base": 30,
+   "coef": 1.8
+  },
+  {
+   "key": "ne",
+   "name": "Né Tránh",
+   "base": 15,
+   "coef": 1.5
+  },
+  {
+   "key": "crit",
+   "name": "Chí Mạng %",
+   "base": 5,
+   "coef": 0.35
+  },
+  {
+   "key": "hut",
+   "name": "Hút HP %",
+   "base": 0,
+   "coef": 0.3
+  },
+  {
+   "key": "tocdanh",
+   "name": "Tốc Đánh",
+   "base": 10,
+   "coef": 0.8
+  },
+  {
+   "key": "tocchay",
+   "name": "Tốc Chạy",
+   "base": 10,
+   "coef": 1.0
+  },
+  {
+   "key": "phan",
+   "name": "Phản Đòn %",
+   "base": 0,
+   "coef": 0.35
+  }
+ ],
+ "diminishing": {
+  "_cong_thuc": "điểm hiệu dụng = điểm / (1 + điểm/100)",
+  "keys": [
+   "crit",
+   "hut",
+   "phan"
+  ]
+ },
+ "caps": {
+  "crit": 0.6,
+  "hut": 0.3,
+  "phan": 0.4,
+  "xuyen_reduction": 0.65,
+  "tocdanh_haste": 0.65
+ },
+ "combat": {
+  "raw": "linh × (0.8 + clamp(tocdanh/400, 0, 0.5)) × (phapTuong ? avatar_atk_mul : 1)",
+  "interval_s": "1 / (1 + clamp(tocdanh/(tocdanh+150), 0, 0.65))",
+  "def_eff": "def × (phapTuongPhongThu ? avatar_def_mul : 1)",
+  "pen": "clamp(xuyen/200, 0, 0.65)",
+  "reduction": "def_eff/(def_eff + def_k) × (1 − pen)",
+  "damage": "max(min_damage_ratio × raw, raw × (1 − reduction))",
+  "hit": "clamp(chinh/(chinh + ne × dodge_weight), 0.15, 0.95)",
+  "crit": "min(crit%/100, 0.60) → × crit_mul",
+  "lifesteal": "damage × min(hut%/100, 0.30)",
+  "reflect": "damage × min(phan%/100, 0.40)",
+  "const": {
+   "avatar_atk_mul": 1.6,
+   "avatar_def_mul": 1.25,
+   "def_k": 150,
+   "min_damage_ratio": 0.05,
+   "dodge_weight": 1.2,
+   "hit_min": 0.15,
+   "hit_max": 0.95,
+   "crit_mul": 1.8,
+   "avatar_mp_drain_per_tick": 12
+  }
+ },
+ "boss_phase": [
+  {
+   "hp_below": 0.6,
+   "dmg_mul": 1.25
+  },
+  {
+   "hp_below": 0.3,
+   "dmg_mul": 1.5,
+   "aoe": true
+  }
+ ]
+}
