@@ -1,0 +1,374 @@
+{
+ "_status": "design",
+ "_nguon": "Auralora Lab v3 (21/10/2026)",
+ "_ghi_chu": "THIẾT KẾ từ Lab — CHƯA triển khai trong game, CHƯA kiểm thử cân bằng. Số liệu là baseline để thử nghiệm.",
+ "_ghi_chu_rieng": "Dòng Chính Xác, Né, Tốc Đánh, Tốc Chạy: Lab ghi 'xem file cân bằng đầy đủ' — chưa có số, để trống.",
+ "currency": "linh-thach",
+ "tiers": [
+  {
+   "id": "luc",
+   "name": "Lục",
+   "rate_at_gearQ0": 0.42,
+   "lines": [
+    1,
+    1
+   ],
+   "power_mul": [
+    1.0,
+    1.0
+   ],
+   "awaken_cost": [
+    80,
+    200
+   ]
+  },
+  {
+   "id": "lam",
+   "name": "Lam",
+   "rate_at_gearQ0": 0.28,
+   "lines": [
+    2,
+    2
+   ],
+   "power_mul": [
+    1.35,
+    1.35
+   ],
+   "awaken_cost": [
+    80,
+    200
+   ]
+  },
+  {
+   "id": "tim",
+   "name": "Tím",
+   "rate_at_gearQ0": 0.16,
+   "lines": [
+    3,
+    3
+   ],
+   "power_mul": [
+    1.8,
+    1.8
+   ],
+   "awaken_cost": [
+    280,
+    450
+   ]
+  },
+  {
+   "id": "cam",
+   "name": "Cam",
+   "rate_at_gearQ0": 0.08,
+   "lines": [
+    4,
+    5
+   ],
+   "power_mul": [
+    2.4,
+    2.4
+   ],
+   "awaken_cost": [
+    280,
+    450
+   ]
+  },
+  {
+   "id": "vang",
+   "name": "Vàng",
+   "rate_at_gearQ0": 0.035,
+   "lines": [
+    5,
+    6
+   ],
+   "power_mul": [
+    3.2,
+    3.2
+   ],
+   "awaken_cost": [
+    600,
+    900
+   ]
+  },
+  {
+   "id": "do",
+   "name": "Đỏ",
+   "rate_at_gearQ0": 0.018,
+   "lines": [
+    7,
+    8
+   ],
+   "power_mul": [
+    4.5,
+    4.5
+   ],
+   "awaken_cost": [
+    1200,
+    1800
+   ]
+  },
+  {
+   "id": "den",
+   "name": "Đen viền đỏ",
+   "rate_at_gearQ0": 0.007,
+   "lines": [
+    9,
+    10
+   ],
+   "power_mul": [
+    6.5,
+    8.0
+   ],
+   "awaken_cost": [
+    2500,
+    4000
+   ]
+  }
+ ],
+ "line_ranges": {
+  "_thu_tu": [
+   "luc",
+   "lam",
+   "tim",
+   "cam",
+   "vang",
+   "do",
+   "den"
+  ],
+  "hp": [
+   [
+    25,
+    45
+   ],
+   [
+    40,
+    70
+   ],
+   [
+    65,
+    110
+   ],
+   [
+    100,
+    170
+   ],
+   [
+    150,
+    250
+   ],
+   [
+    220,
+    360
+   ],
+   [
+    320,
+    520
+   ]
+  ],
+  "def": [
+   [
+    3,
+    6
+   ],
+   [
+    5,
+    10
+   ],
+   [
+    9,
+    16
+   ],
+   [
+    14,
+    24
+   ],
+   [
+    22,
+    36
+   ],
+   [
+    32,
+    52
+   ],
+   [
+    48,
+    78
+   ]
+  ],
+  "linh": [
+   [
+    6,
+    12
+   ],
+   [
+    10,
+    18
+   ],
+   [
+    16,
+    28
+   ],
+   [
+    25,
+    42
+   ],
+   [
+    38,
+    62
+   ],
+   [
+    55,
+    90
+   ],
+   [
+    80,
+    130
+   ]
+  ],
+  "xuyen": [
+   [
+    2,
+    5
+   ],
+   [
+    4,
+    8
+   ],
+   [
+    7,
+    13
+   ],
+   [
+    11,
+    19
+   ],
+   [
+    17,
+    28
+   ],
+   [
+    25,
+    40
+   ],
+   [
+    36,
+    58
+   ]
+  ],
+  "crit": [
+   [
+    0.8,
+    1.5
+   ],
+   [
+    1.2,
+    2.2
+   ],
+   [
+    1.8,
+    3.2
+   ],
+   [
+    2.8,
+    4.8
+   ],
+   [
+    4.0,
+    6.5
+   ],
+   [
+    5.5,
+    9.0
+   ],
+   [
+    8,
+    13
+   ]
+  ],
+  "hut": [
+   [
+    0.4,
+    0.9
+   ],
+   [
+    0.7,
+    1.4
+   ],
+   [
+    1.1,
+    2.0
+   ],
+   [
+    1.7,
+    3.0
+   ],
+   [
+    2.5,
+    4.2
+   ],
+   [
+    3.5,
+    5.8
+   ],
+   [
+    5,
+    8.5
+   ]
+  ],
+  "phan": [
+   [
+    0.5,
+    1.1
+   ],
+   [
+    0.9,
+    1.8
+   ],
+   [
+    1.4,
+    2.6
+   ],
+   [
+    2.2,
+    3.8
+   ],
+   [
+    3.2,
+    5.2
+   ],
+   [
+    4.5,
+    7.2
+   ],
+   [
+    6.5,
+    10.5
+   ]
+  ]
+ },
+ "line_ranges_missing": [
+  "chinh",
+  "ne",
+  "tocdanh",
+  "tocchay"
+ ],
+ "gearQ": {
+  "_ghi_chu": "Lab Đấu: ngưỡng cộng dồn tăng tuyến tính theo gearQ (0..1). gearQ chỉ dịch dần xác suất lên phẩm cao, không bảo đảm đồ hiếm.",
+  "cumulative_at_0": {
+   "den": 0.007,
+   "do": 0.025,
+   "vang": 0.06,
+   "cam": 0.14,
+   "tim": 0.3,
+   "lam": 0.58
+  },
+  "cumulative_add_per_gearQ": {
+   "den": 0.01,
+   "do": 0.017,
+   "vang": 0.035,
+   "cam": 0.05,
+   "tim": 0.07,
+   "lam": 0.08
+  }
+ }
+}

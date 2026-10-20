@@ -1,0 +1,619 @@
+{
+ "_status": "design",
+ "_nguon": "Auralora Lab v3 (21/10/2026)",
+ "_ghi_chu": "THIẾT KẾ từ Lab — CHƯA triển khai trong game, CHƯA kiểm thử cân bằng. Số liệu là baseline để thử nghiệm.",
+ "_ghi_chu_rieng": "Số dạng [min, max]. 'art' và 'behavior' để trống: hình quái chính thức chưa có, AI quái chưa thiết kế chi tiết. tier 1–5 theo 5 vùng Lab; data/terrain.json đang có 6 bậc địa hình — cách ghép vùng ↔ địa hình CHƯA chốt.",
+ "zones": [
+  {
+   "id": "xanh",
+   "name": "Vùng Xanh",
+   "realm": "luyen-khi",
+   "tier": 1
+  },
+  {
+   "id": "cam",
+   "name": "Vùng Cam",
+   "realm": "truc-co",
+   "tier": 2
+  },
+  {
+   "id": "trang",
+   "name": "Vùng Trắng",
+   "realm": "ket-dan",
+   "tier": 3
+  },
+  {
+   "id": "xam",
+   "name": "Vùng Xám",
+   "realm": "nguyen-anh",
+   "tier": 4
+  },
+  {
+   "id": "than",
+   "name": "Vùng Than",
+   "realm": "hoa-than",
+   "tier": 5
+  }
+ ],
+ "behavior_states_design": [
+  "nhan-roi",
+  "tuan-tra",
+  "phat-hien",
+  "canh-bao",
+  "truy-duoi",
+  "tan-cong",
+  "hoi-phuc-rut-lui",
+  "quay-ve",
+  "chet"
+ ],
+ "anti_power_creep": [
+  {
+   "case": "LK5 vs quái TC Sơ",
+   "expect": "Thua hoặc rất khó"
+  },
+  {
+   "case": "LK10 full Lam vs Boss Cam",
+   "expect": "Thắng được nhưng tốn đan"
+  },
+  {
+   "case": "NA Hậu full Vàng vs Elite Than",
+   "expect": "Còn thiếu, cần Hóa Thần"
+  },
+  {
+   "case": "HT Sơ vs quái Than thường",
+   "expect": "Sống được; Elite cần Pháp Tướng"
+  }
+ ],
+ "monsters": [
+  {
+   "id": "monster.xanh.yeu-ho.001",
+   "name": "Yêu Hồ Sơ",
+   "zone": "xanh",
+   "tier": 1,
+   "rank": "thuong",
+   "realm": "lk1–3",
+   "hp": [
+    90,
+    140
+   ],
+   "atk": [
+    10,
+    16
+   ],
+   "def": [
+    6,
+    10
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.xanh.thanh-xa.001",
+   "name": "Thanh Xà Yêu",
+   "zone": "xanh",
+   "tier": 1,
+   "rank": "thuong",
+   "realm": "lk2–4",
+   "hp": [
+    120,
+    180
+   ],
+   "atk": [
+    14,
+    22
+   ],
+   "def": [
+    8,
+    14
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.xanh.thach-giap.001",
+   "name": "Thạch Giáp Thú",
+   "zone": "xanh",
+   "tier": 1,
+   "rank": "thuong",
+   "realm": "lk4–6",
+   "hp": [
+    180,
+    280
+   ],
+   "atk": [
+    18,
+    28
+   ],
+   "def": [
+    15,
+    25
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.xanh.hac-lang-vuong.001",
+   "name": "Hắc Lang Vương",
+   "zone": "xanh",
+   "tier": 1,
+   "rank": "elite",
+   "realm": "lk6–8",
+   "hp": [
+    450,
+    650
+   ],
+   "atk": [
+    35,
+    50
+   ],
+   "def": [
+    22,
+    32
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.xanh.son-dong-lao-yeu.001",
+   "name": "Sơn Động Lão Yêu",
+   "zone": "xanh",
+   "tier": 1,
+   "rank": "boss",
+   "realm": "lk8–10",
+   "hp": [
+    900,
+    1300
+   ],
+   "atk": [
+    55,
+    75
+   ],
+   "def": [
+    30,
+    42
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.cam.huyet-sai.001",
+   "name": "Huyết Sài",
+   "zone": "cam",
+   "tier": 2,
+   "rank": "thuong",
+   "realm": "tc_so",
+   "hp": [
+    380,
+    520
+   ],
+   "atk": [
+    40,
+    58
+   ],
+   "def": [
+    28,
+    40
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.cam.diem-xa.001",
+   "name": "Diễm Xà",
+   "zone": "cam",
+   "tier": 2,
+   "rank": "thuong",
+   "realm": "tc_so–trung",
+   "hp": [
+    480,
+    650
+   ],
+   "atk": [
+    50,
+    70
+   ],
+   "def": [
+    32,
+    48
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.cam.nham-giap.001",
+   "name": "Nham Giáp Thú",
+   "zone": "cam",
+   "tier": 2,
+   "rank": "thuong",
+   "realm": "tc_trung",
+   "hp": [
+    600,
+    850
+   ],
+   "atk": [
+    55,
+    80
+   ],
+   "def": [
+    50,
+    70
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.cam.huyet-lang-vuong.001",
+   "name": "Huyết Lang Vương",
+   "zone": "cam",
+   "tier": 2,
+   "rank": "elite",
+   "realm": "tc_trung–hau",
+   "hp": [
+    1600,
+    2200
+   ],
+   "atk": [
+    95,
+    130
+   ],
+   "def": [
+    55,
+    75
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.cam.hoa-vuc-ma-ton.001",
+   "name": "Hỏa Vực Ma Tôn",
+   "zone": "cam",
+   "tier": 2,
+   "rank": "boss",
+   "realm": "tc_hau",
+   "hp": [
+    4200,
+    5500
+   ],
+   "atk": [
+    160,
+    210
+   ],
+   "def": [
+    70,
+    95
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.trang.bang-ho.001",
+   "name": "Băng Hồ",
+   "zone": "trang",
+   "tier": 3,
+   "rank": "thuong",
+   "realm": "kd_so",
+   "hp": [
+    1300,
+    1800
+   ],
+   "atk": [
+    95,
+    130
+   ],
+   "def": [
+    65,
+    90
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.trang.tuyet-ung.001",
+   "name": "Tuyết Ưng",
+   "zone": "trang",
+   "tier": 3,
+   "rank": "thuong",
+   "realm": "kd_so–trung",
+   "hp": [
+    1600,
+    2300
+   ],
+   "atk": [
+    110,
+    155
+   ],
+   "def": [
+    70,
+    100
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.trang.han-giap.001",
+   "name": "Hàn Giáp Thú",
+   "zone": "trang",
+   "tier": 3,
+   "rank": "thuong",
+   "realm": "kd_trung",
+   "hp": [
+    2200,
+    3000
+   ],
+   "atk": [
+    130,
+    180
+   ],
+   "def": [
+    110,
+    150
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.trang.bang-hon-tuong.001",
+   "name": "Băng Hồn Tướng",
+   "zone": "trang",
+   "tier": 3,
+   "rank": "elite",
+   "realm": "kd_trung–hau",
+   "hp": [
+    7000,
+    10000
+   ],
+   "atk": [
+    250,
+    340
+   ],
+   "def": [
+    130,
+    180
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.trang.tuyet-son-lao-to.001",
+   "name": "Tuyết Sơn Lão Tổ",
+   "zone": "trang",
+   "tier": 3,
+   "rank": "boss",
+   "realm": "kd_hau",
+   "hp": [
+    16000,
+    22000
+   ],
+   "atk": [
+    380,
+    480
+   ],
+   "def": [
+    160,
+    220
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.xam.co-chien-hon.001",
+   "name": "Cổ Chiến Hồn",
+   "zone": "xam",
+   "tier": 4,
+   "rank": "thuong",
+   "realm": "na_so",
+   "hp": [
+    4500,
+    6500
+   ],
+   "atk": [
+    240,
+    330
+   ],
+   "def": [
+    150,
+    210
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.xam.doc-yeu.001",
+   "name": "Độc Yêu",
+   "zone": "xam",
+   "tier": 4,
+   "rank": "thuong",
+   "realm": "na_so–trung",
+   "hp": [
+    5500,
+    8000
+   ],
+   "atk": [
+    280,
+    380
+   ],
+   "def": [
+    160,
+    230
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.xam.huyen-giap.001",
+   "name": "Huyền Giáp Thú",
+   "zone": "xam",
+   "tier": 4,
+   "rank": "thuong",
+   "realm": "na_trung",
+   "hp": [
+    7000,
+    10000
+   ],
+   "atk": [
+    320,
+    430
+   ],
+   "def": [
+    220,
+    300
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.xam.thuong-co-chien-tuong.001",
+   "name": "Thượng Cổ Chiến Tướng",
+   "zone": "xam",
+   "tier": 4,
+   "rank": "elite",
+   "realm": "na_trung–hau",
+   "hp": [
+    22000,
+    32000
+   ],
+   "atk": [
+    580,
+    780
+   ],
+   "def": [
+    250,
+    350
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.xam.huyen-vuc-ma-ton.001",
+   "name": "Huyền Vực Ma Tôn",
+   "zone": "xam",
+   "tier": 4,
+   "rank": "boss",
+   "realm": "na_hau",
+   "hp": [
+    65000,
+    90000
+   ],
+   "atk": [
+    900,
+    1200
+   ],
+   "def": [
+    320,
+    420
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.than.hac-vuc-yeu.001",
+   "name": "Hắc Vực Yêu",
+   "zone": "than",
+   "tier": 5,
+   "rank": "thuong",
+   "realm": "ht_so",
+   "hp": [
+    16000,
+    24000
+   ],
+   "atk": [
+    520,
+    720
+   ],
+   "def": [
+    320,
+    450
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.than.hu-khong-thu.001",
+   "name": "Hư Không Thú",
+   "zone": "than",
+   "tier": 5,
+   "rank": "thuong",
+   "realm": "ht_so–trung",
+   "hp": [
+    22000,
+    32000
+   ],
+   "atk": [
+    620,
+    850
+   ],
+   "def": [
+    360,
+    500
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.than.tan-the-giap.001",
+   "name": "Tận Thế Giáp Thú",
+   "zone": "than",
+   "tier": 5,
+   "rank": "thuong",
+   "realm": "ht_trung",
+   "hp": [
+    30000,
+    42000
+   ],
+   "atk": [
+    750,
+    1000
+   ],
+   "def": [
+    480,
+    650
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.than.thuong-co-ma-tuong.001",
+   "name": "Thượng Cổ Ma Tướng",
+   "zone": "than",
+   "tier": 5,
+   "rank": "elite",
+   "realm": "ht_trung–hau",
+   "hp": [
+    85000,
+    120000
+   ],
+   "atk": [
+    1500,
+    2100
+   ],
+   "def": [
+    550,
+    750
+   ],
+   "art": null,
+   "behavior": null
+  },
+  {
+   "id": "monster.than.hac-vuc-chu-te.001",
+   "name": "Hắc Vực Chủ Tể",
+   "zone": "than",
+   "tier": 5,
+   "rank": "boss",
+   "realm": "ht_hau",
+   "hp": [
+    280000,
+    450000
+   ],
+   "atk": [
+    2800,
+    4200
+   ],
+   "def": [
+    700,
+    950
+   ],
+   "art": null,
+   "behavior": null
+  }
+ ]
+}

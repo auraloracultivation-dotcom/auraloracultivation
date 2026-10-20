@@ -1,0 +1,210 @@
+{
+ "_status": "design",
+ "_nguon": "Auralora Lab v3 (21/10/2026)",
+ "_ghi_chu": "THIẾT KẾ từ Lab — CHƯA triển khai trong game, CHƯA kiểm thử cân bằng. Số liệu là baseline để thử nghiệm.",
+ "_ghi_chu_rieng": "Luyện đan CHỈ tốn nguyên liệu, KHÔNG tốn Linh thạch. Thất bại mất 30–50% nguyên liệu. Hiệu ứng số của đan hồi/cường hoá Lab CHƯA ghi — để trống, không tự điền.",
+ "fail_material_loss": [
+  0.3,
+  0.5
+ ],
+ "pills": [
+  {
+   "id": "item.dan.truc-co.001",
+   "name": "Trúc Cơ Đan",
+   "cat": "linh-dan",
+   "when": "LK → TC",
+   "recipe": {
+    "inputs": [
+     {
+      "id": "item.thao.thanh-tam.001",
+      "count": 30
+     },
+     {
+      "id": "item.khoang.huyen-thiet-vun.001",
+      "count": 10
+     },
+     {
+      "id": "item.thao.linh-chi-non.001",
+      "count": 8
+     }
+    ],
+    "rate": 0.85
+   },
+   "shop": "co"
+  },
+  {
+   "id": "item.dan.ket-dan.001",
+   "name": "Kết Đan Đan",
+   "cat": "linh-dan",
+   "when": "TC → KD",
+   "recipe": {
+    "inputs": [
+     {
+      "id": "item.thao.huyet-linh.001",
+      "count": 50
+     },
+     {
+      "id": "item.khoang.xich-thiet.001",
+      "count": 20
+     },
+     {
+      "id": "item.dacbiet.huyet-yeu-tinh.001",
+      "count": 5
+     }
+    ],
+    "rate": 0.7
+   },
+   "shop": "co"
+  },
+  {
+   "id": "item.dan.nguyen-anh.001",
+   "name": "Nguyên Anh Đan",
+   "cat": "linh-dan",
+   "when": "KD → NA",
+   "recipe": {
+    "inputs": [
+     {
+      "id": "item.thao.han-linh.001",
+      "count": 80
+     },
+     {
+      "id": "item.khoang.han-thiet.001",
+      "count": 30
+     },
+     {
+      "id": "item.dacbiet.hon-thu-tinh.001",
+      "count": 3
+     }
+    ],
+    "rate": 0.5
+   },
+   "shop": "co-dat"
+  },
+  {
+   "id": "item.dan.hoa-than.001",
+   "name": "Hóa Thần Đan",
+   "cat": "linh-dan",
+   "when": "NA → HT",
+   "recipe": {
+    "inputs": [
+     {
+      "id": "item.thao.huyen-linh.001",
+      "count": 120
+     },
+     {
+      "id": "item.khoang.huyen-thiet.001",
+      "count": 50
+     },
+     {
+      "id": "item.dacbiet.tinh-hon-co.001",
+      "count": 1
+     }
+    ],
+    "rate": 0.3
+   },
+   "shop": "khong"
+  },
+  {
+   "id": "item.dan.tieu-hoi-huyet.001",
+   "name": "Tiểu Hồi Huyết Đan",
+   "cat": "linh-dan",
+   "when": "Mọi lúc",
+   "recipe": {
+    "inputs": [
+     {
+      "id": "item.thao.thanh-tam.001",
+      "count": 5
+     }
+    ],
+    "rate": 0.95
+   },
+   "shop": "co"
+  },
+  {
+   "id": "item.dan.hoi-linh.001",
+   "name": "Hồi Linh Đan",
+   "cat": "linh-dan",
+   "when": "Mọi lúc",
+   "recipe": {
+    "inputs": [
+     {
+      "id": "item.thao.linh-chi-non.001",
+      "count": 8
+     }
+    ],
+    "rate": 0.9,
+    "alt_inputs": [
+     [
+      {
+       "id": "item.thao.diem-chi.001",
+       "count": 8
+      }
+     ],
+     [
+      {
+       "id": "item.thao.bang-chi.001",
+       "count": 8
+      }
+     ]
+    ]
+   },
+   "shop": "co"
+  },
+  {
+   "id": "item.dan.cuong-cong.001",
+   "name": "Cường Công Đan",
+   "cat": "linh-dan",
+   "when": "—",
+   "recipe": {
+    "inputs": [
+     {
+      "id": "item.thao.huyet-linh.001",
+      "count": 12
+     },
+     {
+      "id": "item.khoang.xich-thiet.001",
+      "count": 3
+     }
+    ],
+    "rate": 0.8
+   },
+   "shop": "co"
+  },
+  {
+   "id": "item.dan.cuong-the.001",
+   "name": "Cường Thể Đan",
+   "cat": "linh-dan",
+   "when": "—",
+   "recipe": {
+    "inputs": [
+     {
+      "id": "item.thao.han-linh.001",
+      "count": 10
+     }
+    ],
+    "rate": 0.8
+   },
+   "shop": "co"
+  },
+  {
+   "id": "item.dan.duy-tri.001",
+   "name": "Duy Trì Đan",
+   "cat": "linh-dan",
+   "when": "HT",
+   "recipe": {
+    "inputs": [
+     {
+      "id": "item.thao.u-minh.001",
+      "count": 15
+     },
+     {
+      "id": "item.dacbiet.tinh-hon.001",
+      "count": 1
+     }
+    ],
+    "rate": 0.6
+   },
+   "shop": "hiem"
+  }
+ ]
+}

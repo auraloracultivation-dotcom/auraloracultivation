@@ -2,7 +2,8 @@
 
 ```
 data/        Định nghĩa nội dung (JSON) — nguồn sự thật
-  config.json, audio.json, items/, monsters/, skills/, zones/
+  config.json, audio.json, items/, monsters/, skills/, zones/, quests/
+  realms.json, stats.json, shop.json   (thiết kế Lab v3 — xem docs/07)
 src/
   core/      Vòng lặp game, input, camera, nạp dữ liệu. Không chứa luật gameplay.
   net/       Toàn bộ giao tiếp Supabase (đăng nhập, RPC, Realtime). Module khác KHÔNG gọi Supabase trực tiếp.

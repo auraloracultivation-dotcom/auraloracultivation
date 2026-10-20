@@ -1,6 +1,7 @@
 // Kiểm tra tự động: JSON hợp lệ, không lộ khoá bí mật, file không quá dài, index.html không chứa logic.
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, extname } from 'node:path';
+import { checkRefs } from './check_refs.mjs';
 
 const errors = [];
 const SKIP = new Set(['.git', 'node_modules']);
@@ -31,6 +32,12 @@ for (const file of walk('.')) {
   if (file === 'index.html' && /<script(?![^>]*\bsrc=)[^>]*>[\s\S]*?\S[\s\S]*?<\/script>/i.test(text)) {
     errors.push('index.html: không được chứa logic inline, chỉ nạp src/main.js');
   }
+}
+
+try {
+  errors.push(...checkRefs());
+} catch (e) {
+  errors.push(`Kiểm tra tham chiếu ID lỗi — ${e.message}`);
 }
 
 if (errors.length) {
