@@ -14,7 +14,9 @@ export function createLocalPlayer(character) {
   };
 }
 
-export function createRemotePlayers() {
+// worldW/worldH: kích thước thế giới vòng lặp để nội suy đi qua mép không bị kéo ngược cả bản đồ
+export function createRemotePlayers(worldW, worldH) {
+  const wrap = (d, size) => ((d + size / 2) % size + size) % size - size / 2;
   const list = new Map();
 
   function ensure(id, name, x, y) {
@@ -43,7 +45,8 @@ export function createRemotePlayers() {
     },
     onMove({ id, x, y, moving }) {
       const p = ensure(id, null, x, y);
-      if (x !== p.tx) p.facing = x > p.tx ? 1 : -1;
+      const dx = wrap(x - p.tx, worldW);
+      if (dx) p.facing = dx > 0 ? 1 : -1;
       p.tx = x; p.ty = y; p.moving = moving;
     },
     onChat({ id, text }, now, seconds) {
@@ -54,9 +57,12 @@ export function createRemotePlayers() {
     update(dt) {
       const k = Math.min(1, dt * 8);
       for (const p of list.values()) {
-        const dx = p.tx - p.x, dy = p.ty - p.y;
+        const dx = wrap(p.tx - p.x, worldW), dy = wrap(p.ty - p.y, worldH);
         if (Math.hypot(dx, dy) > 200) { p.x = p.tx; p.y = p.ty; } // lệch quá xa: dịch thẳng tới
-        else { p.x += dx * k; p.y += dy * k; }
+        else {
+          p.x = ((p.x + dx * k) % worldW + worldW) % worldW;
+          p.y = ((p.y + dy * k) % worldH + worldH) % worldH;
+        }
         const walking = p.moving || Math.hypot(dx, dy) > 1;
         p.walkT = walking ? p.walkT + dt : 0;
       }
