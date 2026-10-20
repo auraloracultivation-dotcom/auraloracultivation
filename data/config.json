@@ -2,7 +2,8 @@
   "version": 1,
   "player": {
     "max_speed_px_per_s": 200,
-    "walk_speed_px_per_s": 170,
+    "walk_speed_px_per_s": 110,
+    "_note_walk": "Đi bộ chậm lại theo yêu cầu chủ dự án 21/10 (170 → 110); bay giữ nguyên",
     "radius_px": 5,
     "_note_max_speed": "max_speed đồng bộ với c_max_speed trong hàm SQL public.save_position; walk_speed phải nhỏ hơn",
     "sprite_scale": 0.75,
