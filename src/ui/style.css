@@ -243,26 +243,6 @@ img { image-rendering: pixelated; }
 }
 .char-line.gold { color: var(--gold); font-weight: 700; }
 
-/* Bảng chỉ số trượt lên trong lòng khung nhân vật */
-.modal-char { touch-action: none; }
-.stats-view { overflow: hidden; border-radius: 6px; pointer-events: none; z-index: 2; }
-.stats-page {
-  position: absolute; inset: 0; pointer-events: auto; overflow-y: auto; transform: translateY(100%);
-  transition: transform .3s cubic-bezier(.2,.8,.2,1); padding: 4% 7%;
-  background: linear-gradient(rgba(16,25,45,.97), rgba(12,18,34,.98)); border-top: 1px solid var(--gold-dark);
-  font-size: max(11px, 4.6cqw);
-}
-.stats-page h3 { margin: 0 0 3%; font-size: max(12px, 5.2cqw); color: var(--gold); text-align: center; }
-.stat { display: flex; justify-content: space-between; gap: 8px; padding: 2.2% 0; border-bottom: 1px solid rgba(184,137,74,.25); }
-.stat b { color: var(--gold); }
-.muted { margin: 4% 0 0; font-size: max(10px, 3.8cqw); color: var(--muted); line-height: 1.35; }
-.stats-tab {
-  z-index: 3; border: 1px solid var(--gold-dark); border-radius: 999px; background: var(--navy); cursor: pointer;
-  color: var(--gold); font-size: max(10px, 3.8cqw); font-weight: 700; padding: 0;
-}
-.stats-tab span::after { content: " ▴"; }
-.stats-tab.open span::after { content: " ▾"; }
-
 .set-label {
   display: flex; align-items: center; font-size: 4.6cqw; color: var(--text); padding-left: 4%;
   text-shadow: 0 1px 2px #000; pointer-events: none;
@@ -315,3 +295,31 @@ img { image-rendering: pixelated; }
 .modal-map .modal-close { right: 0; top: 0; }
 .modal-map .modal-close img { image-rendering: auto; }
 .map-zoom img { image-rendering: auto; }
+
+/* ---- Chỉ số cạnh trái ---- */
+.stats-dock {
+  position: absolute; left: max(4px, env(safe-area-inset-left));
+  background: url("../../assets/ui/frames/chi-so-gon.png") center / 100% 100% no-repeat; container-type: inline-size;
+}
+.stats-dock > button { position: absolute; padding: 0; border: 0; background: none; cursor: pointer; }
+.sd-slot { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2%; }
+.sd-slot img { width: 64%; aspect-ratio: 1; object-fit: contain; image-rendering: auto; pointer-events: none; }
+.sd-slot b { font-size: 15cqw; line-height: 1; color: #fff7e2; text-shadow: 0 1px 2px #000; pointer-events: none; }
+.sd-slot:active, .sd-arrow:active { background: rgba(255,255,255,.12) !important; border-radius: 6px; }
+.stats-full-wrap {
+  position: fixed; inset: 0; z-index: 40; display: flex; align-items: center; justify-content: flex-start;
+  padding-left: max(8px, env(safe-area-inset-left)); background: rgba(7,11,22,0); transition: background .2s;
+}
+.stats-full-wrap.open { background: rgba(7,11,22,.35); }
+.stats-full {
+  position: relative; height: min(88dvh, 640px); max-width: 94vw; container-type: inline-size;
+  background: url("../../assets/ui/frames/chi-so-day-du.png") center / 100% 100% no-repeat;
+  transform-origin: left center; transform: scale(.25); opacity: 0; transition: transform .2s ease-out, opacity .2s;
+}
+.stats-full-wrap.open .stats-full { transform: none; opacity: 1; }
+.sf-num {
+  position: absolute; display: flex; align-items: center; justify-content: center;
+  font-size: 4cqw; color: #fff7e2; text-shadow: 0 1px 2px #000; pointer-events: none;
+}
+.sf-close { position: absolute; right: -2%; top: 2%; width: 11%; aspect-ratio: 1; padding: 0; border: 0; background: none; cursor: pointer; }
+.sf-close img { width: 100%; height: 100%; }

@@ -67,9 +67,8 @@ const SLOTS = [
   [32, 60], [32, 110], [32, 160], [32, 210],
   [194, 60], [194, 110], [194, 160], [194, 210],
 ];
-const INNER = [22, 54, 226, 228]; // lòng khung (x, y, rộng, cao) — bảng chỉ số trượt trong vùng này
 
-export function showCharacterPanel({ name, realmName, stats, equipment, drawAvatar }) {
+export function showCharacterPanel({ name, realmName, equipment, drawAvatar }) {
   const maxW = () => Math.min(vw() * 0.94, 440, (vh() * 0.82 * CHAR_FRAME.w) / CHAR_FRAME.h);
   openModal('modal-char', CHAR_FRAME, maxW, ({ box, at }) => {
     const av = at('<canvas class="char-avatar" width="96" height="128"></canvas>', 85, 66, 100, 176);
@@ -89,52 +88,7 @@ export function showCharacterPanel({ name, realmName, stats, equipment, drawAvat
     at(`<div class="char-line gold">${escapeHtml(name)}</div>`, 98, 247, 88, 12);
     at(`<div class="char-line">${escapeHtml(realmName)}</div>`, 98, 267, 88, 12);
 
-    // Lớp chỉ số nằm sẵn dưới đáy lòng khung; vuốt lên để trượt ra, vuốt xuống để thu lại
-    const view = at('<div class="stats-view"></div>', ...INNER);
-    const page = el(`<div class="stats-page">
-      <h3>Chỉ số</h3>${stats.map((s) => `
-      <div class="stat"><span>${escapeHtml(s.label)}</span><b>${s.value ?? '—'}</b></div>`).join('')}
-      <p class="muted">Chỉ số sẽ hiện số thật khi có bảng chỉ số nhân vật.</p></div>`);
-    view.appendChild(page);
-    const tab = at('<button type="button" class="stats-tab glow" aria-expanded="false"><span>Chỉ số</span></button>', 100, 283, 70, 14);
-    attachSlide(box, page, tab);
   });
-}
-
-function attachSlide(area, page, tab) {
-  let open = false;
-  const set = (v) => {
-    open = v;
-    page.style.transition = '';
-    page.style.transform = v ? 'translateY(0)' : 'translateY(100%)';
-    tab.setAttribute('aria-expanded', String(v));
-    tab.classList.toggle('open', v);
-  };
-  let y0 = null, moved = false;
-  area.addEventListener('pointerdown', (e) => {
-    if (e.target.closest('.modal-close')) return;
-    y0 = e.clientY; moved = false;
-  });
-  area.addEventListener('pointermove', (e) => {
-    if (y0 === null) return;
-    const dy = e.clientY - y0;
-    if (Math.abs(dy) < 6) return;
-    moved = true;
-    const h = page.offsetHeight || 1;
-    page.style.transition = 'none';
-    page.style.transform = `translateY(${Math.max(0, Math.min(h, (open ? 0 : h) + dy))}px)`;
-  });
-  const end = (e) => {
-    if (y0 === null) return;
-    const dy = e.clientY - y0;
-    y0 = null;
-    if (!moved) return;
-    if (dy < -30) set(true); else if (dy > 30) set(false); else set(open);
-  };
-  area.addEventListener('pointerup', end);
-  area.addEventListener('pointercancel', end);
-  tab.addEventListener('click', () => set(!open));
-  set(false);
 }
 
 // ---------- Cài đặt: khung + nút vẽ sẵn của chủ dự án (frames/bang-cai-dat-v2.png, tách bằng tools/panel_from_mockup.py) ----------
