@@ -4,7 +4,7 @@ import { escapeHtml, toast } from './screens.js';
 
 const SLOT_NAME = {
   'mat-na': 'Mặt nạ', 'trang-phuc': 'Trang phục', 'vu-khi': 'Vũ khí', nhan: 'Nhẫn',
-  canh: 'Cánh', 'phap-bao': 'Pháp bảo', 'linh-thu': 'Linh thú', 'day-chuyen': 'Dây chuyền', 'phap-tuong': 'Pháp tướng',
+  canh: 'Cánh', 'linh-thu': 'Linh thú', 'day-chuyen': 'Dây chuyền', 'phap-tuong': 'Pháp tướng',
 };
 
 function overlay(cls) {

@@ -37,12 +37,12 @@
    "worn": true
   },
   {
-   "id": "phap-bao",
-   "name": "Pháp bảo",
+   "id": "phap-tuong",
+   "name": "Pháp tướng",
    "panel": 5,
    "art": "phap-tuong",
    "worn": true,
-   "_ghi_chu": "Pháp bảo = pháp tướng hiện sau lưng nhân vật (hình ở assets/equipment/phap-tuong/)"
+   "_ghi_chu": "Pháp tướng hiện to sau lưng nhân vật (ô phải 2; trước đây ghi nhầm là Pháp bảo)"
   },
   {
    "id": "linh-thu",

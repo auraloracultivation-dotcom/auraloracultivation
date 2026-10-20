@@ -82,7 +82,7 @@ async function boot() {
 
   const realmName = character.realm > 0 ? `Cảnh giới ${character.realm}` : 'Phàm nhân'; // tạm, chờ dữ liệu cảnh giới
   const drawMe = (ctx) => drawPlayer(ctx, { x: 0, y: 0, facing: 1, walkT: 0, isLocal: true, look: me.look }, 1);
-  const SLOT_ORDER = ['mat-na', 'trang-phuc', 'vu-khi', 'nhan', 'canh', 'phap-bao', 'linh-thu', 'day-chuyen']; // thứ tự ô bảng Nhân vật
+  const SLOT_ORDER = ['mat-na', 'trang-phuc', 'vu-khi', 'nhan', 'canh', 'phap-tuong', 'linh-thu', 'day-chuyen']; // thứ tự ô bảng Nhân vật
   const S = (n) => `assets/ui/skills/${n}.png`;
   const fan = (deg, r = 122) => ({ dx: Math.round(Math.cos((deg * Math.PI) / 180) * r), dy: -Math.round(Math.sin((deg * Math.PI) / 180) * r) });
   const markers = () => [{ x: me.x, y: me.y, self: true }, ...[...others.list.values()].map((p) => ({ x: p.x, y: p.y }))];
@@ -312,7 +312,7 @@ async function sha256(text) {
 }
 
 // Kho THỬ NGHIỆM (Mốc 4 sẽ chuyển lên máy chủ): danh sách mã vật phẩm + đồ đang mặc, lưu localStorage theo tài khoản.
-const LOOK_OF = { 'trang-phuc': 'outfit', 'vu-khi': 'weapon', canh: 'wing', 'phap-bao': 'avatar' }; // ô Pháp bảo = pháp tướng sau lưng
+const LOOK_OF = { 'trang-phuc': 'outfit', 'vu-khi': 'weapon', canh: 'wing', 'phap-tuong': 'avatar' }; // ô Pháp tướng: hiện sau lưng
 function createTestBag(userId, defs) {
   const key = `tc.bag.${userId}`;
   const byId = new Map(defs.map((d) => [d.id, d]));
