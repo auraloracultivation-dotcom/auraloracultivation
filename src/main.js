@@ -67,7 +67,10 @@ async function boot() {
         hud?.setOnline(Object.keys(state).length, maxPlayers);
       },
       onMove: (p) => others.onMove(p),
-      onChat: (p) => others.onChat(p, performance.now(), config.net.chat_bubble_s),
+      onChat: (p) => {
+        others.onChat(p, performance.now(), config.net.chat_bubble_s);
+        hud?.addChatLine(others.list.get(p.id)?.name || 'Đạo hữu', p.text);
+      },
     },
   });
 
@@ -92,6 +95,7 @@ async function boot() {
       me.chat = text;
       me.chatUntil = performance.now() + config.net.chat_bubble_s * 1000;
       zone.sendChat(text);
+      hud.addChatLine(me.name, text, true);
     },
     onOpenCharacter() {
       showCharacterPanel({

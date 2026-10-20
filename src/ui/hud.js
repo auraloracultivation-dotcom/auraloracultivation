@@ -7,7 +7,6 @@
 import { escapeHtml, toast } from './screens.js';
 import { crispWidth } from './stage.js';
 import { setupRoundCanvas } from './compass.js';
-import { watchKeyboard } from './keyboard.js';
 
 // Đặt kích thước nút/khung theo bội số nguyên điểm ảnh gốc → viền sắc, đều
 const crisp = (node, srcW, maxCss, square = false) => {
@@ -114,21 +113,48 @@ export function createHud(opts) {
   }
 
   // ---- Dưới trái: Chat ----
-  // Gõ phím Enter / nút "Gửi" trên bàn phím → gửi và đóng. Chạm ra ngoài / "Xong" → đóng, giữ nháp.
-  // Dùng <form> để bắt Enter ổn định cả khi gõ tiếng Việt (Telex/VNI) trên iPhone.
+  // iPhone: khi ô nhập ở sát đáy, Safari đẩy cả trang lên để tránh bàn phím (màn game giật lên rồi bị kéo về).
+  // Cách tránh: lúc mở, đưa thanh chat lên TRÊN CÙNG màn hình rồi mới focus → Safari không cần đẩy trang;
+  // khi bàn phím hiện xong (visualViewport đổi cỡ) mới đặt thanh chat ngay trên mép bàn phím. Game không bị động tới.
   const bar = document.createElement('form');
   bar.className = 'chatbar';
   bar.setAttribute('action', '');
   bar.innerHTML = `<button class="round-btn glow" type="button" aria-label="Chat">Chat</button>
-    <input class="field framed" type="text" maxlength="${maxChars}" placeholder="Nói gì đó…" enterkeyhint="send" autocomplete="off" hidden>`;
+    <input class="field framed" type="text" maxlength="${maxChars}" placeholder="Nói gì đó…" enterkeyhint="send" autocomplete="off" hidden>
+    <button class="chat-send glow" type="submit" aria-label="Gửi"><img src="assets/ui/icons/gui.png" alt=""></button>`;
   root.appendChild(bar);
   crisp(bar.querySelector('.round-btn'), 122, 56, true);
   const input = bar.querySelector('input');
-  const open = bar.querySelector('button');
+  const open = bar.querySelector('.round-btn');
+  const sendBtn = bar.querySelector('.chat-send');
+  sendBtn.addEventListener('pointerdown', (e) => e.preventDefault()); // không làm ô nhập mất tiêu điểm trước khi gửi
+  const vv = window.visualViewport;
+  let fullH = vv ? vv.height : window.innerHeight; // chiều cao khi chưa có bàn phím
+  const placeAboveKeyboard = () => {
+    if (!bar.classList.contains('typing')) return;
+    const h = vv ? vv.height : window.innerHeight;
+    const top = vv ? vv.offsetTop : 0;
+    if (h < fullH - 80) bar.style.top = `${top + h - bar.offsetHeight - 8}px`; // bàn phím đang mở
+  };
+  vv?.addEventListener('resize', () => {
+    if (!bar.classList.contains('typing')) fullH = Math.max(fullH * 0.5, vv.height);
+    placeAboveKeyboard();
+  });
+  vv?.addEventListener('scroll', placeAboveKeyboard);
+  const startTyping = () => {
+    input.hidden = false;
+    bar.style.top = '';
+    bar.classList.add('typing'); // CSS: thanh chat nằm trên cùng màn hình
+    input.focus({ preventScroll: true });
+    window.scrollTo(0, 0);
+    setTimeout(placeAboveKeyboard, 350); // phòng khi trình duyệt không báo đổi cỡ
+  };
   const close = () => {
     input.hidden = true;
     bar.classList.remove('typing');
+    bar.style.top = '';
     input.blur();
+    window.scrollTo(0, 0); // phòng khi Safari đã lỡ cuộn
   };
   const send = () => {
     const text = input.value.trim().slice(0, maxChars);
@@ -138,28 +164,41 @@ export function createHud(opts) {
   };
   // giữ tiêu điểm ở ô nhập khi chạm nút Chat (nếu không, ô nhập mất tiêu điểm và tự đóng trước khi kịp gửi)
   open.addEventListener('pointerdown', (e) => { if (!input.hidden) e.preventDefault(); });
-  open.addEventListener('click', () => {
-    if (input.hidden) { input.hidden = false; bar.classList.add('typing'); input.focus(); } else send();
-  });
+  open.addEventListener('click', () => { if (input.hidden) startTyping(); else send(); });
   bar.addEventListener('submit', (e) => { e.preventDefault(); send(); });
-  input.addEventListener('keydown', (e) => { if (e.key === 'Escape') { input.value = ''; close(); } });
-  input.addEventListener('blur', () => setTimeout(() => { if (document.activeElement !== input) close(); }, 0));
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && input.hidden && document.activeElement === document.body) {
-      input.hidden = false; bar.classList.add('typing'); input.focus();
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { input.value = ''; close(); }
+    // bộ gõ tiếng Việt: Enter lúc đang ghép chữ đôi khi không tạo submit → tự gửi khi ghép xong
+    if (e.key === 'Enter' && (e.isComposing || e.keyCode === 229)) {
+      e.preventDefault();
+      input.addEventListener('compositionend', () => setTimeout(send, 0), { once: true });
     }
   });
-  // bàn phím mở: chỉ thanh chat nổi lên ngay trên bàn phím
-  watchKeyboard(({ covered }) => {
-    bar.style.transform = covered > 40 ? `translateY(${-(covered - chatBottom(bar)) - 8}px)` : '';
-    bar.classList.toggle('above-keyboard', covered > 40);
+  input.addEventListener('blur', () => setTimeout(() => { if (document.activeElement !== input) close(); }, 0));
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && input.hidden && document.activeElement === document.body) startTyping();
   });
+
+  // Nhật ký chat: vài dòng gần nhất phía trên nút Chat, mờ dần sau một lúc
+  const log = document.createElement('div');
+  log.className = 'chat-log';
+  root.appendChild(log);
+  const addChatLine = (name, text, self = false) => {
+    const line = document.createElement('div');
+    line.className = `chat-line${self ? ' self' : ''}`;
+    line.innerHTML = `<b>${escapeHtml(name)}:</b> ${escapeHtml(text)}`;
+    log.appendChild(line);
+    while (log.children.length > 5) log.firstChild.remove();
+    setTimeout(() => line.classList.add('fade'), 12000);
+    setTimeout(() => line.remove(), 13000);
+  };
 
   const els = Object.fromEntries(['hp', 'mp', 'xp'].map((k) => [k, {
     fill: info.querySelector(`[data-${k}]`), text: info.querySelector(`[data-${k}-t]`),
   }]));
   return {
     miniCanvas,
+    addChatLine,
     setOnline(count, max) { online.textContent = `· ${count}/${max}`; },
     // value/max: số thật khi có dữ liệu chỉ số; chưa có thì max = 0 → hiện thanh đầy, không ghi số
     setBar(kind, value, max) {
@@ -181,7 +220,3 @@ function drawAvatar(canvas, draw) {
   ctx.restore();
 }
 
-// khoảng cách từ đáy thanh chat tới đáy lớp HUD (giá trị CSS bottom, không phụ thuộc phép dịch)
-function chatBottom(bar) {
-  return parseFloat(getComputedStyle(bar).bottom) || 0;
-}
