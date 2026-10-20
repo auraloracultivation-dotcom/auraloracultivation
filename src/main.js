@@ -106,9 +106,8 @@ async function boot() {
     onSettings() { showSettings({ onLogout: logout }); },
     onOpenMap() {
       showWorldMap({
-        overview: map.overview,
         zoneName: zoneDef.name,
-        getMarkers: () => markers().map((m) => ({ u: m.x / map.width, v: m.y / map.height, self: m.self })),
+        draw: (canvas, radiusTiles) => map.drawMinimap(canvas, me.x, me.y, radiusTiles, markers()),
       });
     },
     // Nút hành động. Chỉ "Chém thường" mở; còn lại khoá tới khi có hệ thống kỹ năng.

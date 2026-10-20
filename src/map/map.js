@@ -106,7 +106,8 @@ export async function createMap(def, terrainDef, tilesDef) {
       ctx.strokeStyle = '#000';
       ctx.lineWidth = 1.5;
       ctx.beginPath();
-      ctx.arc(size / 2 + dx * k, size / 2 + dy * k, m.self ? 4 : 3, 0, Math.PI * 2);
+      const dot = Math.max(3, size / 32);
+      ctx.arc(size / 2 + dx * k, size / 2 + dy * k, m.self ? dot * 1.3 : dot, 0, Math.PI * 2);
       ctx.fill(); ctx.stroke();
     }
   }
