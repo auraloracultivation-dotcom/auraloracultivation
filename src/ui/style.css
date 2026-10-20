@@ -184,30 +184,22 @@ img { image-rendering: pixelated; }
 .zone-tag em { font-style: normal; }
 
 /* ---- Dưới phải: tấn công + kỹ năng (kiểu MOBA) ---- */
-.action-pad {
-  position: absolute; right: max(10px, env(safe-area-inset-right)); bottom: max(10px, env(safe-area-inset-bottom));
-  width: 210px; height: 190px; pointer-events: none;
+.action-pad { /* gốc toạ độ = tâm nút Đánh thường */
+  position: absolute; width: 0; height: 0; pointer-events: none;
+  right: calc(max(10px, env(safe-area-inset-right)) + 50px); bottom: calc(max(10px, env(safe-area-inset-bottom)) + 50px);
+}
+@media (orientation: landscape) and (max-height: 520px) { /* màn ngang thấp: thu cả bộ cho khỏi đè bản đồ nhỏ */
+  .action-pad { transform: scale(.68); transform-origin: 0 0; right: calc(max(10px, env(safe-area-inset-right)) + 36px); bottom: calc(max(6px, env(safe-area-inset-bottom)) + 36px); }
 }
 .act {
   position: absolute; pointer-events: auto; border: 0; padding: 0; cursor: pointer; border-radius: 50%;
-  background: url("../../assets/ui/frames/o-tron.png") center / 100% 100% no-repeat; image-rendering: pixelated;
-  display: flex; align-items: center; justify-content: center; touch-action: none;
+  background: none; touch-action: none;
 }
-.act img { width: 70%; height: 70%; object-fit: contain; image-rendering: pixelated; }
-.act span { display: none; } /* tên nút chỉ dùng cho trợ năng; ô kỹ năng sẽ có icon riêng */
-.act.full { background: none; border-radius: 50%; }
-.act.full img { width: 100%; height: 100%; }
-.act.locked { filter: grayscale(.8) brightness(.6); }
-.act.locked img.lock { position: absolute; width: 38%; height: 38%; filter: none; }
+.act img { width: 100%; height: 100%; display: block; object-fit: contain; pointer-events: none; }
+.act span { display: none; }
+.act.locked img { filter: grayscale(.55) brightness(.82); } /* chưa mở: nhạt màu nhưng vẫn thấy hình */
 .act.pulse { animation: act-pulse .25s ease-out; }
-@keyframes act-pulse { 0% { transform: scale(.88); filter: brightness(1.6) drop-shadow(0 0 10px #f2c77f); } 100% { transform: scale(1); } }
-.act-attack { right: 0; bottom: 0; }
-.act-attack img { width: 62%; height: 62%; }
-.act-s1 { right: 108px; bottom: 0; }
-.act-s2 { right: 96px; bottom: 70px; }
-.act-s3 { right: 30px; bottom: 112px; }
-.act-fly { right: 166px; bottom: 62px; }
-.act-blink { right: 100px; bottom: 136px; }
+@keyframes act-pulse { 0% { transform: scale(.88); filter: brightness(1.5) drop-shadow(0 0 10px #f2c77f); } 100% { transform: scale(1); } }
 
 /* ---- Dưới trái: Chat ---- */
 .chatbar {
