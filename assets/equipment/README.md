@@ -1,24 +1,19 @@
 # Trang bị
 
-Mỗi ô trang bị một thư mục. Ảnh gốc của chủ dự án để chung ở `_source/` (không sửa).
+Mỗi thư mục = một ô hành trang ở bảng Nhân vật (8 ô). Ảnh gốc chủ dự án gửi để chung ở `_source/`, không sửa.
 
-```
-equipment/
-  _source/     Ảnh gốc (bảng mảnh GPT, nền hồng #FA03FB). Giữ nguyên.
-  mu/          Mũ / mặt nạ / tóc — vẽ trên khung đầu, giữ mắt nhìn thấy (trừ mặt nạ kín).
-  giap/        Giáp = cả bộ trang phục: thân + 2 tay áo + quần.
-  hai/         Hài — chỉ phần đế dưới gót mỗi chân.
-  vu-khi/      Kiếm, trượng… (chuôi giấu trong nắm tay).
-  nhan/        Nhẫn — chỉ icon, không vẽ lên người.
-  linh-quang/  Vầng sáng sau lưng, to bằng nhân vật.
-```
+| Thư mục | Ô | Vị trí trên bảng |
+|---|---|---|
+| `mat-na/` | Mặt nạ (ô "Mũ") | trái 1 |
+| `trang-phuc/` | Trang phục (ô "Áo giáp") | trái 2 |
+| `vu-khi/` | Vũ khí | trái 3 |
+| `nhan/` | Nhẫn | trái 4 |
+| `canh/` | Cánh | phải 1 |
+| `phap-bao/` | Pháp bảo | phải 2 |
+| `linh-thu/` | Linh thú | phải 3 |
+| `day-chuyen/` | Dây chuyền | phải 4 |
 
-## Luật
-- Lớp rời chồng đúng khung nhân vật trần (`assets/characters/base/`), cùng mật độ pixel, cùng điểm neo.
-- Không làm nhân vật to/nhỏ đi; đồ không to quá thân.
-- Icon túi đồ phải khớp đúng hình khi mặc.
+Thiết kế, tỉ lệ, cách mặc lên người: theo chủ dự án, sẽ ghi vào đây khi chốt.
 
-## Tên file (trùng ID dữ liệu)
-`<ô>/<id>.png` (lớp mặc) + `<ô>/<id>.icon.png` (icon túi).
-Ví dụ: `giap/item.armor.tu-dien.001.png`, `giap/item.armor.tu-dien.001.icon.png`.
-ID đã phát hành KHÔNG BAO GIỜ đổi.
+## Tên file (trùng ID dữ liệu, ID đã phát hành không bao giờ đổi)
+`<thư mục>/<id>.png` (hình) + `<thư mục>/<id>.icon.png` (icon).
