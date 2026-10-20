@@ -1,13 +1,13 @@
 // Điểm khởi động: nối các module lại với nhau. Không chứa luật gameplay chi tiết.
 import { loadJSON, startLoop, createScreen, createCamera, followCamera, createInput, drawStick } from './core/index.js';
 import { createMap, wrapDelta } from './map/index.js';
-import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel } from './entity/index.js';
+import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash } from './entity/index.js';
 
 // Luôn lấy code mới nhất (xem sw.js) — tránh lẫn code cũ với dữ liệu mới sau mỗi lần cập nhật
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 import {
   showLoading, showLogin, shouldForgetSession, showCreateCharacter, showNewPassword,
-  showConfirm, showFatal, toast, createHud,
+  showConfirm, showFatal, toast, createHud, showCharacterPanel, showSettings, showWorldMap,
 } from './ui/index.js';
 
 async function boot() {
@@ -71,31 +71,62 @@ async function boot() {
     },
   });
 
+  const realmName = character.realm > 0 ? `Cảnh giới ${character.realm}` : 'Phàm nhân'; // tạm, chờ dữ liệu cảnh giới
+  const drawMe = (ctx) => drawPlayer(ctx, { x: 0, y: 0, facing: 1, walkT: 0, isLocal: true }, 1);
+  const markers = () => [{ x: me.x, y: me.y, self: true }, ...[...others.list.values()].map((p) => ({ x: p.x, y: p.y }))];
+
+  async function logout() {
+    if (!(await showConfirm('Đăng xuất', 'Rời Tu Chân giới và đăng xuất?', { yes: 'Đăng xuất' }))) return;
+    await saver.flush();
+    await zone.leave();
+    await net.signOut();
+    location.reload();
+  }
+
   hud = createHud({
     zoneName: zoneDef.name,
     line: zone.line,
     maxChars: config.net.chat_max_chars,
+    player: { name: me.name, realmName, drawAvatar: drawMe },
     onChat(text) {
       me.chat = text;
       me.chatUntil = performance.now() + config.net.chat_bubble_s * 1000;
       zone.sendChat(text);
     },
-    player: {
-      name: me.name,
-      realmName: character.realm > 0 ? `Cảnh giới ${character.realm}` : 'Phàm nhân', // tạm, chờ dữ liệu cảnh giới
-      drawAvatar: (ctx) => drawPlayer(ctx, { x: 0, y: 0, facing: 1, walkT: 0, isLocal: true }, 1),
+    onOpenCharacter() {
+      showCharacterPanel({
+        name: me.name, realmName, drawAvatar: drawMe,
+        stats: [ // chờ bảng chỉ số cơ bản (đợt 1) — hiện "—"
+          { label: 'Khí huyết' }, { label: 'Linh lực' }, { label: 'Tu vi' },
+          { label: 'Công' }, { label: 'Thủ' }, { label: 'Tốc độ' }, { label: 'Bạo kích' }, { label: 'Né tránh' },
+        ],
+        equipment: [],
+      });
     },
-    onSettings() { toast('Cài đặt sắp có'); },
-    async onLogout() {
-      if (!(await showConfirm('Đăng xuất', 'Rời Tu Chân giới và đăng xuất?', { yes: 'Đăng xuất' }))) return;
-      await saver.flush();
-      await zone.leave();
-      await net.signOut();
-      location.reload();
+    onSettings() { showSettings({ onLogout: logout }); },
+    onOpenMap() {
+      showWorldMap({
+        overview: map.overview,
+        zoneName: zoneDef.name,
+        getMarkers: () => markers().map((m) => ({ u: m.x / map.width, v: m.y / map.height, self: m.self })),
+      });
     },
+    // Nút hành động. Chỉ "Chém thường" mở; còn lại khoá tới khi có hệ thống kỹ năng.
+    actions: [
+      { id: 'attack', slot: 'attack', name: 'Tấn công', icon: 'assets/ui/icons/tan-cong.png', onUse: () => { me.slashT = 0.22; } },
+      { id: 'skill1', slot: 's1', name: 'Kỹ năng 1', locked: true },
+      { id: 'skill2', slot: 's2', name: 'Kỹ năng 2', locked: true },
+      { id: 'skill3', slot: 's3', name: 'Kỹ năng 3', locked: true },
+      { id: 'fly', slot: 'fly', name: 'Phi hành', icon: 'assets/ui/icons/phi-hanh.png', locked: true },
+      { id: 'blink', slot: 'blink', name: 'Tốc biến', icon: 'assets/ui/icons/toc-bien.png', locked: true },
+    ],
   });
   hud.setOnline(others.list.size + 1, maxPlayers);
-  hud.setBars(1, 1); // tạm đầy — nối chỉ số thật khi có dữ liệu chỉ số nhân vật
+  hud.setBar('hp', 0, 0); hud.setBar('mp', 0, 0); hud.setBar('xp', 0, 0); // chờ dữ liệu chỉ số
+  let miniTimer = 0;
+  window.addEventListener('keydown', (e) => { // máy tính: phím cách = tấn công
+    if (e.code === 'Space' && !(e.target instanceof HTMLInputElement)) { e.preventDefault(); me.slashT = 0.22; }
+  });
   loading.set(100, 'Hoàn tất');
   setTimeout(() => loading.hide(), 300);
   toast(`Chào mừng ${me.name} đến ${zoneDef.name}`);
@@ -124,6 +155,9 @@ async function boot() {
     }
     saver.tick(dt, me.moving);
     others.update(dt);
+    if (me.slashT > 0) me.slashT -= dt;
+    miniTimer -= dt;
+    if (miniTimer <= 0) { miniTimer = 0.25; map.drawMinimap(hud.miniCanvas, me.x, me.y, 40, markers()); }
     followCamera(cam, me, screen, map.width, map.height, zoneDef.wrap);
   }
 
@@ -147,6 +181,7 @@ async function boot() {
       y: me.y + wrapDelta(p.y - me.y, map.height),
     }))].sort((a, b) => a.y - b.y);
     for (const p of people) drawPlayer(ctx, p, sprite);
+    drawSlash(ctx, me, sprite);
     for (const p of people) drawLabel(ctx, p, now, sprite);
 
     drawStick(ctx, input.stick, dpr);

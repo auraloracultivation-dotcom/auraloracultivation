@@ -86,7 +86,32 @@ export async function createMap(def, terrainDef, tilesDef) {
     }
   }
 
-  return { def, width, height, typeAt, blocked, move, drawGround, wrapX, wrapY };
+  // Bản đồ nhỏ: vùng radiusTiles ô quanh (x, y), quấn qua mép; đầu vào canvas tròn trên HUD
+  function drawMinimap(canvas, x, y, radiusTiles, markers) {
+    const ctx = canvas.getContext('2d');
+    const size = canvas.width;
+    const k = size / (radiusTiles * 2); // điểm ảnh minimap mỗi ô
+    const ox = x / T - radiusTiles, oy = y / T - radiusTiles;
+    ctx.imageSmoothingEnabled = false;
+    ctx.fillStyle = '#10192d';
+    ctx.fillRect(0, 0, size, size);
+    const bx = Math.floor(ox / W), by = Math.floor(oy / H);
+    for (let i = bx; i <= bx + 1; i++) for (let j = by; j <= by + 1; j++) {
+      ctx.drawImage(c, (i * W - ox) * k, (j * H - oy) * k, W * k, H * k);
+    }
+    for (const m of markers) {
+      const dx = wrapDelta(m.x - x, width) / T, dy = wrapDelta(m.y - y, height) / T;
+      if (Math.abs(dx) > radiusTiles || Math.abs(dy) > radiusTiles) continue;
+      ctx.fillStyle = m.self ? '#ffe36a' : '#ffffff';
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(size / 2 + dx * k, size / 2 + dy * k, m.self ? 4 : 3, 0, Math.PI * 2);
+      ctx.fill(); ctx.stroke();
+    }
+  }
+
+  return { def, width, height, typeAt, blocked, move, drawGround, drawMinimap, overview: c, wrapX, wrapY };
 }
 
 // Khoảng cách ngắn nhất trên thế giới vòng lặp (âm/dương), dùng để vẽ và nội suy người khác

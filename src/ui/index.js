@@ -3,3 +3,4 @@ export {
   showConfirm, showFatal, toast,
 } from './screens.js';
 export { createHud } from './hud.js';
+export { showCharacterPanel, showSettings, showWorldMap } from './panels.js';
