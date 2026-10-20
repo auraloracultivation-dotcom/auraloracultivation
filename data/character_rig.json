@@ -76,8 +76,6 @@
   },
   "attack_hand": "tay-phia-truoc",
   "attack_raise_ch": 0.035,
-  "attack_glow": false,
-  "layer": "sau-ao",
-  "max_top": "mep-tren-ao"
+  "attack_glow": false
  }
 }
