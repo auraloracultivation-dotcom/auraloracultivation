@@ -82,6 +82,7 @@ export function createProgress(userId, gp) {
       st.eq[g.slot] = uid; touch(); return true;
     },
     unequipSlot(slot) { if (st.eq[slot]) { delete st.eq[slot]; touch(); } },
+    dropItemAw(id) { delete st.itemAw[id]; touch(); },
     itemAw: (id) => (st.itemAw[id] ||= { tier: null, lines: [], spent: 0 }),
     equipped: () => Object.values(st.eq).map((u) => st.gear.find((g) => g.uid === u)).filter(Boolean),
   };

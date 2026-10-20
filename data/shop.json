@@ -1,5 +1,5 @@
 {
- "_status": "design",
+ "_status": "test",
  "_nguon": "Auralora Lab v3 (21/10/2026)",
  "_ghi_chu": "THIẾT KẾ từ Lab — CHƯA triển khai trong game, CHƯA kiểm thử cân bằng. Số liệu là baseline để thử nghiệm.",
  "_ghi_chu_rieng": "Danh sách định hướng, chưa có giá.",
@@ -15,5 +15,132 @@
   "công thức Cánh/Pháp Tướng cao cấp",
   "Tinh Hồn Cổ",
   "phôi Đỏ+ sẵn"
+ ],
+ "name": "Vạn Bảo Lâu",
+ "where": "Kho hàng trong Thanh Vân Thành (chạm vào, hoặc nút Tông môn khi đang ở trong thành)",
+ "_ghi_chu_gia": "Giá (Linh thạch) là số TẠM Claude đặt — Lab chưa có. stack = số lượng mỗi lần mua. daily_limit = giới hạn mua mỗi ngày.",
+ "stock": [
+  {
+   "id": "item.danphuong.tieu-hoi-huyet.001",
+   "price": 30
+  },
+  {
+   "id": "item.danphuong.hoi-linh.001",
+   "price": 40
+  },
+  {
+   "id": "item.danphuong.cuong-cong.001",
+   "price": 120
+  },
+  {
+   "id": "item.danphuong.cuong-the.001",
+   "price": 120
+  },
+  {
+   "id": "item.danphuong.truc-co.001",
+   "price": 200
+  },
+  {
+   "id": "item.danphuong.ket-dan.001",
+   "price": 900
+  },
+  {
+   "id": "item.danphuong.nguyen-anh.001",
+   "price": 3500
+  },
+  {
+   "id": "item.congthuc.vu-khi.001",
+   "price": 60
+  },
+  {
+   "id": "item.congthuc.trang-phuc.001",
+   "price": 60
+  },
+  {
+   "id": "item.congthuc.nhan.001",
+   "price": 60
+  },
+  {
+   "id": "item.congthuc.day-chuyen.001",
+   "price": 100
+  },
+  {
+   "id": "item.congthuc.mat-na.001",
+   "price": 150
+  },
+  {
+   "id": "item.congthuc.linh-thu.001",
+   "price": 1500
+  },
+  {
+   "id": "item.congphap.tamphap.luyen-khi.001",
+   "price": 50
+  },
+  {
+   "id": "item.congphap.tamphap.thanh-tam.001",
+   "price": 80
+  },
+  {
+   "id": "item.congphap.chieu.kiem-khi.001",
+   "price": 600
+  },
+  {
+   "id": "item.congphap.chieu.hoi-linh.001",
+   "price": 300
+  },
+  {
+   "id": "item.congphap.than.lang-ba.001",
+   "price": 1200
+  },
+  {
+   "id": "item.phu.bao-ho.001",
+   "price": 300,
+   "daily_limit": 3
+  },
+  {
+   "id": "item.thao.thanh-tam.001",
+   "price": 12,
+   "stack": 5
+  },
+  {
+   "id": "item.thao.linh-chi-non.001",
+   "price": 12,
+   "stack": 5
+  },
+  {
+   "id": "item.thao.bat-nha.001",
+   "price": 12,
+   "stack": 5
+  },
+  {
+   "id": "item.thao.huyet-linh.001",
+   "price": 40,
+   "stack": 5
+  },
+  {
+   "id": "item.thao.diem-chi.001",
+   "price": 40,
+   "stack": 5
+  },
+  {
+   "id": "item.khoang.huyen-thiet-vun.001",
+   "price": 12,
+   "stack": 5
+  },
+  {
+   "id": "item.khoang.tinh-sa.001",
+   "price": 12,
+   "stack": 5
+  },
+  {
+   "id": "item.khoang.xich-thiet.001",
+   "price": 40,
+   "stack": 5
+  },
+  {
+   "id": "item.khoang.huyet-ngoc.001",
+   "price": 40,
+   "stack": 5
+  }
  ]
 }

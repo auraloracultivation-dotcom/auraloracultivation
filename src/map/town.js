@@ -48,6 +48,14 @@ export async function createTown(town, props, tileSize) {
     safeAt: (x, y) => Math.abs(x - cx) <= half && Math.abs(y - cy) <= half,
     // điểm có vướng chân công trình không (r = bán kính người/quái)
     blockedAt: (x, y, r = 0) => allBlocks.some(([a, b, c, d]) => x + r > a && x - r < c && y + r * 0.5 > b && y - r * 0.5 < d),
+    // Công trình (đứng) ở điểm chạm, ưu tiên cái gần phía trước
+    propAt(x, y) {
+      for (let i = standing.length - 1; i >= 0; i--) {
+        const it = standing[i];
+        if (x > it.x - it.w * 0.4 && x < it.x + it.w * 0.4 && y > it.y - it.h * 0.85 && y < it.y) return it.id;
+      }
+      return null;
+    },
     // Vẽ: lớp sát đất trước; công trình đứng chia 2 lượt theo chân người chơi (sau lưng / che trước)
     drawGround(ctx, cam) { ctx.imageSmoothingEnabled = true; for (const it of ground) if (visible(it, cam)) draw(ctx, it); },
     drawBehind(ctx, cam, refY) { ctx.imageSmoothingEnabled = true; for (const it of standing) if (it.y <= refY && visible(it, cam)) draw(ctx, it); },

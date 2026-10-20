@@ -74,7 +74,8 @@ const CHAR_FOOT = [497, 740]; // chân đặt giữa vòng pháp trận
 const CHAR_CLIP = [92, 212, 812, 600]; // vùng trong khung (trên hai thanh tên): vũ khí/cánh được tràn ra đây
 const NAME_BARS = [[392, 819, 270, 57], [392, 886, 270, 58]]; // phần chữ của 2 thanh (sau biểu tượng người / sen)
 
-export function showCharacterPanel({ name, realmName, equipment, portrait }) {
+// onSlot(i): chạm ô đã có đồ → mở hộp thao tác (Tháo / Thức tỉnh / Phân rã / Vứt)
+export function showCharacterPanel({ name, realmName, equipment, portrait, onSlot }) {
   const maxW = () => Math.min(vw() * 0.96, 460, (vh() * 0.84 * CHAR_FRAME.w) / CHAR_FRAME.h);
   openModal('modal-char', CHAR_FRAME, maxW, ({ at }) => {
     // Lớp: nền khung → nhân vật (to theo thân; vũ khí, cánh tràn ra nhưng nằm SAU các ô trang bị) → ô trang bị
@@ -87,7 +88,7 @@ export function showCharacterPanel({ name, realmName, equipment, portrait }) {
       const item = equipment[i];
       const slot = at(`<button type="button" class="eq-slot ${item ? 'filled' : ''}" aria-label="${s.name}">${item?.icon ? `<img src="${item.icon}" alt="">` : ''}</button>`, s.x, s.y, ...SLOT);
       if (item?.icon) Object.assign(slot.style, { display: 'flex', alignItems: 'center', justifyContent: 'center' });
-      slot.addEventListener('click', () => toast(item ? item.name : `${s.name}: chưa trang bị`));
+      slot.addEventListener('click', () => (item && onSlot ? onSlot(i) : toast(item ? item.name : `${s.name}: chưa trang bị`)));
     });
     at(`<div class="char-line gold">${escapeHtml(name)}</div>`, ...NAME_BARS[0]);
     at(`<div class="char-line">${escapeHtml(realmName)}</div>`, ...NAME_BARS[1]);

@@ -11,7 +11,7 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catc
 import {
   showLoading, showLogin, shouldForgetSession, showCreateCharacter, showNewPassword,
   showConfirm, showFatal, toast, createHud, showCharacterPanel, showSettings, showWorldMap, drawRoundMap, createStatsDock, enableFastTap,
-  showBag, loadSettings, createTestBag,
+  showBag, showItemActions, loadSettings, createTestBag,
 } from './ui/index.js';
 
 async function boot() {
@@ -163,25 +163,22 @@ async function boot() {
     onOpenCharacter() {
       showCharacterPanel({
         name: me.name, realmName: game.realmName(), portrait: () => ({ full: renderPortrait(me.look), body: renderPortrait(me.look, { body: true }) }),
-        equipment: SLOT_ORDER.map((sl) => { const it = bag.equippedItem(sl); return it && { name: it.name, icon: artInfo(it.art)?.file }; }),
+        equipment: SLOT_ORDER.map((sl) => { const it = game.slotItem(sl); return it && { name: it.name, icon: it.thumb }; }),
+        onSlot: (i) => showItemActions({ getItem: () => game.slotItem(SLOT_ORDER[i]), onAction: (it, a) => game.itemAction(it.key, a) }),
       });
     },
     onSettings() { showSettings({ onLogout: logout, onRedeem: redeemCode, onChange: (st) => audio.apply(st) }); },
     onOpenBag() {
       showBag({
-        categories: itemsDef.categories, getEntries: () => [...bag.entries(), ...game.bagEntries()], isEquipped: bag.isEquipped,
-        thumb: (it) => it.icon || artInfo(it.art)?.file || '', note: 'Đồ thử nghiệm: chỉ lưu trên máy này, chưa lưu máy chủ.',
-        onUse: (it) => game.onBagUse(it),
-        onToggle(it) {
-          bag.toggle(it); game.onBagEquip(it);
-          if (pt.active && !bag.equippedItem('phap-tuong')) { pt.cancel(); phapTuongOff(); } else setLook(); // tháo pháp tướng → thu lại
-        },
+        categories: itemsDef.categories, getEntries: () => game.bagEntries(), note: 'Đồ thử nghiệm: chỉ lưu trên máy này, chưa lưu máy chủ.',
+        onAction: (it, a) => game.itemAction(it.key, a), // Sử dụng / Tháo / Thức tỉnh / Phân rã / Vứt / Dùng / Luyện
       });
     },
     onBreakthrough: () => game.breakthrough(),
     onMenu(id) {
       if (id === 'quests') game.openQuests();
       else if (id === 'skills') game.openCultivate();
+      else if (id === 'sect') game.openShop(); // Vạn Bảo Lâu (chỉ mở trong Thanh Vân Thành)
       else return false;
       return true;
     },
@@ -274,6 +271,8 @@ async function boot() {
     for (const tap of input.takeTaps()) { // chạm vào nhân vật khác → chọn / bỏ chọn
       const wx = cam.x + tap.x / screen.scale, wy = cam.y + tap.y / screen.scale;
       if (game.tap(wx, wy)) continue; // chạm trúng quái → chọn quái
+      const prop = map.town?.propAt(wx, wy);
+      if (prop && game.onProp(prop)) continue; // chạm công trình trong thành (kho hàng = cửa hàng…)
       let best = null, bestD = 22;
       for (const p of others.list.values()) {
         const px = me.x + wrapDelta(p.x - me.x, map.width), py = me.y + wrapDelta(p.y - me.y, map.height) - 12 * sprite;

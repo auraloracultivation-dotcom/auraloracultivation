@@ -1,0 +1,203 @@
+{
+ "_status": "test",
+ "_nguon": "Lab v3.1 (bảng Đan phương, Pháp bảo phương, Công pháp, Shop)",
+ "_ghi_chu": "Đan phương / công thức phôi / bí kíp công pháp: phải CÓ TRONG KHO mới luyện được (không mất khi dùng). Có được: mua ở Vạn Bảo Lâu (data/shop.json), thưởng nhiệm vụ, hoặc rơi từ boss (drop: vùng + cấp quái + tỷ lệ — tỷ lệ là số tạm).",
+ "items": [
+  {
+   "id": "item.danphuong.truc-co.001",
+   "name": "Đan phương Trúc Cơ Đan",
+   "cat": "dan-phuong",
+   "teaches": "item.dan.truc-co.001"
+  },
+  {
+   "id": "item.danphuong.ket-dan.001",
+   "name": "Đan phương Kết Đan Đan",
+   "cat": "dan-phuong",
+   "teaches": "item.dan.ket-dan.001"
+  },
+  {
+   "id": "item.danphuong.nguyen-anh.001",
+   "name": "Đan phương Nguyên Anh Đan",
+   "cat": "dan-phuong",
+   "teaches": "item.dan.nguyen-anh.001"
+  },
+  {
+   "id": "item.danphuong.hoa-than.001",
+   "name": "Đan phương Hóa Thần Đan",
+   "cat": "dan-phuong",
+   "teaches": "item.dan.hoa-than.001",
+   "drop": {
+    "zone": "than",
+    "rank": "boss",
+    "chance": 0.25
+   }
+  },
+  {
+   "id": "item.danphuong.tieu-hoi-huyet.001",
+   "name": "Đan phương Tiểu Hồi Huyết Đan",
+   "cat": "dan-phuong",
+   "teaches": "item.dan.tieu-hoi-huyet.001"
+  },
+  {
+   "id": "item.danphuong.hoi-linh.001",
+   "name": "Đan phương Hồi Linh Đan",
+   "cat": "dan-phuong",
+   "teaches": "item.dan.hoi-linh.001"
+  },
+  {
+   "id": "item.danphuong.cuong-cong.001",
+   "name": "Đan phương Cường Công Đan",
+   "cat": "dan-phuong",
+   "teaches": "item.dan.cuong-cong.001"
+  },
+  {
+   "id": "item.danphuong.cuong-the.001",
+   "name": "Đan phương Cường Thể Đan",
+   "cat": "dan-phuong",
+   "teaches": "item.dan.cuong-the.001"
+  },
+  {
+   "id": "item.danphuong.duy-tri.001",
+   "name": "Đan phương Duy Trì Đan",
+   "cat": "dan-phuong",
+   "teaches": "item.dan.duy-tri.001",
+   "drop": {
+    "zone": "xam",
+    "rank": "boss",
+    "chance": 0.2
+   }
+  },
+  {
+   "id": "item.congthuc.vu-khi.001",
+   "name": "Công thức phôi Vũ khí",
+   "cat": "phap-khi",
+   "teaches": "recipe.phoi.vu-khi.001"
+  },
+  {
+   "id": "item.congthuc.trang-phuc.001",
+   "name": "Công thức phôi Trang phục",
+   "cat": "phap-khi",
+   "teaches": "recipe.phoi.trang-phuc.001"
+  },
+  {
+   "id": "item.congthuc.nhan.001",
+   "name": "Công thức phôi Nhẫn",
+   "cat": "phap-khi",
+   "teaches": "recipe.phoi.nhan.001"
+  },
+  {
+   "id": "item.congthuc.day-chuyen.001",
+   "name": "Công thức phôi Dây chuyền",
+   "cat": "phap-khi",
+   "teaches": "recipe.phoi.day-chuyen.001"
+  },
+  {
+   "id": "item.congthuc.mat-na.001",
+   "name": "Công thức phôi Mặt nạ",
+   "cat": "phap-khi",
+   "teaches": "recipe.phoi.mat-na.001"
+  },
+  {
+   "id": "item.congthuc.linh-thu.001",
+   "name": "Công thức phôi Linh thú",
+   "cat": "phap-khi",
+   "teaches": "recipe.phoi.linh-thu.001"
+  },
+  {
+   "id": "item.congthuc.canh.001",
+   "name": "Công thức phôi Cánh",
+   "cat": "phap-khi",
+   "teaches": "recipe.phoi.canh.001",
+   "drop": {
+    "zone": "xam",
+    "rank": "boss",
+    "chance": 0.3
+   }
+  },
+  {
+   "id": "item.congthuc.phap-tuong.001",
+   "name": "Công thức phôi Pháp tướng",
+   "cat": "phap-khi",
+   "teaches": "recipe.phoi.phap-tuong.001",
+   "drop": {
+    "zone": "than",
+    "rank": "boss",
+    "chance": 0.25
+   }
+  },
+  {
+   "id": "item.congphap.tamphap.luyen-khi.001",
+   "name": "Bí kíp Luyện Khí Quyết",
+   "cat": "cong-phap",
+   "teaches": "skill.tamphap.luyen-khi.001"
+  },
+  {
+   "id": "item.congphap.chieu.kiem-khi.001",
+   "name": "Bí kíp Kiếm Khí Quyết",
+   "cat": "cong-phap",
+   "teaches": "skill.chieu.kiem-khi.001",
+   "drop": {
+    "zone": "cam",
+    "rank": "boss",
+    "chance": 0.3
+   }
+  },
+  {
+   "id": "item.congphap.khe.linh-thu.001",
+   "name": "Bí kíp Linh Thú Khế Ước",
+   "cat": "cong-phap",
+   "teaches": "skill.khe.linh-thu.001",
+   "drop": {
+    "zone": "trang",
+    "rank": "boss",
+    "chance": 0.3
+   }
+  },
+  {
+   "id": "item.congphap.than.canh-phong.001",
+   "name": "Bí kíp Thiên Phong Dực Quyết",
+   "cat": "cong-phap",
+   "teaches": "skill.than.canh-phong.001",
+   "drop": {
+    "zone": "xam",
+    "rank": "boss",
+    "chance": 0.3
+   }
+  },
+  {
+   "id": "item.congphap.phap-tuong.thien-thu.001",
+   "name": "Bí kíp Pháp Tướng Thiên Thư",
+   "cat": "cong-phap",
+   "teaches": "skill.phap-tuong.thien-thu.001",
+   "drop": {
+    "zone": "than",
+    "rank": "boss",
+    "chance": 0.2
+   }
+  },
+  {
+   "id": "item.congphap.tamphap.thanh-tam.001",
+   "name": "Bí kíp Thanh Tâm Tĩnh Khí Quyết",
+   "cat": "cong-phap",
+   "teaches": "skill.tamphap.thanh-tam.001"
+  },
+  {
+   "id": "item.congphap.chieu.hoi-linh.001",
+   "name": "Bí kíp Hồi Linh Thuật",
+   "cat": "cong-phap",
+   "teaches": "skill.chieu.hoi-linh.001"
+  },
+  {
+   "id": "item.congphap.than.lang-ba.001",
+   "name": "Bí kíp Lăng Ba Vi Bộ",
+   "cat": "cong-phap",
+   "teaches": "skill.than.lang-ba.001"
+  },
+  {
+   "id": "item.phu.bao-ho.001",
+   "name": "Bảo hộ phù",
+   "cat": "khac",
+   "use": "Tự dùng khi đột phá: +15 điểm % tỷ lệ thành công"
+  }
+ ]
+}

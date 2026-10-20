@@ -1,11 +1,6 @@
 // Kho đồ (túi trữ vật) và hộp nhập mã. Chỉ hiển thị — dữ liệu và luật do main.js truyền vào.
 import { el } from './stage.js';
-import { escapeHtml, toast } from './screens.js';
-
-const SLOT_NAME = {
-  'mat-na': 'Mặt nạ', 'trang-phuc': 'Trang phục', 'vu-khi': 'Vũ khí', nhan: 'Nhẫn',
-  canh: 'Cánh', 'linh-thu': 'Linh thú', 'day-chuyen': 'Dây chuyền', 'phap-tuong': 'Pháp tướng',
-};
+import { escapeHtml, showConfirm, toast } from './screens.js';
 
 function overlay(cls) {
   const wrap = el(`<div class="overlay modal-wrap ${cls}"></div>`);
@@ -15,10 +10,9 @@ function overlay(cls) {
   return { wrap, close };
 }
 
-// categories: [[id, tên]], getEntries(): [{ item, count }], isEquipped(item), onToggle(item) → cập nhật trạng thái
-// thumb(item): đường dẫn ảnh. note: dòng ghi chú cuối kho (vd. "Đồ thử nghiệm, chỉ lưu trên máy này").
-// onUse(item): vật phẩm dùng được (item.usable, vd. đan dược) → nút "Dùng"
-export function showBag({ categories, getEntries, isEquipped, onToggle, onUse, thumb, note }) {
+// Kho: categories [[id, tên]]; getEntries() → [{ item, count }]; mỗi item có key, name, cat, thumb, sub, detail, equipped,
+// actions [{ id, label, disabled, danger, confirm }]. onAction(item, actionId) → Promise | void (luật do nơi gọi xử lý).
+export function showBag({ categories, getEntries, onAction, note }) {
   const { wrap, close } = overlay('bag-wrap');
   const box = el(`<div class="bag" role="dialog" aria-label="Kho">
     <div class="bag-head"><b>Kho</b><button type="button" class="bag-x" aria-label="Đóng">✕</button></div>
@@ -36,24 +30,13 @@ export function showBag({ categories, getEntries, isEquipped, onToggle, onUse, t
   const render = () => {
     const list = getEntries().filter((e) => cat === 'tat-ca' || e.item.cat === cat);
     grid.innerHTML = list.length ? list.map(({ item, count }) => `
-      <button type="button" class="bag-cell ${isEquipped(item) ? 'on' : ''} ${sel === item.id ? 'sel' : ''}" data-id="${item.id}"
+      <button type="button" class="bag-cell ${item.equipped ? 'on' : ''} ${item.tier ? `tier-${item.tier}` : ''} ${sel === item.key ? 'sel' : ''}" data-key="${escapeHtml(item.key)}"
         aria-label="${escapeHtml(item.name)}">
-        <img src="${thumb(item)}" alt="" loading="lazy">${count > 1 ? `<i>${count}</i>` : ''}${isEquipped(item) ? '<em>Đang dùng</em>' : ''}
+        <img src="${item.thumb || ''}" alt="" loading="lazy">${count > 1 ? `<i>${count}</i>` : ''}${item.equipped ? '<em>Đang dùng</em>' : ''}
       </button>`).join('') : '<p class="bag-empty">Chưa có vật phẩm</p>';
-    const it = list.find((e) => e.item.id === sel)?.item;
+    const it = list.find((e) => e.item.key === sel)?.item;
     detail.hidden = !it;
-    if (it) {
-      const eq = isEquipped(it);
-      detail.innerHTML = `<div><b>${escapeHtml(it.name)}</b><span>${escapeHtml(SLOT_NAME[it.slot] || it.use || '')}${it.he ? ` · hệ ${escapeHtml(it.he)}` : ''}</span></div>
-        ${it.slot ? `<button type="button" class="bag-act">${eq ? 'Tháo ra' : 'Trang bị'}</button>` : ''}
-        ${it.usable && onUse ? '<button type="button" class="bag-act bag-use">Dùng</button>' : ''}`;
-      detail.querySelector('.bag-use')?.addEventListener('click', () => { onUse(it); render(); });
-      detail.querySelector('.bag-act:not(.bag-use)')?.addEventListener('click', () => {
-        onToggle(it);
-        toast(isEquipped(it) ? `Đã trang bị ${it.name}` : `Đã tháo ${it.name}`, 1200);
-        render();
-      });
-    }
+    if (it) detail.replaceChildren(itemCard(it, async (a) => { await onAction(it, a); render(); }));
   };
   box.querySelector('.bag-tabs').addEventListener('click', (e) => {
     const b = e.target.closest('[data-cat]');
@@ -63,12 +46,43 @@ export function showBag({ categories, getEntries, isEquipped, onToggle, onUse, t
     render();
   });
   grid.addEventListener('click', (e) => {
-    const b = e.target.closest('[data-id]');
+    const b = e.target.closest('[data-key]');
     if (!b) return;
-    sel = sel === b.dataset.id ? null : b.dataset.id;
+    sel = sel === b.dataset.key ? null : b.dataset.key;
     render();
   });
   render();
+  return close;
+}
+
+// Thẻ chi tiết + hàng nút thao tác (dùng chung cho Kho và ô trang bị bảng Nhân vật)
+function itemCard(it, run) {
+  const card = el(`<div class="item-card"><div class="ic-info"><b>${escapeHtml(it.name)}</b>
+    <span>${escapeHtml(it.sub || '')}</span>${it.detail ? `<small>${escapeHtml(it.detail)}</small>` : ''}</div>
+    <div class="ic-acts">${(it.actions || []).map((a) => `<button type="button" class="bag-act sm ${a.danger ? 'danger' : ''}" data-a="${a.id}" ${a.disabled ? 'disabled' : ''}>${escapeHtml(a.label)}</button>`).join('')}</div></div>`);
+  card.addEventListener('click', async (e) => {
+    const b = e.target.closest('[data-a]');
+    if (!b || b.disabled) return;
+    const a = it.actions.find((x) => x.id === b.dataset.a);
+    if (a.confirm && !(await showConfirm(a.label, a.confirm, { yes: a.label.split(' (')[0], no: 'Thôi' }))) return;
+    run(a.id);
+  });
+  return card;
+}
+
+// Hộp thao tác một món (chạm ô trang bị ở bảng Nhân vật). getItem() lấy lại món sau mỗi thao tác; trả null thì đóng.
+export function showItemActions({ getItem, onAction }) {
+  const { wrap, close } = overlay('code-wrap');
+  const box = el('<div class="bag code-box item-pop" role="dialog"></div>');
+  wrap.appendChild(box);
+  const paint = () => {
+    const it = getItem();
+    if (!it) { close(); return; }
+    box.replaceChildren(el('<div class="bag-head"><b>Trang bị</b><button type="button" class="bag-x" aria-label="Đóng">✕</button></div>'),
+      itemCard(it, async (a) => { await onAction(it, a); paint(); }));
+    box.querySelector('.bag-x').addEventListener('click', close);
+  };
+  paint();
   return close;
 }
 

@@ -465,3 +465,19 @@ img { image-rendering: pixelated; }
 
 .sheet .ico { width: 26px; height: 26px; object-fit: contain; vertical-align: middle; margin-right: 6px; }
 .sheet .grid2 span .ico { width: 20px; height: 20px; }
+
+/* Thẻ món đồ + hàng thao tác (Kho, bảng Nhân vật) */
+.bag-detail { flex-direction: column; align-items: stretch; }
+.item-card { display: flex; flex-direction: column; gap: 6px; }
+.item-card .ic-info { display: flex; flex-direction: column; min-width: 0; }
+.item-card b { color: var(--gold); font-size: 14px; }
+.item-card span { color: var(--muted); font-size: 12px; }
+.item-card small { color: #cfe8ff; font-size: 12px; }
+.item-card .ic-acts { display: flex; flex-wrap: wrap; gap: 6px; }
+.item-card .bag-act.sm { margin-top: 0; }
+.bag-act.danger { background: linear-gradient(#ff9a8a, #c9473a); color: #2a0a08; }
+.item-pop { height: auto; }
+.bag-cell.tier-luc { border-color: #4caf50; } .bag-cell.tier-lam { border-color: #3d8bff; } .bag-cell.tier-tim { border-color: #b05cff; }
+.bag-cell.tier-cam { border-color: #ff9a3d; } .bag-cell.tier-vang { border-color: #ffd23a; } .bag-cell.tier-do, .bag-cell.tier-den { border-color: #ff3b30; }
+.sheet .row.locked { opacity: .8; }
+.sheet .lock { color: #ffb38a !important; font-size: 12px; }
