@@ -8,7 +8,7 @@ characters/
 
 `base/`:
 - `ban-tay.tron` — bàn tay tròn code vẽ khi đi/đứng (mặc định).
-- `ban-tay.nam`, `nam-chat`, `cam-vu-khi`, `chi`, `mo` — 5 thế tay có tay áo (nắm, nắm chặt, cầm vũ khí, chỉ, mở tay phép thuật).
+- `ban-tay.nam`, `nam-chat`, `nam-nghieng`, `chi`, `mo` — 5 thế bàn tay GPT (không tay áo): nắm, nắm chặt, nắm nghiêng, duỗi/chỉ, mở tay phép thuật. Vẽ hướng phải; tay trái = lật gương.
 - `than-tran`, `toc.sau`, `toc.nghieng` — nhân vật trần và tóc tách lớp (dự phòng cho hệ tóc riêng).
 
 Mẫu "tân thủ" (chưa lên trang bị) nằm ở `assets/equipment/trang-phuc/art.outfit.tan-thu.*`.

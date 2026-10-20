@@ -56,5 +56,16 @@
  "mask": {
   "width_cw": 0.62,
   "face_y": 0.55
+ },
+ "hands": {
+  "_ghi_chu": "Bàn tay GPT đặt vào ô tay trái/phải (vị trí lấy từ 'hands' của trang phục).",
+  "size_cw": 0.2,
+  "idle_pose": "nam",
+  "attack_pose": "chi",
+  "magic_pose": "mo",
+  "breath_scale": 0.05,
+  "step_scale": 0.08,
+  "attack_scale": 0.7,
+  "attack_reach_cw": 0.16
  }
 }
