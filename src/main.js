@@ -62,9 +62,13 @@ async function boot() {
   const me = createLocalPlayer(character);
   me.rig = {};
   const bag = createTestBag(character.user_id, itemsDef.items);
+  let game = null; // luật chơi thử nghiệm: quái, chiến đấu, tu vi, nhiệm vụ (src/game)
+  const hasAvatar = () => !!(bag.equippedItem('phap-tuong') || game?.forgedLook().avatar);
   const lookNow = () => { // đồ đang mặc + pháp tướng (chỉ khi kỹ năng đang bật)
-    const l = { ...bag.look() }, av = bag.equippedItem('phap-tuong');
-    if (pt.active && av) l.avatar = av.art;
+    const forged = game?.forgedLook() || {}; // đồ luyện từ phôi đang mặc
+    const l = { ...bag.look(), ...forged }, av = bag.equippedItem('phap-tuong')?.art || forged.avatar;
+    delete l.avatar;
+    if (pt.active && av) l.avatar = av;
     return Object.keys(l).length ? l : null;
   };
   me.look = lookNow();
@@ -108,7 +112,6 @@ async function boot() {
   const fan = (deg, r = 122) => ({ dx: Math.round(Math.cos((deg * Math.PI) / 180) * r), dy: -Math.round(Math.sin((deg * Math.PI) / 180) * r) });
   const markers = () => [{ x: me.x, y: me.y, self: true }, ...[...others.list.values()].map((p) => ({ x: p.x, y: p.y }))];
 
-  let game = null; // luật chơi thử nghiệm: quái, chiến đấu, tu vi, nhiệm vụ (src/game)
   function attack() { if (game.attack()) swing(); }
   function swing() {
     if (me.look?.outfit || me.look?.weapon) rigAttack(me); // nhân vật ghép lớp: đưa tay (và xoay kiếm nếu có)
@@ -151,10 +154,10 @@ async function boot() {
     hud.setToggle('bay', 0); zone.sendMove(me.x, me.y, me.moving, false); toast(msg, 1600);
   }
   function onLookChanged() { // đồ trên người đổi từ bảng Tu luyện
-    if (pt.active && !bag.equippedItem('phap-tuong')) { pt.cancel(); phapTuongOff(); } else setLook();
+    if (pt.active && !hasAvatar()) { pt.cancel(); phapTuongOff(); } else setLook();
   }
   function usePhapTuong() {
-    const r = pt.toggle(!!bag.equippedItem('phap-tuong'));
+    const r = pt.toggle(hasAvatar());
     if (r === 'off') return phapTuongOff();
     if (r !== 'on') return toast(PT_MSG[r], 1400);
     stopPtSound = audio.play(ptDef.sound);
