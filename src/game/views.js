@@ -81,21 +81,24 @@ export function createViews(o) {
       <p>${bt}</p><p>Linh thạch: <b>${st().stone}</b></p></div><div class="row grid2">${rows}</div>
       <div class="row"><p>Kỹ năng mở theo cảnh giới: Kiếm khí + Khống chế (Trúc Cơ), Linh thú + Lướt (Kết Đan), Diện rộng (Nguyên Anh).</p></div>`;
   }
+  // Chỉ hiện công thức ĐANG CÓ trong kho (đan phương / công thức phôi / bí kíp). Muốn thêm → về Vạn Bảo Lâu trong thành mua.
+  const none = (what) => `<p class="bag-empty">Kho chưa có ${what} nào.<br>Về Vạn Bảo Lâu trong Thanh Vân Thành để mua (nút Tông môn khi ở trong thành), hoặc săn boss.</p>`;
+  const ownedOnly = (list, html, what) => { const own = list.filter((x) => o.owns(x.id)); return own.length ? own.map(html).join('') : none(what); };
   function danTab() {
-    return pills.pills.map((p) => {
+    return ownedOnly(pills.pills, (p) => {
       const inp = craft.pickInputs(p) || p.recipe.inputs, have = progress.count(p.id), usable = gp.pills[p.id], own = o.owns(p.id);
       return `<div class="row ${own ? '' : 'locked'}"><div class="row-h"><b>${ico(p.id)}${E(p.name)}</b><em>có ${have} · ${Math.round(p.recipe.rate * 100)}%</em></div>
         ${own ? '' : `<p class="lock">🔒 Cần ${E(name(o.teacher.get(p.id)))} trong kho (mua ở Vạn Bảo Lâu hoặc rơi từ boss)</p>`}
         <p class="need">${need(inp)}</p>${btn('brew', p.id, 'Luyện', own && progress.has(inp))} ${usable ? btn('use', p.id, 'Dùng', have > 0) : ''}</div>`;
-    }).join('');
+    }, 'đan phương');
   }
   function phoiTab() {
-    return blanks.blanks.map((b) => {
+    return ownedOnly(blanks.blanks, (b) => {
       const ok = craft.stageOk(b.unlock), own = o.owns(b.id);
       return `<div class="row ${own ? '' : 'locked'}"><div class="row-h"><b>${ico(`slot.${b.slot}`)}Phôi ${SLOT[b.slot]}</b><em>${ok ? `${Math.round(b.rate * 100)}%` : `mở ở ${E(stageName(b.unlock))}`}</em></div>
         ${own ? '' : `<p class="lock">🔒 Cần ${E(name(o.teacher.get(b.id)))} trong kho</p>`}
         <p class="need">${need(b.inputs)}</p>${btn('forge', b.id, 'Luyện phôi', own && ok && progress.has(b.inputs))}</div>`;
-    }).join('');
+    }, 'công thức phôi');
   }
   // Dòng thức tỉnh, mỗi dòng tô màu phẩm riêng
   const linesText = (a) => `<span class="ic-lines">${craft.norm(a).lines.map((l, n) => `<i class="ln tier-${l.t}">${n + 1}. ${STAT[l.k]} +${l.v}</i>`).join('')}</span>`;
@@ -122,14 +125,14 @@ export function createViews(o) {
     }).join('');
   }
   function cpTab() {
-    return cp.skills.map((s) => {
+    return ownedOnly(cp.skills, (s) => {
       const lv = st().cp[s.id] || 0, ok = craft.stageOk(s.unlock), own = o.owns(s.id);
       const lock = own ? '' : `<p class="lock">🔒 Cần ${E(name(o.teacher.get(s.id)))} trong kho</p>`;
       const inp = s.learn && s.learn.inputs.map((i) => ({ id: i.id, count: i.count * (lv + 1) }));
       return `<div class="row"><div class="row-h"><b>${ico(s.id)}${E(s.name)}</b><em>cấp ${lv}/${s.max_level}${ok ? '' : ` · mở ở ${E(stageName(s.unlock))}`}</em></div>
         <p>${E(s.desc)}${lv ? ` · +${Math.round(lv * gp.skills.cong_phap_bonus_per_level * 100)}% sát thương kỹ năng liên quan` : ''}</p>${lock}
         ${inp ? `<p class="need">${need(inp)}</p>${btn('train', s.id, lv ? 'Nâng cấp' : 'Luyện', own && ok && lv < s.max_level && progress.has(inp))}` : '<p><i>Lab chưa ghi nguyên liệu</i></p>'}</div>`;
-    }).join('');
+    }, 'bí kíp công pháp');
   }
   function matsTab() {
     const rows = Object.entries(st().inv).map(([id, n]) => `<span>${ico(id)}${E(name(id))}</span><b>${n}</b>`).join('');
