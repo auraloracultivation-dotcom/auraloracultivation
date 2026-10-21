@@ -110,3 +110,10 @@ Thêm `&debug` để có `__tp(x, y)` (dịch chuyển) và `__game` cho kiểm 
 Bật: tự tìm thứ **gần nhất** trong `auto.search_px` — quái hoặc linh thảo / khoáng — đi tới, đánh quái, hái nguyên liệu (đang bay thì chỉ tìm quái);
 khí huyết dưới 30% mà Kho có Tiểu Hồi Huyết Đan thì tự uống. Kẹt (vướng cây / nước) thì tạm bỏ mục tiêu. Kéo cần điều khiển là người chơi điều khiển ngay.
 Chết thì tự tắt. Số: `data/gameplay.json` → auto. Code: `src/game/autoplay.js`.
+
+## Đồ giám (nút sách trên HUD)
+- Liệt kê mọi thứ trong game kèm **ảnh + tên + mã + thông tin**: linh thảo / khoáng, đan, đan phương / công thức, công pháp, kỹ năng người, kỹ năng quái + hiệu ứng, quái vật, trang bị, phôi, NPC, khác.
+- Mỗi mục ghi trạng thái ảnh: **Đã có ảnh** (ảnh riêng của chủ dự án) · **Ảnh tạm** (gói miễn phí / dùng chung / mượn / đổi màu) · **Chưa có ảnh**. Lọc theo trạng thái để biết cần làm ảnh nào.
+- Mã (dòng chữ nhỏ) = tên file nên đặt khi gửi ảnh. Quái, hiệu ứng, NPC có nút ▶ chạy chuyển động (bấm tiếp để đổi đứng / đi / đánh / chết).
+- Trạng thái tính trong `src/game/codex.js` (OWNER_SHEETS, OWNER_FX…): thay ảnh xong thì sửa danh sách đó. Giao diện: `src/ui/codex.js`.
+- Bảng Tu luyện cũ vẫn mở bằng cách chạm Lò luyện đan / Tế đàn trong Thanh Vân Thành.

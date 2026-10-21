@@ -195,7 +195,7 @@ async function boot() {
     onBreakthrough: () => game.breakthrough(),
     onMenu(id) {
       if (id === 'quests') game.openQuests();
-      else if (id === 'skills') game.openCultivate();
+      else if (id === 'skills') game.openCodex(); // nút sách = Đồ giám (Tu luyện vẫn mở ở Lò luyện đan / Tế đàn trong thành)
       else if (id === 'sect') game.openShop(); // Vạn Bảo Lâu (chỉ mở trong Thanh Vân Thành)
       else return false;
       return true;

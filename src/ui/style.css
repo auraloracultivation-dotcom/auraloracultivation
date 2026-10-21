@@ -513,3 +513,23 @@ img { image-rendering: pixelated; }
   background: rgba(22, 14, 40, .92); border: 1px solid #c9a6ff; box-shadow: 0 0 18px rgba(200, 230, 255, .35); }
 .revive-box b { font-size: 16px; color: #e8f4ff; } .revive-box p { margin: 6px 0; font-size: 13px; }
 .revive-btns { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; } .revive-note { color: #ff9a8a; }
+.codex-tabs { display: flex; gap: 6px; overflow-x: auto; flex-shrink: 0; padding-bottom: 2px; scrollbar-width: none; }
+.codex-tabs button, .codex-filter button { flex: 0 0 auto; padding: 7px 11px; border-radius: 999px; font: 700 12px/1 inherit; color: var(--gold);
+  background: rgba(255,255,255,.05); border: 1px solid rgba(242,199,127,.4); cursor: pointer; white-space: nowrap; }
+.codex-tabs button[aria-pressed="true"], .codex-filter button[aria-pressed="true"] { color: #2a1a08; background: linear-gradient(#f7d7a8, #d9a35d); }
+.codex-filter { display: flex; gap: 6px; flex-wrap: wrap; flex-shrink: 0; }
+.codex-filter .none { color: #ff9a8a; } .codex-filter .tam { color: #ffd36a; } .codex-filter .ok { color: #7dff8a; }
+.codex-hint { margin: 2px 2px 8px; font-size: 12px; color: var(--muted); }
+.codex-card { display: flex; gap: 10px; padding: 10px; margin-bottom: 8px; border-radius: 12px; background: rgba(255,255,255,.04); border: 1px solid rgba(242,199,127,.18); }
+.codex-pic { flex: 0 0 76px; height: 76px; border-radius: 10px; background: rgba(0,0,0,.35); display: grid; place-items: center; overflow: hidden; }
+.codex-pic img, .codex-pic canvas { width: 72px; height: 72px; object-fit: contain; }
+.codex-empty { width: 68px; height: 68px; border: 2px dashed #8a8398; border-radius: 8px; display: grid; place-items: center; text-align: center; font-size: 11px; color: #8a8398; }
+.codex-txt { min-width: 0; flex: 1; }
+.codex-txt p { margin: 3px 0 0; font-size: 12px; color: #e8e2f2; }
+.codex-txt code { font-size: 10px; color: #9b93ad; word-break: break-all; }
+.codex-name { display: flex; justify-content: space-between; gap: 6px; align-items: baseline; }
+.codex-name b { color: var(--gold); font-size: 14px; }
+.codex-st { font-style: normal; font-size: 11px; font-weight: 800; white-space: nowrap; }
+.codex-st.ok { color: #7dff8a; } .codex-st.tam { color: #ffd36a; } .codex-st.none { color: #ff9a8a; }
+.codex-txt .codex-note { color: #ffd9a0; }
+.codex .bag-act.sm { margin-top: 6px; }
