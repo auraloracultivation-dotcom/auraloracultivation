@@ -10,6 +10,8 @@ export function createPhapTuong(def) {
     get active() { return active; },
     get mp() { return mp; },
     get max() { return max; },
+    get cdLeft() { return cd; },
+    get cdTotal() { return def.cooldown_s; },
     setMax(n) { if (n > 0 && n !== max) { mp = Math.min(n, mp + Math.max(0, n - max)); max = n; } },
     spend(n) { if (mp < n) return false; mp -= n; return true; },
     gain(n) { mp = Math.min(max, mp + n); },

@@ -92,7 +92,7 @@ export function createHud(opts) {
   pad.innerHTML = actions.map((a) => `
     <button type="button" class="act ${a.locked ? 'locked' : ''}" data-act="${a.id}" aria-label="${escapeHtml(a.name)}"
       style="width:${a.size}px;height:${a.size}px;left:${a.dx - a.size / 2}px;top:${a.dy - a.size / 2}px">
-      <img src="${a.icon || a.icons[0]}" alt=""><span>${escapeHtml(a.name)}</span>
+      <img src="${a.icon || a.icons[0]}" alt=""><img class="act-art" alt="" hidden><b class="act-badge"></b><i class="act-cd" hidden><em></em></i><span>${escapeHtml(a.name)}</span>
     </button>`).join('');
   root.appendChild(pad);
   for (const a of actions) {
@@ -101,7 +101,7 @@ export function createHud(opts) {
     a.setState = (s) => { state = s; btn.querySelector('img').src = a.icons[s]; btn.setAttribute('aria-label', a.names[s]); };
     btn.addEventListener('pointerdown', (e) => {
       e.preventDefault();
-      if (btn.classList.contains('locked')) { toast(`${a.name}: chưa mở${a.lockedHint ? ` — ${a.lockedHint}` : ''}`, 1400); return; }
+      if (btn.classList.contains('locked')) { toast(a.offHint ? `${a.name}: ${a.offHint}` : `${a.name}: chưa mở${a.lockedHint ? ` — ${a.lockedHint}` : ''}`, 1600); return; }
       btn.classList.remove('pulse'); void btn.offsetWidth; btn.classList.add('pulse');
       if (a.icons) {
         const prev = state;
@@ -224,7 +224,18 @@ export function createHud(opts) {
     setToggle(id, s) { actions.find((a) => a.id === id)?.setState?.(s); },
     setRealm(text) { info.querySelector('[data-realm]').textContent = text; },
     // Khoá / mở nút kỹ năng theo cảnh giới
-    setLocked(id, on) { pad.querySelector(`[data-act="${id}"]`)?.classList.toggle('locked', !!on); },
+    // hint: lý do riêng (vd. "chưa đeo linh thú"); bỏ trống = chưa mở theo cảnh giới (lockedHint)
+    setLocked(id, on, hint) { const a = actions.find((x) => x.id === id); if (a) a.offHint = hint; pad.querySelector(`[data-act="${id}"]`)?.classList.toggle('locked', !!on); },
+    // Hình thứ đang dùng trong ô (đan, linh thú, pháp tướng); null = hình mặc định của ô
+    setArt(id, url) { const i = pad.querySelector(`[data-act="${id}"] .act-art`); if (i) { i.hidden = !url; if (url) i.src = url; } },
+    setBadge(id, text) { const b = pad.querySelector(`[data-act="${id}"] .act-badge`); if (b) b.textContent = text ?? ''; },
+    // Hồi chiêu: bóng tối quét theo phần còn lại + số giây
+    setCooldown(id, left, total) {
+      const c = pad.querySelector(`[data-act="${id}"] .act-cd`); if (!c) return;
+      c.hidden = !(left > 0); if (c.hidden) return;
+      c.style.setProperty('--p', `${Math.min(100, (left / total) * 100)}%`);
+      c.firstChild.textContent = left >= 1 ? Math.ceil(left) : left.toFixed(1);
+    },
     // Nút đang bật (vd. pháp tướng đang hiện): sáng viền
     setActive(id, on) { pad.querySelector(`[data-act="${id}"]`)?.classList.toggle('on', !!on); },
     // value/max: số thật khi có dữ liệu chỉ số; chưa có thì max = 0 → hiện thanh đầy, không ghi số
