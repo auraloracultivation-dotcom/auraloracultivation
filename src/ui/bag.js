@@ -58,7 +58,8 @@ export function showBag({ categories, getEntries, onAction, note }) {
 // Thẻ chi tiết + hàng nút thao tác (dùng chung cho Kho và ô trang bị bảng Nhân vật)
 function itemCard(it, run) {
   const card = el(`<div class="item-card"><div class="ic-info"><b>${escapeHtml(it.name)}</b>
-    <span>${escapeHtml(it.sub || '')}</span>${it.detail ? `<small>${escapeHtml(it.detail)}</small>` : ''}</div>
+    <span>${escapeHtml(it.sub || '')}</span>${it.detail ? `<small>${escapeHtml(it.detail)}</small>` : ''}
+    ${it.lines?.length ? `<div class="ic-lines">${it.lines.map((l, n) => `<i class="ln tier-${l.tier}">${n + 1}. ${escapeHtml(l.text)}</i>`).join('')}</div>` : ''}</div>
     <div class="ic-acts">${(it.actions || []).map((a) => `<button type="button" class="bag-act sm ${a.danger ? 'danger' : ''}" data-a="${a.id}" ${a.disabled ? 'disabled' : ''}>${escapeHtml(a.label)}</button>`).join('')}</div></div>`);
   card.addEventListener('click', async (e) => {
     const b = e.target.closest('[data-a]');

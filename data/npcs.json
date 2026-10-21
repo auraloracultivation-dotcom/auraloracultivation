@@ -1,6 +1,6 @@
 {
  "_ghi_chu": "50 NPC trang trí do MÁY KHÁCH tự chạy (docs/01: NPC lấp chỗ trống). Trang phục/vũ khí của NPC là hình RIÊNG (assets/npcs, data/art/sprites.json → npc), KHÔNG phải vật phẩm trong game. home: town = trong thành (dx/dy so với tâm thành), road = dọc đường chính ngoài thành. brave = thấy quái gần thì ra đánh (chỉ hình, không gây sát thương, không lấy thưởng).",
- "height_px": 28,
+ "height_px": 22,
  "speed_px_per_s": 45,
  "active_range_px": 1600,
  "talk_range_px": 70,
@@ -730,5 +730,8 @@
   "Đi theo đường lớn sẽ an toàn hơn.",
   "Rừng phía nam nhiều linh thảo lắm.",
   "Hôm nay trời đẹp, thích hợp luyện kiếm."
- ]
+ ],
+ "respawn_s": 20,
+ "revive_guard_s": 10,
+ "_ghi_chu_pvp": "Cảnh giới NPC: stage (chỉ số theo data/gameplay.json → player.stages). shield = bật khiên (không đánh nhau). NPC tắt khiên ngoài thành tự đánh người chơi / NPC tắt khiên gần; gục thì hồi sinh ở nhà sau respawn_s, được bảo vệ revive_guard_s."
 }

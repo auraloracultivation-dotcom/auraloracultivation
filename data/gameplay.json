@@ -414,16 +414,32 @@
   "cong_phap_bonus_per_level": 0.1
  },
  "awaken": {
-  "first_cost": 120,
-  "reroll_cost": {
-   "luc": 140,
-   "lam": 140,
-   "tim": 365,
-   "cam": 365,
-   "vang": 750,
-   "do": 1500,
-   "den": 3250
-  },
+  "_ghi_chu": "Lab v3.2 — thức tỉnh TỪNG DÒNG: mỗi lần bấm thêm 1 dòng, màu (phẩm) của dòng bốc ngẫu nhiên theo tỷ lệ phẩm Lab (data/equipment/awaken.json → gearQ). Mỗi món có giới hạn dòng ẩn 1–10 (bốc lúc thức tỉnh lần đầu, KHÔNG báo trước); đủ giới hạn thì nút thức tỉnh tắt. Giá (Linh thạch) tăng theo số thứ tự dòng — số tạm.",
+  "line_cost": [
+   80,
+   120,
+   180,
+   260,
+   360,
+   500,
+   700,
+   950,
+   1300,
+   1800
+  ],
+  "cap_weights": [
+   14,
+   14,
+   13,
+   12,
+   11,
+   10,
+   9,
+   7,
+   6,
+   4
+  ],
+  "_cap_weights": "trọng số giới hạn 1..10 dòng (ít dòng hay gặp hơn)",
   "dismantle_refund": 0.5,
   "line_keys": [
    "hp",
@@ -450,5 +466,11 @@
    2
   ],
   "pick_px": 16
+ },
+ "pvp": {
+  "_ghi_chu": "Đánh nhau ngoài thành (yêu cầu chủ dự án 21/10): khiên bật = không đánh / không bị đánh. Chạm khiên sau tên để tắt/bật. Vừa hồi sinh được bảo vệ revive_guard_s. Muốn bật lại khiên phải rời giao chiến shield_on_after_s giây.",
+  "revive_guard_s": 10,
+  "shield_on_after_s": 5,
+  "kill_stone": 5
  }
 }

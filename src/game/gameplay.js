@@ -38,7 +38,8 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
   const owns = (id) => !teacher.has(id) || progress.count(teacher.get(id)) > 0;
   const craft = createCraft({ progress, pills, blanks, awaken, skills: cp, gp, owns });
   const gather = createGather({ gp, mats, map });
-  const npcs = createNpcs({ def: await loadJSON('data/npcs.json'), map, mobs });
+  const npcs = createNpcs({ def: await loadJSON('data/npcs.json'), map, mobs, stats, stages: gp.player.stages });
+  const PV = gp.pvp;
   gather.seed(me);
   const SLOTS = ['mat-na', 'trang-phuc', 'vu-khi', 'nhan', 'canh', 'phap-tuong', 'linh-thu', 'day-chuyen'];
   // Trang bị đang tính chỉ số: đồ luyện ra đang mặc + đồ Kho đang mặc đã thức tỉnh
@@ -51,6 +52,8 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
   const buffs = {}; // tên → { mul, until }
   const cds = {}; // hồi chiêu theo id
   let wasInTown = null;
+  let guardUntil = 0, npcTarget = null; // bảo vệ sau hồi sinh; NPC đang nhắm
+  me.shield = progress.state.shield ?? true; // khiên bảo vệ (mặc định bật)
   let hp = 0, dead = false, reviveT = 0, hurtAt = -99, attackCd = 0, auto = false, targetUid = null, pet = null, now = 0;
   const fx = [], bolts = [];
 
@@ -91,10 +94,23 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     if (sel && mobs.distTo(sel, me) <= range) return sel;
     return mobs.nearest(me, range);
   }
+  // Ngoài thành, tắt khiên, không trong thời gian bảo vệ → đánh / bị đánh được
+  const canFight = () => !dead && !me.shield && now >= guardUntil && !map.safeAt(me.x, me.y);
+  function strikeNpc(n) {
+    const r = stats.hit(ps, n.st, { atkMul: ptMul() * cpBonus('attack') });
+    if (r.miss) return say(n.x, n.y - 20, 'Trượt', '#cfd6e6');
+    say(n.x, n.y - 20, r.crit ? `${r.dmg}!` : `${r.dmg}`, r.crit ? '#ffd23a' : '#ffffff', r.crit);
+    play('chem-x', n.x, n.y - 9, 18);
+    if (npcs.damage(n, r.dmg, 'me')) { progress.addStone(PV.kill_stone); toast(`Hạ gục ${n.name} · +${PV.kill_stone} Linh thạch`, 1800); npcTarget = null; }
+  }
   function attack() {
     if (dead || attackCd > 0) return false;
     attackCd = stats.interval(ps);
     const m = target(PL.attack_range_px);
+    if (!m && canFight()) { // không có quái trong tầm: đánh NPC đang nhắm / NPC tắt khiên gần nhất
+      const n = (npcTarget && npcs.canFight(npcTarget) && npcs.dist(npcTarget, me) <= PL.attack_range_px) ? npcTarget : npcs.nearestFoe(me, PL.attack_range_px);
+      if (n) { me.facing = wrapDelta(n.x - me.x, map.width) >= 0 ? 1 : -1; strikeNpc(n); return true; }
+    }
     if (m) { me.facing = mobs.rel(m, me).dx >= 0 ? 1 : -1; strike(m, 1, 'attack'); }
     return true;
   }
@@ -158,6 +174,13 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     },
     dodged() { say(me.x, me.y - 22, 'Né đòn nặng!', '#7dff8a', true); quests.emit('dodge'); },
   };
+  function hitByNpc(n) {
+    const r = stats.hit(n.st, ps, { defMul: pt.active ? S['phap-tuong'].def_mul : 1 });
+    hurtAt = now;
+    if (r.miss) { say(me.x, me.y - 22, 'Né', '#9fe8ff'); return; }
+    hp -= r.dmg; say(me.x, me.y - 22, `-${r.dmg}`, '#ff9a8a'); play('cham-mau', me.x, me.y - 12, 16);
+    if (hp <= 0) { die(); toast(`Bị ${n.name} hạ gục`, 2500); }
+  }
   function die() {
     hp = 0; dead = true; reviveT = PL.revive_s; mobs.calmAll(); auto = false; hud.setActive('auto', false);
     if (pt.active) pt.cancel();
@@ -238,13 +261,14 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     now += dt;
     attackCd = Math.max(0, attackCd - dt);
     for (const [k, v] of Object.entries(buffs)) if (v.until <= now) { delete buffs[k]; recompute(); }
-    if (dead) { reviveT -= dt; if (reviveT <= 0) { dead = false; hp = ps.hp; toast('Đã hồi phục', 1200); } }
+    if (dead) { reviveT -= dt; if (reviveT <= 0) { dead = false; hp = ps.hp; guardUntil = now + PV.revive_guard_s; toast(`Đã hồi phục — được bảo vệ ${PV.revive_guard_s} giây`, 1600); } }
+    me.guarded = now < guardUntil;
     const inTown = map.safeAt(me.x, me.y);
     if (inTown !== wasInTown) { wasInTown = inTown; toast(inTown ? `Vào ${map.town.name} — vùng an toàn, quái không vào được` : `Rời ${map.town.name}`, 1800); }
     if (!dead && (inTown || now - hurtAt > PL.regen_after_s)) hp = Math.min(ps.hp, hp + ps.hp * PL.regen_hp_per_s * (inTown ? map.town.regenMul : 1) * dt);
     env.alive = !dead;
     mobs.update(dt, env);
-    npcs.update(dt, me);
+    npcs.update(dt, { me, playerCanFight: canFight, hitPlayer: hitByNpc });
     for (const n of gather.update(dt, me, !dead)) { gain(n.item.id, n.n); say(n.x, n.y - 10, `+${n.n} ${n.item.name}`, n.group === 'thao' ? '#9dff8a' : '#d6dbe8'); progress.changed(); }
     if (auto && !dead && target(PL.attack_range_px) && attackCd <= 0) { attack(); me.onAutoSwing?.(); }
     for (let i = bolts.length - 1; i >= 0; i--) {
@@ -290,19 +314,32 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
   }
   function renderAbove(ctx, t) {
     for (const m of mobs.list) { const p = at(m); drawMonsterLabel(ctx, m, p.x, p.y, m.uid === targetUid, t); }
-    for (const n of npcs.list) { const p = at(n); if (Math.abs(p.x - me.x) < 700 && Math.abs(p.y - me.y) < 700) drawNpcLabel(ctx, n, p.x, p.y, npcs.height, performance.now()); }
+    for (const n of npcs.list) { const p = at(n); if (Math.abs(p.x - me.x) < 700 && Math.abs(p.y - me.y) < 700) drawNpcLabel(ctx, n, p.x, p.y, npcs.height, performance.now(), npcs.guarded(n)); }
     drawFx(ctx, [...bolts, ...fx].map((f) => ({ ...f, ...at(f) })), 0, 0);
   }
 
   // Chạm vào quái → chọn mục tiêu. Trả về true nếu đã xử lý (main.js khỏi xét người chơi)
+  // Chạm khiên sau tên mình: tắt / bật (bật lại phải rời giao chiến vài giây)
+  function toggleShield() {
+    if (!me.shield && now - hurtAt < PV.shield_on_after_s) return toast(`Đang giao chiến — chờ ${PV.shield_on_after_s} giây mới bật lại khiên`, 1500);
+    me.shield = !me.shield; progress.state.shield = me.shield; progress.changed();
+    toast(me.shield ? 'Bật khiên bảo vệ: không đánh nhau' : 'Tắt khiên: ra khỏi thành có thể đánh nhau với người / NPC tắt khiên', 2200);
+  }
   function tap(wx, wy) {
+    const s = me.shieldAt;
+    if (s && Math.hypot(wx - s.x, wy - s.y) < s.r + 3) { toggleShield(); return true; }
     let best = null, bd = 18;
     for (const m of mobs.list) {
       if (m.state === 'dead') continue;
       const p = at(m), d = Math.hypot(p.x - wx, p.y - m.r - wy);
       if (d < bd + m.r) { bd = d; best = m; }
     }
-    if (!best) return npcs.tap(wx, wy, at); // chạm NPC → NPC chào
+    if (!best) {
+      const n = npcs.at(wx, wy, at);
+      if (!n) return false;
+      if (npcs.canFight(n) && canFight()) { npcTarget = n; toast(`Mục tiêu: ${n.name} (${n.realm})`, 1000); } else npcs.greet(n, wx);
+      return true;
+    }
     targetUid = best.uid === targetUid ? null : best.uid;
     if (targetUid) toast(`Mục tiêu: ${best.def.name}`, 900);
     return true;
@@ -334,7 +371,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
   return {
     update, renderBelow, renderAbove, tap, attack, skill, breakthrough, usePill,
     get dead() { return dead; },
-    _debug: { progress, mobs, bag, gather, get hp() { return hp; }, get ps() { return ps; } }, // chỉ cho kiểm thử (?debug)
+    _debug: { me, progress, mobs, bag, gather, npcs, get hp() { return hp; }, get ps() { return ps; } }, // chỉ cho kiểm thử (?debug)
     speed: () => buffs.speed?.mul || null,
     toggleAuto() { auto = !auto; hud.setActive('auto', auto); toast(auto ? 'Tự động đánh: bật' : 'Tự động đánh: tắt', 1000); },
     healPill: () => usePill('item.dan.tieu-hoi-huyet.001'),

@@ -9,14 +9,16 @@ const STAT = { hp: 'Khí huyết', linh: 'Tấn công', def: 'Phòng thủ', xuy
 export function createInventory({ progress, bag, craft, itemDefs, awaken, gp, art, icon, fallbackIcon, onLook, recompute, usePill, openCultivate }) {
   const st = () => progress.state;
   const tierName = (id) => awaken.tiers.find((t) => t.id === id)?.name || '';
-  const lines = (a) => (a?.lines || []).map((l) => `${STAT[l.k] || l.k} +${l.v}`).join(' · ');
+  // Dòng chỉ số kèm màu phẩm của từng dòng (bag.js tô màu)
+  const lines = (a) => (craft.norm(a)?.lines || []).map((l) => ({ text: `${STAT[l.k] || l.k} +${l.v}`, tier: l.t }));
 
   // Thao tác chung cho một món trang bị. a = dữ liệu thức tỉnh (tier, lines, spent)
   function gearActions(a, equipped) {
     const cost = craft.awakenCost(a), refund = craft.dismantleRefund(a);
     return [
       { id: 'equip', label: equipped ? 'Tháo' : 'Sử dụng' },
-      { id: 'awaken', label: `${a.tier ? 'Thức tỉnh lại' : 'Thức tỉnh'} (${cost} LT)`, disabled: st().stone < cost },
+      cost === null ? { id: 'awaken', label: 'Thức tỉnh: đã đạt giới hạn', disabled: true }
+        : { id: 'awaken', label: `Thức tỉnh dòng ${a.lines.length + 1} (${cost} LT)`, disabled: st().stone < cost },
       { id: 'dismantle', label: `Phân rã (+${refund} LT)`, confirm: `Phân rã món này, hoàn ${refund} Linh thạch?` },
       { id: 'discard', label: 'Vứt', danger: true, confirm: 'Vứt bỏ vĩnh viễn món này?' },
     ];
@@ -26,13 +28,13 @@ export function createInventory({ progress, bag, craft, itemDefs, awaken, gp, ar
     const a = st().itemAw[it.id] || { tier: null, lines: [], spent: 0 }, eq = bag.isEquipped(it);
     return { ...it, key: `bag:${it.id}`, thumb: art(it.art) || '', equipped: eq, tier: a.tier,
       sub: `${SLOT[it.slot] || ''}${it.he ? ` · hệ ${it.he}` : ''}${a.tier ? ` · ${tierName(a.tier)}` : ' · chưa thức tỉnh'}`,
-      detail: a.tier ? lines(a) : 'Chưa có chỉ số — thức tỉnh để có', actions: gearActions(a, eq) };
+      detail: a.tier ? '' : 'Chưa có chỉ số — thức tỉnh để có', lines: lines(a), actions: gearActions(a, eq) };
   }
   function forgedGear(g) {
     const eq = st().eq[g.slot] === g.uid;
     return { id: `gear:${g.uid}`, key: `gear:${g.uid}`, name: g.name, cat: 'trang-bi', slot: g.slot, thumb: icon(`slot.${g.slot}`) || fallbackIcon(g.name, 'khoang'),
       equipped: eq, tier: g.tier, sub: `${SLOT[g.slot]} · ${g.tier ? tierName(g.tier) : 'phôi trắng'}`,
-      detail: g.tier ? lines(g) : 'Phôi chưa thức tỉnh — chưa mặc được', actions: gearActions(g, eq) };
+      detail: g.tier ? '' : 'Phôi chưa thức tỉnh — chưa mặc được', lines: lines(g), actions: gearActions(g, eq) };
   }
   function stackItem(id, count) {
     const d = itemDefs.get(id);

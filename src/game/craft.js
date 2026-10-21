@@ -59,7 +59,28 @@ export function createCraft({ progress, pills, blanks, awaken, skills, gp, owns 
     }
     return 'luc';
   }
-  const awakenCost = (g) => (g.tier ? A.reroll_cost[g.tier] : A.first_cost);
+  const ORDER = ['luc', 'lam', 'tim', 'cam', 'vang', 'do', 'den'];
+  // Món cũ (thức tỉnh kiểu v3.1, cả món một phẩm): gán phẩm cho từng dòng + giới hạn ẩn
+  function rollCap() {
+    const w = A.cap_weights, sum = w.reduce((s, x) => s + x, 0);
+    let r = Math.random() * sum, i = 0;
+    while ((r -= w[i]) > 0) i++;
+    return i + 1;
+  }
+  function norm(g) {
+    if (!g) return g;
+    g.lines ||= [];
+    for (const l of g.lines) l.t ||= g.tier || 'luc';
+    if (g.lines.length && !g.cap) g.cap = Math.max(g.lines.length, rollCap()); // món cũ: giữ dòng đã có, bốc giới hạn
+    return g;
+  }
+  // Giá dòng kế tiếp; null = đã đạt giới hạn (nút thức tỉnh tắt). Giới hạn chỉ lộ ra khi chạm tới.
+  const awakenCost = (g) => {
+    norm(g);
+    if (g.cap && g.lines.length >= g.cap) return null;
+    return A.line_cost[Math.min(g.lines.length, A.line_cost.length - 1)];
+  };
+  const bestTier = (g) => g.lines.reduce((b, l) => (ORDER.indexOf(l.t) > ORDER.indexOf(b) ? l.t : b), g.lines[0]?.t || null);
 
   // Đồ trong Kho (6 hệ, có hình): lưu dòng thức tỉnh theo mã vật phẩm
   const awakenItem = (id) => awakenTarget(progress.itemAw(id));
@@ -68,21 +89,20 @@ export function createCraft({ progress, pills, blanks, awaken, skills, gp, owns 
   function awakenTarget(g) {
     if (!g) return { ok: false, msg: 'Không thấy trang bị' };
     const cost = awakenCost(g);
+    if (cost === null) return { ok: false, msg: 'Đã đạt giới hạn thức tỉnh' };
     if (progress.state.stone < cost) return { ok: false, msg: `Cần ${cost} Linh thạch` };
+    if (!g.cap) g.cap = rollCap(); // bốc giới hạn ẩn ở lần thức tỉnh đầu
     progress.addStone(-cost);
     g.spent += cost;
-    const tierId = rollTier();
-    const ti = awaken.tiers.findIndex((t) => t.id === tierId), tier = awaken.tiers[ti];
-    const nLines = Math.round(rnd(tier.lines[0], tier.lines[1]));
-    g.tier = tierId;
-    g.lines = Array.from({ length: nLines }, () => {
-      const k = A.line_keys[Math.floor(Math.random() * A.line_keys.length)];
-      const [lo, hi] = awaken.line_ranges[k][ti];
-      const v = rnd(lo, hi);
-      return { k, v: ['crit', 'hut', 'phan'].includes(k) ? Math.round(v * 10) / 10 : Math.round(v) };
-    });
+    const t = rollTier(), ti = awaken.tiers.findIndex((x) => x.id === t);
+    const k = A.line_keys[Math.floor(Math.random() * A.line_keys.length)];
+    const [lo, hi] = awaken.line_ranges[k][ti];
+    const v = rnd(lo, hi);
+    g.lines.push({ k, v: ['crit', 'hut', 'phan'].includes(k) ? Math.round(v * 10) / 10 : Math.round(v), t });
+    g.tier = bestTier(g);
     progress.changed();
-    return { ok: true, msg: `Thức tỉnh: phẩm ${tier.name}, ${nLines} dòng`, event: ['awaken', {}] };
+    const full = g.lines.length >= g.cap;
+    return { ok: true, msg: `Dòng ${g.lines.length}: phẩm ${awaken.tiers[ti].name}${full ? ' — đã đạt giới hạn!' : ''}`, event: ['awaken', {}] };
   }
 
   function dismantle(uid) {
@@ -109,5 +129,5 @@ export function createCraft({ progress, pills, blanks, awaken, skills, gp, owns 
     return { ok: true, msg: `${s.name} lên cấp ${lv + 1}` };
   }
 
-  return { dismantleRefund, brewPill, forgeBlank, awakenGear, awakenItem, dismantle, trainSkill, awakenCost, gearQ, pickInputs, stageOk };
+  return { norm, dismantleRefund, brewPill, forgeBlank, awakenGear, awakenItem, dismantle, trainSkill, awakenCost, gearQ, pickInputs, stageOk };
 }
