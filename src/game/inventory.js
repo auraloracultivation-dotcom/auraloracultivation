@@ -6,10 +6,27 @@ const SLOT = { 'mat-na': 'Mặt nạ', 'trang-phuc': 'Trang phục', 'vu-khi': '
   'day-chuyen': 'Dây chuyền', 'phap-tuong': 'Pháp tướng' };
 const STAT = { hp: 'Khí huyết', linh: 'Tấn công', def: 'Phòng thủ', xuyen: 'Xuyên giáp', crit: 'Bạo kích %', hut: 'Hút máu %', phan: 'Phản đòn %' };
 
-export function createInventory({ info, progress, bag, craft, itemDefs, awaken, gp, art, icon, fallbackIcon, onLook, recompute, usePill, openCultivate }) {
+export function createInventory({ recipes, info, progress, bag, craft, itemDefs, awaken, gp, art, icon, fallbackIcon, onLook, recompute, usePill, openCultivate }) {
   const st = () => progress.state;
   const tierName = (id) => awaken.tiers.find((t) => t.id === id)?.name || '';
   // Dòng chỉ số kèm màu phẩm của từng dòng (bag.js tô màu)
+  // Công thức dạy bởi một cuốn trong kho: { kind, def, inputs, rate, label }
+  const nm = (id) => itemDefs.get(id)?.name || id;
+  function recipeOf(teaches) {
+    const p = recipes.pills.find((x) => x.id === teaches);
+    if (p) { const inputs = craft.pickInputs(p) || p.recipe.inputs; return { kind: 'pill', def: p, inputs, rate: p.recipe.rate, label: 'Luyện đan' }; }
+    const b = recipes.blanks.find((x) => x.id === teaches);
+    if (b) return { kind: 'blank', def: b, inputs: b.inputs, rate: b.rate, label: 'Luyện phôi', locked: !craft.stageOk(b.unlock) };
+    const s = recipes.skills.find((x) => x.id === teaches);
+    if (s) {
+      const lv = progress.state.cp[s.id] || 0;
+      if (!s.learn) return { kind: 'skill', def: s, inputs: [], label: 'Lab chưa ghi nguyên liệu', none: true };
+      return { kind: 'skill', def: s, lv, inputs: s.learn.inputs.map((i) => ({ id: i.id, count: i.count * (lv + 1) })),
+        label: lv >= s.max_level ? 'Đã tối đa' : lv ? `Tu luyện lên cấp ${lv + 1}` : 'Tu luyện cấp 1', max: lv >= s.max_level, locked: !craft.stageOk(s.unlock) };
+    }
+    return null;
+  }
+  const needText = (inputs) => inputs.map((i) => `${nm(i.id)} ${progress.count(i.id)}/${i.count}`).join(' · ');
   const lines = (a) => (craft.norm(a)?.lines || []).map((l) => ({ text: `${STAT[l.k] || l.k} +${l.v}`, tier: l.t }));
 
   // Thao tác chung cho một món trang bị. a = dữ liệu thức tỉnh (tier, lines, spent)
@@ -40,9 +57,16 @@ export function createInventory({ info, progress, bag, craft, itemDefs, awaken, 
     const d = itemDefs.get(id);
     const actions = [];
     if (gp.pills[id]) actions.push({ id: 'use', label: 'Dùng' });
-    if (d.teaches) actions.push({ id: 'learn', label: d.cat === 'cong-phap' ? 'Tu luyện' : 'Luyện' });
+    const rc = d.teaches && recipeOf(d.teaches);
+    if (rc) actions.push({ id: 'craft', label: rc.label + (rc.rate ? ` (${Math.round(rc.rate * 100)}%)` : ''),
+      disabled: rc.none || rc.max || rc.locked || !progress.has(rc.inputs) });
     actions.push({ id: 'discard', label: count > 1 ? `Vứt (${count})` : 'Vứt', danger: true, confirm: `Vứt bỏ ${d.name}${count > 1 ? ` ×${count}` : ''}?` });
     const src = info.source(d);
+    if (rc) { // cuốn công thức: hiện thứ luyện ra + nguyên liệu cần, luyện ngay trong kho
+      const what = rc.kind === 'skill' ? `${rc.def.name} — cấp ${rc.lv || 0}/${rc.def.max_level}` : rc.kind === 'pill' ? `Luyện ra: ${rc.def.name} (có ${progress.count(rc.def.id)})` : 'Luyện ra: phôi (thức tỉnh để có chỉ số)';
+      return { ...d, key: `item:${id}`, thumb: icon(id) || fallbackIcon(d.name, 'nhiemvu'), count, sub: what,
+        detail: rc.inputs.length ? `Cần: ${needText(rc.inputs)}${rc.locked ? '\nCảnh giới chưa đủ' : ''}` : '', actions };
+    }
     return { ...d, key: `item:${id}`, thumb: icon(id) || fallbackIcon(d.name, d.group || 'nhiemvu'), count, sub: `Tác dụng: ${info.effect(d) || '—'}`,
       detail: src ? `Nơi có: ${src}` : '', actions };
   }
@@ -69,7 +93,11 @@ export function createInventory({ info, progress, bag, craft, itemDefs, awaken, 
     if (kind === 'item') {
       const d = itemDefs.get(ref);
       if (action === 'use') return usePill(ref) ? '' : null;
-      if (action === 'learn') { openCultivate(d.cat === 'dan-phuong' ? 'dan' : d.cat === 'cong-phap' ? 'cp' : 'phoi'); return ''; }
+      if (action === 'craft') { // luyện ngay trong kho
+        const rc = recipeOf(d.teaches);
+        const r = rc.kind === 'pill' ? craft.brewPill(rc.def.id) : rc.kind === 'blank' ? craft.forgeBlank(rc.def.id) : craft.trainSkill(rc.def.id);
+        recompute(); return r;
+      }
       if (action === 'discard') { progress.take(ref, progress.count(ref)); progress.changed(); return `Đã vứt ${d.name}`; }
     }
     if (kind === 'bag') {
