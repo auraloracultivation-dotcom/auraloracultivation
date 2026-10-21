@@ -1,0 +1,9 @@
+# Luoi trang bi 6 he (SVG)
+- Dinh dang: SVG vector, 1200x800, nen hong magenta #FF00FF, pixel edges (shape-rendering="crispEdges").
+- Nhanh: kho-anh-gpt
+- Thu muc: assets/_gpt/trangbi/
+- Bo cuc: 3 cot x 2 hang; moi o 400x400.
+- Hang 1: o trai = kiem he Thuy; o giua = riu he Tho; o phai = truong he Hoa.
+- Hang 2: o trai = tien he Moc; o giua = thuong he Kim; o phai = linh hoan/sam he Loi.
+- Day la ban SVG vector tam de Claude co the doc va cat/chinh sua. Khong phai PNG raster.
+- Nen hong co the duoc dung lam mau key de tach nen.
