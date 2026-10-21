@@ -11,3 +11,4 @@ export { showBag, showCodeDialog, showItemActions, showSlotPicker } from './bag.
 export { createTestBag } from './testbag.js';
 export { showSheet, placeholderIcon } from './sheet.js';
 export { escapeHtml } from './screens.js';
+export { showRevive } from './revive.js';
