@@ -501,3 +501,10 @@ img { image-rendering: pixelated; }
 .sheet .src { font-size: 11.5px; color: #bfb3d6 !important; }
 .item-card small { white-space: pre-line; }
 .sheet em.own { color: #8a8398; font-weight: 700; } .sheet em.own.yes { color: #5dff7a; }
+.act .act-art { position: absolute; inset: 24%; width: 52%; height: 52%; object-fit: contain; image-rendering: pixelated; filter: drop-shadow(0 0 3px #000); }
+.act.locked .act-art { filter: grayscale(1) brightness(.35); }
+.act .act-badge { position: absolute; right: 8%; bottom: 6%; font: 800 12px/1 system-ui, sans-serif; color: #fff; text-shadow: 0 0 3px #000, 0 0 2px #000; pointer-events: none; }
+.act .act-cd { position: absolute; inset: 15%; border-radius: 50%; display: grid; place-items: center; pointer-events: none;
+  background: conic-gradient(rgba(0,0,0,.68) var(--p, 0%), rgba(0,0,0,.18) 0); }
+.act .act-cd em { font: 800 17px/1 system-ui, sans-serif; font-style: normal; color: #fff; text-shadow: 0 0 4px #000, 0 0 2px #000; }
+.act .act-cd[hidden], .act .act-art[hidden] { display: none; }

@@ -96,3 +96,8 @@ Hiện bảng nhỏ nằm ngang các món trong kho mặc được vào ô đó;
 ## Chơi thử không cần mạng
 Mở game với `?offline` (vd. `…/auraloracultivation/?offline`): không đăng nhập, không thấy người khác, tiến trình lưu riêng.
 Thêm `&debug` để có `__tp(x, y)` (dịch chuyển) và `__game` cho kiểm thử tự động.
+
+## Ô kỹ năng (HUD)
+- Ô hiện thứ đang dùng: Đan dược = viên Tiểu Hồi Huyết Đan + số còn; Linh thú / Pháp tướng = món đang đeo.
+- Ô xám tối khi chưa mở theo cảnh giới, hoặc chưa có thứ để dùng (hết đan, chưa đeo linh thú / pháp tướng); chạm vào sẽ báo lý do.
+- Đang hồi chiêu: bóng tối quét quanh nút + số giây đếm ngược. Code: `src/game/skillbar.js`, `src/ui/hud.js`.

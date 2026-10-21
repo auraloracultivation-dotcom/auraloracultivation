@@ -14,6 +14,7 @@ import { createMonsters } from './monsters.js';
 import { createQuests } from './quests.js';
 import { createCraft } from './craft.js';
 import { createViews } from './views.js';
+import { createSkillBar } from './skillbar.js';
 import { createGather } from './gather.js';
 import { createInventory } from './inventory.js';
 import { placeholderIcon } from '../ui/index.js';
@@ -70,7 +71,6 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     hp = Math.min(hp, ps.hp);
     hud.setRealm(progress.stageDef.name + (progress.atPeak() ? ' · đỉnh' : ''));
     me.realm = progress.stageDef.name; onRealm(me.realm); // hiện trên đầu + gửi cho người khác
-    for (const [id, s] of Object.entries(S)) if (s.unlock) hud.setLocked(id, progress.stageIndex(s.unlock) > progress.state.stage);
     views.refreshDock?.();
   }
   const cpFx = createCpEffects(S.cong_phap_effects, () => progress.state.cp);
@@ -196,6 +196,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   function ready(id) {
     const s = S[id];
     if (dead) return false;
+    if (bar.blocked(id)) { toast(typeof bar.blocked(id) === 'string' ? bar.blocked(id) : 'Chưa mở', 1200); return false; }
     if ((cds[id] || 0) > now) { toast('Đang hồi chiêu', 900); return false; }
     if (!pt.spend(s.mp)) { toast('Linh lực không đủ', 1000); return false; }
     cds[id] = now + s.cd_s; return true;
@@ -309,6 +310,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     hud.setBar('hp', Math.max(0, Math.round(hp)), ps.hp);
     me.hpR = hp / ps.hp; // thanh máu trên đầu
     hud.setBar('xp', progress.state.exp, progress.stageDef.exp_need);
+    bar.update(now); // ô kỹ năng: hình đang dùng, xám khi chưa có, số đếm hồi chiêu
     progress.state.hp = Math.round(hp);
     progress.tick(dt);
   }
@@ -363,6 +365,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
 
   const inv = createInventory({ recipes: { pills: pills.pills, blanks: blanks.blanks, skills: cp.skills }, info, progress, bag, craft, itemDefs, awaken, gp, art: (a) => artInfo(a)?.file, icon: iconUrl, fallbackIcon: placeholderIcon,
     onLook, recompute, usePill, breakthrough: () => breakthrough(), btPills: new Set(realms.realms.filter((r) => r.breakthrough).map((r) => r.breakthrough.pill)), openCultivate: (tab) => views.openCultivate(tab) });
+  const bar = createSkillBar({ hud, S, gp, progress, pt, cds, slotItem: (s) => inv.slotItem(s), icon: iconUrl });
   function itemAction(key, action) {
     const r = inv.act(key, action);
     if (r && typeof r === 'object') { toast(r.msg, 1600); if (r.event) quests.emit(...r.event); } else if (r) toast(r, 1500);
