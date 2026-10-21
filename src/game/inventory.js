@@ -49,7 +49,7 @@ export function createInventory({ recipes, info, progress, bag, craft, itemDefs,
   }
   function forgedGear(g) {
     const eq = st().eq[g.slot] === g.uid;
-    return { id: `gear:${g.uid}`, key: `gear:${g.uid}`, name: g.name, cat: 'trang-bi', slot: g.slot, thumb: icon(`slot.${g.slot}`) || fallbackIcon(g.name, 'khoang'),
+    return { id: `gear:${g.uid}`, key: `gear:${g.uid}`, name: g.name, cat: 'trang-bi', slot: g.slot, thumb: art(g.art) || icon(`slot.${g.slot}`) || fallbackIcon(g.name, 'khoang'),
       equipped: eq, tier: g.tier, sub: `${SLOT[g.slot]} · ${g.tier ? tierName(g.tier) : 'phôi trắng'}`,
       detail: g.tier ? '' : 'Phôi chưa thức tỉnh — chưa mặc được', lines: lines(g), actions: gearActions(g, eq) };
   }

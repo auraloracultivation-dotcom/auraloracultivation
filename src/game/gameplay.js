@@ -5,6 +5,7 @@ import { wrapDelta } from '../map/index.js';
 import { drawMonster, drawMonsterLabel, drawFx, drawNode, loadSprites, fxDuration, loadNpcArt, drawNpc, drawNpcLabel } from '../entity/index.js';
 import { createNpcs } from './npcs.js';
 import { createItemInfo } from './iteminfo.js';
+import { createForgedArt } from './forged-art.js';
 import { createProgress } from './progress.js';
 import { createStats } from './stats.js';
 import { createMonsters } from './monsters.js';
@@ -27,10 +28,11 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     'data/stats.json', 'data/gameplay.json', 'data/monsters/monsters.json', 'data/items/materials.json', 'data/items/pills.json',
     'data/equipment/blanks.json', 'data/equipment/awaken.json', 'data/skills/cong-phap.json', 'data/quests/quests.json',
     'data/items/quest-items.json', 'data/realms.json'].map((p) => loadJSON(p)));
-  const [recipes, shop] = await Promise.all([loadJSON('data/items/recipes.json'), loadJSON('data/shop.json')]);
+  const [recipes, shop, artIdx] = await Promise.all([loadJSON('data/items/recipes.json'), loadJSON('data/shop.json'), loadJSON('data/equipment/art.json')]);
   const artDef = await loadJSON('data/art/sprites.json');
   await Promise.all([loadSprites(artDef), loadNpcArt(artDef.npc)]); // hình quái, hiệu ứng, icon, NPC (thử nghiệm)
   const progress = createProgress(userId, gp);
+  const { ensureArt, forgedLook } = createForgedArt(artIdx, progress); // hình tạm cho đồ luyện từ phôi
   const stats = createStats(statsDef, gp);
   const mobs = createMonsters({ gp, defs: monDef.monsters, map });
   const quests = createQuests(questDef, progress, () => MAJOR_OF(progress.stageDef.id));
@@ -365,9 +367,10 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     }
     progress.state.migrRecipes = true; progress.changed();
   }
+  for (const g of progress.state.gear) ensureArt(g);
   hp = progress.state.hp ?? Infinity;
   recompute(); if (!Number.isFinite(hp) || hp <= 0) hp = ps.hp;
-  progress.onChange(() => views.refreshDock?.());
+  progress.onChange(() => { for (const g of progress.state.gear) if (!g.art) ensureArt(g); views.refreshDock?.(); });
   addEventListener('pagehide', () => progress.flush());
 
   return {
@@ -378,6 +381,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     toggleAuto() { auto = !auto; hud.setActive('auto', auto); toast(auto ? 'Tự động đánh: bật' : 'Tự động đánh: tắt', 1000); },
     healPill: () => usePill('item.dan.tieu-hoi-huyet.001'),
     statValue: views.statValue, openQuests: views.openQuests, openCultivate: views.openCultivate,
+    forgedLook,
     setDock(d) { views.refreshDock = d.refresh; },
     bagEntries: inv.entries, slotItem: inv.slotItem, slotCandidates: inv.slotCandidates, itemAction,
     openShop() { if (!map.safeAt(me.x, me.y)) return toast(`${shop.name} ở ${map.town?.name || 'trong thành'} — hãy vào thành`, 1800); views.openShop(); },
