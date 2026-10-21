@@ -74,7 +74,11 @@ Phím máy tính: Space đánh, 1–5 kỹ năng, Q uống đan hồi máu.
 Phải cầm kiếm mới bay được (chưa có kiếm thì chỉ chạy). Đang bay linh lực không hồi và mất `player.fly_mp_per_s` mỗi giây (data/config.json); cạn linh lực hoặc tháo kiếm thì tự hạ xuống (đang trên nước thì bước ra bờ gần nhất).
 
 ## Thông tin vật phẩm
-Kho và Vạn Bảo Lâu hiện tác dụng + nơi có của từng món (vùng, rừng / bãi đá, quái rơi, cửa hàng). Code: `src/game/iteminfo.js`.
+- **Vạn Bảo Lâu** chỉ nói công dụng + giá: đan → hồi bao nhiêu / tăng gì / đột phá cảnh giới nào; đan phương → luyện ra đan gì, đan đó làm gì; bí kíp → công pháp tăng gì mỗi cấp.
+  Công thức / bí kíp: chữ **Đã có** (xanh) hoặc **Chưa có** (xám).
+- **Kho** mới nói thêm cần gì, nơi có (vùng, rừng / bãi đá, quái rơi, cửa hàng). Code: `src/game/iteminfo.js`.
+- Mọi đan dùng được ngay trong Kho; đan đột phá (Trúc Cơ, Kết Đan…) có nút **Dùng để đột phá**.
+- Hiệu quả công pháp: `data/gameplay.json` → skills.cong_phap_effects (vd. Luyện Khí Quyết: đánh thường +10% mỗi cấp). Code: `src/game/cp-effects.js`.
 
 ## Bảng Nhân vật: chạm ô trống
 Hiện bảng nhỏ nằm ngang các món trong kho mặc được vào ô đó; chọn là mặc ngay, bảng Nhân vật vẽ lại.

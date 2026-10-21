@@ -130,7 +130,7 @@ export function createViews(o) {
       const lock = own ? '' : `<p class="lock">🔒 Cần ${E(name(o.teacher.get(s.id)))} trong kho</p>`;
       const inp = s.learn && s.learn.inputs.map((i) => ({ id: i.id, count: i.count * (lv + 1) }));
       return `<div class="row"><div class="row-h"><b>${ico(s.id)}${E(s.name)}</b><em>cấp ${lv}/${s.max_level}${ok ? '' : ` · mở ở ${E(stageName(s.unlock))}`}</em></div>
-        <p>${E(s.desc)}${lv ? ` · +${Math.round(lv * gp.skills.cong_phap_bonus_per_level * 100)}% sát thương kỹ năng liên quan` : ''}</p>${lock}
+        <p>${E(s.desc)}<br>${E(o.info.cpText(s.id))}</p>${lock}
         ${inp ? `<p class="need">${need(inp)}</p>${btn('train', s.id, lv ? 'Nâng cấp' : 'Luyện', own && ok && lv < s.max_level && progress.has(inp))}` : '<p><i>Lab chưa ghi nguyên liệu</i></p>'}</div>`;
     }, 'bí kíp công pháp');
   }
@@ -181,21 +181,23 @@ export function createViews(o) {
   }
   // ---------- Vạn Bảo Lâu (cửa hàng) ----------
   const today = () => new Date().toLocaleDateString('sv');
+  // Vạn Bảo Lâu: chỉ nói công dụng + giá. Công thức / bí kíp: "Đã có" (xanh) / "Chưa có" (xám). Nguyên liệu: số đang có.
   function shopRow(s) {
     const d = itemDefs.get(s.id), n = s.stack || 1, isRecipe = !!d.teaches, owned = isRecipe && progress.count(s.id) > 0;
     const bought = st().shopDay?.date === today() ? (st().shopDay.n[s.id] || 0) : 0;
     const left = s.daily_limit ? s.daily_limit - bought : Infinity;
     const can = !owned && left > 0 && st().stone >= s.price;
-    const note = owned ? 'Đã có trong kho' : s.daily_limit ? `Hôm nay còn ${left}/${s.daily_limit}` : isRecipe ? 'Giữ trong kho để luyện' : `có ${progress.count(s.id)}`;
-    return `<div class="row"><div class="row-h"><b>${ico(s.id)}${E(d.name)}${n > 1 ? ` ×${n}` : ''}</b><em>${note}</em></div>
-      <p class="src">${E(o.info.effect(d))}${o.info.source(d) ? `<br>Nơi có: ${E(o.info.source(d))}` : ''}</p>
-      ${btn('buy', s.id, owned ? 'Đã có' : `Mua · ${s.price} LT`, can)}</div>`;
+    const note = isRecipe ? (owned ? '<em class="own yes">Đã có</em>' : '<em class="own">Chưa có</em>')
+      : `<em>${s.daily_limit ? `Hôm nay còn ${left}/${s.daily_limit}` : `có ${progress.count(s.id)}`}</em>`;
+    return `<div class="row"><div class="row-h"><b>${ico(s.id)}${E(d.name)}${n > 1 ? ` ×${n}` : ''}</b>${note}</div>
+      <p class="src">${E(o.info.effect(d))}</p>
+      ${owned ? '' : btn('buy', s.id, `Mua · ${s.price} LT`, can)}</div>`;
   }
   const SHOP_TABS = { dp: (d) => d.cat === 'dan-phuong', ct: (d) => d.cat === 'phap-khi', cp: (d) => d.cat === 'cong-phap', nl: (d) => !d.teaches };
   function openShop() {
     const { shop } = o;
     showSheet({
-      title: shop.name, note: `Giá tạm (Lab chưa có giá). Không bán: Hóa Thần Đan phương, công thức Cánh / Pháp tướng, Tinh Hồn Cổ, phôi Đỏ+ — chỉ rơi từ boss.`,
+      title: shop.name, note: `Giá tạm (Lab chưa có giá).`,
       tabs: [{ id: 'dp', name: 'Đan phương' }, { id: 'ct', name: 'Công thức' }, { id: 'cp', name: 'Công pháp' }, { id: 'nl', name: 'Nguyên liệu' }],
       render: (tab) => `<div class="row"><p>Linh thạch: <b>${st().stone}</b></p></div>`
         + shop.stock.filter((s) => SHOP_TABS[tab](itemDefs.get(s.id))).map(shopRow).join(''),

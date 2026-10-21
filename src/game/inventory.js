@@ -6,7 +6,7 @@ const SLOT = { 'mat-na': 'Mặt nạ', 'trang-phuc': 'Trang phục', 'vu-khi': '
   'day-chuyen': 'Dây chuyền', 'phap-tuong': 'Pháp tướng' };
 const STAT = { hp: 'Khí huyết', linh: 'Tấn công', def: 'Phòng thủ', xuyen: 'Xuyên giáp', crit: 'Bạo kích %', hut: 'Hút máu %', phan: 'Phản đòn %' };
 
-export function createInventory({ recipes, info, progress, bag, craft, itemDefs, awaken, gp, art, icon, fallbackIcon, onLook, recompute, usePill, openCultivate }) {
+export function createInventory({ recipes, info, progress, bag, craft, itemDefs, awaken, gp, art, icon, fallbackIcon, onLook, recompute, usePill, breakthrough, btPills, openCultivate }) {
   const st = () => progress.state;
   const tierName = (id) => awaken.tiers.find((t) => t.id === id)?.name || '';
   // Dòng chỉ số kèm màu phẩm của từng dòng (bag.js tô màu)
@@ -57,6 +57,7 @@ export function createInventory({ recipes, info, progress, bag, craft, itemDefs,
     const d = itemDefs.get(id);
     const actions = [];
     if (gp.pills[id]) actions.push({ id: 'use', label: 'Dùng' });
+    if (btPills.has(id)) actions.push({ id: 'breakthrough', label: 'Dùng để đột phá' }); // đan đột phá: dùng ngay trong kho
     const rc = d.teaches && recipeOf(d.teaches);
     if (rc) actions.push({ id: 'craft', label: rc.label + (rc.rate ? ` (${Math.round(rc.rate * 100)}%)` : ''),
       disabled: rc.none || rc.max || rc.locked || !progress.has(rc.inputs) });
@@ -65,7 +66,7 @@ export function createInventory({ recipes, info, progress, bag, craft, itemDefs,
     if (rc) { // cuốn công thức: hiện thứ luyện ra + nguyên liệu cần, luyện ngay trong kho
       const what = rc.kind === 'skill' ? `${rc.def.name} — cấp ${rc.lv || 0}/${rc.def.max_level}` : rc.kind === 'pill' ? `Luyện ra: ${rc.def.name} (có ${progress.count(rc.def.id)})` : 'Luyện ra: phôi (thức tỉnh để có chỉ số)';
       return { ...d, key: `item:${id}`, thumb: icon(id) || fallbackIcon(d.name, 'nhiemvu'), count, sub: what,
-        detail: rc.inputs.length ? `Cần: ${needText(rc.inputs)}${rc.locked ? '\nCảnh giới chưa đủ' : ''}` : '', actions };
+        detail: [`Công dụng: ${info.effect(d)}`, rc.inputs.length && `Cần: ${needText(rc.inputs)}`, rc.locked && 'Cảnh giới chưa đủ', src && `Nơi có: ${src}`].filter(Boolean).join('\n'), actions };
     }
     return { ...d, key: `item:${id}`, thumb: icon(id) || fallbackIcon(d.name, d.group || 'nhiemvu'), count, sub: `Tác dụng: ${info.effect(d) || '—'}`,
       detail: src ? `Nơi có: ${src}` : '', actions };
@@ -93,6 +94,7 @@ export function createInventory({ recipes, info, progress, bag, craft, itemDefs,
     if (kind === 'item') {
       const d = itemDefs.get(ref);
       if (action === 'use') return usePill(ref) ? '' : null;
+      if (action === 'breakthrough') { breakthrough(); return ''; }
       if (action === 'craft') { // luyện ngay trong kho
         const rc = recipeOf(d.teaches);
         const r = rc.kind === 'pill' ? craft.brewPill(rc.def.id) : rc.kind === 'blank' ? craft.forgeBlank(rc.def.id) : craft.trainSkill(rc.def.id);
