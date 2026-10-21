@@ -197,7 +197,7 @@ img { image-rendering: pixelated; }
 }
 .act img { width: 100%; height: 100%; display: block; object-fit: contain; pointer-events: none; }
 .act span { display: none; }
-.act.locked img { filter: grayscale(1) brightness(.22); opacity: .85; } /* chưa mở: ô trống tối, không lộ icon (yêu cầu chủ dự án 21/10) */
+.act.locked .act-base { filter: brightness(.75); } /* chưa mở / chưa có: khung xám trống assets/ui/skills/trong.png (yêu cầu chủ dự án 21/10) */
 .act.locked span { display: none; }
 @keyframes act-on { from { filter: drop-shadow(0 0 4px #f2c77f); } to { filter: brightness(1.25) drop-shadow(0 0 12px #ffd36a); } }
 .act.pulse { animation: act-pulse .25s ease-out; }

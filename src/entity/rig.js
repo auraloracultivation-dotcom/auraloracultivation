@@ -23,7 +23,18 @@ export async function loadRig(loadJSON) {
     const num = s[k].split('.').pop();
     if (!setOfArt[s[k]] || s.id.endsWith(`.${num}`)) setOfArt[s[k]] = s;
   }
-  R = { art: def.art, sets: def.sets, setOfArt, img, open, built: {} };
+  // Hình 6 hệ chưa thuộc bộ nào (vd. art.weapon.he.3 khi bộ he.3 dùng kiếm he.5) → gán bộ cùng số để vẫn vẽ được
+  for (const id of Object.keys(def.art)) {
+    const num = id.match(/\.he\.(\d+)$/)?.[1], s = num && def.sets.find((x) => x.id === `he.${num}`);
+    if (!setOfArt[id] && s) setOfArt[id] = s;
+  }
+  // Kho hình chung (data/equipment/art.json, đồ luyện từ phôi): vũ khí / cánh / pháp tướng, nạp khi cần lần đầu
+  const extra = {};
+  try {
+    const idx = await loadJSON('data/equipment/art.json');
+    for (const k of ['vu-khi', 'canh', 'phap-tuong']) for (const a of idx[k] || []) if (!def.art[a.id]) extra[a.id] = { ...a, grip: a.grip || a.anchor };
+  } catch (e) { console.warn('Không nạp được kho hình chung', e); }
+  R = { art: def.art, sets: def.sets, setOfArt, img, open, built: {}, extra, loading: new Set() };
   return R;
 }
 export const rigReady = () => !!R;
@@ -92,10 +103,23 @@ function build(set) {
 
 // look: { outfit, weapon, wing, avatar } — mã hình (art id) hoặc null
 // Chỉ giữ mã hình đã nạp (người khác có thể gửi mã máy này chưa có)
+function lazyArt(id) { // hình trong kho chung: nạp ảnh lần đầu, xong mới vẽ (dùng thông số bộ của trang phục)
+  const a = R.extra[id];
+  if (!a || R.art[id] || R.loading.has(id)) return;
+  R.loading.add(id);
+  const i = new Image();
+  i.onload = () => { R.img[id] = i; R.art[id] = a; };
+  i.src = a.file;
+}
 export function knownLook(look) {
   if (!R || !look) return null;
   const out = {};
-  for (const k of ['outfit', 'weapon', 'wing', 'avatar']) if (look[k] && R.art[look[k]] && R.setOfArt[look[k]]) out[k] = look[k];
+  for (const k of ['outfit', 'weapon', 'wing', 'avatar']) {
+    const id = look[k];
+    if (!id) continue;
+    if (k !== 'outfit') lazyArt(id);
+    if (R.art[id] && (R.setOfArt[id] || k !== 'outfit')) out[k] = id; // trang phục cần bộ (vùng cắt tay/giày)
+  }
   return Object.keys(out).length ? out : null;
 }
 export const hasLook = (look) => !!knownLook(look);
@@ -111,7 +135,7 @@ export function drawRig(ctx, p, look, drawFallbackBody) {
   if (st.T === undefined) Object.assign(st, { T: 0, ph: 0, flyT: 0, atk: st.atk ?? -1, last: now });
   const dt = Math.min(0.05, Math.max(0, now - st.last)); st.last = now; st.T += dt;
   const outfitSet = look.outfit ? R.setOfArt[look.outfit] : null;
-  const P = (outfitSet || R.setOfArt[look.weapon] || R.setOfArt[look.wing] || R.setOfArt[look.avatar]).params;
+  const P = (outfitSet || R.setOfArt[look.weapon] || R.setOfArt[look.wing] || R.setOfArt[look.avatar] || R.sets[0]).params;
   const pw = (id) => (id && R.setOfArt[id] ? R.setOfArt[id].params : P);
   const it = outfitSet ? R.art[look.outfit] : null;
   const CH = BASE_CH * P.than.scale, f = CH / (ART_CH * P.than.scale);

@@ -30,7 +30,7 @@ const pct = (x, y, w, h) =>
   `left:${(x / FRAME.w) * 100}%;top:${(y / FRAME.h) * 100}%;width:${(w / FRAME.w) * 100}%;height:${(h / FRAME.h) * 100}%`;
 
 export function createHud(opts) {
-  const { zoneName, line, player, maxChars, actions } = opts;
+  const { zoneName, line, player, maxChars, actions, blankIcon } = opts; // blankIcon: ô trống xám (chưa mở / chưa có)
   const root = document.getElementById('ui');
 
   // ---- Trên trái: khung nhân vật ----
@@ -92,13 +92,13 @@ export function createHud(opts) {
   pad.innerHTML = actions.map((a) => `
     <button type="button" class="act ${a.locked ? 'locked' : ''}" data-act="${a.id}" aria-label="${escapeHtml(a.name)}"
       style="width:${a.size}px;height:${a.size}px;left:${a.dx - a.size / 2}px;top:${a.dy - a.size / 2}px">
-      <img src="${a.icon || a.icons[0]}" alt=""><img class="act-art" alt="" hidden><b class="act-badge"></b><i class="act-cd" hidden><em></em></i><span>${escapeHtml(a.name)}</span>
+      <img class="act-base" src="${a.locked && blankIcon ? blankIcon : a.icon || a.icons[0]}" alt=""><img class="act-art" alt="" hidden><b class="act-badge"></b><i class="act-cd" hidden><em></em></i><span>${escapeHtml(a.name)}</span>
     </button>`).join('');
   root.appendChild(pad);
   for (const a of actions) {
     const btn = pad.querySelector(`[data-act="${a.id}"]`);
     let state = 0; // nút bật/tắt (vd. Bay ↔ Chạy): đổi ảnh + tên theo trạng thái
-    a.setState = (s) => { state = s; btn.querySelector('img').src = a.icons[s]; btn.setAttribute('aria-label', a.names[s]); };
+    a.setState = (s) => { state = s; btn.querySelector('.act-base').src = a.icons[s]; btn.setAttribute('aria-label', a.names[s]); };
     btn.addEventListener('pointerdown', (e) => {
       e.preventDefault();
       if (btn.classList.contains('locked')) { toast(a.offHint ? `${a.name}: ${a.offHint}` : `${a.name}: chưa mở${a.lockedHint ? ` — ${a.lockedHint}` : ''}`, 1600); return; }
@@ -107,7 +107,7 @@ export function createHud(opts) {
         const prev = state;
         state = (state + 1) % a.icons.length;
         if (a.onUse?.(state) === 'keep') state = prev; // không đổi được (vd. đang bay trên nước) → giữ nguyên
-        btn.querySelector('img').src = a.icons[state];
+        btn.querySelector('.act-base').src = a.icons[state];
         btn.setAttribute('aria-label', a.names[state]);
       } else a.onUse?.();
     });
@@ -225,7 +225,12 @@ export function createHud(opts) {
     setRealm(text) { info.querySelector('[data-realm]').textContent = text; },
     // Khoá / mở nút kỹ năng theo cảnh giới
     // hint: lý do riêng (vd. "chưa đeo linh thú"); bỏ trống = chưa mở theo cảnh giới (lockedHint)
-    setLocked(id, on, hint) { const a = actions.find((x) => x.id === id); if (a) a.offHint = hint; pad.querySelector(`[data-act="${id}"]`)?.classList.toggle('locked', !!on); },
+    setLocked(id, on, hint) {
+      const a = actions.find((x) => x.id === id), btn = pad.querySelector(`[data-act="${id}"]`);
+      if (!a || !btn) return;
+      a.offHint = hint; btn.classList.toggle('locked', !!on);
+      if (blankIcon) btn.querySelector('.act-base').src = on ? blankIcon : a.icon || a.icons[0]; // khoá → ô trống xám, không lộ hình
+    },
     // Hình thứ đang dùng trong ô (đan, linh thú, pháp tướng); null = hình mặc định của ô
     setArt(id, url) { const i = pad.querySelector(`[data-act="${id}"] .act-art`); if (i) { i.hidden = !url; if (url) i.src = url; } },
     setBadge(id, text) { const b = pad.querySelector(`[data-act="${id}"] .act-badge`); if (b) b.textContent = text ?? ''; },
