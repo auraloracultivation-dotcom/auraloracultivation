@@ -105,3 +105,17 @@ export function drawIcon(ctx, id, x, y, size) {
   ctx.restore();
   return true;
 }
+
+// Một khung hiệu ứng làm icon vuông (ô kỹ năng trên HUD), giữ lại sau lần đầu
+export function fxIconUrl(id, frame = 0) {
+  const key = `fx:${id}:${frame}`;
+  if (iconUrls.has(key)) return iconUrls.get(key);
+  const f = DEF?.fx[id], im = f && imgs.get(f.src);
+  if (!im) return null;
+  const S = Math.max(f.fw, f.fh), c = document.createElement('canvas'); c.width = c.height = S;
+  const n = Math.min(frame, f.anims.play.n - 1);
+  c.getContext('2d').drawImage(im, n * f.fw, f.anims.play.row * f.fh, f.fw, f.fh, (S - f.fw) / 2, (S - f.fh) / 2, f.fw, f.fh);
+  const url = c.toDataURL();
+  iconUrls.set(key, url);
+  return url;
+}

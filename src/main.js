@@ -207,16 +207,17 @@ async function boot() {
       });
     },
     // Bộ kỹ năng hình quạt (yêu cầu chủ dự án 2026-10-20). dx/dy tính từ tâm nút Tấn công; chưa có hệ thống → khoá.
+    blankIcon: S('trong'), // ô kỹ năng: khung xám trống; hình kỹ năng / đan / linh thú / pháp tướng hiện bên trong khi có
     actions: [
       { id: 'attack', name: 'Đánh thường', icon: S('tan-cong'), dx: 0, dy: 0, size: 96, onUse: () => attack() },
       // vòng quạt 4 kỹ năng (từ trái lên trên)
-      { id: 'kiem-khi', name: 'Kiếm khí', icon: S('kiem-khi'), ...fan(184), size: 60, locked: true, lockedHint: 'mở ở Trúc Cơ', onUse: () => game.skill('kiem-khi') },
-      { id: 'linh-thu', name: 'Kỹ năng linh thú', icon: S('linh-thu'), ...fan(151), size: 60, locked: true, lockedHint: 'mở ở Kết Đan', onUse: () => game.skill('linh-thu') },
-      { id: 'phap-tuong', name: 'Kỹ năng pháp tướng', icon: S('phap-tuong'), ...fan(118), size: 60, onUse: () => usePhapTuong() },
-      { id: 'khong-che', name: 'Khống chế (Trúc Cơ)', icon: S('khong-che'), ...fan(85), size: 60, locked: true, lockedHint: 'mở ở Trúc Cơ', onUse: () => game.skill('khong-che') },
+      { id: 'kiem-khi', name: 'Kiếm khí', icon: S('trong'), ...fan(184), size: 60, locked: true, lockedHint: 'mở ở Trúc Cơ', onUse: () => game.skill('kiem-khi') },
+      { id: 'linh-thu', name: 'Kỹ năng linh thú', icon: S('trong'), ...fan(151), size: 60, locked: true, lockedHint: 'mở ở Kết Đan', onUse: () => game.skill('linh-thu') },
+      { id: 'phap-tuong', name: 'Kỹ năng pháp tướng', icon: S('trong'), ...fan(118), size: 60, onUse: () => usePhapTuong() },
+      { id: 'khong-che', name: 'Khống chế (Trúc Cơ)', icon: S('trong'), ...fan(85), size: 60, locked: true, lockedHint: 'mở ở Trúc Cơ', onUse: () => game.skill('khong-che') },
       // bên trái bộ kỹ năng
-      { id: 'nguyen-anh', name: 'Nguyên Anh: tấn công diện rộng', icon: S('nguyen-anh'), dx: -200, dy: -66, size: 54, locked: true, lockedHint: 'mở ở Nguyên Anh', onUse: () => game.skill('nguyen-anh') },
-      { id: 'dan-duoc', name: 'Đan dược trị thương', icon: S('dan-duoc'), dx: -200, dy: 4, size: 54, onUse: () => game.healPill() },
+      { id: 'nguyen-anh', name: 'Nguyên Anh: tấn công diện rộng', icon: S('trong'), dx: -200, dy: -66, size: 54, locked: true, lockedHint: 'mở ở Nguyên Anh', onUse: () => game.skill('nguyen-anh') },
+      { id: 'dan-duoc', name: 'Đan dược trị thương', icon: S('trong'), dx: -200, dy: 4, size: 54, onUse: () => game.healPill() },
       // phía trên: Lướt + Bay/Chạy song song, trên cùng: Tự động
       { id: 'luot', name: 'Lướt', icon: S('luot'), dx: -92, dy: -192, size: 50, locked: true, lockedHint: 'mở ở Kết Đan', onUse: () => game.skill('luot') },
       {

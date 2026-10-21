@@ -5,7 +5,10 @@
 // Chỉ đọc trạng thái rồi gọi hud; mỗi khung hình chỉ cập nhật khi có thay đổi.
 const HEAL_PILL = 'item.dan.tieu-hoi-huyet.001';
 
-export function createSkillBar({ hud, S, gp, progress, pt, cds, slotItem, icon }) {
+// Hình bên trong ô kỹ năng đánh (lấy một khung hiệu ứng của chính chiêu đó)
+const FX_ICON = { 'kiem-khi': ['kiem-bang-bay', 0], 'khong-che': ['moc-troi', 2], 'nguyen-anh': ['tho-vong', 3] };
+
+export function createSkillBar({ hud, S, gp, progress, pt, cds, slotItem, icon, fxIcon }) {
   const last = {};
   const put = (key, val, fn) => { if (last[key] !== val) { last[key] = val; fn(); } };
 
@@ -15,15 +18,15 @@ export function createSkillBar({ hud, S, gp, progress, pt, cds, slotItem, icon }
     for (const [id, s] of Object.entries(S)) {
       if (!s.unlock) continue;
       const locked = progress.stageIndex(s.unlock) > stage;
-      out[id] = { off: locked || null, cd: [(cds[id] || 0) - now, s.cd_s] };
+      out[id] = { off: locked || null, cd: [(cds[id] || 0) - now, s.cd_s], art: !locked && FX_ICON[id] ? fxIcon(...FX_ICON[id]) : null };
     }
     const pet = slotItem('linh-thu');
     if (!out['linh-thu'].off && !pet) out['linh-thu'].off = 'chưa đeo linh thú (Kho → Trang bị)';
-    out['linh-thu'].art = pet?.thumb || null;
+    out['linh-thu'].art = out['linh-thu'].off ? null : pet.thumb;
     const avatar = slotItem('phap-tuong');
     out['phap-tuong'] = { off: avatar ? null : 'chưa đeo pháp tướng (Kho → Trang bị)', art: avatar?.thumb || null, cd: [pt.cdLeft, pt.cdTotal] };
     const n = progress.count(HEAL_PILL);
-    out['dan-duoc'] = { off: n ? null : 'hết đan hồi máu — luyện ở Lò luyện đan', art: icon(HEAL_PILL), badge: n || '', cd: [(cds.pill || 0) - now, gp.pills.use_cooldown_s] };
+    out['dan-duoc'] = { off: n ? null : 'hết đan hồi máu — luyện ở Lò luyện đan', art: n ? icon(HEAL_PILL) : null, badge: n || '', cd: [(cds.pill || 0) - now, gp.pills.use_cooldown_s] };
     return out;
   }
 

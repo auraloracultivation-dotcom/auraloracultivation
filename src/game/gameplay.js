@@ -21,7 +21,7 @@ import { createLoot } from './loot.js';
 import { createGather } from './gather.js';
 import { createInventory } from './inventory.js';
 import { placeholderIcon, showRevive } from '../ui/index.js';
-import { artInfo, iconUrl } from '../entity/index.js';
+import { artInfo, iconUrl, fxIconUrl } from '../entity/index.js';
 
 const MAJOR_OF = (id) => ({ lk: 0, tc: 1, kd: 2, na: 3, ht: 4 }[id.slice(0, 2)] ?? 0);
 const HEAL_PILL = 'item.dan.tieu-hoi-huyet.001';
@@ -357,7 +357,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
 
   const inv = createInventory({ recipes: { pills: pills.pills, blanks: blanks.blanks, skills: cp.skills }, info, progress, bag, craft, itemDefs, awaken, gp, art: (a) => artInfo(a)?.file, icon: iconUrl, fallbackIcon: placeholderIcon,
     onLook, recompute, usePill, breakthrough: () => breakthrough(), btPills: new Set(realms.realms.filter((r) => r.breakthrough).map((r) => r.breakthrough.pill)), openCultivate: (tab) => views.openCultivate(tab) });
-  const bar = createSkillBar({ hud, S, gp, progress, pt, cds, slotItem: (s) => inv.slotItem(s), icon: iconUrl });
+  const bar = createSkillBar({ hud, S, gp, progress, pt, cds, slotItem: (s) => inv.slotItem(s), icon: iconUrl, fxIcon: fxIconUrl });
   function itemAction(key, action) {
     const r = inv.act(key, action);
     if (r && typeof r === 'object') { toast(r.msg, 1600); if (r.event) quests.emit(...r.event); } else if (r) toast(r, 1500);

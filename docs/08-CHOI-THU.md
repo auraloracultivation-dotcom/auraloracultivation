@@ -28,6 +28,7 @@ Phím máy tính: Space đánh, 1–5 kỹ năng, Q uống đan hồi máu.
 
 ## Trang bị và thức tỉnh
 - **Thức tỉnh từng dòng (Lab v3.2)**: mỗi lần bấm thêm 1 dòng, màu (phẩm) từng dòng ngẫu nhiên; mỗi món có giới hạn ẩn 1–10 dòng, chạm giới hạn thì nút tắt. Không còn thức tỉnh lại. Số ở `data/gameplay.json` → awaken.
+- Hình vũ khí / cánh / pháp tướng: `src/entity/rig.js` nạp hình 6 hệ (he6.json) + kho hình chung (art.json, nạp khi cần). Hình 6 hệ không thuộc bộ nào (vd. Thương Hải Pháp kiếm) mượn thông số bộ cùng số.
 - Đồ 6 hệ trong Kho (có hình): **thức tỉnh được** ở Tu luyện → Thức tỉnh; dòng chỉ số lưu theo mã vật phẩm (`itemAw`).
 - Đồ luyện từ phôi: thức tỉnh có chỉ số, chưa có hình (chờ ảnh của chủ dự án).
 - Mỗi ô chỉ mặc một món: mặc đồ Kho thì tháo đồ phôi cùng ô, và ngược lại.
@@ -101,7 +102,8 @@ Thêm `&debug` để có `__tp(x, y)` (dịch chuyển) và `__game` cho kiểm 
 
 ## Ô kỹ năng (HUD)
 - Ô hiện thứ đang dùng: Đan dược = viên Tiểu Hồi Huyết Đan + số còn; Linh thú / Pháp tướng = món đang đeo.
-- Ô xám tối khi chưa mở theo cảnh giới, hoặc chưa có thứ để dùng (hết đan, chưa đeo linh thú / pháp tướng); chạm vào sẽ báo lý do.
+- Mọi ô dùng khung xám trống `assets/ui/skills/trong.png` (bỏ hình hồng mặc định). Chỉ hiện hình khi có: Kiếm khí / Khống chế / Nguyên Anh = một khung hiệu ứng của chiêu (khi đã mở theo cảnh giới), Đan dược / Linh thú / Pháp tướng như trên.
+- Chưa mở theo cảnh giới, hoặc chưa có thứ để dùng (hết đan, chưa đeo linh thú / pháp tướng) → khung trống; chạm vào sẽ báo lý do.
 - Đang hồi chiêu: bóng tối quét quanh nút + số giây đếm ngược. Code: `src/game/skillbar.js`, `src/ui/hud.js`.
 
 ## Nút Tự động
