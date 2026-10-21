@@ -157,6 +157,7 @@ async function boot() {
     if (pt.active && !hasAvatar()) { pt.cancel(); phapTuongOff(); } else setLook();
   }
   function usePhapTuong() {
+    if (game.dead) return toast('Linh hồn không dùng được kỹ năng', 1200);
     const r = pt.toggle(hasAvatar());
     if (r === 'off') return phapTuongOff();
     if (r !== 'on') return toast(PT_MSG[r], 1400);
@@ -221,6 +222,7 @@ async function boot() {
       {
         id: 'bay', name: 'Bay', icons: [S('bay'), S('chay')], names: ['Bay', 'Chạy bộ'], dx: -34, dy: -200, size: 50,
         onUse: (state) => { // ngự kiếm: phải cầm kiếm; bay tốn linh lực theo thời gian (data/config.json → player.fly_mp_per_s)
+          if (game.dead) { toast('Linh hồn không dùng được kỹ năng', 1200); return 'keep'; }
           if (state === 1 && !me.look?.weapon) { toast('Cần trang bị kiếm mới ngự kiếm phi hành được', 1600); return 'keep'; }
           if (state === 1 && pt.mp < 5) { toast('Linh lực không đủ để ngự kiếm', 1400); return 'keep'; }
           me.flying = state === 1;
@@ -269,14 +271,16 @@ async function boot() {
   let sendTimer = 0;
 
   function update(dt) {
-    const dir = game.dead ? { x: 0, y: 0 } : input.getMove(); // trọng thương: đứng yên chờ hồi phục
+    // Cần điều khiển luôn ưu tiên; thả tay mà đang bật Tự động thì đi theo hướng autoplay (quái / nguyên liệu gần nhất)
+    const stick = input.getMove(), ad = game.autoDir();
+    const dir = stick.x || stick.y || !ad ? stick : ad;
     const wasMoving = me.moving;
     me.moving = dir.x !== 0 || dir.y !== 0;
     if (me.moving) {
       if (!wasMoving) saver.saveNow(); // mốc thời gian mới cho máy chủ trước khi đi
       if (dir.x) me.facing = dir.x > 0 ? 1 : -1;
-      const v = me.flying ? flySpeed : game.speed() || speed; // Lướt: nhanh hơn nhưng vẫn dưới max_speed máy chủ
-      map.move(me, dir.x * v * dt, dir.y * v * dt, radius, !!me.flying);
+      const v = me.flying || game.dead ? flySpeed : game.speed() || speed; // Lướt: nhanh hơn nhưng vẫn dưới max_speed máy chủ; linh hồn = tốc độ bay
+      map.move(me, dir.x * v * dt, dir.y * v * dt, radius, !!me.flying || game.dead); // linh hồn bay qua nước như ngự kiếm
       me.walkT += dt;
       sendTimer += dt;
       if (sendTimer >= sendEvery) { sendTimer = 0; zone.sendMove(me.x, me.y, true, me.flying); }

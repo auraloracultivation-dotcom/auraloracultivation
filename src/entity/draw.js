@@ -15,6 +15,7 @@ const fallbackOutfit = (id = '') => {
 };
 
 export function drawPlayer(ctx, p, scale = 1) {
+  if (p.soul) return drawSoul(ctx, p, scale);
   if (p.alpha === 0) return; // đã tàn mờ hẳn (chết)
   ctx.save();
   if (p.alpha !== undefined) ctx.globalAlpha *= p.alpha;
@@ -81,8 +82,28 @@ let TS = 1;
 export const setTextScale = (k) => { TS = k; };
 export const textScale = () => TS;
 
+// Linh hồn (chết, chờ hồi sinh): bóng trắng mờ trôi lơ lửng, đuôi khói, hai mắt — không tên, không thanh máu
+function drawSoul(ctx, p, scale) {
+  const t = performance.now() / 1000, bob = Math.sin(t * 2.4) * 1.5;
+  ctx.save();
+  ctx.translate(p.x, p.y); ctx.scale(scale * (p.facing || 1), scale);
+  ctx.fillStyle = 'rgba(0,0,0,0.12)'; ctx.beginPath(); ctx.ellipse(0, 1, 6, 2, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.translate(0, -12 + bob);
+  ctx.shadowColor = 'rgba(200,235,255,0.9)'; ctx.shadowBlur = 8;
+  ctx.fillStyle = 'rgba(245,250,255,0.78)';
+  ctx.beginPath(); // đầu tròn + thân thon dần thành đuôi khói lượn sóng
+  ctx.arc(0, -8, 7, Math.PI, 0);
+  ctx.quadraticCurveTo(8, 2, 3 + Math.sin(t * 5) * 2, 10);
+  ctx.quadraticCurveTo(0, 7, -2 + Math.sin(t * 5 + 1) * 2, 12);
+  ctx.quadraticCurveTo(-6, 5, -7, -8);
+  ctx.fill();
+  ctx.shadowBlur = 0; ctx.fillStyle = 'rgba(40,60,90,0.8)';
+  ctx.beginPath(); ctx.ellipse(-2.5, -8, 1.1, 1.6, 0, 0, Math.PI * 2); ctx.ellipse(2.5, -8, 1.1, 1.6, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
+}
+
 export function drawLabel(ctx, p, now, scale = 1) {
-  if (p.alpha === 0) return;
+  if (p.alpha === 0 || p.soul) return;
   const x = Math.round(p.x);
   const head = hasLook(p.look) ? rigHeadHeight(knownLook(p.look)) : 33;
   const y = Math.round(p.y + 33 - head * scale - (p.look?.outfit ? (p.rig?.flyT || 0) * 8 : liftOf(p)) * scale); // bám theo đầu

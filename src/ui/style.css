@@ -508,3 +508,8 @@ img { image-rendering: pixelated; }
   background: conic-gradient(rgba(0,0,0,.68) var(--p, 0%), rgba(0,0,0,.18) 0); }
 .act .act-cd em { font: 800 17px/1 system-ui, sans-serif; font-style: normal; color: #fff; text-shadow: 0 0 4px #000, 0 0 2px #000; }
 .act .act-cd[hidden], .act .act-art[hidden] { display: none; }
+.revive-box { position: fixed; top: calc(env(safe-area-inset-top, 0px) + 110px); left: 50%; transform: translateX(-50%); z-index: 40;
+  width: min(330px, calc(100vw - 32px)); padding: 12px 14px; border-radius: 14px; text-align: center; color: #f3ecff;
+  background: rgba(22, 14, 40, .92); border: 1px solid #c9a6ff; box-shadow: 0 0 18px rgba(200, 230, 255, .35); }
+.revive-box b { font-size: 16px; color: #e8f4ff; } .revive-box p { margin: 6px 0; font-size: 13px; }
+.revive-btns { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; } .revive-note { color: #ff9a8a; }

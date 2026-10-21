@@ -67,7 +67,9 @@ Phím máy tính: Space đánh, 1–5 kỹ năng, Q uống đan hồi máu.
 - Sau tên có **khiên**: xanh = được bảo vệ (mặc định), đỏ gạch chéo = tắt. Chạm khiên của mình để tắt/bật (bật lại phải rời giao chiến 5 giây).
 - Ngoài thành, ai tắt khiên đều đánh được nhau: người chơi ↔ NPC, NPC ↔ NPC. Vừa hồi sinh được bảo vệ 10 giây. Trong thành không ai đánh được.
 - NPC có cảnh giới + khí huyết như người chơi; NPC tắt khiên tự tấn công người / NPC tắt khiên gần đó; gục thì hồi sinh ở nhà sau 20 giây. Hạ NPC +5 Linh thạch.
-- Chết: nhân vật tàn mờ rồi biến mất, hết thời gian thì hồi sinh ở trận pháp giữa Thanh Vân Thành (máy chủ: RPC `respawn_at_town`, migration 0004).
+- Chết: thân xác tàn mờ rồi **hoá linh hồn trắng** (`src/game/soul.js`): chỉ đi lại (tốc độ bằng bay, qua được nước), không tên, không thanh máu, không đánh / kỹ năng / ngự kiếm, quái không thấy.
+  Bảng chọn: **Về Thanh Vân Thành hồi sinh** (miễn phí, trận pháp giữa thành; máy chủ: RPC `respawn_at_town`, migration 0004 — chờ duyệt) hoặc **Hồi sinh tại đây** (Linh thạch = 10 + 5 × số tầng; `data/gameplay.json` → soul).
+  Người khác hiện vẫn thấy hình nhân vật thường (chưa gửi trạng thái linh hồn qua mạng).
 - **Người chơi thật ↔ người chơi thật chưa đánh được**: cần máy chủ xác nhận sát thương (Mốc 3).
 
 ## Ngự kiếm (bay)
@@ -101,3 +103,8 @@ Thêm `&debug` để có `__tp(x, y)` (dịch chuyển) và `__game` cho kiểm 
 - Ô hiện thứ đang dùng: Đan dược = viên Tiểu Hồi Huyết Đan + số còn; Linh thú / Pháp tướng = món đang đeo.
 - Ô xám tối khi chưa mở theo cảnh giới, hoặc chưa có thứ để dùng (hết đan, chưa đeo linh thú / pháp tướng); chạm vào sẽ báo lý do.
 - Đang hồi chiêu: bóng tối quét quanh nút + số giây đếm ngược. Code: `src/game/skillbar.js`, `src/ui/hud.js`.
+
+## Nút Tự động
+Bật: tự tìm thứ **gần nhất** trong `auto.search_px` — quái hoặc linh thảo / khoáng — đi tới, đánh quái, hái nguyên liệu (đang bay thì chỉ tìm quái);
+khí huyết dưới 30% mà Kho có Tiểu Hồi Huyết Đan thì tự uống. Kẹt (vướng cây / nước) thì tạm bỏ mục tiêu. Kéo cần điều khiển là người chơi điều khiển ngay.
+Chết thì tự tắt. Số: `data/gameplay.json` → auto. Code: `src/game/autoplay.js`.

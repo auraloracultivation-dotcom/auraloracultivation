@@ -1,0 +1,39 @@
+// Nút Tự động (yêu cầu chủ dự án 21/10): tự tìm thứ GẦN NHẤT — quái hoặc linh thảo / khoáng — rồi đi tới;
+// tới quái thì đứng đánh, tới nguyên liệu thì gather.js tự hái. Kẹt (vướng cây, nước) thì tạm bỏ mục tiêu đó.
+// Chỉ trả về hướng đi; cần điều khiển của người chơi luôn được ưu tiên (main.js). Số ở data/gameplay.json → auto.
+import { wrapDelta } from '../map/index.js';
+
+export function createAutoPlay({ me, mobs, gather, map, cfg, reach }) {
+  let goal = null, repick = 0, stuckT = 0, lx = me.x, ly = me.y;
+  const skip = new Map(); // mục tiêu đang tạm bỏ → hết hạn lúc
+  const rel = (o) => ({ dx: wrapDelta(o.x - me.x, map.width), dy: wrapDelta(o.y - me.y, map.height) });
+  const alive = (g) => g && (g.kind === 'mob' ? g.o.state !== 'dead' : gather.list.includes(g.o));
+  const free = (o, now) => !(skip.get(o) > now);
+
+  function pick(now) {
+    let best = null;
+    const m = mobs.nearest(me, cfg.search_px, (x) => free(x, now) && !map.safeAt(x.x, x.y));
+    if (m) best = { kind: 'mob', o: m, d: mobs.distTo(m, me) };
+    if (!me.flying) for (const n of gather.list) { // đang bay thì không hái được
+      if (!free(n, now)) continue;
+      const r = rel(n), d = Math.hypot(r.dx, r.dy);
+      if (d <= cfg.search_px && (!best || d < best.d)) best = { kind: 'node', o: n, d };
+    }
+    return best;
+  }
+
+  // Mỗi khung hình khi đang bật Tự động. Trả về { x, y } hướng đi (0,0 = đứng yên) hoặc null nếu không có gì quanh đây.
+  function step(dt, now) {
+    repick -= dt;
+    if (!alive(goal) || repick <= 0) { const g = pick(now); if (g?.o !== goal?.o) stuckT = 0; goal = g; repick = cfg.repick_s; }
+    if (!goal) return null;
+    const { dx, dy } = rel(goal.o), d = Math.hypot(dx, dy) || 1;
+    if (goal.kind === 'mob' && d <= reach * 0.8) { stuckT = 0; lx = me.x; ly = me.y; return { x: 0, y: 0 }; } // đủ gần: đứng đánh
+    const moved = Math.hypot(me.x - lx, me.y - ly);
+    lx = me.x; ly = me.y;
+    stuckT = moved < 0.3 ? stuckT + dt : 0;
+    if (stuckT > cfg.stuck_s) { skip.set(goal.o, now + cfg.skip_s); goal = null; stuckT = 0; return { x: 0, y: 0 }; }
+    return { x: dx / d, y: dy / d };
+  }
+  return { step, reset() { goal = null; stuckT = 0; } };
+}

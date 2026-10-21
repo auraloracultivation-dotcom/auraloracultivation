@@ -520,5 +520,19 @@
   "revive_guard_s": 10,
   "shield_on_after_s": 5,
   "kill_stone": 5
+ },
+ "soul": {
+  "_ghi_chu": "Chết (yêu cầu chủ dự án 21/10): hoá linh hồn trắng — chỉ di chuyển (tốc độ bằng bay, đi qua nước), không tên, không HP, không kỹ năng. Chọn: về thành hồi sinh (miễn phí) hoặc hồi sinh tại chỗ trả Linh thạch = base + per_stage × số tầng. Số TẠM.",
+  "fade_s": 1.2,
+  "here_stone_base": 10,
+  "here_stone_per_stage": 5
+ },
+ "auto": {
+  "_ghi_chu": "Nút Tự động: tự tìm quái / nguyên liệu gần nhất trong search_px, tự đánh, tự hái, tự uống đan hồi máu khi khí huyết dưới hp_pill_below (nếu trong kho có). Kẹt quá stuck_s thì bỏ mục tiêu đó skip_s giây. Cần điều khiển luôn được ưu tiên.",
+  "search_px": 900,
+  "hp_pill_below": 0.3,
+  "stuck_s": 1.2,
+  "skip_s": 10,
+  "repick_s": 0.5
  }
 }
