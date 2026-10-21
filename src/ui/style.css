@@ -500,3 +500,4 @@ img { image-rendering: pixelated; }
 .ln.tier-vang { color: #ffd84a; } .ln.tier-do { color: #ff5a4a; } .ln.tier-den { color: #ff3b30; background: #111; padding: 0 3px; border-radius: 3px; }
 .sheet .src { font-size: 11.5px; color: #bfb3d6 !important; }
 .item-card small { white-space: pre-line; }
+.sheet em.own { color: #8a8398; font-weight: 700; } .sheet em.own.yes { color: #5dff7a; }

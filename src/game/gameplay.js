@@ -7,6 +7,7 @@ import { createNpcs } from './npcs.js';
 import { createItemInfo } from './iteminfo.js';
 import { createForgedArt } from './forged-art.js';
 import { createFxQueue } from './fxqueue.js';
+import { createCpEffects } from './cp-effects.js';
 import { createProgress } from './progress.js';
 import { createStats } from './stats.js';
 import { createMonsters } from './monsters.js';
@@ -18,8 +19,6 @@ import { createInventory } from './inventory.js';
 import { placeholderIcon } from '../ui/index.js';
 import { artInfo, iconUrl } from '../entity/index.js';
 
-const SKILL_OF_CP = { attack: 'skill.tamphap.luyen-khi.001', 'kiem-khi': 'skill.chieu.kiem-khi.001', 'linh-thu': 'skill.khe.linh-thu.001',
-  'nguyen-anh': 'skill.than.canh-phong.001', 'phap-tuong': 'skill.phap-tuong.thien-thu.001' };
 const MAJOR_OF = (id) => ({ lk: 0, tc: 1, kd: 2, na: 3, ht: 4 }[id.slice(0, 2)] ?? 0);
 const rint = (a, b) => Math.round(a + Math.random() * (b - a));
 
@@ -42,7 +41,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const owns = (id) => !teacher.has(id) || progress.count(teacher.get(id)) > 0;
   const craft = createCraft({ progress, pills, blanks, awaken, skills: cp, gp, owns });
   const gather = createGather({ gp, mats, map });
-  const info = createItemInfo({ monsters: monDef.monsters, shop, pills }); // tác dụng + nơi có của vật phẩm
+  const info = createItemInfo({ monsters: monDef.monsters, shop, pills, blanks, realms, gp, cpText: (id) => cpFx.text(id) }); // tác dụng + nơi có của vật phẩm
   const npcs = createNpcs({ def: await loadJSON('data/npcs.json'), map, mobs, stats, stages: gp.player.stages });
   const PV = gp.pvp;
   gather.seed(me);
@@ -66,7 +65,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   function recompute() {
     const b = {};
     for (const [k, v] of Object.entries(buffs)) if (v.until > now) b[k] = v.mul;
-    ps = stats.player(progress.stageDef, wornGear(), b);
+    ps = cpFx.apply(stats.player(progress.stageDef, wornGear(), b)); // + tác dụng công pháp
     pt.setMax(ps.mp);
     hp = Math.min(hp, ps.hp);
     hud.setRealm(progress.stageDef.name + (progress.atPeak() ? ' · đỉnh' : ''));
@@ -74,8 +73,9 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     for (const [id, s] of Object.entries(S)) if (s.unlock) hud.setLocked(id, progress.stageIndex(s.unlock) > progress.state.stage);
     views.refreshDock?.();
   }
-  const cpBonus = (skill) => 1 + (progress.state.cp[SKILL_OF_CP[skill]] || 0) * S.cong_phap_bonus_per_level;
-  const ptMul = () => (pt.active ? S['phap-tuong'].atk_mul : 1);
+  const cpFx = createCpEffects(S.cong_phap_effects, () => progress.state.cp);
+  const cpBonus = (skill) => cpFx.skillMul(skill);
+  const ptMul = () => (pt.active ? S['phap-tuong'].atk_mul * cpFx.skillMul('phap-tuong') : 1);
   const HEAD = 30; // độ cao đầu nhân vật (điểm)
   const healMe = (n) => { if (n > 0) { hp = Math.min(ps.hp, hp + n); say(me.x, me.y - HEAD, `+${Math.round(n)} hút máu`, '#5dff7a'); } };
   const midY = (m) => m.y - (m.def.art?.h || m.r * 2) / 2;
@@ -129,7 +129,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     if (targetUid === m.uid) targetUid = null;
     play('khoi', m.x, m.y, Math.max(16, (m.def.art?.h || 20) * 0.7), { ground: true, delay: 0.4 });
     const rank = m.def.rank, k = gp.monster.exp_mul[rank];
-    const exp = Math.round((m.maxHp / 10) * k), stone = Math.max(1, Math.round(m.maxHp * gp.monster.stone_per_hp * k));
+    const exp = Math.round((m.maxHp / 10) * k * cpFx.expMul()), stone = Math.max(1, Math.round(m.maxHp * gp.monster.stone_per_hp * k));
     addExp(exp); progress.addStone(stone);
     const zoneMats = mats.materials.filter((x) => x.zone === m.def.zone);
     const got = [];
@@ -362,7 +362,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
       for (const i of r.items || []) progress.add(i.id, i.count); }, recompute, usePill, emit: quests.emit });
 
   const inv = createInventory({ recipes: { pills: pills.pills, blanks: blanks.blanks, skills: cp.skills }, info, progress, bag, craft, itemDefs, awaken, gp, art: (a) => artInfo(a)?.file, icon: iconUrl, fallbackIcon: placeholderIcon,
-    onLook, recompute, usePill, openCultivate: (tab) => views.openCultivate(tab) });
+    onLook, recompute, usePill, breakthrough: () => breakthrough(), btPills: new Set(realms.realms.filter((r) => r.breakthrough).map((r) => r.breakthrough.pill)), openCultivate: (tab) => views.openCultivate(tab) });
   function itemAction(key, action) {
     const r = inv.act(key, action);
     if (r && typeof r === 'object') { toast(r.msg, 1600); if (r.event) quests.emit(...r.event); } else if (r) toast(r, 1500);

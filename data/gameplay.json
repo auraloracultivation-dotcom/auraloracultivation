@@ -411,7 +411,55 @@
    "def_mul": 1.25,
    "_ghi_chu": "Kỹ năng hoá hình đang có (data/skills/phap-tuong.json); khi bật cộng chỉ số theo Lab"
   },
-  "cong_phap_bonus_per_level": 0.1
+  "cong_phap_bonus_per_level": 0.1,
+  "cong_phap_effects": {
+   "_ghi_chu": "Tác dụng mỗi cấp công pháp (cấp 1→5). kind: skill = +% sát thương kỹ năng; exp = +% tu vi nhận; mp = +% linh lực tối đa; ne = +% né tránh. Số TẠM.",
+   "skill.tamphap.luyen-khi.001": {
+    "kind": "skill",
+    "skill": "attack",
+    "per": 0.1,
+    "text": "Đánh thường mạnh hơn {v}% "
+   },
+   "skill.chieu.kiem-khi.001": {
+    "kind": "skill",
+    "skill": "kiem-khi",
+    "per": 0.1,
+    "text": "Kiếm khí mạnh hơn {v}%"
+   },
+   "skill.khe.linh-thu.001": {
+    "kind": "skill",
+    "skill": "linh-thu",
+    "per": 0.1,
+    "text": "Linh thú đánh mạnh hơn {v}%"
+   },
+   "skill.than.canh-phong.001": {
+    "kind": "skill",
+    "skill": "nguyen-anh",
+    "per": 0.1,
+    "text": "Tấn công diện rộng mạnh hơn {v}%"
+   },
+   "skill.phap-tuong.thien-thu.001": {
+    "kind": "skill",
+    "skill": "phap-tuong",
+    "per": 0.1,
+    "text": "Pháp tướng tăng thêm {v}% sát thương"
+   },
+   "skill.tamphap.thanh-tam.001": {
+    "kind": "exp",
+    "per": 0.05,
+    "text": "Nhận thêm {v}% tu vi khi hạ quái"
+   },
+   "skill.chieu.hoi-linh.001": {
+    "kind": "mp",
+    "per": 0.08,
+    "text": "Linh lực tối đa +{v}%"
+   },
+   "skill.than.lang-ba.001": {
+    "kind": "ne",
+    "per": 0.08,
+    "text": "Né tránh +{v}%"
+   }
+  }
  },
  "awaken": {
   "_ghi_chu": "Lab v3.2 — thức tỉnh TỪNG DÒNG: mỗi lần bấm thêm 1 dòng, màu (phẩm) của dòng bốc ngẫu nhiên theo tỷ lệ phẩm Lab (data/equipment/awaken.json → gearQ). Mỗi món có giới hạn dòng ẩn 1–10 (bốc lúc thức tỉnh lần đầu, KHÔNG báo trước); đủ giới hạn thì nút thức tỉnh tắt. Giá (Linh thạch) tăng theo số thứ tự dòng — số tạm.",

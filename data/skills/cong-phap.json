@@ -115,7 +115,21 @@
    "type": "tam-phap",
    "unlock": "lk1",
    "desc": "Tăng tốc tu luyện nhẹ",
-   "max_level": 5
+   "max_level": 5,
+   "learn": {
+    "inputs": [
+     {
+      "id": "item.thao.thanh-tam.001",
+      "count": 15
+     },
+     {
+      "id": "item.thao.linh-chi-non.001",
+      "count": 5
+     }
+    ],
+    "how": "Shop",
+    "_tam": "Nguyên liệu TẠM do Claude đặt — Lab chưa ghi"
+   }
   },
   {
    "id": "skill.chieu.hoi-linh.001",
@@ -123,7 +137,21 @@
    "type": "chieu-ho-tro",
    "unlock": "tc_so",
    "desc": "Hồi một phần Linh Lực",
-   "max_level": 5
+   "max_level": 5,
+   "learn": {
+    "inputs": [
+     {
+      "id": "item.thao.linh-chi-non.001",
+      "count": 20
+     },
+     {
+      "id": "item.thao.diem-chi.001",
+      "count": 5
+     }
+    ],
+    "how": "Shop",
+    "_tam": "Nguyên liệu TẠM do Claude đặt — Lab chưa ghi"
+   }
   },
   {
    "id": "skill.than.lang-ba.001",
@@ -131,7 +159,21 @@
    "type": "than-phap",
    "unlock": "kd_so",
    "desc": "Tăng Né + Tốc Chạy ngắn hạn",
-   "max_level": 5
+   "max_level": 5,
+   "learn": {
+    "inputs": [
+     {
+      "id": "item.thao.han-linh.001",
+      "count": 20
+     },
+     {
+      "id": "item.thao.bang-chi.001",
+      "count": 10
+     }
+    ],
+    "how": "Shop",
+    "_tam": "Nguyên liệu TẠM do Claude đặt — Lab chưa ghi"
+   }
   }
  ]
 }

@@ -3,15 +3,37 @@ const ZONE = { xanh: 'Vùng Xanh (đồng cỏ quanh thành)', cam: 'Vùng Cam (
   xam: 'Vùng Xám (sỏi đá)', than: 'Vùng Than (hắc thổ, dung nham)' };
 const RANK = { thuong: 'quái thường', elite: 'tinh anh', boss: 'boss' };
 
-export function createItemInfo({ monsters, shop, pills }) {
+const SLOT = { 'mat-na': 'Mặt nạ', 'trang-phuc': 'Trang phục', 'vu-khi': 'Vũ khí', nhan: 'Nhẫn', canh: 'Cánh', 'linh-thu': 'Linh thú', 'day-chuyen': 'Dây chuyền', 'phap-tuong': 'Pháp tướng' };
+const BUFF = { linh: 'Tấn công', def: 'Phòng thủ', pt_drain: 'Tiêu hao Pháp tướng' };
+
+export function createItemInfo({ monsters, shop, pills, blanks, realms, gp, cpText }) {
+  const blankById = new Map(blanks.blanks.map((b) => [b.id, b]));
+  const btOf = new Map(realms.realms.filter((r) => r.breakthrough).map((r) => [r.breakthrough.pill, r]));
+  // Công dụng của một viên đan (từ data/gameplay.json → pills, realms.json → đột phá)
+  function pillUse(p) {
+    const r = btOf.get(p.id);
+    if (r) return `Đột phá lên ${r.name} (tỷ lệ ${Math.round(r.breakthrough.rate * 100)}%) khi tu vi đã đến đỉnh`;
+    const e = gp.pills[p.id] || {};
+    if (e.heal_hp) return `Hồi ${Math.round(e.heal_hp * 100)}% khí huyết`;
+    if (e.heal_mp) return `Hồi ${Math.round(e.heal_mp * 100)}% linh lực`;
+    if (e.buff === 'pt_drain') return `Pháp tướng tiêu hao linh lực giảm ${Math.round((1 - e.mul) * 100)}% trong ${e.s} giây`;
+    if (e.buff) return `${BUFF[e.buff] || e.buff} +${Math.round((e.mul - 1) * 100)}% trong ${e.s} giây`;
+    return p.when;
+  }
   const sold = new Set(shop.stock.map((s) => s.id));
   const pillById = new Map(pills.pills.map((p) => [p.id, p]));
   const monName = new Map(monsters.map((m) => [m.id, m.name]));
   const effect = (d) => {
     if (d.use) return d.use;
-    if (d.teaches) return 'Giữ trong kho để luyện / tu luyện (không mất khi dùng)';
+    if (d.teaches) { // đan phương / công thức / bí kíp: nói thứ nó dạy làm được gì
+      const p = pillById.get(d.teaches);
+      if (p) return `Luyện ${p.name}: ${pillUse(p)}`;
+      const b = blankById.get(d.teaches);
+      if (b) return `Luyện phôi ${SLOT[b.slot]} — thức tỉnh để có chỉ số`;
+      return cpText(d.teaches) || '';
+    }
     const p = pillById.get(d.id);
-    if (p) return `Đan dược · dùng lúc: ${p.when}`;
+    if (p) return pillUse(p);
     return '';
   };
   function source(d) {
@@ -26,5 +48,5 @@ export function createItemInfo({ monsters, shop, pills }) {
     if (sold.has(d.id)) where.push('Bán ở Vạn Bảo Lâu (Thanh Vân Thành)');
     return where.join(' · ');
   }
-  return { effect, source, text: (d) => [effect(d), source(d) && `Nơi có: ${source(d)}`].filter(Boolean).join('\n') };
+  return { effect, source, cpText, text: (d) => [effect(d), source(d) && `Nơi có: ${source(d)}`].filter(Boolean).join('\n') };
 }
