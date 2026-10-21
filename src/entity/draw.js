@@ -15,7 +15,9 @@ const fallbackOutfit = (id = '') => {
 };
 
 export function drawPlayer(ctx, p, scale = 1) {
+  if (p.alpha === 0) return; // đã tàn mờ hẳn (chết)
   ctx.save();
+  if (p.alpha !== undefined) ctx.globalAlpha *= p.alpha;
   ctx.translate(p.x, p.y);
   ctx.scale(scale, scale);
   // Chưa mặc trang phục (người khác chưa gửi đồ, hoặc vừa tháo): mặc tạm 1 trong 6 bộ hệ theo mã người chơi — không còn hình khối cũ
@@ -80,6 +82,7 @@ export const setTextScale = (k) => { TS = k; };
 export const textScale = () => TS;
 
 export function drawLabel(ctx, p, now, scale = 1) {
+  if (p.alpha === 0) return;
   const x = Math.round(p.x);
   const head = hasLook(p.look) ? rigHeadHeight(knownLook(p.look)) : 33;
   const y = Math.round(p.y + 33 - head * scale - (p.look?.outfit ? (p.rig?.flyT || 0) * 8 : liftOf(p)) * scale); // bám theo đầu

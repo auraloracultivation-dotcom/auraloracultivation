@@ -18,6 +18,13 @@ export async function createCharacter(name) {
   return data;
 }
 
+// Hồi sinh: máy chủ đưa nhân vật về trận pháp giữa Thanh Vân Thành (điểm cố định, migration 0004)
+export async function respawnAtTown() {
+  const { data, error } = await supabase.rpc('respawn_at_town');
+  if (error) throw error;
+  return data;
+}
+
 // Máy chủ trả lại vị trí đã chấp nhận (có thể khác nếu bị từ chối).
 export async function savePosition(x, y) {
   const { data, error } = await supabase.rpc('save_position', { p_x: x, p_y: y });

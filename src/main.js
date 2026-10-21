@@ -238,7 +238,10 @@ async function boot() {
   const refreshAvatar = () => hud.setPortrait(renderPortrait(me.look, { body: true }));
   refreshAvatar();
   loading.set(90, 'Thả yêu thú vào rừng…');
-  game = await createGameplay({ loadJSON, map, me, hud, pt, toast, audio, userId: me.id, bag, onLook: () => onLookChanged(), onRealm: (r) => zone.setRealm(r) });
+  game = await createGameplay({ onRespawn: async () => { // máy chủ xác nhận vị trí hồi sinh (dịch chuyển xa bị chặn kiểm tốc độ)
+    try { const row = await net.respawnAtTown(); if (row) { me.x = row.x; me.y = row.y; } } catch (e) { console.warn('Hồi sinh máy chủ lỗi', e); }
+    zone.sendMove(me.x, me.y, false, false); hud.setToggle('bay', 0);
+  }, loadJSON, map, me, hud, pt, toast, audio, userId: me.id, bag, onLook: () => onLookChanged(), onRealm: (r) => zone.setRealm(r) });
   me.onAutoSwing = swing;
   const dock = createStatsDock({ getValue: (id) => game.statValue(id) });
   game.setDock(dock);

@@ -16,6 +16,7 @@ export async function getMyCharacter() {
 }
 export const createCharacter = getMyCharacter;
 export const savePosition = async () => null;
+export const respawnAtTown = async () => null;
 
 export async function joinZone({ me, handlers }) {
   setTimeout(() => handlers.onPresence({ [me.id]: [me] }), 0);
