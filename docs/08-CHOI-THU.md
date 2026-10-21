@@ -35,7 +35,8 @@ Phím máy tính: Space đánh, 1–5 kỹ năng, Q uống đan hồi máu.
 ## Thanh Vân Thành (vùng an toàn giữa bản đồ)
 - Bố cục ở `data/zones/zone.start.json` → `town`: `stamp` tô quảng trường đá + hào nước + 3 lối vào (cổng nam, cầu đông, cầu tây) lên bản đồ lúc tải (ảnh bản đồ gốc giữ nguyên);
   `props` đặt công trình (dx/dy = chân công trình so với tâm thành), `block` = vùng không đi xuyên.
-- Trong thành (`safe.half_px`): quái không sinh, không bước vào, không đuổi/đánh người đứng trong; hồi máu ×`regen_mul`.
+- Trong thành (`safe.half_px`): quái không sinh, không bước vào, không đuổi/đánh người đứng trong.
+- **Không tự hồi khí huyết** (yêu cầu chủ dự án 21/10): chỉ hồi bằng đan dược và hút máu khi đánh (hồi sinh thì đầy máu).
 - Hình công trình: tấm kiến trúc chủ dự án gửi, cắt bằng `tools/asset_build.py` → `assets/town/`. Code: `src/map/town.js`.
 - Mới là trang trí + vùng an toàn: chạm Lò luyện đan / Kho hàng / Tế đàn chưa mở bảng tương ứng.
 

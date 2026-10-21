@@ -63,7 +63,6 @@ export function createNpcs({ def, map, mobs, stats, stages }) {
         if (n.dead <= 0) { n.dead = 0; n.x = n.hx; n.y = n.hy; n.hp = n.st.hp; n.guardUntil = clock + def.revive_guard_s; }
         continue;
       }
-      if (!n.foe) n.hp = Math.min(n.st.hp, n.hp + n.st.hp * 0.03 * dt);
       if (n.state === 'talk') {
         const k = n.talk;
         if (k && !k.passive && clock >= k.next) {
