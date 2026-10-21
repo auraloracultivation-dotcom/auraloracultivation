@@ -18,6 +18,7 @@ import { createSkillBar } from './skillbar.js';
 import { createAutoPlay } from './autoplay.js';
 import { createSoul } from './soul.js';
 import { createLoot } from './loot.js';
+import { openCodex } from './codex.js';
 import { createGather } from './gather.js';
 import { createInventory } from './inventory.js';
 import { placeholderIcon, showRevive } from '../ui/index.js';
@@ -379,6 +380,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     speed: () => buffs.speed?.mul || null,
     toggleAuto() { if (dead) return; auto = !auto; autoDir = null; autoPlay.reset(); hud.setActive('auto', auto); toast(auto ? 'Tự động đánh: bật' : 'Tự động đánh: tắt', 1000); },
     healPill: () => usePill(HEAL_PILL), autoDir: () => (auto ? autoDir : null),
+    openCodex: () => openCodex({ loadJSON, gp, mats, pills, recipes, cp, monsters: monDef.monsters, blanks, qItems, artDef, info, cpText: cpFx.text, fxDuration }), // Đồ giám (nút sách)
     statValue: views.statValue, openQuests: views.openQuests, openCultivate: views.openCultivate,
     forgedLook,
     setDock(d) { views.refreshDock = d.refresh; },

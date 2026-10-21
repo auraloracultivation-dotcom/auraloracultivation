@@ -21,7 +21,7 @@ const ICON = (n) => `assets/ui/icons/${n}.png`;
 // Menu góc trên phải. id 'map' / 'settings' mở bảng; còn lại chưa có hệ thống → báo "sắp có"
 const MENU = [
   { id: 'map', name: 'Bản đồ', icon: 'ban-do-v2' },
-  { id: 'skills', name: 'Kỹ năng', icon: 'ky-nang' },
+  { id: 'skills', name: 'Đồ giám', icon: 'ky-nang' },
   { id: 'quests', name: 'Nhiệm vụ', icon: 'nhiem-vu' },
   { id: 'sect', name: 'Tông môn', icon: 'tong-mon' },
   { id: 'settings', name: 'Cài đặt', icon: 'cai-dat-v2' },
