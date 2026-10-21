@@ -1,6 +1,6 @@
 # Danh sách ảnh cần làm (xuất từ Đồ giám 21/10/2026)
 
-Tên file = cột **Mã** + `.png` (dấu `#` đổi thành `-`). Bỏ vào thư mục con theo cột **Thư mục**.
+Tên file = cột **Mã** + `.png` (dấu `#` đổi thành `-`). Bỏ vào thư mục ghi ở tiêu đề mỗi nhóm.
 Trạng thái: *Chưa có ảnh* = cần nhất · *Ảnh tạm* = đang dùng hình tạm, nên thay. Mục "Đã có ảnh" không liệt kê ở đây.
 
 ## Kỹ năng người → `assets/_gpt/kynang/`
