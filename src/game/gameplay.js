@@ -6,6 +6,7 @@ import { drawMonster, drawMonsterLabel, drawFx, drawNode, loadSprites, fxDuratio
 import { createNpcs } from './npcs.js';
 import { createItemInfo } from './iteminfo.js';
 import { createForgedArt } from './forged-art.js';
+import { createFxQueue } from './fxqueue.js';
 import { createProgress } from './progress.js';
 import { createStats } from './stats.js';
 import { createMonsters } from './monsters.js';
@@ -60,6 +61,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   me.shield = progress.state.shield ?? true; // khiên bảo vệ (mặc định bật)
   let hp = 0, dead = false, reviveT = 0, hurtAt = -99, attackCd = 0, auto = false, targetUid = null, pet = null, now = 0;
   const fx = [], bolts = [];
+  const { say, play } = createFxQueue(fx, fxDuration); // số bay trên đầu + hiệu ứng hình
 
   function recompute() {
     const b = {};
@@ -74,23 +76,20 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   }
   const cpBonus = (skill) => 1 + (progress.state.cp[SKILL_OF_CP[skill]] || 0) * S.cong_phap_bonus_per_level;
   const ptMul = () => (pt.active ? S['phap-tuong'].atk_mul : 1);
-  const say = (x, y, text, color, big = false) => fx.push({ kind: 'text', x, y, text, color, big, t: 0.9, life: 0.9 });
-  // Hiệu ứng hình (data/art/sprites.json → fx). ground: hình mọc từ mặt đất (đặt đáy ở chân). delay: chờ rồi mới chạy
-  const play = (id, x, y, h, { ground = false, delay = 0, rot = 0 } = {}) => {
-    const life = fxDuration(id);
-    fx.push({ kind: 'sprite', fx: id, x, y, h, lift: ground ? h / 2 : 0, rot, t: life, life, delay });
-  };
+  const HEAD = 30; // độ cao đầu nhân vật (điểm)
+  const healMe = (n) => { if (n > 0) { hp = Math.min(ps.hp, hp + n); say(me.x, me.y - HEAD, `+${Math.round(n)} hút máu`, '#5dff7a'); } };
   const midY = (m) => m.y - (m.def.art?.h || m.r * 2) / 2;
   const HIT_FX = { attack: ['chem-x', 18], 'kiem-khi': ['kiem-bang-no', 28], 'linh-thu': ['chem-x', 14] };
 
   // ---------- Người chơi đánh quái ----------
   function strike(m, mul, skill) {
     const r = stats.hit(ps, stats.monster(m), { atkMul: mul * ptMul() * cpBonus(skill) });
-    if (r.miss) { say(m.x, m.y - m.r * 2, 'Trượt', '#cfd6e6'); return; }
-    say(m.x, m.y - m.r * 2, r.crit ? `${r.dmg}!` : `${r.dmg}`, r.crit ? '#ffd23a' : '#ffffff', r.crit);
+    const top = m.y - (m.def.art?.h || m.r * 2) - 4;
+    if (r.miss) { say(m.x, top, 'Trượt', '#cfd6e6'); return; }
+    say(m.x, top, r.crit ? `Bạo kích -${r.dmg}` : `-${r.dmg}`, r.crit ? '#ffd23a' : '#ffffff', r.crit);
     const hf = HIT_FX[skill];
     if (hf) play(hf[0], m.x, midY(m), hf[1] * (r.crit ? 1.4 : 1));
-    if (r.heal) hp = Math.min(ps.hp, hp + r.heal);
+    healMe(r.heal);
     if (mobs.damage(m, r.dmg)) onKill(m);
   }
   function target(range) {
@@ -102,8 +101,9 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const canFight = () => !dead && !me.shield && now >= guardUntil && !map.safeAt(me.x, me.y);
   function strikeNpc(n) {
     const r = stats.hit(ps, n.st, { atkMul: ptMul() * cpBonus('attack') });
-    if (r.miss) return say(n.x, n.y - 20, 'Trượt', '#cfd6e6');
-    say(n.x, n.y - 20, r.crit ? `${r.dmg}!` : `${r.dmg}`, r.crit ? '#ffd23a' : '#ffffff', r.crit);
+    if (r.miss) return say(n.x, n.y - HEAD, 'Trượt', '#cfd6e6');
+    say(n.x, n.y - HEAD, r.crit ? `Bạo kích -${r.dmg}` : `-${r.dmg}`, r.crit ? '#ffd23a' : '#ffffff', r.crit);
+    healMe(r.heal);
     play('chem-x', n.x, n.y - 9, 18);
     if (npcs.damage(n, r.dmg, 'me')) { progress.addStone(PV.kill_stone); toast(`Hạ gục ${n.name} · +${PV.kill_stone} Linh thạch`, 1800); npcTarget = null; }
   }
@@ -168,21 +168,22 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     hitPlayer(m, mul) {
       const r = stats.hit(stats.monster(m), ps, { atkMul: mul, defMul: pt.active ? S['phap-tuong'].def_mul : 1 });
       hurtAt = now;
-      if (r.miss) { say(me.x, me.y - 22, 'Né', '#9fe8ff'); return; }
+      if (r.miss) { say(me.x, me.y - HEAD, 'Né', '#9fe8ff'); return; }
       hp -= r.dmg;
-      say(me.x, me.y - 22, `-${r.dmg}`, mul > 1 ? '#ff5a3a' : '#ff9a8a', mul > 1);
+      say(me.x, me.y - HEAD, `${mul > 1 ? 'Đòn nặng ' : r.crit ? 'Bạo kích ' : ''}-${r.dmg}`, mul > 1 ? '#ff5a3a' : '#ff9a8a', mul > 1 || r.crit);
       if (mul > 1) play(m.def.rank === 'boss' ? 'hoa-cot' : 'sao-den', me.x, me.y, m.def.rank === 'boss' ? 46 : 34, { ground: m.def.rank === 'boss' });
       else play('cham-mau', me.x, me.y - 12, 16);
-      if (r.reflect && mobs.damage(m, r.reflect)) onKill(m);
+      if (r.reflect) { say(m.x, m.y - (m.def.art?.h || m.r * 2) - 4, `Phản đòn -${r.reflect}`, '#c58cff'); if (mobs.damage(m, r.reflect)) onKill(m); }
       if (hp <= 0) die();
     },
-    dodged() { say(me.x, me.y - 22, 'Né đòn nặng!', '#7dff8a', true); quests.emit('dodge'); },
+    dodged() { say(me.x, me.y - HEAD, 'Né đòn nặng!', '#7dff8a', true); quests.emit('dodge'); },
   };
   function hitByNpc(n) {
     const r = stats.hit(n.st, ps, { defMul: pt.active ? S['phap-tuong'].def_mul : 1 });
     hurtAt = now;
-    if (r.miss) { say(me.x, me.y - 22, 'Né', '#9fe8ff'); return; }
-    hp -= r.dmg; say(me.x, me.y - 22, `-${r.dmg}`, '#ff9a8a'); play('cham-mau', me.x, me.y - 12, 16);
+    if (r.miss) { say(me.x, me.y - HEAD, 'Né', '#9fe8ff'); return; }
+    hp -= r.dmg; say(me.x, me.y - HEAD, `${r.crit ? 'Bạo kích ' : ''}-${r.dmg}`, '#ff9a8a', r.crit); play('cham-mau', me.x, me.y - 12, 16);
+    if (r.reflect) { say(n.x, n.y - HEAD, `Phản đòn -${r.reflect}`, '#c58cff'); npcs.damage(n, r.reflect, 'me'); }
     if (hp <= 0) { die(); toast(`Bị ${n.name} hạ gục`, 2500); }
   }
   function die() {
@@ -230,7 +231,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     if ((cds.pill || 0) > now) { toast('Đan dược đang hồi', 900); return false; }
     if (!progress.take(id, 1)) { toast(`Hết ${itemDefs.get(id)?.name || 'đan'}`, 1200); return false; }
     cds.pill = now + gp.pills.use_cooldown_s;
-    if (p.heal_hp) { hp = Math.min(ps.hp, hp + ps.hp * p.heal_hp); say(me.x, me.y - 22, `+${Math.round(ps.hp * p.heal_hp)}`, '#7dff8a'); }
+    if (p.heal_hp) { hp = Math.min(ps.hp, hp + ps.hp * p.heal_hp); say(me.x, me.y - HEAD, `+${Math.round(ps.hp * p.heal_hp)} khí huyết`, '#5dff7a', true); }
     if (p.heal_mp) pt.gain(ps.mp * p.heal_mp);
     if (p.buff === 'pt_drain') pt.setDrainMul(p.mul, p.s);
     else if (p.buff) { buffs[p.buff] = { mul: p.mul, until: now + p.s }; recompute(); }
@@ -276,7 +277,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     me.guarded = now < guardUntil;
     const inTown = map.safeAt(me.x, me.y);
     if (inTown !== wasInTown) { wasInTown = inTown; toast(inTown ? `Vào ${map.town.name} — vùng an toàn, quái không vào được` : `Rời ${map.town.name}`, 1800); }
-    if (!dead && (inTown || now - hurtAt > PL.regen_after_s)) hp = Math.min(ps.hp, hp + ps.hp * PL.regen_hp_per_s * (inTown ? map.town.regenMul : 1) * dt);
+    // Không tự hồi khí huyết (yêu cầu chủ dự án 21/10): chỉ hồi bằng đan dược và hút máu khi đánh
     env.alive = !dead;
     mobs.update(dt, env);
     npcs.update(dt, { me, playerCanFight: canFight, hitPlayer: hitByNpc });

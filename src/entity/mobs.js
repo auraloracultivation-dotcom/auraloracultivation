@@ -104,7 +104,7 @@ export function drawFx(ctx, fx, ox, oy) {
       ctx.save();
       ctx.globalAlpha = Math.min(1, f.t * 2);
       ctx.translate(x, y - (1 - f.t / f.life) * 18 * textScale()); ctx.scale(textScale(), textScale());
-      ctx.font = `bold ${f.big ? 9 : 7}px sans-serif`; ctx.textAlign = 'center';
+      ctx.font = `bold ${f.big ? 10 : 8}px sans-serif`; ctx.textAlign = 'center';
       ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(0,0,0,.85)'; ctx.fillStyle = f.color;
       ctx.strokeText(f.text, 0, 0); ctx.fillText(f.text, 0, 0);
       ctx.restore();
