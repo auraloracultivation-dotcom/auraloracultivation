@@ -68,7 +68,7 @@ Phím máy tính: Space đánh, 1–5 kỹ năng, Q uống đan hồi máu.
 - Ngoài thành, ai tắt khiên đều đánh được nhau: người chơi ↔ NPC, NPC ↔ NPC. Vừa hồi sinh được bảo vệ 10 giây. Trong thành không ai đánh được.
 - NPC có cảnh giới + khí huyết như người chơi; NPC tắt khiên tự tấn công người / NPC tắt khiên gần đó; gục thì hồi sinh ở nhà sau 20 giây. Hạ NPC +5 Linh thạch.
 - Chết: thân xác tàn mờ rồi **hoá linh hồn trắng** (`src/game/soul.js`): chỉ đi lại (tốc độ bằng bay, qua được nước), không tên, không thanh máu, không đánh / kỹ năng / ngự kiếm, quái không thấy.
-  Bảng chọn: **Về Thanh Vân Thành hồi sinh** (miễn phí, trận pháp giữa thành; máy chủ: RPC `respawn_at_town`, migration 0004 — chờ duyệt) hoặc **Hồi sinh tại đây** (Linh thạch = 10 + 5 × số tầng; `data/gameplay.json` → soul).
+  Bảng chọn: **Về Thanh Vân Thành hồi sinh** (miễn phí, trận pháp giữa thành; máy chủ: RPC `respawn_at_town`, migration 0004, đã cài 21/10) hoặc **Hồi sinh tại đây** (Linh thạch = 10 + 5 × số tầng; `data/gameplay.json` → soul).
   Người khác hiện vẫn thấy hình nhân vật thường (chưa gửi trạng thái linh hồn qua mạng).
 - **Người chơi thật ↔ người chơi thật chưa đánh được**: cần máy chủ xác nhận sát thương (Mốc 3).
 
