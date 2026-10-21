@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" shape-rendering="crispEdges">
+<rect width="1200" height="800" fill="#FF00FF"/>
+<!-- 6 elemental equipment icons, 3 columns x 2 rows; each cell 400x400 -->
+<g stroke="#24172F" stroke-width="12" stroke-linejoin="miter" stroke-linecap="square">
+<!-- WATER SWORD -->
+<g transform="translate(0 0)">
+<path d="M95 285 L270 80 L300 55 L285 105 L130 310 Z" fill="#68D9FF"/>
+<path d="M130 310 L285 105 L270 80 L95 285 Z" fill="#D9F8FF"/>
+<path d="M112 290 L155 325 L132 348 L90 312 Z" fill="#4D7BCE"/>
+<path d="M80 335 L145 270 L165 290 L100 355 Z" fill="#F4D67A"/>
+<rect x="88" y="345" width="22" height="75" transform="rotate(45 99 382)" fill="#7E4A35"/>
+<path d="M185 230 L212 246 L195 266 L170 248 Z" fill="#FFFFFF"/>
+</g>
+<!-- EARTH AXE -->
+<g transform="translate(400 0)">
+<path d="M190 100 L210 340 L235 355 L215 115 Z" fill="#87512E"/>
+<path d="M190 100 L110 120 L55 205 L145 195 L205 145 L265 195 L345 205 L290 120 L210 100 Z" fill="#C5A16B"/>
+<path d="M110 130 L75 190 L145 178 L190 138 Z" fill="#F4DDA1"/>
+<path d="M290 130 L325 190 L255 178 L215 138 Z" fill="#8A6A46"/>
+<rect x="168" y="325" width="70" height="24" fill="#F4D67A"/>
+</g>
+<!-- FIRE STAFF -->
+<g transform="translate(800 0)">
+<rect x="190" y="150" width="24" height="260" fill="#75472F"/>
+<path d="M202 45 L225 90 L270 95 L238 125 L247 170 L202 146 L160 170 L168 125 L135 95 L180 90 Z" fill="#FF6A25"/>
+<path d="M202 67 L216 98 L244 103 L222 122 L228 148 L202 132 L177 148 L182 122 L161 103 L189 98 Z" fill="#FFD34F"/>
+<path d="M202 87 L211 108 L230 111 L215 124 L219 140 L202 130 L185 140 L189 124 L174 111 L193 108 Z" fill="#FFF1A6"/>
+<rect x="176" y="285" width="52" height="18" fill="#D7A45B"/>
+</g>
+<!-- WOOD WHIP -->
+<g transform="translate(0 400)">
+<path d="M110 730 L140 700 L160 650 L185 620 L190 575 L220 540 L245 515 L275 530 L260 565 L235 585 L225 625 L195 650 L185 695 L160 730 Z" fill="#4E9C57"/>
+<path d="M125 715 L155 685 L170 645 L198 615 L205 580 L235 550" fill="none" stroke="#B6E66B" stroke-width="10"/>
+<path d="M90 720 L130 760 L160 730 L120 690 Z" fill="#9D6337"/>
+<path d="M235 550 L270 505 L300 520 L275 555 Z" fill="#D7F28B"/>
+</g>
+<!-- METAL SPEAR -->
+<g transform="translate(400 400)">
+<rect x="190" y="500" width="22" height="250" fill="#87512E"/>
+<path d="M201 455 L248 535 L218 530 L201 560 L183 530 L153 535 Z" fill="#D8E4EE"/>
+<path d="M201 455 L201 560 L183 530 L153 535 Z" fill="#FFFFFF"/>
+<path d="M176 610 L226 610 L226 628 L176 628 Z" fill="#E8C45E"/>
+<path d="M176 685 L226 685 L226 703 L176 703 Z" fill="#E8C45E"/>
+</g>
+<!-- LIGHTNING RING / ORB -->
+<g transform="translate(800 400)">
+<circle cx="202" cy="610" r="105" fill="#5D3D9B"/>
+<circle cx="202" cy="610" r="78" fill="#9A78F2"/>
+<circle cx="202" cy="610" r="48" fill="#D9C9FF"/>
+<path d="M215 485 L165 600 L205 595 L178 710 L250 580 L210 585 Z" fill="#FFF16A"/>
+<path d="M95 570 L130 570 M274 650 L310 650 M202 480 L202 455 M115 685 L135 665 M280 545 L300 525" fill="none" stroke="#FFF16A" stroke-width="10"/>
+</g>
+</g>
+<g fill="#24172F" font-family="monospace" font-size="24" font-weight="bold">
+<text x="20" y="35">THUY - KIEM</text><text x="420" y="35">THO - RUU</text><text x="820" y="35">HOA - TRUONG</text>
+<text x="20" y="435">MOC - TIEN</text><text x="420" y="435">KIM - THUONG</text><text x="820" y="435">LOI - LINH HOAN</text>
+</g>
+</svg>
