@@ -97,25 +97,27 @@ export function createViews(o) {
         <p class="need">${need(b.inputs)}</p>${btn('forge', b.id, 'Luyện phôi', own && ok && progress.has(b.inputs))}</div>`;
     }).join('');
   }
-  const linesText = (a) => a.lines.map((l) => `${STAT[l.k]} +${l.v}`).join(' · ');
+  // Dòng thức tỉnh, mỗi dòng tô màu phẩm riêng
+  const linesText = (a) => `<span class="ic-lines">${craft.norm(a).lines.map((l, n) => `<i class="ln tier-${l.t}">${n + 1}. ${STAT[l.k]} +${l.v}</i>`).join('')}</span>`;
+  const awakenBtn = (act, arg, a) => { const c = craft.awakenCost(a); return c === null ? btn(act, arg, 'Đã đạt giới hạn', false) : btn(act, arg, `Thức tỉnh dòng ${a.lines.length + 1} (${c} LT)`, st().stone >= c); };
   // Đồ trong Kho (6 hệ, có hình): thức tỉnh để có chỉ số, mặc/tháo như trong Kho
   function bagGearRows() {
     return o.bag.entries().map((e) => e.item).filter((it) => it.slot).map((it) => {
-      const a = st().itemAw[it.id] || { tier: null, lines: [], spent: 0 }, eq = o.bag.isEquipped(it), cost = craft.awakenCost(a);
+      const a = st().itemAw[it.id] || { tier: null, lines: [], spent: 0 }, eq = o.bag.isEquipped(it);
       return `<div class="row ${a.tier ? `tier-${a.tier}` : ''}"><div class="row-h"><b>${E(it.name)}</b><em>${SLOT[it.slot]}${a.tier ? ` · ${tierName(a.tier)}` : ''}${eq ? ' · đang mặc' : ''}</em></div>
-        <p>${a.tier ? linesText(a) : 'Chưa thức tỉnh — chưa có chỉ số'}</p>${btn('awakenItem', it.id, `${a.tier ? 'Thức tỉnh lại' : 'Thức tỉnh'} (${cost} LT)`, st().stone >= cost)}
+        <p>${a.tier ? linesText(a) : 'Chưa thức tỉnh — chưa có chỉ số'}</p>${awakenBtn('awakenItem', it.id, a)}
         ${btn('wearItem', it.id, eq ? 'Tháo' : 'Mặc')}</div>`;
     }).join('');
   }
   function gearTab() {
     const list = st().gear, kho = bagGearRows();
-    const head = `<div class="row"><p>Đồ trong Kho (có hình) và đồ luyện từ phôi đều thức tỉnh được. Mỗi ô chỉ mặc một món. Linh thạch: <b>${st().stone}</b></p></div>`;
+    const head = `<div class="row"><p>Mỗi lần thức tỉnh thêm 1 dòng, màu dòng ngẫu nhiên. Mỗi món có giới hạn 1–10 dòng không báo trước — chạm giới hạn thì nút tắt. Mỗi ô chỉ mặc một món. Linh thạch: <b>${st().stone}</b></p></div>`;
     if (!list.length && !kho) return `${head}<p class="bag-empty">Chưa có trang bị. Nhập mã quà trong Cài đặt để nhận đồ 6 hệ, hoặc luyện phôi.</p>`;
     return head + kho + list.map((g) => {
-      const eq = st().eq[g.slot] === g.uid, cost = craft.awakenCost(g);
-      const lines = g.lines.map((l) => `${STAT[l.k]} +${l.v}`).join(' · ') || 'Phôi trắng — chưa có chỉ số';
+      const eq = st().eq[g.slot] === g.uid;
+      const lines = g.lines.length ? linesText(g) : 'Phôi trắng — chưa có chỉ số';
       return `<div class="row ${g.tier ? `tier-${g.tier}` : ''}"><div class="row-h"><b>${ico(`slot.${g.slot}`)}${E(g.name)}</b><em>${SLOT[g.slot]}${g.tier ? ` · ${tierName(g.tier)}` : ''}${eq ? ' · đang mặc' : ''}</em></div>
-        <p>${lines}</p>${btn('awaken', g.uid, `${g.tier ? 'Thức tỉnh lại' : 'Thức tỉnh'} (${cost} LT)`, st().stone >= cost)}
+        <p>${lines}</p>${awakenBtn('awaken', g.uid, g)}
         ${g.tier ? btn('equip', g.uid, eq ? 'Tháo' : 'Trang bị') : ''} ${btn('dismantle', g.uid, 'Rã')}</div>`;
     }).join('');
   }

@@ -492,3 +492,9 @@ img { image-rendering: pixelated; }
 .pick-row .pick span { font-size: 10px; color: var(--text); text-align: center; line-height: 1.2; }
 .pick.tier-luc { border-color: #4caf50; } .pick.tier-lam { border-color: #3d8bff; } .pick.tier-tim { border-color: #b05cff; }
 .pick.tier-cam { border-color: #ff9a3d; } .pick.tier-vang { border-color: #ffd23a; } .pick.tier-do, .pick.tier-den { border-color: #ff3b30; }
+
+/* Dòng thức tỉnh: mỗi dòng một màu phẩm */
+.ic-lines { display: flex; flex-wrap: wrap; gap: 3px 8px; margin-top: 3px; }
+.ln { font-style: normal; font-size: 12px; font-weight: 700; }
+.ln.tier-luc { color: #6fdc76; } .ln.tier-lam { color: #6aa8ff; } .ln.tier-tim { color: #c58cff; } .ln.tier-cam { color: #ffa94d; }
+.ln.tier-vang { color: #ffd84a; } .ln.tier-do { color: #ff5a4a; } .ln.tier-den { color: #ff3b30; background: #111; padding: 0 3px; border-radius: 3px; }

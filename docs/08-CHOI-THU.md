@@ -27,6 +27,7 @@ Phím máy tính: Space đánh, 1–5 kỹ năng, Q uống đan hồi máu.
 - Vùng ↔ địa hình (`data/terrain.json` → `zone`): cỏ = Xanh, cát + đá lát = Cam, tuyết = Trắng, sỏi = Xám, hắc thổ + dung nham = Than.
 
 ## Trang bị và thức tỉnh
+- **Thức tỉnh từng dòng (Lab v3.2)**: mỗi lần bấm thêm 1 dòng, màu (phẩm) từng dòng ngẫu nhiên; mỗi món có giới hạn ẩn 1–10 dòng, chạm giới hạn thì nút tắt. Không còn thức tỉnh lại. Số ở `data/gameplay.json` → awaken.
 - Đồ 6 hệ trong Kho (có hình): **thức tỉnh được** ở Tu luyện → Thức tỉnh; dòng chỉ số lưu theo mã vật phẩm (`itemAw`).
 - Đồ luyện từ phôi: thức tỉnh có chỉ số, chưa có hình (chờ ảnh của chủ dự án).
 - Mỗi ô chỉ mặc một món: mặc đồ Kho thì tháo đồ phôi cùng ô, và ngược lại.
@@ -57,9 +58,15 @@ Phím máy tính: Space đánh, 1–5 kỹ năng, Q uống đan hồi máu.
 
 ## 50 NPC
 - `data/npcs.json`: tên, trang phục, vũ khí, nhà (22 trong thành, 28 dọc đường chính), lời tán gẫu, lời chào. Máy khách tự chạy (docs/01: NPC lấp chỗ trống).
-- Đi lại quanh nhà, đứng tán gẫu với nhau (bong bóng chat), luyện kiếm tại chỗ; NPC gan dạ ra vung vũ khí vào quái gần — chỉ hình, không sát thương, không lấy thưởng. Chạm NPC → chào.
+- Đi lại quanh nhà, tán gẫu, luyện kiếm; vung vào quái chỉ là hình. Cỡ bằng người chơi (`height_px`). Chạm NPC → chào (hoặc chọn làm mục tiêu nếu đánh được).
 - Trang phục/vũ khí NPC là hình RIÊNG (`assets/npcs`), **không phải vật phẩm game** — trang bị của người chơi hiện chỉ có 6 bộ hệ.
 - Chỉ NPC trong ~1600 điểm quanh người chơi mới chạy (nhẹ máy). Code: `src/game/npcs.js`, `src/entity/npc-draw.js`.
+
+## Khiên bảo vệ và đánh nhau
+- Sau tên có **khiên**: xanh = được bảo vệ (mặc định), đỏ gạch chéo = tắt. Chạm khiên của mình để tắt/bật (bật lại phải rời giao chiến 5 giây).
+- Ngoài thành, ai tắt khiên đều đánh được nhau: người chơi ↔ NPC, NPC ↔ NPC. Vừa hồi sinh được bảo vệ 10 giây. Trong thành không ai đánh được.
+- NPC có cảnh giới + khí huyết như người chơi; NPC tắt khiên tự tấn công người / NPC tắt khiên gần đó; gục thì hồi sinh ở nhà sau 20 giây. Hạ NPC +5 Linh thạch.
+- **Người chơi thật ↔ người chơi thật chưa đánh được**: cần máy chủ xác nhận sát thương (Mốc 3).
 
 ## Bảng Nhân vật: chạm ô trống
 Hiện bảng nhỏ nằm ngang các món trong kho mặc được vào ô đó; chọn là mặc ngay, bảng Nhân vật vẽ lại.

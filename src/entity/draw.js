@@ -6,6 +6,7 @@ export function liftOf(p) {
 }
 
 import { hasLook, knownLook, drawRig, rigHeadHeight } from './rig.js';
+import { drawShield } from './npc-draw.js';
 
 const fallbackOutfit = (id = '') => {
   let h = 0;
@@ -93,6 +94,11 @@ export function drawLabel(ctx, p, now, scale = 1) {
   ctx.fillStyle = p.isLocal ? '#ffe9a8' : '#ffffff';
   ctx.strokeText(p.name, 0, -2);
   ctx.fillText(p.name, 0, -2);
+  if (p.isLocal && p.shield !== undefined) { // khiên bảo vệ sau tên: chạm để bật / tắt (main.js → game.tap)
+    const sx = -ctx.measureText(p.name).width / 2 - 5;
+    drawShield(ctx, sx, -5, p.shield || p.guarded);
+    p.shieldAt = { x: x + sx * TS, y: y - 31 - 5 * TS, r: 6 * TS };
+  }
   // Cảnh giới phía trên tên; thanh khí huyết giữa tên và đầu (người khác chưa gửi HP → chỉ hiện cảnh giới)
   if (p.realm) {
     ctx.font = '600 5px sans-serif';
