@@ -145,6 +145,11 @@ async function boot() {
         onPick: (key) => { game.itemAction(key, 'equip'); reopen(); } }),
     });
   }
+  function land(msg) { // hạ cánh bắt buộc; đang trên nước/núi thì bước ra chỗ đứng được gần nhất
+    me.flying = false;
+    if (!map.canStand(me.x, me.y, config.player.radius_px)) ({ x: me.x, y: me.y } = map.nearestStand(me.x, me.y, config.player.radius_px, 30));
+    hud.setToggle('bay', 0); zone.sendMove(me.x, me.y, me.moving, false); toast(msg, 1600);
+  }
   function onLookChanged() { // đồ trên người đổi từ bảng Tu luyện
     if (pt.active && !bag.equippedItem('phap-tuong')) { pt.cancel(); phapTuongOff(); } else setLook();
   }
@@ -212,7 +217,9 @@ async function boot() {
       { id: 'luot', name: 'Lướt', icon: S('luot'), dx: -92, dy: -192, size: 50, locked: true, lockedHint: 'mở ở Kết Đan', onUse: () => game.skill('luot') },
       {
         id: 'bay', name: 'Bay', icons: [S('bay'), S('chay')], names: ['Bay', 'Chạy bộ'], dx: -34, dy: -200, size: 50,
-        onUse: (state) => { // hiện chỉ là hình ảnh, chưa đổi tốc độ / va chạm
+        onUse: (state) => { // ngự kiếm: phải cầm kiếm; bay tốn linh lực theo thời gian (data/config.json → player.fly_mp_per_s)
+          if (state === 1 && !me.look?.weapon) { toast('Cần trang bị kiếm mới ngự kiếm phi hành được', 1600); return 'keep'; }
+          if (state === 1 && pt.mp < 5) { toast('Linh lực không đủ để ngự kiếm', 1400); return 'keep'; }
           me.flying = state === 1;
           if (!me.flying && !map.canStand(me.x, me.y, radius)) { // đang trên nước/núi: chưa hạ được
             me.flying = true; toast('Không thể hạ xuống ở đây', 1400); return 'keep';
@@ -272,7 +279,8 @@ async function boot() {
       if (wasMoving) { zone.sendMove(me.x, me.y, false, me.flying); saver.saveNow(); sendTimer = sendEvery; }
     }
     saver.tick(dt, me.moving);
-    if (pt.tick(dt) === 'empty') phapTuongOff('Linh lực cạn — pháp tướng tan biến');
+    if (pt.tick(dt, me.flying) === 'empty') phapTuongOff('Linh lực cạn — pháp tướng tan biến');
+    if (me.flying && (!pt.spend(config.player.fly_mp_per_s * dt) || !me.look?.weapon)) land(me.look?.weapon ? 'Linh lực cạn — hạ xuống mặt đất' : 'Đã tháo kiếm — hạ xuống mặt đất');
     const mpNow = Math.round(pt.mp);
     if (mpNow !== shownMp) { shownMp = mpNow; hud.setBar('mp', mpNow, pt.max); }
     game.update(dt);

@@ -6,7 +6,7 @@ const SLOT = { 'mat-na': 'Mặt nạ', 'trang-phuc': 'Trang phục', 'vu-khi': '
   'day-chuyen': 'Dây chuyền', 'phap-tuong': 'Pháp tướng' };
 const STAT = { hp: 'Khí huyết', linh: 'Tấn công', def: 'Phòng thủ', xuyen: 'Xuyên giáp', crit: 'Bạo kích %', hut: 'Hút máu %', phan: 'Phản đòn %' };
 
-export function createInventory({ progress, bag, craft, itemDefs, awaken, gp, art, icon, fallbackIcon, onLook, recompute, usePill, openCultivate }) {
+export function createInventory({ info, progress, bag, craft, itemDefs, awaken, gp, art, icon, fallbackIcon, onLook, recompute, usePill, openCultivate }) {
   const st = () => progress.state;
   const tierName = (id) => awaken.tiers.find((t) => t.id === id)?.name || '';
   // Dòng chỉ số kèm màu phẩm của từng dòng (bag.js tô màu)
@@ -42,8 +42,9 @@ export function createInventory({ progress, bag, craft, itemDefs, awaken, gp, ar
     if (gp.pills[id]) actions.push({ id: 'use', label: 'Dùng' });
     if (d.teaches) actions.push({ id: 'learn', label: d.cat === 'cong-phap' ? 'Tu luyện' : 'Luyện' });
     actions.push({ id: 'discard', label: count > 1 ? `Vứt (${count})` : 'Vứt', danger: true, confirm: `Vứt bỏ ${d.name}${count > 1 ? ` ×${count}` : ''}?` });
-    return { ...d, key: `item:${id}`, thumb: icon(id) || fallbackIcon(d.name, d.group || 'nhiemvu'), count, sub: d.use || (d.teaches ? 'Giữ trong kho để luyện / tu luyện' : ''),
-      actions };
+    const src = info.source(d);
+    return { ...d, key: `item:${id}`, thumb: icon(id) || fallbackIcon(d.name, d.group || 'nhiemvu'), count, sub: `Tác dụng: ${info.effect(d) || '—'}`,
+      detail: src ? `Nơi có: ${src}` : '', actions };
   }
 
   function entries() {

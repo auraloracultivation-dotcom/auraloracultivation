@@ -98,6 +98,7 @@ export function createHud(opts) {
   for (const a of actions) {
     const btn = pad.querySelector(`[data-act="${a.id}"]`);
     let state = 0; // nút bật/tắt (vd. Bay ↔ Chạy): đổi ảnh + tên theo trạng thái
+    a.setState = (s) => { state = s; btn.querySelector('img').src = a.icons[s]; btn.setAttribute('aria-label', a.names[s]); };
     btn.addEventListener('pointerdown', (e) => {
       e.preventDefault();
       if (btn.classList.contains('locked')) { toast(`${a.name}: chưa mở${a.lockedHint ? ` — ${a.lockedHint}` : ''}`, 1400); return; }
@@ -219,6 +220,8 @@ export function createHud(opts) {
       g.restore();
     },
     setOnline(count, max) { online.textContent = `· ${count}/${max}`; },
+    // Đặt trạng thái nút bật/tắt từ ngoài (vd. hết linh lực → tự hạ cánh)
+    setToggle(id, s) { actions.find((a) => a.id === id)?.setState?.(s); },
     setRealm(text) { info.querySelector('[data-realm]').textContent = text; },
     // Khoá / mở nút kỹ năng theo cảnh giới
     setLocked(id, on) { pad.querySelector(`[data-act="${id}"]`)?.classList.toggle('locked', !!on); },

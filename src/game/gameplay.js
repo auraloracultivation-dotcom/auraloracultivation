@@ -4,6 +4,7 @@
 import { wrapDelta } from '../map/index.js';
 import { drawMonster, drawMonsterLabel, drawFx, drawNode, loadSprites, fxDuration, loadNpcArt, drawNpc, drawNpcLabel } from '../entity/index.js';
 import { createNpcs } from './npcs.js';
+import { createItemInfo } from './iteminfo.js';
 import { createProgress } from './progress.js';
 import { createStats } from './stats.js';
 import { createMonsters } from './monsters.js';
@@ -38,6 +39,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
   const owns = (id) => !teacher.has(id) || progress.count(teacher.get(id)) > 0;
   const craft = createCraft({ progress, pills, blanks, awaken, skills: cp, gp, owns });
   const gather = createGather({ gp, mats, map });
+  const info = createItemInfo({ monsters: monDef.monsters, shop, pills }); // tác dụng + nơi có của vật phẩm
   const npcs = createNpcs({ def: await loadJSON('data/npcs.json'), map, mobs, stats, stages: gp.player.stages });
   const PV = gp.pvp;
   gather.seed(me);
@@ -345,11 +347,11 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     return true;
   }
 
-  const views = createViews({ shop, owns, teacher, bag, onLook, monsters: monDef.monsters, progress, quests, craft, itemDefs, mats, pills, blanks, awaken, cp, realms, gp, toast,
+  const views = createViews({ info, shop, owns, teacher, bag, onLook, monsters: monDef.monsters, progress, quests, craft, itemDefs, mats, pills, blanks, awaken, cp, realms, gp, toast,
     getStats: () => ps, getHp: () => hp, onReward: (r) => { if (r.exp) addExp(r.exp); if (r.spiritStone) progress.addStone(r.spiritStone);
       for (const i of r.items || []) progress.add(i.id, i.count); }, recompute, usePill, emit: quests.emit });
 
-  const inv = createInventory({ progress, bag, craft, itemDefs, awaken, gp, art: (a) => artInfo(a)?.file, icon: iconUrl, fallbackIcon: placeholderIcon,
+  const inv = createInventory({ info, progress, bag, craft, itemDefs, awaken, gp, art: (a) => artInfo(a)?.file, icon: iconUrl, fallbackIcon: placeholderIcon,
     onLook, recompute, usePill, openCultivate: (tab) => views.openCultivate(tab) });
   function itemAction(key, action) {
     const r = inv.act(key, action);

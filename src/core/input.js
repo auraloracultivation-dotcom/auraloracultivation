@@ -23,6 +23,7 @@ export function createInput(canvas) {
     }
     stick.active = true;
     stick.id = e.pointerId;
+    stick.t0 = performance.now();
     stick.ox = e.clientX;
     stick.oy = e.clientY;
     stick.dx = stick.dy = 0;
@@ -45,6 +46,10 @@ export function createInput(canvas) {
       return;
     }
     if (e.pointerId !== stick.id) return;
+    // chạm nhanh, gần như không kéo → coi là chạm chọn (vd. khiên trên đầu, NPC bên trái)
+    if (e.type === 'pointerup' && performance.now() - stick.t0 < 300 && Math.hypot(e.clientX - stick.ox, e.clientY - stick.oy) < 12) {
+      taps.push({ x: e.clientX, y: e.clientY });
+    }
     stick.active = false;
     stick.dx = stick.dy = 0;
   };

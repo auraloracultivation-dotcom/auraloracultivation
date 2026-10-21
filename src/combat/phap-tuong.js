@@ -27,13 +27,14 @@ export function createPhapTuong(def) {
     // Thu lại không qua nút (vd. tháo pháp tướng ra khỏi người)
     cancel() { if (active) { active = false; cd = def.cooldown_s; } },
     // Mỗi khung hình. Trả về 'empty' đúng lúc linh lực cạn làm pháp tướng tan.
-    tick(dt) {
+    // noRegen: đang ngự kiếm → linh lực không tự hồi
+    tick(dt, noRegen = false) {
       clock += dt;
       if (cd > 0) cd = Math.max(0, cd - dt);
       if (active) {
         mp -= def.mp_drain_per_s * (clock < drainUntil ? drainMul : 1) * dt;
         if (mp <= 0) { mp = 0; active = false; cd = def.cooldown_s; return 'empty'; }
-      } else mp = Math.min(max, mp + def.mp_regen_per_s * dt);
+      } else if (!noRegen) mp = Math.min(max, mp + def.mp_regen_per_s * dt);
       return null;
     },
   };
