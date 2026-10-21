@@ -351,7 +351,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     getStats: () => ps, getHp: () => hp, onReward: (r) => { if (r.exp) addExp(r.exp); if (r.spiritStone) progress.addStone(r.spiritStone);
       for (const i of r.items || []) progress.add(i.id, i.count); }, recompute, usePill, emit: quests.emit });
 
-  const inv = createInventory({ info, progress, bag, craft, itemDefs, awaken, gp, art: (a) => artInfo(a)?.file, icon: iconUrl, fallbackIcon: placeholderIcon,
+  const inv = createInventory({ recipes: { pills: pills.pills, blanks: blanks.blanks, skills: cp.skills }, info, progress, bag, craft, itemDefs, awaken, gp, art: (a) => artInfo(a)?.file, icon: iconUrl, fallbackIcon: placeholderIcon,
     onLook, recompute, usePill, openCultivate: (tab) => views.openCultivate(tab) });
   function itemAction(key, action) {
     const r = inv.act(key, action);
