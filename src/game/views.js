@@ -188,6 +188,7 @@ export function createViews(o) {
     const can = !owned && left > 0 && st().stone >= s.price;
     const note = owned ? 'Đã có trong kho' : s.daily_limit ? `Hôm nay còn ${left}/${s.daily_limit}` : isRecipe ? 'Giữ trong kho để luyện' : `có ${progress.count(s.id)}`;
     return `<div class="row"><div class="row-h"><b>${ico(s.id)}${E(d.name)}${n > 1 ? ` ×${n}` : ''}</b><em>${note}</em></div>
+      <p class="src">${E(o.info.effect(d))}${o.info.source(d) ? `<br>Nơi có: ${E(o.info.source(d))}` : ''}</p>
       ${btn('buy', s.id, owned ? 'Đã có' : `Mua · ${s.price} LT`, can)}</div>`;
   }
   const SHOP_TABS = { dp: (d) => d.cat === 'dan-phuong', ct: (d) => d.cat === 'phap-khi', cp: (d) => d.cat === 'cong-phap', nl: (d) => !d.teaches };

@@ -498,3 +498,5 @@ img { image-rendering: pixelated; }
 .ln { font-style: normal; font-size: 12px; font-weight: 700; }
 .ln.tier-luc { color: #6fdc76; } .ln.tier-lam { color: #6aa8ff; } .ln.tier-tim { color: #c58cff; } .ln.tier-cam { color: #ffa94d; }
 .ln.tier-vang { color: #ffd84a; } .ln.tier-do { color: #ff5a4a; } .ln.tier-den { color: #ff3b30; background: #111; padding: 0 3px; border-radius: 3px; }
+.sheet .src { font-size: 11.5px; color: #bfb3d6 !important; }
+.item-card small { white-space: pre-line; }
