@@ -66,6 +66,7 @@ Phím máy tính: Space đánh, 1–5 kỹ năng, Q uống đan hồi máu.
 - Sau tên có **khiên**: xanh = được bảo vệ (mặc định), đỏ gạch chéo = tắt. Chạm khiên của mình để tắt/bật (bật lại phải rời giao chiến 5 giây).
 - Ngoài thành, ai tắt khiên đều đánh được nhau: người chơi ↔ NPC, NPC ↔ NPC. Vừa hồi sinh được bảo vệ 10 giây. Trong thành không ai đánh được.
 - NPC có cảnh giới + khí huyết như người chơi; NPC tắt khiên tự tấn công người / NPC tắt khiên gần đó; gục thì hồi sinh ở nhà sau 20 giây. Hạ NPC +5 Linh thạch.
+- Chết: nhân vật tàn mờ rồi biến mất, hết thời gian thì hồi sinh ở trận pháp giữa Thanh Vân Thành (máy chủ: RPC `respawn_at_town`, migration 0004).
 - **Người chơi thật ↔ người chơi thật chưa đánh được**: cần máy chủ xác nhận sát thương (Mốc 3).
 
 ## Ngự kiếm (bay)

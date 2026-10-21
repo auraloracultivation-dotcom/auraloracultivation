@@ -23,7 +23,7 @@ const MAJOR_OF = (id) => ({ lk: 0, tc: 1, kd: 2, na: 3, ht: 4 }[id.slice(0, 2)] 
 const rint = (a, b) => Math.round(a + Math.random() * (b - a));
 
 // bag: Kho đồ 6 hệ (src/ui/testbag.js) — đồ trong Kho thức tỉnh được; onLook(): báo main.js cập nhật hình mặc trên người
-export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio, userId, bag, onLook = () => {}, onRealm = () => {} }) {
+export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, hud, pt, toast, audio, userId, bag, onLook = () => {}, onRealm = () => {} }) {
   const [statsDef, gp, monDef, mats, pills, blanks, awaken, cp, questDef, qItems, realms] = await Promise.all([
     'data/stats.json', 'data/gameplay.json', 'data/monsters/monsters.json', 'data/items/materials.json', 'data/items/pills.json',
     'data/equipment/blanks.json', 'data/equipment/awaken.json', 'data/skills/cong-phap.json', 'data/quests/quests.json',
@@ -188,7 +188,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
   function die() {
     hp = 0; dead = true; reviveT = PL.revive_s; mobs.calmAll(); auto = false; hud.setActive('auto', false);
     if (pt.active) pt.cancel();
-    toast(`Trọng thương! Hồi phục sau ${PL.revive_s} giây`, 2500);
+    toast(`Tử vong! Hồi sinh ở trận pháp giữa thành sau ${PL.revive_s} giây`, 2500);
   }
 
   // ---------- Kỹ năng ----------
@@ -265,7 +265,14 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     now += dt;
     attackCd = Math.max(0, attackCd - dt);
     for (const [k, v] of Object.entries(buffs)) if (v.until <= now) { delete buffs[k]; recompute(); }
-    if (dead) { reviveT -= dt; if (reviveT <= 0) { dead = false; hp = ps.hp; guardUntil = now + PV.revive_guard_s; toast(`Đã hồi phục — được bảo vệ ${PV.revive_guard_s} giây`, 1600); } }
+    if (dead) { // chết: tàn mờ dần rồi biến mất, hết giờ thì hồi sinh ở trận pháp giữa thành
+      reviveT -= dt; me.alpha = Math.max(0, 1 - (PL.revive_s - reviveT) / 1.5);
+      if (reviveT <= 0) {
+        dead = false; hp = ps.hp; guardUntil = now + PV.revive_guard_s; me.alpha = 1;
+        if (map.town) { me.flying = false; me.x = map.town.cx; me.y = map.town.cy + 30; onRespawn(me.x, me.y); }
+        play('vong-lua', me.x, me.y - 8, 40); toast(`Hồi sinh tại trận pháp ${map.town?.name || ''} — được bảo vệ ${PV.revive_guard_s} giây`, 2000);
+      }
+    }
     me.guarded = now < guardUntil;
     const inTown = map.safeAt(me.x, me.y);
     if (inTown !== wasInTown) { wasInTown = inTown; toast(inTown ? `Vào ${map.town.name} — vùng an toàn, quái không vào được` : `Rời ${map.town.name}`, 1800); }
@@ -360,14 +367,10 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     if (r && typeof r === 'object') { toast(r.msg, 1600); if (r.event) quests.emit(...r.event); } else if (r) toast(r, 1500);
     progress.changed();
   }
-  // Người chơi cũ đã xong nhiệm vụ trước khi có đan phương/bí kíp trong phần thưởng → bù một lần
-  if (!progress.state.migrRecipes) {
-    for (const q of questDef.quests) if (progress.state.quests.done[q.id] && q.type !== 'daily') {
-      for (const i of q.rewards.items || []) if (teacher.has(itemDefs.get(i.id)?.teaches) && !progress.count(i.id)) progress.add(i.id, 1);
-    }
+  if (!progress.state.migrRecipes) { // người chơi cũ xong nhiệm vụ trước khi có đan phương trong thưởng → bù một lần
+    for (const q of questDef.quests) if (progress.state.quests.done[q.id] && q.type !== 'daily') for (const i of q.rewards.items || []) if (teacher.has(itemDefs.get(i.id)?.teaches) && !progress.count(i.id)) progress.add(i.id, 1);
     progress.state.migrRecipes = true; progress.changed();
   }
-  for (const g of progress.state.gear) ensureArt(g);
   hp = progress.state.hp ?? Infinity;
   recompute(); if (!Number.isFinite(hp) || hp <= 0) hp = ps.hp;
   progress.onChange(() => { for (const g of progress.state.gear) if (!g.art) ensureArt(g); views.refreshDock?.(); });
@@ -385,12 +388,7 @@ export async function createGameplay({ loadJSON, map, me, hud, pt, toast, audio,
     setDock(d) { views.refreshDock = d.refresh; },
     bagEntries: inv.entries, slotItem: inv.slotItem, slotCandidates: inv.slotCandidates, itemAction,
     openShop() { if (!map.safeAt(me.x, me.y)) return toast(`${shop.name} ở ${map.town?.name || 'trong thành'} — hãy vào thành`, 1800); views.openShop(); },
-    onProp(id) { // chạm công trình trong thành
-      if (id === 'kho-hang') { views.openShop(); return true; }
-      if (id === 'lo-luyen-dan') { views.openCultivate('dan'); return true; }
-      if (id === 'te-dan') { views.openCultivate('realm'); return true; }
-      return false;
-    },
+    onProp: (id) => { const f = { 'kho-hang': () => views.openShop(), 'lo-luyen-dan': () => views.openCultivate('dan'), 'te-dan': () => views.openCultivate('realm') }[id]; f?.(); return !!f; }, // chạm công trình
     realmName: () => progress.stageDef.name,
     markers: () => mobs.list.filter((m) => m.def.rank !== 'thuong' && m.state !== 'dead').map((m) => ({ x: m.x, y: m.y, boss: true })),
   };
