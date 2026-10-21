@@ -10,7 +10,8 @@ và gắn vào game qua Pull Request riêng. Game **không** đọc trực tiế
 3. Bỏ vào thư mục con theo nhóm: `thao/` `dan/` `phuong/` `congphap/` `kynang/` `quaiskill/` `quai/` `trangbi/` `phoi/` `npc/` `khac/`.
 4. Một tấm lưới nhiều món: đặt tên `luoi-<mô-tả>.png` và thêm file `luoi-<mô-tả>.txt` ghi thứ tự từng ô theo hàng
    (vd. `hàng 1: item.weapon.he.1, item.weapon.he.2, …`).
-5. PNG, nền hồng thuần **#FF00FF** (hoặc trong suốt). Không chữ, không khung, không watermark, không đổ bóng ra nền.
+5. **PNG nền trong suốt là tốt nhất.** Không làm được thì nền hồng #FF00FF; nền chuyển sắc / không thuần / màu khác **vẫn cứ đẩy lên** —
+   Claude sẽ tự tách nền. Đừng bỏ ảnh chỉ vì nền chưa chuẩn. Không chữ, không khung, không watermark.
 6. Ảnh gốc giữ nguyên, không nén mất chi tiết; ảnh bản mới thì đặt tên thêm `-v2`, `-v3` (không ghi đè bản cũ).
 
 ## Phong cách chung
