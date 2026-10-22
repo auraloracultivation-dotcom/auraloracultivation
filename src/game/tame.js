@@ -1,11 +1,12 @@
 // Thu phục quái (chủ dự án 23/10/2026) — THỬ NGHIỆM phía máy khách, thông số data/gameplay.json → tame.
 // Hạ quái (trừ Âm Hư) có `chance` quái quy phục: vào Kho (thẻ Thú cưng, hình chính con quái), tối đa `max_follow` con đi theo
-// cùng lúc. Thú đi theo tự đánh quái gần người chơi; quái chết do thú cưng vẫn tính cho người chơi (onKill).
+// cùng lúc. Thú đi lang thang quanh chủ, gặp quái thì chủ động xông vào cắn; quái đánh trả, thú ngã xuống thì revive_s giây sau
+// hồi sinh cạnh chủ (chủ dự án 23/10). Quái chết do thú cưng vẫn tính cho người chơi (onKill).
 // Lưu progress.state.pets = [{ uid, mid, stage, atk, follow }] — Mốc 4 lên máy chủ.
 import { wrapDelta } from '../map/index.js';
 import { drawMonster, sheetThumb } from '../entity/index.js';
 
-export function createTame({ cfg, progress, monsters, mobs, map, me, stats, gp, toast, say, play, onKill, placeholder, suppress = () => 1 }) {
+export function createTame({ cfg, progress, monsters, mdef, mobs, map, me, stats, gp, toast, say, play, onKill, placeholder, suppress = () => 1 }) {
   const defOf = new Map(monsters.map((d) => [d.id, d]));
   const pets = () => (progress.state.pets ||= []);
   const following = () => pets().filter((p) => p.follow);
@@ -28,51 +29,110 @@ export function createTame({ cfg, progress, monsters, mobs, map, me, stats, gp, 
     const art = d.art && { ...d.art, h: Math.min(cfg.max_h, (d.art.h || 20) * cfg.scale) };
     return { ...d, art };
   }
+  // Chỉ số chiến đấu của thú: theo tầng + cấp (thường/tinh anh/boss) lúc bắt; khí huyết × hp_mul
+  function battle(p) {
+    const d = defOf.get(p.mid), ss = mdef.stage_stats[p.stage], rm = mdef.rank_mul[d?.rank] || mdef.rank_mul.thuong;
+    if (!ss) return { hp: 100, dfn: 5 };
+    return { hp: Math.round(ss.hp * rm.hp * (d?.mul || 1) * cfg.hp_mul), dfn: Math.round(ss.def * rm.def * (d?.mul || 1)) };
+  }
   const st = (p) => {
     let s = live.get(p.uid);
-    if (!s) { s = { uid: p.uid, x: me.x, y: me.y, facing: 1, moving: false, walkT: 0, atkT: 0, hitT: 0, state: 'idle', next: 0, r: 6 }; live.set(p.uid, s); }
+    if (!s) {
+      const b = battle(p);
+      s = { uid: p.uid, x: me.x, y: me.y, facing: 1, moving: false, walkT: 0, atkT: 0, hitT: 0, state: 'idle', next: 0, r: 6,
+        hp: b.hp, maxHp: b.hp, dfn: b.dfn, mode: 'roam', wx: me.x, wy: me.y, pause: Math.random() * 2, foe: null, deadT: 0, revive: 0 };
+      live.set(p.uid, s);
+    }
     return s;
   };
+  const rel = (a, b) => ({ dx: wrapDelta(a.x - b.x, map.width), dy: wrapDelta(a.y - b.y, map.height) });
+  const dist = (a, b) => { const r = rel(a, b); return Math.hypot(r.dx, r.dy); };
+  function walk(s, tx, ty, speed, dt) {
+    const { dx, dy } = rel({ x: tx, y: ty }, s), L = Math.hypot(dx, dy);
+    s.moving = L > 3;
+    if (!s.moving) return true;
+    const k = Math.min(L, speed * dt) / L;
+    s.x = map.wrapX(s.x + dx * k); s.y = map.wrapY(s.y + dy * k); s.walkT += dt;
+    if (Math.abs(dx) > 1) s.facing = dx > 0 ? 1 : -1;
+    return false;
+  }
 
   let t = 0;
   function update(dt, alive) {
     t += dt;
     const list = following();
-    list.forEach((p, i) => {
-      const s = st(p), d = defOf.get(p.mid); if (!d) return;
-      s.atkT = Math.max(0, s.atkT - dt);
-      // mục tiêu: quái gần người chơi trong tầm
-      const m = alive && mobs.nearest(me, cfg.range_px);
-      let tx, ty;
-      if (m) { tx = m.x - Math.sign(wrapDelta(m.x - s.x, map.width) || 1) * (m.r + 8); ty = m.y + 2; }
-      else { // đội hình vòng cung sau lưng
-        const a = Math.PI * (0.55 + (i / Math.max(1, list.length - 1 || 1)) * 0.9) * (me.facing > 0 ? 1 : -1);
-        tx = me.x + Math.cos(a) * 30 - me.facing * 6; ty = me.y + Math.sin(Math.abs(a)) * 10 - 4 + (i % 2) * 6;
+    for (const p of list) {
+      const s = st(p), d = defOf.get(p.mid); if (!d) continue;
+      const name = d.name;
+      s.atkT = Math.max(0, s.atkT - dt); s.hitT = Math.max(0, s.hitT - dt);
+      if (s.mode === 'dead') { // ngã xuống: hồi sinh sau revive_s giây cạnh chủ
+        s.deadT = Math.max(0, s.deadT - dt); s.revive -= dt;
+        if (s.revive <= 0) {
+          Object.assign(s, { mode: 'roam', state: 'idle', hp: s.maxHp, x: map.wrapX(me.x - me.facing * 16), y: me.y + 4, foe: null, pause: 1 });
+          play('vong-lua', s.x, s.y - 6, 30); say(s.x, s.y - 20, `${name} hồi sinh`, '#7dff8a');
+        }
+        continue;
       }
-      let dx = wrapDelta(tx - s.x, map.width), dy = wrapDelta(ty - s.y, map.height);
-      const dist = Math.hypot(dx, dy);
-      if (Math.hypot(wrapDelta(me.x - s.x, map.width), wrapDelta(me.y - s.y, map.height)) > cfg.leash_px) { s.x = me.x; s.y = me.y; dx = dy = 0; } // lạc xa: dịch tới chủ
-      const step = Math.min(dist, (cfg.speed_px + (dist > 60 ? 120 : 0)) * dt);
-      s.moving = dist > 4;
-      if (s.moving) { s.x = map.wrapX(s.x + (dx / dist) * step); s.y = map.wrapY(s.y + (dy / dist) * step); s.walkT += dt; if (Math.abs(dx) > 1) s.facing = dx > 0 ? 1 : -1; }
-      if (m && mobs.distTo(m, s) <= m.r + 16 && t >= s.next) { // cắn
-        s.next = t + cfg.every_s; s.atkT = 0.5; s.facing = wrapDelta(m.x - s.x, map.width) >= 0 ? 1 : -1;
-        const r = stats.hit(stats.monster({ atk: p.atk * cfg.atk_mul * suppress(m, p), dfn: 0 }), stats.monster(m)); // thú cũng bị áp chế
-        if (r.miss) return;
-        say(m.x, m.y - (m.def.art?.h || 20) - 2, `-${r.dmg}`, '#b6ff9a');
-        if (mobs.damage(m, r.dmg)) onKill(m);
+      if (dist(me, s) > cfg.leash_px) { s.x = me.x; s.y = me.y; s.foe = null; } // lạc quá xa: về cạnh chủ
+      // Chủ động: quái gần thú (trong tầm nhìn của thú) và không quá xa chủ thì xông vào
+      let m = s.foe && mobs.list.find((x) => x.uid === s.foe && x.state !== 'dead');
+      if (m && dist(m, me) > cfg.range_px * 1.4) m = null; // đuổi xa quá thì thôi
+      if (!m && alive) m = mobs.nearest(s, cfg.aggro_px, (x) => !x.void && dist(x, me) <= cfg.range_px);
+      s.foe = m ? m.uid : null;
+      if (m) {
+        s.mode = 'fight';
+        const side = Math.sign(rel(s, m).dx) || 1;
+        const near = walk(s, map.wrapX(m.x + side * (m.r + 7)), m.y + 2, cfg.speed_px, dt);
+        if ((near || dist(m, s) <= m.r + 14) && t >= s.next) { // cắn
+          s.next = t + cfg.every_s; s.atkT = 0.5; s.facing = rel(m, s).dx >= 0 ? 1 : -1;
+          const r = stats.hit(stats.monster({ atk: p.atk * cfg.atk_mul * suppress(m, p), dfn: 0 }), stats.monster(m)); // thú cũng bị áp chế
+          if (!r.miss) { say(m.x, m.y - (m.def.art?.h || 20) - 2, `-${r.dmg}`, '#b6ff9a'); if (mobs.damage(m, r.dmg)) { onKill(m); s.foe = null; continue; } }
+          m.petFoe = s.uid;
+        }
+        // Quái bị thú cắn thì đánh trả (khi đứng sát thú)
+        if (m.petFoe === s.uid && dist(m, s) <= m.r + 18 && t >= (m.petHitAt || 0)) {
+          m.petHitAt = t + cfg.mob_hit_s; m.atkT = 0.5; m.facing = rel(s, m).dx >= 0 ? 1 : -1;
+          const r = stats.hit(stats.monster(m), stats.monster({ atk: 0, dfn: s.dfn }));
+          if (!r.miss) {
+            s.hp -= r.dmg; s.hitT = 0.15; say(s.x, s.y - 18, `-${r.dmg}`, '#ff9a8a');
+            if (s.hp <= 0) {
+              Object.assign(s, { mode: 'dead', state: 'dead', deadT: 0.9, revive: cfg.revive_s, foe: null, moving: false });
+              m.petFoe = null; toast(`${name} ngã xuống — hồi sinh sau ${cfg.revive_s} giây`, 1600);
+            }
+          }
+        }
+        continue;
       }
-    });
+      // Tự do: đi lang thang quanh chủ, dừng nghỉ một lát rồi đi chỗ khác; chủ đi xa thì chạy theo
+      s.mode = 'roam';
+      const far = dist(me, s) > cfg.wander_r * 1.6;
+      if (far) { walk(s, me.x - me.facing * 14, me.y + 4, cfg.speed_px + 60, dt); s.pause = 0.3; continue; }
+      if (s.pause > 0) { s.pause -= dt; s.moving = false; continue; }
+      if (walk(s, s.wx, s.wy, cfg.wander_speed, dt)) {
+        const a = Math.random() * Math.PI * 2, r = 18 + Math.random() * cfg.wander_r;
+        s.wx = map.wrapX(me.x + Math.cos(a) * r); s.wy = map.wrapY(me.y + Math.sin(a) * r * 0.6);
+        if (!map.canStand(s.wx, s.wy, 3)) { s.wx = me.x; s.wy = me.y + 6; }
+        s.pause = 0.8 + Math.random() * 2.2;
+      }
+    }
     for (const uid of live.keys()) if (!list.some((p) => p.uid === uid)) live.delete(uid);
   }
 
   function render(ctx, at, now) {
     for (const p of following()) {
       const s = live.get(p.uid), d = look(p); if (!s || !d) continue;
-      const q = at(s);
-      drawMonster(ctx, { ...s, def: d, r: 5, hp: 1, maxHp: 1 }, q.x, q.y, now);
+      const q = at(s), top = q.y - (d.art?.h || 12) - 2;
+      if (s.mode === 'dead') { // ngã xuống: hoạt ảnh chết rồi chỉ còn số giây hồi sinh
+        if (s.deadT > 0) drawMonster(ctx, { ...s, def: d, r: 5 }, q.x, q.y, now);
+        ctx.fillStyle = '#c9f5d0'; ctx.font = 'bold 6px sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText(`↻ ${Math.ceil(s.revive)}s`, q.x, q.y - 6);
+        continue;
+      }
+      drawMonster(ctx, { ...s, def: d, r: 5 }, q.x, q.y, now);
+      ctx.fillStyle = 'rgba(0,0,0,.6)'; ctx.fillRect(q.x - 9, top - 1, 18, 3); // thanh máu thú
+      ctx.fillStyle = '#5dff7a'; ctx.fillRect(q.x - 8.5, top - 0.5, 17 * Math.max(0, s.hp / s.maxHp), 2);
       ctx.fillStyle = '#7dff8a'; ctx.font = 'bold 6px sans-serif'; ctx.textAlign = 'center'; // dấu thú cưng
-      ctx.fillText('♥', q.x, q.y - (d.art?.h || 12) - 2);
+      ctx.fillText('♥', q.x, top - 2);
     }
   }
 
@@ -87,7 +147,7 @@ export function createTame({ cfg, progress, monsters, mobs, map, me, stats, gp, 
     ];
     return { id: `pet:${p.uid}`, key: `pet:${p.uid}`, name: d.name, cat: 'thu-cung', thumb, equipped: p.follow,
       sub: `Thú cưng · ${stageName(p.stage)}${p.follow ? ' · đang đi theo' : ''}`,
-      detail: `Tự đánh quái gần bạn: công ${Math.round(p.atk * cfg.atk_mul)} mỗi ${cfg.every_s} giây. Không mất máu.`, actions };
+      detail: `Đi lang thang quanh bạn, gặp quái là xông vào cắn: công ${Math.round(p.atk * cfg.atk_mul)} mỗi ${cfg.every_s} giây · khí huyết ${battle(p).hp}. Ngã xuống thì ${cfg.revive_s} giây sau hồi sinh.`, actions };
   }
   const entries = () => pets().map((p) => ({ item: entry(p), count: 1 }));
   function act(key, action) {
@@ -101,5 +161,5 @@ export function createTame({ cfg, progress, monsters, mobs, map, me, stats, gp, 
     if (action === 'pet-free' || action === 'discard') { progress.state.pets = pets().filter((x) => x !== p); progress.changed(); return `Đã thả ${name} về rừng`; }
     return null;
   }
-  return { tryTame, update, render, entries, act, isPet: (key) => key.startsWith('pet:') };
+  return { tryTame, update, render, entries, act, isPet: (key) => key.startsWith('pet:'), live };
 }

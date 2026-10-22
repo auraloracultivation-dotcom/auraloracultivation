@@ -204,7 +204,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     else if (!map.canStand(me.x, me.y, 4)) ({ x: me.x, y: me.y } = map.nearestStand(me.x, me.y, 4, 30));
     play('vong-lua', me.x, me.y - 8, 40); toast(`Hồi sinh${here ? ' tại chỗ' : ` tại trận pháp ${map.town?.name || ''}`} — được bảo vệ ${PV.revive_guard_s} giây`, 2000);
   }
-  const tame = createTame({ cfg: gp.tame, progress, monsters: monDef.monsters, mobs, map, me, stats, gp, toast, say: (...a) => say(...a), play: (...a) => play(...a), onKill: (m) => onKill(m), placeholder: placeholderIcon, suppress: (m, p) => gapR.mul(m.stage, p.stage) });
+  const tame = createTame({ cfg: gp.tame, progress, monsters: monDef.monsters, mdef: monDef, mobs, map, me, stats, gp, toast, say: (...a) => say(...a), play: (...a) => play(...a), onKill: (m) => onKill(m), placeholder: placeholderIcon, suppress: (m, p) => gapR.mul(m.stage, p.stage) });
   const soul = createSoul({ me, hud, progress, cfg: gp.soul, townName: map.town?.name || 'thành', toast, showRevive, onRevive: revive });
 
   // ---------- Kỹ năng (src/game/skills.js) + ô tự xếp (loadout.js) ----------
@@ -381,7 +381,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     wallet, life, // tiền tệ (Kho / Vạn Bảo Lâu) + thọ nguyên
     reincarnate() { progress.reset(); life.reborn(); progress.flush(); }, // tọa hóa → chuyển thế: xoá tiến trình (main.js xoá thêm Kho rồi tải lại)
     stunned: () => now < stunUntil,
-    _debug: { me, map, progress, mobs, voids, mdef: monDef, bag, gather, npcs, die, get hp() { return hp; }, get ps() { return ps; } }, // chỉ cho kiểm thử (?debug)
+    _debug: { me, map, progress, mobs, voids, mdef: monDef, bag, gather, npcs, die, tame, get hp() { return hp; }, get ps() { return ps; } }, // chỉ cho kiểm thử (?debug)
     speed: () => buffs.speed?.mul || null,
     toggleAuto() { if (dead) return; auto = !auto; autoDir = null; autoPlay.reset(); hud.setActive('auto', auto); toast(auto ? 'Tự động đánh: bật' : 'Tự động đánh: tắt', 1000); },
     healPill: () => usePill(HEAL_PILL), autoDir: () => (auto ? autoDir : null),
