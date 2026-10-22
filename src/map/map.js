@@ -94,15 +94,16 @@ export async function createMap(def, terrainDef, tilesDef, art = {}) {
             const hx = gx * g + i, hy = gy * g + j;
             const [sx, sy] = opts[Math.floor(hash(hx, hy) * opts.length)];
             const dx = tx * T + i * st, dy = ty * T + j * st;
-            // chồng 0.5 để không hở khe trên màn hình mật độ lẻ
+            // đất: vẽ khít, không chồng (khe lẻ lộ nền xám đen cùng màu viền); nước: chồng 0.5 cho liền
+            const ov = isWater[kind] ? 0.5 : 0;
             if (!isWater[kind] && hash(hy, hx) > 0.5) {
               ctx.save();
               ctx.translate(dx + st, dy);
               ctx.scale(-1, 1);
-              ctx.drawImage(atlas, sx, sy, S, S, 0, 0, st + 0.5, st + 0.5);
+              ctx.drawImage(atlas, sx, sy, S, S, 0, 0, st + ov, st + ov);
               ctx.restore();
             } else {
-              ctx.drawImage(atlas, sx, sy, S, S, dx, dy, st + 0.5, st + 0.5);
+              ctx.drawImage(atlas, sx, sy, S, S, dx, dy, st + ov, st + ov);
             }
           }
         }

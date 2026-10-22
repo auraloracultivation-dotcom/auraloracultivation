@@ -15,23 +15,67 @@
       "grid": 2,
       "tiles": [
         [
-          "co-1",
-          10
-        ],
-        [
-          "co-2",
+          "v2-xanh-co-1",
           1
         ],
         [
-          "co-3",
-          2
-        ],
-        [
-          "co-4",
+          "v2-xanh-co-2",
           1
         ],
         [
-          "co-5",
+          "v2-xanh-co-3",
+          1
+        ],
+        [
+          "v2-xanh-co-4",
+          1
+        ],
+        [
+          "v2-xanh-co-5",
+          1
+        ],
+        [
+          "v2-xanh-co-6",
+          1
+        ],
+        [
+          "v2-xanh-co-7",
+          1
+        ],
+        [
+          "v2-xanh-co-8",
+          1
+        ],
+        [
+          "v2-xanh-co-9",
+          1
+        ],
+        [
+          "v2-xanh-co-10",
+          1
+        ],
+        [
+          "v2-xanh-co-11",
+          1
+        ],
+        [
+          "v2-xanh-co-12",
+          1
+        ],
+        [
+          "v2-xanh-co-13",
+          1
+        ],
+        [
+          "v2-xanh-co-14",
+          1
+        ],
+        [
+          "v2-xanh-co-15",
+          1
+        ],
+        [
+          "v2-xanh-co-16",
           1
         ]
       ],
@@ -92,23 +136,67 @@
       "grid": 2,
       "tiles": [
         [
-          "cat-1",
-          3
-        ],
-        [
-          "cat-2",
-          4
-        ],
-        [
-          "cat-3",
-          3
-        ],
-        [
-          "cat-4",
+          "v2-cam-cat-1",
           1
         ],
         [
-          "cat-5",
+          "v2-cam-cat-2",
+          1
+        ],
+        [
+          "v2-cam-cat-3",
+          1
+        ],
+        [
+          "v2-cam-cat-4",
+          1
+        ],
+        [
+          "v2-cam-cat-5",
+          1
+        ],
+        [
+          "v2-cam-cat-6",
+          1
+        ],
+        [
+          "v2-cam-cat-7",
+          1
+        ],
+        [
+          "v2-cam-cat-8",
+          1
+        ],
+        [
+          "v2-cam-cat-9",
+          1
+        ],
+        [
+          "v2-cam-cat-10",
+          1
+        ],
+        [
+          "v2-cam-cat-11",
+          1
+        ],
+        [
+          "v2-cam-cat-12",
+          1
+        ],
+        [
+          "v2-cam-cat-13",
+          1
+        ],
+        [
+          "v2-cam-cat-14",
+          1
+        ],
+        [
+          "v2-cam-cat-15",
+          1
+        ],
+        [
+          "v2-cam-cat-16",
           1
         ]
       ],
@@ -157,24 +245,68 @@
       "grid": 2,
       "tiles": [
         [
-          "da-lat-1",
-          6
-        ],
-        [
-          "da-lat-2",
-          2
-        ],
-        [
-          "da-lat-3",
-          2
-        ],
-        [
-          "da-lat-4",
+          "v2-cam-cat-1",
           1
         ],
         [
-          "da-lat-5",
-          2
+          "v2-cam-cat-2",
+          1
+        ],
+        [
+          "v2-cam-cat-3",
+          1
+        ],
+        [
+          "v2-cam-cat-4",
+          1
+        ],
+        [
+          "v2-cam-cat-5",
+          1
+        ],
+        [
+          "v2-cam-cat-6",
+          1
+        ],
+        [
+          "v2-cam-cat-7",
+          1
+        ],
+        [
+          "v2-cam-cat-8",
+          1
+        ],
+        [
+          "v2-cam-cat-9",
+          1
+        ],
+        [
+          "v2-cam-cat-10",
+          1
+        ],
+        [
+          "v2-cam-cat-11",
+          1
+        ],
+        [
+          "v2-cam-cat-12",
+          1
+        ],
+        [
+          "v2-cam-cat-13",
+          1
+        ],
+        [
+          "v2-cam-cat-14",
+          1
+        ],
+        [
+          "v2-cam-cat-15",
+          1
+        ],
+        [
+          "v2-cam-cat-16",
+          1
         ]
       ],
       "zone": "cam",
@@ -224,23 +356,67 @@
       "grid": 2,
       "tiles": [
         [
-          "tuyet-1",
-          4
+          "v2-trang-tuyet-1",
+          1
         ],
         [
-          "tuyet-2",
-          3
+          "v2-trang-tuyet-2",
+          1
         ],
         [
-          "tuyet-3",
-          2
+          "v2-trang-tuyet-3",
+          1
         ],
         [
-          "tuyet-4",
-          2
+          "v2-trang-tuyet-4",
+          1
         ],
         [
-          "tuyet-5",
+          "v2-trang-tuyet-5",
+          1
+        ],
+        [
+          "v2-trang-tuyet-6",
+          1
+        ],
+        [
+          "v2-trang-tuyet-7",
+          1
+        ],
+        [
+          "v2-trang-tuyet-8",
+          1
+        ],
+        [
+          "v2-trang-tuyet-9",
+          1
+        ],
+        [
+          "v2-trang-tuyet-10",
+          1
+        ],
+        [
+          "v2-trang-tuyet-11",
+          1
+        ],
+        [
+          "v2-trang-tuyet-12",
+          1
+        ],
+        [
+          "v2-trang-tuyet-13",
+          1
+        ],
+        [
+          "v2-trang-tuyet-14",
+          1
+        ],
+        [
+          "v2-trang-tuyet-15",
+          1
+        ],
+        [
+          "v2-trang-tuyet-16",
           1
         ]
       ],
@@ -279,23 +455,67 @@
       "grid": 2,
       "tiles": [
         [
-          "soi-1",
-          4
-        ],
-        [
-          "soi-2",
-          3
-        ],
-        [
-          "soi-3",
-          3
-        ],
-        [
-          "soi-4",
+          "v2-xam-khoi-1",
           1
         ],
         [
-          "soi-5",
+          "v2-xam-khoi-2",
+          1
+        ],
+        [
+          "v2-xam-khoi-3",
+          1
+        ],
+        [
+          "v2-xam-khoi-4",
+          1
+        ],
+        [
+          "v2-xam-khoi-5",
+          1
+        ],
+        [
+          "v2-xam-khoi-6",
+          1
+        ],
+        [
+          "v2-xam-khoi-7",
+          1
+        ],
+        [
+          "v2-xam-khoi-8",
+          1
+        ],
+        [
+          "v2-xam-khoi-9",
+          1
+        ],
+        [
+          "v2-xam-khoi-10",
+          1
+        ],
+        [
+          "v2-xam-khoi-11",
+          1
+        ],
+        [
+          "v2-xam-khoi-12",
+          1
+        ],
+        [
+          "v2-xam-khoi-13",
+          1
+        ],
+        [
+          "v2-xam-khoi-14",
+          1
+        ],
+        [
+          "v2-xam-khoi-15",
+          1
+        ],
+        [
+          "v2-xam-khoi-16",
           1
         ]
       ],
@@ -341,19 +561,67 @@
       "grid": 2,
       "tiles": [
         [
-          "dat-den-1",
-          5
+          "v2-xam-than-1",
+          1
         ],
         [
-          "dat-den-2",
-          4
+          "v2-xam-than-2",
+          1
         ],
         [
-          "dat-den-3",
-          4
+          "v2-xam-than-3",
+          1
         ],
         [
-          "dat-den-5",
+          "v2-xam-than-4",
+          1
+        ],
+        [
+          "v2-xam-than-5",
+          1
+        ],
+        [
+          "v2-xam-than-6",
+          1
+        ],
+        [
+          "v2-xam-than-7",
+          1
+        ],
+        [
+          "v2-xam-than-8",
+          1
+        ],
+        [
+          "v2-xam-than-9",
+          1
+        ],
+        [
+          "v2-xam-than-10",
+          1
+        ],
+        [
+          "v2-xam-than-11",
+          1
+        ],
+        [
+          "v2-xam-than-12",
+          1
+        ],
+        [
+          "v2-xam-than-13",
+          1
+        ],
+        [
+          "v2-xam-than-14",
+          1
+        ],
+        [
+          "v2-xam-than-15",
+          1
+        ],
+        [
+          "v2-xam-than-16",
           1
         ]
       ],
@@ -426,19 +694,67 @@
       "grid": 2,
       "tiles": [
         [
-          "hac-thach-1",
-          5
+          "v2-den-1",
+          1
         ],
         [
-          "hac-thach-2",
-          4
+          "v2-den-2",
+          1
         ],
         [
-          "hac-thach-3",
-          3
+          "v2-den-3",
+          1
         ],
         [
-          "hac-thach-4",
+          "v2-den-4",
+          1
+        ],
+        [
+          "v2-den-5",
+          1
+        ],
+        [
+          "v2-den-6",
+          1
+        ],
+        [
+          "v2-den-7",
+          1
+        ],
+        [
+          "v2-den-8",
+          1
+        ],
+        [
+          "v2-den-9",
+          1
+        ],
+        [
+          "v2-den-10",
+          1
+        ],
+        [
+          "v2-den-11",
+          1
+        ],
+        [
+          "v2-den-12",
+          1
+        ],
+        [
+          "v2-den-13",
+          1
+        ],
+        [
+          "v2-den-14",
+          1
+        ],
+        [
+          "v2-den-15",
+          1
+        ],
+        [
+          "v2-den-16",
           1
         ]
       ],
@@ -477,20 +793,68 @@
       "grid": 2,
       "tiles": [
         [
-          "tu-vuc-1",
-          5
+          "v2-tim-1",
+          1
         ],
         [
-          "tu-vuc-2",
-          4
+          "v2-tim-2",
+          1
         ],
         [
-          "tu-vuc-3",
-          3
+          "v2-tim-3",
+          1
         ],
         [
-          "tu-vuc-4",
-          2
+          "v2-tim-4",
+          1
+        ],
+        [
+          "v2-tim-5",
+          1
+        ],
+        [
+          "v2-tim-6",
+          1
+        ],
+        [
+          "v2-tim-7",
+          1
+        ],
+        [
+          "v2-tim-8",
+          1
+        ],
+        [
+          "v2-tim-9",
+          1
+        ],
+        [
+          "v2-tim-10",
+          1
+        ],
+        [
+          "v2-tim-11",
+          1
+        ],
+        [
+          "v2-tim-12",
+          1
+        ],
+        [
+          "v2-tim-13",
+          1
+        ],
+        [
+          "v2-tim-14",
+          1
+        ],
+        [
+          "v2-tim-15",
+          1
+        ],
+        [
+          "v2-tim-16",
+          1
         ]
       ],
       "zone": "tim",
@@ -527,23 +891,35 @@
       "grid": 1,
       "tiles": [
         [
-          "nuoc-sau-1",
-          5
+          "v2-nuoc-9",
+          4
         ],
         [
-          "nuoc-sau-2",
-          5
-        ],
-        [
-          "nuoc-sau-3",
-          3
-        ],
-        [
-          "nuoc-sau-4",
+          "v2-nuoc-10",
           1
         ],
         [
-          "nuoc-sau-5",
+          "v2-nuoc-11",
+          1
+        ],
+        [
+          "v2-nuoc-12",
+          1
+        ],
+        [
+          "v2-nuoc-13",
+          5
+        ],
+        [
+          "v2-nuoc-14",
+          1
+        ],
+        [
+          "v2-nuoc-15",
+          1
+        ],
+        [
+          "v2-nuoc-16",
           1
         ]
       ]
@@ -562,23 +938,35 @@
       "grid": 1,
       "tiles": [
         [
-          "nuoc-ngoc-2",
+          "v2-nuoc-1",
           5
         ],
         [
-          "nuoc-ngoc-1",
-          2
+          "v2-nuoc-2",
+          5
         ],
         [
-          "nuoc-ngoc-3",
-          2
-        ],
-        [
-          "nuoc-ngoc-4",
+          "v2-nuoc-3",
           1
         ],
         [
-          "nuoc-ngoc-5",
+          "v2-nuoc-4",
+          1
+        ],
+        [
+          "v2-nuoc-5",
+          1
+        ],
+        [
+          "v2-nuoc-6",
+          1
+        ],
+        [
+          "v2-nuoc-7",
+          1
+        ],
+        [
+          "v2-nuoc-8",
           1
         ]
       ]
@@ -633,12 +1021,12 @@
       "bridge": true,
       "tiles": [
         [
-          "nuoc-ngoc-2",
-          5
+          "v2-nuoc-1",
+          1
         ],
         [
-          "nuoc-ngoc-1",
-          2
+          "v2-nuoc-2",
+          1
         ]
       ]
     }
@@ -652,11 +1040,13 @@
     "forest_cut": 0.55,
     "rock_cut": 0.62,
     "tree_base": 0.006,
-    "tree_forest": 0.55,
+    "tree_forest": 0.35,
     "rock_base": 0.004,
     "rock_field": 0.35,
     "small": 0.05,
     "road_margin": 1,
-    "center_clear_tiles": 9
-  }
+    "center_clear_tiles": 9,
+    "_ghi_chu_23_10": "Giảm rừng 0.55 → 0.35: rừng dày cũ vây kín người chơi (không đi ra được)"
+  },
+  "_note_tiles_v2": "Ô đất 23/10 (bản 2): bộ ảnh chủ dự án (assets/tiles/_source/v2-*.png), cắt bằng tools/tiles_v2.py — mỗi ô có viền xám đen đều, vẽ khít không chồng; nước vẽ chồng nhẹ cho liền. Dung nham giữ ô cũ."
 }

@@ -98,15 +98,17 @@ export async function createDecor({ grid, W, H, T, types, rules, art, safeAt }) 
   // Ô (gx, gy) đã quấn mép → { d: chỉ số hình hoặc -1, ox, oy }
   const NCX = Math.ceil(W / CH);
   const hit = { d: -1, ox: 0, oy: 0 };
+  let lastId = -1, lastC = null; // mảng vừa dùng: hỏi liên tiếp cùng mảng thì khỏi tra Map
   function cellAt(gx, gy) {
     const cx = Math.floor(gx / CH), cy = Math.floor(gy / CH), id = cy * NCX + cx;
-    let c = chunks.get(id);
-    if (c) { chunks.delete(id); chunks.set(id, c); } // dùng gần đây → đưa xuống cuối
+    let c = id === lastId ? lastC : chunks.get(id);
+    if (c && id !== lastId) { chunks.delete(id); chunks.set(id, c); } // dùng gần đây → đưa xuống cuối
     else {
       c = buildChunk(cx, cy);
       chunks.set(id, c);
       if (chunks.size > MAX_CHUNKS) chunks.delete(chunks.keys().next().value); // bỏ mảng lâu không dùng
     }
+    lastId = id; lastC = c;
     const k = (gy - cy * CH) * CH + (gx - cx * CH);
     hit.d = c.at[k]; hit.ox = c.ox[k]; hit.oy = c.oy[k];
     return hit;
