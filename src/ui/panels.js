@@ -141,7 +141,7 @@ function saveSettings(s) {
   try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); } catch { /* trình duyệt chặn lưu: bỏ qua */ }
 }
 
-export function showSettings({ onLogout, onRedeem, onChange }) {
+export function showSettings({ onLogout, onRedeem, onChange, onRecall }) {
   const s = loadSettings();
   const maxW = () => Math.min(vw() * 0.94, 460, (vh() * 0.8 * SET_FRAME.w) / SET_FRAME.h);
   openModal('modal-settings', SET_FRAME, maxW, ({ at, close, col }) => {
@@ -160,20 +160,21 @@ export function showSettings({ onLogout, onRedeem, onChange }) {
       .addEventListener('click', () => toast('Hiện chỉ có Tiếng Việt'));
     at('<button type="button" class="set-hot" aria-label="Đăng xuất"></button>', ...SET_SPOTS.logout)
       .addEventListener('click', () => { close(); onLogout(); }); // đóng Cài đặt trước để hộp xác nhận hiện trên cùng
-    if (onRedeem) codeDrawer(col, onRedeem); // khung vẽ sẵn không có chỗ → ngăn kéo vuốt lên bên dưới
+    if (onRedeem) codeDrawer(col, onRedeem, onRecall && (() => { close(); onRecall(); })); // khung vẽ sẵn không có chỗ → ngăn kéo vuốt lên bên dưới
   });
 }
 
 // Ngăn "Nhập mã" dưới bảng Cài đặt: vuốt lên trên bảng (hoặc chạm dòng gợi ý) để mở, vuốt xuống để đóng.
-function codeDrawer(col, onRedeem) {
+function codeDrawer(col, onRedeem, onRecall) {
   const d = el(`<div class="set-drawer">
     <button type="button" class="set-pull" aria-expanded="false"><i></i><span>Vuốt lên để nhập mã</span></button>
     <form class="set-code-form" autocomplete="off">
       <input class="code-in" type="text" maxlength="40" placeholder="Nhập mã quà tặng" autocapitalize="none" autocorrect="off" spellcheck="false">
       <button type="submit" class="bag-act">Xác nhận</button>
       <p class="code-msg" role="status"></p>
-    </form></div>`);
+    </form>${onRecall ? '<button type="button" class="bag-act set-recall">Bị kẹt? Về Thanh Vân Thành</button>' : ''}</div>`);
   col.appendChild(d);
+  d.querySelector('.set-recall')?.addEventListener('click', onRecall); // thoát kẹt: máy chủ đưa về trận pháp giữa thành
   const pull = d.querySelector('.set-pull'), form = d.querySelector('form'), input = d.querySelector('input'), msg = d.querySelector('.code-msg');
   const setOpen = (open) => {
     d.classList.toggle('open', open);

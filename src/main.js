@@ -170,6 +170,13 @@ async function boot() {
     hud.setActive('phap-tuong', true); setLook();
   }
 
+  async function recall() { // thoát kẹt (cây đá vây kín, vị trí lỗi): máy chủ đưa về trận pháp giữa thành
+    if (!(await showConfirm('Về Thanh Vân Thành', 'Dịch chuyển về trận pháp giữa thành?', { yes: 'Về thành' }))) return;
+    try { const row = await net.respawnAtTown(); if (row) { me.x = row.x; me.y = row.y; } else ({ x: me.x, y: me.y } = map.nearestStand(map.width / 2, map.height / 2 + 30, radius, 30)); }
+    catch (e) { toast('Chưa về được, thử lại sau'); return; }
+    me.flying = false; hud.setToggle('bay', 0); zone.sendMove(me.x, me.y, false, false); toast('Đã về Thanh Vân Thành');
+  }
+
   async function logout() {
     if (!(await showConfirm('Đăng xuất', 'Rời Tu Chân giới và đăng xuất?', { yes: 'Đăng xuất' }))) return;
     await saver.flush();
@@ -190,7 +197,7 @@ async function boot() {
       hud.addChatLine(me.name, text, true);
     },
     onOpenCharacter: () => openCharacter(),
-    onSettings() { showSettings({ onLogout: logout, onRedeem: redeemCode, onChange: (st) => audio.apply(st) }); },
+    onSettings() { showSettings({ onLogout: logout, onRedeem: redeemCode, onChange: (st) => audio.apply(st), onRecall: recall }); },
     onOpenBag() {
       showBag({
         categories: itemsDef.categories, getEntries: () => game.bagEntries(), note: 'Đồ thử nghiệm: chỉ lưu trên máy này, chưa lưu máy chủ.',
@@ -334,7 +341,7 @@ async function boot() {
     const { ctx, dpr, scale } = screen;
     setTextScale(screen.textScale);
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.fillStyle = '#0f1a14';
+    ctx.fillStyle = '#26232a'; // cùng màu viền ô đất (data/terrain.json, tools/tiles_v2.py)
     ctx.fillRect(0, 0, screen.canvas.width, screen.canvas.height);
     ctx.imageSmoothingEnabled = false;
     const s = dpr * scale;
