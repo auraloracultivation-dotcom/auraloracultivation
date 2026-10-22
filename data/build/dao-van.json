@@ -416,5 +416,20 @@
   "turret_range_px": 220,
   "rain_range_px": 240
  },
- "_ghi_chu_dai_thanh": "Chủ dự án 23/10 05:38: đủ bộ là 'thành' — bắn hàng trăm đạn hình quạt liên tục, linh lực hồi liên tục; sai 1 món là tụt về bộ 6 (bắn từng viên, chờ hồi chiêu). Vì vậy mốc 8/8 (mọi ô cùng hệ) là ĐẠI THÀNH: hồi chiêu ×cd_mul, hồi linh lực mp_regen (phần linh lực tối đa mỗi giây), tốn linh lực ×mp_mul, kèm hiệu ứng riêng của hệ."
+ "_ghi_chu_dai_thanh": "Chủ dự án 23/10 05:38: đủ bộ là 'thành' — bắn hàng trăm đạn hình quạt liên tục, linh lực hồi liên tục; sai 1 món là tụt về bộ 6 (bắn từng viên, chờ hồi chiêu). Vì vậy mốc 8/8 (mọi ô cùng hệ) là ĐẠI THÀNH: hồi chiêu ×cd_mul, hồi linh lực mp_regen (phần linh lực tối đa mỗi giây), tốn linh lực ×mp_mul, kèm hiệu ứng riêng của hệ.",
+ "he_order": [
+  "Kim",
+  "Ám",
+  "Thủy",
+  "Hỏa",
+  "Mộc",
+  "Thổ"
+ ],
+ "set_drop": {
+  "_ghi_chu": "Đồ Kho 6 hệ rơi khi hạ quái (chưa có thì vào Kho, có rồi thì đổi Linh thạch). Phôi luyện ra cũng mang hệ ngẫu nhiên (lộ khi thức tỉnh) và tính vào bộ ngũ hành.",
+  "elite": 0.003,
+  "boss": 0.025,
+  "void": 0.5,
+  "dup_stone": 500
+ }
 }

@@ -5,11 +5,12 @@ const SLOTS = ['mat-na', 'trang-phuc', 'vu-khi', 'nhan', 'canh', 'phap-tuong', '
 const OBJ_SUM = { orbit: ['n'], shock: ['r', 'stun'], burn: ['mul'] };
 const TURRET_SUM = ['n', 'every_s']; // khoá cộng dồn; khoá khác lấy lớn nhất
 
-export function createDaoVan({ def, bag, cards }) {
+export function createDaoVan({ def, bag, cards, progress }) {
   let sig = '', cache = null;
   const counts = () => {
     const c = {};
     for (const sl of SLOTS) { const he = bag.equippedItem(sl)?.he; if (he) c[he] = (c[he] || 0) + 1; }
+    for (const g of progress.equipped()) if (g.he && g.tier) c[g.he] = (c[g.he] || 0) + 1; // phôi luyện đã thức tỉnh mang hệ
     return c;
   };
   function add(m, k, v, he, src = he) {
@@ -45,10 +46,19 @@ export function createDaoVan({ def, bag, cards }) {
   }
   // Bảng hiệu ứng hiện tại (tính lại khi đồ / phù đổi)
   function mods() {
-    const s = SLOTS.map((sl) => bag.equippedItem(sl)?.id || '').join('|') + '#' + cards.signature();
+    const s = SLOTS.map((sl) => bag.equippedItem(sl)?.id || '').join('|') + '#' + progress.equipped().map((g) => g.uid).join(',') + '#' + cards.signature();
     if (s !== sig || !cache) { sig = s; cache = compute(); }
     return cache;
   }
   const heOf = (he) => def.he[he] || def.he.Kim;
-  return { mods, heOf, counts, limits: def.limits };
+  // Hạ quái: rơi đồ Kho 6 hệ (chưa có thì vào Kho, có rồi đổi Linh thạch)
+  function onKill(m, toast) {
+    const D = def.set_drop, ch = m.void ? D.void : D[m.def.rank] || 0;
+    if (Math.random() >= ch) return;
+    const miss = bag.missing((d) => d.he && d.slot);
+    if (!miss.length) { progress.addStone(D.dup_stone); toast(`Đồ ngũ hành rơi ra nhưng đã đủ bộ: +${D.dup_stone} Linh thạch`, 2000); return; }
+    const id = miss[Math.floor(Math.random() * miss.length)]; bag.give(id);
+    toast('Nhặt được đồ ngũ hành! Xem Kho → Trang bị', 2600);
+  }
+  return { mods, heOf, counts, onKill, limits: def.limits };
 }
