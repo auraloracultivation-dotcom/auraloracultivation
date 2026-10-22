@@ -146,50 +146,62 @@ mon['band'] = {'elite': 0.2, 'boss': 0.45, '_ghi_chu': 'Độ sâu trong vành v
 save('data/gameplay.json', gp)
 
 # ---------- Quái ----------
-SPECIES = {  # vùng: [(mã, tên, cấp, các tầng (None = mọi tầng của vùng), hình)]
-    'xanh': [('yeu-ho', 'Yêu Hồ', 'thuong', ['lk1', 'lk2', 'lk3'], {'sheet': 'slime', 'h': 16, 'still': True}),
-             ('thanh-xa', 'Thanh Xà Yêu', 'thuong', ['lk4', 'lk5', 'lk6'], {'sheet': 'ran', 'h': 20, 'still': True}),
-             ('thach-giap', 'Thạch Giáp Thú', 'thuong', ['lk7', 'lk8', 'lk9', 'lk10'], {'sheet': 'gai-dat', 'h': 20, 'still': True}),
-             ('hac-lang-vuong', 'Hắc Lang Vương', 'elite', None, {'sheet': 'orc', 'h': 30}),
-             ('son-dong-lao-yeu', 'Sơn Động Lão Yêu', 'boss', None, {'sheet': 'orc', 'h': 46, 'hue': 40})],
-    'cam': [('huyet-sai', 'Huyết Sài', 'thuong', ['tc_so'], {'sheet': 'blood', 'h': 24}),
-            ('diem-xa', 'Diễm Xà', 'thuong', ['tc_trung'], {'sheet': 'doi-lua', 'h': 30}),
-            ('nham-giap', 'Nham Giáp Thú', 'thuong', ['tc_hau'], {'sheet': 'oc-gai', 'h': 22, 'still': True}),
-            ('huyet-lang-vuong', 'Huyết Lang Vương', 'elite', None, {'sheet': 'demon', 'h': 32}),
-            ('hoa-vuc-ma-ton', 'Hỏa Vực Ma Tôn', 'boss', None, {'sheet': 'demon', 'h': 50, 'hue': 25})],
-    'xam': [('co-chien-hon', 'Cổ Chiến Hồn', 'thuong', ['kd_so'], {'sheet': 'dau-lau', 'h': 22, 'still': True}),
-            ('doc-yeu', 'Độc Yêu', 'thuong', ['kd_trung'], {'sheet': 'nhen', 'h': 24, 'still': True}),
-            ('huyen-giap', 'Huyền Giáp Thú', 'thuong', ['kd_hau'], {'sheet': 'oc-gai', 'h': 26, 'hue': 200, 'still': True}),
-            ('thuong-co-chien-tuong', 'Thượng Cổ Chiến Tướng', 'elite', None, {'sheet': 'knight', 'h': 38}),
-            ('huyen-vuc-ma-ton', 'Huyền Vực Ma Tôn', 'boss', None, {'sheet': 'xuc-tu', 'h': 58})],
-    'trang': [('bang-ho', 'Băng Hồ', 'thuong', ['na_so'], {'sheet': 'ca-quai', 'h': 22, 'still': True}),
-              ('tuyet-ung', 'Tuyết Ưng', 'thuong', ['na_trung'], {'sheet': 'ruoi', 'h': 24, 'hue': 180, 'still': True}),
-              ('han-giap', 'Hàn Giáp Thú', 'thuong', ['na_hau'], {'sheet': 'gai-dat', 'h': 24, 'hue': 170, 'still': True}),
-              ('bang-hon-tuong', 'Băng Hồn Tướng', 'elite', None, {'sheet': 'soldier', 'h': 30, 'hue': 180}),
-              ('tuyet-son-lao-to', 'Tuyết Sơn Lão Tổ', 'boss', None, {'sheet': 'knight', 'h': 52, 'hue': 180})],
-    'than': [('hac-vuc-yeu', 'Hắc Vực Yêu', 'thuong', ['ht_so'], {'sheet': 'soi-loi', 'h': 34}),
-             ('hu-khong-thu', 'Hư Không Thú', 'thuong', ['ht_trung'], {'sheet': 'nhan-cau', 'h': 26, 'hue': 250, 'still': True}),
-             ('tan-the-giap', 'Tận Thế Giáp Thú', 'thuong', ['ht_hau'], {'sheet': 'ran-ba-dau', 'h': 42}),
-             ('thuong-co-ma-tuong', 'Thượng Cổ Ma Tướng', 'elite', None, {'sheet': 'thu-tim', 'h': 46}),
-             ('hac-vuc-chu-te', 'Hắc Vực Chủ Tể', 'boss', None, {'sheet': 'ky-lan-loi', 'h': 66})],
-    'den': [('hac-diem-lang', 'Hắc Diệm Lang', 'thuong', ['ab_so'], {'sheet': 'soi-loi', 'h': 36, 'hue': 300}),
-            ('u-minh-quy-xa', 'U Minh Quỷ Xà', 'thuong', ['ab_trung'], {'sheet': 'ran', 'h': 30, 'hue': 260, 'still': True}),
-            ('hac-nham-cu-nhan', 'Hắc Nham Cự Nhân', 'thuong', ['ab_hau'], {'sheet': 'orc', 'h': 40, 'hue': 220}),
-            ('am-da-ma-tuong', 'Ám Dạ Ma Tướng', 'elite', None, {'sheet': 'knight', 'h': 46, 'hue': 270}),
-            ('hac-uyen-ma-de', 'Hắc Uyên Ma Đế', 'boss', None, {'sheet': 'demon', 'h': 68, 'hue': 250})],
-    'tim': [('tu-loi-yeu-dieu', 'Tử Lôi Yêu Điêu', 'thuong', ['vd_so'], {'sheet': 'doi-lua', 'h': 34, 'hue': 230}),
-            ('tu-tinh-ma-nhen', 'Tử Tinh Ma Nhện', 'thuong', ['vd_trung'], {'sheet': 'nhen', 'h': 30, 'hue': 260, 'still': True}),
-            ('hu-linh-giap-thu', 'Hư Linh Giáp Thú', 'thuong', ['vd_hau'], {'sheet': 'ky-lan-loi', 'h': 48, 'hue': 200}),
-            ('tu-vuc-thien-tuong', 'Tử Vực Thiên Tướng', 'elite', None, {'sheet': 'soldier', 'h': 48, 'hue': 260}),
-            ('van-thien-tu-de', 'Vấn Thiên Tử Đế', 'boss', None, {'sheet': 'xuc-tu', 'h': 74, 'hue': 270})],
+# Quái + hình (sprite chủ dự án 23/10, cắt bằng tools/monster_sheets.py → sheet m.<mã>). Cỡ trong game tính từ chiều cao THÂN.
+SPECIES = {  # vùng: [(mã, tên, cấp, các tầng (None = mọi tầng của vùng))]
+    'xanh': [('yeu-ho', 'Yêu Hồ', 'thuong', ['lk1', 'lk2', 'lk3']), ('thanh-xa', 'Thanh Xà Yêu', 'thuong', ['lk4', 'lk5', 'lk6']),
+             ('thach-giap', 'Thạch Giáp Thú', 'thuong', ['lk7', 'lk8', 'lk9', 'lk10']), ('hac-lang-vuong', 'Hắc Lang Vương', 'elite', None),
+             ('son-dong-lao-yeu', 'Sơn Động Lão Yêu', 'boss', None)],
+    'cam': [('huyet-sai', 'Huyết Sài', 'thuong', ['tc_so']), ('diem-xa', 'Diễm Xà', 'thuong', ['tc_trung']),
+            ('nham-giap', 'Nham Giáp Thú', 'thuong', ['tc_hau']), ('huyet-lang-vuong', 'Huyết Lang Vương', 'elite', None),
+            ('hoa-vuc-ma-ton', 'Hỏa Vực Ma Tôn', 'boss', None)],
+    'xam': [('co-chien-hon', 'Cổ Chiến Hồn', 'thuong', ['kd_so']), ('doc-yeu', 'Độc Yêu', 'thuong', ['kd_trung']),
+            ('huyen-giap', 'Huyền Giáp Thú', 'thuong', ['kd_hau']), ('thuong-co-chien-tuong', 'Thượng Cổ Chiến Tướng', 'elite', None),
+            ('huyen-vuc-ma-ton', 'Huyền Vực Ma Tôn', 'boss', None)],
+    'trang': [('bang-ho', 'Băng Hổ', 'thuong', ['na_so']), ('tuyet-ung', 'Tuyết Ưng', 'thuong', ['na_trung']),
+              ('han-giap', 'Hàn Giáp Thú', 'thuong', ['na_hau']), ('bang-hon-tuong', 'Băng Hồn Tướng', 'elite', None),
+              ('tuyet-son-lao-to', 'Tuyết Sơn Lão Tổ', 'boss', None)],
+    'than': [('hac-vuc-yeu', 'Hắc Vực Yêu', 'thuong', ['ht_so']), ('hu-khong-thu', 'Hư Không Thú', 'thuong', ['ht_trung']),
+             ('tan-the-giap', 'Tận Thế Giáp Thú', 'thuong', ['ht_hau']), ('thuong-co-ma-tuong', 'Thượng Cổ Ma Tướng', 'elite', None),
+             ('hac-vuc-chu-te', 'Hắc Vực Chủ Tể', 'boss', None)],
+    'den': [('tu-suong-yeu-ho', 'Tử Sương Yêu Hồ', 'thuong', ['ab_so']), ('u-moc-thach-mang', 'U Mộc Thạch Măng', 'thuong', ['ab_trung']),
+            ('co-ma-da-nhan-thu', 'Cổ Ma Đa Nhãn Thú', 'thuong', ['ab_hau']), ('tu-moc-yeu-than', 'Tử Mộc Yêu Thần', 'elite', None),
+            ('u-suong-ma-hoang', 'U Sương Ma Hoàng', 'boss', None)],
+    'tim': [('vinh-da-u-minh', 'Vĩnh Dạ U Minh', 'thuong', ['vd_so']), ('luan-hoi-doan-menh', 'Luân Hồi Đoạn Mệnh', 'thuong', ['vd_trung']),
+            ('bat-diet-co-hon', 'Bất Diệt Cổ Hồn', 'thuong', ['vd_hau']), ('phach-huyet-truong-sinh', 'Phách Huyết Trường Sinh', 'elite', None),
+            ('quy-tich-vinh-hang', 'Quỷ Tịch Vĩnh Hằng', 'boss', None)],
 }
-HUVO = [  # 5 Âm Hư: vẽ bằng code (src/entity/void-draw.js) tới khi có ảnh
-    ('ma-nhan', 'Hư Không Ma Nhãn', 1.0, {'code': 'hu-vo', 'shape': 'nhan', 'h': 64, 'color': '#b06bff'}),
-    ('cot-long', 'Âm Hư Cốt Long', 1.15, {'code': 'hu-vo', 'shape': 'long', 'h': 78, 'color': '#7fd2ff'}),
-    ('anh-ma', 'Vô Tướng Ảnh Ma', 0.9, {'code': 'hu-vo', 'shape': 'anh', 'h': 70, 'color': '#d9d9ff'}),
-    ('huyet-lien', 'Tịch Diệt Huyết Liên', 1.05, {'code': 'hu-vo', 'shape': 'lien', 'h': 66, 'color': '#ff4a7a'}),
-    ('thon-thien', 'Thôn Thiên Hư Thú', 1.2, {'code': 'hu-vo', 'shape': 'thu', 'h': 82, 'color': '#8a5bff'}),
+HUVO = [  # 5 Âm Hư (mã, tên, hệ số sức mạnh)
+    ('hac-am-phe-hon-gia', 'Hắc Ám Phệ Hồn Giả', 1.0), ('tich-diet-vo-tung-anh', 'Tịch Diệt Vô Tung Ảnh', 0.9),
+    ('u-lenh-huyet-sat-su', 'U Lệnh Huyết Sát Sư', 1.1), ('vinh-da-dao-anh-quy', 'Vĩnh Dạ Đào Ảnh Quỷ', 1.05),
+    ('tham-uyen-u-minh-ma', 'Thâm Uyên U Minh Ma', 1.2),
 ]
+BODY_H = {'thuong': 26, 'elite': 34, 'boss': 48, 'void': 64}  # chiều cao thân trong game (điểm thế giới)
+SHEETS = json.loads((ROOT / 'data/art/monster_sheets.json').read_text())['sheets']
+
+
+def art_of(code, rank):
+    m = SHEETS[code]
+    h = BODY_H[rank] * m['fh'] / m['body_h']
+    return {'sheet': f'm.{code}', 'h': round(h, 1), **({} if m['void'] else {'breathe': True})}
+
+
+# Kỹ năng boss (chủ dự án 23/10: Nguyên Anh 1, Hóa Thần 2, Anh Biến 2, Vấn Đỉnh 3, Âm Hư 3). Báo trước bằng vòng / dải đỏ, chạy ra là né.
+# kind: target (vòng tại chỗ người chơi), self (vòng quanh boss), line (dải thẳng về phía người chơi), multi (n vòng rải quanh người chơi)
+MOB_SKILLS = {
+    'ms.bang-lang': {'name': 'Băng Lăng Trận', 'kind': 'target', 'r': 60, 'windup_s': 1.1, 'mul': 2.0, 'cd_s': 9, 'range_px': 220, 'fx': 'v.no-bang', 'fx_h': 64},
+    'ms.hac-dong': {'name': 'Hắc Động Thôn Phệ', 'kind': 'target', 'r': 75, 'windup_s': 1.3, 'mul': 2.4, 'stun_s': 0.8, 'cd_s': 11, 'range_px': 240, 'fx': 'v.hac-dong', 'fx_h': 100},
+    'ms.am-tien': {'name': 'U Minh Ám Tiễn', 'kind': 'line', 'len': 260, 'w': 28, 'windup_s': 0.9, 'mul': 1.9, 'cd_s': 8, 'range_px': 250, 'fx': 'v.dan-am', 'fx_h': 40},
+    'ms.u-hon-tran': {'name': 'U Hồn Gai Trận', 'kind': 'self', 'r': 110, 'windup_s': 1.2, 'mul': 2.0, 'cd_s': 10, 'range_px': 100, 'fx': 'v.am-gai', 'fx_h': 60},
+    'ms.huyet-chu': {'name': 'Huyết Chú', 'kind': 'target', 'r': 50, 'windup_s': 1.0, 'mul': 2.6, 'cd_s': 9, 'range_px': 220, 'fx': 'v.huyet-chu', 'fx_h': 56},
+    'ms.van-loi': {'name': 'Vạn Lôi Giáng Thế', 'kind': 'multi', 'n': 4, 'r': 45, 'spread': 110, 'windup_s': 1.2, 'mul': 2.2, 'cd_s': 12, 'range_px': 260, 'fx': 'v.loi-tru', 'fx_h': 90},
+    'ms.xich-tran': {'name': 'Xích Hồn Trận', 'kind': 'target', 'r': 60, 'windup_s': 1.0, 'mul': 1.6, 'stun_s': 1.5, 'cd_s': 14, 'range_px': 220, 'fx': 'v.xich-tran', 'fx_h': 56},
+    'ms.hoa-luan': {'name': 'Luyện Ngục Hỏa Luân', 'kind': 'self', 'r': 140, 'windup_s': 1.4, 'mul': 2.4, 'cd_s': 13, 'range_px': 130, 'fx': 'v.hoa-xoay', 'fx_h': 150},
+    'ms.hu-khong-trao': {'name': 'Hư Không Trảo', 'kind': 'line', 'len': 300, 'w': 42, 'windup_s': 1.0, 'mul': 2.8, 'cd_s': 7, 'range_px': 280, 'fx': 'v.dan-am', 'fx_h': 60},
+    'ms.thon-thien': {'name': 'Thôn Thiên Hắc Động', 'kind': 'target', 'r': 100, 'windup_s': 1.6, 'mul': 3.0, 'stun_s': 1.0, 'cd_s': 14, 'range_px': 260, 'fx': 'v.hac-dong', 'fx_h': 130},
+    'ms.hu-vo-tinh-vu': {'name': 'Hư Vô Tinh Vũ', 'kind': 'multi', 'n': 6, 'r': 45, 'spread': 140, 'windup_s': 1.4, 'mul': 2.4, 'cd_s': 12, 'range_px': 280, 'fx': 'v.am-gai', 'fx_h': 64},
+}
+BOSS_SKILLS = {'trang': ['ms.bang-lang'], 'than': ['ms.hac-dong', 'ms.am-tien'], 'den': ['ms.u-hon-tran', 'ms.huyet-chu'],
+               'tim': ['ms.van-loi', 'ms.xich-tran', 'ms.hoa-luan'], 'huvo': ['ms.hu-khong-trao', 'ms.thon-thien', 'ms.hu-vo-tinh-vu']}
 ZONE_DEFS = [  # id, tên, đại cảnh giới, bậc, màu (quái hình tạm, ngọn linh thảo)
     ('xanh', 'Vùng Xanh', 'luyen-khi', 1, '#5fbf5a', '#b8ffb0'), ('cam', 'Vùng Cam', 'truc-co', 2, '#e08a3a', '#ff7a4a'),
     ('xam', 'Vùng Xám Khói', 'ket-dan', 3, '#8d8f99', '#c7a6ff'), ('trang', 'Vùng Trắng', 'nguyen-anh', 4, '#cfe6f2', '#e8f6ff'),
@@ -231,17 +243,19 @@ mons = []
 zrealm = {z: r for z, _, r, *_ in ZONE_DEFS}
 for zone, lst in SPECIES.items():
     rid = zrealm[zone]
-    for code, name, rank, sts, art in lst:
+    for code, name, rank, sts in lst:
         ids = sts or realm_stages[rid]
         mid = f'monster.{zone}.{code}.001'
         m = {'id': mid, 'name': name, 'zone': zone, 'tier': [z for z in ZONE_DEFS if z[0] == zone][0][3], 'rank': rank,
-             'stages': ids, 'realm': span(ids), **stat_range(ids, rank), 'art': art, 'behavior': None}
+             'stages': ids, 'realm': span(ids), **stat_range(ids, rank), 'art': art_of(code, rank), 'behavior': None}
+        if rank == 'boss' and zone in BOSS_SKILLS: m['skills'] = BOSS_SKILLS[zone]
         mons.append(m)
-for code, name, mul, art in HUVO:
+for code, name, mul in HUVO:
     mons.append({'id': f'monster.huvo.{code}.001', 'name': name, 'zone': 'huvo', 'tier': 8, 'rank': 'boss', 'void': True,
-                 'stages': ['am_hu'], 'mul': mul, 'realm': 'Âm Hư', **stat_range(['am_hu'], 'boss', mul, HUVO_MUL), 'art': art,
-                 'behavior': 'hu-vo'})
+                 'stages': ['am_hu'], 'mul': mul, 'realm': 'Âm Hư', **stat_range(['am_hu'], 'boss', mul, HUVO_MUL), 'art': art_of(code, 'void'),
+                 'behavior': 'hu-vo', 'skills': BOSS_SKILLS['huvo']})
 mj['monsters'] = mons
+mj['skills'] = MOB_SKILLS
 mj['void'] = mj.get('void') or {}
 mj['void'].update({
     '_ghi_chu': ('5 Âm Hư từ hư vô: mỗi con xuất hiện ở MỘT chỗ ngẫu nhiên ngoài thành, theo lịch chung (giờ máy chủ) nên mọi người '

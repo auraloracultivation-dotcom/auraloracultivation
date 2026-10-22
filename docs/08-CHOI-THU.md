@@ -35,6 +35,22 @@ song song với việc hoàn thành Mốc 1. Đây là **bản chơi thử**, ch
 - **Thoát kẹt**: Cài đặt → nút "Bị kẹt? Về Thanh Vân Thành" (máy chủ đưa về trận pháp giữa thành, RPC `respawn_at_town`).
 - Số lớn hiện gọn: 123,5k · 4,57tr · 2,3 tỷ (`src/core/format.js`).
 
+## Quái mới, kỹ năng, ô kỹ năng tự xếp, Tự động bay (chủ dự án 23/10)
+- **Hình quái 7 vùng + 5 Âm Hư** từ tấm chủ dự án (`assets/monsters/_source/quai-*.webp`) — `python3 -I tools/monster_sheets.py` cắt nền hồng, bỏ cột chữ / khung ô,
+  mỗi quái 4 khung (đứng, bước tới, bước về, đánh), chân thẳng hàng → `assets/monsters/<mã>.webp`, sheet `m.<mã>` (tải khi lần đầu gặp). Xám Khói giảm màu băng thành thép xám.
+  Cỡ trong game theo chiều cao THÂN: thường 26, tinh anh 34, boss 48, Âm Hư 64 (`tools/gen_balance.py` → BODY_H). Tên lấy đúng tấm; cấp xếp lại theo luật vùng (mỗi quái thường 1 tầng).
+  Vùng Đen / Tím / Âm Hư đổi tên theo tấm (Tử Sương Yêu Hồ… / Vĩnh Dạ U Minh… / Hắc Ám Phệ Hồn Giả…); Âm Hư không còn vẽ bằng code.
+- **Kỹ năng boss** (`monsters.json → skills`, code `src/game/mob-skills.js`): Nguyên Anh 1, Hóa Thần 2, Anh Biến 2, Vấn Đỉnh 3, Âm Hư 3.
+  Boss đứng vận chiêu (hào quang đỏ), vùng trúng hiện đỏ trên đất — vòng tại chỗ người chơi, vòng quanh boss, dải thẳng, hoặc nhiều vòng rải — chạy ra là né.
+  Có chiêu trói (đứng yên vài giây). Hiệu ứng từ 5 tấm hiệu ứng chủ dự án (`tools/fx_sheets.py`, mã `v.*`).
+- **11 kỹ năng người chơi mới** (`gameplay.json → skills`, code `src/game/skills.js`): Hỏa Cầu Thuật (LK3), Băng Phách Tiễn (LK6), Mộc Liên Hồi Xuân (LK8, hồi máu),
+  Phong Nhận Trảm (TC Trung, xuyên), Cửu Thiên Lôi Kích (TC Hậu), Địa Mạch Thứ (KĐ Trung), Thủy Long Ba (KĐ Hậu), Kim Cang Hộ Thể (NA Trung, khiên),
+  Vạn Kiếm Quy Tông (NA Hậu), Hư Không Hắc Động (HT Sơ), Phượng Hoàng Niết Bàn (HT Trung) + 7 kỹ năng cũ. Số TẠM.
+- **Ô kỹ năng tự xếp** (`src/game/loadout.js`, `skillview.js`): 7 ô trên HUD. Nút sách nhỏ cạnh bộ nút (hoặc chạm ô trống) mở bảng Kỹ năng:
+  chạm kỹ năng → hiện Ô 1…7 → chạm ô là kỹ năng nằm vào đó (đổi chỗ nếu đã ở ô khác). Lưu trên máy (`progress.loadout`). Phím 1–7 trên máy tính.
+- **Tự động**: tự dùng kỹ năng trong ô (trừ Lướt / Pháp tướng / Đan; hồi máu khi dưới 55%). Đi đánh quái mà kẹt (nước, cây) thì tự ngự kiếm bay qua rồi hạ xuống farm tiếp
+  (cần cầm kiếm + ≥ 15 linh lực; `src/game/flight.js`, `autoplay.js`).
+
 ## Đã có trong game (thử nghiệm)
 | Hệ thống | Cách chơi | Code |
 |---|---|---|

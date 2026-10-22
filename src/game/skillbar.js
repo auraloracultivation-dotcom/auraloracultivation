@@ -1,45 +1,60 @@
-// Ô kỹ năng trên HUD (yêu cầu chủ dự án 21/10):
-// - Ô hiện đúng hình thứ đang dùng: Đan dược = viên đan hồi máu (kèm số còn), Linh thú / Pháp tướng = món đang đeo.
-// - Chưa mở theo cảnh giới, hoặc chưa có thứ để dùng (hết đan, chưa đeo linh thú / pháp tướng) → ô xám.
+// Ô kỹ năng trên HUD — ô tự xếp (chủ dự án 23/10): ô s1..sN hiện kỹ năng người chơi đã chọn (loadout.js).
+// - Ô hiện đúng hình kỹ năng: hiệu ứng của chiêu; Đan dược = viên đan (kèm số còn); Linh thú / Pháp tướng = món đang đeo.
+// - Ô trống, chưa mở theo cảnh giới, hoặc chưa có thứ để dùng → ô xám (chạm vào: ô trống mở bảng Kỹ năng, còn lại báo lý do).
 // - Đang hồi chiêu → bóng tối quét quanh nút + số giây đếm ngược.
 // Chỉ đọc trạng thái rồi gọi hud; mỗi khung hình chỉ cập nhật khi có thay đổi.
 const HEAL_PILL = 'item.dan.tieu-hoi-huyet.001';
 
-// Hình bên trong ô kỹ năng đánh (lấy một khung hiệu ứng của chính chiêu đó)
-const FX_ICON = { 'kiem-khi': ['kiem-bang-bay', 0], 'khong-che': ['moc-troi', 2], 'nguyen-anh': ['tho-vong', 3] };
-
-export function createSkillBar({ hud, S, gp, progress, pt, cds, slotItem, icon, fxIcon }) {
+export function createSkillBar({ hud, S, gp, progress, pt, cds, slotItem, icon, fxIcon, loadout, stageName }) {
   const last = {};
   const put = (key, val, fn) => { if (last[key] !== val) { last[key] = val; fn(); } };
 
-  // Mỗi ô: lý do bị khoá (null = dùng được), hình bên trong, hồi chiêu [còn, tổng]
-  function slots(now) {
-    const stage = progress.state.stage, out = {};
-    for (const [id, s] of Object.entries(S)) {
-      if (!s.unlock) continue;
-      const locked = progress.stageIndex(s.unlock) > stage;
-      out[id] = { off: locked || null, cd: [(cds[id] || 0) - now, s.cd_s], art: !locked && FX_ICON[id] ? fxIcon(...FX_ICON[id]) : null };
+  // Một kỹ năng: lý do chưa dùng được (null = dùng được), hình, hồi chiêu [còn, tổng], số kèm
+  function info(id, now) {
+    const s = S[id];
+    if (!s) return { off: 'ô trống — chạm để chọn kỹ năng', art: null, cd: [0, 1] };
+    const locked = s.unlock && progress.stageIndex(s.unlock) > progress.state.stage;
+    const lockMsg = locked ? `mở ở ${stageName(s.unlock)}` : null;
+    if (id === 'linh-thu') {
+      const pet = slotItem('linh-thu');
+      return { off: lockMsg || (pet ? null : 'chưa đeo linh thú (Kho → Trang bị)'), art: !locked && pet ? pet.thumb : null, cd: [(cds[id] || 0) - now, s.cd_s] };
     }
-    const pet = slotItem('linh-thu');
-    if (!out['linh-thu'].off && !pet) out['linh-thu'].off = 'chưa đeo linh thú (Kho → Trang bị)';
-    out['linh-thu'].art = out['linh-thu'].off ? null : pet.thumb;
-    const avatar = slotItem('phap-tuong');
-    out['phap-tuong'] = { off: avatar ? null : 'chưa đeo pháp tướng (Kho → Trang bị)', art: avatar?.thumb || null, cd: [pt.cdLeft, pt.cdTotal] };
-    const n = progress.count(HEAL_PILL);
-    out['dan-duoc'] = { off: n ? null : 'hết đan hồi máu — luyện ở Lò luyện đan', art: n ? icon(HEAL_PILL) : null, badge: n || '', cd: [(cds.pill || 0) - now, gp.pills.use_cooldown_s] };
-    return out;
+    if (id === 'phap-tuong') {
+      const av = slotItem('phap-tuong');
+      return { off: av ? null : 'chưa đeo pháp tướng (Kho → Trang bị)', art: av?.thumb || null, cd: [pt.cdLeft, pt.cdTotal], active: pt.active };
+    }
+    if (id === 'dan-duoc') {
+      const n = progress.count(HEAL_PILL);
+      return { off: n ? null : 'hết đan hồi máu — luyện ở Lò luyện đan', art: n ? icon(HEAL_PILL) : null, badge: n || '', cd: [(cds.pill || 0) - now, gp.pills.use_cooldown_s] };
+    }
+    return { off: lockMsg, art: locked ? null : art(id), cd: [(cds[id] || 0) - now, s.cd_s] };
+  }
+  // Hình đại diện kỹ năng (bảng Kỹ năng cũng dùng)
+  function art(id) {
+    const s = S[id];
+    if (!s) return null;
+    if (s.icon_url) return s.icon_url;
+    if (s.icon) return fxIcon(...s.icon);
+    if (id === 'dan-duoc') return icon(HEAL_PILL);
+    if (id === 'linh-thu' || id === 'phap-tuong') return slotItem(id)?.thumb || null;
+    return null;
   }
 
   return {
+    slotId: (i) => `s${i + 1}`,
+    art,
     // Cho gameplay: kỹ năng này dùng được không (để chặn bấm khi chưa có thứ cần)
-    blocked: (id) => last[`off:${id}`] || null,
+    blocked: (id) => info(id, 0).off,
     update(now) {
-      for (const [id, s] of Object.entries(slots(now))) {
-        put(`off:${id}`, s.off, () => hud.setLocked(id, !!s.off, typeof s.off === 'string' ? s.off : undefined));
-        put(`art:${id}`, s.art, () => hud.setArt(id, s.art));
-        put(`badge:${id}`, s.badge, () => hud.setBadge(id, s.badge));
+      for (let i = 0; i < loadout.size; i++) {
+        const sid = `s${i + 1}`, id = loadout.get(i), s = info(id, now);
+        put(`id:${sid}`, id, () => { for (const k of ['off', 'art', 'badge', 'cd', 'on']) delete last[`${k}:${sid}`]; });
+        put(`off:${sid}`, s.off, () => hud.setLocked(sid, !!s.off, s.off || undefined));
+        put(`art:${sid}`, s.art, () => hud.setArt(sid, s.art));
+        put(`badge:${sid}`, s.badge, () => hud.setBadge(sid, s.badge));
+        put(`on:${sid}`, !!s.active, () => hud.setActive(sid, !!s.active));
         const left = Math.max(0, s.cd[0]), frac = left > 0 ? Math.round((left / s.cd[1]) * 40) : 0;
-        put(`cd:${id}`, `${Math.ceil(left)}:${frac}`, () => hud.setCooldown(id, left, s.cd[1]));
+        put(`cd:${sid}`, `${Math.ceil(left)}:${frac}`, () => hud.setCooldown(sid, left, s.cd[1]));
       }
     },
   };

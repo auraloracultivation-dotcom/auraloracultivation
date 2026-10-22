@@ -4,7 +4,7 @@ import { createMap, wrapDelta } from './map/index.js';
 import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, setTextScale, loadRig, rigAttack, artInfo, renderPortrait, avatarFx } from './entity/index.js';
 import { createAudio } from './audio/index.js';
 import { createPhapTuong } from './combat/index.js';
-import { createGameplay, createRankReporter } from './game/index.js';
+import { createGameplay, createRankReporter, createFlight } from './game/index.js';
 
 // Luôn lấy code mới nhất (xem sw.js) — tránh lẫn code cũ với dữ liệu mới sau mỗi lần cập nhật
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
@@ -137,7 +137,7 @@ async function boot() {
   const PT_MSG = { 'no-avatar': 'Chưa đeo pháp tướng (Kho → Trang bị)', cooldown: 'Pháp tướng đang hồi', 'no-mp': 'Linh lực không đủ để hoá hình' };
   function phapTuongOff(msg) {
     stopPtSound?.(); stopPtSound = null; // thu lại giữa chừng: tắt dần tiếng hoá hình
-    hud.setActive('phap-tuong', false); setLook();
+    setLook();
     if (msg) toast(msg, 1600);
   }
   // Bảng Nhân vật: ô có đồ → Tháo / Thức tỉnh / Phân rã / Vứt; ô trống → bảng ngang chọn đồ trong kho. Đổi xong vẽ lại bảng.
@@ -153,11 +153,6 @@ async function boot() {
         onPick: (key) => { game.itemAction(key, 'equip'); reopen(); } }),
     });
   }
-  function land(msg) { // hạ cánh bắt buộc; đang trên nước/núi thì bước ra chỗ đứng được gần nhất
-    me.flying = false;
-    if (!map.canStand(me.x, me.y, config.player.radius_px)) ({ x: me.x, y: me.y } = map.nearestStand(me.x, me.y, config.player.radius_px, 30));
-    hud.setToggle('bay', 0); zone.sendMove(me.x, me.y, me.moving, false); toast(msg, 1600);
-  }
   function onLookChanged() { // đồ trên người đổi từ bảng Tu luyện
     if (pt.active && !hasAvatar()) { pt.cancel(); phapTuongOff(); } else setLook();
   }
@@ -167,8 +162,18 @@ async function boot() {
     if (r === 'off') return phapTuongOff();
     if (r !== 'on') return toast(PT_MSG[r], 1400);
     stopPtSound = audio.play(ptDef.sound);
-    hud.setActive('phap-tuong', true); setLook();
+    setLook(); // ô kỹ năng tự sáng viền khi pháp tướng đang hiện (skillbar.js)
   }
+  // Ô kỹ năng tự xếp: kỹ năng nằm ở ô i (bảng Kỹ năng). Pháp tướng / đan dược xử lý ở đây, còn lại là chiêu.
+  function useSlot(i) {
+    const id = game.slotSkill(i);
+    if (!id) return game.openSkills(i);
+    if (id === 'phap-tuong') return usePhapTuong();
+    if (id === 'dan-duoc') return game.healPill();
+    game.skill(id);
+  }
+  const slot = (i, pos, size) => ({ id: `s${i + 1}`, name: `Ô kỹ năng ${i + 1}`, icon: S('trong'), ...pos, size, locked: true,
+    onUse: () => useSlot(i), onLocked: () => (game.slotSkill(i) ? false : (game.openSkills(i), true)) });
 
   async function recall() { // thoát kẹt (cây đá vây kín, vị trí lỗi): máy chủ đưa về trận pháp giữa thành
     if (!(await showConfirm('Về Thanh Vân Thành', 'Dịch chuyển về trận pháp giữa thành?', { yes: 'Về thành' }))) return;
@@ -224,34 +229,22 @@ async function boot() {
     blankIcon: S('trong'), // ô kỹ năng: khung xám trống; hình kỹ năng / đan / linh thú / pháp tướng hiện bên trong khi có
     actions: [
       { id: 'attack', name: 'Đánh thường', icon: S('tan-cong'), dx: 0, dy: 0, size: 96, onUse: () => attack() },
-      // vòng quạt 4 kỹ năng (từ trái lên trên)
-      { id: 'kiem-khi', name: 'Kiếm khí', icon: S('trong'), ...fan(184), size: 60, locked: true, lockedHint: 'mở ở Trúc Cơ', onUse: () => game.skill('kiem-khi') },
-      { id: 'linh-thu', name: 'Kỹ năng linh thú', icon: S('trong'), ...fan(151), size: 60, locked: true, lockedHint: 'mở ở Kết Đan', onUse: () => game.skill('linh-thu') },
-      { id: 'phap-tuong', name: 'Kỹ năng pháp tướng', icon: S('trong'), ...fan(118), size: 60, onUse: () => usePhapTuong() },
-      { id: 'khong-che', name: 'Khống chế (Trúc Cơ)', icon: S('trong'), ...fan(85), size: 60, locked: true, lockedHint: 'mở ở Trúc Cơ', onUse: () => game.skill('khong-che') },
-      // bên trái bộ kỹ năng
-      { id: 'nguyen-anh', name: 'Nguyên Anh: tấn công diện rộng', icon: S('trong'), dx: -200, dy: -66, size: 54, locked: true, lockedHint: 'mở ở Nguyên Anh', onUse: () => game.skill('nguyen-anh') },
-      { id: 'dan-duoc', name: 'Đan dược trị thương', icon: S('trong'), dx: -200, dy: 4, size: 54, onUse: () => game.healPill() },
-      // phía trên: Lướt + Bay/Chạy song song, trên cùng: Tự động
-      { id: 'luot', name: 'Lướt', icon: S('luot'), dx: -92, dy: -192, size: 50, locked: true, lockedHint: 'mở ở Kết Đan', onUse: () => game.skill('luot') },
+      // 7 ô kỹ năng tự xếp (chủ dự án 23/10): vòng quạt 4 ô, 2 ô bên trái, 1 ô phía trên — chọn kỹ năng ở bảng Kỹ năng
+      slot(0, fan(184), 60), slot(1, fan(151), 60), slot(2, fan(118), 60), slot(3, fan(85), 60),
+      slot(4, { dx: -200, dy: -66 }, 54), slot(5, { dx: -200, dy: 4 }, 54), slot(6, { dx: -92, dy: -192 }, 50),
+      { id: 'ky-nang', name: 'Kỹ năng: xếp ô', icon: 'assets/ui/icons/ky-nang.png', dx: -200, dy: -132, size: 44, onUse: () => game.openSkills() },
       {
         id: 'bay', name: 'Bay', icons: [S('bay'), S('chay')], names: ['Bay', 'Chạy bộ'], dx: -34, dy: -200, size: 50,
-        onUse: (state) => { // ngự kiếm: phải cầm kiếm; bay tốn linh lực theo thời gian (data/config.json → player.fly_mp_per_s)
+        onUse: (state) => { // ngự kiếm (src/game/flight.js): phải cầm kiếm; bay tốn linh lực theo thời gian
           if (game.dead) { toast('Linh hồn không dùng được kỹ năng', 1200); return 'keep'; }
-          if (state === 1 && !me.look?.weapon) { toast('Cần trang bị kiếm mới ngự kiếm phi hành được', 1600); return 'keep'; }
-          if (state === 1 && pt.mp < 5) { toast('Linh lực không đủ để ngự kiếm', 1400); return 'keep'; }
-          me.flying = state === 1;
-          if (!me.flying && !map.canStand(me.x, me.y, radius)) { // đang trên nước/núi: chưa hạ được
-            me.flying = true; toast('Không thể hạ xuống ở đây', 1400); return 'keep';
-          }
-          zone.sendMove(me.x, me.y, me.moving, me.flying);
-          toast(me.flying ? 'Ngự khí phi hành' : 'Hạ xuống mặt đất', 1200);
+          if (!flight.set(state === 1)) return 'keep';
         },
       },
       { id: 'auto', name: 'Tự động đánh', icon: S('auto'), dx: 26, dy: -192, size: 50, onUse: () => game.toggleAuto() }, // cùng hàng Lướt, sát phải
     ],
   });
   hud.setOnline(onlineN, maxPlayers);
+  const flight = createFlight({ me, map, hud, pt, toast, radius: config.player.radius_px, cfg: config.player, sendMove: (fl) => zone.sendMove(me.x, me.y, me.moving, fl) });
   const refreshAvatar = () => hud.setPortrait(renderPortrait(me.look, { body: true }));
   refreshAvatar();
   loading.set(90, 'Thả yêu thú vào rừng…');
@@ -270,8 +263,8 @@ async function boot() {
   window.addEventListener('keydown', (e) => { // máy tính: phím cách = tấn công
     if (e.target instanceof HTMLInputElement) return;
     if (e.code === 'Space') { e.preventDefault(); attack(); }
-    const k = { Digit1: 'kiem-khi', Digit2: 'khong-che', Digit3: 'linh-thu', Digit4: 'luot', Digit5: 'nguyen-anh' }[e.code]; // phím tắt máy tính
-    if (k) document.querySelector(`[data-act="${k}"]`)?.dispatchEvent(new PointerEvent('pointerdown'));
+    const k = /^Digit([1-7])$/.exec(e.code); // phím tắt máy tính: 1–7 = ô kỹ năng
+    if (k) document.querySelector(`[data-act="s${k[1]}"]`)?.dispatchEvent(new PointerEvent('pointerdown'));
     if (e.code === 'KeyQ') game.healPill();
   });
   loading.set(100, 'Hoàn tất');
@@ -288,8 +281,9 @@ async function boot() {
 
   function update(dt) {
     // Cần điều khiển luôn ưu tiên; thả tay mà đang bật Tự động thì đi theo hướng autoplay (quái / nguyên liệu gần nhất)
-    const stick = input.getMove(), ad = game.autoDir();
+    const stick = game.stunned() ? { x: 0, y: 0 } : input.getMove(), ad = game.stunned() ? null : game.autoDir(); // bị boss trói: đứng yên
     const dir = stick.x || stick.y || !ad ? stick : ad;
+    if (dir === ad && ad.fly !== undefined && ad.fly !== !!me.flying && !game.dead) flight.set(ad.fly, true); // Tự động: bay qua chướng ngại rồi hạ
     const wasMoving = me.moving;
     me.moving = dir.x !== 0 || dir.y !== 0;
     if (me.moving) {
@@ -306,7 +300,7 @@ async function boot() {
     }
     saver.tick(dt, me.moving);
     if (pt.tick(dt, me.flying) === 'empty') phapTuongOff('Linh lực cạn — pháp tướng tan biến');
-    if (me.flying && (!pt.spend(config.player.fly_mp_per_s * dt) || !me.look?.weapon)) land(me.look?.weapon ? 'Linh lực cạn — hạ xuống mặt đất' : 'Đã tháo kiếm — hạ xuống mặt đất');
+    flight.tick(dt);
     const mpNow = Math.round(pt.mp);
     if (mpNow !== shownMp) { shownMp = mpNow; hud.setBar('mp', mpNow, pt.max); }
     game.update(dt);

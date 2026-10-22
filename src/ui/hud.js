@@ -103,6 +103,7 @@ export function createHud(opts) {
     a.setState = (s) => { state = s; btn.querySelector('.act-base').src = a.icons[s]; btn.setAttribute('aria-label', a.names[s]); };
     btn.addEventListener('pointerdown', (e) => {
       e.preventDefault();
+      if (btn.classList.contains('locked') && a.onLocked?.()) return; // vd. ô kỹ năng trống → mở bảng Kỹ năng
       if (btn.classList.contains('locked')) { toast(a.offHint ? `${a.name}: ${a.offHint}` : `${a.name}: chưa mở${a.lockedHint ? ` — ${a.lockedHint}` : ''}`, 1600); return; }
       btn.classList.remove('pulse'); void btn.offsetWidth; btn.classList.add('pulse');
       if (a.icons) {

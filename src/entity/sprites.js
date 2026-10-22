@@ -15,11 +15,14 @@ const load = (src) => new Promise((res) => {
 
 export async function loadSprites(def) {
   DEF = def;
-  const srcs = new Set([...Object.values(def.sheets), ...Object.values(def.fx)].map((s) => s.src));
+  // lazy: tải khi lần đầu cần vẽ (quái 7 vùng, hiệu ứng chiêu mới) — mở game nhanh, không tải hình vùng chưa tới
+  const srcs = new Set([...Object.values(def.sheets), ...Object.values(def.fx)].filter((s) => !s.lazy).map((s) => s.src));
   srcs.add(def.icons.src);
   await Promise.all([...srcs].map(load));
 }
-export const hasSheet = (id) => !!(DEF?.sheets[id] && imgs.get(DEF.sheets[id].src));
+const ensure = (s) => { if (s && !imgs.has(s.src) && !pending.has(s.src)) { pending.add(s.src); load(s.src); } return s && imgs.get(s.src); };
+const pending = new Set();
+export const hasSheet = (id) => !!ensure(DEF?.sheets[id]);
 
 // Đổi sắc độ (hue, độ) một lần rồi giữ lại — dùng cho quái dùng chung hình nhưng khác vùng
 function tinted(src, hue) {
@@ -50,11 +53,13 @@ function tinted(src, hue) {
 // t: giây đã chạy; once: chạy một lần rồi đứng ở khung cuối (chết). face: 1 nhìn phải, -1 nhìn trái.
 export function drawSheet(ctx, id, anim, t, x, y, h, face = 1, { hue = 0, once = false, fps = 8, alpha = 1 } = {}) {
   const s = DEF?.sheets[id];
-  const im = s && tinted(s.src, hue);
+  const im = s && ensure(s) && tinted(s.src, hue);
   if (!im) return false;
   const a = s.anims[anim] || s.anims.idle;
+  const n = a.frames ? a.frames.length : a.n; // frames: thứ tự khung trong hàng (vd. đi = [1, 0, 2, 0])
   let f = Math.floor(t * fps);
-  f = once ? Math.min(a.n - 1, f) : f % a.n;
+  f = once ? Math.min(n - 1, f) : f % n;
+  if (a.frames) f = a.frames[f];
   const k = h / s.fh, w = s.fw * k;
   ctx.save();
   ctx.globalAlpha *= alpha;
@@ -69,7 +74,7 @@ export function drawSheet(ctx, id, anim, t, x, y, h, face = 1, { hue = 0, once =
 // Hiệu ứng: p = tiến độ 0..1. anchor theo kiểu cắt (giữa hoặc đáy). rot: góc quay (rad).
 export function drawEffect(ctx, id, p, x, y, h, rot = 0, alpha = 1) {
   const s = DEF?.fx[id];
-  const im = s && imgs.get(s.src);
+  const im = s && ensure(s);
   if (!im) return false;
   const n = s.anims.play.n, f = Math.min(n - 1, Math.floor(p * n));
   const k = h / s.fh, w = s.fw * k;
@@ -110,7 +115,7 @@ export function drawIcon(ctx, id, x, y, size) {
 export function fxIconUrl(id, frame = 0) {
   const key = `fx:${id}:${frame}`;
   if (iconUrls.has(key)) return iconUrls.get(key);
-  const f = DEF?.fx[id], im = f && imgs.get(f.src);
+  const f = DEF?.fx[id], im = f && ensure(f);
   if (!im) return null;
   const S = Math.max(f.fw, f.fh), c = document.createElement('canvas'); c.width = c.height = S;
   const n = Math.min(frame, f.anims.play.n - 1);
