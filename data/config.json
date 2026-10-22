@@ -16,9 +16,9 @@
   "tile_size": 32,
   "start_zone": "zone.start",
   "zone": {
-    "max_players": 20,
+    "max_players": 50,
     "max_lines": 50,
-    "_note": "Đầy thì sang tuyến tiếp theo"
+    "_note": "Đầy thì sang tuyến tiếp theo. Từ 23/10 vị trí chỉ gửi trong ô lưới quanh mình (net.cell_px) nên một tuyến chứa được nhiều người hơn mà không lag"
   },
   "net": {
     "position_broadcast_hz": 4,
@@ -26,7 +26,11 @@
     "position_save_interval_s": 2,
     "_note_save": "Lưu khi bắt đầu đi, mỗi 2 giây, và khi dừng — khớp c_max_elapsed = 3 giây ở máy chủ",
     "chat_max_chars": 60,
-    "chat_bubble_s": 5
+    "chat_bubble_s": 5,
+    "cell_px": 1280,
+    "_note_cell": "Chống lag (23/10): thế giới chia ô cell_px; mỗi máy chỉ nhận vị trí người trong 3×3 ô quanh mình (src/net/zone.js)",
+    "presence_gap_ms": 1500,
+    "_note_presence": "Gom thay đổi trang bị/cảnh giới thành tối đa 1 lần cập nhật Presence mỗi khoảng này (Supabase giới hạn Presence mỗi máy)"
   },
   "world": {
     "width_px": 16000,

@@ -59,7 +59,6 @@ export async function createDecor({ grid, W, H, T, types, rules, art, safeAt }) 
   const roadKinds = new Set(types.map((t, i) => (t.id === 'duong' || t.id === 'cau' ? i : -1)).filter((i) => i >= 0));
   const forest = noiseField(W, H, rules.forest_cell, 11), rocky = noiseField(W, H, rules.rock_cell, 23);
   const band = (v, cut) => Math.max(0, Math.min(1, (v - cut) / (1 - cut) * 1.6));
-  const at = new Int16Array(W * H).fill(-1), ox = new Int8Array(W * H), oy = new Int8Array(W * H);
   const m = rules.road_margin;
   const nearRoad = (x, y) => {
     for (let b = -m; b <= m; b++) for (let a = -m; a <= m; a++) {
@@ -67,30 +66,59 @@ export async function createDecor({ grid, W, H, T, types, rules, art, safeAt }) 
     }
     return false;
   };
-  for (let y = 0; y < H; y++) {
-    for (let x = 0; x < W; x++) {
-      const i = y * W + x, s = sets[grid[i]];
-      if (!s || !types[grid[i]].walk) continue;
-      const f = band(forest(x, y), rules.forest_cut), r = band(rocky(x, y), rules.rock_cut);
-      const pt = rules.tree_base + rules.tree_forest * f, pr = rules.rock_base + rules.rock_field * r;
-      const h = hash(x, y, 7);
-      let list = null;
-      if (h < pt && s.tree.length) list = s.tree;
-      else if (h < pt + pr && s.rock.length) list = s.rock;
-      else if (h < pt + pr + rules.small * (0.5 + f) && s.small.length) list = s.small;
-      if (!list || nearRoad(x, y) || safeAt((x + 0.5) * T, (y + 0.5) * T)) continue;
-      at[i] = list[Math.floor(hash(x, y, 3) * list.length)];
-      ox[i] = Math.round((hash(x, y, 5) - 0.5) * T * 0.5); oy[i] = Math.round((hash(x, y, 9) - 0.5) * T * 0.4);
+  // Chỉ tính cây/đá cho từng mảng CH×CH ô khi người chơi tới gần (không tính cả bản đồ lúc tải — bản đồ lớn tải nhanh, đỡ tốn bộ nhớ).
+  // Kết quả cố định theo toạ độ (hash) nên mọi máy vẫn thấy giống nhau. Giữ tối đa MAX_CHUNKS mảng gần nhất.
+  const CH = 32, MAX_CHUNKS = 160;
+  const chunks = new Map();
+  function buildChunk(cx, cy) {
+    const at = new Int16Array(CH * CH).fill(-1), ox = new Int8Array(CH * CH), oy = new Int8Array(CH * CH);
+    for (let j = 0; j < CH; j++) {
+      const y = cy * CH + j;
+      if (y >= H) break;
+      for (let i = 0; i < CH; i++) {
+        const x = cx * CH + i;
+        if (x >= W) break;
+        const g = grid[y * W + x], s = sets[g];
+        if (!s || !types[g].walk) continue;
+        const f = band(forest(x, y), rules.forest_cut), r = band(rocky(x, y), rules.rock_cut);
+        const pt = rules.tree_base + rules.tree_forest * f, pr = rules.rock_base + rules.rock_field * r;
+        const h = hash(x, y, 7);
+        let list = null;
+        if (h < pt && s.tree.length) list = s.tree;
+        else if (h < pt + pr && s.rock.length) list = s.rock;
+        else if (h < pt + pr + rules.small * (0.5 + f) && s.small.length) list = s.small;
+        if (!list || nearRoad(x, y) || safeAt((x + 0.5) * T, (y + 0.5) * T)) continue;
+        const k = j * CH + i;
+        at[k] = list[Math.floor(hash(x, y, 3) * list.length)];
+        ox[k] = Math.round((hash(x, y, 5) - 0.5) * T * 0.5); oy[k] = Math.round((hash(x, y, 9) - 0.5) * T * 0.4);
+      }
     }
+    return { at, ox, oy };
+  }
+  // Ô (gx, gy) đã quấn mép → { d: chỉ số hình hoặc -1, ox, oy }
+  const NCX = Math.ceil(W / CH);
+  const hit = { d: -1, ox: 0, oy: 0 };
+  function cellAt(gx, gy) {
+    const cx = Math.floor(gx / CH), cy = Math.floor(gy / CH), id = cy * NCX + cx;
+    let c = chunks.get(id);
+    if (c) { chunks.delete(id); chunks.set(id, c); } // dùng gần đây → đưa xuống cuối
+    else {
+      c = buildChunk(cx, cy);
+      chunks.set(id, c);
+      if (chunks.size > MAX_CHUNKS) chunks.delete(chunks.keys().next().value); // bỏ mảng lâu không dùng
+    }
+    const k = (gy - cy * CH) * CH + (gx - cx * CH);
+    hit.d = c.at[k]; hit.ox = c.ox[k]; hit.oy = c.oy[k];
+    return hit;
   }
   const tileOf = (v, n) => ((Math.floor(v / T) % n) + n) % n;
 
   function blockedAt(x, y, r) {
     const tx = Math.floor(x / T), ty = Math.floor(y / T);
     for (let b = -1; b <= 1; b++) for (let a = -1; a <= 1; a++) {
-      const gx = ((tx + a) % W + W) % W, gy = ((ty + b) % H + H) % H, i = gy * W + gx, d = at[i];
+      const gx = ((tx + a) % W + W) % W, gy = ((ty + b) % H + H) % H, c = cellAt(gx, gy), d = c.d;
       if (d < 0 || !defs[d].r) continue;
-      const bx = (tx + a + 0.5) * T + ox[i], by = (ty + b + 0.5) * T + oy[i];
+      const bx = (tx + a + 0.5) * T + c.ox, by = (ty + b + 0.5) * T + c.oy;
       if (Math.hypot(x - bx, (y - by) * 2) < defs[d].r + r) return true;
     }
     return false;
@@ -103,9 +131,9 @@ export async function createDecor({ grid, W, H, T, types, rules, art, safeAt }) 
     for (let ty = y0; ty <= y1; ty++) {
       const gy = ((ty % H) + H) % H;
       for (let tx = x0; tx <= x1; tx++) {
-        const i = gy * W + (((tx % W) + W) % W), d = at[i];
+        const c = cellAt(((tx % W) + W) % W, gy), d = c.d;
         if (d < 0) continue;
-        const def = defs[d], bx = (tx + 0.5) * T + ox[i], by = (ty + 0.5) * T + oy[i];
+        const def = defs[d], bx = (tx + 0.5) * T + c.ox, by = (ty + 0.5) * T + c.oy;
         const behind = def.kind === 'small' || by <= refY;
         if (behind === front) continue;
         const flip = hash(tx, ty, 13) < 0.5;

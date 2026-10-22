@@ -19,6 +19,6 @@ export const savePosition = async () => null;
 export const respawnAtTown = async () => null;
 
 export async function joinZone({ me, handlers }) {
-  setTimeout(() => handlers.onPresence({ [me.id]: [me] }), 0);
+  setTimeout(() => { handlers.onPresence({ [me.id]: [me] }); handlers.onOnline?.(1); }, 0);
   return { line: 1, sendMove() {}, sendChat() {}, setLook() {}, setRealm() {}, async leave() {} };
 }

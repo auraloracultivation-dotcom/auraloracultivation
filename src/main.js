@@ -80,6 +80,7 @@ async function boot() {
   const input = createInput(screen.canvas);
   const maxPlayers = config.zone.max_players;
   let hud = null;
+  let onlineN = 1;
   loading.set(80, 'Kết nối đạo hữu trong khu…');
 
   const zone = await net.joinZone({
@@ -87,7 +88,11 @@ async function boot() {
     maxPlayers,
     maxLines: config.zone.max_lines,
     me: { id: me.id, name: me.name, x: me.x, y: me.y, look: me.look },
+    world: { width: map.width, height: map.height },
+    cellPx: config.net.cell_px,
+    presenceGapMs: config.net.presence_gap_ms,
     handlers: {
+      onOnline: (n) => { onlineN = n; hud?.setOnline(n, maxPlayers); }, // cả tuyến (kênh sảnh)
       onPresence(state) {
         const hadAv = new Map([...others.list].map(([id, p]) => [id, !!p.look?.avatar]));
         others.syncPresence(state, me.id);
@@ -95,12 +100,11 @@ async function boot() {
           const near = Math.hypot(wrapDelta(p.x - me.x, map.width), wrapDelta(p.y - me.y, map.height)) < audioDef.remote_sfx_range_px;
           if (p.look?.avatar && hadAv.get(id) === false && near) audio.play(ptDef.sound, audioDef.remote_sfx_volume);
         }
-        hud?.setOnline(Object.keys(state).length, maxPlayers);
       },
       onMove: (p) => others.onMove(p),
       onChat: (p) => {
         others.onChat(p, performance.now(), config.net.chat_bubble_s);
-        hud?.addChatLine(others.list.get(p.id)?.name || 'Đạo hữu', p.text);
+        hud?.addChatLine(others.list.get(p.id)?.name || (typeof p.name === 'string' ? p.name.slice(0, 16) : 'Đạo hữu'), p.text);
       },
     },
   });
@@ -237,7 +241,7 @@ async function boot() {
       { id: 'auto', name: 'Tự động đánh', icon: S('auto'), dx: 26, dy: -192, size: 50, onUse: () => game.toggleAuto() }, // cùng hàng Lướt, sát phải
     ],
   });
-  hud.setOnline(others.list.size + 1, maxPlayers);
+  hud.setOnline(onlineN, maxPlayers);
   const refreshAvatar = () => hud.setPortrait(renderPortrait(me.look, { body: true }));
   refreshAvatar();
   loading.set(90, 'Thả yêu thú vào rừng…');
