@@ -56,6 +56,7 @@ export function createSkills(c) {
       }
       case 'linh-thu': c.summonPet(s); return true;
       case 'phap-bao': return c.useTreasure(quiet); // pháp bảo đang đeo (treasure.js)
+      case 'cam-che': return c.camChe(s); // trận cấm chế theo hệ chủ đạo (camche.js)
       case 'luot':
         c.buffs.ne = { mul: s.ne_mul, until: now + s.last_s }; c.buffs.speed = { mul: s.speed_px_per_s, until: now + s.last_s };
         c.recompute(); toast('Lăng Ba Vi Bộ', 900); return true;

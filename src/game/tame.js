@@ -30,10 +30,11 @@ export function createTame({ cfg, progress, monsters, mdef, mobs, map, me, stats
     return { ...d, art };
   }
   // Chỉ số chiến đấu của thú: theo tầng + cấp (thường/tinh anh/boss) lúc bắt; khí huyết × hp_mul
+  const starMul = (p) => 1 + cfg.merge.per_star * (p.star || 0); // luyện hồn: mỗi sao +35% công và khí huyết
   function battle(p) {
     const d = defOf.get(p.mid), ss = mdef.stage_stats[p.stage], rm = mdef.rank_mul[d?.rank] || mdef.rank_mul.thuong;
     if (!ss) return { hp: 100, dfn: 5 };
-    return { hp: Math.round(ss.hp * rm.hp * (d?.mul || 1) * cfg.hp_mul), dfn: Math.round(ss.def * rm.def * (d?.mul || 1)) };
+    return { hp: Math.round(ss.hp * rm.hp * (d?.mul || 1) * cfg.hp_mul * starMul(p)), dfn: Math.round(ss.def * rm.def * (d?.mul || 1)) };
   }
   const st = (p) => {
     let s = live.get(p.uid);
@@ -85,7 +86,7 @@ export function createTame({ cfg, progress, monsters, mdef, mobs, map, me, stats
         const near = walk(s, map.wrapX(m.x + side * (m.r + 7)), m.y + 2, cfg.speed_px, dt);
         if ((near || dist(m, s) <= m.r + 14) && t >= s.next) { // cắn
           s.next = t + cfg.every_s; s.atkT = 0.5; s.facing = rel(m, s).dx >= 0 ? 1 : -1;
-          const r = stats.hit(stats.monster({ atk: p.atk * cfg.atk_mul * suppress(m, p), dfn: 0 }), stats.monster(m)); // thú cũng bị áp chế
+          const r = stats.hit(stats.monster({ atk: p.atk * cfg.atk_mul * starMul(p) * suppress(m, p), dfn: 0 }), stats.monster(m)); // thú cũng bị áp chế
           if (!r.miss) { say(m.x, m.y - (m.def.art?.h || 20) - 2, `-${r.dmg}`, '#b6ff9a'); if (mobs.damage(m, r.dmg)) { onKill(m); s.foe = null; continue; } }
           m.petFoe = s.uid;
         }
@@ -137,17 +138,20 @@ export function createTame({ cfg, progress, monsters, mdef, mobs, map, me, stats
   }
 
   // ---- Kho: thẻ Thú cưng ----
+  const kin = (p) => pets().filter((q) => q !== p && q.mid === p.mid && !q.follow); // cùng loài đang nghỉ trong Kho
   function entry(p) {
-    const d = defOf.get(p.mid) || { name: p.mid }, n = following().length;
+    const d = defOf.get(p.mid) || { name: p.mid }, n = following().length, star = p.star || 0, mates = kin(p).length;
     const thumb = (d.art?.sheet && sheetThumb(d.art.sheet, d.art.hue || 0)) || placeholder(d.name, 'nhiemvu');
     const actions = [
       p.follow ? { id: 'pet-rest', label: 'Cho nghỉ (vào Kho)' }
         : { id: 'pet-follow', label: `Cho đi theo (${n}/${cfg.max_follow})`, disabled: n >= cfg.max_follow },
+      star >= cfg.merge.max_star ? { id: 'pet-merge', label: 'Luyện hồn: đã tối đa', disabled: true }
+        : { id: 'pet-merge', label: `Luyện hồn lên ${star + 1}★ (nuốt 1 ${d.name} đang nghỉ · có ${mates})`, disabled: !mates, confirm: `Nuốt hồn 1 con ${d.name} khác để lên ${star + 1}★?` },
       { id: 'pet-free', label: 'Thả về rừng', danger: true, confirm: `Thả ${d.name} đi? Không lấy lại được.` },
     ];
-    return { id: `pet:${p.uid}`, key: `pet:${p.uid}`, name: d.name, cat: 'thu-cung', thumb, equipped: p.follow,
+    return { id: `pet:${p.uid}`, key: `pet:${p.uid}`, name: `${d.name}${star ? ` ${'★'.repeat(star)}` : ''}`, cat: 'thu-cung', thumb, equipped: p.follow,
       sub: `Thú cưng · ${stageName(p.stage)}${p.follow ? ' · đang đi theo' : ''}`,
-      detail: `Đi lang thang quanh bạn, gặp quái là xông vào cắn: công ${Math.round(p.atk * cfg.atk_mul)} mỗi ${cfg.every_s} giây · khí huyết ${battle(p).hp}. Ngã xuống thì ${cfg.revive_s} giây sau hồi sinh.`, actions };
+      detail: `Đi lang thang quanh bạn, gặp quái là xông vào cắn: công ${Math.round(p.atk * cfg.atk_mul * starMul(p))} mỗi ${cfg.every_s} giây · khí huyết ${battle(p).hp}. Ngã xuống thì ${cfg.revive_s} giây sau hồi sinh. Luyện hồn: nuốt 1 con cùng loài đang nghỉ → +1★ (+${Math.round(cfg.merge.per_star * 100)}% công, máu).`, actions };
   }
   const entries = () => pets().map((p) => ({ item: entry(p), count: 1 }));
   function act(key, action) {
@@ -156,6 +160,12 @@ export function createTame({ cfg, progress, monsters, mdef, mobs, map, me, stats
     if (action === 'pet-follow') {
       if (following().length >= cfg.max_follow) return `Chỉ được ${cfg.max_follow} thú cưng đi theo`;
       p.follow = true; const s = st(p); s.x = me.x; s.y = me.y; progress.changed(); return `${name} đi theo bạn`;
+    }
+    if (action === 'pet-merge') {
+      const q = kin(p)[0]; if (!q) return `Cần thêm 1 ${name} cùng loài đang nghỉ trong Kho`;
+      if ((p.star || 0) >= cfg.merge.max_star) return 'Đã tối đa';
+      progress.state.pets = pets().filter((x) => x !== q); p.star = (p.star || 0) + 1; live.delete(p.uid); progress.changed();
+      play('vong-lua', me.x, me.y - 8, 40); return `${name} luyện hồn thành công: ${'★'.repeat(p.star)}`;
     }
     if (action === 'pet-rest') { p.follow = false; progress.changed(); return `${name} vào Kho nghỉ`; }
     if (action === 'pet-free' || action === 'discard') { progress.state.pets = pets().filter((x) => x !== p); progress.changed(); return `Đã thả ${name} về rừng`; }
