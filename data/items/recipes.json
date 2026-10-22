@@ -220,6 +220,12 @@
    "name": "Bảo hộ phù",
    "cat": "khac",
    "use": "Tự dùng khi đột phá: +15 điểm % tỷ lệ thành công"
+  },
+  {
+   "id": "item.danphuong.tang-tho.001",
+   "name": "Đan phương Trường Sinh Đan",
+   "cat": "dan-phuong",
+   "teaches": "item.dan.tang-tho.001"
   }
  ]
 }

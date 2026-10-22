@@ -1,6 +1,6 @@
 // Thọ nguyên (chủ dự án 23/10/2026) — THỬ NGHIỆM phía máy khách, số liệu: data/lifespan.json.
 // 1 ngày thật theo giờ Việt Nam (qua 0h) = 1 năm tuổi, kể cả khi không vào game. Giờ lấy từ máy chủ (serverNow).
-// Thọ nguyên tối đa = base_max + tổng gain các tầng đã đạt + số năm Tăng Thọ Đan đã cộng.
+// Thọ nguyên tối đa = base_max + tổng gain các tầng đã đạt + số năm Trường Sinh Đan đã cộng.
 // Tuổi ≥ thọ nguyên tối đa → tọa hóa (chết hẳn): main.js hiện bảng chuyển thế và xoá tiến trình (src/ui/toahoa.js).
 // Mốc 4: máy chủ tự tính tuổi từ ngày sinh, không tin máy khách.
 
@@ -17,9 +17,9 @@ export function createLifespan({ def, progress, stages, serverNow = Date.now }) 
   const dead = () => left() <= 0;
   const label = (stageName) => `${stageName} (Thọ nguyên ${age()}/${max()} năm)`;
 
-  // Tăng Thọ Đan: mỗi ngày (giờ VN) một viên. Trả về { ok, msg }; ok = được ăn (nơi gọi trừ đan).
+  // Trường Sinh Đan: mỗi ngày (giờ VN) một viên. Trả về { ok, msg }; ok = được ăn (nơi gọi trừ đan).
   function canEat() {
-    if (st().pillDay === today()) return { ok: false, msg: 'Hôm nay đã dùng Tăng Thọ Đan — mai hãy dùng tiếp (qua 0h giờ Việt Nam)' };
+    if (st().pillDay === today()) return { ok: false, msg: 'Hôm nay đã dùng Trường Sinh Đan — mai hãy dùng tiếp (qua 0h giờ Việt Nam)' };
     return { ok: true };
   }
   function eat() {
@@ -37,7 +37,7 @@ export function createLifespan({ def, progress, stages, serverNow = Date.now }) 
     const w = def.warn_left.find((x) => l <= x);
     if (w === undefined) return null;
     warned = d;
-    return `Thọ nguyên chỉ còn ${l} năm — đột phá hoặc dùng Tăng Thọ Đan (hái Thọ Nguyên Thảo ở Vùng Xanh)`;
+    return `Thọ nguyên chỉ còn ${l} năm — đột phá hoặc dùng Trường Sinh Đan (hái Thọ Nguyên Thảo ở Vùng Xanh)`;
   }
   // Gọi mỗi khung hình; kiểm tra mỗi check_every_s giây. Chỉ xét tọa hóa khi đã có giờ máy chủ (synced).
   let t = 0, over = false;

@@ -29,7 +29,7 @@ export function createViews(o) {
   const tierName = (id) => awaken.tiers.find((t) => t.id === id)?.name || id;
   // Thọ nguyên trong bảng Cảnh giới
   const lifeLine = () => { const L = o.life, ate = st().life?.pillDay === L.today();
-    return `<p>Thọ nguyên: <b>${L.age()}/${L.max()} năm</b> (còn ${L.left()} năm · mỗi ngày +1 tuổi theo giờ Việt Nam). Tăng Thọ Đan hôm nay: ${ate ? 'đã dùng' : '<b>chưa dùng</b>'}.</p>`; };
+    return `<p>Thọ nguyên: <b>${L.age()}/${L.max()} năm</b> (còn ${L.left()} năm · mỗi ngày +1 tuổi theo giờ Việt Nam). Trường Sinh Đan hôm nay: ${ate ? 'đã dùng' : '<b>chưa dùng</b>'}.</p>`; };
   const msg = (r) => { if (!r) return; toast(r.msg, 1800); if (r.event) quests.emit(...r.event); o.recompute(); };
 
   // ---------- Nhiệm vụ ----------

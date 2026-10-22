@@ -150,6 +150,7 @@ def main():
         new[k] = fit(im)
     # Thọ nguyên / tiên đan: chưa có ảnh riêng → đổi màu icon có sẵn
     for k, (src, hue, sat) in DERIVED.items(): new[k] = recolor(new[src], hue, sat)
+    new['item.danphuong.tang-tho.001'] = with_scroll(new['item.dan.tang-tho.001'])  # Đan phương Trường Sinh Đan
     tiles.update(new)
     cols = 16
     keys = list(tiles)

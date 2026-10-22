@@ -323,7 +323,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "xanh",
-   "use": "Luyện Tăng Thọ Đan (1 cây = 1 viên)",
+   "use": "Luyện Trường Sinh Đan (1 cây = 1 viên)",
    "spawn_share": 0.3,
    "_ghi_chu": "Cỏ mọc khắp Vùng Xanh ngay ngoài thành, hái miễn phí. spawn_share: tỷ lệ trong số linh thảo mọc ở vùng này (không theo thứ tự phổ biến)."
   }
