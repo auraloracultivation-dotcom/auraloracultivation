@@ -462,7 +462,7 @@ img { image-rendering: pixelated; }
 .bag-act:disabled { filter: grayscale(1); opacity: .45; cursor: default; }
 .sheet .tier-luc { border-color: #4caf50; } .sheet .tier-lam { border-color: #3d8bff; } .sheet .tier-tim { border-color: #b05cff; }
 .sheet .tier-cam { border-color: #ff9a3d; } .sheet .tier-vang { border-color: #ffd23a; } .sheet .tier-do { border-color: #ff3b30; }
-.sheet .tier-den { border-color: #ff3b30; background: #0d0a10; }
+.sheet .tier-den { border-color: #7a0016; background: #07040a; box-shadow: 0 0 0 1px #000 inset, 0 0 10px rgba(200, 0, 40, .55); animation: tnAura 2.4s ease-in-out infinite; }
 
 .sheet .ico { width: 26px; height: 26px; object-fit: contain; vertical-align: middle; margin-right: 6px; }
 .sheet .grid2 span .ico { width: 20px; height: 20px; }
@@ -479,7 +479,8 @@ img { image-rendering: pixelated; }
 .bag-act.danger { background: linear-gradient(#ff9a8a, #c9473a); color: #2a0a08; }
 .item-pop { height: auto; }
 .bag-cell.tier-luc { border-color: #4caf50; } .bag-cell.tier-lam { border-color: #3d8bff; } .bag-cell.tier-tim { border-color: #b05cff; }
-.bag-cell.tier-cam { border-color: #ff9a3d; } .bag-cell.tier-vang { border-color: #ffd23a; } .bag-cell.tier-do, .bag-cell.tier-den { border-color: #ff3b30; }
+.bag-cell.tier-cam { border-color: #ff9a3d; } .bag-cell.tier-vang { border-color: #ffd23a; } .bag-cell.tier-do { border-color: #ff3b30; }
+.bag-cell.tier-den { border-color: #050005; box-shadow: 0 0 0 1px #8a0018, 0 0 9px rgba(210, 0, 40, .7); animation: tnAura 2.4s ease-in-out infinite; }
 .sheet .row.locked { opacity: .8; }
 .sheet .lock { color: #ffb38a !important; font-size: 12px; }
 
@@ -491,13 +492,18 @@ img { image-rendering: pixelated; }
 .pick-row .pick img { width: 60px; height: 60px; object-fit: contain; }
 .pick-row .pick span { font-size: 10px; color: var(--text); text-align: center; line-height: 1.2; }
 .pick.tier-luc { border-color: #4caf50; } .pick.tier-lam { border-color: #3d8bff; } .pick.tier-tim { border-color: #b05cff; }
-.pick.tier-cam { border-color: #ff9a3d; } .pick.tier-vang { border-color: #ffd23a; } .pick.tier-do, .pick.tier-den { border-color: #ff3b30; }
+.pick.tier-cam { border-color: #ff9a3d; } .pick.tier-vang { border-color: #ffd23a; } .pick.tier-do { border-color: #ff3b30; }
+.pick.tier-den { border-color: #050005; box-shadow: 0 0 0 1px #8a0018, 0 0 9px rgba(210, 0, 40, .7); }
 
 /* Dòng thức tỉnh: mỗi dòng một màu phẩm */
 .ic-lines { display: flex; flex-wrap: wrap; gap: 3px 8px; margin-top: 3px; }
 .ln { font-style: normal; font-size: 12px; font-weight: 700; }
 .ln.tier-luc { color: #6fdc76; } .ln.tier-lam { color: #6aa8ff; } .ln.tier-tim { color: #c58cff; } .ln.tier-cam { color: #ffa94d; }
-.ln.tier-vang { color: #ffd84a; } .ln.tier-do { color: #ff5a4a; } .ln.tier-den { color: #ff3b30; background: #111; padding: 0 3px; border-radius: 3px; }
+.ln.tier-vang { color: #ffd84a; } .ln.tier-do { color: #ff5a4a; } /* Tiên Nghịch (phẩm cao nhất): chữ ĐEN, quầng đỏ huyền bí bao quanh, thở chậm */
+.ln.tier-den { color: #050005; font-weight: 700; padding: 0 3px;
+  text-shadow: 0 0 1px #ff2a4a, 0 0 3px #e0002a, 0 0 6px #a8001f, 0 0 10px #6a0014; animation: tnText 2.4s ease-in-out infinite; }
+@keyframes tnText { 50% { text-shadow: 0 0 1px #ff5a70, 0 0 4px #ff0033, 0 0 9px #c0002a, 0 0 14px #7a0018; } }
+@keyframes tnAura { 50% { box-shadow: 0 0 0 1px #b0001f, 0 0 16px rgba(230, 0, 50, .85); } }
 .sheet .src { font-size: 11.5px; color: #bfb3d6 !important; }
 .item-card small { white-space: pre-line; }
 .sheet em.own { color: #8a8398; font-weight: 700; } .sheet em.own.yes { color: #5dff7a; }
@@ -533,3 +539,21 @@ img { image-rendering: pixelated; }
 .codex-st.ok { color: #7dff8a; } .codex-st.tam { color: #ffd36a; } .codex-st.none { color: #ff9a8a; }
 .codex-txt .codex-note { color: #ffd9a0; }
 .codex .bag-act.sm { margin-top: 6px; }
+
+/* Bảng xếp hạng (src/ui/rank.js) */
+.sheet .rank-row { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; margin-bottom: 6px; cursor: pointer; }
+.sheet .rank-row.me { border-color: var(--gold); box-shadow: 0 0 0 1px rgba(255, 211, 106, .35) inset; }
+.sheet .rank-no { width: 34px; flex: none; text-align: center; font-weight: 700; color: #cfc3ff; font-size: 15px; }
+.sheet .rank-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.sheet .rank-main b { color: var(--gold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sheet .rank-main small, .sheet .rank-card small { color: var(--muted); font-size: 11px; }
+.sheet .rank-row em { font-style: normal; font-size: 12px; color: #9fe8ff; text-align: right; flex: none; max-width: 42%; }
+.sheet .rank-mine { margin: 2px 0 10px; padding: 8px 10px; border-radius: 8px; background: #2a1d45; color: var(--text); font-size: 13px; }
+.sheet .rank-mine b { color: var(--gold); }
+.sheet .rank-empty { color: var(--muted); text-align: center; padding: 14px 0; }
+.sheet .rank-card { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.sheet .rank-card img { width: 96px; height: 96px; object-fit: contain; image-rendering: pixelated; background: #120d22; border-radius: 10px; }
+.sheet .rank-card div { display: flex; flex-direction: column; gap: 4px; color: var(--gold); }
+.sheet .rank-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.sheet .rank-stat { display: flex; justify-content: space-between; padding: 7px 9px; border-radius: 8px; background: #1b1430; border: 1px solid #3a2c52; font-size: 12px; color: var(--text); }
+.sheet .rank-stat b { color: var(--gold); }

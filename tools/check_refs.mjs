@@ -62,5 +62,20 @@ export function checkRefs() {
   for (const q of load('data/items/quest-items.json').items) if (q.drop.from) must(q.drop.from, q.id);
   for (const r of load('data/items/recipes.json').items) if (r.teaches) must(r.teaches, r.id);
   for (const s of load('data/shop.json').stock) must(s.id, 'shop.json');
+  // Luật cảnh giới (chủ dự án 23/10): boss mạnh nhất một đại cảnh giới ≤ quái thường yếu nhất Sơ kỳ cảnh giới kế tiếp, từng chỉ số
+  const mon = load('data/monsters/monsters.json');
+  const realmOfZone = Object.fromEntries(mon.zones.map((z) => [z.id, `realm.${z.realm}`]));
+  const order = mon.rule.order;
+  for (let i = 0; i + 1 < order.length; i++) {
+    const top = mon.monsters.filter((m) => realmOfZone[m.zone] === order[i]);
+    const next = mon.monsters.filter((m) => realmOfZone[m.zone] === order[i + 1]);
+    const firstStage = next.find((m) => m.rank === 'thuong' || m.void)?.stages[0];
+    const low = next.filter((m) => (m.rank === 'thuong' || m.void) && m.stages[0] === firstStage);
+    if (!top.length || !low.length) { errors.push(`monsters.json: thiếu quái cho ${order[i]} hoặc ${order[i + 1]}`); continue; }
+    for (const k of ['hp', 'atk', 'def']) {
+      const hi = Math.max(...top.map((m) => m[k][1])), lo = Math.min(...low.map((m) => m[k][0]));
+      if (hi > lo) errors.push(`monsters.json: ${order[i]} có quái ${k} tối đa ${hi} > quái yếu nhất ${order[i + 1]} (${lo}) — vi phạm luật cảnh giới`);
+    }
+  }
   return errors;
 }

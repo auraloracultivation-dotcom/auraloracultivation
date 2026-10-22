@@ -2,8 +2,9 @@
 // Khi có ảnh thật: thêm "art" vào data/monsters/monsters.json và đổi hàm này sang vẽ ảnh — không phải sửa AI.
 import { textScale } from './draw.js';
 import { drawSheet, drawEffect, drawIcon, hasSheet } from './sprites.js';
+import { drawVoid } from './void-draw.js';
 
-const ZONE_COLOR = { xanh: '#5fbf5a', cam: '#e08a3a', trang: '#cfe6f2', xam: '#8d8f99', than: '#4a3b46' };
+const ZONE_COLOR = { xanh: '#5fbf5a', cam: '#e08a3a', xam: '#8d8f99', trang: '#cfe6f2', than: '#4a3b46', den: '#1d1a24', tim: '#7a3fb0', huvo: '#2a0f3d' };
 
 export function drawMonster(ctx, m, x, y, now) {
   const r = m.r, dead = m.state === 'dead';
@@ -15,6 +16,7 @@ export function drawMonster(ctx, m, x, y, now) {
     ctx.fillStyle = '#ff3b30'; ctx.beginPath();
     ctx.ellipse(m.wrx, m.wry, m.heavyR, m.heavyR * 0.55, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
   }
+  if (m.def.art?.code === 'hu-vo') { drawVoid(ctx, m, x, y, now / 1000); ctx.restore(); return; } // Âm Hư: vẽ bằng code
   // bóng
   ctx.fillStyle = 'rgba(0,0,0,.28)';
   ctx.beginPath(); ctx.ellipse(x, y + 1, r * 0.9, r * 0.35, 0, 0, Math.PI * 2); ctx.fill();
@@ -59,7 +61,7 @@ function drawMonsterSprite(ctx, m, art, x, y, t) {
 }
 
 // Cảnh giới quái dạng chữ: "lk1–3" → "Luyện Khí 1–3", "tc_so–trung" → "Trúc Cơ Sơ–Trung"
-const REALM = { lk: 'Luyện Khí', tc: 'Trúc Cơ', kd: 'Kết Đan', na: 'Nguyên Anh', ht: 'Hóa Thần' };
+const REALM = { lk: 'Luyện Khí', tc: 'Trúc Cơ', kd: 'Kết Đan', na: 'Nguyên Anh', ht: 'Hóa Thần', ab: 'Anh Biến', vd: 'Vấn Đỉnh', am: 'Âm Hư' };
 const KY = { so: 'Sơ', trung: 'Trung', hau: 'Hậu' };
 const realmText = (r) => {
   const big = REALM[r.slice(0, 2)] || r;
@@ -88,7 +90,7 @@ export function drawMonsterLabel(ctx, m, x, y, selected, now) {
   ctx.fillStyle = m.def.rank === 'boss' ? '#ffd36a' : m.def.rank === 'elite' ? '#d9b8ff' : '#f2efe6';
   ctx.strokeText(label, 0, -2); ctx.fillText(label, 0, -2);
   ctx.font = '600 4.5px sans-serif'; ctx.fillStyle = '#9fe8ff';
-  const rt = realmText(m.def.realm);
+  const rt = m.realmName || realmText(m.def.realm); // tầng thật của con này (vd. Trúc Cơ Trung kỳ)
   ctx.strokeText(rt, 0, -8); ctx.fillText(rt, 0, -8);
   ctx.restore();
 }
@@ -130,7 +132,7 @@ export function drawFx(ctx, fx, ox, oy) {
 }
 
 // Điểm hái HÌNH TẠM: linh thảo = cụm lá + nụ hoa theo màu vùng; khoáng = tảng đá có vân sáng
-const HERB_TIP = { xanh: '#b8ffb0', cam: '#ff7a4a', trang: '#e8f6ff', xam: '#c7a6ff', than: '#ff3b6b' };
+const HERB_TIP = { xanh: '#b8ffb0', cam: '#ff7a4a', xam: '#c7a6ff', trang: '#e8f6ff', than: '#ff3b6b', den: '#7cf2ff', tim: '#f0a8ff' };
 export function drawNode(ctx, n, x0, y0, now) {
   ctx.save();
   ctx.translate(x0, y0); ctx.scale(1.7, 1.7); // to hơn cho dễ thấy khi camera thu nhỏ

@@ -209,7 +209,7 @@ function codeDrawer(col, onRedeem) {
 }
 
 // ---------- Bản đồ thế giới (tròn, lấy mình làm tâm vì thế giới vòng lặp) ----------
-const ZOOMS = [250, 125, 60]; // bán kính hiển thị (ô): 250 = thấy trọn thế giới 500×500
+const ZOOMS = [500, 200, 70]; // bán kính hiển thị (ô): 500 = thấy trọn thế giới 1000×1000
 
 export function showWorldMap({ zoneName, draw }) {
   let raf = 0;

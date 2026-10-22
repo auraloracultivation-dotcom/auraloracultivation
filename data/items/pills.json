@@ -64,21 +64,22 @@
    "recipe": {
     "inputs": [
      {
-      "id": "item.thao.han-linh.001",
+      "id": "item.thao.huyen-linh.001",
       "count": 80
      },
      {
-      "id": "item.khoang.han-thiet.001",
+      "id": "item.khoang.huyen-thiet.001",
       "count": 30
      },
      {
-      "id": "item.dacbiet.hon-thu-tinh.001",
+      "id": "item.dacbiet.tinh-hon.001",
       "count": 3
      }
     ],
     "rate": 0.5
    },
-   "shop": "co-dat"
+   "shop": "co-dat",
+   "_doi_23_10": "Vùng Xám Khói nay là vùng Kết Đan → đan lên Nguyên Anh dùng nguyên liệu Xám Khói"
   },
   {
    "id": "item.dan.hoa-than.001",
@@ -88,21 +89,76 @@
    "recipe": {
     "inputs": [
      {
-      "id": "item.thao.huyen-linh.001",
+      "id": "item.thao.han-linh.001",
       "count": 120
      },
      {
-      "id": "item.khoang.huyen-thiet.001",
+      "id": "item.khoang.han-thiet.001",
       "count": 50
      },
      {
-      "id": "item.dacbiet.tinh-hon-co.001",
+      "id": "item.dacbiet.hon-thu-tinh.001",
       "count": 1
      }
     ],
     "rate": 0.3
    },
-   "shop": "khong"
+   "shop": "khong",
+   "_doi_23_10": "Vùng Trắng nay là vùng Nguyên Anh → đan lên Hóa Thần dùng nguyên liệu Trắng"
+  },
+  {
+   "id": "item.dan.anh-bien.001",
+   "name": "Anh Biến Đan",
+   "cat": "linh-dan",
+   "when": "HT → AB",
+   "recipe": {
+    "inputs": [
+     {
+      "id": "item.thao.hac-linh.001",
+      "count": 160
+     },
+     {
+      "id": "item.khoang.hac-thiet.001",
+      "count": 70
+     },
+     {
+      "id": "item.dacbiet.tinh-hon-co.001",
+      "count": 2
+     }
+    ],
+    "rate": 0.2
+   },
+   "shop": "khong",
+   "_nguon": "Claude đề xuất 23/10"
+  },
+  {
+   "id": "item.dan.van-dinh.001",
+   "name": "Vấn Đỉnh Đan",
+   "cat": "linh-dan",
+   "when": "AB → VĐ",
+   "recipe": {
+    "inputs": [
+     {
+      "id": "item.thao.hac-diem.001",
+      "count": 200
+     },
+     {
+      "id": "item.thao.u-hon-hoa.001",
+      "count": 60
+     },
+     {
+      "id": "item.khoang.hac-dieu.001",
+      "count": 90
+     },
+     {
+      "id": "item.dacbiet.anh-bien-tinh.001",
+      "count": 3
+     }
+    ],
+    "rate": 0.12
+   },
+   "shop": "khong",
+   "_nguon": "Claude đề xuất 23/10"
   },
   {
    "id": "item.dan.tieu-hoi-huyet.001",

@@ -1,6 +1,6 @@
 // Nhiệm vụ THỬ NGHIỆM (data/quests/quests.json): nhận, đếm tiến độ theo sự kiện, nhận thưởng đúng một lần.
 // Daily làm lại mỗi ngày (theo giờ máy). Mục tiêu trỏ NPC/địa điểm chưa có → "Hoàn thành tạm".
-const MAJOR = { lk: 0, tc: 1, kd: 2, na: 3, ht: 4 };
+const MAJOR = { lk: 0, tc: 1, kd: 2, na: 3, ht: 4, ab: 5, vd: 6 };
 const today = () => new Date().toLocaleDateString('sv'); // YYYY-MM-DD theo giờ máy
 
 export function createQuests(def, progress, realmMajor) {

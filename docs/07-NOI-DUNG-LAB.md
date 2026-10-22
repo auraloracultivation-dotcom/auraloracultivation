@@ -31,8 +31,15 @@ Mọi file dưới đây có `"_status": "design"`. Nghĩa là:
 `tools/check_refs.mjs` (chạy trong `tools/check.mjs`): ID không trùng, đúng dạng, mọi nguyên liệu/đan/quái/nhiệm vụ được trỏ tới phải tồn tại.
 Mục tiêu nhiệm vụ chưa có thực thể (NPC, địa điểm, cờ mở khoá) phải khai báo trong `placeholders` của `quests.json`.
 
+## Thay đổi 23/10/2026 (chủ dự án)
+- Thêm cảnh giới **Anh Biến**, **Vấn Đỉnh** (người chơi) và **Âm Hư** (chỉ boss). `data/realms.json`, `data/gameplay.json → player.stages` sinh bằng `tools/gen_balance.py`.
+- Thứ tự vùng đổi: **Xám Khói (sỏi) = Kết Đan, Trắng (tuyết) = Nguyên Anh** (trước ngược lại). Đi kèm: Nguyên Anh Đan dùng nguyên liệu Xám Khói,
+  Hóa Thần Đan dùng nguyên liệu Trắng; đồ rơi từ boss đổi vùng Trắng ↔ Xám; nhiệm vụ "Thử thách Tuyết Sơn" nay là nhiệm vụ Nguyên Anh.
+- Thêm Vùng Đen, Vùng Tím: 10 quái mới (hình mượn + đổi màu), 8 nguyên liệu + Âm Hư Tinh Hạch (`materials.json`, ghi `_nguon`), Anh Biến Đan, Vấn Đỉnh Đan + đan phương.
+- Quái giờ có `stages` (tầng xuất hiện); hp/atk/def [min, max] chỉ để hiển thị. Linh thạch rơi theo tầng (`monster.stone_by_stage`), không theo HP.
+
 ## Chênh lệch Lab ↔ repo — đã chốt ở Lab v3.1 (21/10/2026)
-1. **Vùng ↔ địa hình**: cỏ = Xanh, cát + đá lát cổ = Cam, tuyết = Trắng, sỏi = Xám, hắc thổ + dung nham = Than (`data/terrain.json` → `zone`).
+1. **Vùng ↔ địa hình**: cỏ = Xanh, cát + đá lát cổ = Cam, sỏi = Xám Khói, tuyết = Trắng, hắc thổ + dung nham = Xám Than, hắc thạch = Đen, tử vực = Tím (`data/terrain.json` → `zone`; đổi 23/10).
 2. **Huyền Thiết Vụn** (không phải Huyền Thiết) trong phôi Dây chuyền và Luyện Khí Quyết.
 3. Nhiệm vụ "Thử thách Tuyết Sơn": boss Vùng Trắng là **Tuyết Sơn Lão Tổ**.
 4. Vật phẩm nhiệm vụ có ID chuẩn: `data/items/quest-items.json`.

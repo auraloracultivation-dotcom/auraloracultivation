@@ -1,6 +1,7 @@
 // Nội dung các bảng Nhiệm vụ / Tu luyện / Kho cho phần chơi thử. Chỉ dựng HTML + gọi luật trong craft/quests.
 import { showSheet, escapeHtml as E } from '../ui/index.js';
 import { iconUrl } from '../entity/index.js';
+import { compactNum as N } from '../core/index.js';
 
 const GOAL = { talk: 'Nói chuyện', reach: 'Đến', collect: 'Thu thập', craft: 'Luyện', kill: 'Hạ', boss: 'Hạ boss', dodge_heavy: 'Né đòn nặng',
   discover: 'Khám phá', complete_daily: 'Hoàn thành nhiệm vụ ngày', awaken: 'Thức tỉnh trang bị', use: 'Dùng',
@@ -31,7 +32,7 @@ export function createViews(o) {
   // ---------- Nhiệm vụ ----------
   function rewardText(r) {
     const parts = [];
-    if (r.exp) parts.push(`${r.exp} tu vi`);
+    if (r.exp) parts.push(`${N(r.exp)} tu vi`);
     if (r.spiritStone) parts.push(`${r.spiritStone} Linh thạch`);
     for (const i of r.items || []) parts.push(`${name(i.id)} ×${i.count}`);
     const later = [r.title && `danh hiệu "${r.title}"`, r.cosmetic && 'trang trí', r.choiceReward && 'rương chọn thưởng'].filter(Boolean);
@@ -77,7 +78,7 @@ export function createViews(o) {
         : `Lên <b>${E(next.name)}</b>: đủ tu vi sẽ tự lên tầng.`;
     }
     const rows = Object.keys(STAT).map((k) => `<span>${STAT[k]}</span><b>${k === 'hp' ? `${Math.round(o.getHp())}/${ps.hp}` : ps[k]}</b>`).join('');
-    return `<div class="row"><div class="row-h"><b>${E(s.name)}</b><em>${st().exp}/${s.exp_need} tu vi</em></div>
+    return `<div class="row"><div class="row-h"><b>${E(s.name)}</b><em>${N(st().exp)}/${N(s.exp_need)} tu vi</em></div>
       <p>${bt}</p><p>Linh thạch: <b>${st().stone}</b></p></div><div class="row grid2">${rows}</div>
       <div class="row"><p>Kỹ năng mở theo cảnh giới: Kiếm khí + Khống chế (Trúc Cơ), Linh thú + Lướt (Kết Đan), Diện rộng (Nguyên Anh).</p></div>`;
   }

@@ -1,6 +1,7 @@
 // Thông tin một vật phẩm cho người chơi: tác dụng + nơi có (dùng ở Kho và Vạn Bảo Lâu). Chỉ dựng chữ từ data/.
-const ZONE = { xanh: 'Vùng Xanh (đồng cỏ quanh thành)', cam: 'Vùng Cam (cát vàng, đá lát cổ)', trang: 'Vùng Trắng (băng tuyết)',
-  xam: 'Vùng Xám (sỏi đá)', than: 'Vùng Than (hắc thổ, dung nham)' };
+const ZONE = { xanh: 'Vùng Xanh (đồng cỏ quanh thành)', cam: 'Vùng Cam (cát vàng, đá lát cổ)', xam: 'Vùng Xám Khói (sỏi đá)',
+  trang: 'Vùng Trắng (băng tuyết)', than: 'Vùng Xám Than (hắc thổ, dung nham)', den: 'Vùng Đen (hắc thạch)', tim: 'Vùng Tím (tử vực)',
+  huvo: 'Âm Hư từ hư vô' };
 const RANK = { thuong: 'quái thường', elite: 'tinh anh', boss: 'boss' };
 
 const SLOT = { 'mat-na': 'Mặt nạ', 'trang-phuc': 'Trang phục', 'vu-khi': 'Vũ khí', nhan: 'Nhẫn', canh: 'Cánh', 'linh-thu': 'Linh thú', 'day-chuyen': 'Dây chuyền', 'phap-tuong': 'Pháp tướng' };

@@ -12,11 +12,20 @@ export const updatePassword = async () => {};
 export const isPasswordRecovery = () => false;
 
 export async function getMyCharacter() {
-  return { user_id: USER, name: 'Đạo hữu thử', zone_id: 'zone.start', x: 8016, y: 8016, realm: 0 };
+  return { user_id: USER, name: 'Đạo hữu thử', zone_id: 'zone.start', x: 16016, y: 16016, realm: 0 };
 }
 export const createCharacter = getMyCharacter;
 export const savePosition = async () => null;
 export const respawnAtTown = async () => null;
+export const syncServerTime = async () => {};
+export const serverNow = () => Date.now();
+// Bảng xếp hạng chơi một mình: chỉ có mình
+let mine = null;
+const row = () => mine && { user_id: USER, name: 'Đạo hữu thử', stage_index: mine.stageIndex, stage_name: mine.stageName, exp: mine.exp,
+  power: mine.power, void_kills: mine.voidKills, stats: mine.stats, look: mine.look, source: 'client', updated_at: new Date().toISOString() };
+export const submitLeaderboard = async (p) => { mine = p; };
+export const fetchLeaderboard = async () => (mine ? [row()] : []);
+export const fetchMyRank = async () => (mine ? { rank: 1, row: row() } : null);
 
 export async function joinZone({ me, handlers }) {
   setTimeout(() => { handlers.onPresence({ [me.id]: [me] }); handlers.onOnline?.(1); }, 0);

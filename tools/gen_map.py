@@ -1,12 +1,14 @@
-"""Sinh bản đồ vòng lặp 500×500 ô cho khu khởi đầu.
+"""Sinh bản đồ vòng lặp 1000×1000 ô cho khu khởi đầu (mở rộng 23/10/2026: 7 vùng).
 
 Dùng: python3 -I tools/gen_map.py
 Ra:   data/zones/zone.start.map.png — mỗi điểm ảnh là một ô, màu theo data/terrain.json.
       Mở bằng app vẽ bất kỳ để sửa tay; game đọc thẳng ảnh này.
 
 Thiết kế (bản nháp đầu, chờ chủ dự án duyệt):
-- Tâm là đồng cỏ ~100×100 ô cho tân thủ (quái yếu nhất). Ra ngoài lần lượt:
-  cát vàng → đá lát → băng tuyết → sỏi đá → hắc thổ (có vũng dung nham).
+- Tâm là đồng cỏ (Vùng Xanh, Luyện Khí). Ra ngoài lần lượt (chốt chủ dự án 23/10):
+  cát vàng + đá lát (Cam, Trúc Cơ) → sỏi đá (Xám Khói, Kết Đan) → băng tuyết (Trắng, Nguyên Anh)
+  → hắc thổ + dung nham (Xám Than, Hóa Thần) → hắc thạch (Đen, Anh Biến) → tử vực (Tím, Vấn Đỉnh, nối qua mép).
+- Cũng ghi lại đường đi (roads) + tâm thành vào data/zones/zone.start.json cho khớp cỡ bản đồ.
 - Ranh giới các vành dùng hàm nhiễu tuần hoàn nên mép tự nhiên và bản đồ nối liền khi đi qua mép (vòng lặp).
 - Hai vòng sông bảo vệ: quanh đồng cỏ và quanh vành cát. Chỉ qua được ở các chỗ lội nước nông,
   để quái mạnh vành ngoài không tràn vào khu tân thủ.
@@ -20,15 +22,17 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-N = 500
+N = 1000
 SEED = 20261020
 OUT = Path('data/zones/zone.start.map.png')
 TERRAIN = json.loads(Path('data/terrain.json').read_text())['types']
 ID = {t['id']: i for i, t in enumerate(TERRAIN)}
 
 # Bán kính các vành (đơn vị ô, theo "khoảng cách tròn-vuông" từ tâm)
-RINGS = [('co', 57), ('cat', 100), ('da_lat', 140), ('tuyet', 180), ('soi', 220), ('dat_den', 10_000)]
-MOATS = [(57, 4), (100, 4)]  # (bán kính, bề rộng) hai vòng sông bảo vệ
+RINGS = [('co', 95), ('cat', 150), ('da_lat', 175), ('soi', 235), ('tuyet', 295), ('dat_den', 355), ('hac_thach', 420), ('tu_vuc', 10_000)]
+MOATS = [(95, 5), (175, 5)]  # (bán kính, bề rộng) hai vòng sông bảo vệ: quanh Vùng Xanh và quanh Vùng Cam
+ROAD_RINGS = [60, 122, 205, 265, 325, 388, 455]  # nửa cạnh vành đường vuông, mỗi vùng một vành
+ZONE_FILE = Path('data/zones/zone.start.json')
 FORDS_PER_MOAT = 4
 FORD_WIDTH = 7
 
@@ -81,7 +85,7 @@ def main():
     warp = periodic_noise(rng, 14, 6) * 9 + periodic_noise(rng, 10, 14) * 3
     rw = r + warp
 
-    grid = np.full((N, N), ID['dat_den'], np.uint8)
+    grid = np.full((N, N), ID['tu_vuc'], np.uint8)
     for name, radius in reversed(RINGS):
         grid[rw < radius] = ID[name]
 
@@ -108,11 +112,11 @@ def main():
     # sông uốn lượn ở các vành ngoài (theo đường đồng mức của nhiễu)
     # là nước nông (lội được, đi chậm) để không chặn đường thành vùng kín
     river = periodic_noise(rng, 12, 5)
-    outer = rw > 145
+    outer = rw > 260
     grid[outer & (np.abs(river) < 0.03) & (grid != ID['nuoc_sau'])] = ID['nuoc_nong']
 
     # hồ: mỗi vành vài hồ, tránh tâm và tránh đè lên sông bảo vệ
-    lakes = [(25, 40, 3, 6), (70, 92, 3, 8), (110, 135, 3, 10), (150, 175, 3, 11), (190, 215, 3, 12), (230, 300, 4, 14)]
+    lakes = [(30, 80, 4, 7), (110, 145, 4, 9), (185, 228, 4, 11), (245, 290, 5, 12), (305, 350, 5, 13), (365, 415, 5, 14), (430, 560, 7, 16)]
     for rmin, rmax, count, size in lakes:
         for _ in range(count):
             a = rng.uniform(0, 2 * math.pi)
@@ -129,10 +133,31 @@ def main():
 
     ensure_reachable(grid)
 
+    write_zone()
     palette = np.array([t['color'] for t in TERRAIN], np.uint8)
     Image.fromarray(palette[grid], 'RGB').save(OUT, optimize=True)
     counts = {TERRAIN[i]['id']: int((grid == i).sum()) for i in range(len(TERRAIN))}
     print(OUT, OUT.stat().st_size // 1024, 'KB', counts)
+
+
+def write_zone():
+    """Tâm thành, điểm xuất hiện, cỡ bản đồ và đường đi trong data/zones/zone.start.json khớp N."""
+    z = json.loads(ZONE_FILE.read_text())
+    c = N // 2
+    z['width_tiles'] = z['height_tiles'] = N
+    z['spawn'] = {'x': c * 32 + 16, 'y': c * 32 + 16}
+    z['town']['center_tile'] = [c, c]
+    lines = [[0, c, N - 1, c], [c, 0, c, N - 1]]
+    for h in ROAD_RINGS:
+        a, b = c - h, c + h
+        lines += [[a, a, b, a], [a, b, b, b], [a, a, a, b], [b, a, b, b]]
+    r1, r2 = ROAD_RINGS[0], ROAD_RINGS[1]
+    for sx, sy in ((-1, -1), (1, 1), (1, -1), (-1, 1)):  # đường chéo nối vành 1–2
+        lines.append([c + sx * r1, c + sy * r1, c + sx * r2, c + sy * r2])
+    z['roads']['lines'] = lines
+    z['roads']['_ghi_chu'] = ('Đường (ô, toạ độ ảnh bản đồ) — sinh bằng tools/gen_map.py: 2 trục Đông–Tây / Bắc–Nam xuyên bản đồ (quấn mép) '
+                              '+ vành đường vuông ở mỗi vùng (7 vành) + 4 đường chéo nối vành 1–2. Qua nước tự thành cầu gỗ.')
+    ZONE_FILE.write_text(json.dumps(z, ensure_ascii=False, indent=1) + '\n')
 
 
 if __name__ == '__main__':

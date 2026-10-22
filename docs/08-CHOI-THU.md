@@ -3,6 +3,34 @@
 Quyết định của chủ dự án ngày 21/10/2026: **đưa toàn bộ Lab vào game bằng code đơn giản, hình tạm**, để hình dung game trước,
 song song với việc hoàn thành Mốc 1. Đây là **bản chơi thử**, chưa phải hệ thống an toàn cho nhiều người.
 
+## Cảnh giới, 7 vùng, Âm Hư (chủ dự án chốt 23/10/2026)
+- **Cảnh giới** (yếu → mạnh): Luyện Khí 1–10 → Trúc Cơ → Kết Đan → Nguyên Anh → Hóa Thần → Anh Biến → Vấn Đỉnh (mỗi cảnh giới Sơ / Trung / Hậu kỳ)
+  → **Âm Hư** (chỉ có boss, người chơi không tu tới). Đột phá đại cảnh giới cần đan: … Hóa Thần Đan, **Anh Biến Đan**, **Vấn Đỉnh Đan** (đan phương rơi từ boss Xám Than / Đen).
+- **Luật cứng**: boss mạnh nhất một đại cảnh giới (kể cả lệch ngẫu nhiên ±5%) không mạnh hơn quái thường yếu nhất Sơ kỳ cảnh giới sau, trên từng chỉ số HP/Công/Thủ.
+  `tools/check_refs.mjs` kiểm mỗi Pull Request. Số sinh bằng `python3 -I tools/gen_balance.py` (sửa hệ số ở đầu file rồi chạy lại).
+- **Bản đồ 1000×1000 ô**, 7 vành từ thành ra ngoài: Xanh (cỏ, LK) → Cam (cát + đá lát, TC) → Xám Khói (sỏi, KĐ) → Trắng (tuyết, NA)
+  → Xám Than (hắc thổ + dung nham, HT) → Đen (hắc thạch, AB) → Tím (tử vực, VĐ, nối qua mép bản đồ). Sinh bằng `tools/gen_map.py`.
+  Ô đất Đen / Tím **vẽ bằng code** (`tools/gen_tiles_code.py`) chờ ảnh thật.
+- **Tầng quái theo độ sâu**: mép trong mỗi vành là tầng thấp nhất của vùng, ra ngoài mạnh dần (Vùng Xanh: LK1 sát thành → LK10 ở mép sông).
+  Chỉ số thật = `stage_stats[tầng] × rank_mul[cấp]` trong `data/monsters/monsters.json`. Trên đầu quái ghi đúng tầng (vd. "Trúc Cơ Trung kỳ").
+- **5 Âm Hư từ hư vô** (`src/game/void.js`, hình vẽ bằng code `src/entity/void-draw.js`): Hư Không Ma Nhãn, Âm Hư Cốt Long, Vô Tướng Ảnh Ma,
+  Tịch Diệt Huyết Liên, Thôn Thiên Hư Thú. Mỗi con mỗi giờ xuất hiện 1 lần (lệch nhau 12 phút) ở **một chỗ bất kỳ ngoài thành** (cả vùng tân thủ),
+  sống 15 phút rồi tan biến — ai không kịp đánh thì mất, ai lỡ đi ngang thì bị đánh. Lịch tính từ giờ máy chủ (RPC `server_time`) nên mọi người thấy
+  cùng con, cùng chỗ, cùng lúc; hiện báo + chấm tím trên bản đồ (bản đồ nhỏ chỉ hướng). Số ở `monsters.json → void`.
+  **Giới hạn**: máu Âm Hư chưa chung — mỗi máy đánh con của mình (Mốc 3 chuyển lên máy chủ).
+- **Bảng xếp hạng** (nút cúp trên HUD, `src/ui/rank.js`): 3 bảng Cảnh giới / Lực chiến / Trảm Âm Hư, hạng của mình, chạm tên xem chỉ số + hình trang phục.
+  Máy gửi ảnh chụp mỗi phút hoặc khi lên tầng (`src/game/rank.js`, lực chiến = trọng số ở `data/gameplay.json → luc_chien`). Bảng riêng trên máy chủ
+  (migration 0006) — không đụng bảng nhân vật, Mốc 4 máy chủ tự ghi vào cùng bảng nên không phải làm lại. Hiện người chơi sửa máy được → chỉ để tham khảo.
+- **Chỉnh 23/10 (bản 2) — chống "4 tiếng là hết game"**: người chơi **tối đa Hóa Thần Hậu kỳ** (Anh Biến / Vấn Đỉnh chỉ có quái, vùng Đen / Tím là tường cuối game).
+  **Từ Nguyên Anh Hậu kỳ, quái mỗi tầng mạnh gấp đôi tầng trước** (HP + Công ×2), còn người chơi chỉ ×1,4 mỗi tầng → càng lên càng phải dựa trang bị, đan, pháp tướng.
+  Hạ quái thường Hóa Thần Hậu kỳ ≈ 16 đòn, bị đánh ≈ 8 đòn là gục (trước: vài giây). Tu vi cần tăng mạnh: ≈ 9.700 quái thường để từ Luyện Khí 1 lên Hóa Thần Hậu kỳ.
+  Boss HP còn ×1,8 (thay vì ×3) để giữ luật boss cảnh giới dưới < quái thường cảnh giới trên. Tất cả số ở đầu `tools/gen_balance.py`.
+- **Tên phẩm trang bị / dòng thức tỉnh** (`data/equipment/awaken.json`): Phàm (lục) → Nhân (lam) → Địa (tím) → Thiên (cam) → Tiên (vàng) → Thần (đỏ)
+  → **Tiên Nghịch** (cao nhất, chữ đen quầng đỏ huyền bí, viền ô đỏ thở chậm).
+- **Mã thử `lkjhg`** (Cài đặt → Nhập mã): như mã cũ + 999 mỗi nguyên liệu, 99 mỗi đan, mọi đan phương / công thức / bí kíp, đồ cửa hàng,
+  10 triệu Linh thạch, 1 phôi mỗi ô (`src/game/testgift.js`). Mã ngắn dò được từ dấu SHA-256 → **xoá khỏi data/codes.json trước khi phát hành thật**.
+- Số lớn hiện gọn: 123,5k · 4,57tr · 2,3 tỷ (`src/core/format.js`).
+
 ## Đã có trong game (thử nghiệm)
 | Hệ thống | Cách chơi | Code |
 |---|---|---|
@@ -24,7 +52,7 @@ Phím máy tính: Space đánh, 1–5 kỹ năng, Q uống đan hồi máu.
 - `data/gameplay.json` — mọi số chơi thử Lab chưa có (Claude đề xuất, sửa thoải mái): chỉ số nhân vật theo tầng, tu vi cần, AI quái,
   tỷ lệ rơi, hiệu quả đan, kỹ năng, giá thức tỉnh.
 - Chỉ số nhân vật mỗi tầng được **tính ngược từ quái Lab**: Linh lực đủ hạ quái thường cùng tầng trong ~4 đòn, HP chịu ~16 đòn.
-- Vùng ↔ địa hình (`data/terrain.json` → `zone`): cỏ = Xanh, cát + đá lát = Cam, tuyết = Trắng, sỏi = Xám, hắc thổ + dung nham = Than.
+- Vùng ↔ địa hình (`data/terrain.json` → `zone`): cỏ = Xanh, cát + đá lát = Cam, sỏi = Xám Khói, tuyết = Trắng, hắc thổ + dung nham = Xám Than, hắc thạch = Đen, tử vực = Tím.
 
 ## Trang bị và thức tỉnh
 - **Thức tỉnh từng dòng (Lab v3.2)**: mỗi lần bấm thêm 1 dòng, màu (phẩm) từng dòng ngẫu nhiên; mỗi món có giới hạn ẩn 1–10 dòng, chạm giới hạn thì nút tắt. Không còn thức tỉnh lại. Số ở `data/gameplay.json` → awaken.
