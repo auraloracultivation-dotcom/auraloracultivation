@@ -856,5 +856,18 @@
    "tocchay": 5
   },
   "submit_every_s": 60
+ },
+ "tame": {
+  "_ghi_chu": "Thu phục quái (chủ dự án 23/10): mỗi lần hạ quái (trừ Âm Hư) có chance quái quy phục làm thú cưng — có trong Kho (hình con quái), tối đa max_follow con đi theo cùng lúc, tự đánh quái gần (sát thương = công của con quái lúc bắt × atk_mul). Thú cưng không mất máu (bản chơi thử).",
+  "chance": 0.005,
+  "max_follow": 5,
+  "max_owned": 30,
+  "atk_mul": 0.35,
+  "every_s": 1.6,
+  "range_px": 160,
+  "leash_px": 260,
+  "speed_px": 130,
+  "scale": 0.62,
+  "max_h": 34
  }
 }

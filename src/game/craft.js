@@ -91,6 +91,7 @@ export function createCraft({ progress, pills, blanks, awaken, skills, gp, owns 
     const cost = awakenCost(g);
     if (cost === null) return { ok: false, msg: 'Đã đạt giới hạn thức tỉnh' };
     if (progress.state.stone < cost) return { ok: false, msg: `Cần ${cost} Linh thạch` };
+    const reveal = !g.lines.length && g.uid; // phôi luyện: lần thức tỉnh đầu lộ hình ngẫu nhiên
     if (!g.cap) g.cap = rollCap(); // bốc giới hạn ẩn ở lần thức tỉnh đầu
     progress.addStone(-cost);
     g.spent += cost;
@@ -102,7 +103,7 @@ export function createCraft({ progress, pills, blanks, awaken, skills, gp, owns 
     g.tier = bestTier(g);
     progress.changed();
     const full = g.lines.length >= g.cap;
-    return { ok: true, msg: `Dòng ${g.lines.length}: phẩm ${awaken.tiers[ti].name}${full ? ' — đã đạt giới hạn!' : ''}`, event: ['awaken', {}] };
+    return { ok: true, msg: `${reveal ? 'Phôi lộ hình! ' : ''}Dòng ${g.lines.length}: phẩm ${awaken.tiers[ti].name}${full ? ' — đã đạt giới hạn!' : ''}`, event: ['awaken', {}] };
   }
 
   function dismantle(uid) {

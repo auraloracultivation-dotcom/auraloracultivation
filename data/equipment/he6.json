@@ -808,5 +808,12 @@
    },
    "saved_at": "2026-10-20T17:17:56.148Z"
   }
- ]
+ ],
+ "mask_default": {
+  "_ghi_chu": "Mặt nạ trên mặt khi bộ chưa chỉnh thẻ Mặt nạ ở Tủ Đồ: x theo bề ngang áo (cw), y = vị trí tâm theo phần đầu (0 = đỉnh hình, 1 = đường cắt cổ), s = bề ngang mặt nạ / cw, a = độ trong.",
+  "x": 0,
+  "y": 0.62,
+  "s": 0.5,
+  "a": 1
+ }
 }

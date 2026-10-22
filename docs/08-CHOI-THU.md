@@ -177,3 +177,14 @@ Chết thì tự tắt. Số: `data/gameplay.json` → auto. Code: `src/game/aut
 - Mã (dòng chữ nhỏ) = tên file nên đặt khi gửi ảnh. Quái, hiệu ứng, NPC có nút ▶ chạy chuyển động (bấm tiếp để đổi đứng / đi / đánh / chết).
 - Trạng thái tính trong `src/game/codex.js` (OWNER_SHEETS, OWNER_FX…): thay ảnh xong thì sửa danh sách đó. Giao diện: `src/ui/codex.js`.
 - Bảng Tu luyện cũ vẫn mở bằng cách chạm Lò luyện đan / Tế đàn trong Thanh Vân Thành.
+
+## Trang bị 6 hệ bản 2 + thú cưng (23/10/2026)
+- `tools/equip_6he.py` cắt `assets/items/_source/trang-bi-6he.webp`: mỗi hệ (Kim, Ám, Thủy, Hỏa, Mộc, Thổ) có 1 mặt nạ, 1 nhẫn, 1 dây chuyền và 2 linh thú. Tổng 30 món, đều thành vật phẩm Kho `item.<mask|ring|necklace|pet>.he.<n>`. Hình nằm trong `data/equipment/art.json`.
+- **Luyện phôi ra hình ngẫu nhiên** (`src/game/forged-art.js`): luyện xong phôi được gắn ngẫu nhiên một hình cùng ô. Mặt nạ, nhẫn, dây chuyền, linh thú bốc cả hình 6 hệ bản 2. Kho chỉ hiện hình phôi; lần Thức tỉnh đầu mới lộ hình ("Phôi lộ hình!").
+- **Mặt nạ che mặt**: `src/entity/rig.js` vẽ mặt nạ lên đầu. Thông số lấy từ `params.matna` của bộ (thẻ Mặt nạ ở Tủ Đồ Tu Chân); bộ chưa chỉnh thì dùng `data/equipment/he6.json → mask_default`. Người khác cũng thấy (look.mask).
+- **Linh thú đang mặc**: kỹ năng Linh thú hiện đúng hình linh thú trong ô.
+- **Thu phục quái** (`src/game/tame.js`, `data/gameplay.json → tame`):
+  - Hạ quái (trừ Âm Hư) có 0,5% quái quy phục. Thú cưng hiện ở Kho, thẻ Thú cưng, bằng chính hình con quái.
+  - Tối đa 5 con đi theo cùng lúc, Kho chứa tối đa 30 con.
+  - Thú đi theo tự cắn quái gần người chơi (công = công con quái lúc bắt × 0,35) và không mất máu.
+  - Quái chết do thú vẫn tính cho người chơi.

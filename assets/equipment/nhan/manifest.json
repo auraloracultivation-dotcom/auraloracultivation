@@ -1,0 +1,62 @@
+[
+ {
+  "id": "art.ring.he.1",
+  "file": "art.ring.he.1.webp",
+  "w": 205,
+  "h": 174,
+  "anchor": [
+   102.5,
+   87.0
+  ]
+ },
+ {
+  "id": "art.ring.he.2",
+  "file": "art.ring.he.2.webp",
+  "w": 211,
+  "h": 176,
+  "anchor": [
+   105.5,
+   88.0
+  ]
+ },
+ {
+  "id": "art.ring.he.3",
+  "file": "art.ring.he.3.webp",
+  "w": 215,
+  "h": 176,
+  "anchor": [
+   107.5,
+   88.0
+  ]
+ },
+ {
+  "id": "art.ring.he.4",
+  "file": "art.ring.he.4.webp",
+  "w": 208,
+  "h": 172,
+  "anchor": [
+   104.0,
+   86.0
+  ]
+ },
+ {
+  "id": "art.ring.he.5",
+  "file": "art.ring.he.5.webp",
+  "w": 208,
+  "h": 174,
+  "anchor": [
+   104.0,
+   87.0
+  ]
+ },
+ {
+  "id": "art.ring.he.6",
+  "file": "art.ring.he.6.webp",
+  "w": 200,
+  "h": 172,
+  "anchor": [
+   100.0,
+   86.0
+  ]
+ }
+]

@@ -30,6 +30,10 @@
    "Trang bị"
   ],
   [
+   "thu-cung",
+   "Thú cưng"
+  ],
+  [
    "khac",
    "Khác"
   ]
@@ -248,6 +252,276 @@
    "cat": "trang-bi",
    "slot": "phap-tuong",
    "art": "art.avatar.he.6",
+   "set": "he.6",
+   "he": "Thổ"
+  },
+  {
+   "id": "item.mask.he.1",
+   "name": "Kim Quang Diện cụ",
+   "cat": "trang-bi",
+   "slot": "mat-na",
+   "art": "art.mask.he.1",
+   "set": "he.1",
+   "he": "Kim"
+  },
+  {
+   "id": "item.mask.he.2",
+   "name": "U Minh Diện cụ",
+   "cat": "trang-bi",
+   "slot": "mat-na",
+   "art": "art.mask.he.2",
+   "set": "he.2",
+   "he": "Ám"
+  },
+  {
+   "id": "item.mask.he.3",
+   "name": "Thương Hải Diện cụ",
+   "cat": "trang-bi",
+   "slot": "mat-na",
+   "art": "art.mask.he.3",
+   "set": "he.3",
+   "he": "Thủy"
+  },
+  {
+   "id": "item.mask.he.4",
+   "name": "Xích Diệm Diện cụ",
+   "cat": "trang-bi",
+   "slot": "mat-na",
+   "art": "art.mask.he.4",
+   "set": "he.4",
+   "he": "Hỏa"
+  },
+  {
+   "id": "item.mask.he.5",
+   "name": "Thanh Mộc Diện cụ",
+   "cat": "trang-bi",
+   "slot": "mat-na",
+   "art": "art.mask.he.5",
+   "set": "he.5",
+   "he": "Mộc"
+  },
+  {
+   "id": "item.mask.he.6",
+   "name": "Hậu Thổ Diện cụ",
+   "cat": "trang-bi",
+   "slot": "mat-na",
+   "art": "art.mask.he.6",
+   "set": "he.6",
+   "he": "Thổ"
+  },
+  {
+   "id": "item.ring.he.1",
+   "name": "Kim Quang Giới chỉ",
+   "cat": "trang-bi",
+   "slot": "nhan",
+   "art": "art.ring.he.1",
+   "set": "he.1",
+   "he": "Kim"
+  },
+  {
+   "id": "item.ring.he.2",
+   "name": "U Minh Giới chỉ",
+   "cat": "trang-bi",
+   "slot": "nhan",
+   "art": "art.ring.he.2",
+   "set": "he.2",
+   "he": "Ám"
+  },
+  {
+   "id": "item.ring.he.3",
+   "name": "Thương Hải Giới chỉ",
+   "cat": "trang-bi",
+   "slot": "nhan",
+   "art": "art.ring.he.3",
+   "set": "he.3",
+   "he": "Thủy"
+  },
+  {
+   "id": "item.ring.he.4",
+   "name": "Xích Diệm Giới chỉ",
+   "cat": "trang-bi",
+   "slot": "nhan",
+   "art": "art.ring.he.4",
+   "set": "he.4",
+   "he": "Hỏa"
+  },
+  {
+   "id": "item.ring.he.5",
+   "name": "Thanh Mộc Giới chỉ",
+   "cat": "trang-bi",
+   "slot": "nhan",
+   "art": "art.ring.he.5",
+   "set": "he.5",
+   "he": "Mộc"
+  },
+  {
+   "id": "item.ring.he.6",
+   "name": "Hậu Thổ Giới chỉ",
+   "cat": "trang-bi",
+   "slot": "nhan",
+   "art": "art.ring.he.6",
+   "set": "he.6",
+   "he": "Thổ"
+  },
+  {
+   "id": "item.necklace.he.1",
+   "name": "Kim Quang Hạng liên",
+   "cat": "trang-bi",
+   "slot": "day-chuyen",
+   "art": "art.necklace.he.1",
+   "set": "he.1",
+   "he": "Kim"
+  },
+  {
+   "id": "item.necklace.he.2",
+   "name": "U Minh Hạng liên",
+   "cat": "trang-bi",
+   "slot": "day-chuyen",
+   "art": "art.necklace.he.2",
+   "set": "he.2",
+   "he": "Ám"
+  },
+  {
+   "id": "item.necklace.he.3",
+   "name": "Thương Hải Hạng liên",
+   "cat": "trang-bi",
+   "slot": "day-chuyen",
+   "art": "art.necklace.he.3",
+   "set": "he.3",
+   "he": "Thủy"
+  },
+  {
+   "id": "item.necklace.he.4",
+   "name": "Xích Diệm Hạng liên",
+   "cat": "trang-bi",
+   "slot": "day-chuyen",
+   "art": "art.necklace.he.4",
+   "set": "he.4",
+   "he": "Hỏa"
+  },
+  {
+   "id": "item.necklace.he.5",
+   "name": "Thanh Mộc Hạng liên",
+   "cat": "trang-bi",
+   "slot": "day-chuyen",
+   "art": "art.necklace.he.5",
+   "set": "he.5",
+   "he": "Mộc"
+  },
+  {
+   "id": "item.necklace.he.6",
+   "name": "Hậu Thổ Hạng liên",
+   "cat": "trang-bi",
+   "slot": "day-chuyen",
+   "art": "art.necklace.he.6",
+   "set": "he.6",
+   "he": "Thổ"
+  },
+  {
+   "id": "item.pet.he.1",
+   "name": "Kim Quang Thánh Sư",
+   "cat": "trang-bi",
+   "slot": "linh-thu",
+   "art": "art.pet.he.1",
+   "set": "he.1",
+   "he": "Kim"
+  },
+  {
+   "id": "item.pet.he.2",
+   "name": "U Minh Ma Lang",
+   "cat": "trang-bi",
+   "slot": "linh-thu",
+   "art": "art.pet.he.2",
+   "set": "he.2",
+   "he": "Ám"
+  },
+  {
+   "id": "item.pet.he.3",
+   "name": "Thương Hải Thủy Long",
+   "cat": "trang-bi",
+   "slot": "linh-thu",
+   "art": "art.pet.he.3",
+   "set": "he.3",
+   "he": "Thủy"
+  },
+  {
+   "id": "item.pet.he.4",
+   "name": "Xích Diệm Hỏa Sư",
+   "cat": "trang-bi",
+   "slot": "linh-thu",
+   "art": "art.pet.he.4",
+   "set": "he.4",
+   "he": "Hỏa"
+  },
+  {
+   "id": "item.pet.he.5",
+   "name": "Thanh Mộc Diệp Long",
+   "cat": "trang-bi",
+   "slot": "linh-thu",
+   "art": "art.pet.he.5",
+   "set": "he.5",
+   "he": "Mộc"
+  },
+  {
+   "id": "item.pet.he.6",
+   "name": "Hậu Thổ Thạch Vương",
+   "cat": "trang-bi",
+   "slot": "linh-thu",
+   "art": "art.pet.he.6",
+   "set": "he.6",
+   "he": "Thổ"
+  },
+  {
+   "id": "item.pet.he.7",
+   "name": "Kim Quang Thiên Hồ",
+   "cat": "trang-bi",
+   "slot": "linh-thu",
+   "art": "art.pet.he.7",
+   "set": "he.1",
+   "he": "Kim"
+  },
+  {
+   "id": "item.pet.he.8",
+   "name": "U Minh Ma Ưng",
+   "cat": "trang-bi",
+   "slot": "linh-thu",
+   "art": "art.pet.he.8",
+   "set": "he.2",
+   "he": "Ám"
+  },
+  {
+   "id": "item.pet.he.9",
+   "name": "Thương Hải Lam Long",
+   "cat": "trang-bi",
+   "slot": "linh-thu",
+   "art": "art.pet.he.9",
+   "set": "he.3",
+   "he": "Thủy"
+  },
+  {
+   "id": "item.pet.he.10",
+   "name": "Xích Diệm Viêm Long",
+   "cat": "trang-bi",
+   "slot": "linh-thu",
+   "art": "art.pet.he.10",
+   "set": "he.4",
+   "he": "Hỏa"
+  },
+  {
+   "id": "item.pet.he.11",
+   "name": "Thanh Mộc Thanh Long",
+   "cat": "trang-bi",
+   "slot": "linh-thu",
+   "art": "art.pet.he.11",
+   "set": "he.5",
+   "he": "Mộc"
+  },
+  {
+   "id": "item.pet.he.12",
+   "name": "Hậu Thổ Nham Ma",
+   "cat": "trang-bi",
+   "slot": "linh-thu",
+   "art": "art.pet.he.12",
    "set": "he.6",
    "he": "Thổ"
   }

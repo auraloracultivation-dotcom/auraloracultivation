@@ -17,7 +17,7 @@ export function createLocalPlayer(character) {
 }
 
 // Trang bị người khác gửi qua Presence: chỉ nhận mã hình dạng art.<loại>.<…>, bỏ mọi thứ khác
-const LOOK_KEYS = ['outfit', 'weapon', 'wing', 'avatar'];
+const LOOK_KEYS = ['outfit', 'weapon', 'wing', 'avatar', 'mask'];
 function sanitizeLook(l) {
   if (!l || typeof l !== 'object') return null;
   const out = {};
