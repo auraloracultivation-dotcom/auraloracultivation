@@ -871,7 +871,7 @@
   "submit_every_s": 60
  },
  "tame": {
-  "_ghi_chu": "Thu phục quái (chủ dự án 23/10): mỗi lần hạ quái (trừ Âm Hư) có chance quái quy phục làm thú cưng — có trong Kho (hình con quái), tối đa max_follow con đi theo cùng lúc, tự đánh quái gần (sát thương = công của con quái lúc bắt × atk_mul). Thú cưng không mất máu (bản chơi thử).",
+  "_ghi_chu": "Thu phục quái (chủ dự án 23/10): hạ quái (trừ Âm Hư) có chance quái quy phục — vào Kho (hình con quái), tối đa max_follow con đi theo. Thú đi lang thang quanh chủ (wander_r), gặp quái trong aggro_px (và cách chủ ≤ range_px) thì chủ động xông vào cắn (công lúc bắt × atk_mul mỗi every_s giây). Quái bị cắn đánh trả mỗi mob_hit_s giây; khí huyết thú = khí huyết quái cùng tầng × hp_mul. Ngã xuống thì revive_s giây sau hồi sinh cạnh chủ.",
   "chance": 0.005,
   "max_follow": 5,
   "max_owned": 30,
@@ -881,6 +881,12 @@
   "leash_px": 260,
   "speed_px": 130,
   "scale": 0.62,
-  "max_h": 34
+  "max_h": 34,
+  "hp_mul": 0.6,
+  "aggro_px": 120,
+  "wander_r": 70,
+  "wander_speed": 40,
+  "mob_hit_s": 1.6,
+  "revive_s": 5
  }
 }

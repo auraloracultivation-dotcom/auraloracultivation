@@ -186,7 +186,8 @@ Chết thì tự tắt. Số: `data/gameplay.json` → auto. Code: `src/game/aut
 - **Thu phục quái** (`src/game/tame.js`, `data/gameplay.json → tame`):
   - Hạ quái (trừ Âm Hư) có 0,5% quái quy phục. Thú cưng hiện ở Kho, thẻ Thú cưng, bằng chính hình con quái.
   - Tối đa 5 con đi theo cùng lúc, Kho chứa tối đa 30 con.
-  - Thú đi theo tự cắn quái gần người chơi (công = công con quái lúc bắt × 0,35) và không mất máu.
+  - Thú đi theo **đi lang thang** quanh người chơi; gặp quái (trong 120 px, cách chủ ≤ 160 px) thì **chủ động xông vào cắn** (công = công con quái lúc bắt × 0,35).
+  - Quái bị cắn đánh trả. Khí huyết thú = khí huyết quái cùng tầng × 0,6. Ngã xuống thì **5 giây sau hồi sinh** cạnh chủ (hiện ↻ giây đếm ngược).
   - Quái chết do thú vẫn tính cho người chơi.
 
 ## Áp chế cảnh giới + trần tu vi (23/10/2026)
