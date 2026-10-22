@@ -1,0 +1,420 @@
+{
+ "_status": "test",
+ "_nguon": "Chủ dự án 23/10/2026: build phải làm đổi cách chiêu hoạt động (bắn liên thanh, nảy, xuyên, mưa kiếm…) chứ không chỉ cộng chỉ số — kiểu My Heroes. Claude thiết kế, chờ duyệt số.",
+ "_ghi_chu": "ĐẠO VẬN = hiệu ứng build. Nguồn: (1) BỘ NGŨ HÀNH — số món đồ Kho cùng hệ đang mặc (2/4/6/8 món); (2) THẦN PHÙ — thẻ gắn vào ô phù. Mọi hiệu ứng cộng dồn. Đơn vị: px thế giới, giây, mul = hệ số sát thương như kỹ năng. Code: src/game/daovan.js (tính), src/game/barrage.js (đạn + bị động).",
+ "_tu_dien": {
+  "multishot": "Mỗi lần bắn đạn (chiêu bolt, kiếm khí, đạn đạo pháp) bắn thêm N viên xoè quạt",
+  "pierce": "Đạn xuyên thêm N quái",
+  "bounce": "Trúng quái thì bật sang quái gần khác N lần",
+  "split": "Lần trúng đầu tách N đạn nhỏ toả tròn (sát thương split_mul)",
+  "chain": "Trúng thì sét lan sang N quái gần (chain_mul)",
+  "homing": "Đạn tự đuổi mục tiêu (0–1 = độ bẻ lái)",
+  "echo": "Tỷ lệ chiêu tự phát thêm lần nữa miễn phí",
+  "explode": "Đạn nổ lan bán kính N khi trúng",
+  "burn": "Chỗ trúng cháy: {mul mỗi giây, s, r}",
+  "basic_shot": "Đánh thường bắn thêm N đạn đạo pháp theo hệ chủ đạo",
+  "shock": "Đánh thường tạo sóng chấn quanh mục tiêu {r, mul, stun}",
+  "orbit": "N phi kiếm xoay quanh người, chạm quái thì đánh {n, r, mul}",
+  "rain": "Bị động: mỗi every_s giây giáng N đòn lên quái gần {every_s, n, mul, fx, h, radius, stun}",
+  "turret": "Bị động: mỗi every_s giây tự bắn N đạn đuổi quái gần nhất {every_s, n, mul} — 'liên thanh'",
+  "heal_on_hit": "Mỗi lần trúng hồi % khí huyết tối đa",
+  "stat": "Nhân chỉ số {hp, def, linh, hut…}",
+  "cd_mul": "Nhân thời gian hồi chiêu (nhân dồn)",
+  "mp_regen": "Hồi linh lực mỗi giây = phần linh lực tối đa",
+  "mp_mul": "Nhân linh lực tốn khi dùng chiêu (nhân dồn)"
+ },
+ "he": {
+  "Kim": {
+   "name": "Vạn Kiếm Quy Tông",
+   "color": "#ffd76a",
+   "bolt": "v.dan-kim",
+   "tiers": {
+    "2": {
+     "basic_shot": 1,
+     "_mo_ta": "Đánh thường phóng thêm 1 kiếm khí"
+    },
+    "4": {
+     "multishot": 2,
+     "_mo_ta": "Mọi đạn bắn thêm 2 viên xoè quạt"
+    },
+    "6": {
+     "rain": {
+      "every_s": 2.5,
+      "n": 4,
+      "mul": 1.2,
+      "fx": "v.van-kiem",
+      "h": 46,
+      "radius": 26
+     },
+     "_mo_ta": "Mưa kiếm: 2,5 giây giáng 4 thanh kiếm xuống quái gần"
+    },
+    "8": {
+     "cd_mul": 0.15,
+     "mp_regen": 0.2,
+     "mp_mul": 0.5,
+     "multishot": 10,
+     "pierce": 2,
+     "_mo_ta": "ĐẠI THÀNH: mọi chiêu bắn quạt 15 kiếm khí xuyên giáp, hồi chiêu ×0,15, linh lực hồi liên tục"
+    }
+   }
+  },
+  "Ám": {
+   "name": "U Minh Phệ Hồn",
+   "color": "#c07bff",
+   "bolt": "v.dan-am",
+   "tiers": {
+    "2": {
+     "stat": {
+      "hut": 5
+     },
+     "heal_on_hit": 0.002,
+     "_mo_ta": "Hút máu +5%"
+    },
+    "4": {
+     "orbit": {
+      "n": 3,
+      "r": 26,
+      "mul": 0.5
+     },
+     "_mo_ta": "3 phi kiếm u minh xoay quanh người"
+    },
+    "6": {
+     "orbit": {
+      "n": 3
+     },
+     "homing": 0.6,
+     "_mo_ta": "Thêm 3 phi kiếm, đạn tự đuổi mục tiêu"
+    },
+    "8": {
+     "cd_mul": 0.15,
+     "mp_regen": 0.2,
+     "mp_mul": 0.5,
+     "split": 4,
+     "orbit": {
+      "n": 4
+     },
+     "_mo_ta": "ĐẠI THÀNH: 10 phi kiếm u minh, đạn tách 4 hồn đạn, hồi chiêu ×0,15, linh lực hồi liên tục"
+    }
+   }
+  },
+  "Thủy": {
+   "name": "Thương Hải Lưu Ba",
+   "color": "#6fd3ff",
+   "bolt": "v.dan-thuy",
+   "tiers": {
+    "2": {
+     "bounce": 2,
+     "_mo_ta": "Đạn bật nảy sang 2 quái khác"
+    },
+    "4": {
+     "bounce": 2,
+     "chain": 2,
+     "_mo_ta": "Nảy thêm 2 lần, trúng thì lan sang 2 quái"
+    },
+    "6": {
+     "split": 3,
+     "_mo_ta": "Đạn trúng tách 3 giọt thủy"
+    },
+    "8": {
+     "cd_mul": 0.15,
+     "mp_regen": 0.2,
+     "mp_mul": 0.5,
+     "multishot": 4,
+     "bounce": 3,
+     "rain": {
+      "every_s": 2,
+      "n": 3,
+      "mul": 1.6,
+      "fx": "v.thuy-ba",
+      "h": 56,
+      "radius": 44
+     },
+     "_mo_ta": "ĐẠI THÀNH: đạn ×5 nảy 7 lần, thủy triều 2 giây một lần, hồi chiêu ×0,15"
+    }
+   }
+  },
+  "Hỏa": {
+   "name": "Xích Diệm Phần Thiên",
+   "color": "#ff7a3a",
+   "bolt": "v.dan-hoa",
+   "tiers": {
+    "2": {
+     "explode": 26,
+     "_mo_ta": "Đạn nổ lan"
+    },
+    "4": {
+     "burn": {
+      "mul": 0.35,
+      "s": 3,
+      "r": 24
+     },
+     "_mo_ta": "Chỗ trúng cháy 3 giây"
+    },
+    "6": {
+     "rain": {
+      "every_s": 3,
+      "n": 3,
+      "mul": 1.5,
+      "fx": "v.no-hoa",
+      "h": 44,
+      "radius": 34
+     },
+     "_mo_ta": "Thiên hỏa: 3 giây rơi 3 quả cầu lửa"
+    },
+    "8": {
+     "cd_mul": 0.15,
+     "mp_regen": 0.2,
+     "mp_mul": 0.5,
+     "multishot": 6,
+     "explode": 14,
+     "rain": {
+      "every_s": 1.5,
+      "n": 3,
+      "mul": 1.5,
+      "fx": "v.no-hoa",
+      "h": 44,
+      "radius": 34
+     },
+     "_mo_ta": "ĐẠI THÀNH: quạt 7 hỏa cầu nổ lớn, thiên hỏa dày đặc, hồi chiêu ×0,15"
+    }
+   }
+  },
+  "Mộc": {
+   "name": "Thanh Mộc Trường Sinh",
+   "color": "#7dff8a",
+   "bolt": "v.dan-moc",
+   "tiers": {
+    "2": {
+     "heal_on_hit": 0.004,
+     "_mo_ta": "Mỗi lần trúng hồi 0,4% khí huyết"
+    },
+    "4": {
+     "turret": {
+      "every_s": 0.9,
+      "n": 1,
+      "mul": 0.5
+     },
+     "_mo_ta": "Lá phi đao tự bắn liên thanh"
+    },
+    "6": {
+     "turret": {
+      "n": 1
+     },
+     "homing": 0.8,
+     "_mo_ta": "Bắn 2 lá mỗi loạt, đạn tự đuổi"
+    },
+    "8": {
+     "cd_mul": 0.15,
+     "mp_regen": 0.2,
+     "mp_mul": 0.5,
+     "turret": {
+      "every_s": -0.65,
+      "n": 3
+     },
+     "multishot": 2,
+     "_mo_ta": "ĐẠI THÀNH: liên thanh 4 lá mỗi 0,25 giây, mỗi đạn ×3, hồi chiêu ×0,15"
+    }
+   }
+  },
+  "Thổ": {
+   "name": "Hậu Thổ Trấn Sơn",
+   "color": "#e0a95a",
+   "bolt": "v.dan-phong",
+   "tiers": {
+    "2": {
+     "stat": {
+      "def": 1.1
+     },
+     "_mo_ta": "Phòng thủ +10%"
+    },
+    "4": {
+     "shock": {
+      "r": 40,
+      "mul": 0.6
+     },
+     "_mo_ta": "Đánh thường tạo sóng chấn"
+    },
+    "6": {
+     "rain": {
+      "every_s": 3,
+      "n": 5,
+      "mul": 1.3,
+      "fx": "v.dia-thu",
+      "h": 40,
+      "radius": 28,
+      "stun": 0.5
+     },
+     "_mo_ta": "Địa thứ: 3 giây trồi 5 cột đá, choáng"
+    },
+    "8": {
+     "cd_mul": 0.15,
+     "mp_regen": 0.2,
+     "mp_mul": 0.5,
+     "shock": {
+      "r": 22,
+      "stun": 0.4
+     },
+     "rain": {
+      "every_s": 1.5,
+      "n": 6,
+      "mul": 1.3,
+      "fx": "v.dia-thu",
+      "h": 40,
+      "radius": 28,
+      "stun": 0.5
+     },
+     "_mo_ta": "ĐẠI THÀNH: sóng chấn choáng, địa thứ trồi liên tục, hồi chiêu ×0,15"
+    }
+   }
+  }
+ },
+ "cards": {
+  "_ghi_chu": "Thần Phù: rơi khi hạ quái (drop theo cấp quái), phẩm ngẫu nhiên Lục → Đen (tier 0–6). Giá trị = base + per_tier × tier (số nguyên thì làm tròn xuống). Gắn vào ô phù (mở theo cảnh giới).",
+  "slots": [
+   {
+    "unlock": "lk1"
+   },
+   {
+    "unlock": "tc_so"
+   },
+   {
+    "unlock": "kd_so"
+   }
+  ],
+  "drop": {
+   "thuong": 0.004,
+   "elite": 0.04,
+   "boss": 0.15,
+   "void": 1
+  },
+  "tier_weights": [
+   40,
+   25,
+   15,
+   10,
+   6,
+   3,
+   1
+  ],
+  "dismantle_stone": [
+   5,
+   15,
+   40,
+   100,
+   250,
+   600,
+   1500
+  ],
+  "list": [
+   {
+    "id": "phu.phan-quang",
+    "name": "Phân Quang Phù",
+    "mod": "multishot",
+    "base": 1,
+    "per_tier": 0.5,
+    "int": true,
+    "desc": "Bắn thêm {v} viên"
+   },
+   {
+    "id": "phu.xuyen-van",
+    "name": "Xuyên Vân Phù",
+    "mod": "pierce",
+    "base": 1,
+    "per_tier": 1,
+    "int": true,
+    "desc": "Đạn xuyên thêm {v} quái"
+   },
+   {
+    "id": "phu.truy-hon",
+    "name": "Truy Hồn Phù",
+    "mod": "homing",
+    "base": 0.3,
+    "per_tier": 0.1,
+    "desc": "Đạn tự đuổi mục tiêu (lực {v})"
+   },
+   {
+    "id": "phu.lien-hoan",
+    "name": "Liên Hoàn Phù",
+    "mod": "echo",
+    "base": 0.08,
+    "per_tier": 0.05,
+    "pct": true,
+    "desc": "{v}% chiêu tự phát lần nữa"
+   },
+   {
+    "id": "phu.phan-liet",
+    "name": "Phân Liệt Phù",
+    "mod": "split",
+    "base": 2,
+    "per_tier": 0.5,
+    "int": true,
+    "desc": "Trúng thì tách {v} đạn nhỏ"
+   },
+   {
+    "id": "phu.loi-lien",
+    "name": "Lôi Liên Phù",
+    "mod": "chain",
+    "base": 1,
+    "per_tier": 0.5,
+    "int": true,
+    "desc": "Sét lan sang {v} quái"
+   },
+   {
+    "id": "phu.lien-thanh",
+    "name": "Liên Thanh Phù",
+    "mod": "basic_shot",
+    "base": 1,
+    "per_tier": 0.34,
+    "int": true,
+    "desc": "Đánh thường bắn thêm {v} đạn"
+   },
+   {
+    "id": "phu.liet-diem",
+    "name": "Liệt Diễm Phù",
+    "mod": "explode",
+    "base": 18,
+    "per_tier": 4,
+    "int": true,
+    "desc": "Đạn nổ lan bán kính {v}"
+   },
+   {
+    "id": "phu.kiem-luan",
+    "name": "Kiếm Luân Phù",
+    "mod": "orbit",
+    "obj": {
+     "r": 24,
+     "mul": 0.45
+    },
+    "base": 1,
+    "per_tier": 0.5,
+    "int": true,
+    "key": "n",
+    "desc": "{v} phi kiếm xoay quanh người"
+   },
+   {
+    "id": "phu.phong-bao",
+    "name": "Phong Bạo Phù",
+    "mod": "turret",
+    "obj": {
+     "n": 1,
+     "mul": 0.45
+    },
+    "base": 1.6,
+    "per_tier": -0.15,
+    "key": "every_s",
+    "desc": "Tự bắn liên thanh mỗi {v} giây"
+   }
+  ]
+ },
+ "limits": {
+  "max_bolts": 160,
+  "split_mul": 0.4,
+  "chain_mul": 0.5,
+  "basic_shot_mul": 0.6,
+  "bounce_px": 150,
+  "orbit_hit_s": 0.45,
+  "turret_range_px": 220,
+  "rain_range_px": 240
+ },
+ "_ghi_chu_dai_thanh": "Chủ dự án 23/10 05:38: đủ bộ là 'thành' — bắn hàng trăm đạn hình quạt liên tục, linh lực hồi liên tục; sai 1 món là tụt về bộ 6 (bắn từng viên, chờ hồi chiêu). Vì vậy mốc 8/8 (mọi ô cùng hệ) là ĐẠI THÀNH: hồi chiêu ×cd_mul, hồi linh lực mp_regen (phần linh lực tối đa mỗi giây), tốn linh lực ×mp_mul, kèm hiệu ứng riêng của hệ."
+}

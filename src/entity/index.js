@@ -4,4 +4,5 @@ export { loadRig, rigReady, rigAttack, artInfo, artImage, avatarFx } from './rig
 export { drawMonster, drawMonsterLabel, drawFx, drawNode } from './mobs.js';
 export { loadSprites, iconUrl, fxIconUrl, fxDuration, drawSheet, drawEffect, sheetThumb } from './sprites.js';
 export { drawVoid, drawVoidPreview } from './void-draw.js';
+export { cardArt } from './card-art.js';
 export { loadNpcArt, drawNpc, drawNpcLabel, drawShield } from './npc-draw.js';

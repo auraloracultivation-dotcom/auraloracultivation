@@ -1,11 +1,11 @@
 // Kỹ năng người chơi (THỬ NGHIỆM phía máy khách): dùng chiêu, đạn bay, tự dùng chiêu khi bật Tự động.
 // Thông số ở data/gameplay.json → skills. kind: bolt | strike | area_self | heal | buff; chiêu cũ (kiếm khí, khống chế,
 // linh thú, lướt, nguyên anh) giữ cách riêng. Hiệu ứng v.* cắt từ tấm chủ dự án (tools/fx_sheets.py).
-import { wrapDelta } from '../map/index.js';
 
-// c: { S, me, mobs, map, pt, cds, bar, toast, say, play, fx, bolts, strike, target, buffs, recompute, heal, maxHp, now, dead, summonPet }
+// c: { S, me, mobs, map, pt, cds, bar, toast, say, play, fx, bolts, strike, target, buffs, recompute, heal, maxHp, now, dead, summonPet,
+//      mods() (Đạo Vận: hồi chiêu, linh lực), fire(spec) + maybeEcho(fn) (barrage.js: đạn xoè quạt, nảy, tách…) }
 export function createSkills(c) {
-  const { S, me, mobs, map, pt, cds, toast, say, play, fx, bolts } = c;
+  const { S, me, mobs, pt, cds, toast, say, play, fx } = c;
 
   function ready(id, quiet = false) {
     const s = S[id], now = c.now();
@@ -13,8 +13,9 @@ export function createSkills(c) {
     const off = c.bar.blocked(id);
     if (off) { if (!quiet) toast(off, 1200); return false; }
     if ((cds[id] || 0) > now) { if (!quiet) toast('Đang hồi chiêu', 900); return false; }
-    if (pt.mp < (s.mp || 0)) { if (!quiet) toast('Linh lực không đủ', 1000); return false; }
-    pt.spend(s.mp || 0); cds[id] = now + s.cd_s;
+    const md = c.mods(), cost = (s.mp || 0) * (md.mp_mul ?? 1);
+    if (pt.mp < cost) { if (!quiet) toast('Linh lực không đủ', 1000); return false; }
+    pt.spend(cost); cds[id] = now + (s.cd_s || 0) * (md.cd_mul ?? 1); // Đạo Vận đại thành: hồi chiêu ×0,15, tốn linh lực ×0,5
     return true;
   }
   const dirTo = (m) => {
@@ -30,15 +31,21 @@ export function createSkills(c) {
     }
   };
 
+  const ECHO = new Set(['kiem-khi', 'nguyen-anh']); // chiêu đánh: Liên Hoàn Phù có thể tự phát lại
   // Trả về true nếu đã dùng chiêu
   function cast(id, quiet = false) {
     const s = S[id];
     if (!s || !ready(id, quiet)) return false;
+    const ok = perform(id, s, quiet);
+    if (ok && (ECHO.has(id) || ['bolt', 'strike', 'area_self'].includes(s.kind))) c.maybeEcho(() => perform(id, s, true));
+    return ok;
+  }
+  function perform(id, s, quiet) {
     const now = c.now();
     switch (id) {
       case 'kiem-khi': {
         const { dx, dy } = dirTo(c.target(s.range_px));
-        bolts.push({ kind: 'bolt', x: me.x, y: me.y - 10, vx: dx * s.speed_px_per_s, vy: dy * s.speed_px_per_s, left: s.range_px, id });
+        c.fire({ id, x: me.x, y: me.y - 10, dx, dy, speed: s.speed_px_per_s, range: s.range_px, fx: 'kiem-bang-bay', size: 22, mul: s.mul, base: s, label: 'kiem-khi' });
         return true;
       }
       case 'khong-che': {
@@ -60,11 +67,10 @@ export function createSkills(c) {
     }
     if (s.kind === 'bolt') {
       const { dx, dy } = dirTo(c.target(s.range_px));
-      bolts.push({ kind: 'bolt', fx: s.fx, size: s.fx_size, x: me.x, y: me.y - 12, vx: dx * s.speed_px_per_s, vy: dy * s.speed_px_per_s,
-        left: s.range_px, id, hit: new Set() });
+      c.fire({ id, x: me.x, y: me.y - 12, dx, dy, speed: s.speed_px_per_s, range: s.range_px, fx: s.fx, size: s.fx_size, mul: s.mul, base: s });
     } else if (s.kind === 'strike') {
       const m = c.target(s.range_px);
-      if (!m) { cds[id] = 0; pt.gain(s.mp || 0); if (!quiet) toast('Không có mục tiêu trong tầm', 900); return false; }
+      if (!m) { cds[id] = 0; pt.gain((s.mp || 0) * (c.mods().mp_mul ?? 1)); if (!quiet) toast('Không có mục tiêu trong tầm', 900); return false; }
       dirTo(m);
       play(s.fx, m.x, m.y, s.fx_h, { ground: true });
       hitAround(m.x, m.y, s);
@@ -83,25 +89,6 @@ export function createSkills(c) {
     return true;
   }
 
-  // Đạn bay: trúng quái thì đánh; xuyên (pierce) thì bay tiếp, nổ lan (splash_px) thì đánh cả quái quanh chỗ trúng
-  function updateBolts(dt) {
-    for (let i = bolts.length - 1; i >= 0; i--) {
-      const b = bolts[i], s = S[b.id], step = Math.hypot(b.vx, b.vy) * dt;
-      b.x = map.wrapX(b.x + b.vx * dt); b.y = map.wrapY(b.y + b.vy * dt); b.left -= step;
-      const m = mobs.list.find((x) => x.state !== 'dead' && !b.hit?.has(x.uid)
-        && Math.hypot(wrapDelta(x.x - b.x, map.width), wrapDelta(x.y - x.r - b.y, map.height)) < x.r + 6);
-      if (m) {
-        if (s.splash_px) { hitAround(m.x, m.y, { ...s, radius_px: s.splash_px }); } else {
-          c.strike(m, s.mul, b.id === 'kiem-khi' ? 'kiem-khi' : 'skill');
-          if (s.stun_s && m.state !== 'dead') { m.stun = Math.max(m.stun, s.stun_s); say(m.x, m.y - m.r * 2, 'Đóng băng', '#9fe8ff'); }
-        }
-        if (s.hit_fx) play(s.hit_fx, m.x, m.y, s.hit_h, { ground: true });
-        b.hit?.add(m.uid);
-      }
-      if ((m && !s.pierce) || b.left <= 0) bolts.splice(i, 1);
-    }
-  }
-
   // Tự động: dùng chiêu đầu tiên trong ô sẵn sàng (đủ tầm). Hồi máu khi khí huyết dưới 55%. Bỏ qua Lướt / Pháp tướng / Đan.
   const SKIP = new Set(['luot', 'phap-tuong', 'dan-duoc']);
   function autoCast(ids, hpFrac) {
@@ -109,10 +96,10 @@ export function createSkills(c) {
       const s = S[id];
       if (!s || SKIP.has(id)) continue;
       if (s.kind === 'heal' ? hpFrac > 0.55 : s.kind === 'buff' ? !c.target(120) : !c.target(s.range_px || s.radius_px || 120)) continue;
-      if ((c.cds[id] || 0) > c.now() || pt.mp < (s.mp || 0) || c.bar.blocked(id)) continue;
+      if ((c.cds[id] || 0) > c.now() || pt.mp < (s.mp || 0) * (c.mods().mp_mul ?? 1) || c.bar.blocked(id)) continue;
       if (cast(id, true)) return id;
     }
     return null;
   }
-  return { cast, updateBolts, autoCast };
+  return { cast, autoCast };
 }
