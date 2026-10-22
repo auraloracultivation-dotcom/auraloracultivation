@@ -94,8 +94,8 @@ export async function createMap(def, terrainDef, tilesDef, art = {}) {
             const hx = gx * g + i, hy = gy * g + j;
             const [sx, sy] = opts[Math.floor(hash(hx, hy) * opts.length)];
             const dx = tx * T + i * st, dy = ty * T + j * st;
-            // đất: vẽ khít, không chồng (khe lẻ lộ nền xám đen cùng màu viền); nước: chồng 0.5 cho liền
-            const ov = isWater[kind] ? 0.5 : 0;
+            // chồng 0.5 để không hở khe trên màn hình mật độ lẻ (ô đất bản 3 đã hoà mép nên chồng không lộ)
+            const ov = 0.5;
             if (!isWater[kind] && hash(hy, hx) > 0.5) {
               ctx.save();
               ctx.translate(dx + st, dy);
