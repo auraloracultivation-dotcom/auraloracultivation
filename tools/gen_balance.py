@@ -56,8 +56,10 @@ JUMP = {'hp': 3.6, 'atk': 1.75, 'def': 1.40}
 BASE = {'hp': 110, 'atk': 13, 'def': 8}  # Luyện Khí tầng 1 (giữ như Yêu Hồ Sơ cũ)
 # Chủ dự án 23/10 (bản 2): TỪ Nguyên Anh Hậu kỳ trở đi mỗi tầng quái mạnh GẤP ĐÔI tầng trước (HT Sơ = 2× NA Hậu, HT Trung = 2× HT Sơ…)
 LATE_FROM = 'na_hau'
-STEP_LATE = {'hp': 2.0, 'atk': 2.0, 'def': 1.15}   # trong một đại cảnh giới
-JUMP_LATE = {'hp': 2.0, 'atk': 2.0, 'def': 1.40}   # sang đại cảnh giới mới (Thủ nhảy nhiều hơn để giữ luật boss)
+# Bản 3 (chủ dự án 23/10 04:41: người chơi Hóa Thần Hậu kỳ chém được Âm Hư sau 20 phút): TỪ Hóa Thần trở đi quái tăng mạnh hơn —
+# Khí huyết ×2.5, Thủ ×1.3 mỗi tầng (Công vẫn ×2). Thêm áp chế cảnh giới trong code (gameplay.json → monster.suppress).
+STEP_LATE = {'hp': 2.5, 'atk': 2.0, 'def': 1.3}    # trong một đại cảnh giới
+JUMP_LATE = {'hp': 2.5, 'atk': 2.0, 'def': 1.5}    # sang đại cảnh giới mới (Thủ nhảy nhiều hơn để giữ luật boss)
 # boss HP 1.8 (không phải 3): vì quái chỉ ×2 mỗi tầng, boss Hậu kỳ (kể cả lệch +5%) vẫn phải yếu hơn quái thường Sơ kỳ cảnh giới sau
 RANK_MUL = {'thuong': {'hp': 1, 'atk': 1, 'def': 1}, 'elite': {'hp': 1.5, 'atk': 1.25, 'def': 1.12},
             'boss': {'hp': 1.8, 'atk': 1.5, 'def': 1.25}}

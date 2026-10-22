@@ -5,7 +5,7 @@
 import { wrapDelta } from '../map/index.js';
 import { drawMonster, sheetThumb } from '../entity/index.js';
 
-export function createTame({ cfg, progress, monsters, mobs, map, me, stats, gp, toast, say, play, onKill, placeholder }) {
+export function createTame({ cfg, progress, monsters, mobs, map, me, stats, gp, toast, say, play, onKill, placeholder, suppress = () => 1 }) {
   const defOf = new Map(monsters.map((d) => [d.id, d]));
   const pets = () => (progress.state.pets ||= []);
   const following = () => pets().filter((p) => p.follow);
@@ -57,7 +57,7 @@ export function createTame({ cfg, progress, monsters, mobs, map, me, stats, gp, 
       if (s.moving) { s.x = map.wrapX(s.x + (dx / dist) * step); s.y = map.wrapY(s.y + (dy / dist) * step); s.walkT += dt; if (Math.abs(dx) > 1) s.facing = dx > 0 ? 1 : -1; }
       if (m && mobs.distTo(m, s) <= m.r + 16 && t >= s.next) { // cắn
         s.next = t + cfg.every_s; s.atkT = 0.5; s.facing = wrapDelta(m.x - s.x, map.width) >= 0 ? 1 : -1;
-        const r = stats.hit({ ...stats.monster({ atk: p.atk * cfg.atk_mul, dfn: 0 }) }, stats.monster(m));
+        const r = stats.hit(stats.monster({ atk: p.atk * cfg.atk_mul * suppress(m, p), dfn: 0 }), stats.monster(m)); // thú cũng bị áp chế
         if (r.miss) return;
         say(m.x, m.y - (m.def.art?.h || 20) - 2, `-${r.dmg}`, '#b6ff9a');
         if (mobs.damage(m, r.dmg)) onKill(m);

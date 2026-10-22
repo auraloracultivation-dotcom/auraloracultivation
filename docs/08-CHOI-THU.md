@@ -188,3 +188,14 @@ Chết thì tự tắt. Số: `data/gameplay.json` → auto. Code: `src/game/aut
   - Tối đa 5 con đi theo cùng lúc, Kho chứa tối đa 30 con.
   - Thú đi theo tự cắn quái gần người chơi (công = công con quái lúc bắt × 0,35) và không mất máu.
   - Quái chết do thú vẫn tính cho người chơi.
+
+## Áp chế cảnh giới + trần tu vi (23/10/2026)
+Lý do: người chơi Hóa Thần Hậu kỳ chém chết Âm Hư sau khoảng 20 phút, và một con Âm Hư cho đầy cả một tầng tu vi.
+
+- **Quái mạnh hơn từ Hóa Thần** (`tools/gen_balance.py`): mỗi tầng Khí huyết ×2,5 (trước ×2), Thủ ×1,3–1,5, Công vẫn ×2.
+  - Âm Hư ≈ 2,1 tỷ Khí huyết.
+  - Tu vi cần cho các tầng Hóa Thần tăng theo.
+- **Áp chế cảnh giới** (`src/game/realm-gap.js`, `gameplay.json → monster.suppress`):
+  - Đánh quái cao hơn mình quá 1 tầng thì sát thương ×0,5 cho mỗi tầng vượt; áp chế cả thú cưng. Số bay hiện "bị áp chế".
+  - Hóa Thần Hậu kỳ đánh Âm Hư (cách 7 tầng) chỉ còn 1/64 sát thương. Mô phỏng: cần khoảng 13 triệu đòn (đồ ×5 vẫn khoảng 2,6 triệu đòn).
+- **Trần tu vi mỗi lần hạ quái** (`monster.exp_cap`): tối đa 0,5% / 2% / 5% / 8% vạch tu vi tầng hiện tại cho quái thường / tinh anh / boss / Âm Hư.

@@ -29,6 +29,7 @@ import { openSkillPanel } from './skillview.js';
 import { createWallet } from './currency.js';
 import { createLifespan } from './lifespan.js';
 import { createTame } from './tame.js';
+import { createRealmGap } from './realm-gap.js';
 import { placeholderIcon, showRevive } from '../ui/index.js';
 import { artInfo, iconUrl, fxIconUrl } from '../entity/index.js';
 
@@ -50,7 +51,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const life = createLifespan({ def: lifeDef, progress, stages: gp.player.stages, serverNow, bornAt }); // thọ nguyên theo ngày giờ Việt Nam
   const { ensureArt, forgedLook, artFile } = createForgedArt(artIdx, progress); // hình ngẫu nhiên cho đồ luyện từ phôi
   const stats = createStats(statsDef, gp);
-  const mobs = createMonsters({ gp, mdef: monDef, map });
+  const mobs = createMonsters({ gp, mdef: monDef, map }), gapR = createRealmGap({ gp, mdef: monDef }); // áp chế cảnh giới
   const voids = createVoid({ mdef: monDef, mobs, map, progress, toast, me, serverNow });
   const quests = createQuests(questDef, progress, () => MAJOR_OF(progress.stageDef.id));
   // Đan phương / công thức / bí kíp: món id được dạy bởi vật phẩm nào; có trong kho mới luyện được
@@ -101,10 +102,10 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
 
   // ---------- Người chơi đánh quái ----------
   function strike(m, mul, skill) {
-    const r = stats.hit(ps, stats.monster(m), { atkMul: mul * ptMul() * cpBonus(skill) });
+    const sup = gapR.mul(m.stage, progress.stageDef.id), r = stats.hit(ps, stats.monster(m), { atkMul: mul * ptMul() * cpBonus(skill) * sup });
     const top = m.y - (m.def.art?.h || m.r * 2) - 4;
     if (r.miss) { say(m.x, top, 'Trượt', '#cfd6e6'); return; }
-    say(m.x, top, r.crit ? `Bạo kích -${r.dmg}` : `-${r.dmg}`, r.crit ? '#ffd23a' : '#ffffff', r.crit);
+    say(m.x, top, `${r.crit ? 'Bạo kích ' : ''}-${r.dmg}${sup < 1 ? ' · bị áp chế' : ''}`, sup < 1 ? '#b9a6d6' : r.crit ? '#ffd23a' : '#ffffff', r.crit);
     const hf = HIT_FX[skill];
     if (hf) play(hf[0], m.x, midY(m), hf[1] * (r.crit ? 1.4 : 1));
     healMe(r.heal);
@@ -147,7 +148,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     if (targetUid === m.uid) targetUid = null;
     play('khoi', m.x, m.y, Math.max(16, (m.def.art?.h || 20) * 0.7), { ground: true, delay: 0.4 });
     const rank = m.def.rank, k = gp.monster.exp_mul[rank];
-    const exp = Math.round((m.maxHp / 10) * k * cpFx.expMul()), stone = m.stone || 1; // Linh thạch theo tầng quái (data/gameplay.json → monster.stone_by_stage)
+    const exp = gapR.capExp(Math.round((m.maxHp / 10) * k * cpFx.expMul()), m, progress.stageDef.exp_need), stone = m.stone || 1; // Linh thạch theo tầng quái (data/gameplay.json → monster.stone_by_stage)
     const gold = wallet.goldPerKill(stone);
     addExp(exp); progress.addStone(stone); wallet.add('vang', gold);
     const got = rollLoot(m);
@@ -203,7 +204,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     else if (!map.canStand(me.x, me.y, 4)) ({ x: me.x, y: me.y } = map.nearestStand(me.x, me.y, 4, 30));
     play('vong-lua', me.x, me.y - 8, 40); toast(`Hồi sinh${here ? ' tại chỗ' : ` tại trận pháp ${map.town?.name || ''}`} — được bảo vệ ${PV.revive_guard_s} giây`, 2000);
   }
-  const tame = createTame({ cfg: gp.tame, progress, monsters: monDef.monsters, mobs, map, me, stats, gp, toast, say: (...a) => say(...a), play: (...a) => play(...a), onKill: (m) => onKill(m), placeholder: placeholderIcon });
+  const tame = createTame({ cfg: gp.tame, progress, monsters: monDef.monsters, mobs, map, me, stats, gp, toast, say: (...a) => say(...a), play: (...a) => play(...a), onKill: (m) => onKill(m), placeholder: placeholderIcon, suppress: (m, p) => gapR.mul(m.stage, p.stage) });
   const soul = createSoul({ me, hud, progress, cfg: gp.soul, townName: map.town?.name || 'thành', toast, showRevive, onRevive: revive });
 
   // ---------- Kỹ năng (src/game/skills.js) + ô tự xếp (loadout.js) ----------
