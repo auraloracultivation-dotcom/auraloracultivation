@@ -56,7 +56,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const progress = createProgress(userId, gp);
   const wallet = createWallet({ def: curDef, progress }); // Vàng · Linh thạch · Tiên ngọc
   const life = createLifespan({ def: lifeDef, progress, stages: gp.player.stages, serverNow, bornAt }); // thọ nguyên theo ngày giờ Việt Nam
-  const { ensureArt, forgedLook, artFile } = createForgedArt(artIdx, progress); // hình ngẫu nhiên cho đồ luyện từ phôi
+  const { ensureArt, forgedLook, artFile } = createForgedArt(artIdx, progress, dvDef.he_order); // hình ngẫu nhiên cho đồ luyện từ phôi
   const stats = createStats(statsDef, gp);
   const mobs = createMonsters({ gp, mdef: monDef, map }), gapR = createRealmGap({ gp, mdef: monDef }); // áp chế cảnh giới
   const voids = createVoid({ mdef: monDef, mobs, map, progress, toast, me, serverNow });
@@ -163,7 +163,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     const got = rollLoot(m);
     for (const g of got) gain(g.id, g.n);
     if (rank === 'boss' && !progress.state.bosses.includes(m.def.id)) progress.state.bosses.push(m.def.id);
-    tame.tryTame(m); cards.onKill(m); treasure.onKill(m); // 0,5% quái quy phục làm thú cưng · rơi Thần Phù
+    tame.tryTame(m); cards.onKill(m); treasure.onKill(m); dv.onKill(m, toast); // 0,5% quái quy phục làm thú cưng · rơi Thần Phù
     quests.emit('kill', { id: m.def.id, rank });
     say(m.x, m.y - m.r * 3, `+${exp} tu vi · +${stone} Linh thạch · +${gold} Vàng`, '#9fe8ff');
     if (got.length) toast(`Nhặt: ${got.map((g) => g.label).join(', ')}`, 1800);
@@ -220,7 +220,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const loadout = createLoadout(progress, S);
   // ---------- Đạo Vận: bộ ngũ hành + Thần Phù → đạn xoè quạt, nảy, tách, phi kiếm, mưa kiếm, liên thanh (daovan / cards / barrage) ----------
   const cards = createCards({ def: dvDef, tiers: awaken.tiers, progress, stageOk: (id) => craft.stageOk(id), toast, play });
-  const dv = createDaoVan({ def: dvDef, bag, cards });
+  const dv = createDaoVan({ def: dvDef, bag, cards, progress });
   const barrage = createBarrage({ dv, me, mobs, map, bolts, play, strike, toast, dead: () => dead, maxHp: () => ps.hp, heal: (n) => { hp = Math.min(ps.hp, hp + n); } });
   treasure = createTreasure({ def: pbDef, S, progress, craft, awaken, barrage, mobs, me, map, buffs, recompute, target, play, say, toast, heOf: dv.heOf,
     stageOk: (id) => craft.stageOk(id), now: () => now, maxHp: () => ps.hp, heal: (n) => { hp = Math.min(ps.hp, hp + n); } });

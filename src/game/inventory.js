@@ -50,7 +50,7 @@ export function createInventory({ recipes, info, progress, bag, craft, itemDefs,
   function forgedGear(g) {
     const eq = st().eq[g.slot] === g.uid;
     return { id: `gear:${g.uid}`, key: `gear:${g.uid}`, name: g.name, cat: 'trang-bi', slot: g.slot, thumb: (g.tier && art(g.art)) || icon(`slot.${g.slot}`) || fallbackIcon(g.name, 'khoang'), // chưa thức tỉnh: chỉ thấy phôi
-      equipped: eq, tier: g.tier, sub: `${SLOT[g.slot]} · ${g.tier ? tierName(g.tier) : 'phôi trắng'}`,
+      equipped: eq, tier: g.tier, sub: `${SLOT[g.slot]} · ${g.tier ? `${tierName(g.tier)}${g.he ? ` · hệ ${g.he}` : ''}` : 'phôi trắng'}`,
       detail: g.tier ? '' : 'Phôi chưa thức tỉnh — chưa mặc được, chưa biết hình gì (thức tỉnh để lộ hình)', lines: lines(g), actions: gearActions(g, eq) };
   }
   function stackItem(id, count) {

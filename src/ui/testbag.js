@@ -38,6 +38,9 @@ export function createTestBag(userId, defs) {
     },
     wipe() { st = { items: [], equipped: {} }; try { localStorage.removeItem(key); } catch { /* bỏ qua */ } }, // tọa hóa: xoá Kho (tải lại sẽ nhận quà tân thủ mới)
     unequip(slot) { if (st.equipped[slot]) { delete st.equipped[slot]; save(); } },
+    // Nhận 1 món (rơi từ quái): false nếu đã có
+    give(id) { if (!byId.has(id) || st.items.includes(id)) return false; st.items.push(id); save(); return true; },
+    missing: (filter) => defs.filter((d) => !st.items.includes(d.id) && filter(d)).map((d) => d.id),
     grantAll() {
       const before = st.items.length;
       for (const d of defs) if (!st.items.includes(d.id)) st.items.push(d.id);

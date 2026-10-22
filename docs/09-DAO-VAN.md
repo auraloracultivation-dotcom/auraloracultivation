@@ -12,6 +12,12 @@ Chủ dự án muốn chất My Heroes: chọn đúng bộ + hệ + thẻ thì c
    - 3 ô phù, mở lần lượt ở Luyện Khí 1, Trúc Cơ, Kết Đan.
    - Kho → thẻ Thần Phù: Gắn / Gỡ / Phân rã. Ô đầu tiên của thẻ là "Đạo Vận hiện tại", liệt kê hiệu ứng đang có và mốc kế tiếp.
 
+## Có đồ ngũ hành từ đâu
+- **Đồ Kho 6 hệ rơi khi hạ quái**: tinh anh 0,3%, boss 2,5%, Âm Hư 50%. Món chưa có thì vào Kho, đủ bộ rồi thì đổi thành 500 Linh thạch.
+- **Phôi luyện ra mang hệ ngẫu nhiên**, lộ ra khi thức tỉnh.
+  - Mặt nạ, nhẫn, dây chuyền, linh thú có hình 6 hệ thì hệ đi theo hình.
+  - Phôi đã thức tỉnh và đang mặc thì tính vào bộ ngũ hành.
+
 ## Hiệu ứng (data/build/dao-van.json → `_tu_dien`)
 - **Bắn và đạn**:
   - multishot: bắn thêm viên, xoè hình quạt.
