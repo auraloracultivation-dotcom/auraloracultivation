@@ -2,6 +2,7 @@
 //   thanh gọn — 2 ô (biểu tượng + số), ▲▼ để lướt qua 16 chỉ số
 //   chạm vào ô → phóng to thành bảng đầy đủ 16 chỉ số; chạm lần nữa / ✕ → thu nhỏ lại
 // Khung sinh bằng tools/stats_ui.py. Giá trị lấy từ getValue(id); chưa có dữ liệu thì hiện "—".
+import { compactNum } from '../core/index.js';
 import { escapeHtml } from './screens.js';
 
 export const STATS = [
@@ -22,7 +23,7 @@ const FULL = { src: 'assets/ui/frames/chi-so-day-du.png', w: 881, h: 1518,
 
 const pct = (f, x, y, w, h) =>
   `left:${(x / f.w) * 100}%;top:${(y / f.h) * 100}%;width:${(w / f.w) * 100}%;height:${(h / f.h) * 100}%`;
-const fmt = (v) => (v === null || v === undefined ? '—' : String(v));
+const fmt = (v) => (v === null || v === undefined ? '—' : typeof v === 'number' ? compactNum(v) : String(v));
 
 export function createStatsDock({ getValue = () => null } = {}) {
   const root = document.getElementById('ui');

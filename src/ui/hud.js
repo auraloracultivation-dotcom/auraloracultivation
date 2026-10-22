@@ -7,6 +7,7 @@
 import { escapeHtml, toast } from './screens.js';
 import { crispWidth } from './stage.js';
 import { setupRoundCanvas } from './compass.js';
+import { compactNum } from '../core/index.js';
 
 // Đặt kích thước nút/khung theo bội số nguyên điểm ảnh gốc → viền sắc, đều
 const crisp = (node, srcW, maxCss, square = false) => {
@@ -248,7 +249,7 @@ export function createHud(opts) {
       const e = els[kind];
       const r = max > 0 ? Math.max(0, Math.min(1, value / max)) : (kind === 'xp' ? 0 : 1);
       e.fill.style.width = `${r * 100}%`;
-      e.text.textContent = max > 0 ? `${value}/${max}` : '';
+      e.text.textContent = max > 0 ? `${compactNum(value)}/${compactNum(max)}` : '';
     },
   };
 }

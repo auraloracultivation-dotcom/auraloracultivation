@@ -12,6 +12,7 @@
 | Lưu vị trí | Máy chủ | RPC `save_position` — kiểm tra tốc độ, từ chối dịch chuyển gian lận |
 | Thấy người chơi khác | Supabase Realtime (Presence/Broadcast) | `src/net/` |
 | Tạo nhân vật | Máy chủ | RPC `create_character` |
+| Giờ chung (lịch Âm Hư) | Máy chủ | RPC `server_time` (chỉ đọc), máy khách nhớ độ lệch |
 | Sát thương, hồi chiêu, kết quả trận | Máy chủ (từ Mốc 3) | Edge Function / RPC |
 | Kinh nghiệm, rơi đồ, đột phá, giao dịch | Máy chủ | RPC / Edge Function, không có ngoại lệ |
 

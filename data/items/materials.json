@@ -235,6 +235,87 @@
    "group": "dacbiet",
    "zone": "than",
    "use": "Hóa Thần Đan · bắt buộc phôi Pháp Tướng / đồ Đen (rơi 0.5–0.8%)"
+  },
+  {
+   "id": "item.thao.hac-diem.001",
+   "name": "Hắc Diệm Thảo",
+   "cat": "linh-duoc",
+   "group": "thao",
+   "zone": "den",
+   "use": "Anh Biến Đan · Vấn Đỉnh Đan",
+   "_nguon": "Claude đề xuất 23/10 (vùng mới)"
+  },
+  {
+   "id": "item.thao.u-hon-hoa.001",
+   "name": "U Hồn Hoa",
+   "cat": "linh-duoc",
+   "group": "thao",
+   "zone": "den",
+   "use": "Vấn Đỉnh Đan",
+   "_nguon": "Claude đề xuất 23/10 (vùng mới)"
+  },
+  {
+   "id": "item.khoang.hac-dieu.001",
+   "name": "Hắc Diệu Thạch",
+   "cat": "khac",
+   "group": "khoang",
+   "zone": "den",
+   "use": "Vấn Đỉnh Đan",
+   "_nguon": "Claude đề xuất 23/10 (vùng mới)"
+  },
+  {
+   "id": "item.dacbiet.anh-bien-tinh.001",
+   "name": "Anh Biến Tinh Phách",
+   "cat": "khac",
+   "group": "dacbiet",
+   "zone": "den",
+   "use": "Vấn Đỉnh Đan",
+   "_nguon": "Claude đề xuất 23/10 (vùng mới)"
+  },
+  {
+   "id": "item.thao.tu-van.001",
+   "name": "Tử Vân Thảo",
+   "cat": "linh-duoc",
+   "group": "thao",
+   "zone": "tim",
+   "use": "Đan cảnh giới cao (chưa dùng)",
+   "_nguon": "Claude đề xuất 23/10 (vùng mới)"
+  },
+  {
+   "id": "item.thao.hu-khong-lien.001",
+   "name": "Hư Không Liên",
+   "cat": "linh-duoc",
+   "group": "thao",
+   "zone": "tim",
+   "use": "Đan cảnh giới cao (chưa dùng)",
+   "_nguon": "Claude đề xuất 23/10 (vùng mới)"
+  },
+  {
+   "id": "item.khoang.tu-tinh.001",
+   "name": "Tử Tinh Khoáng",
+   "cat": "khac",
+   "group": "khoang",
+   "zone": "tim",
+   "use": "Phôi cảnh giới cao (chưa dùng)",
+   "_nguon": "Claude đề xuất 23/10 (vùng mới)"
+  },
+  {
+   "id": "item.dacbiet.van-dinh-hon.001",
+   "name": "Vấn Đỉnh Tinh Hồn",
+   "cat": "khac",
+   "group": "dacbiet",
+   "zone": "tim",
+   "use": "Đan cảnh giới cao (chưa dùng)",
+   "_nguon": "Claude đề xuất 23/10 (vùng mới)"
+  },
+  {
+   "id": "item.dacbiet.am-hu-hach.001",
+   "name": "Âm Hư Tinh Hạch",
+   "cat": "khac",
+   "group": "dacbiet",
+   "zone": "huvo",
+   "use": "Chỉ rơi từ Âm Hư — dùng sau (chưa chốt)",
+   "_nguon": "Claude đề xuất 23/10 (vùng mới)"
   }
  ]
 }

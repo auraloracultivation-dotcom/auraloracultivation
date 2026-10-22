@@ -12,7 +12,7 @@ Trạng thái người chơi chỉ lưu **ID**, không lưu lại chỉ số. Ch
 | Loại | Ví dụ |
 |---|---|
 | Vật phẩm | `item.sword.luc.001` |
-| Quái | `monster.forest.wolf.001` |
+| Quái | `monster.forest.wolf.001` (vùng: xanh, cam, xam, trang, than, den, tim, huvo) |
 | Skill | `skill.sword.basic.001` |
 | Zone | `zone.start`, `zone.forest.01` |
 
@@ -29,4 +29,4 @@ Cấp độ hiếm (không phải màu): `luc, lam, tim, vang, cam, do, nau, den
 - Ô đất **giữ viền đen** và vẽ nhỏ: mỗi ô bản đồ (32 điểm) chia 2×2 ô đất 16 điểm (`grid: 2` trong `terrain.json`); nước 1 ô liền, không viền.
 - Ô vẽ lấy từ atlas `assets/tiles/atlas.webp`, chỉ mục ở `data/tiles.json` (sinh bằng `tools/tiles_atlas.py`).
 - Bản đồ sinh bằng `tools/gen_map.py`; cũng có thể **sửa tay bằng app vẽ** — chỉ cần tô đúng màu trong `terrain.json`.
-- Bản đồ vòng lặp: kích thước thế giới (`data/config.json` → `world`) phải khớp hằng `c_world` trong hàm SQL `save_position`.
+- Bản đồ 1000×1000 ô (từ 23/10), tâm thành ô (500, 500). Bản đồ vòng lặp: kích thước thế giới (`data/config.json` → `world`) phải khớp hằng `c_world` trong hàm SQL `save_position`.

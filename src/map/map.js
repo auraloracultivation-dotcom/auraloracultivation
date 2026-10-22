@@ -127,12 +127,15 @@ export async function createMap(def, terrainDef, tilesDef, art = {}) {
     // Dấu định vị: chấm nhỏ vừa đủ nhận ra (mình vàng có viền, người khác trắng nhỏ hơn)
     const dot = Math.max(2, size / 70);
     for (const m of markers) {
-      const dx = wrapDelta(m.x - x, width) / T, dy = wrapDelta(m.y - y, height) / T;
-      if (Math.abs(dx) > radiusTiles || Math.abs(dy) > radiusTiles) continue;
+      let dx = wrapDelta(m.x - x, width) / T, dy = wrapDelta(m.y - y, height) / T;
+      if (Math.abs(dx) > radiusTiles || Math.abs(dy) > radiusTiles) {
+        if (!m.big) continue;
+        const k2 = (radiusTiles * 0.9) / Math.max(Math.abs(dx), Math.abs(dy)); dx *= k2; dy *= k2; // Âm Hư ở xa: chấm ở mép chỉ hướng
+      }
       const px = size / 2 + dx * k, py = size / 2 + dy * k;
       ctx.beginPath();
-      ctx.arc(px, py, m.self ? dot * 1.2 : dot * 0.85, 0, Math.PI * 2);
-      ctx.fillStyle = m.self ? '#ffe36a' : '#ffffff';
+      ctx.arc(px, py, m.self ? dot * 1.2 : m.big ? dot * 1.6 : dot * 0.85, 0, Math.PI * 2);
+      ctx.fillStyle = m.self ? '#ffe36a' : m.color || '#ffffff'; // Âm Hư: chấm tím to
       ctx.fill();
       ctx.lineWidth = Math.max(1, dot * 0.45);
       ctx.strokeStyle = '#1b1208';

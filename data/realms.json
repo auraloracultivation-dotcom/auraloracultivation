@@ -2,7 +2,7 @@
  "_status": "design",
  "_nguon": "Auralora Lab v3 (21/10/2026)",
  "_ghi_chu": "THIẾT KẾ từ Lab — CHƯA triển khai trong game, CHƯA kiểm thử cân bằng. Số liệu là baseline để thử nghiệm.",
- "_ghi_chu_rieng": "LK2–4, LK6–9 chưa có hệ số trong Lab: nội suy khi cần, phải ghi rõ là nội suy.",
+ "_ghi_chu_rieng": "Cảnh giới chốt 23/10/2026 (chủ dự án): 7 đại cảnh giới người chơi + Âm Hư chỉ có boss. Sinh bằng tools/gen_balance.py.",
  "realms": [
   {
    "id": "realm.luyen-khi",
@@ -21,8 +21,7 @@
     "lk10"
    ],
    "unlock_skill": "danh-thuong",
-   "zone": "xanh",
-   "target_hours": "4–8 (LK1→LK10)"
+   "zone": "xanh"
   },
   {
    "id": "realm.truc-co",
@@ -38,8 +37,7 @@
    "breakthrough": {
     "rate": 0.85,
     "pill": "item.dan.truc-co.001"
-   },
-   "target_hours": "15–25 (hoàn thành)"
+   }
   },
   {
    "id": "realm.ket-dan",
@@ -51,12 +49,11 @@
     "hau"
    ],
    "unlock_skill": "skill.khe.linh-thu.001",
-   "zone": "trang",
+   "zone": "xam",
    "breakthrough": {
     "rate": 0.7,
     "pill": "item.dan.ket-dan.001"
-   },
-   "target_hours": "40–60"
+   }
   },
   {
    "id": "realm.nguyen-anh",
@@ -68,12 +65,11 @@
     "hau"
    ],
    "unlock_skill": "skill.than.canh-phong.001",
-   "zone": "xam",
+   "zone": "trang",
    "breakthrough": {
     "rate": 0.5,
     "pill": "item.dan.nguyen-anh.001"
-   },
-   "target_hours": "80–120"
+   }
   },
   {
    "id": "realm.hoa-than",
@@ -89,73 +85,80 @@
    "breakthrough": {
     "rate": 0.3,
     "pill": "item.dan.hoa-than.001"
-   },
-   "target_hours": "150–250 (tới HT Sơ)"
+   }
+  },
+  {
+   "id": "realm.anh-bien",
+   "name": "Anh Biến",
+   "short": "AB",
+   "stages": [
+    "so",
+    "trung",
+    "hau"
+   ],
+   "unlock_skill": "chua-co",
+   "zone": "den",
+   "breakthrough": {
+    "rate": 0.2,
+    "pill": "item.dan.anh-bien.001"
+   }
+  },
+  {
+   "id": "realm.van-dinh",
+   "name": "Vấn Đỉnh",
+   "short": "VD",
+   "stages": [
+    "so",
+    "trung",
+    "hau"
+   ],
+   "unlock_skill": "chua-co",
+   "zone": "tim",
+   "breakthrough": {
+    "rate": 0.12,
+    "pill": "item.dan.van-dinh.001"
+   }
+  },
+  {
+   "id": "realm.am-hu",
+   "name": "Âm Hư",
+   "short": "AH",
+   "stages": [],
+   "unlock_skill": "chua-co",
+   "zone": "huvo",
+   "monster_only": true,
+   "_ghi_chu": "Người chơi không tu tới được. Chỉ 5 Âm Hư từ hư vô (boss) mang cảnh giới này."
   }
  ],
  "power_mul": {
   "lk1": 1.0,
-  "lk5": 1.58,
-  "lk10": 2.9,
-  "tc_so": 3.4,
-  "tc_trung": 4.0,
-  "tc_hau": 4.7,
-  "kd_so": 5.6,
-  "kd_trung": 6.6,
-  "kd_hau": 7.8,
-  "na_so": 9.5,
-  "na_trung": 11.2,
-  "na_hau": 13.3,
-  "ht_so": 16.5,
-  "ht_trung": 19.5,
-  "ht_hau": 23.5
- },
- "lab_duel_build": {
-  "_ghi_chu": "Chỉ dùng cho Lab Đấu: [số ô trang bị random, gearQ]",
-  "lk1": [
-   3,
-   0.15
-  ],
-  "lk5": [
-   4,
-   0.25
-  ],
-  "lk10": [
-   5,
-   0.35
-  ],
-  "tc_so": [
-   5,
-   0.45
-  ],
-  "tc_hau": [
-   5,
-   0.55
-  ],
-  "kd_so": [
-   6,
-   0.6
-  ],
-  "kd_hau": [
-   6,
-   0.7
-  ],
-  "na_so": [
-   7,
-   0.75
-  ],
-  "na_hau": [
-   7,
-   0.85
-  ],
-  "ht_so": [
-   8,
-   0.9
-  ],
-  "ht_hau": [
-   8,
-   1.0
-  ]
+  "lk2": 1.26,
+  "lk3": 1.6,
+  "lk4": 2.0,
+  "lk5": 2.51,
+  "lk6": 3.14,
+  "lk7": 3.97,
+  "lk8": 5.03,
+  "lk9": 6.31,
+  "lk10": 7.97,
+  "tc_so": 29.83,
+  "tc_trung": 39.66,
+  "tc_hau": 52.37,
+  "kd_so": 201.51,
+  "kd_trung": 269.74,
+  "kd_hau": 360.71,
+  "na_so": 1436.74,
+  "na_trung": 1945.43,
+  "na_hau": 2639.71,
+  "ht_so": 10975.34,
+  "ht_trung": 15054.11,
+  "ht_hau": 20705.94,
+  "ab_so": 89808.0,
+  "ab_trung": 124885.49,
+  "ab_hau": 174215.37,
+  "vd_so": 781526.14,
+  "vd_trung": 1098060.51,
+  "vd_hau": 1544227.2
  },
  "breakthrough_rules": {
   "require": "đỉnh cảnh giới hiện tại + đủ đan đột phá",

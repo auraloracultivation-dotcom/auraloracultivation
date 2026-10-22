@@ -2,37 +2,71 @@
  "_status": "design",
  "_nguon": "Auralora Lab v3 (21/10/2026)",
  "_ghi_chu": "THIẾT KẾ từ Lab — CHƯA triển khai trong game, CHƯA kiểm thử cân bằng. Số liệu là baseline để thử nghiệm.",
- "_ghi_chu_rieng": "Số dạng [min, max]. 'art' và 'behavior' để trống: hình quái chính thức chưa có, AI quái chưa thiết kế chi tiết. tier 1–5 theo 5 vùng Lab; data/terrain.json đang có 6 bậc địa hình — cách ghép vùng ↔ địa hình CHƯA chốt.",
+ "_ghi_chu_rieng": "Chốt 23/10/2026: 7 vùng × 7 đại cảnh giới + Hư Vô (5 Âm Hư). Mỗi con có \"stages\" (tầng nó xuất hiện); chỉ số thật = stage_stats[tầng] × rank_mul[cấp] × mul, lệch ±variance. hp/atk/def [min,max] chỉ để hiển thị (Đồ giám). Sinh bằng tools/gen_balance.py.",
  "zones": [
   {
    "id": "xanh",
    "name": "Vùng Xanh",
    "realm": "luyen-khi",
-   "tier": 1
+   "tier": 1,
+   "color": "#5fbf5a",
+   "herb_tip": "#b8ffb0"
   },
   {
    "id": "cam",
    "name": "Vùng Cam",
    "realm": "truc-co",
-   "tier": 2
+   "tier": 2,
+   "color": "#e08a3a",
+   "herb_tip": "#ff7a4a"
+  },
+  {
+   "id": "xam",
+   "name": "Vùng Xám Khói",
+   "realm": "ket-dan",
+   "tier": 3,
+   "color": "#8d8f99",
+   "herb_tip": "#c7a6ff"
   },
   {
    "id": "trang",
    "name": "Vùng Trắng",
-   "realm": "ket-dan",
-   "tier": 3
-  },
-  {
-   "id": "xam",
-   "name": "Vùng Xám",
    "realm": "nguyen-anh",
-   "tier": 4
+   "tier": 4,
+   "color": "#cfe6f2",
+   "herb_tip": "#e8f6ff"
   },
   {
    "id": "than",
-   "name": "Vùng Than",
+   "name": "Vùng Xám Than",
    "realm": "hoa-than",
-   "tier": 5
+   "tier": 5,
+   "color": "#4a3b46",
+   "herb_tip": "#ff3b6b"
+  },
+  {
+   "id": "den",
+   "name": "Vùng Đen",
+   "realm": "anh-bien",
+   "tier": 6,
+   "color": "#1d1a24",
+   "herb_tip": "#7cf2ff"
+  },
+  {
+   "id": "tim",
+   "name": "Vùng Tím",
+   "realm": "van-dinh",
+   "tier": 7,
+   "color": "#7a3fb0",
+   "herb_tip": "#f0a8ff"
+  },
+  {
+   "id": "huvo",
+   "name": "Hư Vô",
+   "realm": "am-hu",
+   "tier": 8,
+   "color": "#2a0f3d",
+   "herb_tip": "#d18bff"
   }
  ],
  "behavior_states_design": [
@@ -67,21 +101,26 @@
  "monsters": [
   {
    "id": "monster.xanh.yeu-ho.001",
-   "name": "Yêu Hồ Sơ",
+   "name": "Yêu Hồ",
    "zone": "xanh",
    "tier": 1,
    "rank": "thuong",
-   "realm": "lk1–3",
+   "stages": [
+    "lk1",
+    "lk2",
+    "lk3"
+   ],
+   "realm": "Luyện Khí tầng 1–3",
    "hp": [
-    90,
-    140
+    104,
+    181
    ],
    "atk": [
-    10,
-    16
+    12,
+    18
    ],
    "def": [
-    6,
+    8,
     10
    ],
    "art": {
@@ -97,17 +136,22 @@
    "zone": "xanh",
    "tier": 1,
    "rank": "thuong",
-   "realm": "lk2–4",
+   "stages": [
+    "lk4",
+    "lk5",
+    "lk6"
+   ],
+   "realm": "Luyện Khí tầng 4–6",
    "hp": [
-    120,
-    180
+    204,
+    353
    ],
    "atk": [
-    14,
-    22
+    19,
+    27
    ],
    "def": [
-    8,
+    10,
     14
    ],
    "art": {
@@ -123,18 +167,24 @@
    "zone": "xanh",
    "tier": 1,
    "rank": "thuong",
-   "realm": "lk4–6",
+   "stages": [
+    "lk7",
+    "lk8",
+    "lk9",
+    "lk10"
+   ],
+   "realm": "Luyện Khí tầng 7–10",
    "hp": [
-    180,
-    280
+    399,
+    861
    ],
    "atk": [
-    18,
-    28
+    28,
+    48
    ],
    "def": [
-    15,
-    25
+    13,
+    20
    ],
    "art": {
     "sheet": "gai-dat",
@@ -149,18 +199,30 @@
    "zone": "xanh",
    "tier": 1,
    "rank": "elite",
-   "realm": "lk6–8",
+   "stages": [
+    "lk1",
+    "lk2",
+    "lk3",
+    "lk4",
+    "lk5",
+    "lk6",
+    "lk7",
+    "lk8",
+    "lk9",
+    "lk10"
+   ],
+   "realm": "Luyện Khí tầng 1–10",
    "hp": [
-    450,
-    650
+    230,
+    1894
    ],
    "atk": [
-    35,
-    50
+    15,
+    60
    ],
    "def": [
-    22,
-    32
+    9,
+    22
    ],
    "art": {
     "sheet": "orc",
@@ -174,18 +236,30 @@
    "zone": "xanh",
    "tier": 1,
    "rank": "boss",
-   "realm": "lk8–10",
+   "stages": [
+    "lk1",
+    "lk2",
+    "lk3",
+    "lk4",
+    "lk5",
+    "lk6",
+    "lk7",
+    "lk8",
+    "lk9",
+    "lk10"
+   ],
+   "realm": "Luyện Khí tầng 1–10",
    "hp": [
-    900,
-    1300
+    314,
+    2583
    ],
    "atk": [
-    55,
-    75
+    19,
+    72
    ],
    "def": [
-    30,
-    42
+    10,
+    25
    ],
    "art": {
     "sheet": "orc",
@@ -200,18 +274,21 @@
    "zone": "cam",
    "tier": 2,
    "rank": "thuong",
-   "realm": "tc_so",
+   "stages": [
+    "tc_so"
+   ],
+   "realm": "Trúc Cơ Sơ kỳ",
    "hp": [
-    380,
-    520
+    2802,
+    3098
    ],
    "atk": [
-    40,
-    58
+    76,
+    84
    ],
    "def": [
-    28,
-    40
+    25,
+    27
    ],
    "art": {
     "sheet": "blood",
@@ -225,18 +302,21 @@
    "zone": "cam",
    "tier": 2,
    "rank": "thuong",
-   "realm": "tc_so–trung",
+   "stages": [
+    "tc_trung"
+   ],
+   "realm": "Trúc Cơ Trung kỳ",
    "hp": [
-    480,
-    650
+    3644,
+    4028
    ],
    "atk": [
-    50,
-    70
+    89,
+    99
    ],
    "def": [
-    32,
-    48
+    28,
+    32
    ],
    "art": {
     "sheet": "doi-lua",
@@ -250,18 +330,21 @@
    "zone": "cam",
    "tier": 2,
    "rank": "thuong",
-   "realm": "tc_trung",
+   "stages": [
+    "tc_hau"
+   ],
+   "realm": "Trúc Cơ Hậu kỳ",
    "hp": [
-    600,
-    850
+    4737,
+    5235
    ],
    "atk": [
-    55,
-    80
+    105,
+    117
    ],
    "def": [
-    50,
-    70
+    31,
+    35
    ],
    "art": {
     "sheet": "oc-gai",
@@ -276,18 +359,23 @@
    "zone": "cam",
    "tier": 2,
    "rank": "elite",
-   "realm": "tc_trung–hau",
+   "stages": [
+    "tc_so",
+    "tc_trung",
+    "tc_hau"
+   ],
+   "realm": "Trúc Cơ Sơ kỳ – Hậu kỳ",
    "hp": [
-    1600,
-    2200
+    6166,
+    11518
    ],
    "atk": [
     95,
-    130
+    146
    ],
    "def": [
-    55,
-    75
+    28,
+    39
    ],
    "art": {
     "sheet": "demon",
@@ -301,18 +389,23 @@
    "zone": "cam",
    "tier": 2,
    "rank": "boss",
-   "realm": "tc_hau",
+   "stages": [
+    "tc_so",
+    "tc_trung",
+    "tc_hau"
+   ],
+   "realm": "Trúc Cơ Sơ kỳ – Hậu kỳ",
    "hp": [
-    4200,
-    5500
+    8408,
+    15706
    ],
    "atk": [
-    160,
-    210
+    114,
+    175
    ],
    "def": [
-    70,
-    95
+    31,
+    43
    ],
    "art": {
     "sheet": "demon",
@@ -322,155 +415,26 @@
    "behavior": null
   },
   {
-   "id": "monster.trang.bang-ho.001",
-   "name": "Băng Hồ",
-   "zone": "trang",
-   "tier": 3,
-   "rank": "thuong",
-   "realm": "kd_so",
-   "hp": [
-    1300,
-    1800
-   ],
-   "atk": [
-    95,
-    130
-   ],
-   "def": [
-    65,
-    90
-   ],
-   "art": {
-    "sheet": "ca-quai",
-    "h": 22,
-    "still": true
-   },
-   "behavior": null
-  },
-  {
-   "id": "monster.trang.tuyet-ung.001",
-   "name": "Tuyết Ưng",
-   "zone": "trang",
-   "tier": 3,
-   "rank": "thuong",
-   "realm": "kd_so–trung",
-   "hp": [
-    1600,
-    2300
-   ],
-   "atk": [
-    110,
-    155
-   ],
-   "def": [
-    70,
-    100
-   ],
-   "art": {
-    "sheet": "ruoi",
-    "h": 24,
-    "hue": 180,
-    "still": true
-   },
-   "behavior": null
-  },
-  {
-   "id": "monster.trang.han-giap.001",
-   "name": "Hàn Giáp Thú",
-   "zone": "trang",
-   "tier": 3,
-   "rank": "thuong",
-   "realm": "kd_trung",
-   "hp": [
-    2200,
-    3000
-   ],
-   "atk": [
-    130,
-    180
-   ],
-   "def": [
-    110,
-    150
-   ],
-   "art": {
-    "sheet": "gai-dat",
-    "h": 24,
-    "hue": 170,
-    "still": true
-   },
-   "behavior": null
-  },
-  {
-   "id": "monster.trang.bang-hon-tuong.001",
-   "name": "Băng Hồn Tướng",
-   "zone": "trang",
-   "tier": 3,
-   "rank": "elite",
-   "realm": "kd_trung–hau",
-   "hp": [
-    7000,
-    10000
-   ],
-   "atk": [
-    250,
-    340
-   ],
-   "def": [
-    130,
-    180
-   ],
-   "art": {
-    "sheet": "soldier",
-    "h": 30,
-    "hue": 180
-   },
-   "behavior": null
-  },
-  {
-   "id": "monster.trang.tuyet-son-lao-to.001",
-   "name": "Tuyết Sơn Lão Tổ",
-   "zone": "trang",
-   "tier": 3,
-   "rank": "boss",
-   "realm": "kd_hau",
-   "hp": [
-    16000,
-    22000
-   ],
-   "atk": [
-    380,
-    480
-   ],
-   "def": [
-    160,
-    220
-   ],
-   "art": {
-    "sheet": "knight",
-    "h": 52,
-    "hue": 180
-   },
-   "behavior": null
-  },
-  {
    "id": "monster.xam.co-chien-hon.001",
    "name": "Cổ Chiến Hồn",
    "zone": "xam",
-   "tier": 4,
+   "tier": 3,
    "rank": "thuong",
-   "realm": "na_so",
+   "stages": [
+    "kd_so"
+   ],
+   "realm": "Kết Đan Sơ kỳ",
    "hp": [
-    4500,
-    6500
+    17052,
+    18848
    ],
    "atk": [
-    240,
-    330
+    185,
+    205
    ],
    "def": [
-    150,
-    210
+    44,
+    48
    ],
    "art": {
     "sheet": "dau-lau",
@@ -483,20 +447,23 @@
    "id": "monster.xam.doc-yeu.001",
    "name": "Độc Yêu",
    "zone": "xam",
-   "tier": 4,
+   "tier": 3,
    "rank": "thuong",
-   "realm": "na_so–trung",
+   "stages": [
+    "kd_trung"
+   ],
+   "realm": "Kết Đan Trung kỳ",
    "hp": [
-    5500,
-    8000
+    22169,
+    24503
    ],
    "atk": [
-    280,
-    380
+    218,
+    242
    ],
    "def": [
-    160,
-    230
+    49,
+    55
    ],
    "art": {
     "sheet": "nhen",
@@ -509,20 +476,23 @@
    "id": "monster.xam.huyen-giap.001",
    "name": "Huyền Giáp Thú",
    "zone": "xam",
-   "tier": 4,
+   "tier": 3,
    "rank": "thuong",
-   "realm": "na_trung",
+   "stages": [
+    "kd_hau"
+   ],
+   "realm": "Kết Đan Hậu kỳ",
    "hp": [
-    7000,
-    10000
+    28819,
+    31853
    ],
    "atk": [
-    320,
-    430
+    258,
+    286
    ],
    "def": [
-    220,
-    300
+    55,
+    61
    ],
    "art": {
     "sheet": "oc-gai",
@@ -536,20 +506,25 @@
    "id": "monster.xam.thuong-co-chien-tuong.001",
    "name": "Thượng Cổ Chiến Tướng",
    "zone": "xam",
-   "tier": 4,
+   "tier": 3,
    "rank": "elite",
-   "realm": "na_trung–hau",
+   "stages": [
+    "kd_so",
+    "kd_trung",
+    "kd_hau"
+   ],
+   "realm": "Kết Đan Sơ kỳ – Hậu kỳ",
    "hp": [
-    22000,
-    32000
+    37516,
+    70076
    ],
    "atk": [
-    580,
-    780
+    232,
+    357
    ],
    "def": [
-    250,
-    350
+    49,
+    68
    ],
    "art": {
     "sheet": "knight",
@@ -561,24 +536,180 @@
    "id": "monster.xam.huyen-vuc-ma-ton.001",
    "name": "Huyền Vực Ma Tôn",
    "zone": "xam",
-   "tier": 4,
+   "tier": 3,
    "rank": "boss",
-   "realm": "na_hau",
+   "stages": [
+    "kd_so",
+    "kd_trung",
+    "kd_hau"
+   ],
+   "realm": "Kết Đan Sơ kỳ – Hậu kỳ",
    "hp": [
-    65000,
-    90000
+    51158,
+    95558
    ],
    "atk": [
-    900,
-    1200
+    278,
+    428
    ],
    "def": [
-    320,
-    420
+    55,
+    76
    ],
    "art": {
     "sheet": "xuc-tu",
     "h": 58
+   },
+   "behavior": null
+  },
+  {
+   "id": "monster.trang.bang-ho.001",
+   "name": "Băng Hồ",
+   "zone": "trang",
+   "tier": 4,
+   "rank": "thuong",
+   "stages": [
+    "na_so"
+   ],
+   "realm": "Nguyên Anh Sơ kỳ",
+   "hp": [
+    103750,
+    114670
+   ],
+   "atk": [
+    451,
+    499
+   ],
+   "def": [
+    77,
+    85
+   ],
+   "art": {
+    "sheet": "ca-quai",
+    "h": 22,
+    "still": true
+   },
+   "behavior": null
+  },
+  {
+   "id": "monster.trang.tuyet-ung.001",
+   "name": "Tuyết Ưng",
+   "zone": "trang",
+   "tier": 4,
+   "rank": "thuong",
+   "stages": [
+    "na_trung"
+   ],
+   "realm": "Nguyên Anh Trung kỳ",
+   "hp": [
+    134874,
+    149072
+   ],
+   "atk": [
+    533,
+    589
+   ],
+   "def": [
+    86,
+    96
+   ],
+   "art": {
+    "sheet": "ruoi",
+    "h": 24,
+    "hue": 180,
+    "still": true
+   },
+   "behavior": null
+  },
+  {
+   "id": "monster.trang.han-giap.001",
+   "name": "Hàn Giáp Thú",
+   "zone": "trang",
+   "tier": 4,
+   "rank": "thuong",
+   "stages": [
+    "na_hau"
+   ],
+   "realm": "Nguyên Anh Hậu kỳ",
+   "hp": [
+    175337,
+    193793
+   ],
+   "atk": [
+    629,
+    695
+   ],
+   "def": [
+    97,
+    107
+   ],
+   "art": {
+    "sheet": "gai-dat",
+    "h": 24,
+    "hue": 170,
+    "still": true
+   },
+   "behavior": null
+  },
+  {
+   "id": "monster.trang.bang-hon-tuong.001",
+   "name": "Băng Hồn Tướng",
+   "zone": "trang",
+   "tier": 4,
+   "rank": "elite",
+   "stages": [
+    "na_so",
+    "na_trung",
+    "na_hau"
+   ],
+   "realm": "Nguyên Anh Sơ kỳ – Hậu kỳ",
+   "hp": [
+    228249,
+    426345
+   ],
+   "atk": [
+    564,
+    869
+   ],
+   "def": [
+    86,
+    120
+   ],
+   "art": {
+    "sheet": "soldier",
+    "h": 30,
+    "hue": 180
+   },
+   "behavior": null
+  },
+  {
+   "id": "monster.trang.tuyet-son-lao-to.001",
+   "name": "Tuyết Sơn Lão Tổ",
+   "zone": "trang",
+   "tier": 4,
+   "rank": "boss",
+   "stages": [
+    "na_so",
+    "na_trung",
+    "na_hau"
+   ],
+   "realm": "Nguyên Anh Sơ kỳ – Hậu kỳ",
+   "hp": [
+    311248,
+    581380
+   ],
+   "atk": [
+    677,
+    1043
+   ],
+   "def": [
+    96,
+    134
+   ],
+   "art": {
+    "sheet": "knight",
+    "h": 52,
+    "hue": 180
    },
    "behavior": null
   },
@@ -588,18 +719,21 @@
    "zone": "than",
    "tier": 5,
    "rank": "thuong",
-   "realm": "ht_so",
+   "stages": [
+    "ht_so"
+   ],
+   "realm": "Hóa Thần Sơ kỳ",
    "hp": [
-    16000,
-    24000
+    631214,
+    697658
    ],
    "atk": [
-    520,
-    720
+    1100,
+    1216
    ],
    "def": [
-    320,
-    450
+    136,
+    150
    ],
    "art": {
     "sheet": "soi-loi",
@@ -613,18 +747,21 @@
    "zone": "than",
    "tier": 5,
    "rank": "thuong",
-   "realm": "ht_so–trung",
+   "stages": [
+    "ht_trung"
+   ],
+   "realm": "Hóa Thần Trung kỳ",
    "hp": [
-    22000,
-    32000
+    820578,
+    906954
    ],
    "atk": [
-    620,
-    850
+    1298,
+    1434
    ],
    "def": [
-    360,
-    500
+    152,
+    168
    ],
    "art": {
     "sheet": "nhan-cau",
@@ -640,18 +777,21 @@
    "zone": "than",
    "tier": 5,
    "rank": "thuong",
-   "realm": "ht_trung",
+   "stages": [
+    "ht_hau"
+   ],
+   "realm": "Hóa Thần Hậu kỳ",
    "hp": [
-    30000,
-    42000
+    1066751,
+    1179041
    ],
    "atk": [
-    750,
-    1000
+    1531,
+    1693
    ],
    "def": [
-    480,
-    650
+    170,
+    188
    ],
    "art": {
     "sheet": "ran-ba-dau",
@@ -665,18 +805,23 @@
    "zone": "than",
    "tier": 5,
    "rank": "elite",
-   "realm": "ht_trung–hau",
+   "stages": [
+    "ht_so",
+    "ht_trung",
+    "ht_hau"
+   ],
+   "realm": "Hóa Thần Sơ kỳ – Hậu kỳ",
    "hp": [
-    85000,
-    120000
+    1388671,
+    2593890
    ],
    "atk": [
-    1500,
-    2100
+    1375,
+    2116
    ],
    "def": [
-    550,
-    750
+    152,
+    211
    ],
    "art": {
     "sheet": "thu-tim",
@@ -690,25 +835,716 @@
    "zone": "than",
    "tier": 5,
    "rank": "boss",
-   "realm": "ht_hau",
+   "stages": [
+    "ht_so",
+    "ht_trung",
+    "ht_hau"
+   ],
+   "realm": "Hóa Thần Sơ kỳ – Hậu kỳ",
    "hp": [
-    280000,
-    450000
+    1893643,
+    3537122
    ],
    "atk": [
-    2800,
-    4200
+    1650,
+    2539
    ],
    "def": [
-    700,
-    950
+    170,
+    235
    ],
    "art": {
     "sheet": "ky-lan-loi",
     "h": 66
    },
    "behavior": null
+  },
+  {
+   "id": "monster.den.hac-diem-lang.001",
+   "name": "Hắc Diệm Lang",
+   "zone": "den",
+   "tier": 6,
+   "rank": "thuong",
+   "stages": [
+    "ab_so"
+   ],
+   "realm": "Anh Biến Sơ kỳ",
+   "hp": [
+    3840305,
+    4244547
+   ],
+   "atk": [
+    2680,
+    2962
+   ],
+   "def": [
+    238,
+    264
+   ],
+   "art": {
+    "sheet": "soi-loi",
+    "h": 36,
+    "hue": 300
+   },
+   "behavior": null
+  },
+  {
+   "id": "monster.den.u-minh-quy-xa.001",
+   "name": "U Minh Quỷ Xà",
+   "zone": "den",
+   "tier": 6,
+   "rank": "thuong",
+   "stages": [
+    "ab_trung"
+   ],
+   "realm": "Anh Biến Trung kỳ",
+   "hp": [
+    4992396,
+    5517912
+   ],
+   "atk": [
+    3163,
+    3495
+   ],
+   "def": [
+    267,
+    295
+   ],
+   "art": {
+    "sheet": "ran",
+    "h": 30,
+    "hue": 260,
+    "still": true
+   },
+   "behavior": null
+  },
+  {
+   "id": "monster.den.hac-nham-cu-nhan.001",
+   "name": "Hắc Nham Cự Nhân",
+   "zone": "den",
+   "tier": 6,
+   "rank": "thuong",
+   "stages": [
+    "ab_hau"
+   ],
+   "realm": "Anh Biến Hậu kỳ",
+   "hp": [
+    6490116,
+    7173286
+   ],
+   "atk": [
+    3733,
+    4125
+   ],
+   "def": [
+    299,
+    331
+   ],
+   "art": {
+    "sheet": "orc",
+    "h": 40,
+    "hue": 220
+   },
+   "behavior": null
+  },
+  {
+   "id": "monster.den.am-da-ma-tuong.001",
+   "name": "Ám Dạ Ma Tướng",
+   "zone": "den",
+   "tier": 6,
+   "rank": "elite",
+   "stages": [
+    "ab_so",
+    "ab_trung",
+    "ab_hau"
+   ],
+   "realm": "Anh Biến Sơ kỳ – Hậu kỳ",
+   "hp": [
+    8448670,
+    15781229
+   ],
+   "atk": [
+    3350,
+    5157
+   ],
+   "def": [
+    267,
+    370
+   ],
+   "art": {
+    "sheet": "knight",
+    "h": 46,
+    "hue": 270
+   },
+   "behavior": null
+  },
+  {
+   "id": "monster.den.hac-uyen-ma-de.001",
+   "name": "Hắc Uyên Ma Đế",
+   "zone": "den",
+   "tier": 6,
+   "rank": "boss",
+   "stages": [
+    "ab_so",
+    "ab_trung",
+    "ab_hau"
+   ],
+   "realm": "Anh Biến Sơ kỳ – Hậu kỳ",
+   "hp": [
+    11520914,
+    21519858
+   ],
+   "atk": [
+    4020,
+    6188
+   ],
+   "def": [
+    298,
+    413
+   ],
+   "art": {
+    "sheet": "demon",
+    "h": 68,
+    "hue": 250
+   },
+   "behavior": null
+  },
+  {
+   "id": "monster.tim.tu-loi-yeu-dieu.001",
+   "name": "Tử Lôi Yêu Điêu",
+   "zone": "tim",
+   "tier": 7,
+   "rank": "thuong",
+   "stages": [
+    "vd_so"
+   ],
+   "realm": "Vấn Đỉnh Sơ kỳ",
+   "hp": [
+    23364416,
+    25823828
+   ],
+   "atk": [
+    6531,
+    7219
+   ],
+   "def": [
+    419,
+    463
+   ],
+   "art": {
+    "sheet": "doi-lua",
+    "h": 34,
+    "hue": 230
+   },
+   "behavior": null
+  },
+  {
+   "id": "monster.tim.tu-tinh-ma-nhen.001",
+   "name": "Tử Tinh Ma Nhện",
+   "zone": "tim",
+   "tier": 7,
+   "rank": "thuong",
+   "stages": [
+    "vd_trung"
+   ],
+   "realm": "Vấn Đỉnh Trung kỳ",
+   "hp": [
+    30373741,
+    33570977
+   ],
+   "atk": [
+    7706,
+    8518
+   ],
+   "def": [
+    469,
+    519
+   ],
+   "art": {
+    "sheet": "nhen",
+    "h": 30,
+    "hue": 260,
+    "still": true
+   },
+   "behavior": null
+  },
+  {
+   "id": "monster.tim.hu-linh-giap-thu.001",
+   "name": "Hư Linh Giáp Thú",
+   "zone": "tim",
+   "tier": 7,
+   "rank": "thuong",
+   "stages": [
+    "vd_hau"
+   ],
+   "realm": "Vấn Đỉnh Hậu kỳ",
+   "hp": [
+    39485864,
+    43642270
+   ],
+   "atk": [
+    9094,
+    10052
+   ],
+   "def": [
+    525,
+    581
+   ],
+   "art": {
+    "sheet": "ky-lan-loi",
+    "h": 48,
+    "hue": 200
+   },
+   "behavior": null
+  },
+  {
+   "id": "monster.tim.tu-vuc-thien-tuong.001",
+   "name": "Tử Vực Thiên Tướng",
+   "zone": "tim",
+   "tier": 7,
+   "rank": "elite",
+   "stages": [
+    "vd_so",
+    "vd_trung",
+    "vd_hau"
+   ],
+   "realm": "Vấn Đỉnh Sơ kỳ – Hậu kỳ",
+   "hp": [
+    51401715,
+    96012995
+   ],
+   "atk": [
+    8164,
+    12565
+   ],
+   "def": [
+    469,
+    650
+   ],
+   "art": {
+    "sheet": "soldier",
+    "h": 48,
+    "hue": 260
+   },
+   "behavior": null
+  },
+  {
+   "id": "monster.tim.van-thien-tu-de.001",
+   "name": "Vấn Thiên Tử Đế",
+   "zone": "tim",
+   "tier": 7,
+   "rank": "boss",
+   "stages": [
+    "vd_so",
+    "vd_trung",
+    "vd_hau"
+   ],
+   "realm": "Vấn Đỉnh Sơ kỳ – Hậu kỳ",
+   "hp": [
+    70093248,
+    130926811
+   ],
+   "atk": [
+    9797,
+    15077
+   ],
+   "def": [
+    524,
+    726
+   ],
+   "art": {
+    "sheet": "xuc-tu",
+    "h": 74,
+    "hue": 270
+   },
+   "behavior": null
+  },
+  {
+   "id": "monster.huvo.ma-nhan.001",
+   "name": "Hư Không Ma Nhãn",
+   "zone": "huvo",
+   "tier": 8,
+   "rank": "boss",
+   "void": true,
+   "stages": [
+    "am_hu"
+   ],
+   "mul": 1.0,
+   "realm": "Âm Hư",
+   "hp": [
+    170578931,
+    188534608
+   ],
+   "atk": [
+    26259,
+    29023
+   ],
+   "def": [
+    994,
+    1099
+   ],
+   "art": {
+    "code": "hu-vo",
+    "shape": "nhan",
+    "h": 64,
+    "color": "#b06bff"
+   },
+   "behavior": "hu-vo"
+  },
+  {
+   "id": "monster.huvo.cot-long.001",
+   "name": "Âm Hư Cốt Long",
+   "zone": "huvo",
+   "tier": 8,
+   "rank": "boss",
+   "void": true,
+   "stages": [
+    "am_hu"
+   ],
+   "mul": 1.15,
+   "realm": "Âm Hư",
+   "hp": [
+    196165770,
+    216814799
+   ],
+   "atk": [
+    30198,
+    33376
+   ],
+   "def": [
+    1143,
+    1263
+   ],
+   "art": {
+    "code": "hu-vo",
+    "shape": "long",
+    "h": 78,
+    "color": "#7fd2ff"
+   },
+   "behavior": "hu-vo"
+  },
+  {
+   "id": "monster.huvo.anh-ma.001",
+   "name": "Vô Tướng Ảnh Ma",
+   "zone": "huvo",
+   "tier": 8,
+   "rank": "boss",
+   "void": true,
+   "stages": [
+    "am_hu"
+   ],
+   "mul": 0.9,
+   "realm": "Âm Hư",
+   "hp": [
+    153521038,
+    169681147
+   ],
+   "atk": [
+    23633,
+    26121
+   ],
+   "def": [
+    895,
+    989
+   ],
+   "art": {
+    "code": "hu-vo",
+    "shape": "anh",
+    "h": 70,
+    "color": "#d9d9ff"
+   },
+   "behavior": "hu-vo"
+  },
+  {
+   "id": "monster.huvo.huyet-lien.001",
+   "name": "Tịch Diệt Huyết Liên",
+   "zone": "huvo",
+   "tier": 8,
+   "rank": "boss",
+   "void": true,
+   "stages": [
+    "am_hu"
+   ],
+   "mul": 1.05,
+   "realm": "Âm Hư",
+   "hp": [
+    179107877,
+    197961338
+   ],
+   "atk": [
+    27572,
+    30474
+   ],
+   "def": [
+    1044,
+    1153
+   ],
+   "art": {
+    "code": "hu-vo",
+    "shape": "lien",
+    "h": 66,
+    "color": "#ff4a7a"
+   },
+   "behavior": "hu-vo"
+  },
+  {
+   "id": "monster.huvo.thon-thien.001",
+   "name": "Thôn Thiên Hư Thú",
+   "zone": "huvo",
+   "tier": 8,
+   "rank": "boss",
+   "void": true,
+   "stages": [
+    "am_hu"
+   ],
+   "mul": 1.2,
+   "realm": "Âm Hư",
+   "hp": [
+    204694717,
+    226241529
+   ],
+   "atk": [
+    31511,
+    34827
+   ],
+   "def": [
+    1193,
+    1318
+   ],
+   "art": {
+    "code": "hu-vo",
+    "shape": "thu",
+    "h": 82,
+    "color": "#8a5bff"
+   },
+   "behavior": "hu-vo"
   }
  ],
- "_ghi_chu_art": "art: hình THỬ NGHIỆM (data/art/sprites.json). sheet = bộ hình, h = cao trên bản đồ (điểm), hue = đổi màu (độ) khi dùng chung hình, still = hình tĩnh (code tự nhún). Chủ dự án có ảnh mới thì đổi ở đây."
+ "_ghi_chu_art": "art: hình THỬ NGHIỆM (data/art/sprites.json). sheet = bộ hình, h = cao trên bản đồ (điểm), hue = đổi màu (độ) khi dùng chung hình, still = hình tĩnh (code tự nhún). Chủ dự án có ảnh mới thì đổi ở đây.",
+ "stage_stats": {
+  "lk1": {
+   "hp": 110,
+   "atk": 13,
+   "def": 8
+  },
+  "lk2": {
+   "hp": 138,
+   "atk": 15,
+   "def": 9
+  },
+  "lk3": {
+   "hp": 172,
+   "atk": 17,
+   "def": 10
+  },
+  "lk4": {
+   "hp": 215,
+   "atk": 20,
+   "def": 11
+  },
+  "lk5": {
+   "hp": 269,
+   "atk": 23,
+   "def": 12
+  },
+  "lk6": {
+   "hp": 336,
+   "atk": 26,
+   "def": 13
+  },
+  "lk7": {
+   "hp": 420,
+   "atk": 30,
+   "def": 14
+  },
+  "lk8": {
+   "hp": 525,
+   "atk": 35,
+   "def": 16
+  },
+  "lk9": {
+   "hp": 656,
+   "atk": 40,
+   "def": 17
+  },
+  "lk10": {
+   "hp": 820,
+   "atk": 46,
+   "def": 19
+  },
+  "tc_so": {
+   "hp": 2950,
+   "atk": 80,
+   "def": 26
+  },
+  "tc_trung": {
+   "hp": 3836,
+   "atk": 94,
+   "def": 30
+  },
+  "tc_hau": {
+   "hp": 4986,
+   "atk": 111,
+   "def": 33
+  },
+  "kd_so": {
+   "hp": 17950,
+   "atk": 195,
+   "def": 46
+  },
+  "kd_trung": {
+   "hp": 23336,
+   "atk": 230,
+   "def": 52
+  },
+  "kd_hau": {
+   "hp": 30336,
+   "atk": 272,
+   "def": 58
+  },
+  "na_so": {
+   "hp": 109210,
+   "atk": 475,
+   "def": 81
+  },
+  "na_trung": {
+   "hp": 141973,
+   "atk": 561,
+   "def": 91
+  },
+  "na_hau": {
+   "hp": 184565,
+   "atk": 662,
+   "def": 102
+  },
+  "ht_so": {
+   "hp": 664436,
+   "atk": 1158,
+   "def": 143
+  },
+  "ht_trung": {
+   "hp": 863766,
+   "atk": 1366,
+   "def": 160
+  },
+  "ht_hau": {
+   "hp": 1122896,
+   "atk": 1612,
+   "def": 179
+  },
+  "ab_so": {
+   "hp": 4042426,
+   "atk": 2821,
+   "def": 251
+  },
+  "ab_trung": {
+   "hp": 5255154,
+   "atk": 3329,
+   "def": 281
+  },
+  "ab_hau": {
+   "hp": 6831701,
+   "atk": 3929,
+   "def": 315
+  },
+  "vd_so": {
+   "hp": 24594122,
+   "atk": 6875,
+   "def": 441
+  },
+  "vd_trung": {
+   "hp": 31972359,
+   "atk": 8112,
+   "def": 494
+  },
+  "vd_hau": {
+   "hp": 41564067,
+   "atk": 9573,
+   "def": 553
+  },
+  "am_hu": {
+   "hp": 149630641,
+   "atk": 16752,
+   "def": 775
+  }
+ },
+ "stage_names": {
+  "lk1": "Luyện Khí tầng 1",
+  "lk2": "Luyện Khí tầng 2",
+  "lk3": "Luyện Khí tầng 3",
+  "lk4": "Luyện Khí tầng 4",
+  "lk5": "Luyện Khí tầng 5",
+  "lk6": "Luyện Khí tầng 6",
+  "lk7": "Luyện Khí tầng 7",
+  "lk8": "Luyện Khí tầng 8",
+  "lk9": "Luyện Khí tầng 9",
+  "lk10": "Luyện Khí tầng 10",
+  "tc_so": "Trúc Cơ Sơ kỳ",
+  "tc_trung": "Trúc Cơ Trung kỳ",
+  "tc_hau": "Trúc Cơ Hậu kỳ",
+  "kd_so": "Kết Đan Sơ kỳ",
+  "kd_trung": "Kết Đan Trung kỳ",
+  "kd_hau": "Kết Đan Hậu kỳ",
+  "na_so": "Nguyên Anh Sơ kỳ",
+  "na_trung": "Nguyên Anh Trung kỳ",
+  "na_hau": "Nguyên Anh Hậu kỳ",
+  "ht_so": "Hóa Thần Sơ kỳ",
+  "ht_trung": "Hóa Thần Trung kỳ",
+  "ht_hau": "Hóa Thần Hậu kỳ",
+  "ab_so": "Anh Biến Sơ kỳ",
+  "ab_trung": "Anh Biến Trung kỳ",
+  "ab_hau": "Anh Biến Hậu kỳ",
+  "vd_so": "Vấn Đỉnh Sơ kỳ",
+  "vd_trung": "Vấn Đỉnh Trung kỳ",
+  "vd_hau": "Vấn Đỉnh Hậu kỳ",
+  "am_hu": "Âm Hư"
+ },
+ "rank_mul": {
+  "thuong": {
+   "hp": 1,
+   "atk": 1,
+   "def": 1
+  },
+  "elite": {
+   "hp": 2.2,
+   "atk": 1.25,
+   "def": 1.12
+  },
+  "boss": {
+   "hp": 3.0,
+   "atk": 1.5,
+   "def": 1.25
+  },
+  "huvo": {
+   "hp": 1.2,
+   "atk": 1.65,
+   "def": 1.35
+  }
+ },
+ "variance": 0.05,
+ "rule": {
+  "_ghi_chu": "Luật cứng: boss mạnh nhất đại cảnh giới ≤ quái thường yếu nhất Sơ kỳ cảnh giới kế tiếp (từng chỉ số). check_refs kiểm.",
+  "order": [
+   "realm.luyen-khi",
+   "realm.truc-co",
+   "realm.ket-dan",
+   "realm.nguyen-anh",
+   "realm.hoa-than",
+   "realm.anh-bien",
+   "realm.van-dinh",
+   "realm.am-hu"
+  ]
+ },
+ "void": {
+  "_ghi_chu": "5 Âm Hư từ hư vô: mỗi con xuất hiện ở MỘT chỗ ngẫu nhiên ngoài thành, theo lịch chung (giờ máy chủ) nên mọi người thấy cùng chỗ, cùng lúc. Sống life_s giây rồi tan biến — ai không kịp đánh thì mất. Lịch: mỗi con mỗi cycle_s giây, lệch nhau cycle_s/5. Máu chưa chung giữa người chơi (Mốc 3: máy chủ quản lý).",
+  "cycle_s": 3600,
+  "life_s": 900,
+  "warn_s": 60,
+  "aggro_px": 230,
+  "leash_px": 420,
+  "speed_px_per_s": 62,
+  "radius_px": 26,
+  "avoid_town_px": 2400,
+  "seed": 20261023
+ }
 }

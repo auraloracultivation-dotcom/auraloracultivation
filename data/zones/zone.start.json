@@ -1,439 +1,487 @@
 {
-  "id": "zone.start",
-  "name": "Thanh Vân Trấn",
-  "map_image": "data/zones/zone.start.map.png",
-  "_note_map": "Mỗi điểm ảnh = 1 ô, màu theo data/terrain.json. Sinh bằng tools/gen_map.py hoặc sửa tay bằng app vẽ.",
-  "width_tiles": 500,
-  "height_tiles": 500,
-  "tile_size": 32,
-  "wrap": true,
-  "spawn": {
-    "x": 8016,
-    "y": 8016
+ "id": "zone.start",
+ "name": "Thanh Vân Trấn",
+ "map_image": "data/zones/zone.start.map.png",
+ "_note_map": "Mỗi điểm ảnh = 1 ô, màu theo data/terrain.json. Sinh bằng tools/gen_map.py hoặc sửa tay bằng app vẽ.",
+ "width_tiles": 1000,
+ "height_tiles": 1000,
+ "tile_size": 32,
+ "wrap": true,
+ "spawn": {
+  "x": 16016,
+  "y": 16016
+ },
+ "max_players": 20,
+ "town": {
+  "_ghi_chu": "Thanh Vân Thành ở giữa bản đồ (quyết định chủ dự án 21/10/2026). center_tile = ô giữa; stamp tô địa hình lên ảnh bản đồ lúc tải (ảnh gốc giữ nguyên). dx/dy = điểm đặt CHÂN công trình so với tâm thành (điểm ảnh). layer ground = nằm sát đất (người đi đè lên). block = vùng không đi qua được [x0,y0,x1,y1] tính từ chân; không ghi thì tự lấy đáy công trình. Hình ở data/art/sprites.json → props.",
+  "name": "Thanh Vân Thành",
+  "center_tile": [
+   500,
+   500
+  ],
+  "safe": {
+   "half_px": 500,
+   "_ghi_chu": "Vùng an toàn hình vuông ±half_px quanh tâm: quái không sinh, không đánh, không đuổi vào; hồi máu nhanh hơn",
+   "regen_mul": 4
   },
-  "max_players": 20,
-  "town": {
-    "_ghi_chu": "Thanh Vân Thành ở giữa bản đồ (quyết định chủ dự án 21/10/2026). center_tile = ô giữa; stamp tô địa hình lên ảnh bản đồ lúc tải (ảnh gốc giữ nguyên). dx/dy = điểm đặt CHÂN công trình so với tâm thành (điểm ảnh). layer ground = nằm sát đất (người đi đè lên). block = vùng không đi qua được [x0,y0,x1,y1] tính từ chân; không ghi thì tự lấy đáy công trình. Hình ở data/art/sprites.json → props.",
-    "name": "Thanh Vân Thành",
-    "center_tile": [
-      250,
-      250
-    ],
-    "safe": {
-      "half_px": 500,
-      "_ghi_chu": "Vùng an toàn hình vuông ±half_px quanh tâm: quái không sinh, không đánh, không đuổi vào; hồi máu nhanh hơn",
-      "regen_mul": 4
-    },
-    "stamp": [
-      {
-        "terrain": "nuoc_sau",
-        "rect": [
-          -15,
-          -15,
-          15,
-          15
-        ]
-      },
-      {
-        "terrain": "da_lat",
-        "rect": [
-          -13,
-          -13,
-          13,
-          13
-        ]
-      },
-      {
-        "terrain": "da_lat",
-        "rect": [
-          -2,
-          13,
-          2,
-          15
-        ],
-        "_ghi_chu": "lối cổng nam"
-      },
-      {
-        "terrain": "da_lat",
-        "rect": [
-          14,
-          -1,
-          15,
-          1
-        ],
-        "_ghi_chu": "cầu đông"
-      },
-      {
-        "terrain": "da_lat",
-        "rect": [
-          -15,
-          -1,
-          -14,
-          1
-        ],
-        "_ghi_chu": "cầu tây"
-      }
-    ],
-    "props": [
-      {
-        "id": "phap-tran",
-        "dx": 0,
-        "dy": 30,
-        "layer": "ground"
-      },
-      {
-        "id": "cau-da",
-        "dx": 465,
-        "dy": 26,
-        "layer": "ground"
-      },
-      {
-        "id": "cau-da",
-        "dx": -465,
-        "dy": 26,
-        "layer": "ground"
-      },
-      {
-        "id": "dien-chinh",
-        "dx": 0,
-        "dy": -230
-      },
-      {
-        "id": "tuong-thanh",
-        "dx": -300,
-        "dy": -345
-      },
-      {
-        "id": "tuong-thanh",
-        "dx": 300,
-        "dy": -345
-      },
-      {
-        "id": "truyen-tong",
-        "dx": -330,
-        "dy": -230
-      },
-      {
-        "id": "te-dan",
-        "dx": 290,
-        "dy": -200
-      },
-      {
-        "id": "kho-hang",
-        "dx": -270,
-        "dy": -40
-      },
-      {
-        "id": "dai-thien-van",
-        "dx": 300,
-        "dy": -20
-      },
-      {
-        "id": "co-treo",
-        "dx": -110,
-        "dy": -150
-      },
-      {
-        "id": "co-treo",
-        "dx": 110,
-        "dy": -150
-      },
-      {
-        "id": "den-da",
-        "dx": -70,
-        "dy": -80
-      },
-      {
-        "id": "den-da",
-        "dx": 70,
-        "dy": -80
-      },
-      {
-        "id": "den-da",
-        "dx": -70,
-        "dy": 110
-      },
-      {
-        "id": "den-da",
-        "dx": 70,
-        "dy": 110
-      },
-      {
-        "id": "den-da",
-        "dx": -70,
-        "dy": 260
-      },
-      {
-        "id": "den-da",
-        "dx": 70,
-        "dy": 260
-      },
-      {
-        "id": "lo-luyen-dan",
-        "dx": -300,
-        "dy": 160
-      },
-      {
-        "id": "nha-nho",
-        "dx": -170,
-        "dy": 170
-      },
-      {
-        "id": "kho-go",
-        "dx": -330,
-        "dy": 300
-      },
-      {
-        "id": "bia-da",
-        "dx": -200,
-        "dy": 300
-      },
-      {
-        "id": "tuong-tien-nhan",
-        "dx": 200,
-        "dy": 170
-      },
-      {
-        "id": "dai-linh-chau",
-        "dx": 320,
-        "dy": 170
-      },
-      {
-        "id": "ho-sen",
-        "dx": 300,
-        "dy": 320
-      },
-      {
-        "id": "cay-anh-dao",
-        "dx": -390,
-        "dy": -390
-      },
-      {
-        "id": "cay-bonsai",
-        "dx": 390,
-        "dy": -390
-      },
-      {
-        "id": "cay-anh-dao",
-        "dx": 390,
-        "dy": 60
-      },
-      {
-        "id": "cay-bonsai",
-        "dx": -400,
-        "dy": 60
-      },
-      {
-        "id": "cay-tung",
-        "dx": -150,
-        "dy": 390
-      },
-      {
-        "id": "cay-tung",
-        "dx": 160,
-        "dy": 390
-      },
-      {
-        "id": "cong-thanh",
-        "dx": 0,
-        "dy": 470,
-        "block": [
-          [
-            -85,
-            -22,
-            -42,
-            0
-          ],
-          [
-            42,
-            -22,
-            85,
-            0
-          ]
-        ]
-      },
-      {
-        "id": "tuong-thanh",
-        "dx": -170,
-        "dy": 420
-      },
-      {
-        "id": "tuong-thanh",
-        "dx": -310,
-        "dy": 420
-      },
-      {
-        "id": "tuong-thanh",
-        "dx": 170,
-        "dy": 420
-      },
-      {
-        "id": "tuong-thanh",
-        "dx": 310,
-        "dy": 420
-      }
+  "stamp": [
+   {
+    "terrain": "nuoc_sau",
+    "rect": [
+     -15,
+     -15,
+     15,
+     15
     ]
-  },
-  "roads": {
-    "_ghi_chu": "Đường (ô, toạ độ ảnh bản đồ): 2 trục Đông–Tây / Bắc–Nam xuyên bản đồ (quấn mép) + vành đường vuông ở mỗi vùng + 4 đường chéo nối vành 1–2. Qua nước tự thành cầu gỗ. Tô trước thành (thành đè lên).",
-    "width": 3,
-    "lines": [
-      [
-        0,
-        250,
-        499,
-        250
-      ],
-      [
-        250,
-        0,
-        250,
-        499
-      ],
-      [
-        210,
-        210,
-        290,
-        210
-      ],
-      [
-        210,
-        290,
-        290,
-        290
-      ],
-      [
-        210,
-        210,
-        210,
-        290
-      ],
-      [
-        290,
-        210,
-        290,
-        290
-      ],
-      [
-        162,
-        162,
-        338,
-        162
-      ],
-      [
-        162,
-        338,
-        338,
-        338
-      ],
-      [
-        162,
-        162,
-        162,
-        338
-      ],
-      [
-        338,
-        162,
-        338,
-        338
-      ],
-      [
-        120,
-        120,
-        380,
-        120
-      ],
-      [
-        120,
-        380,
-        380,
-        380
-      ],
-      [
-        120,
-        120,
-        120,
-        380
-      ],
-      [
-        380,
-        120,
-        380,
-        380
-      ],
-      [
-        80,
-        80,
-        420,
-        80
-      ],
-      [
-        80,
-        420,
-        420,
-        420
-      ],
-      [
-        80,
-        80,
-        80,
-        420
-      ],
-      [
-        420,
-        80,
-        420,
-        420
-      ],
-      [
-        35,
-        35,
-        465,
-        35
-      ],
-      [
-        35,
-        465,
-        465,
-        465
-      ],
-      [
-        35,
-        35,
-        35,
-        465
-      ],
-      [
-        465,
-        35,
-        465,
-        465
-      ],
-      [
-        210,
-        210,
-        162,
-        162
-      ],
-      [
-        290,
-        290,
-        338,
-        338
-      ],
-      [
-        290,
-        210,
-        338,
-        162
-      ],
-      [
-        210,
-        290,
-        162,
-        338
-      ]
+   },
+   {
+    "terrain": "da_lat",
+    "rect": [
+     -13,
+     -13,
+     13,
+     13
     ]
-  }
+   },
+   {
+    "terrain": "da_lat",
+    "rect": [
+     -2,
+     13,
+     2,
+     15
+    ],
+    "_ghi_chu": "lối cổng nam"
+   },
+   {
+    "terrain": "da_lat",
+    "rect": [
+     14,
+     -1,
+     15,
+     1
+    ],
+    "_ghi_chu": "cầu đông"
+   },
+   {
+    "terrain": "da_lat",
+    "rect": [
+     -15,
+     -1,
+     -14,
+     1
+    ],
+    "_ghi_chu": "cầu tây"
+   }
+  ],
+  "props": [
+   {
+    "id": "phap-tran",
+    "dx": 0,
+    "dy": 30,
+    "layer": "ground"
+   },
+   {
+    "id": "cau-da",
+    "dx": 465,
+    "dy": 26,
+    "layer": "ground"
+   },
+   {
+    "id": "cau-da",
+    "dx": -465,
+    "dy": 26,
+    "layer": "ground"
+   },
+   {
+    "id": "dien-chinh",
+    "dx": 0,
+    "dy": -230
+   },
+   {
+    "id": "tuong-thanh",
+    "dx": -300,
+    "dy": -345
+   },
+   {
+    "id": "tuong-thanh",
+    "dx": 300,
+    "dy": -345
+   },
+   {
+    "id": "truyen-tong",
+    "dx": -330,
+    "dy": -230
+   },
+   {
+    "id": "te-dan",
+    "dx": 290,
+    "dy": -200
+   },
+   {
+    "id": "kho-hang",
+    "dx": -270,
+    "dy": -40
+   },
+   {
+    "id": "dai-thien-van",
+    "dx": 300,
+    "dy": -20
+   },
+   {
+    "id": "co-treo",
+    "dx": -110,
+    "dy": -150
+   },
+   {
+    "id": "co-treo",
+    "dx": 110,
+    "dy": -150
+   },
+   {
+    "id": "den-da",
+    "dx": -70,
+    "dy": -80
+   },
+   {
+    "id": "den-da",
+    "dx": 70,
+    "dy": -80
+   },
+   {
+    "id": "den-da",
+    "dx": -70,
+    "dy": 110
+   },
+   {
+    "id": "den-da",
+    "dx": 70,
+    "dy": 110
+   },
+   {
+    "id": "den-da",
+    "dx": -70,
+    "dy": 260
+   },
+   {
+    "id": "den-da",
+    "dx": 70,
+    "dy": 260
+   },
+   {
+    "id": "lo-luyen-dan",
+    "dx": -300,
+    "dy": 160
+   },
+   {
+    "id": "nha-nho",
+    "dx": -170,
+    "dy": 170
+   },
+   {
+    "id": "kho-go",
+    "dx": -330,
+    "dy": 300
+   },
+   {
+    "id": "bia-da",
+    "dx": -200,
+    "dy": 300
+   },
+   {
+    "id": "tuong-tien-nhan",
+    "dx": 200,
+    "dy": 170
+   },
+   {
+    "id": "dai-linh-chau",
+    "dx": 320,
+    "dy": 170
+   },
+   {
+    "id": "ho-sen",
+    "dx": 300,
+    "dy": 320
+   },
+   {
+    "id": "cay-anh-dao",
+    "dx": -390,
+    "dy": -390
+   },
+   {
+    "id": "cay-bonsai",
+    "dx": 390,
+    "dy": -390
+   },
+   {
+    "id": "cay-anh-dao",
+    "dx": 390,
+    "dy": 60
+   },
+   {
+    "id": "cay-bonsai",
+    "dx": -400,
+    "dy": 60
+   },
+   {
+    "id": "cay-tung",
+    "dx": -150,
+    "dy": 390
+   },
+   {
+    "id": "cay-tung",
+    "dx": 160,
+    "dy": 390
+   },
+   {
+    "id": "cong-thanh",
+    "dx": 0,
+    "dy": 470,
+    "block": [
+     [
+      -85,
+      -22,
+      -42,
+      0
+     ],
+     [
+      42,
+      -22,
+      85,
+      0
+     ]
+    ]
+   },
+   {
+    "id": "tuong-thanh",
+    "dx": -170,
+    "dy": 420
+   },
+   {
+    "id": "tuong-thanh",
+    "dx": -310,
+    "dy": 420
+   },
+   {
+    "id": "tuong-thanh",
+    "dx": 170,
+    "dy": 420
+   },
+   {
+    "id": "tuong-thanh",
+    "dx": 310,
+    "dy": 420
+   }
+  ]
+ },
+ "roads": {
+  "_ghi_chu": "Đường (ô, toạ độ ảnh bản đồ) — sinh bằng tools/gen_map.py: 2 trục Đông–Tây / Bắc–Nam xuyên bản đồ (quấn mép) + vành đường vuông ở mỗi vùng (7 vành) + 4 đường chéo nối vành 1–2. Qua nước tự thành cầu gỗ.",
+  "width": 3,
+  "lines": [
+   [
+    0,
+    500,
+    999,
+    500
+   ],
+   [
+    500,
+    0,
+    500,
+    999
+   ],
+   [
+    440,
+    440,
+    560,
+    440
+   ],
+   [
+    440,
+    560,
+    560,
+    560
+   ],
+   [
+    440,
+    440,
+    440,
+    560
+   ],
+   [
+    560,
+    440,
+    560,
+    560
+   ],
+   [
+    378,
+    378,
+    622,
+    378
+   ],
+   [
+    378,
+    622,
+    622,
+    622
+   ],
+   [
+    378,
+    378,
+    378,
+    622
+   ],
+   [
+    622,
+    378,
+    622,
+    622
+   ],
+   [
+    295,
+    295,
+    705,
+    295
+   ],
+   [
+    295,
+    705,
+    705,
+    705
+   ],
+   [
+    295,
+    295,
+    295,
+    705
+   ],
+   [
+    705,
+    295,
+    705,
+    705
+   ],
+   [
+    235,
+    235,
+    765,
+    235
+   ],
+   [
+    235,
+    765,
+    765,
+    765
+   ],
+   [
+    235,
+    235,
+    235,
+    765
+   ],
+   [
+    765,
+    235,
+    765,
+    765
+   ],
+   [
+    175,
+    175,
+    825,
+    175
+   ],
+   [
+    175,
+    825,
+    825,
+    825
+   ],
+   [
+    175,
+    175,
+    175,
+    825
+   ],
+   [
+    825,
+    175,
+    825,
+    825
+   ],
+   [
+    112,
+    112,
+    888,
+    112
+   ],
+   [
+    112,
+    888,
+    888,
+    888
+   ],
+   [
+    112,
+    112,
+    112,
+    888
+   ],
+   [
+    888,
+    112,
+    888,
+    888
+   ],
+   [
+    45,
+    45,
+    955,
+    45
+   ],
+   [
+    45,
+    955,
+    955,
+    955
+   ],
+   [
+    45,
+    45,
+    45,
+    955
+   ],
+   [
+    955,
+    45,
+    955,
+    955
+   ],
+   [
+    440,
+    440,
+    378,
+    378
+   ],
+   [
+    560,
+    560,
+    622,
+    622
+   ],
+   [
+    560,
+    440,
+    622,
+    378
+   ],
+   [
+    440,
+    560,
+    378,
+    622
+   ]
+  ]
+ }
 }

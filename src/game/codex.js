@@ -3,10 +3,10 @@
 //   ok   = ảnh riêng của chủ dự án đã dùng trong game
 //   tam  = ảnh thử nghiệm / gói miễn phí / dùng chung / mượn hình khác → nên thay
 //   none = chưa có ảnh (đang vẽ tạm bằng code hoặc ô trống)
-import { iconUrl, drawSheet, drawEffect, drawNpc } from '../entity/index.js';
+import { iconUrl, drawSheet, drawEffect, drawNpc, drawVoidPreview } from '../entity/index.js';
 import { showCodex } from '../ui/index.js';
 
-const ZONE = { xanh: 'Vùng Xanh', cam: 'Vùng Cam', trang: 'Vùng Trắng', xam: 'Vùng Xám', than: 'Vùng Than' };
+const ZONE = { xanh: 'Vùng Xanh', cam: 'Vùng Cam', xam: 'Vùng Xám Khói', trang: 'Vùng Trắng', than: 'Vùng Xám Than', den: 'Vùng Đen', tim: 'Vùng Tím', huvo: 'Hư Vô (khắp nơi)' };
 const RANK = { thuong: 'Quái thường', elite: 'Tinh anh', boss: 'Boss' };
 const SLOT = { 'trang-phuc': 'Trang phục', 'vu-khi': 'Vũ khí', canh: 'Cánh', 'phap-tuong': 'Pháp tướng', 'mat-na': 'Mặt nạ', nhan: 'Nhẫn', 'day-chuyen': 'Dây chuyền', 'linh-thu': 'Linh thú' };
 const OWNER_SHEETS = new Set(['soi-loi', 'ran-ba-dau', 'xuc-tu', 'ky-lan-loi', 'thu-tim']); // quái chủ dự án vẽ
@@ -27,8 +27,12 @@ export async function openCodex(o) {
   const iconEntry = (d, extra = []) => ({ id: d.id, name: d.name, img: icon(d.id), status: icon(d.id) ? 'ok' : 'none', info: [info.effect(d), ...extra, info.source(d) && `Nơi có: ${info.source(d)}`] });
 
   const sheetUse = {};
-  for (const m of monsters) (sheetUse[m.art.sheet] ||= []).push(m.name);
+  for (const m of monsters) if (m.art.sheet) (sheetUse[m.art.sheet] ||= []).push(m.name);
   const mon = monsters.map((m) => {
+    if (m.art.code) return { id: m.id, name: m.name, status: 'none', note: 'Vẽ tạm bằng code — chờ ảnh của chủ dự án',
+      anim: { list: ['đứng', 'đánh'], draw: (g, w, h, anim, t) => drawVoidPreview(g, w, h, m, anim, t) },
+      info: [`Âm Hư · ${ZONE[m.zone]} · cảnh giới ${m.realm}`, `Khí huyết ${m.hp.join('–')} · Công ${m.atk.join('–')} · Thủ ${m.def.join('–')}`,
+        'Xuất hiện theo lịch ở một chỗ bất kỳ ngoài thành, hết giờ thì tan biến'] };
     const sh = artDef.sheets[m.art.sheet], shared = sheetUse[m.art.sheet].filter((n) => n !== m.name);
     const owner = OWNER_SHEETS.has(m.art.sheet) && !shared.length && !m.art.hue;
     const notes = [!OWNER_SHEETS.has(m.art.sheet) && 'Hình thử nghiệm (gói miễn phí / chưa rõ nguồn)', shared.length && `Dùng chung hình với: ${shared.join(', ')}`,

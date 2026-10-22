@@ -12,7 +12,7 @@ export function createAutoPlay({ me, mobs, gather, map, cfg, reach }) {
 
   function pick(now) {
     let best = null;
-    const m = mobs.nearest(me, cfg.search_px, (x) => free(x, now) && !map.safeAt(x.x, x.y));
+    const m = mobs.nearest(me, cfg.search_px, (x) => free(x, now) && !x.void && !map.safeAt(x.x, x.y)); // không tự lao vào Âm Hư
     if (m) best = { kind: 'mob', o: m, d: mobs.distTo(m, me) };
     if (!me.flying) for (const n of gather.list) { // đang bay thì không hái được
       if (!free(n, now)) continue;

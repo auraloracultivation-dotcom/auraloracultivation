@@ -48,6 +48,7 @@ async function boot() {
     loading = showLoading('Nhập thế…');
   }
   loading.set(65, 'Dựng bản đồ…');
+  net.syncServerTime(); // lịch Âm Hư theo giờ máy chủ (không chờ)
 
   const zoneDef = await loadJSON(`data/zones/${character.zone_id}.json`);
   const [terrainDef, tilesDef] = await Promise.all([loadJSON('data/terrain.json'), loadJSON('data/tiles.json')]);
@@ -114,7 +115,7 @@ async function boot() {
   const SLOT_ORDER = ['mat-na', 'trang-phuc', 'vu-khi', 'nhan', 'canh', 'phap-tuong', 'linh-thu', 'day-chuyen']; // thứ tự ô bảng Nhân vật
   const S = (n) => `assets/ui/skills/${n}.png`;
   const fan = (deg, r = 122) => ({ dx: Math.round(Math.cos((deg * Math.PI) / 180) * r), dy: -Math.round(Math.sin((deg * Math.PI) / 180) * r) });
-  const markers = () => [{ x: me.x, y: me.y, self: true }, ...[...others.list.values()].map((p) => ({ x: p.x, y: p.y }))];
+  const markers = () => [...(game?.markers() || []), { x: me.x, y: me.y, self: true }, ...[...others.list.values()].map((p) => ({ x: p.x, y: p.y }))];
 
   function attack() { if (game.attack()) swing(); }
   function swing() {
@@ -248,7 +249,7 @@ async function boot() {
   game = await createGameplay({ onRespawn: async () => { // máy chủ xác nhận vị trí hồi sinh (dịch chuyển xa bị chặn kiểm tốc độ)
     try { const row = await net.respawnAtTown(); if (row) { me.x = row.x; me.y = row.y; } } catch (e) { console.warn('Hồi sinh máy chủ lỗi', e); }
     zone.sendMove(me.x, me.y, false, false); hud.setToggle('bay', 0);
-  }, loadJSON, map, me, hud, pt, toast, audio, userId: me.id, bag, onLook: () => onLookChanged(), onRealm: (r) => zone.setRealm(r) });
+  }, loadJSON, map, me, hud, pt, toast, audio, userId: me.id, bag, onLook: () => onLookChanged(), onRealm: (r) => zone.setRealm(r), serverNow: net.serverNow });
   me.onAutoSwing = swing;
   const dock = createStatsDock({ getValue: (id) => game.statValue(id) });
   game.setDock(dock);

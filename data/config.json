@@ -33,9 +33,9 @@
     "_note_presence": "Gom thay đổi trang bị/cảnh giới thành tối đa 1 lần cập nhật Presence mỗi khoảng này (Supabase giới hạn Presence mỗi máy)"
   },
   "world": {
-    "width_px": 16000,
-    "height_px": 16000,
-    "_note": "Đồng bộ với hằng c_world trong hàm SQL public.save_position"
+    "width_px": 32000,
+    "height_px": 32000,
+    "_note": "1000×1000 ô × 32 (mở rộng 23/10). Đồng bộ với hằng c_world trong hàm SQL public.save_position (migration 0005)"
   },
   "camera": {
     "zoom": 0.75,

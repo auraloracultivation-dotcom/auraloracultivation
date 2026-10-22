@@ -2,7 +2,7 @@
  "_status": "test",
  "_ghi_chu": "THÔNG SỐ CHƠI THỬ do Claude đề xuất để Lab chạy được trong game (Lab chưa có). Luật chạy PHÍA MÁY KHÁCH, lưu trên máy (localStorage) — người chơi sửa được, CHƯA an toàn. Mốc 3–4 chuyển lên máy chủ. Mọi số ở đây chỉnh thoải mái.",
  "player": {
-  "_cach_tinh": "Mỗi tầng: Linh lực đủ hạ quái thường cùng tầng trong ~4 đòn, HP chịu ~16 đòn của nó (tools: xem docs/08). Elite/Boss cần đan + trang bị.",
+  "_cach_tinh": "Sinh bằng tools/gen_balance.py: Linh lực đủ hạ quái thường cùng tầng trong ~4 đòn, HP chịu ~18 đòn của nó. Elite/Boss cần đan + trang bị. Đột phá đại cảnh giới = nhảy vọt sức mạnh.",
   "base_other": {
    "xuyen": 5,
    "chinh": 30,
@@ -21,200 +21,254 @@
    {
     "id": "lk1",
     "name": "Luyện Khí tầng 1",
-    "hp": 199,
-    "linh": 36,
-    "def": 6,
+    "hp": 179,
+    "linh": 35,
+    "def": 7,
     "mp": 100,
-    "exp_need": 120
+    "exp_need": 110
    },
    {
     "id": "lk2",
     "name": "Luyện Khí tầng 2",
-    "hp": 236,
-    "linh": 41,
+    "hp": 206,
+    "linh": 44,
     "def": 8,
     "mp": 115,
-    "exp_need": 156
+    "exp_need": 179
    },
    {
     "id": "lk3",
     "name": "Luyện Khí tầng 3",
-    "hp": 236,
-    "linh": 41,
+    "hp": 232,
+    "linh": 56,
     "def": 8,
     "mp": 130,
-    "exp_need": 182
+    "exp_need": 275
    },
    {
     "id": "lk4",
     "name": "Luyện Khí tầng 4",
-    "hp": 303,
-    "linh": 62,
-    "def": 12,
+    "hp": 271,
+    "linh": 70,
+    "def": 9,
     "mp": 145,
-    "exp_need": 304
+    "exp_need": 408
    },
    {
     "id": "lk5",
     "name": "Luyện Khí tầng 5",
-    "hp": 333,
-    "linh": 77,
-    "def": 16,
+    "hp": 310,
+    "linh": 88,
+    "def": 10,
     "mp": 160,
-    "exp_need": 414
+    "exp_need": 592
    },
    {
     "id": "lk6",
     "name": "Luyện Khí tầng 6",
-    "hp": 333,
-    "linh": 77,
-    "def": 16,
+    "hp": 349,
+    "linh": 110,
+    "def": 11,
     "mp": 175,
-    "exp_need": 460
+    "exp_need": 840
    },
    {
     "id": "lk7",
     "name": "Luyện Khí tầng 7",
-    "hp": 390,
-    "linh": 91,
-    "def": 18,
+    "hp": 400,
+    "linh": 139,
+    "def": 12,
     "mp": 190,
-    "exp_need": 594
+    "exp_need": 1176
    },
    {
     "id": "lk8",
     "name": "Luyện Khí tầng 8",
-    "hp": 457,
-    "linh": 109,
-    "def": 20,
+    "hp": 462,
+    "linh": 176,
+    "def": 14,
     "mp": 205,
-    "exp_need": 768
+    "exp_need": 1628
    },
    {
     "id": "lk9",
     "name": "Luyện Khí tầng 9",
-    "hp": 535,
-    "linh": 130,
-    "def": 23,
+    "hp": 525,
+    "linh": 221,
+    "def": 14,
     "mp": 220,
-    "exp_need": 962
+    "exp_need": 2230
    },
    {
     "id": "lk10",
     "name": "Luyện Khí tầng 10",
-    "hp": 625,
-    "linh": 155,
-    "def": 26,
+    "hp": 598,
+    "linh": 279,
+    "def": 16,
     "mp": 235,
-    "exp_need": 1204
+    "exp_need": 3034
    },
    {
     "id": "tc_so",
     "name": "Trúc Cơ Sơ kỳ",
-    "hp": 728,
-    "linh": 186,
-    "def": 30,
+    "hp": 1004,
+    "linh": 1044,
+    "def": 22,
     "mp": 250,
-    "exp_need": 1530
+    "exp_need": 11800
    },
    {
     "id": "tc_trung",
     "name": "Trúc Cơ Trung kỳ",
-    "hp": 805,
-    "linh": 253,
-    "def": 40,
+    "hp": 1157,
+    "linh": 1388,
+    "def": 26,
     "mp": 265,
-    "exp_need": 2048
+    "exp_need": 16495
    },
    {
     "id": "tc_hau",
     "name": "Trúc Cơ Hậu kỳ",
-    "hp": 1055,
-    "linh": 445,
-    "def": 51,
+    "hp": 1347,
+    "linh": 1833,
+    "def": 28,
     "mp": 280,
-    "exp_need": 3604
+    "exp_need": 22936
    },
    {
     "id": "kd_so",
     "name": "Kết Đan Sơ kỳ",
-    "hp": 1367,
-    "linh": 794,
-    "def": 65,
+    "hp": 2227,
+    "linh": 7053,
+    "def": 39,
     "mp": 295,
-    "exp_need": 6300
+    "exp_need": 87955
    },
    {
     "id": "kd_trung",
     "name": "Kết Đan Trung kỳ",
-    "hp": 1462,
-    "linh": 1149,
-    "def": 86,
+    "hp": 2558,
+    "linh": 9441,
+    "def": 44,
     "mp": 310,
-    "exp_need": 8664
+    "exp_need": 121347
    },
    {
     "id": "kd_hau",
     "name": "Kết Đan Hậu kỳ",
-    "hp": 1914,
-    "linh": 2137,
-    "def": 114,
+    "hp": 2948,
+    "linh": 12625,
+    "def": 49,
     "mp": 325,
-    "exp_need": 14920
+    "exp_need": 166848
    },
    {
     "id": "na_so",
     "name": "Nguyên Anh Sơ kỳ",
-    "hp": 2460,
-    "linh": 4053,
-    "def": 150,
+    "hp": 4688,
+    "linh": 50286,
+    "def": 69,
     "mp": 340,
-    "exp_need": 25704
+    "exp_need": 633418
    },
    {
     "id": "na_trung",
     "name": "Nguyên Anh Trung kỳ",
-    "hp": 2548,
-    "linh": 5644,
-    "def": 182,
+    "hp": 5330,
+    "linh": 68090,
+    "def": 77,
     "mp": 355,
-    "exp_need": 33528
+    "exp_need": 866035
    },
    {
     "id": "na_hau",
     "name": "Nguyên Anh Hậu kỳ",
-    "hp": 2980,
-    "linh": 11929,
-    "def": 244,
+    "hp": 6041,
+    "linh": 92390,
+    "def": 87,
     "mp": 370,
-    "exp_need": 61594
+    "exp_need": 1181216
    },
    {
     "id": "ht_so",
     "name": "Hóa Thần Sơ kỳ",
-    "hp": 3416,
-    "linh": 25689,
-    "def": 326,
+    "hp": 9211,
+    "linh": 384137,
+    "def": 122,
     "mp": 385,
-    "exp_need": 112800
+    "exp_need": 4451721
    },
    {
     "id": "ht_trung",
     "name": "Hóa Thần Trung kỳ",
-    "hp": 3526,
-    "linh": 39993,
-    "def": 398,
+    "hp": 10317,
+    "linh": 526894,
+    "def": 136,
     "mp": 400,
-    "exp_need": 157500
+    "exp_need": 6046362
    },
    {
     "id": "ht_hau",
     "name": "Hóa Thần Hậu kỳ",
-    "hp": 3610,
-    "linh": 62704,
-    "def": 486,
+    "hp": 11524,
+    "linh": 724708,
+    "def": 152,
     "mp": 415,
-    "exp_need": 219544
+    "exp_need": 8197141
+   },
+   {
+    "id": "ab_so",
+    "name": "Anh Biến Sơ kỳ",
+    "hp": 16770,
+    "linh": 3143280,
+    "def": 213,
+    "mp": 430,
+    "exp_need": 30722438
+   },
+   {
+    "id": "ab_trung",
+    "name": "Anh Biến Trung kỳ",
+    "hp": 18492,
+    "linh": 4370992,
+    "def": 239,
+    "mp": 445,
+    "exp_need": 41515717
+   },
+   {
+    "id": "ab_hau",
+    "name": "Anh Biến Hậu kỳ",
+    "hp": 20315,
+    "linh": 6097538,
+    "def": 268,
+    "mp": 460,
+    "exp_need": 56019948
+   },
+   {
+    "id": "vd_so",
+    "name": "Vấn Đỉnh Sơ kỳ",
+    "hp": 28294,
+    "linh": 27353415,
+    "def": 375,
+    "mp": 475,
+    "exp_need": 209050037
+   },
+   {
+    "id": "vd_trung",
+    "name": "Vấn Đỉnh Trung kỳ",
+    "hp": 30746,
+    "linh": 38432118,
+    "def": 420,
+    "mp": 490,
+    "exp_need": 281356759
+   },
+   {
+    "id": "vd_hau",
+    "name": "Vấn Đỉnh Hậu kỳ",
+    "hp": 33348,
+    "linh": 54047952,
+    "def": 470,
+    "mp": 505,
+    "exp_need": 378233010
    }
   ]
  },
@@ -222,20 +276,26 @@
   "tc_so": "realm.truc-co",
   "kd_so": "realm.ket-dan",
   "na_so": "realm.nguyen-anh",
-  "ht_so": "realm.hoa-than"
+  "ht_so": "realm.hoa-than",
+  "ab_so": "realm.anh-bien",
+  "vd_so": "realm.van-dinh"
  },
  "gearQ_by_stage": {
   "lk1": 0.15,
-  "lk5": 0.25,
-  "lk10": 0.35,
-  "tc_so": 0.45,
-  "tc_hau": 0.55,
-  "kd_so": 0.6,
-  "kd_hau": 0.7,
-  "na_so": 0.75,
-  "na_hau": 0.85,
-  "ht_so": 0.9,
-  "ht_hau": 1.0
+  "lk5": 0.28,
+  "lk10": 0.43,
+  "tc_so": 0.46,
+  "tc_hau": 0.53,
+  "kd_so": 0.56,
+  "kd_hau": 0.62,
+  "na_so": 0.65,
+  "na_hau": 0.72,
+  "ht_so": 0.75,
+  "ht_hau": 0.81,
+  "ab_so": 0.84,
+  "ab_hau": 0.91,
+  "vd_so": 0.94,
+  "vd_hau": 1.0
  },
  "monster": {
   "max_alive": 18,
@@ -281,13 +341,44 @@
    "elite": 4,
    "boss": 15
   },
-  "stone_per_hp": 0.025,
   "respawn_note": "chết thì quái mới sinh ra chỗ khác quanh người chơi",
   "band": {
-   "elite": 0.55,
-   "boss": 0.8,
-   "_ghi_chu": "Độ sâu trong vành vùng (0 = mép trong gần tâm bản đồ, 1 = mép ngoài) tối thiểu để tinh anh / boss xuất hiện. Quái thường mạnh dần theo độ sâu."
-  }
+   "elite": 0.2,
+   "boss": 0.45,
+   "_ghi_chu": "Độ sâu trong vành vùng (0 = mép trong, 1 = mép ngoài) tối thiểu để tinh anh / boss xuất hiện. Tầng quái tăng theo độ sâu."
+  },
+  "stone_by_stage": {
+   "lk1": 3,
+   "lk2": 4,
+   "lk3": 4,
+   "lk4": 5,
+   "lk5": 6,
+   "lk6": 7,
+   "lk7": 9,
+   "lk8": 11,
+   "lk9": 13,
+   "lk10": 15,
+   "tc_so": 19,
+   "tc_trung": 22,
+   "tc_hau": 27,
+   "kd_so": 32,
+   "kd_trung": 39,
+   "kd_hau": 46,
+   "na_so": 55,
+   "na_trung": 67,
+   "na_hau": 80,
+   "ht_so": 96,
+   "ht_trung": 115,
+   "ht_hau": 138,
+   "ab_so": 166,
+   "ab_trung": 199,
+   "ab_hau": 238,
+   "vd_so": 286,
+   "vd_trung": 343,
+   "vd_hau": 412,
+   "am_hu": 1484
+  },
+  "_stone": "Linh thạch rơi = stone_by_stage[tầng quái] × exp_mul[cấp quái] (không theo HP nữa, để giá cửa hàng không mất giá ở cảnh giới cao)"
  },
  "loot": {
   "thuong": {

@@ -153,7 +153,7 @@
       ],
       "walk": true,
       "speed": 1,
-      "tier": 3,
+      "tier": 2,
       "grid": 2,
       "tiles": [
         [
@@ -275,7 +275,7 @@
       ],
       "walk": true,
       "speed": 1,
-      "tier": 5,
+      "tier": 3,
       "grid": 2,
       "tiles": [
         [
@@ -329,7 +329,7 @@
     },
     {
       "id": "dat_den",
-      "name": "Hắc thổ",
+      "name": "Hắc thổ (Xám Than)",
       "color": [
         80,
         65,
@@ -337,7 +337,7 @@
       ],
       "walk": true,
       "speed": 1,
-      "tier": 6,
+      "tier": 5,
       "grid": 2,
       "tiles": [
         [
@@ -391,7 +391,7 @@
       ],
       "walk": true,
       "speed": 0.7,
-      "tier": 6,
+      "tier": 5,
       "grid": 2,
       "tiles": [
         [
@@ -411,6 +411,107 @@
           "re-kho"
         ]
       }
+    },
+    {
+      "id": "hac_thach",
+      "name": "Hắc thạch",
+      "color": [
+        34,
+        30,
+        40
+      ],
+      "walk": true,
+      "speed": 1,
+      "tier": 6,
+      "grid": 2,
+      "tiles": [
+        [
+          "hac-thach-1",
+          5
+        ],
+        [
+          "hac-thach-2",
+          4
+        ],
+        [
+          "hac-thach-3",
+          3
+        ],
+        [
+          "hac-thach-4",
+          1
+        ]
+      ],
+      "zone": "den",
+      "decor": {
+        "tree": [
+          "re-kho-2",
+          "tu-dang"
+        ],
+        "rock": [
+          "da-den",
+          "tinh-den",
+          "tinh-tim",
+          "nui-da",
+          "hang-da-2"
+        ],
+        "small": [
+          "nam-tim",
+          "re-kho",
+          "re-kho-2"
+        ]
+      },
+      "_ghi_chu": "Vùng Đen (Anh Biến) — ô vẽ bằng code (tools/gen_tiles_code.py), cây đá mượn vùng Than"
+    },
+    {
+      "id": "tu_vuc",
+      "name": "Tử vực",
+      "color": [
+        118,
+        64,
+        160
+      ],
+      "walk": true,
+      "speed": 1,
+      "tier": 7,
+      "grid": 2,
+      "tiles": [
+        [
+          "tu-vuc-1",
+          5
+        ],
+        [
+          "tu-vuc-2",
+          4
+        ],
+        [
+          "tu-vuc-3",
+          3
+        ],
+        [
+          "tu-vuc-4",
+          2
+        ]
+      ],
+      "zone": "tim",
+      "decor": {
+        "tree": [
+          "tu-dang"
+        ],
+        "rock": [
+          "tinh-tim",
+          "tinh-trang",
+          "da-nhon-3",
+          "hang-da",
+          "tinh-den"
+        ],
+        "small": [
+          "nam-tim",
+          "nam-xanh",
+          "da-vun-2"
+        ]
+      },
+      "_ghi_chu": "Vùng Tím (Vấn Đỉnh) — ô vẽ bằng code (tools/gen_tiles_code.py), cây đá mượn"
     },
     {
       "id": "nuoc_sau",
@@ -542,7 +643,7 @@
       ]
     }
   ],
-  "_note_zone": "zone = vùng quái theo Lab v3.1 (xanh/cam/trang/xam/than, xem data/monsters/monsters.json). Đá lát cổ là vành ngoài Vùng Cam. Nước không có quái.",
+  "_note_zone": "zone = vùng quái (chốt 23/10): xanh=cỏ (Luyện Khí), cam=cát + đá lát cổ (Trúc Cơ), xam=sỏi đá \"Xám Khói\" (Kết Đan), trang=băng tuyết (Nguyên Anh), than=hắc thổ + dung nham \"Xám Than\" (Hóa Thần), den=hắc thạch (Anh Biến), tim=tử vực (Vấn Đỉnh). Âm Hư (hư vô) xuất hiện ở bất kỳ vùng nào. Nước không có quái. duong / cau: đường nối các vùng. Không có quái, cây, đá trên đường.",
   "_note_road": "duong / cau: đường nối các vùng (data/zones/*.json → roads). Đường qua nước thành cầu gỗ (vẽ ván trên nước). Không có quái, cây, đá trên đường.",
   "decor_rules": {
     "_ghi_chu": "Cây/đá/hoa cỏ rải theo ô, cố định (mọi máy thấy giống nhau). Rừng & bãi đá mọc thành cụm theo 2 trường nhiễu (cell = cỡ cụm, ô). Xác suất mỗi ô: cây = tree_base + tree_forest × độ rừng; đá = rock_base + rock_field × độ đá; small = cỏ hoa. Tên hình: data/art/sprites.json → decor.",

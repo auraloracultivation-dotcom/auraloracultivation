@@ -33,6 +33,28 @@
    }
   },
   {
+   "id": "item.danphuong.van-dinh.001",
+   "name": "Đan phương Vấn Đỉnh Đan",
+   "cat": "dan-phuong",
+   "teaches": "item.dan.van-dinh.001",
+   "drop": {
+    "zone": "den",
+    "rank": "boss",
+    "chance": 0.2
+   }
+  },
+  {
+   "id": "item.danphuong.anh-bien.001",
+   "name": "Đan phương Anh Biến Đan",
+   "cat": "dan-phuong",
+   "teaches": "item.dan.anh-bien.001",
+   "drop": {
+    "zone": "than",
+    "rank": "boss",
+    "chance": 0.2
+   }
+  },
+  {
    "id": "item.danphuong.tieu-hoi-huyet.001",
    "name": "Đan phương Tiểu Hồi Huyết Đan",
    "cat": "dan-phuong",
@@ -62,7 +84,7 @@
    "cat": "dan-phuong",
    "teaches": "item.dan.duy-tri.001",
    "drop": {
-    "zone": "xam",
+    "zone": "trang",
     "rank": "boss",
     "chance": 0.2
    }
@@ -109,7 +131,7 @@
    "cat": "phap-khi",
    "teaches": "recipe.phoi.canh.001",
    "drop": {
-    "zone": "xam",
+    "zone": "trang",
     "rank": "boss",
     "chance": 0.3
    }
@@ -148,7 +170,7 @@
    "cat": "cong-phap",
    "teaches": "skill.khe.linh-thu.001",
    "drop": {
-    "zone": "trang",
+    "zone": "xam",
     "rank": "boss",
     "chance": 0.3
    }
@@ -159,7 +181,7 @@
    "cat": "cong-phap",
    "teaches": "skill.than.canh-phong.001",
    "drop": {
-    "zone": "xam",
+    "zone": "trang",
     "rank": "boss",
     "chance": 0.3
    }

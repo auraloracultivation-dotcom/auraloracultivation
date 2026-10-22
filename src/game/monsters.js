@@ -5,10 +5,21 @@ import { wrapDelta } from '../map/index.js';
 
 const rint = (a, b) => Math.round(a + Math.random() * (b - a));
 
-export function createMonsters({ gp, defs, map }) {
+// mdef = data/monsters/monsters.json: chỉ số thật = stage_stats[tầng] × rank_mul[cấp] × mul (luật cảnh giới 23/10, tools/gen_balance.py)
+export function createMonsters({ gp, mdef, map }) {
   const P = gp.monster;
+  const defs = mdef.monsters;
   const byZone = {};
-  for (const d of defs) (byZone[d.zone] ||= { thuong: [], elite: [], boss: [] })[d.rank].push(d);
+  for (const d of defs) if (!d.void) (byZone[d.zone] ||= { thuong: [], elite: [], boss: [], stages: [] })[d.rank].push(d);
+  for (const z of Object.values(byZone)) z.stages = [...new Set(z.thuong.flatMap((d) => d.stages))]; // tầng của vùng, yếu → mạnh
+  // Tạo một con quái ở tầng `stage`: lệch ngẫu nhiên ±variance
+  function makeStats(def, stage) {
+    const ss = mdef.stage_stats[stage], rm = mdef.rank_mul[def.void ? 'huvo' : def.rank], mul = def.mul || 1;
+    const v = () => 1 + (Math.random() * 2 - 1) * mdef.variance;
+    const hp = Math.round(ss.hp * rm.hp * mul * v());
+    return { hp, maxHp: hp, atk: Math.round(ss.atk * rm.atk * mul * v()), dfn: Math.round(ss.def * rm.def * mul * v()),
+      stage, realmName: mdef.stage_names[stage] || stage, stone: (P.stone_by_stage[stage] || 1) * (P.exp_mul[def.rank] || 1) };
+  }
   const list = [];
   let uid = 1, spawnT = 0;
   // Vùng là các vành quanh tâm bản đồ: đo bán kính trong/ngoài của mỗi vùng để biết "độ sâu" 0..1 trong vành.
@@ -39,7 +50,7 @@ export function createMonsters({ gp, defs, map }) {
     let rank = r < w.boss ? 'boss' : r < w.boss + w.elite ? 'elite' : 'thuong';
     if (rank === 'boss' && band < P.band.boss) rank = 'elite';
     if (rank === 'elite' && band < P.band.elite) rank = 'thuong';
-    if (rank === 'boss' && list.filter((m) => m.def.rank === 'boss').length >= P.max_boss) rank = 'elite';
+    if (rank === 'boss' && list.filter((m) => m.def.rank === 'boss' && !m.void).length >= P.max_boss) rank = 'elite';
     if (!zone[rank].length) rank = 'thuong';
     return rank;
   }
@@ -56,13 +67,14 @@ export function createMonsters({ gp, defs, map }) {
       const zone = byZone[t.zone];
       const band = depth(t.zone, x, y);
       const rank = pickRank(zone, band);
-      // quái thường: chọn theo độ sâu (danh sách Lab xếp từ yếu đến mạnh), lệch ngẫu nhiên ±1 cho đa dạng
-      const arr = zone[rank];
-      const i = rank === 'thuong' ? Math.max(0, Math.min(arr.length - 1, Math.floor(band * arr.length) + (Math.random() < 0.25 ? -1 : 0)))
-        : Math.floor(Math.random() * arr.length);
-      const def = arr[i];
-      const hp = rint(...def.hp);
-      list.push({ uid: uid++, def, x, y, hx: x, hy: y, hp, maxHp: hp, atk: rint(...def.atk), dfn: rint(...def.def),
+      // tầng quái theo độ sâu trong vành (mép trong = tầng thấp nhất của vùng), lệch ±1 tầng 25% cho đa dạng
+      const n = zone.stages.length;
+      let si = Math.min(n - 1, Math.floor(band * n));
+      if (Math.random() < 0.25) si = Math.max(0, Math.min(n - 1, si + (Math.random() < 0.5 ? -1 : 1)));
+      const stage = zone.stages[si];
+      const arr = rank === 'thuong' ? zone.thuong.filter((d) => d.stages.includes(stage)) : zone[rank];
+      const def = arr[Math.floor(Math.random() * arr.length)] || zone.thuong[0];
+      list.push({ uid: uid++, def, x, y, hx: x, hy: y, ...makeStats(def, stage),
         r: P.radius_px[rank], state: 'idle', cd: 0, atkT: 0, moving: false, n: 0, stun: 0, facing: 1, wt: 0, tx: x, ty: y, hitT: 0, walkT: 0 });
       return;
     }
@@ -91,12 +103,12 @@ export function createMonsters({ gp, defs, map }) {
       const m = list[i];
       const d = distTo(m, me);
       if (m.state === 'dead') { m.deadT -= dt; if (m.deadT <= 0) list.splice(i, 1); continue; }
-      if (d > P.despawn_px) { list.splice(i, 1); continue; }
+      if (m.void ? Date.now() > m.until : d > P.despawn_px) { list.splice(i, 1); continue; } // Âm Hư: tan biến khi hết giờ
       if (m.hitT > 0) m.hitT -= dt;
       if (m.atkT > 0) m.atkT -= dt;
       m.moving = false;
       if (m.stun > 0) { m.stun -= dt; continue; }
-      const rank = m.def.rank, speed = P.speed_px_per_s[rank];
+      const rank = m.def.rank, speed = m.speed || P.speed_px_per_s[rank];
       m.cd = Math.max(0, m.cd - dt);
       if (m.state === 'idle') {
         m.wt -= dt;
@@ -106,9 +118,9 @@ export function createMonsters({ gp, defs, map }) {
           m.tx = map.wrapX(m.hx + Math.cos(a) * r); m.ty = map.wrapY(m.hy + Math.sin(a) * r);
         }
         step(m, m.tx, m.ty, speed * 0.35, dt);
-        if (env.alive && !inTown && d < P.aggro_px[rank]) m.state = 'chase';
+        if (env.alive && !inTown && d < (m.aggro || P.aggro_px[rank])) m.state = 'chase';
       } else if (m.state === 'chase') {
-        if (!env.alive || inTown || homeDist(m) > P.leash_px) { m.state = 'return'; continue; }
+        if (!env.alive || inTown || homeDist(m) > (m.leash || P.leash_px)) { m.state = 'return'; continue; }
         if (d > P.attack_range_px + m.r * 0.5) step(m, me.x, me.y, speed, dt);
         else if (m.cd <= 0) {
           m.cd = P.attack_every_s; m.n++;
@@ -151,5 +163,16 @@ export function createMonsters({ gp, defs, map }) {
   }
   const within = (me, radius) => list.filter((m) => m.state !== 'dead' && distTo(m, me) <= radius);
 
-  return { list, update, damage, nearest, within, distTo, rel, calmAll() { for (const m of list) if (m.state !== 'dead') m.state = 'return'; } };
+  // Âm Hư (src/game/void.js): đặt đúng chỗ theo lịch chung; sống tới `until` (ms, giờ máy) rồi tan
+  function addVoid(def, x, y, until, key, V) {
+    if (list.some((m) => m.voidKey === key)) return null;
+    const m = { uid: uid++, def, x, y, hx: x, hy: y, ...makeStats(def, def.stages[0]), void: true, voidKey: key, until,
+      r: V.radius_px, aggro: V.aggro_px, leash: V.leash_px, speed: V.speed_px_per_s,
+      state: 'idle', cd: 0, atkT: 0, moving: false, n: 0, stun: 0, facing: 1, wt: 0, tx: x, ty: y, hitT: 0, walkT: 0 };
+    list.push(m);
+    return m;
+  }
+  const removeVoid = (key) => { const i = list.findIndex((m) => m.voidKey === key && m.state !== 'dead'); if (i >= 0) list.splice(i, 1); };
+
+  return { list, update, addVoid, removeVoid, damage, nearest, within, distTo, rel, calmAll() { for (const m of list) if (m.state !== 'dead') m.state = 'return'; } };
 }

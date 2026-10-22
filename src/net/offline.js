@@ -12,11 +12,13 @@ export const updatePassword = async () => {};
 export const isPasswordRecovery = () => false;
 
 export async function getMyCharacter() {
-  return { user_id: USER, name: 'Đạo hữu thử', zone_id: 'zone.start', x: 8016, y: 8016, realm: 0 };
+  return { user_id: USER, name: 'Đạo hữu thử', zone_id: 'zone.start', x: 16016, y: 16016, realm: 0 };
 }
 export const createCharacter = getMyCharacter;
 export const savePosition = async () => null;
 export const respawnAtTown = async () => null;
+export const syncServerTime = async () => {};
+export const serverNow = () => Date.now();
 
 export async function joinZone({ me, handlers }) {
   setTimeout(() => { handlers.onPresence({ [me.id]: [me] }); handlers.onOnline?.(1); }, 0);
