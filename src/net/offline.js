@@ -12,7 +12,7 @@ export const updatePassword = async () => {};
 export const isPasswordRecovery = () => false;
 
 export async function getMyCharacter() {
-  return { user_id: USER, name: 'Đạo hữu thử', zone_id: 'zone.start', x: 16016, y: 16016, realm: 0 };
+  return { user_id: USER, name: 'Đạo hữu thử', zone_id: 'zone.start', x: 16016, y: 16016, realm: 0, created_at: new Date(Date.now() - 3 * 864e5).toISOString() }; // tạo 3 ngày trước: thử tuổi theo ngày tạo
 }
 export const createCharacter = getMyCharacter;
 export const savePosition = async () => null;

@@ -2,13 +2,18 @@
 // 1 ngày thật theo giờ Việt Nam (qua 0h) = 1 năm tuổi, kể cả khi không vào game. Giờ lấy từ máy chủ (serverNow).
 // Thọ nguyên tối đa = base_max + tổng gain các tầng đã đạt + số năm Trường Sinh Đan đã cộng.
 // Tuổi ≥ thọ nguyên tối đa → tọa hóa (chết hẳn): main.js hiện bảng chuyển thế và xoá tiến trình (src/ui/toahoa.js).
-// Mốc 4: máy chủ tự tính tuổi từ ngày sinh, không tin máy khách.
+// Ngày sinh = ngày tạo nhân vật (characters.created_at trên máy chủ, giờ VN) — mỗi người một tuổi khác nhau (chủ dự án 23/10).
+// Chuyển thế sau tọa hóa: ngày sinh = ngày chuyển thế (src: 'reborn'). Mốc 4: máy chủ tự tính tuổi, không tin máy khách.
 
-export function createLifespan({ def, progress, stages, serverNow = Date.now }) {
+export function createLifespan({ def, progress, stages, serverNow = Date.now, bornAt = null }) {
   const DAY = 86400000, TZ = def.tz_offset_hours * 3600000;
   const today = () => Math.floor((serverNow() + TZ) / DAY); // số ngày (giờ VN) kể từ 1/1/1970
-  const st = () => (progress.state.life ||= { born: today(), bonus: 0, pillDay: -1 });
-  st(); progress.changed();
+  const dayOf = (t) => Math.floor((new Date(t).getTime() + TZ) / DAY);
+  const accDay = bornAt && Number.isFinite(new Date(bornAt).getTime()) ? Math.min(dayOf(bornAt), today()) : null; // ngày tạo nhân vật
+  const st = () => (progress.state.life ||= { born: accDay ?? today(), bonus: 0, pillDay: -1, src: accDay !== null ? 'acc' : 'local' });
+  // Bản cũ (born = ngày bật tính năng) → chuyển sang ngày tạo nhân vật; đời sau chuyển thế giữ ngày chuyển thế
+  if (accDay !== null && !['acc', 'reborn'].includes(st().src)) { st().born = accDay; st().src = 'acc'; }
+  progress.changed();
 
   const gainUpTo = (idx) => { let s = 0; for (let i = 1; i <= idx; i++) s += def.gain[stages[i].id] || 0; return s; };
   const age = () => def.start_age + Math.max(0, today() - st().born);
@@ -48,5 +53,7 @@ export function createLifespan({ def, progress, stages, serverNow = Date.now }) 
     const w = warning(); if (w) onWarn(w);
   }
   const summary = () => ({ age: age(), max: max(), lived: Math.max(0, today() - st().born) });
-  return { age, max, left, dead, label, canEat, eat, warning, summary, today, watch };
+  // Chuyển thế: đời mới sinh hôm nay (không lấy ngày tạo nhân vật nữa, kẻo vừa sinh đã hết thọ)
+  const reborn = () => { progress.state.life = { born: today(), bonus: 0, pillDay: -1, src: 'reborn' }; };
+  return { age, max, left, dead, label, canEat, eat, warning, summary, today, watch, reborn };
 }
