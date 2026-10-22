@@ -4,6 +4,7 @@ import { compactText } from '../core/index.js';
 export function createFxQueue(fx, fxDuration) {
   // Số bay: lệch ngang ngẫu nhiên + xếp tầng theo số chữ đang bay gần đó để không đè nhau
   const say = (x, y, text, color, big = false) => {
+    if (fx.length > 220 && !big) return; // bắn hàng trăm đạn: bớt số bay cho đỡ lag
     const near = fx.filter((f) => f.kind === 'text' && Math.abs(f.x - x) < 24 && f.t > 0.5).length;
     fx.push({ kind: 'text', x: x + (Math.random() - 0.5) * 10, y: y - 16 - near * 9, // -16: bay phía trên tên + thanh máu
       text: compactText(text), color, big, t: 1.1, life: 1.1 });
