@@ -1,4 +1,5 @@
 # 08 — Bản chơi thử (luật chơi phía máy khách)
+<!-- cập nhật 23/10: kích lại GitHub Pages sau lần đăng bị kẹt -->
 
 Quyết định của chủ dự án ngày 21/10/2026: **đưa toàn bộ Lab vào game bằng code đơn giản, hình tạm**, để hình dung game trước,
 song song với việc hoàn thành Mốc 1. Đây là **bản chơi thử**, chưa phải hệ thống an toàn cho nhiều người.
