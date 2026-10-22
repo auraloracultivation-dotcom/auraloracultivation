@@ -196,7 +196,7 @@
     "linh": 129346,
     "def": 100,
     "mp": 385,
-    "exp_need": 48245422
+    "exp_need": 60306810
    },
    {
     "id": "ht_trung",
@@ -205,7 +205,7 @@
     "linh": 181084,
     "def": 115,
     "mp": 400,
-    "exp_need": 123511233
+    "exp_need": 192986238
    },
    {
     "id": "ht_hau",
@@ -214,7 +214,7 @@
     "linh": 253518,
     "def": 132,
     "mp": 415,
-    "exp_need": 316123788
+    "exp_need": 617429074
    }
   ],
   "max_stage": "ht_hau"
@@ -319,7 +319,20 @@
    "vd_hau": 412,
    "am_hu": 1484
   },
-  "_stone": "Linh thạch rơi = stone_by_stage[tầng quái] × exp_mul[cấp quái] (không theo HP nữa, để giá cửa hàng không mất giá ở cảnh giới cao)"
+  "_stone": "Linh thạch rơi = stone_by_stage[tầng quái] × exp_mul[cấp quái] (không theo HP nữa, để giá cửa hàng không mất giá ở cảnh giới cao)",
+  "suppress": {
+   "_ghi_chu": "Áp chế cảnh giới (23/10): quái cao hơn người chơi quá grace tầng → sát thương người chơi (và thú cưng) × per_stage cho mỗi tầng vượt, thấp nhất min.",
+   "grace": 1,
+   "per_stage": 0.5,
+   "min": 0.0005
+  },
+  "exp_cap": {
+   "_ghi_chu": "Tu vi tối đa mỗi lần hạ quái, tính theo phần vạch tu vi tầng hiện tại của người chơi (23/10: Âm Hư từng cho đầy cả tầng).",
+   "thuong": 0.005,
+   "elite": 0.02,
+   "boss": 0.05,
+   "void": 0.08
+  }
  },
  "loot": {
   "thuong": {
