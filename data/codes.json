@@ -1,5 +1,5 @@
 {
-  "_ghi_chu": "Mã quà tặng THỬ NGHIỆM. Chỉ lưu dấu SHA-256 của mã (không lưu mã gốc). grant 'all' = mọi vật phẩm trong data/items/items.json. Đồ nhận từ mã thử nằm trong kho trên máy người chơi (localStorage), chưa lưu máy chủ — sẽ chuyển lên máy chủ ở Mốc 4. grant 'full' (23/10) = như 'all' + 999 mỗi nguyên liệu, 99 mỗi đan, mọi đan phương/công thức/bí kíp, đồ cửa hàng, 10 triệu Linh thạch, 10 triệu Vàng, 100.000 Tiên ngọc, 1 phôi mỗi ô (src/game/testgift.js). Mã ngắn dễ dò từ dấu SHA-256 — xoá trước khi phát hành thật.",
+  "_ghi_chu": "Mã quà tặng THỬ NGHIỆM. Chỉ lưu dấu SHA-256 của mã (không lưu mã gốc). grant 'all' = mọi vật phẩm trong data/items/items.json. Đồ nhận từ mã thử nằm trong kho trên máy người chơi (localStorage), chưa lưu máy chủ — sẽ chuyển lên máy chủ ở Mốc 4. grant 'full' (23/10) = như 'all' + 999 mỗi nguyên liệu, 99 mỗi đan, mọi đan phương/công thức/bí kíp, đồ cửa hàng, 10 triệu Linh thạch, 10 triệu Vàng, 100.000 Tiên ngọc, 1 phôi mỗi ô (src/game/testgift.js). Mã ngắn dễ dò từ dấu SHA-256 — xoá trước khi phát hành thật. grant 'god' (23/10) = như 'all' + mọi trang bị trong Kho thức tỉnh 10 dòng phẩm Đen (giá trị cao nhất) + 5 thú cưng Âm Hư đi theo (src/game/testgift.js → grantGod).",
   "codes": [
     {
       "sha256": "ae118a7acd2ff2f77598c7316bced68d92bf8c8f0ca30ffb28f4edf6fc7c2f3d",
@@ -17,6 +17,15 @@
         "stone": 10000000,
         "gold": 10000000,
         "jade": 100000
+      }
+    },
+    {
+      "sha256": "93bcf942be55acd1057a8b62fa7aa7a0eef0e3941a20bd247429ff9334729f71",
+      "grant": "god",
+      "message": "Nhận 5 thú cưng Âm Hư + toàn bộ trang bị 10 dòng Đen",
+      "gift": {
+        "lines": 10,
+        "void_pets": 5
       }
     }
   ]

@@ -14,3 +14,23 @@ export function grantFull({ progress, wallet, gift, mats, pills, recipes, shop, 
   progress.changed();
   return n;
 }
+
+// Mã thử "thần" (data/codes.json → grant: 'god', chủ dự án 23/10): mọi trang bị trong Kho thức tỉnh đủ `gift.lines` dòng phẩm Đen
+// (giá trị cao nhất của phẩm Đen), + `gift.void_pets` thú cưng Âm Hư đi theo (các thú khác vào nghỉ). Chỉ trên máy (localStorage).
+export function grantGod({ progress, bag, awaken, gp, mdef, gift }) {
+  const keys = gp.awaken.line_keys, ti = awaken.tiers.findIndex((t) => t.id === 'den');
+  const line = (k) => { const v = awaken.line_ranges[k][ti][1]; return { k, v: ['crit', 'hut', 'phan'].includes(k) ? Math.round(v * 10) / 10 : Math.round(v), t: 'den' }; };
+  let n = 0;
+  for (const { item } of bag.entries()) {
+    if (!item?.slot) continue;
+    progress.state.itemAw[item.id] = { tier: 'den', lines: Array.from({ length: gift.lines }, (_, i) => line(keys[i % keys.length])), spent: 0, cap: gift.lines };
+    n++;
+  }
+  const pets = (progress.state.pets ||= []);
+  for (const p of pets) p.follow = false;
+  for (const d of mdef.monsters.filter((m) => m.void).slice(0, gift.void_pets)) {
+    pets.push({ uid: progress.state.uid++, mid: d.id, stage: d.stages[0], atk: d.atk[1], follow: true }); n++;
+  }
+  progress.changed();
+  return n;
+}
