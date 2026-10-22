@@ -162,6 +162,12 @@
    "stack": 5
   },
   {
+   "id": "item.phapbao.phoi.001",
+   "price": 3000,
+   "daily_limit": 3,
+   "min_stage": "tc_so"
+  },
+  {
    "id": "item.dan.tang-tho.001",
    "price": 500,
    "currency": "vang"

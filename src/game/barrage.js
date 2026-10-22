@@ -8,7 +8,7 @@ import { drawEffect } from '../entity/index.js';
 export function createBarrage(c) {
   const { dv, me, mobs, map, bolts, play } = c;
   const L = dv.limits;
-  const zones = [], zaps = [], echoes = [], timers = {};
+  const zones = [], zaps = [], echoes = [], timers = {}, tasks = [], extraOrbits = []; // tasks: chiêu kéo dài (pháp bảo)
   const orbitHit = new Map(); // uid quái → lúc phi kiếm được chém tiếp
   let T = 0, orbitA = 0;
   const rel = (a, b) => ({ dx: wrapDelta(a.x - b.x, map.width), dy: wrapDelta(a.y - b.y, map.height) });
@@ -115,14 +115,14 @@ export function createBarrage(c) {
   // ---- Bị động mỗi khung hình ----
   function passives(dt) {
     const md = dv.mods();
-    if (md.orbit?.n) { // phi kiếm xoay quanh người
-      orbitA += dt * 3.2;
-      const n = Math.min(12, md.orbit.n), r = md.orbit.r || 26;
-      for (let k = 0; k < n; k++) {
-        const a = orbitA + (k / n) * Math.PI * 2, p = { x: map.wrapX(me.x + Math.cos(a) * r), y: map.wrapY(me.y - 10 + Math.sin(a) * r * 0.55) };
+    orbitA += dt * 3.2;
+    for (const o of orbits(md)) { // phi kiếm / u hồn xoay quanh người
+      for (let k = 0; k < o.n; k++) {
+        const a = orbitA * o.sp + (k / o.n) * Math.PI * 2, p = { x: map.wrapX(me.x + Math.cos(a) * o.r), y: map.wrapY(me.y - 10 + Math.sin(a) * o.r * 0.55) };
         for (const m of mobs.within(p, 10)) {
-          if ((orbitHit.get(m.uid) || 0) > T) continue;
-          orbitHit.set(m.uid, T + L.orbit_hit_s); c.strike(m, md.orbit.mul || 0.5, 'skill');
+          const key = `${o.key}:${m.uid}`;
+          if ((orbitHit.get(key) || 0) > T) continue;
+          orbitHit.set(key, T + L.orbit_hit_s); c.strike(m, o.mul, 'skill');
         }
       }
     }
@@ -164,8 +164,24 @@ export function createBarrage(c) {
     }
     lastTop = now;
   }
+  // Vòng xoay đang có: của Đạo Vận + tạm thời (pháp bảo U Hồn Phiên)
+  function orbits(md) {
+    const out = [];
+    if (md.orbit?.n) out.push({ key: 'dv', n: Math.min(12, md.orbit.n), r: md.orbit.r || 26, mul: md.orbit.mul || 0.5, sp: 1, bolt: dv.heOf(md.orbit.he || md.he).bolt });
+    for (const o of extraOrbits) if (o.until > T) out.push(o);
+    return out;
+  }
+  const addOrbit = (o) => { extraOrbits.push({ key: `x${T}`, sp: -1.3, ...o, until: T + o.s }); };
+  // Chiêu kéo dài: gọi fn(lần thứ k) mỗi `every` giây trong `dur` giây
+  const schedule = (dur, every, fn) => tasks.push({ left: dur, every, acc: every, k: 0, fn });
   function update(dt) {
     T += dt; announce();
+    for (let i = tasks.length - 1; i >= 0; i--) {
+      const q = tasks[i]; q.left -= dt; q.acc += dt;
+      while (q.acc >= q.every && q.left > -1e-6) { q.acc -= q.every; q.fn(q.k++); }
+      if (q.left <= 0) tasks.splice(i, 1);
+    }
+    for (let i = extraOrbits.length - 1; i >= 0; i--) if (extraOrbits[i].until <= T) extraOrbits.splice(i, 1);
     for (let i = echoes.length - 1; i >= 0; i--) { echoes[i].t -= dt; if (echoes[i].t <= 0) { const e = echoes.splice(i, 1)[0]; e.fn(); } }
     updateBolts(dt);
     if (!c.dead()) passives(dt);
@@ -208,11 +224,11 @@ export function createBarrage(c) {
     }
     ctx.restore();
     const md = dv.mods();
-    if (md.orbit?.n && !c.dead()) { // phi kiếm xoay quanh người
-      const n = Math.min(12, md.orbit.n), r = md.orbit.r || 26, he = dv.heOf(md.orbit.he || md.he), p0 = at(me);
-      for (let k = 0; k < n; k++) {
-        const a = orbitA + (k / n) * Math.PI * 2, x = p0.x + Math.cos(a) * r, y = p0.y - 10 + Math.sin(a) * r * 0.55;
-        drawEffect(ctx, he.bolt, 0, x, y, 16, a + Math.PI / 2);
+    if (!c.dead()) for (const o of orbits(md)) { // phi kiếm / u hồn xoay quanh người
+      const p0 = at(me);
+      for (let k = 0; k < o.n; k++) {
+        const a = orbitA * o.sp + (k / o.n) * Math.PI * 2, x = p0.x + Math.cos(a) * o.r, y = p0.y - 10 + Math.sin(a) * o.r * 0.55;
+        drawEffect(ctx, o.bolt, 0, x, y, 16, a + Math.PI / 2 * Math.sign(o.sp));
       }
     }
   }
@@ -239,5 +255,5 @@ export function createBarrage(c) {
     }
     ctx.restore();
   }
-  return { fire, basic, maybeEcho, update, render, renderGround, hitAround };
+  return { fire, basic, maybeEcho, update, render, renderGround, hitAround, schedule, addOrbit, nearestTo, zap: (z) => zaps.push(z) };
 }

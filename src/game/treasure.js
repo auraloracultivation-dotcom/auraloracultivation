@@ -1,0 +1,145 @@
+// PHÁP BẢO (chủ dự án 23/10/2026, Tiên Nghịch × My Heroes) — THỬ NGHIỆM phía máy khách. Số liệu: data/build/phap-bao.json.
+// - Có được từ Phôi Pháp Bảo (Vạn Bảo Lâu / rơi từ tinh anh, boss, Âm Hư): chưa biết là gì, NHẬN CHỦ (tốn Linh thạch) mới lộ.
+// - 1 ô pháp bảo (mở ở `unlock`). Đeo vào → kỹ năng "Pháp Bảo" (xếp vào ô kỹ năng) dùng chiêu riêng của pháp bảo.
+// - Chiêu bắn đạn đi qua barrage.fire → ăn Đạo Vận (bộ ngũ hành + Thần Phù): bắn quạt, nảy, tách, sét lan…
+// - Ôn dưỡng lên cấp (Linh thạch): sát thương +mul_per_lv mỗi cấp, số đạn / hồn / tia +1 mỗi 2 cấp.
+// - Thức tỉnh dòng chỉ số random như trang bị (craft.awakenObj) — cộng vào chỉ số khi đang đeo.
+// Lưu progress.state.treasures = [{ uid, id, lv, known, aw }], progress.state.treasureOn = uid.
+import { fxIconUrl } from '../entity/index.js';
+
+const STAT = { hp: 'Khí huyết', linh: 'Tấn công', def: 'Phòng thủ', xuyen: 'Xuyên giáp', crit: 'Bạo kích %', hut: 'Hút máu %', phan: 'Phản đòn %' };
+
+// c: { def, S, progress, craft, awaken, barrage, mobs, me, map, buffs, recompute, heal(n), maxHp(), target(r), play, say, toast, stageOk, now() }
+export function createTreasure(c) {
+  const { def, S, progress, craft, barrage, mobs, me, play, toast } = c;
+  const byId = new Map(def.list.map((t) => [t.id, t]));
+  const list = () => (progress.state.treasures ||= []);
+  const on = () => list().find((t) => t.uid === progress.state.treasureOn && t.known) || null;
+  const tierName = (id) => c.awaken.tiers.find((x) => x.id === id)?.name || '';
+  const scale = (t) => 1 + def.mul_per_lv * (t.lv || 0);
+  const more = (t) => Math.floor((t.lv || 0) / 2);
+  const fill = (d, t) => d.desc.replace(/\{(\w+)(%?)\}/g, (_, k, p) => { const v = k === 'n' ? d.n + more(t) : d[k]; return p ? `${Math.round(v * 100)}%` : v; });
+
+  // Kỹ năng "Pháp Bảo": hồi chiêu + linh lực theo pháp bảo đang đeo (skills.js đọc S['phap-bao'])
+  function syncSkill() {
+    const t = on(), d = t && byId.get(t.id), s = S['phap-bao'];
+    if (!s) return;
+    s.cd_s = d ? d.cd_s : 10; s.mp = d ? d.mp : 20;
+    s.icon = d ? d.icon : ['v.cong-hu', 0];
+  }
+
+  // ---- Dùng chiêu: trả về true nếu đã kích hoạt ----
+  function use(quiet) {
+    const t = on(), d = t && byId.get(t.id);
+    if (!d) { if (!quiet) toast('Chưa đeo pháp bảo (Kho → Pháp Bảo)', 1400); return false; }
+    const mul = d.mul * scale(t), n = (d.n || 0) + more(t), tgt = c.target(260);
+    const he = c.heOf(d.he);
+    const aim = (m) => { if (!m) return { dx: me.facing, dy: 0 }; const r = mobs.rel(m, me), L = Math.hypot(r.dx, r.dy - 10) || 1; return { dx: r.dx / L, dy: (r.dy - 10) / L }; };
+    const shot = (dx, dy, extra = {}) => barrage.fire({ id: 'pb', x: me.x, y: me.y - 14, dx, dy, speed: 420, range: 260, fx: d.fx || he.bolt, size: d.size || 18, mul, color: he.color, ...extra });
+    c.say(me.x, me.y - 44, d.name, he.color, true);
+    switch (d.kind) {
+      case 'ring_burst': for (let k = 0; k < n; k++) { const a = (k / n) * Math.PI * 2; shot(Math.cos(a), Math.sin(a), { homing: 0.9 }); } break;
+      case 'stream': { // phun liên tục về phía mục tiêu (đổi mục tiêu khi con cũ chết)
+        barrage.schedule(d.s, d.s / n, () => { const m = c.target(260) || tgt, { dx, dy } = aim(m), j = (Math.random() - 0.5) * 0.25; shot(dx * Math.cos(j) - dy * Math.sin(j), dx * Math.sin(j) + dy * Math.cos(j)); });
+        break;
+      }
+      case 'sweep': { // quét quạt ±60° quanh hướng mục tiêu
+        const { dx, dy } = aim(tgt), a0 = Math.atan2(dy, dx);
+        barrage.schedule(d.s, d.s / n, (k) => { const a = a0 - 1.05 + (2.1 * k) / Math.max(1, n - 1); shot(Math.cos(a), Math.sin(a)); });
+        break;
+      }
+      case 'storm': barrage.schedule(d.s, d.s / n, () => { // sét đánh ngẫu nhiên quái quanh mình
+        const near = mobs.within(me, d.r).filter((m) => m.state !== 'dead'); if (!near.length) return;
+        const m = near[Math.floor(Math.random() * near.length)];
+        play(d.fx, m.x, m.y + 2, d.h, { ground: true }); barrage.hitAround(m.x, m.y, 30, mul, 'skill');
+      }); break;
+      case 'wisps': barrage.addOrbit({ n, r: d.r, mul, s: d.s, bolt: 'v.dan-am' }); play('v.hac-dong', me.x, me.y, 50, { ground: true }); break;
+      case 'field': {
+        play('v.moc-lien', me.x, me.y + 4, 46, { ground: true });
+        barrage.schedule(d.s, 1, () => c.heal(c.maxHp() * d.heal));
+        barrage.schedule(d.s, 0.3, () => { const m = barrage.nearestTo(me, 220); if (!m) return; const { dx, dy } = aim(m); for (let j = 0; j < n; j++) { const a = (j - (n - 1) / 2) * 0.2; shot(dx * Math.cos(a) - dy * Math.sin(a), dx * Math.sin(a) + dy * Math.cos(a), { homing: 0.7 }); } });
+        break;
+      }
+      case 'seal': {
+        const m = tgt || { x: me.x + me.facing * 40, y: me.y };
+        play(d.fx, m.x, m.y + 4, d.h, { ground: true }); play('tho-vong', m.x, m.y + 4, d.r * 1.6, { ground: true });
+        barrage.zap({ kind: 'ring', x: m.x, y: m.y, r: d.r, t: 0.6, color: he.color });
+        barrage.hitAround(m.x, m.y, d.r, mul, 'skill', d.stun);
+        break;
+      }
+      case 'shield': {
+        c.buffs.def = { mul: d.def_mul * (1 + 0.05 * (t.lv || 0)), until: c.now() + d.s }; c.recompute();
+        play(d.fx, me.x, me.y - 12, d.h); barrage.zap({ kind: 'ring', x: me.x, y: me.y, r: d.r, t: 0.6, color: he.color });
+        barrage.hitAround(me.x, me.y, d.r, 0.8 * scale(t), 'skill', d.stun);
+        break;
+      }
+      default: return false;
+    }
+    return true;
+  }
+
+  // ---- Có được: phôi pháp bảo ----
+  function openBlank(itemId) {
+    if (!progress.take(itemId, 1)) return 'Hết phôi';
+    const d = def.list[Math.floor(Math.random() * def.list.length)];
+    list().push({ uid: progress.state.uid++, id: d.id, lv: 0, known: false, aw: { tier: null, lines: [], spent: 0 } }); progress.changed();
+    return 'Luyện hóa xong: một pháp bảo chưa nhận chủ (Kho → Pháp Bảo)';
+  }
+  function onKill(m) { // rơi phôi
+    const ch = m.void ? def.drop.void : def.drop[m.def.rank] || 0;
+    if (Math.random() < ch) { progress.add(def.items[0].id, 1); toast('Nhặt được Phôi Pháp Bảo!', 2200); }
+  }
+
+  // ---- Kho: thẻ Pháp Bảo ----
+  function entry(t) {
+    const d = byId.get(t.id);
+    if (!t.known) return { id: `pb:${t.uid}`, key: `pb:${t.uid}`, name: 'Pháp bảo chưa nhận chủ', cat: 'phap-bao', thumb: fxIconUrl('v.cong-hu', 0),
+      sub: 'Linh quang mờ ảo — chưa biết là pháp bảo gì', detail: 'Nhận chủ để lộ hình và dùng được.',
+      actions: [{ id: 'pb-bind', label: `Nhận chủ (${def.bind_cost} LT)`, disabled: progress.state.stone < def.bind_cost },
+        { id: 'pb-break', label: 'Phân rã', danger: true, confirm: 'Phân rã pháp bảo chưa nhận chủ?' }] };
+    const worn = progress.state.treasureOn === t.uid, cost = def.lv_cost[(t.lv || 0) + 1], aw = craft.awakenCost(t.aw);
+    const lines = (craft.norm(t.aw)?.lines || []).map((l) => ({ text: `${STAT[l.k] || l.k} +${l.v}`, tier: l.t }));
+    return { id: `pb:${t.uid}`, key: `pb:${t.uid}`, name: `${d.name}${t.lv ? ` +${t.lv}` : ''}`, cat: 'phap-bao', thumb: fxIconUrl(...d.icon), equipped: worn, tier: t.aw.tier,
+      sub: `Pháp bảo · hệ ${d.he} · cấp ${t.lv || 0}/${def.max_lv}${t.aw.tier ? ` · ${tierName(t.aw.tier)}` : ''}`, lines,
+      detail: `${fill(d, t)}\nHồi ${d.cd_s} giây · ${d.mp} linh lực · sát thương ×${scale(t).toFixed(2)}. Xếp kỹ năng "Pháp Bảo" vào ô kỹ năng để dùng.`,
+      actions: [
+        { id: 'pb-wear', label: worn ? 'Tháo' : 'Đeo', disabled: !worn && !c.stageOk(def.unlock) },
+        cost ? { id: 'pb-up', label: `Ôn dưỡng lên cấp ${(t.lv || 0) + 1} (${cost} LT)`, disabled: progress.state.stone < cost } : { id: 'pb-up', label: 'Đã ôn dưỡng tối đa', disabled: true },
+        aw === null ? { id: 'pb-aw', label: 'Thức tỉnh: đã đạt giới hạn', disabled: true } : { id: 'pb-aw', label: `Thức tỉnh dòng ${t.aw.lines.length + 1} (${aw} LT)`, disabled: progress.state.stone < aw },
+        { id: 'pb-break', label: 'Phân rã', danger: true, confirm: `Phân rã ${d.name}?` }] };
+  }
+  const entries = () => list().map((t) => ({ item: entry(t), count: 1 }));
+  function act(key, action) {
+    const t = list().find((x) => `pb:${x.uid}` === key); if (!t) return null;
+    const d = byId.get(t.id);
+    if (action === 'pb-bind') {
+      if (progress.state.stone < def.bind_cost) return 'Không đủ Linh thạch';
+      progress.addStone(-def.bind_cost); t.known = true; progress.changed(); play('vong-lua', me.x, me.y - 10, 44);
+      return `Nhận chủ thành công: ${d.name}!`;
+    }
+    if (action === 'pb-wear') {
+      if (progress.state.treasureOn === t.uid) progress.state.treasureOn = null;
+      else { if (!c.stageOk(def.unlock)) return 'Cảnh giới chưa đủ'; progress.state.treasureOn = t.uid; }
+      syncSkill(); c.recompute(); progress.changed();
+      return progress.state.treasureOn ? `Đeo ${d.name} — xếp kỹ năng "Pháp Bảo" vào ô để dùng` : `Tháo ${d.name}`;
+    }
+    if (action === 'pb-up') {
+      const cost = def.lv_cost[(t.lv || 0) + 1]; if (!cost) return 'Đã tối đa';
+      if (progress.state.stone < cost) return 'Không đủ Linh thạch';
+      progress.addStone(-cost); t.lv = (t.lv || 0) + 1; progress.changed(); return `${d.name} ôn dưỡng lên cấp ${t.lv}`;
+    }
+    if (action === 'pb-aw') { const r = craft.awakenObj(t.aw); c.recompute(); return r.msg; }
+    if (action === 'pb-break' || action === 'discard') {
+      const back = Math.floor((t.aw.spent + def.lv_cost.slice(0, (t.lv || 0) + 1).reduce((a, b) => a + b, 0)) * def.dismantle_refund);
+      if (progress.state.treasureOn === t.uid) progress.state.treasureOn = null;
+      progress.state.treasures = list().filter((x) => x !== t); progress.addStone(back); syncSkill(); c.recompute(); progress.changed();
+      return `Phân rã${t.known ? ` ${d.name}` : ''}: +${back} Linh thạch`;
+    }
+    return null;
+  }
+  // Dòng thức tỉnh của pháp bảo đang đeo (gộp vào chỉ số như trang bị)
+  const worn = () => { const t = on(); return t?.aw?.tier ? [t.aw] : []; };
+  const view = () => { const t = on(), d = t && byId.get(t.id); return d ? { thumb: fxIconUrl(...d.icon), cd: d.cd_s, name: d.name } : null; };
+  syncSkill();
+  return { use, openBlank, onKill, entries, act, worn, view, isTreasure: (key) => key.startsWith('pb:'), grant: (id, lv = 0) => { list().push({ uid: progress.state.uid++, id, lv, known: true, aw: { tier: null, lines: [], spent: 0 } }); progress.changed(); } };
+}

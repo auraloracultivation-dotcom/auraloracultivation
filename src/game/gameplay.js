@@ -34,6 +34,7 @@ import { createPillUse } from './pill-use.js';
 import { createDaoVan } from './daovan.js';
 import { createCards } from './cards.js';
 import { createBarrage } from './barrage.js';
+import { createTreasure } from './treasure.js';
 import { placeholderIcon, showRevive } from '../ui/index.js';
 import { artInfo, iconUrl, fxIconUrl } from '../entity/index.js';
 
@@ -48,6 +49,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     'data/items/quest-items.json', 'data/realms.json'].map((p) => loadJSON(p)));
   const [recipes, shop, artIdx] = await Promise.all([loadJSON('data/items/recipes.json'), loadJSON('data/shop.json'), loadJSON('data/equipment/art.json')]);
   const [curDef, lifeDef, premium, dvDef] = await Promise.all(['data/currency.json', 'data/lifespan.json', 'data/items/premium.json', 'data/build/dao-van.json'].map((p) => loadJSON(p)));
+  const pbDef = await loadJSON('data/build/phap-bao.json'); // pháp bảo
   const artDef = await loadJSON('data/art/sprites.json');
   await Promise.all([loadSprites(artDef), loadNpcArt(artDef.npc)]); // hình quái, hiệu ứng, icon, NPC (thử nghiệm)
   const progress = createProgress(userId, gp);
@@ -70,9 +72,10 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   gather.seed(me);
   const SLOTS = ['mat-na', 'trang-phuc', 'vu-khi', 'nhan', 'canh', 'phap-tuong', 'linh-thu', 'day-chuyen'];
   // Trang bị đang tính chỉ số: đồ luyện ra đang mặc + đồ Kho đang mặc đã thức tỉnh
-  const wornGear = () => [...progress.equipped(),
+  let treasure = null; // pháp bảo (treasure.js) — tạo sau barrage
+  const wornGear = () => [...progress.equipped(), ...(treasure ? treasure.worn() : []),
     ...SLOTS.map((sl) => bag.equippedItem(sl)).filter(Boolean).map((it) => progress.state.itemAw[it.id]).filter((a) => a?.tier)];
-  const itemDefs = new Map([...mats.materials, ...pills.pills, ...qItems.items, ...recipes.items, ...premium.items].map((d) => [d.id, d]));
+  const itemDefs = new Map([...mats.materials, ...pills.pills, ...qItems.items, ...recipes.items, ...premium.items, ...pbDef.items].map((d) => [d.id, d]));
   const S = gp.skills, PL = gp.player;
 
   let ps = null; // chỉ số hiện tại
@@ -159,7 +162,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     const got = rollLoot(m);
     for (const g of got) gain(g.id, g.n);
     if (rank === 'boss' && !progress.state.bosses.includes(m.def.id)) progress.state.bosses.push(m.def.id);
-    tame.tryTame(m); cards.onKill(m); // 0,5% quái quy phục làm thú cưng · rơi Thần Phù
+    tame.tryTame(m); cards.onKill(m); treasure.onKill(m); // 0,5% quái quy phục làm thú cưng · rơi Thần Phù
     quests.emit('kill', { id: m.def.id, rank });
     say(m.x, m.y - m.r * 3, `+${exp} tu vi · +${stone} Linh thạch · +${gold} Vàng`, '#9fe8ff');
     if (got.length) toast(`Nhặt: ${got.map((g) => g.label).join(', ')}`, 1800);
@@ -218,7 +221,9 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const cards = createCards({ def: dvDef, tiers: awaken.tiers, progress, stageOk: (id) => craft.stageOk(id), toast, play });
   const dv = createDaoVan({ def: dvDef, bag, cards });
   const barrage = createBarrage({ dv, me, mobs, map, bolts, play, strike, toast, dead: () => dead, maxHp: () => ps.hp, heal: (n) => { hp = Math.min(ps.hp, hp + n); } });
-  const skills = createSkills({ S, me, mobs, map, pt, cds, toast, say, play, fx, bolts, strike, target, buffs, recompute, mods: dv.mods, fire: barrage.fire, maybeEcho: barrage.maybeEcho,
+  treasure = createTreasure({ def: pbDef, S, progress, craft, awaken, barrage, mobs, me, map, buffs, recompute, target, play, say, toast, heOf: dv.heOf,
+    stageOk: (id) => craft.stageOk(id), now: () => now, maxHp: () => ps.hp, heal: (n) => { hp = Math.min(ps.hp, hp + n); } });
+  const skills = createSkills({ useTreasure: (q) => treasure.use(q), S, me, mobs, map, pt, cds, toast, say, play, fx, bolts, strike, target, buffs, recompute, mods: dv.mods, fire: barrage.fire, maybeEcho: barrage.maybeEcho,
     get bar() { return bar; }, heal: (n) => { hp = Math.min(ps.hp, hp + n); say(me.x, me.y - HEAD, `+${Math.round(n)} khí huyết`, '#5dff7a', true); },
     maxHp: () => ps.hp, now: () => now, dead: () => dead,
     summonPet() { const a = bag.equippedItem('linh-thu')?.art || progress.equipped().find((x) => x.slot === 'linh-thu')?.art, f = a && artFile(a); // hình linh thú đang mặc
@@ -330,9 +335,10 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const inv = createInventory({ recipes: { pills: pills.pills, blanks: blanks.blanks, skills: cp.skills }, info, progress, bag, craft, itemDefs, awaken, gp, art: (a) => artInfo(a)?.file || artFile(a), icon: iconUrl, fallbackIcon: placeholderIcon,
     onLook, recompute, usePill, breakthrough: () => breakthrough(), btPills: new Set(realms.realms.filter((r) => r.breakthrough).map((r) => r.breakthrough.pill)), openCultivate: (tab) => views.openCultivate(tab) });
   const stageName = (id) => gp.player.stages.find((x) => x.id === id)?.name || id;
-  const bar = createSkillBar({ hud, S, gp, progress, pt, cds, slotItem: (s) => inv.slotItem(s), icon: iconUrl, fxIcon: fxIconUrl, loadout, stageName });
+  const bar = createSkillBar({ hud, S, gp, progress, pt, cds, slotItem: (s) => inv.slotItem(s), icon: iconUrl, fxIcon: fxIconUrl, loadout, stageName, treasure: () => treasure.view() });
   function itemAction(key, action) {
-    const r = tame.isPet(key) ? tame.act(key, action) : cards.isCard(key) ? cards.act(key, action) : inv.act(key, action); // thú cưng / Thần Phù / đồ khác
+    const r = tame.isPet(key) ? tame.act(key, action) : cards.isCard(key) ? cards.act(key, action) : treasure.isTreasure(key) ? treasure.act(key, action)
+      : action === 'open' ? treasure.openBlank(key.slice(5)) : inv.act(key, action); // thú cưng / Thần Phù / pháp bảo / mở phôi / đồ khác
     if (r && cards.isCard(key)) recompute();
     if (r && typeof r === 'object') { toast(r.msg, 1600); if (r.event) quests.emit(...r.event); } else if (r) toast(r, 1500);
     progress.changed();
@@ -354,7 +360,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     wallet, life, // tiền tệ (Kho / Vạn Bảo Lâu) + thọ nguyên
     reincarnate() { progress.reset(); life.reborn(); progress.flush(); }, // tọa hóa → chuyển thế: xoá tiến trình (main.js xoá thêm Kho rồi tải lại)
     stunned: () => now < stunUntil,
-    _debug: { me, map, progress, mobs, voids, mdef: monDef, bag, gather, npcs, die, tame, dv, cards, bolts, get hp() { return hp; }, get ps() { return ps; } }, // chỉ cho kiểm thử (?debug)
+    _debug: { me, map, progress, mobs, voids, mdef: monDef, bag, gather, npcs, die, tame, dv, cards, bolts, get treasure() { return treasure; }, cds, get hp() { return hp; }, get ps() { return ps; } }, // chỉ cho kiểm thử (?debug)
     speed: () => buffs.speed?.mul || null,
     toggleAuto() { if (dead) return; auto = !auto; autoDir = null; autoPlay.reset(); hud.setActive('auto', auto); toast(auto ? 'Tự động đánh: bật' : 'Tự động đánh: tắt', 1000); },
     healPill: () => usePill(HEAL_PILL), autoDir: () => (auto ? autoDir : null),
@@ -362,7 +368,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     statValue: views.statValue, openQuests: views.openQuests, openCultivate: views.openCultivate,
     forgedLook,
     setDock(d) { views.refreshDock = d.refresh; },
-    bagEntries: () => [...inv.entries(), ...tame.entries(), ...cards.entries(dv.mods())], slotItem: inv.slotItem, slotCandidates: inv.slotCandidates, itemAction,
+    bagEntries: () => [...inv.entries(), ...tame.entries(), ...cards.entries(dv.mods()), ...treasure.entries()], slotItem: inv.slotItem, slotCandidates: inv.slotCandidates, itemAction,
     openShop() { if (!map.safeAt(me.x, me.y)) return toast(`${shop.name} ở ${map.town?.name || 'trong thành'} — hãy vào thành`, 1800); views.openShop(); },
     onProp: (id) => { const f = { 'kho-hang': () => views.openShop(), 'lo-luyen-dan': () => views.openCultivate('dan'), 'te-dan': () => views.openCultivate('realm') }[id]; f?.(); return !!f; }, // chạm công trình
     realmName: () => progress.stageDef.name, gp, grantFull: (gift) => grantFull({ progress, wallet, gift, mats, pills, recipes, shop, blanks }), grantGod: (gift) => { const n = grantGod({ progress, bag, awaken, gp, mdef: monDef, gift }); recompute(); return n; }, // mã thử 'full' // gp: thông số chơi thử (bảng xếp hạng dùng trọng số lực chiến)

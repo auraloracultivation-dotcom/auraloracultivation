@@ -760,6 +760,7 @@
    "van-kiem",
    "hac-dong",
    "phuong-hoang",
+   "phap-bao",
    "phap-tuong",
    "dan-duoc"
   ],
@@ -773,7 +774,15 @@
    "dan-duoc",
    "luot"
   ],
-  "_ghi_chu_23_10": "Kỹ năng người chơi (chủ dự án 23/10): ô kỹ năng tự xếp — người chơi chọn kỹ năng nào vào ô 1.._slots. kind: bolt (đạn bay, pierce = xuyên, splash_px = nổ lan), strike (đánh tại mục tiêu, radius_px), area_self (quanh mình), heal, buff, toggle (pháp tướng), pill (đan). icon = [mã hiệu ứng, khung]. Hiệu ứng v.* cắt từ tấm chủ dự án (tools/fx_sheets.py). Số TẠM."
+  "_ghi_chu_23_10": "Kỹ năng người chơi (chủ dự án 23/10): ô kỹ năng tự xếp — người chơi chọn kỹ năng nào vào ô 1.._slots. kind: bolt (đạn bay, pierce = xuyên, splash_px = nổ lan), strike (đánh tại mục tiêu, radius_px), area_self (quanh mình), heal, buff, toggle (pháp tướng), pill (đan). icon = [mã hiệu ứng, khung]. Hiệu ứng v.* cắt từ tấm chủ dự án (tools/fx_sheets.py). Số TẠM.",
+  "phap-bao": {
+   "name": "Pháp Bảo",
+   "kind": "treasure",
+   "unlock": "tc_so",
+   "mp": 20,
+   "cd_s": 10,
+   "desc": "Kích hoạt pháp bảo đang đeo (Kho → Pháp Bảo). Chiêu bắn đạn ăn theo Đạo Vận."
+  }
  },
  "awaken": {
   "_ghi_chu": "Lab v3.2 — thức tỉnh TỪNG DÒNG: mỗi lần bấm thêm 1 dòng, màu (phẩm) của dòng bốc ngẫu nhiên theo tỷ lệ phẩm Lab (data/equipment/awaken.json → gearQ). Mỗi món có giới hạn dòng ẩn 1–10 (bốc lúc thức tỉnh lần đầu, KHÔNG báo trước); đủ giới hạn thì nút thức tỉnh tắt. Giá (Linh thạch) tăng theo số thứ tự dòng — số tạm.",

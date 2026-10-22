@@ -57,6 +57,7 @@ export function createInventory({ recipes, info, progress, bag, craft, itemDefs,
     const d = itemDefs.get(id);
     const actions = [];
     if (gp.pills[id]) actions.push({ id: 'use', label: 'Dùng' });
+    if (d.opens) actions.push({ id: 'open', label: 'Luyện hóa' }); // phôi pháp bảo (treasure.js)
     if (btPills.has(id)) actions.push({ id: 'breakthrough', label: 'Dùng để đột phá' }); // đan đột phá: dùng ngay trong kho
     const rc = d.teaches && recipeOf(d.teaches);
     if (rc) actions.push({ id: 'craft', label: rc.label + (rc.rate ? ` (${Math.round(rc.rate * 100)}%)` : ''),

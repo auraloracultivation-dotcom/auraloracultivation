@@ -45,7 +45,21 @@ Chủ dự án muốn chất My Heroes: chọn đúng bộ + hệ + thẻ thì c
 
 ## Lộ trình tiếp (Tiên Nghịch × My Heroes, chỉ lấy hệ thống, không chép tên hay truyện)
 1. ✅ Đạo Vận: bộ ngũ hành + Thần Phù.
-2. Pháp bảo: ô riêng, luyện từ phôi, thức tỉnh random, có chiêu kích hoạt, ôn dưỡng lên cấp.
+2. ✅ **Pháp bảo** (`data/build/phap-bao.json`, `src/game/treasure.js`):
+   - **Phôi Pháp Bảo**: Vạn Bảo Lâu bán 3000 LT, tối đa 3 phôi/ngày, từ Trúc Cơ. Cũng rơi từ tinh anh 0,4%, boss 4%, Âm Hư chắc chắn.
+   - **Luyện hóa** phôi ra một pháp bảo **chưa nhận chủ**. **Nhận chủ** (800 LT) mới biết là pháp bảo nào.
+   - **8 pháp bảo**:
+     - Thanh Phong Phi Kiếm: kiếm toả tròn rồi tự đuổi quái.
+     - U Hồn Phiên: u hồn xoay quanh người.
+     - Thương Hải Châu: quét quạt thủy tiễn.
+     - Xích Diệm Hồ Lô: phun hỏa đạn liên tục.
+     - Thanh Mộc Đỉnh: hồi máu + bắn lá.
+     - Trấn Sơn Ấn: ấn núi giáng xuống, choáng.
+     - Lôi Linh Châu: lôi bạo.
+     - Hộ Thân Chung: phòng thủ ×2,5 + chấn quanh mình.
+   - Đeo vào ô pháp bảo, rồi xếp kỹ năng **Pháp Bảo** vào ô kỹ năng để dùng. Chiêu bắn đạn đi qua `barrage.fire` nên ăn theo Đạo Vận.
+   - **Ôn dưỡng** cấp 1→10 bằng Linh thạch: sát thương +15% mỗi cấp, số đạn / hồn / tia +1 mỗi 2 cấp.
+   - **Thức tỉnh** dòng chỉ số random như trang bị, cộng vào chỉ số khi đang đeo.
 3. Cấm chế và trận pháp: đặt bẫy trên đất, phong ấn.
 4. Hồn phiên: luyện hồn quái thu phục để thú cưng mạnh hơn.
 5. Chuyển kết quả có giá trị lên máy chủ (Mốc 3–4): máy chủ chỉ kiểm hợp lý, không mô phỏng từng khung hình.
