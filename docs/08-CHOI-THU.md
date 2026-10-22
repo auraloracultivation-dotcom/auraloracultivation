@@ -21,6 +21,14 @@ song song với việc hoàn thành Mốc 1. Đây là **bản chơi thử**, ch
 - **Bảng xếp hạng** (nút cúp trên HUD, `src/ui/rank.js`): 3 bảng Cảnh giới / Lực chiến / Trảm Âm Hư, hạng của mình, chạm tên xem chỉ số + hình trang phục.
   Máy gửi ảnh chụp mỗi phút hoặc khi lên tầng (`src/game/rank.js`, lực chiến = trọng số ở `data/gameplay.json → luc_chien`). Bảng riêng trên máy chủ
   (migration 0006) — không đụng bảng nhân vật, Mốc 4 máy chủ tự ghi vào cùng bảng nên không phải làm lại. Hiện người chơi sửa máy được → chỉ để tham khảo.
+- **Chỉnh 23/10 (bản 2) — chống "4 tiếng là hết game"**: người chơi **tối đa Hóa Thần Hậu kỳ** (Anh Biến / Vấn Đỉnh chỉ có quái, vùng Đen / Tím là tường cuối game).
+  **Từ Nguyên Anh Hậu kỳ, quái mỗi tầng mạnh gấp đôi tầng trước** (HP + Công ×2), còn người chơi chỉ ×1,4 mỗi tầng → càng lên càng phải dựa trang bị, đan, pháp tướng.
+  Hạ quái thường Hóa Thần Hậu kỳ ≈ 16 đòn, bị đánh ≈ 8 đòn là gục (trước: vài giây). Tu vi cần tăng mạnh: ≈ 9.700 quái thường để từ Luyện Khí 1 lên Hóa Thần Hậu kỳ.
+  Boss HP còn ×1,8 (thay vì ×3) để giữ luật boss cảnh giới dưới < quái thường cảnh giới trên. Tất cả số ở đầu `tools/gen_balance.py`.
+- **Tên phẩm trang bị / dòng thức tỉnh** (`data/equipment/awaken.json`): Phàm (lục) → Nhân (lam) → Địa (tím) → Thiên (cam) → Tiên (vàng) → Thần (đỏ)
+  → **Tiên Nghịch** (cao nhất, chữ đen quầng đỏ huyền bí, viền ô đỏ thở chậm).
+- **Mã thử `lkjhg`** (Cài đặt → Nhập mã): như mã cũ + 999 mỗi nguyên liệu, 99 mỗi đan, mọi đan phương / công thức / bí kíp, đồ cửa hàng,
+  10 triệu Linh thạch, 1 phôi mỗi ô (`src/game/testgift.js`). Mã ngắn dò được từ dấu SHA-256 → **xoá khỏi data/codes.json trước khi phát hành thật**.
 - Số lớn hiện gọn: 123,5k · 4,57tr · 2,3 tỷ (`src/core/format.js`).
 
 ## Đã có trong game (thử nghiệm)

@@ -54,36 +54,55 @@ STEP_LK = {'hp': 1.25, 'atk': 1.15, 'def': 1.10}
 STEP_IN = {'hp': 1.30, 'atk': 1.18, 'def': 1.12}
 JUMP = {'hp': 3.6, 'atk': 1.75, 'def': 1.40}
 BASE = {'hp': 110, 'atk': 13, 'def': 8}  # Luyện Khí tầng 1 (giữ như Yêu Hồ Sơ cũ)
-RANK_MUL = {'thuong': {'hp': 1, 'atk': 1, 'def': 1}, 'elite': {'hp': 2.2, 'atk': 1.25, 'def': 1.12},
-            'boss': {'hp': 3.0, 'atk': 1.5, 'def': 1.25}}
+# Chủ dự án 23/10 (bản 2): TỪ Nguyên Anh Hậu kỳ trở đi mỗi tầng quái mạnh GẤP ĐÔI tầng trước (HT Sơ = 2× NA Hậu, HT Trung = 2× HT Sơ…)
+LATE_FROM = 'na_hau'
+STEP_LATE = {'hp': 2.0, 'atk': 2.0, 'def': 1.15}   # trong một đại cảnh giới
+JUMP_LATE = {'hp': 2.0, 'atk': 2.0, 'def': 1.40}   # sang đại cảnh giới mới (Thủ nhảy nhiều hơn để giữ luật boss)
+# boss HP 1.8 (không phải 3): vì quái chỉ ×2 mỗi tầng, boss Hậu kỳ (kể cả lệch +5%) vẫn phải yếu hơn quái thường Sơ kỳ cảnh giới sau
+RANK_MUL = {'thuong': {'hp': 1, 'atk': 1, 'def': 1}, 'elite': {'hp': 1.5, 'atk': 1.25, 'def': 1.12},
+            'boss': {'hp': 1.8, 'atk': 1.5, 'def': 1.25}}
 HUVO_MUL = {'hp': 1.2, 'atk': 1.65, 'def': 1.35}  # Âm Hư: so với "quái thường" cảnh giới Âm Hư (đã nhảy 1 bậc trên Vấn Đỉnh Hậu kỳ)
 VARIANCE = 0.05  # quái sinh ra lệch ngẫu nhiên ±5%
 
 stage_stats = {}
 cur = dict(BASE)
 prev_realm = None
+late = False
 for sid, sname, rid, first in stages:
     if prev_realm is not None:
-        step = JUMP if rid != prev_realm else (STEP_LK if rid == 'luyen-khi' else STEP_IN)
+        if late: step = JUMP_LATE if rid != prev_realm else STEP_LATE
+        else: step = JUMP if rid != prev_realm else (STEP_LK if rid == 'luyen-khi' else STEP_IN)
         cur = {k: cur[k] * step[k] for k in cur}
     stage_stats[sid] = {k: round(v) for k, v in cur.items()}
     prev_realm = rid
-cur = {k: cur[k] * JUMP[k] for k in cur}
+    late = late or sid == LATE_FROM
+cur = {k: cur[k] * JUMP_LATE[k] for k in cur}
 stage_stats['am_hu'] = {k: round(v) for k, v in cur.items()}
 
 # ---------- Người chơi: tính ngược từ quái thường cùng tầng ----------
 DEF_K, MIN_RATIO = 150, 0.05
 def red(d, pen=0.025): return d / (d + DEF_K) * (1 - pen)
 HITS_TO_KILL, HITS_TO_DIE = 4, 18
+# Người chơi tối đa Hóa Thần Hậu kỳ (chủ dự án 23/10). Anh Biến, Vấn Đỉnh: chỉ có quái (vùng Đen / Tím = tường cuối game).
+PLAYER_MAX = 'ht_hau'
+# Sau Nguyên Anh Hậu kỳ người chơi chỉ mạnh thêm ×1.4 mỗi tầng (quái ×2) → càng lên càng khó, cần trang bị + đan
+PLAYER_LATE = {'linh': 1.4, 'hp': 1.4, 'def': 1.15}
+# Tu vi: số quái thường cần hạ mỗi tầng tăng ×1.28 (≈ 1 tháng chơi tới Hóa Thần Hậu kỳ, không phải vài giờ)
+def kills_at(i): return round(12 * 1.28 ** i)
 player = []
 for i, (sid, sname, rid, first) in enumerate(stages):
     m = stage_stats[sid]
-    linh = m['hp'] / (HITS_TO_KILL * 0.825 * (1 - red(m['def'])))
-    pdef = m['def'] * 0.85
-    hp = HITS_TO_DIE * m['atk'] * 0.8 * (1 - red(pdef, 0))
-    kills = 10 + 3 * i
-    player.append({'id': sid, 'name': sname, 'hp': round(hp), 'linh': round(linh), 'def': round(pdef),
-                   'mp': 100 + 15 * i, 'exp_need': round(m['hp'] / 10 * kills)})
+    if player and player[-1]['id'] in (LATE_FROM,) or (player and player[-1].get('_late')):
+        q = player[-1]
+        p = {'id': sid, 'name': sname, 'hp': round(q['hp'] * PLAYER_LATE['hp']), 'linh': round(q['linh'] * PLAYER_LATE['linh']),
+             'def': round(q['def'] * PLAYER_LATE['def']), '_late': True}
+    else:
+        p = {'id': sid, 'name': sname, 'hp': round(HITS_TO_DIE * m['atk'] * 0.8 * (1 - red(m['def'] * 0.85, 0))),
+             'linh': round(m['hp'] / (HITS_TO_KILL * 0.825 * (1 - red(m['def'])))), 'def': round(m['def'] * 0.85)}
+    p.update({'mp': 100 + 15 * i, 'exp_need': round(m['hp'] / 10 * kills_at(i))})
+    player.append(p)
+    if sid == PLAYER_MAX: break
+for p in player: p.pop('_late', None)
 
 # ---------- Ghi realms.json ----------
 rj = load('data/realms.json')
@@ -94,6 +113,7 @@ for rid, name, short, zone, code in REALMS:
          'stages': [f'lk{i}' for i in range(1, 11)] if code == 'lk' else [k for k, _ in KY],
          'unlock_skill': UNLOCK[rid], 'zone': zone}
     if rid in BREAK: r['breakthrough'] = {'rate': BREAK[rid][0], 'pill': BREAK[rid][1]}
+    if rid in ('anh-bien', 'van-dinh'): r['player_locked'] = True; r['_ghi_chu'] = 'Người chơi tạm tối đa Hóa Thần Hậu kỳ (23/10) — chỉ có quái'
     rj['realms'].append(r)
 rj['realms'].append({'id': 'realm.am-hu', 'name': 'Âm Hư', 'short': 'AH', 'stages': [], 'unlock_skill': 'chua-co',
                      'zone': 'huvo', 'monster_only': True,
@@ -108,12 +128,14 @@ gp = load('data/gameplay.json')
 gp['player']['_cach_tinh'] = ('Sinh bằng tools/gen_balance.py: Linh lực đủ hạ quái thường cùng tầng trong ~4 đòn, '
                               'HP chịu ~18 đòn của nó. Elite/Boss cần đan + trang bị. Đột phá đại cảnh giới = nhảy vọt sức mạnh.')
 gp['player']['stages'] = player
-gp['major_realm_first_stage'] = {sid: f'realm.{rid}' for sid, _, rid, first in stages if first}
+pids = {p['id'] for p in player}
+gp['major_realm_first_stage'] = {sid: f'realm.{rid}' for sid, _, rid, first in stages if first and sid in pids}
+gp['player']['max_stage'] = PLAYER_MAX
 gq = {}
 n = len(stages)
 for i, (sid, *_r) in enumerate(stages):
-    if sid in ('lk1', 'lk5', 'lk10') or sid.endswith('_so') or sid.endswith('_hau'):
-        gq[sid] = round(0.15 + 0.85 * i / (n - 1), 2)
+    if sid in pids and (sid in ('lk1', 'lk5', 'lk10') or sid.endswith('_so') or sid.endswith('_hau')):
+        gq[sid] = round(0.15 + 0.85 * i / (len(player) - 1), 2)
 gp['gearQ_by_stage'] = gq
 mon = gp['monster']
 mon.pop('stone_per_hp', None)
@@ -240,7 +262,11 @@ for a, b in zip(order, order[1:] + ['am-hu']):
     for k in ('hp', 'atk', 'def'):
         if max(m[k][1] for m in top) > min(m[k][0] for m in nxt): bad.append((a, b, k))
 print('Vi phạm luật:', bad or 'không')
+tot = 0
+for i, p in enumerate(player):
+    tot += kills_at(i)
+print('Tổng số quái thường cần hạ tới', player[-1]['name'], '≈', f'{tot:,}')
 for p in player[::3] + [player[-1]]:
     print(f"{p['name']:<22} HP {p['hp']:>9,}  Linh {p['linh']:>12,}  Thủ {p['def']:>4}  Tu vi cần {p['exp_need']:>12,}")
-for sid in ('lk1', 'lk10', 'tc_so', 'vd_hau', 'am_hu'):
+for sid in ('lk1', 'lk10', 'tc_so', 'na_hau', 'ht_so', 'ht_trung', 'ht_hau', 'vd_hau', 'am_hu'):
     print(sid, stage_stats[sid])

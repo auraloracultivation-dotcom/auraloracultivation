@@ -101,7 +101,9 @@
    "breakthrough": {
     "rate": 0.2,
     "pill": "item.dan.anh-bien.001"
-   }
+   },
+   "player_locked": true,
+   "_ghi_chu": "Người chơi tạm tối đa Hóa Thần Hậu kỳ (23/10) — chỉ có quái"
   },
   {
    "id": "realm.van-dinh",
@@ -117,7 +119,9 @@
    "breakthrough": {
     "rate": 0.12,
     "pill": "item.dan.van-dinh.001"
-   }
+   },
+   "player_locked": true,
+   "_ghi_chu": "Người chơi tạm tối đa Hóa Thần Hậu kỳ (23/10) — chỉ có quái"
   },
   {
    "id": "realm.am-hu",
@@ -150,15 +154,9 @@
   "na_so": 1436.74,
   "na_trung": 1945.43,
   "na_hau": 2639.71,
-  "ht_so": 10975.34,
-  "ht_trung": 15054.11,
-  "ht_hau": 20705.94,
-  "ab_so": 89808.0,
-  "ab_trung": 124885.49,
-  "ab_hau": 174215.37,
-  "vd_so": 781526.14,
-  "vd_trung": 1098060.51,
-  "vd_hau": 1544227.2
+  "ht_so": 3695.6,
+  "ht_trung": 5173.83,
+  "ht_hau": 7243.37
  },
  "breakthrough_rules": {
   "require": "đỉnh cảnh giới hiện tại + đủ đan đột phá",

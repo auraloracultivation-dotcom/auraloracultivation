@@ -128,7 +128,7 @@ async function boot() {
     const hex = await sha256(code.trim().toLowerCase());
     const c = codesDef.codes.find((x) => x.sha256 === hex);
     if (!c) throw new Error('Mã không đúng hoặc đã hết hạn.');
-    const n = bag.grantAll();
+    const n = bag.grantAll() + (c.grant === 'full' ? game.grantFull(c.gift) : 0); // 'full': thêm nguyên liệu, đan, phôi, Linh thạch
     return `${c.message}: ${n} vật phẩm vào Kho`;
   }
 

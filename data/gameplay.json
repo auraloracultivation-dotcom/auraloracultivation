@@ -25,7 +25,7 @@
     "linh": 35,
     "def": 7,
     "mp": 100,
-    "exp_need": 110
+    "exp_need": 132
    },
    {
     "id": "lk2",
@@ -34,7 +34,7 @@
     "linh": 44,
     "def": 8,
     "mp": 115,
-    "exp_need": 179
+    "exp_need": 207
    },
    {
     "id": "lk3",
@@ -43,7 +43,7 @@
     "linh": 56,
     "def": 8,
     "mp": 130,
-    "exp_need": 275
+    "exp_need": 344
    },
    {
     "id": "lk4",
@@ -52,7 +52,7 @@
     "linh": 70,
     "def": 9,
     "mp": 145,
-    "exp_need": 408
+    "exp_need": 538
    },
    {
     "id": "lk5",
@@ -61,7 +61,7 @@
     "linh": 88,
     "def": 10,
     "mp": 160,
-    "exp_need": 592
+    "exp_need": 861
    },
    {
     "id": "lk6",
@@ -70,7 +70,7 @@
     "linh": 110,
     "def": 11,
     "mp": 175,
-    "exp_need": 840
+    "exp_need": 1378
    },
    {
     "id": "lk7",
@@ -79,7 +79,7 @@
     "linh": 139,
     "def": 12,
     "mp": 190,
-    "exp_need": 1176
+    "exp_need": 2226
    },
    {
     "id": "lk8",
@@ -88,7 +88,7 @@
     "linh": 176,
     "def": 14,
     "mp": 205,
-    "exp_need": 1628
+    "exp_need": 3570
    },
    {
     "id": "lk9",
@@ -97,7 +97,7 @@
     "linh": 221,
     "def": 14,
     "mp": 220,
-    "exp_need": 2230
+    "exp_need": 5642
    },
    {
     "id": "lk10",
@@ -106,7 +106,7 @@
     "linh": 279,
     "def": 16,
     "mp": 235,
-    "exp_need": 3034
+    "exp_need": 9102
    },
    {
     "id": "tc_so",
@@ -115,7 +115,7 @@
     "linh": 1044,
     "def": 22,
     "mp": 250,
-    "exp_need": 11800
+    "exp_need": 41890
    },
    {
     "id": "tc_trung",
@@ -124,7 +124,7 @@
     "linh": 1388,
     "def": 26,
     "mp": 265,
-    "exp_need": 16495
+    "exp_need": 69432
    },
    {
     "id": "tc_hau",
@@ -133,7 +133,7 @@
     "linh": 1833,
     "def": 28,
     "mp": 280,
-    "exp_need": 22936
+    "exp_need": 115675
    },
    {
     "id": "kd_so",
@@ -142,7 +142,7 @@
     "linh": 7053,
     "def": 39,
     "mp": 295,
-    "exp_need": 87955
+    "exp_need": 533115
    },
    {
     "id": "kd_trung",
@@ -151,7 +151,7 @@
     "linh": 9441,
     "def": 44,
     "mp": 310,
-    "exp_need": 121347
+    "exp_need": 886768
    },
    {
     "id": "kd_hau",
@@ -160,7 +160,7 @@
     "linh": 12625,
     "def": 49,
     "mp": 325,
-    "exp_need": 166848
+    "exp_need": 1477363
    },
    {
     "id": "na_so",
@@ -169,7 +169,7 @@
     "linh": 50286,
     "def": 69,
     "mp": 340,
-    "exp_need": 633418
+    "exp_need": 6803783
    },
    {
     "id": "na_trung",
@@ -178,7 +178,7 @@
     "linh": 68090,
     "def": 77,
     "mp": 355,
-    "exp_need": 866035
+    "exp_need": 11329445
    },
    {
     "id": "na_hau",
@@ -187,115 +187,56 @@
     "linh": 92390,
     "def": 87,
     "mp": 370,
-    "exp_need": 1181216
+    "exp_need": 18844086
    },
    {
     "id": "ht_so",
     "name": "Hóa Thần Sơ kỳ",
-    "hp": 9211,
-    "linh": 384137,
-    "def": 122,
+    "hp": 8457,
+    "linh": 129346,
+    "def": 100,
     "mp": 385,
-    "exp_need": 4451721
+    "exp_need": 48245422
    },
    {
     "id": "ht_trung",
     "name": "Hóa Thần Trung kỳ",
-    "hp": 10317,
-    "linh": 526894,
-    "def": 136,
+    "hp": 11840,
+    "linh": 181084,
+    "def": 115,
     "mp": 400,
-    "exp_need": 6046362
+    "exp_need": 123511233
    },
    {
     "id": "ht_hau",
     "name": "Hóa Thần Hậu kỳ",
-    "hp": 11524,
-    "linh": 724708,
-    "def": 152,
+    "hp": 16576,
+    "linh": 253518,
+    "def": 132,
     "mp": 415,
-    "exp_need": 8197141
-   },
-   {
-    "id": "ab_so",
-    "name": "Anh Biến Sơ kỳ",
-    "hp": 16770,
-    "linh": 3143280,
-    "def": 213,
-    "mp": 430,
-    "exp_need": 30722438
-   },
-   {
-    "id": "ab_trung",
-    "name": "Anh Biến Trung kỳ",
-    "hp": 18492,
-    "linh": 4370992,
-    "def": 239,
-    "mp": 445,
-    "exp_need": 41515717
-   },
-   {
-    "id": "ab_hau",
-    "name": "Anh Biến Hậu kỳ",
-    "hp": 20315,
-    "linh": 6097538,
-    "def": 268,
-    "mp": 460,
-    "exp_need": 56019948
-   },
-   {
-    "id": "vd_so",
-    "name": "Vấn Đỉnh Sơ kỳ",
-    "hp": 28294,
-    "linh": 27353415,
-    "def": 375,
-    "mp": 475,
-    "exp_need": 209050037
-   },
-   {
-    "id": "vd_trung",
-    "name": "Vấn Đỉnh Trung kỳ",
-    "hp": 30746,
-    "linh": 38432118,
-    "def": 420,
-    "mp": 490,
-    "exp_need": 281356759
-   },
-   {
-    "id": "vd_hau",
-    "name": "Vấn Đỉnh Hậu kỳ",
-    "hp": 33348,
-    "linh": 54047952,
-    "def": 470,
-    "mp": 505,
-    "exp_need": 378233010
+    "exp_need": 316123788
    }
-  ]
+  ],
+  "max_stage": "ht_hau"
  },
  "major_realm_first_stage": {
   "tc_so": "realm.truc-co",
   "kd_so": "realm.ket-dan",
   "na_so": "realm.nguyen-anh",
-  "ht_so": "realm.hoa-than",
-  "ab_so": "realm.anh-bien",
-  "vd_so": "realm.van-dinh"
+  "ht_so": "realm.hoa-than"
  },
  "gearQ_by_stage": {
   "lk1": 0.15,
-  "lk5": 0.28,
-  "lk10": 0.43,
-  "tc_so": 0.46,
-  "tc_hau": 0.53,
-  "kd_so": 0.56,
-  "kd_hau": 0.62,
-  "na_so": 0.65,
-  "na_hau": 0.72,
-  "ht_so": 0.75,
-  "ht_hau": 0.81,
-  "ab_so": 0.84,
-  "ab_hau": 0.91,
-  "vd_so": 0.94,
-  "vd_hau": 1.0
+  "lk5": 0.31,
+  "lk10": 0.51,
+  "tc_so": 0.55,
+  "tc_hau": 0.64,
+  "kd_so": 0.68,
+  "kd_hau": 0.76,
+  "na_so": 0.8,
+  "na_hau": 0.88,
+  "ht_so": 0.92,
+  "ht_hau": 1.0
  },
  "monster": {
   "max_alive": 18,
