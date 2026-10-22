@@ -178,7 +178,15 @@ export function createMonsters({ gp, mdef, map }) {
     list.push(m);
     return m;
   }
+  // Bí cảnh (bicanh.js): sinh quái tầng `stage` tại (x, y); extra ghi đè (aggro, leash, nhân máu…)
+  function spawnAt(def, stage, x, y, extra = {}) {
+    const st = makeStats(def, stage), hpMul = extra.hpMul || 1;
+    const m = { uid: uid++, def, x, y, hx: x, hy: y, ...st, hp: Math.round(st.hp * hpMul), maxHp: Math.round(st.maxHp * hpMul),
+      r: P.radius_px[def.rank] || P.radius_px.thuong, state: 'chase', cd: 0, atkT: 0, moving: false, n: 0, stun: 0, facing: 1, wt: 0, tx: x, ty: y, hitT: 0, walkT: 0, ...extra };
+    delete m.hpMul; list.push(m);
+    return m;
+  }
   const removeVoid = (key) => { const i = list.findIndex((m) => m.voidKey === key && m.state !== 'dead'); if (i >= 0) list.splice(i, 1); };
 
-  return { list, update, addVoid, removeVoid, telegraph: mskills.telegraph, damage, nearest, within, distTo, rel, calmAll() { for (const m of list) if (m.state !== 'dead') { m.state = 'return'; m.cast = null; } } };
+  return { list, update, addVoid, removeVoid, spawnAt, telegraph: mskills.telegraph, damage, nearest, within, distTo, rel, calmAll() { for (const m of list) if (m.state !== 'dead') { m.state = 'return'; m.cast = null; } } };
 }

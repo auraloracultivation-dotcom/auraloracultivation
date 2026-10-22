@@ -55,19 +55,33 @@ export function createViews(o) {
   function openQuests() {
     showSheet({
       title: 'Nhiệm vụ', note: 'Thử nghiệm: tiến độ lưu trên máy này. "Hoàn thành tạm" dành cho NPC/địa điểm chưa có trong game.',
-      tabs: [{ id: 'active', name: 'Đang làm' }, { id: 'avail', name: 'Có thể nhận' }, { id: 'done', name: 'Đã xong' }],
+      tabs: [{ id: 'active', name: 'Đang làm' }, { id: 'avail', name: 'Có thể nhận' }, { id: 'done', name: 'Đã xong' }, { id: 'bc', name: 'Bí Cảnh' }],
       render(tab) {
+        if (tab === 'bc') return biCanhTab();
         const rows = tab === 'active' ? quests.active().map(({ q, a }) => questRow(q, a))
           : tab === 'avail' ? quests.available().map((q) => questRow(q, null))
             : quests.done().map((q) => `<div class="row done"><b>${E(q.title)}</b> <em>✓</em></div>`);
         return rows.join('') || '<p class="bag-empty">Trống</p>';
       },
-      onAction(act, arg) {
+      onAction(act, arg, close) {
+        if (act === 'bc-start') { const e = o.biCanh.start(); if (e) toast(e, 1800); else close(); return; }
+        if (act === 'bc-quit') { o.biCanh.quit(); return; }
         if (act === 'accept') quests.accept(arg);
         if (act === 'fake') { const [id, i] = arg.split('|'); quests.fakeGoal(id, +i); }
         if (act === 'claim') { const r = quests.claim(arg); if (r) { o.onReward(r); toast('Đã nhận thưởng nhiệm vụ', 1500); } }
       },
     });
+  }
+
+  // ---------- Bí cảnh (bicanh.js) ----------
+  function biCanhTab() {
+    const b = o.biCanh.panel(), d = b.def, R = d.reward;
+    const s = b.status;
+    return `<div class="row"><div class="row-h"><b>${E(b.name)}</b><em>Hôm nay còn ${b.tries}/${b.max} lượt</em></div>
+      <p>Đứng ngoài thành rồi bấm Bắt đầu: vòng cấm chế đỏ hiện quanh chỗ đứng, ${d.waves} đợt quái cảnh giới của bạn ùa vào (đợt ${d.elite_wave} có tinh anh, đợt ${d.boss_wave} có boss). Mỗi đợt ${d.wave_time_s} giây. Thua khi ngã xuống, ra khỏi vòng hoặc hết giờ.</p>
+      <p>Thưởng mỗi đợt qua: ${R.stone_per_wave} Linh thạch + ${R.gold_per_wave} Vàng. Qua đợt ${R.card_at.join(' / ')}: Thần Phù (càng sâu phẩm càng cao). Qua hết: Phôi Pháp Bảo + cơ hội đồ ngũ hành.</p>
+      <p>Đây là nơi khoe Đạo Vận: bộ ngũ hành + Thần Phù + pháp bảo càng hợp, quét quái càng nhanh.</p>
+      ${s ? `<p><b>Đang ở đợt ${s.wave}/${s.waves}</b> · còn ${s.left} giây · ${s.mobs} quái</p>${btn('bc-quit', '', 'Bỏ cuộc')}` : btn('bc-start', '', 'Bắt đầu', b.tries > 0)}</div>`;
   }
 
   // ---------- Tu luyện ----------

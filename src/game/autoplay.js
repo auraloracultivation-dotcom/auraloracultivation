@@ -4,17 +4,20 @@
 // Chỉ trả về hướng đi; cần điều khiển của người chơi luôn được ưu tiên (main.js). Số ở data/gameplay.json → auto.
 import { wrapDelta } from '../map/index.js';
 
-export function createAutoPlay({ me, mobs, gather, map, cfg, reach, canFly = () => false }) {
+// zone(): { x, y, r } khi đang ở bí cảnh — chỉ đánh quái trong vòng, không đi hái, không có gì thì về giữa vòng
+export function createAutoPlay({ me, mobs, gather, map, cfg, reach, canFly = () => false, zone = () => null }) {
   let goal = null, repick = 0, stuckT = 0, lx = me.x, ly = me.y, fly = false, flyT = 0;
   const skip = new Map(); // mục tiêu đang tạm bỏ → hết hạn lúc
   const rel = (o) => ({ dx: wrapDelta(o.x - me.x, map.width), dy: wrapDelta(o.y - me.y, map.height) });
-  const alive = (g) => g && (g.kind === 'mob' ? g.o.state !== 'dead' : gather.list.includes(g.o));
+  const alive = (g) => g && (g.kind === 'mob' ? g.o.state !== 'dead' : g.kind === 'spot' ? false : gather.list.includes(g.o));
   const free = (o, now) => !(skip.get(o) > now);
 
   function pick(now) {
     let best = null;
-    const m = mobs.nearest(me, cfg.search_px, (x) => free(x, now) && !x.void && !map.safeAt(x.x, x.y)); // không tự lao vào Âm Hư
+    const z = zone(), inZ = (o) => !z || Math.hypot(wrapDelta(o.x - z.x, map.width), wrapDelta(o.y - z.y, map.height)) < z.r;
+    const m = mobs.nearest(me, cfg.search_px, (x) => free(x, now) && !x.void && !map.safeAt(x.x, x.y) && inZ(x)); // không tự lao vào Âm Hư
     if (m) best = { kind: 'mob', o: m, d: mobs.distTo(m, me) };
+    if (z) return best || { kind: 'spot', o: { x: z.x, y: z.y }, d: 0 }; // bí cảnh: không hái, không có quái thì về giữa vòng
     if (!me.flying) for (const n of gather.list) { // đang bay thì không hái được
       if (!free(n, now)) continue;
       const r = rel(n), d = Math.hypot(r.dx, r.dy);
@@ -31,6 +34,7 @@ export function createAutoPlay({ me, mobs, gather, map, cfg, reach, canFly = () 
     if (fly) { flyT += dt; if (flyT > 1 && map.canStand(me.x, me.y, 6) && (!goal || flyT > 6 || mobs.distTo(goal.o, me) < reach * 2)) fly = false; }
     if (!goal) return fly ? { x: 0, y: 0, fly } : null;
     const { dx, dy } = rel(goal.o), d = Math.hypot(dx, dy) || 1;
+    if (goal.kind === 'spot' && d < 30) return { x: 0, y: 0, fly };
     if (goal.kind === 'mob' && d <= reach * 0.8) { stuckT = 0; lx = me.x; ly = me.y; return { x: 0, y: 0, fly }; } // đủ gần: đứng đánh
     const moved = Math.hypot(me.x - lx, me.y - ly);
     lx = me.x; ly = me.y;

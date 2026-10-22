@@ -1,0 +1,32 @@
+{
+ "_status": "test",
+ "_nguon": "Chủ dự án 23/10/2026 (trao toàn quyền) — kiểu dungeon My Heroes, chỗ để khoe build Đạo Vận.",
+ "_ghi_chu": "HUYẾT SÁT BÍ CẢNH: mở ở Nhiệm vụ → tab Bí Cảnh, phải đứng ngoài thành. Vòng cấm chế bán kính radius_px quanh chỗ đứng; 10 đợt quái tầng của người chơi ùa từ mép vòng vào. Hết đợt thì đợt sau (máu ×(1 + hp_per_wave × đợt)); đợt 5 thêm tinh anh, đợt 10 thêm boss. Thua khi: chết, ra khỏi vòng, hết giờ một đợt. Thưởng theo số đợt đã qua. Mỗi ngày (giờ VN) tries_per_day lượt. Code: src/game/bicanh.js.",
+ "name": "Huyết Sát Bí Cảnh",
+ "tries_per_day": 3,
+ "radius_px": 230,
+ "waves": 10,
+ "base_count": 6,
+ "per_wave": 2,
+ "hp_per_wave": 0.15,
+ "wave_time_s": 50,
+ "break_s": 2.5,
+ "elite_wave": 5,
+ "boss_wave": 10,
+ "reward": {
+  "stone_per_wave": 300,
+  "gold_per_wave": 800,
+  "card_at": [
+   3,
+   6,
+   9
+  ],
+  "card_min_tier": [
+   0,
+   2,
+   4
+  ],
+  "treasure_blank_at": 10,
+  "set_item_at": 10
+ }
+}
