@@ -3,8 +3,8 @@
   "_nguon": "Chủ dự án, 23/10/2026 (thay bản đề xuất Lab 21/10)",
   "_ghi_chu": "Thọ nguyên. Đơn vị năm; 1 ngày thật (giờ Việt Nam, qua 0h) = 1 năm tuổi, kể cả khi không vào game. Giờ lấy từ máy chủ (RPC server_time) để không chỉnh đồng hồ điện thoại được. Đột phá cộng thọ nguyên tối đa theo bảng gain; Trường Sinh Đan +2 thọ nguyên tối đa, mỗi ngày 1 viên. Tuổi chạm thọ nguyên tối đa = TỌA HÓA: nhân vật chết hẳn, tiến trình + kho bị xoá, chuyển thế làm lại từ đầu (chủ dự án chọn 23/10). Bản chơi thử: lưu localStorage (src/game/lifespan.js) — Mốc 4 máy chủ tự tính.",
   "tz_offset_hours": 7,
-  "start_age": 16,
-  "base_max": 60,
+  "start_age": 1,
+  "base_max": 100,
   "_ghi_chu_gain": "Thọ nguyên tối đa = base_max + tổng gain của mọi tầng đã đạt (tầng lk1 là mốc gốc). Đại cảnh giới gấp đôi mỗi bậc 10 → 20 → 40 → 80; Trung kỳ và Hậu kỳ mỗi tầng một nửa.",
   "gain": {
     "lk2": 1, "lk3": 1, "lk4": 1, "lk5": 1, "lk6": 1, "lk7": 1, "lk8": 1, "lk9": 1, "lk10": 1,
