@@ -5,7 +5,7 @@
 // Chỉ đọc trạng thái rồi gọi hud; mỗi khung hình chỉ cập nhật khi có thay đổi.
 const HEAL_PILL = 'item.dan.tieu-hoi-huyet.001';
 
-export function createSkillBar({ hud, S, gp, progress, pt, cds, slotItem, icon, fxIcon, loadout, stageName }) {
+export function createSkillBar({ hud, S, gp, progress, pt, cds, slotItem, icon, fxIcon, loadout, stageName, treasure = () => null }) {
   const last = {};
   const put = (key, val, fn) => { if (last[key] !== val) { last[key] = val; fn(); } };
 
@@ -22,6 +22,10 @@ export function createSkillBar({ hud, S, gp, progress, pt, cds, slotItem, icon, 
     if (id === 'phap-tuong') {
       const av = slotItem('phap-tuong');
       return { off: av ? null : 'chưa đeo pháp tướng (Kho → Trang bị)', art: av?.thumb || null, cd: [pt.cdLeft, pt.cdTotal], active: pt.active };
+    }
+    if (id === 'phap-bao') { // pháp bảo đang đeo (treasure.js)
+      const t = treasure();
+      return { off: lockMsg || (t ? null : 'chưa đeo pháp bảo (Kho → Pháp Bảo)'), art: !locked && t ? t.thumb : null, cd: [(cds[id] || 0) - now, t?.cd || s.cd_s] };
     }
     if (id === 'dan-duoc') {
       const n = progress.count(HEAL_PILL);

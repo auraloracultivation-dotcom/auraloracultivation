@@ -1,0 +1,182 @@
+{
+ "_status": "test",
+ "_nguon": "Chủ dự án 23/10/2026 (trao toàn quyền): hệ pháp bảo kiểu Tiên Nghịch × My Heroes. Claude thiết kế — tên riêng của Auralora, không lấy tên trong truyện.",
+ "_ghi_chu": "Pháp bảo: 1 ô riêng (mở ở unlock). Có được từ Phôi pháp bảo (Vạn Bảo Lâu / rơi từ tinh anh, boss, Âm Hư) — chưa biết là pháp bảo gì, phải NHẬN CHỦ (tốn Linh thạch) mới lộ. Đeo vào thì kỹ năng 'Pháp Bảo' (xếp vào ô kỹ năng) kích hoạt chiêu riêng. Chiêu bắn đạn đi qua Đạo Vận (barrage.js) nên ăn mọi hiệu ứng bộ + Thần Phù (bắn quạt, nảy, tách…). Ôn dưỡng lên cấp 1→10: sát thương +mul_per_lv mỗi cấp, số đạn +1 mỗi 2 cấp. Thức tỉnh dòng chỉ số như trang bị (random Lục→Đen). Code: src/game/treasure.js.",
+ "unlock": "tc_so",
+ "drop": {
+  "elite": 0.004,
+  "boss": 0.04,
+  "void": 1
+ },
+ "bind_cost": 800,
+ "max_lv": 10,
+ "lv_cost": [
+  0,
+  500,
+  1200,
+  2500,
+  5000,
+  9000,
+  15000,
+  25000,
+  40000,
+  65000,
+  100000
+ ],
+ "mul_per_lv": 0.15,
+ "dismantle_refund": 0.4,
+ "items": [
+  {
+   "id": "item.phapbao.phoi.001",
+   "name": "Phôi Pháp Bảo",
+   "cat": "khac",
+   "use": "Luyện hóa ra một pháp bảo ngẫu nhiên — phải Nhận chủ mới biết là gì",
+   "opens": "phap-bao"
+  }
+ ],
+ "list": [
+  {
+   "id": "pb.phi-kiem",
+   "name": "Thanh Phong Phi Kiếm",
+   "he": "Kim",
+   "kind": "ring_burst",
+   "mp": 20,
+   "cd_s": 10,
+   "mul": 1.2,
+   "n": 16,
+   "fx": "v.dan-kim",
+   "size": 20,
+   "icon": [
+    "v.dan-kim",
+    0
+   ],
+   "desc": "Tung {n} phi kiếm toả tròn quanh mình rồi tự đuổi quái"
+  },
+  {
+   "id": "pb.hon-phien",
+   "name": "U Hồn Phiên",
+   "he": "Ám",
+   "kind": "wisps",
+   "mp": 24,
+   "cd_s": 16,
+   "mul": 0.6,
+   "n": 6,
+   "s": 8,
+   "r": 34,
+   "icon": [
+    "v.dan-am",
+    0
+   ],
+   "desc": "Gọi {n} u hồn xoay quanh người {s} giây, chạm quái là cắn"
+  },
+  {
+   "id": "pb.thuong-hai-chau",
+   "name": "Thương Hải Châu",
+   "he": "Thủy",
+   "kind": "sweep",
+   "mp": 22,
+   "cd_s": 12,
+   "mul": 0.9,
+   "n": 20,
+   "s": 1.2,
+   "fx": "v.dan-thuy",
+   "size": 20,
+   "icon": [
+    "v.dan-thuy",
+    0
+   ],
+   "desc": "Quét {n} dòng thủy tiễn hình quạt trong {s} giây"
+  },
+  {
+   "id": "pb.xich-ho-lo",
+   "name": "Xích Diệm Hồ Lô",
+   "he": "Hỏa",
+   "kind": "stream",
+   "mp": 26,
+   "cd_s": 14,
+   "mul": 0.7,
+   "n": 30,
+   "s": 2.5,
+   "fx": "v.dan-hoa",
+   "size": 18,
+   "icon": [
+    "v.dan-hoa",
+    0
+   ],
+   "desc": "Hồ lô phun liên tục {n} hỏa đạn trong {s} giây"
+  },
+  {
+   "id": "pb.thanh-moc-dinh",
+   "name": "Thanh Mộc Đỉnh",
+   "he": "Mộc",
+   "kind": "field",
+   "mp": 24,
+   "cd_s": 20,
+   "mul": 0.5,
+   "n": 3,
+   "s": 6,
+   "heal": 0.04,
+   "icon": [
+    "v.moc-lien",
+    1
+   ],
+   "desc": "Đỉnh xanh {s} giây: mỗi giây hồi {heal%} khí huyết, tự bắn {n} lá mỗi 0,3 giây"
+  },
+  {
+   "id": "pb.tran-son-an",
+   "name": "Trấn Sơn Ấn",
+   "he": "Thổ",
+   "kind": "seal",
+   "mp": 30,
+   "cd_s": 15,
+   "mul": 4,
+   "r": 70,
+   "stun": 2,
+   "fx": "v.dia-thu",
+   "h": 90,
+   "icon": [
+    "v.dia-thu",
+    2
+   ],
+   "desc": "Ấn núi giáng xuống mục tiêu: sát thương lớn bán kính {r}, choáng {stun} giây"
+  },
+  {
+   "id": "pb.loi-linh-chau",
+   "name": "Lôi Linh Châu",
+   "he": "Kim",
+   "kind": "storm",
+   "mp": 28,
+   "cd_s": 16,
+   "mul": 1.4,
+   "n": 16,
+   "s": 4,
+   "r": 200,
+   "fx": "v.loi-tru",
+   "h": 70,
+   "icon": [
+    "v.loi-tru",
+    2
+   ],
+   "desc": "Lôi bạo {s} giây: {n} tia sét đánh quái quanh mình"
+  },
+  {
+   "id": "pb.ho-than-chung",
+   "name": "Hộ Thân Chung",
+   "he": "Thổ",
+   "kind": "shield",
+   "mp": 20,
+   "cd_s": 24,
+   "def_mul": 2.5,
+   "s": 6,
+   "r": 60,
+   "stun": 1,
+   "fx": "v.ho-the",
+   "h": 60,
+   "icon": [
+    "v.ho-the",
+    1
+   ],
+   "desc": "Chuông hộ thân: phòng thủ ×{def_mul} trong {s} giây, chấn choáng quái quanh mình"
+  }
+ ]
+}

@@ -91,7 +91,7 @@ export function createCraft({ progress, pills, blanks, awaken, skills, gp, owns 
     const cost = awakenCost(g);
     if (cost === null) return { ok: false, msg: 'Đã đạt giới hạn thức tỉnh' };
     if (progress.state.stone < cost) return { ok: false, msg: `Cần ${cost} Linh thạch` };
-    const reveal = !g.lines.length && g.uid; // phôi luyện: lần thức tỉnh đầu lộ hình ngẫu nhiên
+    const reveal = !g.lines.length && g.uid && g.slot; // phôi luyện: lần thức tỉnh đầu lộ hình ngẫu nhiên
     if (!g.cap) g.cap = rollCap(); // bốc giới hạn ẩn ở lần thức tỉnh đầu
     progress.addStone(-cost);
     g.spent += cost;
@@ -130,5 +130,5 @@ export function createCraft({ progress, pills, blanks, awaken, skills, gp, owns 
     return { ok: true, msg: `${s.name} lên cấp ${lv + 1}` };
   }
 
-  return { norm, dismantleRefund, brewPill, forgeBlank, awakenGear, awakenItem, dismantle, trainSkill, awakenCost, gearQ, pickInputs, stageOk };
+  return { awakenObj: awakenTarget, norm, dismantleRefund, brewPill, forgeBlank, awakenGear, awakenItem, dismantle, trainSkill, awakenCost, gearQ, pickInputs, stageOk };
 }
