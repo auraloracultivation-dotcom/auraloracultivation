@@ -810,10 +810,10 @@
   }
  ],
  "mask_default": {
-  "_ghi_chu": "Mặt nạ trên mặt khi bộ chưa chỉnh thẻ Mặt nạ ở Tủ Đồ: x theo bề ngang áo (cw), y = vị trí tâm theo phần đầu (0 = đỉnh hình, 1 = đường cắt cổ), s = bề ngang mặt nạ / cw, a = độ trong.",
-  "x": 0,
-  "y": 0.62,
-  "s": 0.5,
+  "_ghi_chu": "Mặt nạ trên mặt khi bộ chưa chỉnh thẻ Mặt nạ ở Tủ Đồ: x theo bề ngang áo (cw), y = vị trí tâm theo phần đầu (0 = đỉnh hình, 1 = đường cắt cổ), s = bề ngang mặt nạ / cw, a = độ trong. Chốt 23/10/2026 qua Tủ Đồ (chủ dự án): x 0,145 · y 0,66 · cỡ 0,66 · trong 1 — dùng cho mọi bộ.",
+  "x": 0.145,
+  "y": 0.66,
+  "s": 0.66,
   "a": 1
  }
 }
