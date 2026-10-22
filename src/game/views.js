@@ -187,11 +187,14 @@ export function createViews(o) {
     const d = itemDefs.get(s.id), n = s.stack || 1, isRecipe = !!d.teaches, owned = isRecipe && progress.count(s.id) > 0;
     const bought = st().shopDay?.date === today() ? (st().shopDay.n[s.id] || 0) : 0;
     const left = s.daily_limit ? s.daily_limit - bought : Infinity;
-    const can = !owned && left > 0 && st().stone >= s.price;
+    const stageOk = !s.min_stage || craft.stageOk(s.min_stage), itemsOk = !s.cost_items || progress.has(s.cost_items);
+    const can = !owned && left > 0 && st().stone >= s.price && stageOk && itemsOk;
+    const need = [s.min_stage && `<span class="${stageOk ? 'ok' : ''}">Cần ${E(stageName(s.min_stage))}</span>`,
+      ...(s.cost_items || []).map((i) => `<span class="${progress.count(i.id) >= i.count ? 'ok' : ''}">${E(itemDefs.get(i.id)?.name || i.id)} ${progress.count(i.id)}/${i.count}</span>`)].filter(Boolean).join(' · ');
     const note = isRecipe ? (owned ? '<em class="own yes">Đã có</em>' : '<em class="own">Chưa có</em>')
       : `<em>${s.daily_limit ? `Hôm nay còn ${left}/${s.daily_limit}` : `có ${progress.count(s.id)}`}</em>`;
     return `<div class="row"><div class="row-h"><b>${ico(s.id)}${E(d.name)}${n > 1 ? ` ×${n}` : ''}</b>${note}</div>
-      <p class="src">${E(o.info.effect(d))}</p>
+      <p class="src">${E(o.info.effect(d))}</p>${need && !owned ? `<p class="need">${need}</p>` : ''}
       ${owned ? '' : btn('buy', s.id, `Mua · ${s.price} LT`, can)}</div>`;
   }
   const SHOP_TABS = { dp: (d) => d.cat === 'dan-phuong', ct: (d) => d.cat === 'phap-khi', cp: (d) => d.cat === 'cong-phap', nl: (d) => !d.teaches };
@@ -207,6 +210,9 @@ export function createViews(o) {
         const s = shop.stock.find((x) => x.id === id), d = itemDefs.get(id);
         if (d.teaches && progress.count(id) > 0) return toast('Đã có trong kho', 1200);
         if (st().stone < s.price) return toast('Không đủ Linh thạch', 1200);
+        if (s.min_stage && !craft.stageOk(s.min_stage)) return toast(`Cần cảnh giới ${stageName(s.min_stage)}`, 1500);
+        if (s.cost_items && !progress.has(s.cost_items)) return toast('Thiếu vật phẩm đổi', 1500);
+        for (const i of s.cost_items || []) progress.take(i.id, i.count);
         if (st().shopDay?.date !== today()) st().shopDay = { date: today(), n: {} };
         if (s.daily_limit && (st().shopDay.n[id] || 0) >= s.daily_limit) return toast('Hết lượt mua hôm nay', 1200);
         progress.addStone(-s.price); progress.add(id, s.stack || 1);

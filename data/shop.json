@@ -11,14 +11,13 @@
   "nguyên liệu phổ thông (đắt)"
  ],
  "never_sells": [
-  "Hóa Thần Đan phương",
   "công thức Cánh/Pháp Tướng cao cấp",
   "Tinh Hồn Cổ",
   "phôi Đỏ+ sẵn"
  ],
  "name": "Vạn Bảo Lâu",
  "where": "Kho hàng trong Thanh Vân Thành (chạm vào, hoặc nút Tông môn khi đang ở trong thành)",
- "_ghi_chu_gia": "Giá (Linh thạch) là số TẠM Claude đặt — Lab chưa có. stack = số lượng mỗi lần mua. daily_limit = giới hạn mua mỗi ngày.",
+ "_ghi_chu_gia": "Giá (Linh thạch) là số TẠM Claude đặt — Lab chưa có. stack = số lượng mỗi lần mua. daily_limit = giới hạn mua mỗi ngày. min_stage = cảnh giới tối thiểu để mua; cost_items = vật phẩm phải nộp kèm (mất khi mua).",
  "stock": [
   {
    "id": "item.danphuong.tieu-hoi-huyet.001",
@@ -47,6 +46,22 @@
   {
    "id": "item.danphuong.nguyen-anh.001",
    "price": 3500
+  },
+  {
+   "id": "item.danphuong.hoa-than.001",
+   "price": 60000,
+   "min_stage": "na_hau",
+   "cost_items": [
+    {
+     "id": "item.dacbiet.hon-thu-tinh.001",
+     "count": 5
+    },
+    {
+     "id": "item.dacbiet.tinh-hon.001",
+     "count": 2
+    }
+   ],
+   "_ghi_chu": "Chủ dự án 23/10: bán nhưng khó — 60.000 Linh thạch + Nguyên Anh Hậu kỳ + 5 Hồn Thú Tinh (Vùng Trắng) + 2 Tinh Hồn (Xám Khói). Vẫn rơi từ boss Xám Than."
   },
   {
    "id": "item.congthuc.vu-khi.001",
