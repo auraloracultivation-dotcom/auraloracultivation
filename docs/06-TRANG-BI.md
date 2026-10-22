@@ -28,7 +28,7 @@ Danh sách 8 ô và thứ tự trên bảng Nhân vật: `data/equipment/slots.j
   Sinh tự động, **không sửa tay**; sửa tay đặt ở `data/equipment/overrides.json` (vd vũ khí ngược đầu: `"flip": true`).
 - Vật phẩm (`data/items/…`, mã `item.<nhóm>.<cấp>.<số>`) mang chỉ số, cấp, tên và trỏ tới hình:
   ```json
-  { "id": "item.mask.lam.001", "slot": "mat-na", "art": "art.mask.012", "name": "Hồ Diện", "tier": "lam", "stats": {} }
+  { "id": "item.mask.lam.001", "slot": "mat-na", "art": "art.mask.he.1", "name": "Hồ Diện", "tier": "lam", "stats": {} }
   ```
   Đổi hình một món chỉ cần đổi `art`; người chơi lưu ID vật phẩm nên không ảnh hưởng dữ liệu lưu.
 
