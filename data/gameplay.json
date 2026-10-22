@@ -625,5 +625,23 @@
   "stuck_s": 1.2,
   "skip_s": 10,
   "repick_s": 0.5
+ },
+ "luc_chien": {
+  "_ghi_chu": "Lực chiến (bảng xếp hạng) = tổng chỉ số × trọng số. Số TẠM, chỉnh thoải mái. src/game/rank.js",
+  "weights": {
+   "linh": 1,
+   "hp": 1,
+   "def": 8,
+   "mp": 0.5,
+   "xuyen": 20,
+   "chinh": 10,
+   "ne": 12,
+   "crit": 40,
+   "hut": 40,
+   "phan": 40,
+   "tocdanh": 15,
+   "tocchay": 5
+  },
+  "submit_every_s": 60
  }
 }

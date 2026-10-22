@@ -389,7 +389,8 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     bagEntries: inv.entries, slotItem: inv.slotItem, slotCandidates: inv.slotCandidates, itemAction,
     openShop() { if (!map.safeAt(me.x, me.y)) return toast(`${shop.name} ở ${map.town?.name || 'trong thành'} — hãy vào thành`, 1800); views.openShop(); },
     onProp: (id) => { const f = { 'kho-hang': () => views.openShop(), 'lo-luyen-dan': () => views.openCultivate('dan'), 'te-dan': () => views.openCultivate('realm') }[id]; f?.(); return !!f; }, // chạm công trình
-    realmName: () => progress.stageDef.name,
+    realmName: () => progress.stageDef.name, gp, // gp: thông số chơi thử (bảng xếp hạng dùng trọng số lực chiến)
+    rankInfo: () => ({ stageIndex: progress.state.stage, stageName: progress.stageDef.name, exp: progress.state.exp, stats: ps, voidKills: progress.state.voidKillCount || 0 }),
     markers: () => voids.markers(), // Âm Hư đang xuất hiện (chấm tím trên bản đồ)
   };
 }

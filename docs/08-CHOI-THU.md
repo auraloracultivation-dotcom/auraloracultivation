@@ -18,6 +18,9 @@ song song với việc hoàn thành Mốc 1. Đây là **bản chơi thử**, ch
   sống 15 phút rồi tan biến — ai không kịp đánh thì mất, ai lỡ đi ngang thì bị đánh. Lịch tính từ giờ máy chủ (RPC `server_time`) nên mọi người thấy
   cùng con, cùng chỗ, cùng lúc; hiện báo + chấm tím trên bản đồ (bản đồ nhỏ chỉ hướng). Số ở `monsters.json → void`.
   **Giới hạn**: máu Âm Hư chưa chung — mỗi máy đánh con của mình (Mốc 3 chuyển lên máy chủ).
+- **Bảng xếp hạng** (nút cúp trên HUD, `src/ui/rank.js`): 3 bảng Cảnh giới / Lực chiến / Trảm Âm Hư, hạng của mình, chạm tên xem chỉ số + hình trang phục.
+  Máy gửi ảnh chụp mỗi phút hoặc khi lên tầng (`src/game/rank.js`, lực chiến = trọng số ở `data/gameplay.json → luc_chien`). Bảng riêng trên máy chủ
+  (migration 0006) — không đụng bảng nhân vật, Mốc 4 máy chủ tự ghi vào cùng bảng nên không phải làm lại. Hiện người chơi sửa máy được → chỉ để tham khảo.
 - Số lớn hiện gọn: 123,5k · 4,57tr · 2,3 tỷ (`src/core/format.js`).
 
 ## Đã có trong game (thử nghiệm)

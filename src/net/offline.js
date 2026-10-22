@@ -19,6 +19,13 @@ export const savePosition = async () => null;
 export const respawnAtTown = async () => null;
 export const syncServerTime = async () => {};
 export const serverNow = () => Date.now();
+// Bảng xếp hạng chơi một mình: chỉ có mình
+let mine = null;
+const row = () => mine && { user_id: USER, name: 'Đạo hữu thử', stage_index: mine.stageIndex, stage_name: mine.stageName, exp: mine.exp,
+  power: mine.power, void_kills: mine.voidKills, stats: mine.stats, look: mine.look, source: 'client', updated_at: new Date().toISOString() };
+export const submitLeaderboard = async (p) => { mine = p; };
+export const fetchLeaderboard = async () => (mine ? [row()] : []);
+export const fetchMyRank = async () => (mine ? { rank: 1, row: row() } : null);
 
 export async function joinZone({ me, handlers }) {
   setTimeout(() => { handlers.onPresence({ [me.id]: [me] }); handlers.onOnline?.(1); }, 0);

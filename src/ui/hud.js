@@ -25,6 +25,7 @@ const MENU = [
   { id: 'skills', name: 'Đồ giám', icon: 'ky-nang' },
   { id: 'quests', name: 'Nhiệm vụ', icon: 'nhiem-vu' },
   { id: 'sect', name: 'Tông môn', icon: 'tong-mon' },
+  { id: 'rank', name: 'Bảng xếp hạng', icon: 'bxh' },
   { id: 'settings', name: 'Cài đặt', icon: 'cai-dat-v2' },
 ];
 const pct = (x, y, w, h) =>

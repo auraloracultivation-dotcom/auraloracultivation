@@ -58,6 +58,7 @@ export function createVoid({ mdef, mobs, map, progress, toast, me, serverNow = (
       if (m.void && m.state === 'dead' && !killed.has(m.voidKey)) {
         killed.add(m.voidKey);
         progress.state.voidKills = [...killed].slice(-30);
+        progress.state.voidKillCount = (progress.state.voidKillCount || 0) + 1; // tổng số Âm Hư đã trảm (bảng xếp hạng)
         progress.changed();
         toast(`Đã trảm ${m.def.name}! Âm Hư tan về hư vô`, 3000);
       }

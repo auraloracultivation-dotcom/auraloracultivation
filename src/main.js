@@ -4,14 +4,14 @@ import { createMap, wrapDelta } from './map/index.js';
 import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, setTextScale, loadRig, rigAttack, artInfo, renderPortrait, avatarFx } from './entity/index.js';
 import { createAudio } from './audio/index.js';
 import { createPhapTuong } from './combat/index.js';
-import { createGameplay } from './game/index.js';
+import { createGameplay, createRankReporter } from './game/index.js';
 
 // Luôn lấy code mới nhất (xem sw.js) — tránh lẫn code cũ với dữ liệu mới sau mỗi lần cập nhật
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 import {
   showLoading, showLogin, shouldForgetSession, showCreateCharacter, showNewPassword,
   showConfirm, showFatal, toast, createHud, showCharacterPanel, showSettings, showWorldMap, drawRoundMap, createStatsDock, enableFastTap,
-  showBag, showItemActions, showSlotPicker, loadSettings, createTestBag,
+  showBag, showItemActions, showSlotPicker, loadSettings, createTestBag, showLeaderboard,
 } from './ui/index.js';
 
 async function boot() {
@@ -202,6 +202,8 @@ async function boot() {
       if (id === 'quests') game.openQuests();
       else if (id === 'skills') game.openCodex(); // nút sách = Đồ giám (Tu luyện vẫn mở ở Lò luyện đan / Tế đàn trong thành)
       else if (id === 'sect') game.openShop(); // Vạn Bảo Lâu (chỉ mở trong Thanh Vân Thành)
+      else if (id === 'rank') showLeaderboard({ myId: me.id, fetchBoard: (k) => net.fetchLeaderboard(k), fetchMine: (k) => net.fetchMyRank(k, me.id),
+        portrait: (look) => { try { return renderPortrait(look, { body: true, zoom: 2 }).toDataURL(); } catch { return null; } } }); // Bảng xếp hạng
       else return false;
       return true;
     },
@@ -251,6 +253,7 @@ async function boot() {
     zone.sendMove(me.x, me.y, false, false); hud.setToggle('bay', 0);
   }, loadJSON, map, me, hud, pt, toast, audio, userId: me.id, bag, onLook: () => onLookChanged(), onRealm: (r) => zone.setRealm(r), serverNow: net.serverNow });
   me.onAutoSwing = swing;
+  const rank = createRankReporter({ gp: game.gp, info: game.rankInfo, me, submit: net.submitLeaderboard }); // ảnh chụp tiến trình → bảng xếp hạng
   const dock = createStatsDock({ getValue: (id) => game.statValue(id) });
   game.setDock(dock);
   enableFastTap(); // nút bấm được cả khi tay kia đang giữ cần điều khiển
@@ -300,6 +303,7 @@ async function boot() {
     const mpNow = Math.round(pt.mp);
     if (mpNow !== shownMp) { shownMp = mpNow; hud.setBar('mp', mpNow, pt.max); }
     game.update(dt);
+    rank.tick(dt);
     others.update(dt);
     for (const tap of input.takeTaps()) { // chạm vào nhân vật khác → chọn / bỏ chọn
       const wx = cam.x + tap.x / screen.scale, wy = cam.y + tap.y / screen.scale;
