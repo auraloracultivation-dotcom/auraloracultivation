@@ -1,0 +1,62 @@
+[
+ {
+  "id": "art.necklace.he.1",
+  "file": "art.necklace.he.1.webp",
+  "w": 218,
+  "h": 191,
+  "anchor": [
+   109.0,
+   95.5
+  ]
+ },
+ {
+  "id": "art.necklace.he.2",
+  "file": "art.necklace.he.2.webp",
+  "w": 200,
+  "h": 191,
+  "anchor": [
+   100.0,
+   95.5
+  ]
+ },
+ {
+  "id": "art.necklace.he.3",
+  "file": "art.necklace.he.3.webp",
+  "w": 211,
+  "h": 190,
+  "anchor": [
+   105.5,
+   95.0
+  ]
+ },
+ {
+  "id": "art.necklace.he.4",
+  "file": "art.necklace.he.4.webp",
+  "w": 204,
+  "h": 191,
+  "anchor": [
+   102.0,
+   95.5
+  ]
+ },
+ {
+  "id": "art.necklace.he.5",
+  "file": "art.necklace.he.5.webp",
+  "w": 205,
+  "h": 190,
+  "anchor": [
+   102.5,
+   95.0
+  ]
+ },
+ {
+  "id": "art.necklace.he.6",
+  "file": "art.necklace.he.6.webp",
+  "w": 200,
+  "h": 189,
+  "anchor": [
+   100.0,
+   94.5
+  ]
+ }
+]

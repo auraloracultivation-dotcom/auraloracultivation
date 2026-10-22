@@ -71,6 +71,20 @@ export function drawSheet(ctx, id, anim, t, x, y, h, face = 1, { hue = 0, once =
   return true;
 }
 
+// Ảnh nhỏ (data URL) khung đứng đầu tiên của một tấm hình động — icon thú cưng trong Kho. null khi hình chưa tải xong.
+const thumbs = new Map();
+export function sheetThumb(id, hue = 0, size = 96) {
+  const key = `${id}|${hue}`;
+  if (thumbs.has(key)) return thumbs.get(key);
+  const s = DEF?.sheets[id];
+  if (!s) return null;
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const h = Math.min(size - 8, ((size - 8) * s.fh) / s.fw);
+  if (!drawSheet(c.getContext('2d'), id, 'idle', 0, size / 2, size - (size - h) / 2, h, 1, { hue })) return null;
+  const url = c.toDataURL(); thumbs.set(key, url);
+  return url;
+}
+
 // Hiệu ứng: p = tiến độ 0..1. anchor theo kiểu cắt (giữa hoặc đáy). rot: góc quay (rad).
 export function drawEffect(ctx, id, p, x, y, h, rot = 0, alpha = 1) {
   const s = DEF?.fx[id];

@@ -32,9 +32,9 @@ export async function loadRig(loadJSON) {
   const extra = {};
   try {
     const idx = await loadJSON('data/equipment/art.json');
-    for (const k of ['vu-khi', 'canh', 'phap-tuong']) for (const a of idx[k] || []) if (!def.art[a.id]) extra[a.id] = { ...a, grip: a.grip || a.anchor };
+    for (const k of ['vu-khi', 'canh', 'phap-tuong', 'mat-na']) for (const a of idx[k] || []) if (!def.art[a.id]) extra[a.id] = { ...a, grip: a.grip || a.anchor };
   } catch (e) { console.warn('Không nạp được kho hình chung', e); }
-  R = { art: def.art, sets: def.sets, setOfArt, img, open, built: {}, extra, loading: new Set() };
+  R = { art: def.art, sets: def.sets, setOfArt, img, open, built: {}, extra, loading: new Set(), mask: def.mask_default };
   return R;
 }
 export const rigReady = () => !!R;
@@ -114,7 +114,7 @@ function lazyArt(id) { // hình trong kho chung: nạp ảnh lần đầu, xong 
 export function knownLook(look) {
   if (!R || !look) return null;
   const out = {};
-  for (const k of ['outfit', 'weapon', 'wing', 'avatar']) {
+  for (const k of ['outfit', 'weapon', 'wing', 'avatar', 'mask']) {
     const id = look[k];
     if (!id) continue;
     if (k !== 'outfit') lazyArt(id);
@@ -233,6 +233,12 @@ export function drawRig(ctx, p, look, drawFallbackBody) {
   ctx.drawImage(B.body, 0, neckY, it.w, hem - neckY, ox, -(hem - neckY) * k, it.w * k, (hem - neckY) * k); ctx.restore();
   const top = by - (hem - neckY) * k * (1 - sq) - (hL - bL); // đầu (trễ nhịp so với thân)
   ctx.drawImage(B.body, 0, 0, it.w, headB, ox, top - neckY * k, it.w * k, headB * k);
+  if (look.mask && R.img[look.mask]) { // mặt nạ che mặt: thông số matna của bộ (Tủ Đồ → thẻ Mặt nạ), thiếu thì mask_default
+    const a = R.art[look.mask], M = { ...R.mask, ...(P.matna || {}) }, w = cw * M.s, h = w * a.h / a.w;
+    ctx.globalAlpha = M.a ?? 1;
+    ctx.drawImage(R.img[look.mask], M.x * cw - w / 2, top - neckY * k + M.y * neckY * k - h / 2, w, h);
+    ctx.globalAlpha = 1;
+  }
   const hand = (img, b, side, extra, open) => {
     const s = sk * P.tay.s * (1 + extra), w = img.width * s, h = img.height * s;
     const cx = ox + ((b[0] + b[2]) / 2) * k + side * P.tay.x * cw, cy = by + ((b[1] + b[3]) / 2 - hem) * k * (1 - sq) + P.tay.y * CH;

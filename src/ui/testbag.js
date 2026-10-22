@@ -1,5 +1,5 @@
 // Kho THỬ NGHIỆM (Mốc 4 sẽ chuyển lên máy chủ): danh sách mã vật phẩm + đồ đang mặc, lưu localStorage theo tài khoản.
-const LOOK_OF = { 'trang-phuc': 'outfit', 'vu-khi': 'weapon', canh: 'wing' }; // ô Pháp tướng KHÔNG tự hiện: phải bấm kỹ năng (lookNow trong src/main.js)
+const LOOK_OF = { 'trang-phuc': 'outfit', 'vu-khi': 'weapon', canh: 'wing', 'mat-na': 'mask' }; // ô Pháp tướng KHÔNG tự hiện: phải bấm kỹ năng (lookNow trong src/main.js)
 export function createTestBag(userId, defs) {
   const key = `tc.bag.${userId}`;
   const byId = new Map(defs.map((d) => [d.id, d]));
