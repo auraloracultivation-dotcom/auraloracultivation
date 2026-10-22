@@ -316,6 +316,16 @@
    "zone": "huvo",
    "use": "Chỉ rơi từ Âm Hư — dùng sau (chưa chốt)",
    "_nguon": "Claude đề xuất 23/10 (vùng mới)"
+  },
+  {
+   "id": "item.thao.tho-nguyen.001",
+   "name": "Thọ Nguyên Thảo",
+   "cat": "linh-duoc",
+   "group": "thao",
+   "zone": "xanh",
+   "use": "Luyện Tăng Thọ Đan (1 cây = 1 viên)",
+   "spawn_share": 0.3,
+   "_ghi_chu": "Cỏ mọc khắp Vùng Xanh ngay ngoài thành, hái miễn phí. spawn_share: tỷ lệ trong số linh thảo mọc ở vùng này (không theo thứ tự phổ biến)."
   }
  ]
 }

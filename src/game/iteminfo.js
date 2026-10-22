@@ -15,6 +15,7 @@ export function createItemInfo({ monsters, shop, pills, blanks, realms, gp, cpTe
     const r = btOf.get(p.id);
     if (r) return `Đột phá lên ${r.name} (tỷ lệ ${Math.round(r.breakthrough.rate * 100)}%) khi tu vi đã đến đỉnh`;
     const e = gp.pills[p.id] || {};
+    if (e.life_add) return `Thọ nguyên tối đa +${e.life_add} năm — mỗi ngày chỉ dùng 1 viên`;
     if (e.heal_hp) return `Hồi ${Math.round(e.heal_hp * 100)}% khí huyết`;
     if (e.heal_mp) return `Hồi ${Math.round(e.heal_mp * 100)}% linh lực`;
     if (e.buff === 'pt_drain') return `Pháp tướng tiêu hao linh lực giảm ${Math.round((1 - e.mul) * 100)}% trong ${e.s} giây`;

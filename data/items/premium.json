@@ -1,0 +1,19 @@
+{
+ "_status": "test",
+ "_nguon": "Chủ dự án, 23/10/2026",
+ "_ghi_chu": "Tiên đan — chỉ bán bằng Tiên ngọc ở Vạn Bảo Lâu (tab Tiên Bảo), không luyện được. Tác dụng: data/gameplay.json → pills.",
+ "items": [
+  {
+   "id": "item.dan.tu-vi.001",
+   "name": "Tu Vi Đan",
+   "cat": "linh-dan", "premium": true,
+   "use": "Tăng 10% vạch tu vi của tầng hiện tại"
+  },
+  {
+   "id": "item.dan.vien-man.001",
+   "name": "Viên Mãn Đan",
+   "cat": "linh-dan", "premium": true,
+   "use": "Lấp đầy vạch tu vi tầng hiện tại (đại cảnh giới mới vẫn phải bấm Đột phá)"
+  }
+ ]
+}

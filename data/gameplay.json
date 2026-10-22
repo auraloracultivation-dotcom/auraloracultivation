@@ -397,6 +397,15 @@
    "mul": 0.5,
    "s": 120
   },
+  "item.dan.tang-tho.001": {
+   "life_add": 2
+  },
+  "item.dan.tu-vi.001": {
+   "exp_pct": 0.1
+  },
+  "item.dan.vien-man.001": {
+   "exp_fill": true
+  },
   "use_cooldown_s": 2
  },
  "skills": {

@@ -151,9 +151,10 @@ img { image-rendering: pixelated; }
 .fill.mp { background: linear-gradient(#6fa8ff, #3a63c4); }
 .fill.xp { background: linear-gradient(#c79bff, #7a4fd1); }
 .pi-realm {
-  display: flex; align-items: center; justify-content: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.05;
   font-size: 4.4cqw; font-weight: 700; color: var(--gold); white-space: nowrap; text-shadow: 0 1px 2px #000;
 }
+.pi-realm small { font-size: 3.1cqw; font-weight: 600; color: #bfe9ff; text-shadow: 0 0 3px #000, 0 1px 2px #000, 0 0 2px #000; }
 
 /* ---- Trên phải: Bản đồ, Cài đặt, bản đồ nhỏ, tên khu ---- */
 .top-right {
@@ -565,3 +566,19 @@ img { image-rendering: pixelated; }
 .sheet .sk-slots { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
 .sheet .sk-slots .bag-act.sm { margin-top: 0; }
 .sheet .sk-slots .bag-act.on { outline: 2px solid #7dff8a; }
+
+/* ---- Ba loại tiền (Kho, Vạn Bảo Lâu, Tu luyện) ---- */
+.wallet { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; flex-shrink: 0; margin: 2px 0; }
+.wallet span { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px 2px 3px; border-radius: 12px;
+  background: rgba(0,0,0,.35); border: 1px solid rgba(242,199,127,.35); font-size: 12px; }
+.wallet img { width: 22px; height: 22px; object-fit: contain; }
+.wallet b { color: var(--gold); } .wallet i { font-style: normal; color: var(--muted); font-size: 11px; }
+
+/* ---- Tọa hóa: thọ nguyên tận ---- */
+.toahoa-wrap { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 16px;
+  background: radial-gradient(circle, rgba(30,10,10,.85), rgba(0,0,0,.95)); }
+.toahoa { max-width: 360px; width: 100%; text-align: center; padding: 20px 16px; border-radius: 14px;
+  background: linear-gradient(#1b1420, #0d0a12); border: 1px solid #7a3a3a; box-shadow: 0 0 30px rgba(180,40,40,.35); }
+.toahoa > b { display: block; font-size: 20px; color: #ff8a7a; letter-spacing: .06em; margin-bottom: 6px; }
+.toahoa p { margin: 6px 0; font-size: 13px; } .toahoa .th-name { font-size: 16px; color: var(--gold); }
+.toahoa .th-note { color: var(--muted); font-size: 12px; } .toahoa button { margin-top: 10px; width: 100%; }

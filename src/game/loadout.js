@@ -12,7 +12,7 @@ export function createLoadout(progress, S) {
     return l;
   };
   fix();
-  const list = () => progress.state.loadout;
+  const list = () => progress.state.loadout || fix(); // tiến trình vừa đặt lại (chuyển thế) → dựng lại
   return {
     size: N,
     get: (i) => list()[i] || null,

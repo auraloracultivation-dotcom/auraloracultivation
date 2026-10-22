@@ -27,6 +27,9 @@ export function createViews(o) {
   }).join(' · ');
   const stageName = (id) => gp.player.stages.find((s) => s.id === id)?.name || id;
   const tierName = (id) => awaken.tiers.find((t) => t.id === id)?.name || id;
+  // Thọ nguyên trong bảng Cảnh giới
+  const lifeLine = () => { const L = o.life, ate = st().life?.pillDay === L.today();
+    return `<p>Thọ nguyên: <b>${L.age()}/${L.max()} năm</b> (còn ${L.left()} năm · mỗi ngày +1 tuổi theo giờ Việt Nam). Tăng Thọ Đan hôm nay: ${ate ? 'đã dùng' : '<b>chưa dùng</b>'}.</p>`; };
   const msg = (r) => { if (!r) return; toast(r.msg, 1800); if (r.event) quests.emit(...r.event); o.recompute(); };
 
   // ---------- Nhiệm vụ ----------
@@ -79,7 +82,7 @@ export function createViews(o) {
     }
     const rows = Object.keys(STAT).map((k) => `<span>${STAT[k]}</span><b>${k === 'hp' ? `${Math.round(o.getHp())}/${ps.hp}` : ps[k]}</b>`).join('');
     return `<div class="row"><div class="row-h"><b>${E(s.name)}</b><em>${N(st().exp)}/${N(s.exp_need)} tu vi</em></div>
-      <p>${bt}</p><p>Linh thạch: <b>${st().stone}</b></p></div><div class="row grid2">${rows}</div>
+      <p>${bt}</p>${lifeLine()}</div>${o.wallet.html()}<div class="row grid2">${rows}</div>
       <div class="row"><p>Kỹ năng mở theo cảnh giới: Kiếm khí + Khống chế (Trúc Cơ), Linh thú + Lướt (Kết Đan), Diện rộng (Nguyên Anh).</p></div>`;
   }
   // Chỉ hiện công thức ĐANG CÓ trong kho (đan phương / công thức phôi / bí kíp). Muốn thêm → về Vạn Bảo Lâu trong thành mua.
@@ -115,7 +118,7 @@ export function createViews(o) {
   }
   function gearTab() {
     const list = st().gear, kho = bagGearRows();
-    const head = `<div class="row"><p>Mỗi lần thức tỉnh thêm 1 dòng, màu dòng ngẫu nhiên. Mỗi món có giới hạn 1–10 dòng không báo trước — chạm giới hạn thì nút tắt. Mỗi ô chỉ mặc một món. Linh thạch: <b>${st().stone}</b></p></div>`;
+    const head = `<div class="row"><p>Mỗi lần thức tỉnh thêm 1 dòng, màu dòng ngẫu nhiên. Mỗi món có giới hạn 1–10 dòng không báo trước — chạm giới hạn thì nút tắt. Mỗi ô chỉ mặc một món.</p>${o.wallet.html()}</div>`;
     if (!list.length && !kho) return `${head}<p class="bag-empty">Chưa có trang bị. Nhập mã quà trong Cài đặt để nhận đồ 6 hệ, hoặc luyện phôi.</p>`;
     return head + kho + list.map((g) => {
       const eq = st().eq[g.slot] === g.uid;
@@ -137,7 +140,7 @@ export function createViews(o) {
   }
   function matsTab() {
     const rows = Object.entries(st().inv).map(([id, n]) => `<span>${ico(id)}${E(name(id))}</span><b>${n}</b>`).join('');
-    return `<div class="row"><p>Linh thạch: <b>${st().stone}</b></p></div><div class="row grid2">${rows || '<span>Túi trống — hạ quái để nhặt nguyên liệu</span>'}</div>`;
+    return `<div class="row">${o.wallet.html()}</div><div class="row grid2">${rows || '<span>Túi trống — hạ quái để nhặt nguyên liệu</span>'}</div>`;
   }
   function openCultivate(start) {
     const tabs = [{ id: 'realm', name: 'Cảnh giới' }, { id: 'dan', name: 'Luyện đan' }, { id: 'phoi', name: 'Luyện phôi' },
@@ -181,44 +184,56 @@ export function createViews(o) {
     return k ? ps[k] : null;
   }
   // ---------- Vạn Bảo Lâu (cửa hàng) ----------
-  const today = () => new Date().toLocaleDateString('sv');
+  const today = () => String(o.life.today()); // ngày theo giờ Việt Nam (giờ máy chủ) — giới hạn mua mỗi ngày
   // Vạn Bảo Lâu: chỉ nói công dụng + giá. Công thức / bí kíp: "Đã có" (xanh) / "Chưa có" (xám). Nguyên liệu: số đang có.
+  const W = o.wallet, CUR = (s) => s.currency || 'linh-thach';
   function shopRow(s) {
     const d = itemDefs.get(s.id), n = s.stack || 1, isRecipe = !!d.teaches, owned = isRecipe && progress.count(s.id) > 0;
     const bought = st().shopDay?.date === today() ? (st().shopDay.n[s.id] || 0) : 0;
     const left = s.daily_limit ? s.daily_limit - bought : Infinity;
     const stageOk = !s.min_stage || craft.stageOk(s.min_stage), itemsOk = !s.cost_items || progress.has(s.cost_items);
-    const can = !owned && left > 0 && st().stone >= s.price && stageOk && itemsOk;
+    const ok = !owned && left > 0 && stageOk && itemsOk;
     const need = [s.min_stage && `<span class="${stageOk ? 'ok' : ''}">Cần ${E(stageName(s.min_stage))}</span>`,
       ...(s.cost_items || []).map((i) => `<span class="${progress.count(i.id) >= i.count ? 'ok' : ''}">${E(itemDefs.get(i.id)?.name || i.id)} ${progress.count(i.id)}/${i.count}</span>`)].filter(Boolean).join(' · ');
     const note = isRecipe ? (owned ? '<em class="own yes">Đã có</em>' : '<em class="own">Chưa có</em>')
       : `<em>${s.daily_limit ? `Hôm nay còn ${left}/${s.daily_limit}` : `có ${progress.count(s.id)}`}</em>`;
+    // Nút mua: tiền gốc của món + Tiên ngọc (mua được mọi món)
+    const pays = [...new Set([CUR(s), 'tien-ngoc'])];
+    const btns = pays.map((k) => btn('buy', `${k}|${s.id}`, `${k === CUR(s) ? 'Mua · ' : ''}${W.label(k, W.price(s, k))}`, ok && W.can(s, k))).join(' ');
     return `<div class="row"><div class="row-h"><b>${ico(s.id)}${E(d.name)}${n > 1 ? ` ×${n}` : ''}</b>${note}</div>
       <p class="src">${E(o.info.effect(d))}</p>${need && !owned ? `<p class="need">${need}</p>` : ''}
-      ${owned ? '' : btn('buy', s.id, `Mua · ${s.price} LT`, can)}</div>`;
+      ${owned ? '' : btns}</div>`;
   }
-  const SHOP_TABS = { dp: (d) => d.cat === 'dan-phuong', ct: (d) => d.cat === 'phap-khi', cp: (d) => d.cat === 'cong-phap', nl: (d) => !d.teaches };
+  const isLT = (s) => CUR(s) === 'linh-thach';
+  const SHOP_TABS = { dp: (s, d) => isLT(s) && d.cat === 'dan-phuong', ct: (s, d) => isLT(s) && d.cat === 'phap-khi', cp: (s, d) => isLT(s) && d.cat === 'cong-phap',
+    nl: (s, d) => isLT(s) && !d.teaches, pp: (s) => CUR(s) === 'vang', tb: (s) => CUR(s) === 'tien-ngoc' };
+  // Tiên khí (trang bị tiên giới): cần Vấn Đỉnh trở lên — người chơi hiện dừng ở Hóa Thần nên chỉ báo trước
+  const celestialRow = () => `<div class="row"><div class="row-h"><b>${ico('cur.tien-ngoc')}Tiên khí — trang bị tiên giới</b><em class="own">Chưa mở</em></div>
+    <p class="src">Chỉ bán bằng Tiên ngọc. Từ Vấn Đỉnh đến Âm Hư mới chạm được một phần tiên khí.</p>${btn('none', '', 'Cần cảnh giới Vấn Đỉnh', false)}</div>`;
   function openShop() {
     const { shop } = o;
     showSheet({
-      title: shop.name, note: `Giá tạm (Lab chưa có giá).`,
-      tabs: [{ id: 'dp', name: 'Đan phương' }, { id: 'ct', name: 'Công thức' }, { id: 'cp', name: 'Công pháp' }, { id: 'nl', name: 'Nguyên liệu' }],
-      render: (tab) => `<div class="row"><p>Linh thạch: <b>${st().stone}</b></p></div>`
-        + shop.stock.filter((s) => SHOP_TABS[tab](itemDefs.get(s.id))).map(shopRow).join(''),
-      onAction(act, id) {
+      title: shop.name, note: 'Giá tạm. Tiên ngọc mua được mọi món — sau này chỉ có khi nạp.',
+      tabs: [{ id: 'dp', name: 'Đan phương' }, { id: 'ct', name: 'Công thức' }, { id: 'cp', name: 'Công pháp' }, { id: 'nl', name: 'Nguyên liệu' },
+        { id: 'pp', name: 'Phàm phẩm' }, { id: 'tb', name: 'Tiên Bảo' }],
+      render: (tab) => `<div class="row">${W.html()}</div>`
+        + shop.stock.filter((s) => SHOP_TABS[tab](s, itemDefs.get(s.id))).map(shopRow).join('') + (tab === 'tb' ? celestialRow() : ''),
+      onAction(act, arg) {
         if (act !== 'buy') return;
+        const [k, id] = arg.split('|');
         const s = shop.stock.find((x) => x.id === id), d = itemDefs.get(id);
+        if (!s || W.price(s, k) === null) return;
         if (d.teaches && progress.count(id) > 0) return toast('Đã có trong kho', 1200);
-        if (st().stone < s.price) return toast('Không đủ Linh thạch', 1200);
+        if (!W.can(s, k)) return toast(`Không đủ ${W.name(k)}`, 1200);
         if (s.min_stage && !craft.stageOk(s.min_stage)) return toast(`Cần cảnh giới ${stageName(s.min_stage)}`, 1500);
         if (s.cost_items && !progress.has(s.cost_items)) return toast('Thiếu vật phẩm đổi', 1500);
-        for (const i of s.cost_items || []) progress.take(i.id, i.count);
         if (st().shopDay?.date !== today()) st().shopDay = { date: today(), n: {} };
         if (s.daily_limit && (st().shopDay.n[id] || 0) >= s.daily_limit) return toast('Hết lượt mua hôm nay', 1200);
-        progress.addStone(-s.price); progress.add(id, s.stack || 1);
+        for (const i of s.cost_items || []) progress.take(i.id, i.count);
+        W.pay(s, k); progress.add(id, s.stack || 1);
         st().shopDay.n[id] = (st().shopDay.n[id] || 0) + 1;
         o.emit('gain', { id, n: s.stack || 1 }); progress.changed();
-        toast(`Đã mua ${d.name}`, 1200);
+        toast(`Đã mua ${d.name} (−${W.label(k, W.price(s, k))})`, 1400);
       },
     });
   }

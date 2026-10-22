@@ -4,5 +4,5 @@ export {
 } from './auth.js';
 export { getMyCharacter, createCharacter, savePosition, respawnAtTown } from './character.js';
 export { joinZone } from './zone.js';
-export { syncServerTime, serverNow } from './time.js';
+export { syncServerTime, serverNow, timeSynced } from './time.js';
 export { submitLeaderboard, fetchLeaderboard, fetchMyRank } from './leaderboard.js';

@@ -156,6 +156,46 @@
    "id": "item.khoang.huyet-ngoc.001",
    "price": 40,
    "stack": 5
+  },
+  {
+   "id": "item.dan.tieu-hoi-huyet.001",
+   "price": 300,
+   "currency": "vang"
+  },
+  {
+   "id": "item.dan.hoi-linh.001",
+   "price": 400,
+   "currency": "vang"
+  },
+  {
+   "id": "item.thao.thanh-tam.001",
+   "price": 250,
+   "stack": 5,
+   "currency": "vang"
+  },
+  {
+   "id": "item.khoang.tinh-sa.001",
+   "price": 300,
+   "stack": 5,
+   "currency": "vang"
+  },
+  {
+   "id": "item.dan.tang-tho.001",
+   "price": 5,
+   "currency": "tien-ngoc"
+  },
+  {
+   "id": "item.dan.tu-vi.001",
+   "price": 10,
+   "currency": "tien-ngoc",
+   "daily_limit": 20
+  },
+  {
+   "id": "item.dan.vien-man.001",
+   "price": 120,
+   "currency": "tien-ngoc",
+   "daily_limit": 3
   }
- ]
+ ],
+ "_ghi_chu_tien": "currency: tiền bán món (mặc định linh-thach). Mọi món bán bằng Vàng / Linh thạch cũng mua được bằng Tiên ngọc theo tỷ giá data/currency.json. Tab: Phàm phẩm = món bán bằng Vàng; Tiên Bảo = món chỉ bán bằng Tiên ngọc."
 }
