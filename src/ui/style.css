@@ -582,3 +582,9 @@ img { image-rendering: pixelated; }
 .toahoa > b { display: block; font-size: 20px; color: #ff8a7a; letter-spacing: .06em; margin-bottom: 6px; }
 .toahoa p { margin: 6px 0; font-size: 13px; } .toahoa .th-name { font-size: 16px; color: var(--gold); }
 .toahoa .th-note { color: var(--muted); font-size: 12px; } .toahoa button { margin-top: 10px; width: 100%; }
+
+/* Kho: thẻ chi tiết không quá nửa bảng, cuộn được, có nút đóng; dòng thức tỉnh xếp 2 cột */
+.bag-detail { position: relative; max-height: 44%; overflow-y: auto; overscroll-behavior: contain; }
+.bag-detail-x { position: sticky; top: 0; align-self: flex-end; margin-bottom: -26px; z-index: 2; width: 30px; height: 30px; flex-shrink: 0;
+  border-radius: 50%; border: 1px solid var(--gold-dark); background: #2a1f3d; color: var(--gold); font-size: 14px; line-height: 1; }
+.bag-detail .ic-lines { display: grid; grid-template-columns: 1fr 1fr; column-gap: 8px; }
