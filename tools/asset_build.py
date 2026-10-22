@@ -200,6 +200,7 @@ def run_fx():
 
 # ---------------- Icon vật phẩm (64×64) ----------------
 def run_icons():
+    """CŨ — icon nay sinh bằng tools/icons_v2.py (assets/items/icons.webp). Giữ để tham khảo, không chạy lại."""
     icons = {}
     env_rgb, env_a = load_keyed(src('canh-vat'), 'magenta')
     herbs = [(21, 96), (99, 174), (178, 259), (260, 340), (346, 420), (431, 519), (531, 639), (645, 742), (744, 829), (832, 917),

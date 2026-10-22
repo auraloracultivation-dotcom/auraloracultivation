@@ -51,42 +51,52 @@
       "decor": {
         "tree": [
           "cay-xanh",
-          "co-thu",
-          "cay-hoc",
+          "cay-xanh",
           "anh-dao",
-          "hoa-trang",
-          "cay-con",
-          "cay-con-2",
-          "cay-tron",
-          "tung-cong",
-          "truc",
-          "truc-2"
+          "lieu",
+          "truc"
         ],
         "rock": [
-          "da-3",
-          "da-reu",
-          "da-cum",
-          "goc-cay"
+          "da-vua",
+          "da-nho",
+          "da-doi",
+          "goc-cay",
+          "goc-cay-reu",
+          "khuc-go",
+          "khuc-go-rong",
+          "dong-go",
+          "hang-rao",
+          "thung",
+          "vo-sanh",
+          "hop-go"
         ],
         "small": [
-          "bui-1",
-          "bui-2",
-          "bui-3",
-          "hoa-1",
-          "hoa-2",
-          "hoa-3",
-          "co-1",
-          "co-2",
-          "hoa-nho-1",
-          "hoa-nho-2",
-          "hoa-nho-3",
-          "hoa-nho-4",
-          "hoa-nho-5",
-          "hoa-nho-6",
-          "la",
-          "nam-do",
-          "go-1",
-          "goc-nho"
+          "bui",
+          "hoa-vang",
+          "hoa-hong",
+          "co-cao",
+          "hoa-trang",
+          "duong-xi",
+          "qua-do",
+          "mam",
+          "co-nho",
+          "nam",
+          "co-cum",
+          "bui-reu",
+          "cui",
+          "van-go"
+        ],
+        "big": [
+          "nha-tranh",
+          "lan-tre",
+          "rom",
+          "gieng",
+          "lua-trai",
+          "xe-go",
+          "ao-sen",
+          "ao",
+          "thac",
+          "bien-go"
         ]
       }
     },
@@ -139,31 +149,38 @@
       "zone": "cam",
       "decor": {
         "tree": [
-          "chuoi",
-          "dua",
           "cay-vang",
-          "cay-do"
+          "cay-kho",
+          "cay-kho-b"
         ],
         "rock": [
-          "da-lon",
-          "da-2",
-          "da-3",
-          "tang-da",
-          "da-cum",
+          "da-to",
+          "da-cao",
+          "da-vua",
           "goc-cay",
-          "tinh-vang",
-          "tinh-cam"
+          "khuc-go",
+          "tuong-da",
+          "cot-da",
+          "da-vun-2"
         ],
         "small": [
-          "lau-1",
-          "lau-2",
-          "co-1",
-          "co-2",
-          "hoa-cam",
-          "re-kho",
-          "go-2",
-          "go-3",
+          "co-cao",
+          "co-nho",
+          "cui",
+          "cui-2",
+          "soi",
           "da-vun"
+        ],
+        "big": [
+          "nha-hoang-1",
+          "nha-hoang-2",
+          "nha-hoang-3",
+          "nha-hoang-1b",
+          "nha-hoang-4b",
+          "cong-nho",
+          "cong-tuong-b",
+          "xe-hong",
+          "tuong-pha"
         ]
       }
     },
@@ -204,33 +221,31 @@
       "zone": "cam",
       "decor": {
         "tree": [
-          "tung-cong",
-          "thong",
-          "lieu",
-          "cay-tron"
+          "cay-vang",
+          "cay-kho"
         ],
         "rock": [
-          "bia-co",
-          "bia-co-2",
-          "cot-da",
-          "cot-da-2",
-          "phe-tich",
-          "phe-tich-2",
-          "tang-da",
-          "da-dung",
-          "da-dung-2",
-          "da-dung-3",
-          "da-nhon",
-          "den-dat",
-          "den-dat-2"
+          "cot-gay",
+          "cot-doi",
+          "da-ngon",
+          "dong-da",
+          "bia-da",
+          "den-da",
+          "bac-thang",
+          "tuong-mieu"
         ],
         "small": [
-          "co-1",
-          "co-2",
-          "la",
-          "da-vun",
-          "da-vun-2",
-          "hoa-nho-2"
+          "nen-da",
+          "co-nho",
+          "soi-2"
+        ],
+        "big": [
+          "cong-mai",
+          "cong-cot",
+          "cong-gay",
+          "dinh-nho",
+          "dai-cot",
+          "tuong-pha-b"
         ]
       }
     },
@@ -283,21 +298,29 @@
       "zone": "trang",
       "decor": {
         "tree": [
-          "hoa-trang",
+          "thong-tuyet",
           "thong"
         ],
         "rock": [
-          "tinh-bang",
-          "tinh-lam",
-          "tinh-trang",
-          "da-nhon-2",
-          "da-2"
+          "da-to",
+          "da-cao",
+          "da-vua",
+          "cot-gay",
+          "den-da-2",
+          "bia-da"
         ],
         "small": [
-          "hoa-bang",
-          "hoa-nho-1",
-          "da-vun",
-          "da-vun-2"
+          "soi",
+          "soi-2",
+          "da-vun"
+        ],
+        "big": [
+          "tuong-ngoi",
+          "tuong-dung",
+          "dinh-nho",
+          "dinh-b",
+          "nha-hoang-5b",
+          "dai-tron"
         ]
       }
     },
@@ -351,27 +374,34 @@
       "decor": {
         "tree": [
           "thong",
-          "tung-cong"
+          "cay-kho"
         ],
         "rock": [
-          "da-lon",
-          "da-2",
-          "da-nhon",
-          "da-nhon-2",
-          "da-nhon-3",
-          "nui-da",
-          "hang-da",
-          "hang-da-2",
-          "tinh-den",
-          "tinh-trang",
-          "da-cum"
+          "da-to",
+          "da-cao",
+          "da-vua",
+          "da-ngon",
+          "cot-gay",
+          "dong-da",
+          "den-da-b",
+          "tuong-da"
         ],
         "small": [
-          "nam-xanh",
-          "nam-tim",
+          "co-nho",
+          "soi",
+          "soi-2",
           "da-vun",
-          "da-vun-2",
-          "re-kho"
+          "nen-da"
+        ],
+        "big": [
+          "nha-hoang-5",
+          "nha-hoang-2b",
+          "nha-hoang-3b",
+          "dinh",
+          "cong-nho-b",
+          "cong-tuong",
+          "tuong-pha",
+          "xe-hong-b"
         ]
       }
     },
@@ -424,24 +454,28 @@
       "zone": "than",
       "decor": {
         "tree": [
-          "tu-dang",
-          "re-kho-2"
+          "cay-kho",
+          "cay-kho-b"
         ],
         "rock": [
-          "tinh-den",
-          "tinh-tim",
-          "tinh-do",
-          "nui-da",
-          "hang-da",
-          "da-den",
-          "goc-cay"
+          "da-cao-den",
+          "da-ngon",
+          "dong-da",
+          "cot-do",
+          "cot-gay",
+          "tuong-mieu"
         ],
         "small": [
-          "nam-tim",
-          "nam-xanh",
-          "re-kho",
-          "re-kho-2",
-          "hoa-cam"
+          "soi",
+          "da-vun",
+          "cui"
+        ],
+        "big": [
+          "kiem-dai",
+          "cong-gay",
+          "nha-hoang-3",
+          "tuong-pha-b",
+          "dinh-tram"
         ]
       }
     },
@@ -465,14 +499,12 @@
       ],
       "zone": "than",
       "decor": {
-        "tree": [],
         "rock": [
-          "tinh-do",
-          "tinh-cam",
-          "da-den"
+          "da-ngon",
+          "da-cao-den"
         ],
         "small": [
-          "re-kho"
+          "soi"
         ]
       }
     },
@@ -525,20 +557,28 @@
       "zone": "den",
       "decor": {
         "tree": [
-          "re-kho-2",
-          "tu-dang"
+          "cay-kho-den"
         ],
         "rock": [
-          "da-den",
-          "tinh-den",
-          "tinh-tim",
-          "nui-da",
-          "hang-da-2"
+          "da-cao-den",
+          "da-ngon",
+          "dong-da",
+          "cot-doi",
+          "dinh-tram",
+          "ban-te",
+          "cot-co"
         ],
         "small": [
-          "nam-tim",
-          "re-kho",
-          "re-kho-2"
+          "nen-da",
+          "soi",
+          "da-vun"
+        ],
+        "big": [
+          "dau-phat",
+          "am-duong",
+          "trang-khuyet",
+          "kiem-dai",
+          "dai-cot"
         ]
       },
       "_ghi_chu": "Vùng Đen (Anh Biến) — ô vẽ bằng code (tools/gen_tiles_code.py), cây đá mượn vùng Than"
@@ -592,19 +632,25 @@
       "zone": "tim",
       "decor": {
         "tree": [
-          "tu-dang"
+          "cay-kho-tim"
         ],
         "rock": [
-          "tinh-tim",
-          "tinh-trang",
-          "da-nhon-3",
-          "hang-da",
-          "tinh-den"
+          "da-to-tim",
+          "cot-doi",
+          "cot-gay",
+          "da-ngon",
+          "den-da-2"
         ],
         "small": [
-          "nam-tim",
-          "nam-xanh",
-          "da-vun-2"
+          "nen-da",
+          "soi-2"
+        ],
+        "big": [
+          "te-dan-tinh",
+          "dai-tron",
+          "dai-cot",
+          "am-duong",
+          "cong-cot"
         ]
       },
       "_ghi_chu": "Vùng Tím (Vấn Đỉnh) — ô vẽ bằng code (tools/gen_tiles_code.py), cây đá mượn"
@@ -742,7 +788,15 @@
     "small": 0.015,
     "road_margin": 1,
     "center_clear_tiles": 9,
-    "_ghi_chu_23_10": "Thưa cây/đá/cỏ hoa (0,55/0,35/0,05 → 0,2/0,2/0,015): chủ dự án thấy chi chít đau mắt, rừng dày vây kín người chơi"
+    "_ghi_chu_23_10": "Thưa cây/đá/cỏ hoa (0,55/0,35/0,05 → 0,2/0,2/0,015): chủ dự án thấy chi chít đau mắt, rừng dày vây kín người chơi",
+    "big_grid": 9,
+    "big_chance": 0.2,
+    "big_clear": [
+      3,
+      2
+    ],
+    "big_road_margin": 3,
+    "_ghi_chu_big": "Công trình (big): chỉ mọc ở tâm lưới big_grid ô, xác suất big_chance; dọn cây đá trong ±big_clear ô quanh nó; cách đường big_road_margin ô."
   },
   "_note_tiles_v2": "Ô đất 23/10 (bản 4): mỗi khối 2×2 ảnh chủ dự án = 1 ô 32 điểm, nhạt màu, mép hoà liền; mỗi vùng 4 ô trơn (lọc bỏ sỏi/cỏ) trọng số 6 + 4 ô chi tiết trọng số 1 → ~80% ô trơn. Đá lát cổ (quảng trường thành) giữ ô gốc. tools/tiles_v2.py rồi tools/atlas_compact.py."
 }
