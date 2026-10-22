@@ -38,7 +38,11 @@ export function showBag({ categories, getEntries, onAction, note, wallet }) {
       </button>`).join('') : '<p class="bag-empty">Chưa có vật phẩm</p>';
     const it = list.find((e) => e.item.key === sel)?.item;
     detail.hidden = !it;
-    if (it) detail.replaceChildren(itemCard(it, async (a) => { await onAction(it, a); render(); }));
+    if (it) { // thẻ chi tiết: có nút đóng, cuộn được khi dài (đồ 10 dòng) — không che hết lưới đồ
+      const x = el('<button type="button" class="bag-detail-x" aria-label="Đóng chi tiết">✕</button>');
+      x.addEventListener('click', () => { sel = null; render(); });
+      detail.replaceChildren(x, itemCard(it, async (a) => { await onAction(it, a); render(); }));
+    }
   };
   box.querySelector('.bag-tabs').addEventListener('click', (e) => {
     const b = e.target.closest('[data-cat]');
