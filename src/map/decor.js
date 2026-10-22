@@ -2,6 +2,7 @@
 // - Đường (data/zones/*.json → roads): tô lên ảnh bản đồ lúc tải; đoạn qua nước thành cầu gỗ.
 // - Cây/đá (data/terrain.json → decor của từng loại đất + decor_rules): rải theo ô, cố định theo toạ độ nên mọi máy thấy giống nhau.
 //   Rừng và bãi đá mọc thành cụm (2 trường nhiễu). Cây chặn ở gốc, đá chặn cả khối, cỏ hoa đi xuyên.
+//   Công trình (big: nhà hoang, cổng, tượng, ao… — tools/decor_v2.py) mọc thưa ở tâm lưới big_grid ô, dọn cây đá quanh nó.
 
 function hash(x, y, s = 0) {
   let h = (x * 374761393 + y * 668265263 + s * 2246822519) | 0;
@@ -55,7 +56,8 @@ export async function createDecor({ grid, W, H, T, types, rules, art, safeAt }) 
   const sets = types.map((t) => t.decor && {
     tree: (t.decor.tree || []).map((k) => idx.get(k)).filter((i) => i !== undefined),
     rock: (t.decor.rock || []).map((k) => idx.get(k)).filter((i) => i !== undefined),
-    small: (t.decor.small || []).map((k) => idx.get(k)).filter((i) => i !== undefined) });
+    small: (t.decor.small || []).map((k) => idx.get(k)).filter((i) => i !== undefined),
+    big: (t.decor.big || []).map((k) => idx.get(k)).filter((i) => i !== undefined) });
   const roadKinds = new Set(types.map((t, i) => (t.id === 'duong' || t.id === 'cau' ? i : -1)).filter((i) => i >= 0));
   const forest = noiseField(W, H, rules.forest_cell, 11), rocky = noiseField(W, H, rules.rock_cell, 23);
   const band = (v, cut) => Math.max(0, Math.min(1, (v - cut) / (1 - cut) * 1.6));
@@ -66,6 +68,20 @@ export async function createDecor({ grid, W, H, T, types, rules, art, safeAt }) 
     }
     return false;
   };
+  // Công trình: chỉ ở tâm lưới G×G ô (hàm thuần theo toạ độ → mọi máy giống nhau, không phụ thuộc mảng đã tính)
+  const G = rules.big_grid || 9, [CX, CY] = rules.big_clear || [3, 2], BM = rules.big_road_margin || 3;
+  const nearRoadM = (x, y, mm) => { for (let b = -mm; b <= mm; b++) for (let a = -mm; a <= mm; a++) if (roadKinds.has(grid[(((y + b) % H + H) % H) * W + (((x + a) % W + W) % W)])) return true; return false; };
+  const walkAt = (x, y) => types[grid[(((y % H) + H) % H) * W + (((x % W) + W) % W)]].walk;
+  function bigAt(x, y) { // x, y = tâm lưới; trả về chỉ số hình hoặc -1
+    if (hash(x, y, 31) >= (rules.big_chance || 0)) return -1;
+    const s = sets[grid[(((y % H) + H) % H) * W + (((x % W) + W) % W)]];
+    if (!s?.big.length) return -1;
+    for (let b = -CY; b <= 0; b++) for (let a = -CX + 1; a <= CX - 1; a++) if (!walkAt(x + a, y + b)) return -1; // nền đặt công trình phải đi được
+    if (nearRoadM(x, y, BM) || safeAt((x + 0.5) * T, (y + 0.5) * T) || safeAt((x + 0.5) * T, (y - 3) * T)) return -1;
+    return s.big[Math.floor(hash(x, y, 37) * s.big.length)];
+  }
+  const bigCenter = (v) => Math.floor(v / G) * G + (G >> 1);
+
   // Chỉ tính cây/đá cho từng mảng CH×CH ô khi người chơi tới gần (không tính cả bản đồ lúc tải — bản đồ lớn tải nhanh, đỡ tốn bộ nhớ).
   // Kết quả cố định theo toạ độ (hash) nên mọi máy vẫn thấy giống nhau. Giữ tối đa MAX_CHUNKS mảng gần nhất.
   const CH = 32, MAX_CHUNKS = 160;
@@ -80,6 +96,11 @@ export async function createDecor({ grid, W, H, T, types, rules, art, safeAt }) 
         if (x >= W) break;
         const g = grid[y * W + x], s = sets[g];
         if (!s || !types[g].walk) continue;
+        const bx = bigCenter(x), by = bigCenter(y);
+        if (Math.abs(x - bx) <= CX && y - by <= 1 && by - y <= CY) { // trong khu một công trình: chỉ công trình ở tâm, quanh nó để trống
+          if (x === bx && y === by) { const d = bigAt(x, y); if (d >= 0) { at[j * CH + i] = d; continue; } }
+          else if (bigAt(bx, by) >= 0) continue;
+        }
         const f = band(forest(x, y), rules.forest_cut), r = band(rocky(x, y), rules.rock_cut);
         const pt = rules.tree_base + rules.tree_forest * f, pr = rules.rock_base + rules.rock_field * r;
         const h = hash(x, y, 7);
@@ -115,10 +136,13 @@ export async function createDecor({ grid, W, H, T, types, rules, art, safeAt }) 
     return hit;
   }
   const tileOf = (v, n) => ((Math.floor(v / T) % n) + n) % n;
+  // Tầm quét theo món lớn nhất (công trình rộng hơn 1 ô): va chạm ±RB ô, vẽ thêm MX ô hai bên, MY ô phía dưới
+  const RB = Math.ceil((Math.max(...defs.map((d) => d.r)) + 10) / T);
+  const MX = Math.ceil(Math.max(...defs.map((d) => d.w)) / 2 / T) + 1, MY = Math.ceil(Math.max(...defs.map((d) => d.h)) / T) + 1;
 
   function blockedAt(x, y, r) {
     const tx = Math.floor(x / T), ty = Math.floor(y / T);
-    for (let b = -1; b <= 1; b++) for (let a = -1; a <= 1; a++) {
+    for (let b = -RB; b <= RB; b++) for (let a = -RB; a <= RB; a++) {
       const gx = ((tx + a) % W + W) % W, gy = ((ty + b) % H + H) % H, c = cellAt(gx, gy), d = c.d;
       if (d < 0 || !defs[d].r) continue;
       const bx = (tx + a + 0.5) * T + c.ox, by = (ty + b + 0.5) * T + c.oy;
@@ -128,8 +152,8 @@ export async function createDecor({ grid, W, H, T, types, rules, art, safeAt }) 
   }
   // Lượt vẽ: front = false → mọi thứ có chân ở trên refY (sau lưng) + cỏ hoa; front = true → phần còn lại (che trước người)
   function draw(ctx, cam, refY, front) {
-    const x0 = Math.floor(cam.x / T) - 2, x1 = Math.ceil((cam.x + cam.viewW) / T) + 2;
-    const y0 = Math.floor(cam.y / T) - 1, y1 = Math.ceil((cam.y + cam.viewH) / T) + 3;
+    const x0 = Math.floor(cam.x / T) - MX, x1 = Math.ceil((cam.x + cam.viewW) / T) + MX;
+    const y0 = Math.floor(cam.y / T) - 1, y1 = Math.ceil((cam.y + cam.viewH) / T) + MY;
     ctx.imageSmoothingEnabled = true;
     for (let ty = y0; ty <= y1; ty++) {
       const gy = ((ty % H) + H) % H;
@@ -142,7 +166,7 @@ export async function createDecor({ grid, W, H, T, types, rules, art, safeAt }) 
         const flip = hash(tx, ty, 13) < 0.5;
         ctx.save();
         ctx.translate(bx, by);
-        if (flip && def.kind !== 'rock') ctx.scale(-1, 1);
+        if (flip && def.kind !== 'rock' && def.kind !== 'big') ctx.scale(-1, 1);
         ctx.drawImage(atlas, def.x, def.y, def.sw, def.sh, -def.w / 2, -def.h, def.w, def.h);
         ctx.restore();
       }
@@ -150,6 +174,15 @@ export async function createDecor({ grid, W, H, T, types, rules, art, safeAt }) 
   }
   return {
     blockedAt,
+    // công trình gần (x, y) trong bán kính r điểm — kiểm thử / bản đồ
+    landmarks(x, y, r) {
+      const out = [], tx = Math.floor(x / T), ty = Math.floor(y / T), n = Math.ceil(r / T / G) + 1;
+      for (let j = -n; j <= n; j++) for (let i = -n; i <= n; i++) {
+        const cx = bigCenter(tx) + i * G, cy = bigCenter(ty) + j * G, d = bigAt(((cx % W) + W) % W, ((cy % H) + H) % H);
+        if (d >= 0) out.push({ x: (cx + 0.5) * T, y: (cy + 0.5) * T, id: keys[d] });
+      }
+      return out;
+    },
     drawBehind: (ctx, cam, refY) => draw(ctx, cam, refY, false),
     drawFront: (ctx, cam, refY) => draw(ctx, cam, refY, true),
     // độ rừng / độ đá ở điểm (0..1) — linh thảo mọc nhiều trong rừng, khoáng nhiều ở bãi đá

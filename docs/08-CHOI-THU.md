@@ -52,6 +52,16 @@ song song với việc hoàn thành Mốc 1. Đây là **bản chơi thử**, ch
 - **Tự động**: tự dùng kỹ năng trong ô (trừ Lướt / Pháp tướng / Đan; hồi máu khi dưới 55%). Đi đánh quái mà kẹt (nước, cây) thì tự ngự kiếm bay qua rồi hạ xuống farm tiếp
   (cần cầm kiếm + ≥ 15 linh lực; `src/game/flight.js`, `autoplay.js`).
 
+## Trang trí bản đồ + icon bản 2 (chủ dự án 23/10)
+- **Bỏ toàn bộ cây / đá / cỏ hoa cũ.** Trang trí mới từ 4 tấm chủ dự án (`assets/decor/_source/`): `python3 -I tools/decor_v2.py` → `assets/decor/atlas.webp`, 109 món,
+  bộ riêng cho từng loại đất (`data/terrain.json → decor`). Vùng Xanh: cây xanh / anh đào / liễu / trúc, nhà tranh, lán, giếng, ao sen, thác…;
+  Cam: cây vàng, cây khô, nhà hoang, cổng đổ; Đá lát: cổng đền, đình nhỏ; Xám Khói: thông, nhà hoang, đình; Trắng: thông phủ tuyết, tượng, đài tròn;
+  Xám Than: cây khô, kiếm đài, cổng gãy; Đen: cây khô tối, đầu Phật, âm dương, trăng khuyết; Tím: cây khô tím, tế đàn tinh thể, đài cột.
+- **Công trình (big)** mọc thưa ở tâm lưới 9 ô (`decor_rules.big_*`), quanh nó dọn trống, cách đường 3 ô, không mọc trong thành. Chặn đi như đá.
+- **Icon vật phẩm bản 2** (`assets/items/_source/icon-*.webp` → `python3 -I tools/icons_v2.py` → `assets/items/icons.webp`, 96×96): 15 linh thảo, 10 khoáng,
+  4 vật liệu đặc biệt, 9 đan, 8 phôi, 8 công pháp, 2 vật phẩm nhiệm vụ. Đan phương / công thức phôi = icon đan / phôi tương ứng + dấu cuộn giấy (vẽ bằng code).
+  Kho, cửa hàng, bảng tu luyện, linh thảo trên bản đồ đều dùng icon mới. Còn icon cũ: Bảo hộ phù, Linh thạch; chưa có icon: nguyên liệu + đan Vùng Đen / Tím.
+
 ## Đã có trong game (thử nghiệm)
 | Hệ thống | Cách chơi | Code |
 |---|---|---|
