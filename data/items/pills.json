@@ -264,20 +264,28 @@
   },
   {
    "id": "item.dan.tang-tho.001",
-   "name": "Tăng Thọ Đan",
+   "name": "Trường Sinh Đan",
    "cat": "linh-dan",
    "when": "Mọi cảnh giới",
    "recipe": {
     "inputs": [
      {
-      "id": "item.thao.tho-nguyen.001",
-      "count": 1
+      "id": "item.thao.thanh-tam.001",
+      "count": 2
      }
+    ],
+    "alt_inputs": [
+     [
+      {
+       "id": "item.thao.tho-nguyen.001",
+       "count": 1
+      }
+     ]
     ],
     "rate": 1
    },
-   "shop": "khong",
-   "_ghi_chu": "Không cần đan phương. +2 thọ nguyên tối đa, mỗi ngày (giờ Việt Nam) chỉ ăn 1 viên — data/lifespan.json → pill."
+   "shop": "co",
+   "_ghi_chu": "Cần Đan phương Trường Sinh Đan (Vạn Bảo Lâu, rẻ). 2 Thanh Tâm Thảo hoặc 1 Thọ Nguyên Thảo = 1 viên. +2 thọ nguyên tối đa, mỗi ngày (giờ Việt Nam) chỉ dùng 1 viên — data/lifespan.json → pill."
   }
  ]
 }

@@ -20,6 +20,10 @@
  "_ghi_chu_gia": "Giá (Linh thạch) là số TẠM Claude đặt — Lab chưa có. stack = số lượng mỗi lần mua. daily_limit = giới hạn mua mỗi ngày. min_stage = cảnh giới tối thiểu để mua; cost_items = vật phẩm phải nộp kèm (mất khi mua).",
  "stock": [
   {
+   "id": "item.danphuong.tang-tho.001",
+   "price": 20
+  },
+  {
    "id": "item.danphuong.tieu-hoi-huyet.001",
    "price": 30
   },
@@ -156,6 +160,11 @@
    "id": "item.khoang.huyet-ngoc.001",
    "price": 40,
    "stack": 5
+  },
+  {
+   "id": "item.dan.tang-tho.001",
+   "price": 500,
+   "currency": "vang"
   },
   {
    "id": "item.dan.tieu-hoi-huyet.001",
