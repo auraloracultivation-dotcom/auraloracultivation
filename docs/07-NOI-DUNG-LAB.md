@@ -54,7 +54,7 @@ giới hạn bảo hộ phù/ngày; giá shop. Trạng thái các file Lab vẫn
 File: `data/lifespan.json`, code `src/game/lifespan.js`. Bản chơi thử (localStorage); Mốc 4 máy chủ tự tính.
 
 - 1 ngày thật theo giờ Việt Nam (qua 0h) = 1 năm tuổi, kể cả khi không vào game. Giờ lấy từ máy chủ (`server_time`).
-- Bắt đầu 16 tuổi, thọ nguyên tối đa 60. Đột phá cộng: Luyện Khí mỗi tầng +1; Trúc Cơ +10/+5/+5; Kết Đan +20/+10/+10; Nguyên Anh +40/+20/+20; Hóa Thần +80/+40/+40.
+- Tuổi = 16 + số ngày (giờ VN) kể từ ngày tạo nhân vật (`characters.created_at`). Chuyển thế sau tọa hóa thì tính lại từ ngày chuyển thế. Thọ nguyên tối đa gốc 60. Đột phá cộng: Luyện Khí mỗi tầng +1; Trúc Cơ +10/+5/+5; Kết Đan +20/+10/+10; Nguyên Anh +40/+20/+20; Hóa Thần +80/+40/+40.
 - Trường Sinh Đan: +2 thọ nguyên tối đa, mỗi ngày 1 viên. Luyện từ 1 Thọ Nguyên Thảo (mọc khắp Vùng Xanh ngoài thành), không cần đan phương.
 - Hiện sau cảnh giới: trên đầu nhân vật và khung nhân vật, ví dụ `Kết Đan Sơ kỳ (Thọ nguyên 43/109 năm)`.
 - Tuổi chạm thọ nguyên tối đa → **tọa hóa: chết hẳn** (chủ dự án chọn). Tiến trình + Kho bị xoá, chuyển thế từ Luyện Khí tầng 1. Chỉ xét khi đã lấy được giờ máy chủ.

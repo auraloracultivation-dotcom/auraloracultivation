@@ -36,7 +36,7 @@ const MAJOR_OF = (id) => ({ lk: 0, tc: 1, kd: 2, na: 3, ht: 4, ab: 5, vd: 6 }[id
 const HEAL_PILL = 'item.dan.tieu-hoi-huyet.001';
 
 // bag: Kho đồ 6 hệ (src/ui/testbag.js) — đồ trong Kho thức tỉnh được; onLook(): báo main.js cập nhật hình mặc trên người
-export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, hud, pt, toast, audio, userId, bag, onLook = () => {}, onRealm = () => {}, serverNow, timeSynced = () => true, onToaHoa = () => {} }) {
+export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, hud, pt, toast, audio, userId, bag, onLook = () => {}, onRealm = () => {}, serverNow, bornAt = null, timeSynced = () => true, onToaHoa = () => {} }) {
   const [statsDef, gp, monDef, mats, pills, blanks, awaken, cp, questDef, qItems, realms] = await Promise.all([
     'data/stats.json', 'data/gameplay.json', 'data/monsters/monsters.json', 'data/items/materials.json', 'data/items/pills.json',
     'data/equipment/blanks.json', 'data/equipment/awaken.json', 'data/skills/cong-phap.json', 'data/quests/quests.json',
@@ -47,7 +47,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   await Promise.all([loadSprites(artDef), loadNpcArt(artDef.npc)]); // hình quái, hiệu ứng, icon, NPC (thử nghiệm)
   const progress = createProgress(userId, gp);
   const wallet = createWallet({ def: curDef, progress }); // Vàng · Linh thạch · Tiên ngọc
-  const life = createLifespan({ def: lifeDef, progress, stages: gp.player.stages, serverNow }); // thọ nguyên theo ngày giờ Việt Nam
+  const life = createLifespan({ def: lifeDef, progress, stages: gp.player.stages, serverNow, bornAt }); // thọ nguyên theo ngày giờ Việt Nam
   const { ensureArt, forgedLook, artFile } = createForgedArt(artIdx, progress); // hình ngẫu nhiên cho đồ luyện từ phôi
   const stats = createStats(statsDef, gp);
   const mobs = createMonsters({ gp, mdef: monDef, map });
@@ -378,7 +378,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     openSkills: (slot = -1) => openSkillPanel({ S, loadout, bar, progress, stageName, slot, toast }), // bảng Kỹ năng: chạm kỹ năng → chọn ô
     get dead() { return dead; },
     wallet, life, // tiền tệ (Kho / Vạn Bảo Lâu) + thọ nguyên
-    reincarnate() { progress.reset(); progress.flush(); }, // tọa hóa → chuyển thế: xoá tiến trình (main.js xoá thêm Kho rồi tải lại)
+    reincarnate() { progress.reset(); life.reborn(); progress.flush(); }, // tọa hóa → chuyển thế: xoá tiến trình (main.js xoá thêm Kho rồi tải lại)
     stunned: () => now < stunUntil,
     _debug: { me, map, progress, mobs, voids, mdef: monDef, bag, gather, npcs, die, get hp() { return hp; }, get ps() { return ps; } }, // chỉ cho kiểm thử (?debug)
     speed: () => buffs.speed?.mul || null,
