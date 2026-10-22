@@ -76,7 +76,8 @@ Phím máy tính: Space đánh, 1–5 kỹ năng, Q uống đan hồi máu.
 ## Vạn Bảo Lâu, đan phương, kho
 - Cửa hàng (`data/shop.json`, giá TẠM): mở bằng nút Tông môn khi đang trong thành, hoặc chạm Kho hàng. Bán theo Lab: đan phương sơ–trung,
   công thức phôi Lục–Cam (đến Linh thú), công pháp cơ bản, bảo hộ phù (3 lần/ngày), nguyên liệu Vùng Xanh/Cam (đắt).
-  Không bán (chỉ rơi từ boss, `data/items/recipes.json` → drop): Hóa Thần / Duy Trì Đan phương, công thức Cánh / Pháp tướng, bí kíp Kiếm Khí trở lên.
+  **Đan phương Hóa Thần Đan** (23/10) bán nhưng khó: 60.000 Linh thạch + cần Nguyên Anh Hậu kỳ + nộp 5 Hồn Thú Tinh, 2 Tinh Hồn (`shop.json` → `min_stage`, `cost_items`); vẫn rơi từ boss Xám Than.
+  Không bán (chỉ rơi từ boss, `data/items/recipes.json` → drop): Duy Trì Đan phương, công thức Cánh / Pháp tướng, bí kíp Kiếm Khí trở lên.
 - **Phải có trong kho** Đan phương / Công thức phôi / Bí kíp mới luyện được (không mất khi dùng). Bảng Tu luyện CHỈ hiện những cuốn đang có; muốn thêm phải về thành mua. Nhiệm vụ đầu tặng Luyện Khí Quyết, Đan phương Tiểu Hồi Huyết, Trúc Cơ.
 - Bảo hộ phù: có trong kho thì tự dùng khi Đột phá (+15 điểm %).
 - Kho / ô trang bị bảng Nhân vật: chạm món → Sử dụng / Tháo / Thức tỉnh / Phân rã (hoàn 50% Linh thạch đã thức tỉnh) / Vứt; đan: Dùng; đan phương / công thức / bí kíp: hiện nguyên liệu cần + nút Luyện đan / Luyện phôi / Tu luyện, luyện ngay trong Kho. Code: `src/game/inventory.js`.
