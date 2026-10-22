@@ -5,7 +5,7 @@
 // - Ôn dưỡng lên cấp (Linh thạch): sát thương +mul_per_lv mỗi cấp, số đạn / hồn / tia +1 mỗi 2 cấp.
 // - Thức tỉnh dòng chỉ số random như trang bị (craft.awakenObj) — cộng vào chỉ số khi đang đeo.
 // Lưu progress.state.treasures = [{ uid, id, lv, known, aw }], progress.state.treasureOn = uid.
-import { fxIconUrl } from '../entity/index.js';
+import { fxIconUrl, loadFx } from '../entity/index.js';
 
 const STAT = { hp: 'Khí huyết', linh: 'Tấn công', def: 'Phòng thủ', xuyen: 'Xuyên giáp', crit: 'Bạo kích %', hut: 'Hút máu %', phan: 'Phản đòn %' };
 
@@ -140,6 +140,6 @@ export function createTreasure(c) {
   // Dòng thức tỉnh của pháp bảo đang đeo (gộp vào chỉ số như trang bị)
   const worn = () => { const t = on(); return t?.aw?.tier ? [t.aw] : []; };
   const view = () => { const t = on(), d = t && byId.get(t.id); return d ? { thumb: fxIconUrl(...d.icon), cd: d.cd_s, name: d.name } : null; };
-  syncSkill();
+  syncSkill(); loadFx([...def.list.map((d) => d.icon[0]), 'v.cong-hu']); // icon pháp bảo trong Kho / ô kỹ năng
   return { use, openBlank, onKill, entries, act, worn, view, isTreasure: (key) => key.startsWith('pb:'), grant: (id, lv = 0) => { list().push({ uid: progress.state.uid++, id, lv, known: true, aw: { tier: null, lines: [], spent: 0 } }); progress.changed(); } };
 }

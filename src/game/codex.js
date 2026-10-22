@@ -3,7 +3,7 @@
 //   ok   = ảnh riêng của chủ dự án đã dùng trong game
 //   tam  = ảnh thử nghiệm / gói miễn phí / dùng chung / mượn hình khác → nên thay
 //   none = chưa có ảnh (đang vẽ tạm bằng code hoặc ô trống)
-import { iconUrl, drawSheet, drawEffect, drawNpc, drawVoidPreview } from '../entity/index.js';
+import { iconUrl, drawSheet, drawEffect, drawNpc, drawVoidPreview, cardArt, fxIconUrl, loadFx } from '../entity/index.js';
 import { showCodex } from '../ui/index.js';
 
 const ZONE = { xanh: 'Vùng Xanh', cam: 'Vùng Cam', xam: 'Vùng Xám Khói', trang: 'Vùng Trắng', than: 'Vùng Xám Than', den: 'Vùng Đen', tim: 'Vùng Tím', huvo: 'Hư Vô (khắp nơi)' };
@@ -24,6 +24,19 @@ export async function openCodex(o) {
   const { loadJSON, gp, mats, pills, recipes, cp, monsters, blanks, qItems, artDef, info, cpText, fxDuration, mobSkills = {} } = o;
   const isOwner = (sh) => OWNER_SHEETS.has(sh) || sh?.startsWith('m.'); // m.* = tấm quái chủ dự án gửi 23/10
   const [items, he6, artIdx, npcDef] = await Promise.all(['data/items/items.json', 'data/equipment/he6.json', 'data/equipment/art.json', 'data/npcs.json'].map((p) => loadJSON(p)));
+  const [dvDef, pbDef, ccDef] = await Promise.all(['data/build/dao-van.json', 'data/build/phap-bao.json', 'data/build/cam-che.json'].map((p) => loadJSON(p)));
+  await loadFx([...Object.values(dvDef.he).map((h) => h.bolt), ...pbDef.list.map((d) => d.icon[0]), 'v.tran-phap']);
+  // Đạo Vận: bộ ngũ hành, Thần Phù, pháp bảo, cấm chế — hình đang vẽ bằng code / mượn hiệu ứng → chủ dự án gửi ảnh riêng thì thay
+  const daoVan = [
+    ...Object.entries(dvDef.he).map(([he, h]) => ({ id: `dv.${he}`, name: `Bộ ${he}: ${h.name}`, img: fxIconUrl(h.bolt, 0), status: 'tam', note: 'Mượn hình đạn hiệu ứng',
+      info: Object.entries(h.tiers).map(([t, v]) => `${t}/8 món: ${v._mo_ta}`) })),
+    ...dvDef.cards.list.map((d) => ({ id: d.id, name: d.name, img: cardArt(d.id, 'tim'), status: 'none', note: 'Lá bùa vẽ bằng code — cần ảnh lá phù',
+      info: [`Thần Phù · ${d.desc.replace('{v}', 'N')}`, 'Rơi khi hạ quái, phẩm Lục → Đen'] })),
+    ...pbDef.list.map((d) => ({ id: d.id, name: d.name, img: fxIconUrl(...d.icon), status: 'none', note: 'Mượn icon hiệu ứng — cần ảnh pháp bảo',
+      info: [`Pháp bảo hệ ${d.he} · hồi ${d.cd_s} giây · ${d.mp} linh lực`, d.desc.replace(/\{(\w+)%?\}/g, (_, k) => d[k] ?? k)] })),
+    ...Object.entries(ccDef.he).map(([he, d]) => ({ id: `cc.${he}`, name: d.name, img: fxIconUrl('v.tran-phap', 0), status: 'tam', note: 'Vòng phù văn vẽ bằng code',
+      info: [`Cấm chế hệ ${he} (kỹ năng Bố Cấm Chế)`, d.desc] })),
+  ];
   const icon = (id) => iconUrl(id);
   const iconEntry = (d, extra = []) => ({ id: d.id, name: d.name, img: icon(d.id), status: icon(d.id) ? 'ok' : 'none', info: [info.effect(d), ...extra, info.source(d) && `Nơi có: ${info.source(d)}`] });
 
@@ -110,6 +123,7 @@ export async function openCodex(o) {
       { id: 'quai', name: 'Quái vật', hint: 'Mỗi quái: dải hình đứng / đi / đánh / chết (cùng cỡ khung, nền trong suốt). Bấm ▶ nhiều lần để xem từng chuyển động.', entries: mon },
       { id: 'trangbi', name: 'Trang bị', hint: 'Đồ 6 hệ trong Kho (hình mặc lên người) và các ô chưa có đồ.', entries: [...gear, ...emptySlots] },
       { id: 'phoi', name: 'Phôi luyện', hint: 'Đồ luyện từ phôi chưa có hình riêng — mỗi tên mẫu cần 1 ảnh.', entries: phoi },
+      { id: 'daovan', name: 'Đạo Vận', hint: 'Bộ ngũ hành, Thần Phù (cần ảnh lá phù ~256×384), pháp bảo (cần ảnh pháp bảo ~256×256), cấm chế. Nền trong suốt.', entries: daoVan },
       { id: 'npc', name: 'NPC', hint: '50 NPC (hình riêng, không phải vật phẩm).', entries: npcs },
       { id: 'khac', name: 'Khác', hint: 'Tiền tệ, icon ô trang bị, vật phẩm nhiệm vụ.', entries: misc },
     ],
