@@ -60,6 +60,15 @@ Chủ dự án muốn chất My Heroes: chọn đúng bộ + hệ + thẻ thì c
    - Đeo vào ô pháp bảo, rồi xếp kỹ năng **Pháp Bảo** vào ô kỹ năng để dùng. Chiêu bắn đạn đi qua `barrage.fire` nên ăn theo Đạo Vận.
    - **Ôn dưỡng** cấp 1→10 bằng Linh thạch: sát thương +15% mỗi cấp, số đạn / hồn / tia +1 mỗi 2 cấp.
    - **Thức tỉnh** dòng chỉ số random như trang bị, cộng vào chỉ số khi đang đeo.
-3. Cấm chế và trận pháp: đặt bẫy trên đất, phong ấn.
-4. Hồn phiên: luyện hồn quái thu phục để thú cưng mạnh hơn.
+3. ✅ **Cấm chế** (`data/build/cam-che.json`, `src/game/camche.js`):
+   - Kỹ năng **Bố Cấm Chế** (từ Luyện Khí 5) đặt trận dưới mục tiêu. Tối đa 3 trận, mỗi trận 9–12 giây.
+   - Loại trận theo hệ chủ đạo:
+     - Kim: kiếm chém quái trong trận.
+     - Ám: hút hồn, hồi máu cho mình.
+     - Thủy: thủy lao giam quái.
+     - Hỏa: thiêu đốt.
+     - Mộc: dây leo trói quái, hồi máu khi mình đứng trong trận.
+     - Thổ: chấn choáng.
+   - Mỗi món cùng hệ đang mặc: +15% sát thương trận.
+4. ✅ **Luyện hồn thú cưng**: thú nuốt hồn 1 con cùng loài đang nghỉ trong Kho thì +1★, tối đa 5★. Mỗi sao +35% công và khí huyết.
 5. Chuyển kết quả có giá trị lên máy chủ (Mốc 3–4): máy chủ chỉ kiểm hợp lý, không mô phỏng từng khung hình.

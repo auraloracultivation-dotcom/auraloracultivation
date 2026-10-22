@@ -760,6 +760,7 @@
    "van-kiem",
    "hac-dong",
    "phuong-hoang",
+   "cam-che",
    "phap-bao",
    "phap-tuong",
    "dan-duoc"
@@ -782,6 +783,19 @@
    "mp": 20,
    "cd_s": 10,
    "desc": "Kích hoạt pháp bảo đang đeo (Kho → Pháp Bảo). Chiêu bắn đạn ăn theo Đạo Vận."
+  },
+  "cam-che": {
+   "name": "Bố Cấm Chế",
+   "kind": "trap",
+   "unlock": "lk5",
+   "mp": 18,
+   "cd_s": 6,
+   "range_px": 200,
+   "icon": [
+    "v.tran-phap",
+    0
+   ],
+   "desc": "Đặt trận cấm chế theo hệ chủ đạo (tối đa 3 trận) — Kim kiếm, Ám hút hồn, Thủy giam, Hỏa thiêu, Mộc trói, Thổ chấn"
   }
  },
  "awaken": {
@@ -896,6 +910,11 @@
   "wander_r": 70,
   "wander_speed": 40,
   "mob_hit_s": 1.6,
-  "revive_s": 5
+  "revive_s": 5,
+  "merge": {
+   "max_star": 5,
+   "per_star": 0.35
+  },
+  "_ghi_chu_luyen_hon": "Luyện hồn (23/10): thú cưng nuốt hồn một con CÙNG LOÀI đang nghỉ trong Kho → +1 sao (tối đa max_star), công và khí huyết ×(1 + per_star × sao)."
  }
 }

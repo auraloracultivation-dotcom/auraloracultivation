@@ -1,0 +1,63 @@
+{
+ "_status": "test",
+ "_nguon": "Chủ dự án 23/10/2026 (trao toàn quyền) — cấm chế kiểu Tiên Nghịch, tên riêng của Auralora.",
+ "_ghi_chu": "Kỹ năng 'Bố Cấm Chế' đặt một trận cấm chế dưới chân (hoặc dưới mục tiêu). Loại cấm chế theo HỆ CHỦ ĐẠO của Đạo Vận (hệ có nhiều món đang mặc nhất; chưa mặc đồ hệ nào = Kim). Tối đa max_active trận cùng lúc, mỗi trận s giây; quái đứng trong trận bị tác động mỗi tick_s giây. Sát thương tăng theo bộ ngũ hành: × (1 + set_bonus × số món cùng hệ). Code: src/game/camche.js.",
+ "max_active": 3,
+ "tick_s": 0.5,
+ "set_bonus": 0.15,
+ "he": {
+  "Kim": {
+   "name": "Canh Kim Kiếm Cấm",
+   "r": 46,
+   "s": 10,
+   "mul": 0.55,
+   "fx": "chem-x",
+   "desc": "Kiếm khí vô hình chém mọi quái trong trận"
+  },
+  "Ám": {
+   "name": "U Minh Phệ Hồn Cấm",
+   "r": 44,
+   "s": 10,
+   "mul": 0.4,
+   "drain": 0.003,
+   "fx": "v.dan-am",
+   "desc": "Hút sinh lực quái trong trận, hồi máu cho mình"
+  },
+  "Thủy": {
+   "name": "Huyền Thủy Khốn Lao",
+   "r": 52,
+   "s": 12,
+   "mul": 0.3,
+   "stun": 0.35,
+   "fx": "v.no-bang",
+   "desc": "Thủy lao giam quái: liên tục bị trói, mất máu"
+  },
+  "Hỏa": {
+   "name": "Liệt Diễm Phần Cấm",
+   "r": 44,
+   "s": 9,
+   "mul": 0.75,
+   "fx": "no-lua",
+   "desc": "Lửa cấm chế thiêu đốt quái trong trận"
+  },
+  "Mộc": {
+   "name": "Thanh Đằng Triền Cấm",
+   "r": 50,
+   "s": 12,
+   "mul": 0.25,
+   "stun": 0.4,
+   "heal": 0.004,
+   "fx": "moc-troi",
+   "desc": "Dây leo quấn chặt quái, trận hồi máu cho mình khi đứng trong"
+  },
+  "Thổ": {
+   "name": "Hậu Thổ Trấn Địa Cấm",
+   "r": 48,
+   "s": 10,
+   "mul": 0.5,
+   "stun": 0.25,
+   "fx": "v.dia-thu",
+   "desc": "Đất chấn liên hồi, quái trong trận choáng váng"
+  }
+ }
+}

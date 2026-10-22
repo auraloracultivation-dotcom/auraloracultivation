@@ -35,6 +35,7 @@ import { createDaoVan } from './daovan.js';
 import { createCards } from './cards.js';
 import { createBarrage } from './barrage.js';
 import { createTreasure } from './treasure.js';
+import { createCamChe } from './camche.js';
 import { placeholderIcon, showRevive } from '../ui/index.js';
 import { artInfo, iconUrl, fxIconUrl } from '../entity/index.js';
 
@@ -49,7 +50,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     'data/items/quest-items.json', 'data/realms.json'].map((p) => loadJSON(p)));
   const [recipes, shop, artIdx] = await Promise.all([loadJSON('data/items/recipes.json'), loadJSON('data/shop.json'), loadJSON('data/equipment/art.json')]);
   const [curDef, lifeDef, premium, dvDef] = await Promise.all(['data/currency.json', 'data/lifespan.json', 'data/items/premium.json', 'data/build/dao-van.json'].map((p) => loadJSON(p)));
-  const pbDef = await loadJSON('data/build/phap-bao.json'); // pháp bảo
+  const [pbDef, ccDef] = await Promise.all([loadJSON('data/build/phap-bao.json'), loadJSON('data/build/cam-che.json')]); // pháp bảo, cấm chế
   const artDef = await loadJSON('data/art/sprites.json');
   await Promise.all([loadSprites(artDef), loadNpcArt(artDef.npc)]); // hình quái, hiệu ứng, icon, NPC (thử nghiệm)
   const progress = createProgress(userId, gp);
@@ -223,7 +224,8 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const barrage = createBarrage({ dv, me, mobs, map, bolts, play, strike, toast, dead: () => dead, maxHp: () => ps.hp, heal: (n) => { hp = Math.min(ps.hp, hp + n); } });
   treasure = createTreasure({ def: pbDef, S, progress, craft, awaken, barrage, mobs, me, map, buffs, recompute, target, play, say, toast, heOf: dv.heOf,
     stageOk: (id) => craft.stageOk(id), now: () => now, maxHp: () => ps.hp, heal: (n) => { hp = Math.min(ps.hp, hp + n); } });
-  const skills = createSkills({ useTreasure: (q) => treasure.use(q), S, me, mobs, map, pt, cds, toast, say, play, fx, bolts, strike, target, buffs, recompute, mods: dv.mods, fire: barrage.fire, maybeEcho: barrage.maybeEcho,
+  const camChe = createCamChe({ def: ccDef, dv, barrage, me, mobs, target, play, toast, dead: () => dead, maxHp: () => ps.hp, heal: (n) => { hp = Math.min(ps.hp, hp + n); } });
+  const skills = createSkills({ useTreasure: (q) => treasure.use(q), camChe: (s) => camChe.cast(s), S, me, mobs, map, pt, cds, toast, say, play, fx, bolts, strike, target, buffs, recompute, mods: dv.mods, fire: barrage.fire, maybeEcho: barrage.maybeEcho,
     get bar() { return bar; }, heal: (n) => { hp = Math.min(ps.hp, hp + n); say(me.x, me.y - HEAD, `+${Math.round(n)} khí huyết`, '#5dff7a', true); },
     maxHp: () => ps.hp, now: () => now, dead: () => dead,
     summonPet() { const a = bag.equippedItem('linh-thu')?.art || progress.equipped().find((x) => x.slot === 'linh-thu')?.art, f = a && artFile(a); // hình linh thú đang mặc
@@ -255,7 +257,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
       if (gp.auto.use_skills && target(260)) skills.autoCast(loadout.ids(), hp / ps.hp); // tự dùng kỹ năng trong ô
       if (target(PL.attack_range_px) && attackCd <= 0) { attack(); me.onAutoSwing?.(); }
     }
-    barrage.update(dt); const md = dv.mods(); if (md.mp_regen && !dead) pt.gain(ps.mp * md.mp_regen * dt); // đạn + bị động Đạo Vận, linh lực hồi liên tục
+    barrage.update(dt); camChe.update(dt); const md = dv.mods(); if (md.mp_regen && !dead) pt.gain(ps.mp * md.mp_regen * dt); // đạn + bị động Đạo Vận, linh lực hồi liên tục
     if (pet) {
       if (now > pet.until || dead) pet = null;
       else {
@@ -283,7 +285,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const at = (o) => ({ x: me.x + wrapDelta(o.x - me.x, map.width), y: me.y + wrapDelta(o.y - me.y, map.height) });
   function renderBelow(ctx, t) {
     for (const n of gather.list) { const p = at(n); drawNode(ctx, n, p.x, p.y, t); }
-    barrage.renderGround(ctx, at, t); // hào quang Đạo Vận dưới chân
+    barrage.renderGround(ctx, at, t); camChe.render(ctx, at, t); // hào quang Đạo Vận + trận cấm chế dưới chân
     for (const n of npcs.list) { const p = at(n); if (Math.abs(p.x - me.x) < 700 && Math.abs(p.y - me.y) < 700) drawNpc(ctx, n, p.x, p.y, npcs.height); }
     const list = mobs.list.map((m) => ({ m, ...at(m) })).filter((o) => Math.abs(o.x - me.x) < 800 && Math.abs(o.y - me.y) < 1000).sort((a, b) => a.y - b.y); // chỉ vẽ quái gần màn hình
     for (const { m, x, y } of list) {
