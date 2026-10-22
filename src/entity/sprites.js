@@ -126,6 +126,9 @@ export function drawIcon(ctx, id, x, y, size) {
 }
 
 // Một khung hiệu ứng làm icon vuông (ô kỹ năng trên HUD), giữ lại sau lần đầu
+// Nạp trước ảnh hiệu ứng (lazy) để fxIconUrl có hình ngay — Đồ giám, icon pháp bảo trong Kho
+export const loadFx = (ids) => Promise.all(ids.map((id) => DEF?.fx[id] && load(DEF.fx[id].src)));
+
 export function fxIconUrl(id, frame = 0) {
   const key = `fx:${id}:${frame}`;
   if (iconUrls.has(key)) return iconUrls.get(key);
