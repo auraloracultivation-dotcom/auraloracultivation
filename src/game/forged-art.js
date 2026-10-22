@@ -8,6 +8,7 @@ export function createForgedArt(artIdx, progress) {
   const pool = (slot) => (artIdx[slot] || []).filter((a) => WITH_HE.has(slot) || !/\.he\./.test(a.id));
   function ensureArt(g) {
     const p = pool(g.slot);
+    if (g.art && !p.some((x) => x.id === g.art) && WITH_HE.has(g.slot)) g.art = null; // hình đã bị xoá (mặt nạ cũ) → bốc lại
     if (!g.art && p.length) { g.art = p[Math.floor(Math.random() * p.length)].id; progress.changed(); }
     return g;
   }
