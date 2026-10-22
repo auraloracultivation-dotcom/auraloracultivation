@@ -16,6 +16,7 @@ export function drawMonster(ctx, m, x, y, now) {
     ctx.fillStyle = '#ff3b30'; ctx.beginPath();
     ctx.ellipse(m.wrx, m.wry, m.heavyR, m.heavyR * 0.55, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
   }
+  if (m.tele) drawTelegraph(ctx, m.tele, now);
   if (m.def.art?.code === 'hu-vo') { drawVoid(ctx, m, x, y, now / 1000); ctx.restore(); return; } // Âm Hư: vẽ bằng code
   // bóng
   ctx.fillStyle = 'rgba(0,0,0,.28)';
@@ -43,6 +44,23 @@ export function drawMonster(ctx, m, x, y, now) {
   ctx.restore();
 }
 
+// Vùng chiêu boss sắp đánh (src/game/mob-skills.js): đỏ mờ + vùng đậm dần lan ra theo tiến độ vận chiêu
+function drawTelegraph(ctx, t, now) {
+  ctx.save();
+  const pulse = 0.5 + 0.5 * Math.sin(now / 70);
+  ctx.strokeStyle = `rgba(255,70,60,${0.6 + pulse * 0.3})`; ctx.lineWidth = 1.5;
+  if (t.line) {
+    ctx.translate(t.line.x, t.line.y); ctx.rotate(t.line.ang);
+    ctx.fillStyle = 'rgba(255,40,30,0.18)'; ctx.fillRect(0, -t.line.w / 2, t.line.len, t.line.w);
+    ctx.fillStyle = 'rgba(255,40,30,0.32)'; ctx.fillRect(0, -t.line.w / 2, t.line.len * t.p, t.line.w);
+    ctx.strokeRect(0, -t.line.w / 2, t.line.len, t.line.w);
+  } else for (const c of t.circles) {
+    ctx.fillStyle = 'rgba(255,40,30,0.16)'; ctx.beginPath(); ctx.ellipse(c.x, c.y, c.r, c.r * 0.7, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,40,30,0.3)'; ctx.beginPath(); ctx.ellipse(c.x, c.y, c.r * t.p, c.r * 0.7 * t.p, 0, 0, Math.PI * 2); ctx.fill();
+  }
+  ctx.restore();
+}
+
 // Quái có hình (data/art/sprites.json): chọn hoạt ảnh theo trạng thái. Hình tĩnh 1 khung thì code nhún nhẹ.
 function drawMonsterSprite(ctx, m, art, x, y, t) {
   let anim = 'idle', at = t, once = false;
@@ -54,6 +72,8 @@ function drawMonsterSprite(ctx, m, art, x, y, t) {
   const bob = still ? Math.abs(Math.sin(m.walkT * 8)) * 2 + Math.sin(t * 2.5) * 0.6 : 0;
   ctx.save();
   if (still && m.moving) { ctx.translate(x, y); ctx.rotate(Math.sin(m.walkT * 8) * 0.08); ctx.translate(-x, -y); }
+  if (art.breathe && !m.moving && m.state !== 'dead') { const k = Math.sin(t * 2.4 + m.uid) * 0.025; ctx.translate(x, y); ctx.scale(1 - k * 0.5, 1 + k); ctx.translate(-x, -y); } // thở
+  if (m.state === 'cast') { ctx.shadowColor = '#ff3b30'; ctx.shadowBlur = 10 + 6 * Math.sin(t * 12); } // đang vận chiêu: hào quang đỏ
   drawSheet(ctx, art.sheet, anim, at, x, y - bob, art.h, m.facing, { hue: art.hue || 0, once, fps: art.fps || 8 });
   if (m.hitT > 0) { ctx.globalAlpha = 0.35; ctx.globalCompositeOperation = 'lighter'; drawSheet(ctx, art.sheet, anim, at, x, y - bob, art.h, m.facing, { hue: art.hue || 0, once }); }
   ctx.restore();
@@ -112,8 +132,8 @@ export function drawFx(ctx, fx, ox, oy) {
       ctx.restore();
     } else if (f.kind === 'sprite') { // hiệu ứng hình: f.fx, tiến độ theo thời gian còn lại
       drawEffect(ctx, f.fx, 1 - f.t / f.life, x, y - (f.lift || 0), f.h, f.rot || 0);
-    } else if (f.kind === 'bolt' && drawEffect(ctx, 'kiem-bang-bay', 0, x, y, 22, Math.atan2(f.vy, f.vx))) {
-      // kiếm khí: thanh kiếm băng bay theo hướng
+    } else if (f.kind === 'bolt' && drawEffect(ctx, f.fx || 'kiem-bang-bay', 0, x, y, f.size || 22, Math.atan2(f.vy, f.vx))) {
+      // đạn chiêu (kiếm khí, hỏa cầu, băng tiễn…) bay theo hướng
     } else if (f.kind === 'bolt') {
       ctx.globalAlpha = 0.9; ctx.strokeStyle = '#9ff3ff'; ctx.lineWidth = 3; ctx.lineCap = 'round';
       ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x - f.vx * 0.04, y - f.vy * 0.04); ctx.stroke();

@@ -406,14 +406,26 @@
    "cd_s": 3,
    "mul": 1.8,
    "range_px": 170,
-   "speed_px_per_s": 420
+   "speed_px_per_s": 420,
+   "name": "Kiếm Khí",
+   "icon": [
+    "kiem-bang-bay",
+    0
+   ],
+   "desc": "Phóng kiếm khí bay thẳng tới mục tiêu"
   },
   "khong-che": {
    "unlock": "tc_so",
    "mp": 10,
    "cd_s": 10,
    "stun_s": 2,
-   "range_px": 120
+   "range_px": 120,
+   "name": "Khống Chế",
+   "icon": [
+    "moc-troi",
+    2
+   ],
+   "desc": "Rễ cây trói mục tiêu, choáng {stun_s} giây"
   },
   "linh-thu": {
    "unlock": "kd_so",
@@ -421,7 +433,9 @@
    "cd_s": 40,
    "last_s": 30,
    "mul": 0.35,
-   "every_s": 1
+   "every_s": 1,
+   "name": "Linh Thú",
+   "desc": "Gọi linh thú đang đeo ra đánh cùng trong {last_s} giây"
   },
   "luot": {
    "unlock": "kd_so",
@@ -429,19 +443,31 @@
    "cd_s": 8,
    "last_s": 3,
    "ne_mul": 1.5,
-   "speed_px_per_s": 195
+   "speed_px_per_s": 195,
+   "name": "Lăng Ba Vi Bộ",
+   "icon_url": "assets/ui/skills/luot.png",
+   "desc": "Lướt nhanh, né tránh ×{ne_mul} trong {last_s} giây"
   },
   "nguyen-anh": {
    "unlock": "na_so",
    "mp": 30,
    "cd_s": 8,
    "mul": 1.4,
-   "radius_px": 85
+   "radius_px": 85,
+   "name": "Nguyên Anh Chấn",
+   "icon": [
+    "tho-vong",
+    3
+   ],
+   "desc": "Đánh mọi quái quanh mình (bán kính {radius_px})"
   },
   "phap-tuong": {
    "atk_mul": 1.6,
    "def_mul": 1.25,
-   "_ghi_chu": "Kỹ năng hoá hình đang có (data/skills/phap-tuong.json); khi bật cộng chỉ số theo Lab"
+   "_ghi_chu": "Kỹ năng hoá hình đang có (data/skills/phap-tuong.json); khi bật cộng chỉ số theo Lab",
+   "name": "Pháp Tướng",
+   "kind": "toggle",
+   "desc": "Hoá pháp tướng đang đeo: công ×{atk_mul}, thủ ×{def_mul}, hao linh lực liên tục"
   },
   "cong_phap_bonus_per_level": 0.1,
   "cong_phap_effects": {
@@ -491,7 +517,241 @@
     "per": 0.08,
     "text": "Né tránh +{v}%"
    }
-  }
+  },
+  "dan-duoc": {
+   "name": "Đan Dược",
+   "kind": "pill",
+   "desc": "Uống Tiểu Hồi Huyết Đan (hồi máu)"
+  },
+  "hoa-cau": {
+   "name": "Hỏa Cầu Thuật",
+   "kind": "bolt",
+   "unlock": "lk3",
+   "mp": 8,
+   "cd_s": 4,
+   "mul": 1.6,
+   "range_px": 220,
+   "speed_px_per_s": 330,
+   "fx": "v.dan-hoa",
+   "fx_size": 22,
+   "hit_fx": "v.no-hoa",
+   "hit_h": 34,
+   "splash_px": 36,
+   "icon": [
+    "v.dan-hoa",
+    0
+   ],
+   "desc": "Cầu lửa bay tới mục tiêu, nổ lan {splash_px} quanh chỗ trúng"
+  },
+  "bang-tien": {
+   "name": "Băng Phách Tiễn",
+   "kind": "bolt",
+   "unlock": "lk6",
+   "mp": 10,
+   "cd_s": 5,
+   "mul": 1.5,
+   "stun_s": 0.6,
+   "range_px": 240,
+   "speed_px_per_s": 380,
+   "fx": "v.dan-bang",
+   "fx_size": 20,
+   "hit_fx": "v.no-bang",
+   "hit_h": 30,
+   "icon": [
+    "v.dan-bang",
+    0
+   ],
+   "desc": "Mũi tên băng, đóng băng mục tiêu {stun_s} giây"
+  },
+  "moc-lien": {
+   "name": "Mộc Liên Hồi Xuân",
+   "kind": "heal",
+   "unlock": "lk8",
+   "mp": 20,
+   "cd_s": 25,
+   "heal": 0.25,
+   "fx": "v.moc-lien",
+   "fx_h": 40,
+   "icon": [
+    "v.moc-lien",
+    1
+   ],
+   "desc": "Sen xanh nở dưới chân, hồi {heal%} khí huyết"
+  },
+  "phong-nhan": {
+   "name": "Phong Nhận Trảm",
+   "kind": "bolt",
+   "unlock": "tc_trung",
+   "mp": 14,
+   "cd_s": 6,
+   "mul": 1.4,
+   "pierce": true,
+   "range_px": 280,
+   "speed_px_per_s": 420,
+   "fx": "v.dan-phong",
+   "fx_size": 26,
+   "hit_fx": "v.loc-xoay",
+   "hit_h": 30,
+   "icon": [
+    "v.dan-phong",
+    0
+   ],
+   "desc": "Lưỡi gió xuyên qua mọi quái trên đường bay"
+  },
+  "loi-kich": {
+   "name": "Cửu Thiên Lôi Kích",
+   "kind": "strike",
+   "unlock": "tc_hau",
+   "mp": 18,
+   "cd_s": 7,
+   "mul": 2.2,
+   "radius_px": 45,
+   "range_px": 260,
+   "fx": "v.loi-tru",
+   "fx_h": 70,
+   "icon": [
+    "v.loi-tru",
+    2
+   ],
+   "desc": "Sét trời đánh xuống mục tiêu và quái quanh nó"
+  },
+  "dia-thu": {
+   "name": "Địa Mạch Thứ",
+   "kind": "strike",
+   "unlock": "kd_trung",
+   "mp": 22,
+   "cd_s": 9,
+   "mul": 1.8,
+   "stun_s": 0.8,
+   "radius_px": 75,
+   "range_px": 220,
+   "fx": "v.dia-thu",
+   "fx_h": 48,
+   "icon": [
+    "v.dia-thu",
+    1
+   ],
+   "desc": "Gai đá trồi lên quanh mục tiêu, choáng {stun_s} giây"
+  },
+  "thuy-long": {
+   "name": "Thủy Long Ba",
+   "kind": "area_self",
+   "unlock": "kd_hau",
+   "mp": 26,
+   "cd_s": 10,
+   "mul": 1.7,
+   "radius_px": 100,
+   "fx": "v.long-thuy",
+   "fx_h": 70,
+   "icon": [
+    "v.long-thuy",
+    0
+   ],
+   "desc": "Rồng nước cuộn quanh mình, đánh mọi quái trong {radius_px}"
+  },
+  "ho-the": {
+   "name": "Kim Cang Hộ Thể",
+   "kind": "buff",
+   "unlock": "na_trung",
+   "mp": 30,
+   "cd_s": 30,
+   "buff": "def",
+   "buff_mul": 1.6,
+   "last_s": 8,
+   "fx": "v.ho-the",
+   "fx_h": 40,
+   "icon": [
+    "v.ho-the",
+    1
+   ],
+   "desc": "Khiên thần hộ thể: phòng thủ ×{buff_mul} trong {last_s} giây"
+  },
+  "van-kiem": {
+   "name": "Vạn Kiếm Quy Tông",
+   "kind": "area_self",
+   "unlock": "na_hau",
+   "mp": 40,
+   "cd_s": 14,
+   "mul": 2.6,
+   "radius_px": 130,
+   "fx": "v.van-kiem",
+   "fx_h": 80,
+   "icon": [
+    "v.van-kiem",
+    1
+   ],
+   "desc": "Kiếm vàng mưa xuống quanh mình (bán kính {radius_px})"
+  },
+  "hac-dong": {
+   "name": "Hư Không Hắc Động",
+   "kind": "strike",
+   "unlock": "ht_so",
+   "mp": 50,
+   "cd_s": 18,
+   "mul": 3.0,
+   "stun_s": 1.2,
+   "radius_px": 100,
+   "range_px": 240,
+   "fx": "v.hac-dong",
+   "fx_h": 90,
+   "icon": [
+    "v.hac-dong",
+    0
+   ],
+   "desc": "Hố đen nuốt quái quanh mục tiêu, choáng {stun_s} giây"
+  },
+  "phuong-hoang": {
+   "name": "Phượng Hoàng Niết Bàn",
+   "kind": "bolt",
+   "unlock": "ht_trung",
+   "mp": 60,
+   "cd_s": 20,
+   "mul": 3.4,
+   "pierce": true,
+   "range_px": 320,
+   "speed_px_per_s": 300,
+   "fx": "v.phuong-hoang",
+   "fx_size": 54,
+   "hit_fx": "v.no-hoa",
+   "hit_h": 50,
+   "splash_px": 50,
+   "icon": [
+    "v.phuong-hoang",
+    0
+   ],
+   "desc": "Phượng lửa lao qua hàng quái, nổ lan {splash_px}"
+  },
+  "_order": [
+   "hoa-cau",
+   "bang-tien",
+   "moc-lien",
+   "kiem-khi",
+   "khong-che",
+   "phong-nhan",
+   "loi-kich",
+   "linh-thu",
+   "luot",
+   "dia-thu",
+   "thuy-long",
+   "nguyen-anh",
+   "ho-the",
+   "van-kiem",
+   "hac-dong",
+   "phuong-hoang",
+   "phap-tuong",
+   "dan-duoc"
+  ],
+  "_slots": 7,
+  "_default_loadout": [
+   "hoa-cau",
+   "bang-tien",
+   "phap-tuong",
+   "kiem-khi",
+   "moc-lien",
+   "dan-duoc",
+   "luot"
+  ],
+  "_ghi_chu_23_10": "Kỹ năng người chơi (chủ dự án 23/10): ô kỹ năng tự xếp — người chơi chọn kỹ năng nào vào ô 1.._slots. kind: bolt (đạn bay, pierce = xuyên, splash_px = nổ lan), strike (đánh tại mục tiêu, radius_px), area_self (quanh mình), heal, buff, toggle (pháp tướng), pill (đan). icon = [mã hiệu ứng, khung]. Hiệu ứng v.* cắt từ tấm chủ dự án (tools/fx_sheets.py). Số TẠM."
  },
  "awaken": {
   "_ghi_chu": "Lab v3.2 — thức tỉnh TỪNG DÒNG: mỗi lần bấm thêm 1 dòng, màu (phẩm) của dòng bốc ngẫu nhiên theo tỷ lệ phẩm Lab (data/equipment/awaken.json → gearQ). Mỗi món có giới hạn dòng ẩn 1–10 (bốc lúc thức tỉnh lần đầu, KHÔNG báo trước); đủ giới hạn thì nút thức tỉnh tắt. Giá (Linh thạch) tăng theo số thứ tự dòng — số tạm.",
@@ -565,7 +825,10 @@
   "hp_pill_below": 0.3,
   "stuck_s": 1.2,
   "skip_s": 10,
-  "repick_s": 0.5
+  "repick_s": 0.5,
+  "use_skills": true,
+  "fly_when_stuck": true,
+  "_ghi_chu_23_10": "Tự động dùng kỹ năng trong ô (trừ Lướt / Pháp tướng); kẹt vướng cây, nước thì tự ngự kiếm bay qua rồi hạ xuống farm tiếp (cần cầm kiếm + đủ linh lực)"
  },
  "luc_chien": {
   "_ghi_chu": "Lực chiến (bảng xếp hạng) = tổng chỉ số × trọng số. Số TẠM, chỉnh thoải mái. src/game/rank.js",

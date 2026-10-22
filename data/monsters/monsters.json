@@ -124,9 +124,9 @@
     10
    ],
    "art": {
-    "sheet": "slime",
-    "h": 16,
-    "still": true
+    "sheet": "m.yeu-ho",
+    "h": 26.3,
+    "breathe": true
    },
    "behavior": null
   },
@@ -155,9 +155,9 @@
     14
    ],
    "art": {
-    "sheet": "ran",
-    "h": 20,
-    "still": true
+    "sheet": "m.thanh-xa",
+    "h": 26.1,
+    "breathe": true
    },
    "behavior": null
   },
@@ -187,9 +187,9 @@
     20
    ],
    "art": {
-    "sheet": "gai-dat",
-    "h": 20,
-    "still": true
+    "sheet": "m.thach-giap",
+    "h": 25.9,
+    "breathe": true
    },
    "behavior": null
   },
@@ -225,8 +225,9 @@
     22
    ],
    "art": {
-    "sheet": "orc",
-    "h": 30
+    "sheet": "m.hac-lang-vuong",
+    "h": 39.0,
+    "breathe": true
    },
    "behavior": null
   },
@@ -262,9 +263,9 @@
     25
    ],
    "art": {
-    "sheet": "orc",
-    "h": 46,
-    "hue": 40
+    "sheet": "m.son-dong-lao-yeu",
+    "h": 49.4,
+    "breathe": true
    },
    "behavior": null
   },
@@ -291,8 +292,9 @@
     27
    ],
    "art": {
-    "sheet": "blood",
-    "h": 24
+    "sheet": "m.huyet-sai",
+    "h": 26.6,
+    "breathe": true
    },
    "behavior": null
   },
@@ -319,8 +321,9 @@
     32
    ],
    "art": {
-    "sheet": "doi-lua",
-    "h": 30
+    "sheet": "m.diem-xa",
+    "h": 26.2,
+    "breathe": true
    },
    "behavior": null
   },
@@ -347,9 +350,9 @@
     35
    ],
    "art": {
-    "sheet": "oc-gai",
-    "h": 22,
-    "still": true
+    "sheet": "m.nham-giap",
+    "h": 26.6,
+    "breathe": true
    },
    "behavior": null
   },
@@ -378,8 +381,9 @@
     39
    ],
    "art": {
-    "sheet": "demon",
-    "h": 32
+    "sheet": "m.huyet-lang-vuong",
+    "h": 38.6,
+    "breathe": true
    },
    "behavior": null
   },
@@ -408,9 +412,9 @@
     43
    ],
    "art": {
-    "sheet": "demon",
-    "h": 50,
-    "hue": 25
+    "sheet": "m.hoa-vuc-ma-ton",
+    "h": 49.3,
+    "breathe": true
    },
    "behavior": null
   },
@@ -437,9 +441,9 @@
     48
    ],
    "art": {
-    "sheet": "dau-lau",
-    "h": 22,
-    "still": true
+    "sheet": "m.co-chien-hon",
+    "h": 25.7,
+    "breathe": true
    },
    "behavior": null
   },
@@ -466,9 +470,9 @@
     55
    ],
    "art": {
-    "sheet": "nhen",
-    "h": 24,
-    "still": true
+    "sheet": "m.doc-yeu",
+    "h": 28.3,
+    "breathe": true
    },
    "behavior": null
   },
@@ -495,10 +499,9 @@
     61
    ],
    "art": {
-    "sheet": "oc-gai",
-    "h": 26,
-    "hue": 200,
-    "still": true
+    "sheet": "m.huyen-giap",
+    "h": 29.6,
+    "breathe": true
    },
    "behavior": null
   },
@@ -527,8 +530,9 @@
     68
    ],
    "art": {
-    "sheet": "knight",
-    "h": 38
+    "sheet": "m.thuong-co-chien-tuong",
+    "h": 40.3,
+    "breathe": true
    },
    "behavior": null
   },
@@ -557,14 +561,15 @@
     76
    ],
    "art": {
-    "sheet": "xuc-tu",
-    "h": 58
+    "sheet": "m.huyen-vuc-ma-ton",
+    "h": 49.4,
+    "breathe": true
    },
    "behavior": null
   },
   {
    "id": "monster.trang.bang-ho.001",
-   "name": "Băng Hồ",
+   "name": "Băng Hổ",
    "zone": "trang",
    "tier": 4,
    "rank": "thuong",
@@ -585,9 +590,9 @@
     85
    ],
    "art": {
-    "sheet": "ca-quai",
-    "h": 22,
-    "still": true
+    "sheet": "m.bang-ho",
+    "h": 26.1,
+    "breathe": true
    },
    "behavior": null
   },
@@ -614,10 +619,9 @@
     96
    ],
    "art": {
-    "sheet": "ruoi",
-    "h": 24,
-    "hue": 180,
-    "still": true
+    "sheet": "m.tuyet-ung",
+    "h": 26.1,
+    "breathe": true
    },
    "behavior": null
   },
@@ -644,10 +648,9 @@
     107
    ],
    "art": {
-    "sheet": "gai-dat",
-    "h": 24,
-    "hue": 170,
-    "still": true
+    "sheet": "m.han-giap",
+    "h": 26.2,
+    "breathe": true
    },
    "behavior": null
   },
@@ -676,9 +679,9 @@
     120
    ],
    "art": {
-    "sheet": "soldier",
-    "h": 30,
-    "hue": 180
+    "sheet": "m.bang-hon-tuong",
+    "h": 35.0,
+    "breathe": true
    },
    "behavior": null
   },
@@ -707,11 +710,14 @@
     134
    ],
    "art": {
-    "sheet": "knight",
-    "h": 52,
-    "hue": 180
+    "sheet": "m.tuyet-son-lao-to",
+    "h": 47.9,
+    "breathe": true
    },
-   "behavior": null
+   "behavior": null,
+   "skills": [
+    "ms.bang-lang"
+   ]
   },
   {
    "id": "monster.than.hac-vuc-yeu.001",
@@ -736,8 +742,9 @@
     150
    ],
    "art": {
-    "sheet": "soi-loi",
-    "h": 34
+    "sheet": "m.hac-vuc-yeu",
+    "h": 25.9,
+    "breathe": true
    },
    "behavior": null
   },
@@ -764,10 +771,9 @@
     172
    ],
    "art": {
-    "sheet": "nhan-cau",
-    "h": 26,
-    "hue": 250,
-    "still": true
+    "sheet": "m.hu-khong-thu",
+    "h": 25.6,
+    "breathe": true
    },
    "behavior": null
   },
@@ -794,8 +800,9 @@
     198
    ],
    "art": {
-    "sheet": "ran-ba-dau",
-    "h": 42
+    "sheet": "m.tan-the-giap",
+    "h": 28.6,
+    "breathe": true
    },
    "behavior": null
   },
@@ -824,8 +831,9 @@
     222
    ],
    "art": {
-    "sheet": "thu-tim",
-    "h": 46
+    "sheet": "m.thuong-co-ma-tuong",
+    "h": 37.6,
+    "breathe": true
    },
    "behavior": null
   },
@@ -854,14 +862,19 @@
     248
    ],
    "art": {
-    "sheet": "ky-lan-loi",
-    "h": 66
+    "sheet": "m.hac-vuc-chu-te",
+    "h": 49.3,
+    "breathe": true
    },
-   "behavior": null
+   "behavior": null,
+   "skills": [
+    "ms.hac-dong",
+    "ms.am-tien"
+   ]
   },
   {
-   "id": "monster.den.hac-diem-lang.001",
-   "name": "Hắc Diệm Lang",
+   "id": "monster.den.tu-suong-yeu-ho.001",
+   "name": "Tử Sương Yêu Hồ",
    "zone": "den",
    "tier": 6,
    "rank": "thuong",
@@ -882,15 +895,15 @@
     278
    ],
    "art": {
-    "sheet": "soi-loi",
-    "h": 36,
-    "hue": 300
+    "sheet": "m.tu-suong-yeu-ho",
+    "h": 25.8,
+    "breathe": true
    },
    "behavior": null
   },
   {
-   "id": "monster.den.u-minh-quy-xa.001",
-   "name": "U Minh Quỷ Xà",
+   "id": "monster.den.u-moc-thach-mang.001",
+   "name": "U Mộc Thạch Măng",
    "zone": "den",
    "tier": 6,
    "rank": "thuong",
@@ -911,16 +924,15 @@
     320
    ],
    "art": {
-    "sheet": "ran",
-    "h": 30,
-    "hue": 260,
-    "still": true
+    "sheet": "m.u-moc-thach-mang",
+    "h": 26.2,
+    "breathe": true
    },
    "behavior": null
   },
   {
-   "id": "monster.den.hac-nham-cu-nhan.001",
-   "name": "Hắc Nham Cự Nhân",
+   "id": "monster.den.co-ma-da-nhan-thu.001",
+   "name": "Cổ Ma Đa Nhãn Thú",
    "zone": "den",
    "tier": 6,
    "rank": "thuong",
@@ -941,15 +953,15 @@
     368
    ],
    "art": {
-    "sheet": "orc",
-    "h": 40,
-    "hue": 220
+    "sheet": "m.co-ma-da-nhan-thu",
+    "h": 26.3,
+    "breathe": true
    },
    "behavior": null
   },
   {
-   "id": "monster.den.am-da-ma-tuong.001",
-   "name": "Ám Dạ Ma Tướng",
+   "id": "monster.den.tu-moc-yeu-than.001",
+   "name": "Tử Mộc Yêu Thần",
    "zone": "den",
    "tier": 6,
    "rank": "elite",
@@ -972,15 +984,15 @@
     412
    ],
    "art": {
-    "sheet": "knight",
-    "h": 46,
-    "hue": 270
+    "sheet": "m.tu-moc-yeu-than",
+    "h": 37.6,
+    "breathe": true
    },
    "behavior": null
   },
   {
-   "id": "monster.den.hac-uyen-ma-de.001",
-   "name": "Hắc Uyên Ma Đế",
+   "id": "monster.den.u-suong-ma-hoang.001",
+   "name": "U Sương Ma Hoàng",
    "zone": "den",
    "tier": 6,
    "rank": "boss",
@@ -1003,15 +1015,19 @@
     459
    ],
    "art": {
-    "sheet": "demon",
-    "h": 68,
-    "hue": 250
+    "sheet": "m.u-suong-ma-hoang",
+    "h": 49.8,
+    "breathe": true
    },
-   "behavior": null
+   "behavior": null,
+   "skills": [
+    "ms.u-hon-tran",
+    "ms.huyet-chu"
+   ]
   },
   {
-   "id": "monster.tim.tu-loi-yeu-dieu.001",
-   "name": "Tử Lôi Yêu Điêu",
+   "id": "monster.tim.vinh-da-u-minh.001",
+   "name": "Vĩnh Dạ U Minh",
    "zone": "tim",
    "tier": 7,
    "rank": "thuong",
@@ -1032,15 +1048,15 @@
     514
    ],
    "art": {
-    "sheet": "doi-lua",
-    "h": 34,
-    "hue": 230
+    "sheet": "m.vinh-da-u-minh",
+    "h": 28.6,
+    "breathe": true
    },
    "behavior": null
   },
   {
-   "id": "monster.tim.tu-tinh-ma-nhen.001",
-   "name": "Tử Tinh Ma Nhện",
+   "id": "monster.tim.luan-hoi-doan-menh.001",
+   "name": "Luân Hồi Đoạn Mệnh",
    "zone": "tim",
    "tier": 7,
    "rank": "thuong",
@@ -1061,16 +1077,15 @@
     592
    ],
    "art": {
-    "sheet": "nhen",
-    "h": 30,
-    "hue": 260,
-    "still": true
+    "sheet": "m.luan-hoi-doan-menh",
+    "h": 26.4,
+    "breathe": true
    },
    "behavior": null
   },
   {
-   "id": "monster.tim.hu-linh-giap-thu.001",
-   "name": "Hư Linh Giáp Thú",
+   "id": "monster.tim.bat-diet-co-hon.001",
+   "name": "Bất Diệt Cổ Hồn",
    "zone": "tim",
    "tier": 7,
    "rank": "thuong",
@@ -1091,15 +1106,15 @@
     680
    ],
    "art": {
-    "sheet": "ky-lan-loi",
-    "h": 48,
-    "hue": 200
+    "sheet": "m.bat-diet-co-hon",
+    "h": 27.7,
+    "breathe": true
    },
    "behavior": null
   },
   {
-   "id": "monster.tim.tu-vuc-thien-tuong.001",
-   "name": "Tử Vực Thiên Tướng",
+   "id": "monster.tim.phach-huyet-truong-sinh.001",
+   "name": "Phách Huyết Trường Sinh",
    "zone": "tim",
    "tier": 7,
    "rank": "elite",
@@ -1122,15 +1137,15 @@
     762
    ],
    "art": {
-    "sheet": "soldier",
-    "h": 48,
-    "hue": 260
+    "sheet": "m.phach-huyet-truong-sinh",
+    "h": 39.2,
+    "breathe": true
    },
    "behavior": null
   },
   {
-   "id": "monster.tim.van-thien-tu-de.001",
-   "name": "Vấn Thiên Tử Đế",
+   "id": "monster.tim.quy-tich-vinh-hang.001",
+   "name": "Quỷ Tịch Vĩnh Hằng",
    "zone": "tim",
    "tier": 7,
    "rank": "boss",
@@ -1153,15 +1168,20 @@
     850
    ],
    "art": {
-    "sheet": "xuc-tu",
-    "h": 74,
-    "hue": 270
+    "sheet": "m.quy-tich-vinh-hang",
+    "h": 50.4,
+    "breathe": true
    },
-   "behavior": null
+   "behavior": null,
+   "skills": [
+    "ms.van-loi",
+    "ms.xich-tran",
+    "ms.hoa-luan"
+   ]
   },
   {
-   "id": "monster.huvo.ma-nhan.001",
-   "name": "Hư Không Ma Nhãn",
+   "id": "monster.huvo.hac-am-phe-hon-gia.001",
+   "name": "Hắc Ám Phệ Hồn Giả",
    "zone": "huvo",
    "tier": 8,
    "rank": "boss",
@@ -1184,48 +1204,19 @@
     1287
    ],
    "art": {
-    "code": "hu-vo",
-    "shape": "nhan",
-    "h": 64,
-    "color": "#b06bff"
+    "sheet": "m.hac-am-phe-hon-gia",
+    "h": 63.5
    },
-   "behavior": "hu-vo"
+   "behavior": "hu-vo",
+   "skills": [
+    "ms.hu-khong-trao",
+    "ms.thon-thien",
+    "ms.hu-vo-tinh-vu"
+   ]
   },
   {
-   "id": "monster.huvo.cot-long.001",
-   "name": "Âm Hư Cốt Long",
-   "zone": "huvo",
-   "tier": 8,
-   "rank": "boss",
-   "void": true,
-   "stages": [
-    "am_hu"
-   ],
-   "mul": 1.15,
-   "realm": "Âm Hư",
-   "hp": [
-    247772479,
-    273853793
-   ],
-   "atk": [
-    1221336,
-    1349898
-   ],
-   "def": [
-    1339,
-    1480
-   ],
-   "art": {
-    "code": "hu-vo",
-    "shape": "long",
-    "h": 78,
-    "color": "#7fd2ff"
-   },
-   "behavior": "hu-vo"
-  },
-  {
-   "id": "monster.huvo.anh-ma.001",
-   "name": "Vô Tướng Ảnh Ma",
+   "id": "monster.huvo.tich-diet-vo-tung-anh.001",
+   "name": "Tịch Diệt Vô Tung Ảnh",
    "zone": "huvo",
    "tier": 8,
    "rank": "boss",
@@ -1248,16 +1239,54 @@
     1158
    ],
    "art": {
-    "code": "hu-vo",
-    "shape": "anh",
-    "h": 70,
-    "color": "#d9d9ff"
+    "sheet": "m.tich-diet-vo-tung-anh",
+    "h": 65.1
    },
-   "behavior": "hu-vo"
+   "behavior": "hu-vo",
+   "skills": [
+    "ms.hu-khong-trao",
+    "ms.thon-thien",
+    "ms.hu-vo-tinh-vu"
+   ]
   },
   {
-   "id": "monster.huvo.huyet-lien.001",
-   "name": "Tịch Diệt Huyết Liên",
+   "id": "monster.huvo.u-lenh-huyet-sat-su.001",
+   "name": "U Lệnh Huyết Sát Sư",
+   "zone": "huvo",
+   "tier": 8,
+   "rank": "boss",
+   "void": true,
+   "stages": [
+    "am_hu"
+   ],
+   "mul": 1.1,
+   "realm": "Âm Hư",
+   "hp": [
+    236999763,
+    261947106
+   ],
+   "atk": [
+    1168235,
+    1291207
+   ],
+   "def": [
+    1281,
+    1416
+   ],
+   "art": {
+    "sheet": "m.u-lenh-huyet-sat-su",
+    "h": 68.5
+   },
+   "behavior": "hu-vo",
+   "skills": [
+    "ms.hu-khong-trao",
+    "ms.thon-thien",
+    "ms.hu-vo-tinh-vu"
+   ]
+  },
+  {
+   "id": "monster.huvo.vinh-da-dao-anh-quy.001",
+   "name": "Vĩnh Dạ Đào Ảnh Quỷ",
    "zone": "huvo",
    "tier": 8,
    "rank": "boss",
@@ -1280,16 +1309,19 @@
     1351
    ],
    "art": {
-    "code": "hu-vo",
-    "shape": "lien",
-    "h": 66,
-    "color": "#ff4a7a"
+    "sheet": "m.vinh-da-dao-anh-quy",
+    "h": 63.1
    },
-   "behavior": "hu-vo"
+   "behavior": "hu-vo",
+   "skills": [
+    "ms.hu-khong-trao",
+    "ms.thon-thien",
+    "ms.hu-vo-tinh-vu"
+   ]
   },
   {
-   "id": "monster.huvo.thon-thien.001",
-   "name": "Thôn Thiên Hư Thú",
+   "id": "monster.huvo.tham-uyen-u-minh-ma.001",
+   "name": "Thâm Uyên U Minh Ma",
    "zone": "huvo",
    "tier": 8,
    "rank": "boss",
@@ -1312,12 +1344,15 @@
     1545
    ],
    "art": {
-    "code": "hu-vo",
-    "shape": "thu",
-    "h": 82,
-    "color": "#8a5bff"
+    "sheet": "m.tham-uyen-u-minh-ma",
+    "h": 64.7
    },
-   "behavior": "hu-vo"
+   "behavior": "hu-vo",
+   "skills": [
+    "ms.hu-khong-trao",
+    "ms.thon-thien",
+    "ms.hu-vo-tinh-vu"
+   ]
   }
  ],
  "_ghi_chu_art": "art: hình THỬ NGHIỆM (data/art/sprites.json). sheet = bộ hình, h = cao trên bản đồ (điểm), hue = đổi màu (độ) khi dùng chung hình, still = hình tĩnh (code tự nhún). Chủ dự án có ảnh mới thì đổi ở đây.",
@@ -1546,5 +1581,137 @@
   "radius_px": 26,
   "avoid_town_px": 2400,
   "seed": 20261023
+ },
+ "skills": {
+  "ms.bang-lang": {
+   "name": "Băng Lăng Trận",
+   "kind": "target",
+   "r": 60,
+   "windup_s": 1.1,
+   "mul": 2.0,
+   "cd_s": 9,
+   "range_px": 220,
+   "fx": "v.no-bang",
+   "fx_h": 64
+  },
+  "ms.hac-dong": {
+   "name": "Hắc Động Thôn Phệ",
+   "kind": "target",
+   "r": 75,
+   "windup_s": 1.3,
+   "mul": 2.4,
+   "stun_s": 0.8,
+   "cd_s": 11,
+   "range_px": 240,
+   "fx": "v.hac-dong",
+   "fx_h": 100
+  },
+  "ms.am-tien": {
+   "name": "U Minh Ám Tiễn",
+   "kind": "line",
+   "len": 260,
+   "w": 28,
+   "windup_s": 0.9,
+   "mul": 1.9,
+   "cd_s": 8,
+   "range_px": 250,
+   "fx": "v.dan-am",
+   "fx_h": 40
+  },
+  "ms.u-hon-tran": {
+   "name": "U Hồn Gai Trận",
+   "kind": "self",
+   "r": 110,
+   "windup_s": 1.2,
+   "mul": 2.0,
+   "cd_s": 10,
+   "range_px": 100,
+   "fx": "v.am-gai",
+   "fx_h": 60
+  },
+  "ms.huyet-chu": {
+   "name": "Huyết Chú",
+   "kind": "target",
+   "r": 50,
+   "windup_s": 1.0,
+   "mul": 2.6,
+   "cd_s": 9,
+   "range_px": 220,
+   "fx": "v.huyet-chu",
+   "fx_h": 56
+  },
+  "ms.van-loi": {
+   "name": "Vạn Lôi Giáng Thế",
+   "kind": "multi",
+   "n": 4,
+   "r": 45,
+   "spread": 110,
+   "windup_s": 1.2,
+   "mul": 2.2,
+   "cd_s": 12,
+   "range_px": 260,
+   "fx": "v.loi-tru",
+   "fx_h": 90
+  },
+  "ms.xich-tran": {
+   "name": "Xích Hồn Trận",
+   "kind": "target",
+   "r": 60,
+   "windup_s": 1.0,
+   "mul": 1.6,
+   "stun_s": 1.5,
+   "cd_s": 14,
+   "range_px": 220,
+   "fx": "v.xich-tran",
+   "fx_h": 56
+  },
+  "ms.hoa-luan": {
+   "name": "Luyện Ngục Hỏa Luân",
+   "kind": "self",
+   "r": 140,
+   "windup_s": 1.4,
+   "mul": 2.4,
+   "cd_s": 13,
+   "range_px": 130,
+   "fx": "v.hoa-xoay",
+   "fx_h": 150
+  },
+  "ms.hu-khong-trao": {
+   "name": "Hư Không Trảo",
+   "kind": "line",
+   "len": 300,
+   "w": 42,
+   "windup_s": 1.0,
+   "mul": 2.8,
+   "cd_s": 7,
+   "range_px": 280,
+   "fx": "v.dan-am",
+   "fx_h": 60
+  },
+  "ms.thon-thien": {
+   "name": "Thôn Thiên Hắc Động",
+   "kind": "target",
+   "r": 100,
+   "windup_s": 1.6,
+   "mul": 3.0,
+   "stun_s": 1.0,
+   "cd_s": 14,
+   "range_px": 260,
+   "fx": "v.hac-dong",
+   "fx_h": 130
+  },
+  "ms.hu-vo-tinh-vu": {
+   "name": "Hư Vô Tinh Vũ",
+   "kind": "multi",
+   "n": 6,
+   "r": 45,
+   "spread": 140,
+   "windup_s": 1.4,
+   "mul": 2.4,
+   "cd_s": 12,
+   "range_px": 280,
+   "fx": "v.am-gai",
+   "fx_h": 64
+  }
  }
 }

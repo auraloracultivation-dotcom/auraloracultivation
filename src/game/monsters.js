@@ -2,6 +2,7 @@
 // thấy người chơi (thần thức) thì đuổi, không đuổi quá xa (leash), đánh thường + đòn nặng có báo trước để né.
 // Mỗi máy tự có quái riêng — người chơi khác không thấy cùng con quái (Mốc 3: máy chủ quản lý quái).
 import { wrapDelta } from '../map/index.js';
+import { createMobSkills } from './mob-skills.js';
 
 const rint = (a, b) => Math.round(a + Math.random() * (b - a));
 
@@ -9,6 +10,7 @@ const rint = (a, b) => Math.round(a + Math.random() * (b - a));
 export function createMonsters({ gp, mdef, map }) {
   const P = gp.monster;
   const defs = mdef.monsters;
+  const mskills = createMobSkills({ lib: mdef.skills || {}, map }); // kỹ năng boss
   const byZone = {};
   for (const d of defs) if (!d.void) (byZone[d.zone] ||= { thuong: [], elite: [], boss: [], stages: [] })[d.rank].push(d);
   for (const z of Object.values(byZone)) z.stages = [...new Set(z.thuong.flatMap((d) => d.stages))]; // tầng của vùng, yếu → mạnh
@@ -110,6 +112,7 @@ export function createMonsters({ gp, mdef, map }) {
       if (m.stun > 0) { m.stun -= dt; continue; }
       const rank = m.def.rank, speed = m.speed || P.speed_px_per_s[rank];
       m.cd = Math.max(0, m.cd - dt);
+      mskills.cool(m, dt);
       if (m.state === 'idle') {
         m.wt -= dt;
         if (m.wt <= 0) {
@@ -121,6 +124,7 @@ export function createMonsters({ gp, mdef, map }) {
         if (env.alive && !inTown && d < (m.aggro || P.aggro_px[rank])) m.state = 'chase';
       } else if (m.state === 'chase') {
         if (!env.alive || inTown || homeDist(m) > (m.leash || P.leash_px)) { m.state = 'return'; continue; }
+        if (mskills.tryCast(m, me, d)) continue; // boss vận chiêu (vòng / dải đỏ báo trước)
         if (d > P.attack_range_px + m.r * 0.5) step(m, me.x, me.y, speed, dt);
         else if (m.cd <= 0) {
           m.cd = P.attack_every_s; m.n++;
@@ -135,6 +139,8 @@ export function createMonsters({ gp, mdef, map }) {
           if (env.alive && !inTown && off < P.heavy.radius_px) env.hitPlayer(m, P.heavy.mul); else if (env.alive && !inTown) env.dodged(m);
           m.state = 'chase';
         }
+      } else if (m.state === 'cast') {
+        mskills.tick(m, dt, { ...env, inTown });
       } else if (m.state === 'return') {
         m.hp = Math.min(m.maxHp, m.hp + m.maxHp * 0.5 * dt);
         if (step(m, m.hx, m.hy, speed * 1.4, dt) < 4) { m.state = 'idle'; m.hp = m.maxHp; }
@@ -174,5 +180,5 @@ export function createMonsters({ gp, mdef, map }) {
   }
   const removeVoid = (key) => { const i = list.findIndex((m) => m.voidKey === key && m.state !== 'dead'); if (i >= 0) list.splice(i, 1); };
 
-  return { list, update, addVoid, removeVoid, damage, nearest, within, distTo, rel, calmAll() { for (const m of list) if (m.state !== 'dead') m.state = 'return'; } };
+  return { list, update, addVoid, removeVoid, telegraph: mskills.telegraph, damage, nearest, within, distTo, rel, calmAll() { for (const m of list) if (m.state !== 'dead') { m.state = 'return'; m.cast = null; } } };
 }

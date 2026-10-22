@@ -1,0 +1,325 @@
+{
+ "_ghi_chu": "Sinh bằng tools/monster_sheets.py — không sửa tay.",
+ "sheets": {
+  "yeu-ho": {
+   "src": "assets/monsters/yeu-ho.webp",
+   "fw": 250,
+   "fh": 106,
+   "body_h": 104.8,
+   "feet": 1.012,
+   "void": false
+  },
+  "thanh-xa": {
+   "src": "assets/monsters/thanh-xa.webp",
+   "fw": 326,
+   "fh": 106,
+   "body_h": 105.4,
+   "feet": 1.0,
+   "void": false
+  },
+  "thach-giap": {
+   "src": "assets/monsters/thach-giap.webp",
+   "fw": 294,
+   "fh": 100,
+   "body_h": 100.4,
+   "feet": 1.0,
+   "void": false
+  },
+  "hac-lang-vuong": {
+   "src": "assets/monsters/hac-lang-vuong.webp",
+   "fw": 282,
+   "fh": 121,
+   "body_h": 105.4,
+   "feet": 0.907,
+   "void": false
+  },
+  "son-dong-lao-yeu": {
+   "src": "assets/monsters/son-dong-lao-yeu.webp",
+   "fw": 273,
+   "fh": 143,
+   "body_h": 138.9,
+   "feet": 1.009,
+   "void": false
+  },
+  "huyet-sai": {
+   "src": "assets/monsters/huyet-sai.webp",
+   "fw": 252,
+   "fh": 108,
+   "body_h": 105.4,
+   "feet": 1.0,
+   "void": false
+  },
+  "diem-xa": {
+   "src": "assets/monsters/diem-xa.webp",
+   "fw": 306,
+   "fh": 112,
+   "body_h": 111.0,
+   "feet": 1.0,
+   "void": false
+  },
+  "nham-giap": {
+   "src": "assets/monsters/nham-giap.webp",
+   "fw": 305,
+   "fh": 102,
+   "body_h": 99.8,
+   "feet": 0.988,
+   "void": false
+  },
+  "huyet-lang-vuong": {
+   "src": "assets/monsters/huyet-lang-vuong.webp",
+   "fw": 299,
+   "fh": 121,
+   "body_h": 106.6,
+   "feet": 0.896,
+   "void": false
+  },
+  "hoa-vuc-ma-ton": {
+   "src": "assets/monsters/hoa-vuc-ma-ton.webp",
+   "fw": 289,
+   "fh": 142,
+   "body_h": 138.3,
+   "feet": 1.009,
+   "void": false
+  },
+  "bang-ho": {
+   "src": "assets/monsters/bang-ho.webp",
+   "fw": 265,
+   "fh": 107,
+   "body_h": 106.6,
+   "feet": 1.012,
+   "void": false
+  },
+  "tuyet-ung": {
+   "src": "assets/monsters/tuyet-ung.webp",
+   "fw": 256,
+   "fh": 117,
+   "body_h": 116.6,
+   "feet": 1.011,
+   "void": false
+  },
+  "han-giap": {
+   "src": "assets/monsters/han-giap.webp",
+   "fw": 272,
+   "fh": 102,
+   "body_h": 101.1,
+   "feet": 1.0,
+   "void": false
+  },
+  "bang-hon-tuong": {
+   "src": "assets/monsters/bang-hon-tuong.webp",
+   "fw": 281,
+   "fh": 122,
+   "body_h": 118.4,
+   "feet": 1.0,
+   "void": false
+  },
+  "tuyet-son-lao-to": {
+   "src": "assets/monsters/tuyet-son-lao-to.webp",
+   "fw": 286,
+   "fh": 149,
+   "body_h": 149.4,
+   "feet": 1.008,
+   "void": false
+  },
+  "co-chien-hon": {
+   "src": "assets/monsters/co-chien-hon.webp",
+   "fw": 233,
+   "fh": 104,
+   "body_h": 105.4,
+   "feet": 1.012,
+   "void": false
+  },
+  "doc-yeu": {
+   "src": "assets/monsters/doc-yeu.webp",
+   "fw": 296,
+   "fh": 108,
+   "body_h": 99.2,
+   "feet": 0.948,
+   "void": false
+  },
+  "huyen-giap": {
+   "src": "assets/monsters/huyen-giap.webp",
+   "fw": 259,
+   "fh": 123,
+   "body_h": 107.9,
+   "feet": 0.944,
+   "void": false
+  },
+  "thuong-co-chien-tuong": {
+   "src": "assets/monsters/thuong-co-chien-tuong.webp",
+   "fw": 285,
+   "fh": 133,
+   "body_h": 112.2,
+   "feet": 0.915,
+   "void": false
+  },
+  "huyen-vuc-ma-ton": {
+   "src": "assets/monsters/huyen-vuc-ma-ton.webp",
+   "fw": 265,
+   "fh": 148,
+   "body_h": 143.8,
+   "feet": 1.008,
+   "void": false
+  },
+  "hac-vuc-yeu": {
+   "src": "assets/monsters/hac-vuc-yeu.webp",
+   "fw": 236,
+   "fh": 108,
+   "body_h": 108.5,
+   "feet": 1.012,
+   "void": false
+  },
+  "hu-khong-thu": {
+   "src": "assets/monsters/hu-khong-thu.webp",
+   "fw": 200,
+   "fh": 105,
+   "body_h": 106.6,
+   "feet": 1.012,
+   "void": false
+  },
+  "tan-the-giap": {
+   "src": "assets/monsters/tan-the-giap.webp",
+   "fw": 250,
+   "fh": 101,
+   "body_h": 91.8,
+   "feet": 0.907,
+   "void": false
+  },
+  "thuong-co-ma-tuong": {
+   "src": "assets/monsters/thuong-co-ma-tuong.webp",
+   "fw": 253,
+   "fh": 133,
+   "body_h": 120.3,
+   "feet": 0.911,
+   "void": false
+  },
+  "hac-vuc-chu-te": {
+   "src": "assets/monsters/hac-vuc-chu-te.webp",
+   "fw": 203,
+   "fh": 135,
+   "body_h": 131.4,
+   "feet": 1.009,
+   "void": false
+  },
+  "tu-suong-yeu-ho": {
+   "src": "assets/monsters/tu-suong-yeu-ho.webp",
+   "fw": 265,
+   "fh": 105,
+   "body_h": 106.0,
+   "feet": 1.012,
+   "void": false
+  },
+  "u-moc-thach-mang": {
+   "src": "assets/monsters/u-moc-thach-mang.webp",
+   "fw": 266,
+   "fh": 102,
+   "body_h": 101.1,
+   "feet": 1.012,
+   "void": false
+  },
+  "co-ma-da-nhan-thu": {
+   "src": "assets/monsters/co-ma-da-nhan-thu.webp",
+   "fw": 248,
+   "fh": 104,
+   "body_h": 102.9,
+   "feet": 1.012,
+   "void": false
+  },
+  "tu-moc-yeu-than": {
+   "src": "assets/monsters/tu-moc-yeu-than.webp",
+   "fw": 236,
+   "fh": 133,
+   "body_h": 120.3,
+   "feet": 0.911,
+   "void": false
+  },
+  "u-suong-ma-hoang": {
+   "src": "assets/monsters/u-suong-ma-hoang.webp",
+   "fw": 260,
+   "fh": 144,
+   "body_h": 138.9,
+   "feet": 1.009,
+   "void": false
+  },
+  "vinh-da-u-minh": {
+   "src": "assets/monsters/vinh-da-u-minh.webp",
+   "fw": 211,
+   "fh": 113,
+   "body_h": 102.9,
+   "feet": 0.956,
+   "void": false
+  },
+  "luan-hoi-doan-menh": {
+   "src": "assets/monsters/luan-hoi-doan-menh.webp",
+   "fw": 270,
+   "fh": 104,
+   "body_h": 102.3,
+   "feet": 1.0,
+   "void": false
+  },
+  "bat-diet-co-hon": {
+   "src": "assets/monsters/bat-diet-co-hon.webp",
+   "fw": 207,
+   "fh": 111,
+   "body_h": 104.2,
+   "feet": 1.0,
+   "void": false
+  },
+  "phach-huyet-truong-sinh": {
+   "src": "assets/monsters/phach-huyet-truong-sinh.webp",
+   "fw": 198,
+   "fh": 123,
+   "body_h": 106.6,
+   "feet": 0.903,
+   "void": false
+  },
+  "quy-tich-vinh-hang": {
+   "src": "assets/monsters/quy-tich-vinh-hang.webp",
+   "fw": 218,
+   "fh": 129,
+   "body_h": 122.8,
+   "feet": 0.976,
+   "void": false
+  },
+  "hac-am-phe-hon-gia": {
+   "src": "assets/monsters/hac-am-phe-hon-gia.webp",
+   "fw": 248,
+   "fh": 118,
+   "body_h": 119.0,
+   "feet": 0.5,
+   "void": true
+  },
+  "tich-diet-vo-tung-anh": {
+   "src": "assets/monsters/tich-diet-vo-tung-anh.webp",
+   "fw": 257,
+   "fh": 94,
+   "body_h": 92.4,
+   "feet": 0.5,
+   "void": true
+  },
+  "u-lenh-huyet-sat-su": {
+   "src": "assets/monsters/u-lenh-huyet-sat-su.webp",
+   "fw": 256,
+   "fh": 95,
+   "body_h": 88.7,
+   "feet": 0.5,
+   "void": true
+  },
+  "vinh-da-dao-anh-quy": {
+   "src": "assets/monsters/vinh-da-dao-anh-quy.webp",
+   "fw": 244,
+   "fh": 96,
+   "body_h": 97.3,
+   "feet": 0.5,
+   "void": true
+  },
+  "tham-uyen-u-minh-ma": {
+   "src": "assets/monsters/tham-uyen-u-minh-ma.webp",
+   "fw": 275,
+   "fh": 96,
+   "body_h": 94.9,
+   "feet": 0.489,
+   "void": true
+  }
+ }
+}

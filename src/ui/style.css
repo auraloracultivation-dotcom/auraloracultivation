@@ -558,3 +558,10 @@ img { image-rendering: pixelated; }
 .sheet .rank-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .sheet .rank-stat { display: flex; justify-content: space-between; padding: 7px 9px; border-radius: 8px; background: #1b1430; border: 1px solid #3a2c52; font-size: 12px; color: var(--text); }
 .sheet .rank-stat b { color: var(--gold); }
+
+/* Bảng Kỹ năng (src/game/skillview.js) */
+.sheet .sk-row.sel { border-color: var(--gold); }
+.sheet .sk-ico { width: 30px; height: 30px; border-radius: 6px; background: #120d22; }
+.sheet .sk-slots { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.sheet .sk-slots .bag-act.sm { margin-top: 0; }
+.sheet .sk-slots .bag-act.on { outline: 2px solid #7dff8a; }
