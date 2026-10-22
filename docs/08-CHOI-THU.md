@@ -28,8 +28,7 @@ song song với việc hoàn thành Mốc 1. Đây là **bản chơi thử**, ch
   Boss HP còn ×1,8 (thay vì ×3) để giữ luật boss cảnh giới dưới < quái thường cảnh giới trên. Tất cả số ở đầu `tools/gen_balance.py`.
 - **Tên phẩm trang bị / dòng thức tỉnh** (`data/equipment/awaken.json`): Phàm (lục) → Nhân (lam) → Địa (tím) → Thiên (cam) → Tiên (vàng) → Thần (đỏ)
   → **Tiên Nghịch** (cao nhất, chữ đen quầng đỏ huyền bí, viền ô đỏ thở chậm).
-- **Mã thử `lkjhg`** (Cài đặt → Nhập mã): như mã cũ + 999 mỗi nguyên liệu, 99 mỗi đan, mọi đan phương / công thức / bí kíp, đồ cửa hàng,
-  10 triệu Linh thạch, 1 phôi mỗi ô (`src/game/testgift.js`). Mã `lkjhb` (grant `god`, 23/10): mọi trang bị trong Kho thức tỉnh 10 dòng phẩm Đen + 5 thú cưng Âm Hư đi theo. Mã ngắn dò được từ dấu SHA-256 → **xoá khỏi data/codes.json trước khi phát hành thật**.
+- **Mã thử**: đã xoá hết (qqqqq, lkjhg, lkjhb — chủ dự án 23/10). Code cấp quà vẫn giữ (`src/game/testgift.js`: grant `full`, `god`) để dùng lại khi có mã mới; mã thật nên chuyển lên máy chủ.
 - **Ô đất bản 4** (23/10): bộ ảnh 7 vùng + nước của chủ dự án (`assets/tiles/_source/v2-*.png`): `python3 -I tools/tiles_v2.py` rồi `python3 -I tools/atlas_compact.py`.
   Mỗi khối 2×2 = một ô 32 điểm, nhạt màu 42%, sáng +10%, mép hoà liền. Mỗi vùng có 4 ô **trơn** (lọc bỏ sỏi/cỏ, trọng số 6) + 4 ô chi tiết (trọng số 1) → ~80% mặt đất trơn.
   Cây/đá/cỏ hoa thưa hơn nhiều (`decor_rules`). Quảng trường Thanh Vân Thành (Đá lát cổ) giữ ô gốc. Vùng Đen làm tối 38%.
