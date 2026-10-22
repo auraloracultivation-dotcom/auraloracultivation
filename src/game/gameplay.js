@@ -315,7 +315,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   function renderBelow(ctx, t) {
     for (const n of gather.list) { const p = at(n); drawNode(ctx, n, p.x, p.y, t); }
     for (const n of npcs.list) { const p = at(n); if (Math.abs(p.x - me.x) < 700 && Math.abs(p.y - me.y) < 700) drawNpc(ctx, n, p.x, p.y, npcs.height); }
-    const list = mobs.list.map((m) => ({ m, ...at(m) })).sort((a, b) => a.y - b.y);
+    const list = mobs.list.map((m) => ({ m, ...at(m) })).filter((o) => Math.abs(o.x - me.x) < 800 && Math.abs(o.y - me.y) < 1000).sort((a, b) => a.y - b.y); // chỉ vẽ quái gần màn hình
     for (const { m, x, y } of list) {
       if (m.state === 'windup') { const w = at({ x: m.wx, y: m.wy }); m.wrx = w.x; m.wry = w.y; m.heavyR = gp.monster.heavy.radius_px; }
       drawMonster(ctx, m, x, y, t);
@@ -323,7 +323,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     if (pet) drawFx(ctx, [{ ...pet, kind: 'pet', ...at(pet) }], 0, 0);
   }
   function renderAbove(ctx, t) {
-    for (const m of mobs.list) { const p = at(m); drawMonsterLabel(ctx, m, p.x, p.y, m.uid === targetUid, t); }
+    for (const m of mobs.list) { const p = at(m); if (Math.abs(p.x - me.x) < 800 && Math.abs(p.y - me.y) < 1000) drawMonsterLabel(ctx, m, p.x, p.y, m.uid === targetUid, t); }
     for (const n of npcs.list) { const p = at(n); if (Math.abs(p.x - me.x) < 700 && Math.abs(p.y - me.y) < 700) drawNpcLabel(ctx, n, p.x, p.y, npcs.height, performance.now(), npcs.guarded(n)); }
     drawFx(ctx, [...bolts, ...fx].map((f) => ({ ...f, ...at(f) })), 0, 0);
   }

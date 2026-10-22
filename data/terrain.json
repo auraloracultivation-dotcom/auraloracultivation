@@ -15,6 +15,22 @@
       "grid": 1,
       "tiles": [
         [
+          "v3-xanh-co-tron-1",
+          6
+        ],
+        [
+          "v3-xanh-co-tron-2",
+          6
+        ],
+        [
+          "v3-xanh-co-tron-3",
+          6
+        ],
+        [
+          "v3-xanh-co-tron-4",
+          6
+        ],
+        [
           "v3-xanh-co-1",
           1
         ],
@@ -88,6 +104,22 @@
       "grid": 1,
       "tiles": [
         [
+          "v3-cam-cat-tron-1",
+          6
+        ],
+        [
+          "v3-cam-cat-tron-2",
+          6
+        ],
+        [
+          "v3-cam-cat-tron-3",
+          6
+        ],
+        [
+          "v3-cam-cat-tron-4",
+          6
+        ],
+        [
           "v3-cam-cat-1",
           1
         ],
@@ -146,23 +178,27 @@
       "walk": true,
       "speed": 1,
       "tier": 2,
-      "grid": 1,
+      "grid": 2,
       "tiles": [
         [
-          "v3-cam-cat-1",
+          "da-lat-1",
+          6
+        ],
+        [
+          "da-lat-2",
+          2
+        ],
+        [
+          "da-lat-3",
+          2
+        ],
+        [
+          "da-lat-4",
           1
         ],
         [
-          "v3-cam-cat-2",
-          1
-        ],
-        [
-          "v3-cam-cat-3",
-          1
-        ],
-        [
-          "v3-cam-cat-4",
-          1
+          "da-lat-5",
+          2
         ]
       ],
       "zone": "cam",
@@ -211,6 +247,22 @@
       "tier": 4,
       "grid": 1,
       "tiles": [
+        [
+          "v3-trang-tuyet-tron-1",
+          6
+        ],
+        [
+          "v3-trang-tuyet-tron-2",
+          6
+        ],
+        [
+          "v3-trang-tuyet-tron-3",
+          6
+        ],
+        [
+          "v3-trang-tuyet-tron-4",
+          6
+        ],
         [
           "v3-trang-tuyet-1",
           1
@@ -262,6 +314,22 @@
       "tier": 3,
       "grid": 1,
       "tiles": [
+        [
+          "v3-xam-khoi-tron-1",
+          6
+        ],
+        [
+          "v3-xam-khoi-tron-2",
+          6
+        ],
+        [
+          "v3-xam-khoi-tron-3",
+          6
+        ],
+        [
+          "v3-xam-khoi-tron-4",
+          6
+        ],
         [
           "v3-xam-khoi-1",
           1
@@ -320,6 +388,22 @@
       "tier": 5,
       "grid": 1,
       "tiles": [
+        [
+          "v3-xam-than-tron-1",
+          6
+        ],
+        [
+          "v3-xam-than-tron-2",
+          6
+        ],
+        [
+          "v3-xam-than-tron-3",
+          6
+        ],
+        [
+          "v3-xam-than-tron-4",
+          6
+        ],
         [
           "v3-xam-than-1",
           1
@@ -406,6 +490,22 @@
       "grid": 1,
       "tiles": [
         [
+          "v3-den-tron-1",
+          6
+        ],
+        [
+          "v3-den-tron-2",
+          6
+        ],
+        [
+          "v3-den-tron-3",
+          6
+        ],
+        [
+          "v3-den-tron-4",
+          6
+        ],
+        [
           "v3-den-1",
           1
         ],
@@ -456,6 +556,22 @@
       "tier": 7,
       "grid": 1,
       "tiles": [
+        [
+          "v3-tim-tron-1",
+          6
+        ],
+        [
+          "v3-tim-tron-2",
+          6
+        ],
+        [
+          "v3-tim-tron-3",
+          6
+        ],
+        [
+          "v3-tim-tron-4",
+          6
+        ],
         [
           "v3-tim-1",
           1
@@ -620,13 +736,13 @@
     "forest_cut": 0.55,
     "rock_cut": 0.62,
     "tree_base": 0.006,
-    "tree_forest": 0.35,
+    "tree_forest": 0.2,
     "rock_base": 0.004,
-    "rock_field": 0.35,
-    "small": 0.05,
+    "rock_field": 0.2,
+    "small": 0.015,
     "road_margin": 1,
     "center_clear_tiles": 9,
-    "_ghi_chu_23_10": "Giảm rừng 0.55 → 0.35: rừng dày cũ vây kín người chơi (không đi ra được)"
+    "_ghi_chu_23_10": "Thưa cây/đá/cỏ hoa (0,55/0,35/0,05 → 0,2/0,2/0,015): chủ dự án thấy chi chít đau mắt, rừng dày vây kín người chơi"
   },
-  "_note_tiles_v2": "Ô đất 23/10 (bản 3): mỗi khối 2×2 trong ảnh chủ dự án = MỘT ô bản đồ 32 điểm (grid 1), xoá vạch lưới, nhạt màu, dải mép hoà về màu nền chung để liền mạch — tools/tiles_v2.py. Nước 16 ô (v2-nuoc), dung nham giữ ô cũ."
+  "_note_tiles_v2": "Ô đất 23/10 (bản 4): mỗi khối 2×2 ảnh chủ dự án = 1 ô 32 điểm, nhạt màu, mép hoà liền; mỗi vùng 4 ô trơn (lọc bỏ sỏi/cỏ) trọng số 6 + 4 ô chi tiết trọng số 1 → ~80% ô trơn. Đá lát cổ (quảng trường thành) giữ ô gốc. tools/tiles_v2.py rồi tools/atlas_compact.py."
 }

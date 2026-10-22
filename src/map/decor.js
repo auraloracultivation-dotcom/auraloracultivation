@@ -101,8 +101,9 @@ export async function createDecor({ grid, W, H, T, types, rules, art, safeAt }) 
   let lastId = -1, lastC = null; // mảng vừa dùng: hỏi liên tiếp cùng mảng thì khỏi tra Map
   function cellAt(gx, gy) {
     const cx = Math.floor(gx / CH), cy = Math.floor(gy / CH), id = cy * NCX + cx;
-    let c = id === lastId ? lastC : chunks.get(id);
-    if (c && id !== lastId) { chunks.delete(id); chunks.set(id, c); } // dùng gần đây → đưa xuống cuối
+    if (id === lastId) { const k = (gy - cy * CH) * CH + (gx - cx * CH); hit.d = lastC.at[k]; hit.ox = lastC.ox[k]; hit.oy = lastC.oy[k]; return hit; }
+    let c = chunks.get(id);
+    if (c) { chunks.delete(id); chunks.set(id, c); } // dùng gần đây → đưa xuống cuối
     else {
       c = buildChunk(cx, cy);
       chunks.set(id, c);
