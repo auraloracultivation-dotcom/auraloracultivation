@@ -44,8 +44,8 @@ def blocks(img, want):
     return out
 
 
-SAT = 0.72      # giảm độ đậm màu (yêu cầu 23/10: nhạt đi một chút)
-LIGHT = 1.04    # sáng lên chút cho đỡ nặng mắt
+SAT = 0.58      # giảm độ đậm màu (yêu cầu 23/10: nhạt hơn nữa)
+LIGHT = 1.10    # sáng lên cho đỡ nặng mắt
 FEATHER = 0.14  # bề rộng dải mép (tỷ lệ cạnh ô) hoà dần về màu nền chung của vùng → các ô đặt cạnh nhau liền mạch
 EDGE_MIX = 0.55 # tại sát mép: 55% màu nền chung, 45% ảnh gốc
 
@@ -94,11 +94,20 @@ def water_tiles():
 
 
 new = {}
-for k in [k for k in idx['tiles'] if any(k.startswith(f'v2-{n}-') for n in LAND)]:
+for k in [k for k in idx['tiles'] if any(k.startswith(f'v2-{n}-') or k.startswith(f'v3-{n}-') for n in LAND)]:
     del idx['tiles'][k]  # bản cắt 16 ô nhỏ cũ (thay bằng 4 ô lớn v3)
 for name in LAND:
     for i, t in enumerate(land_tiles(name)):
         new[f'v3-{name}-{i + 1}'] = t
+# Biến thể TRƠN mỗi vùng (v3-<vùng>-tron-1..4): lọc trung vị bỏ sỏi, cỏ, cây vẽ sẵn, giữ vân nền + hạt nhiễu nhẹ.
+# Bản đồ dùng chủ yếu ô trơn, ô nhiều chi tiết chỉ thỉnh thoảng (chủ dự án: sỏi + cây chi chít đau mắt).
+import cv2
+rng0 = np.random.default_rng(3)
+for name in LAND:
+    for i in range(4):
+        a = np.asarray(new[f'v3-{name}-{i + 1}']).copy()
+        a = cv2.medianBlur(cv2.medianBlur(a, 19), 11).astype(float) + rng0.normal(0, 2.2, a.shape[:2])[..., None]
+        new[f'v3-{name}-tron-{i + 1}'] = Image.fromarray(a.clip(0, 255).astype(np.uint8))
 # Đường đất: lấy ô cát, lọc trung vị bỏ hết xương rồng / đá / cỏ, nhuộm nâu đất, thêm hạt sỏi nhỏ → khớp phong cách ô mới
 import cv2
 rng = np.random.default_rng(7)

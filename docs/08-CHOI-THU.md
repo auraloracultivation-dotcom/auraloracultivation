@@ -29,9 +29,9 @@ song song với việc hoàn thành Mốc 1. Đây là **bản chơi thử**, ch
   → **Tiên Nghịch** (cao nhất, chữ đen quầng đỏ huyền bí, viền ô đỏ thở chậm).
 - **Mã thử `lkjhg`** (Cài đặt → Nhập mã): như mã cũ + 999 mỗi nguyên liệu, 99 mỗi đan, mọi đan phương / công thức / bí kíp, đồ cửa hàng,
   10 triệu Linh thạch, 1 phôi mỗi ô (`src/game/testgift.js`). Mã ngắn dò được từ dấu SHA-256 → **xoá khỏi data/codes.json trước khi phát hành thật**.
-- **Ô đất bản 3** (23/10): bộ ảnh 7 vùng + nước của chủ dự án (`assets/tiles/_source/v2-*.png`), cắt bằng `python3 -I tools/tiles_v2.py`.
-  Mỗi khối 2×2 trong ảnh = một ô bản đồ (to gấp đôi), xoá vạch lưới, nhạt màu 28%, dải mép hoà về màu nền chung để liền mạch. Vùng Đen làm tối 38% để khác Xám Than.
-  Nước nông = 8 ô sáng, nước sâu = 8 ô đậm. Rừng thưa bớt (`decor_rules.tree_forest` 0,55 → 0,35) vì rừng dày cũ vây kín người chơi.
+- **Ô đất bản 4** (23/10): bộ ảnh 7 vùng + nước của chủ dự án (`assets/tiles/_source/v2-*.png`): `python3 -I tools/tiles_v2.py` rồi `python3 -I tools/atlas_compact.py`.
+  Mỗi khối 2×2 = một ô 32 điểm, nhạt màu 42%, sáng +10%, mép hoà liền. Mỗi vùng có 4 ô **trơn** (lọc bỏ sỏi/cỏ, trọng số 6) + 4 ô chi tiết (trọng số 1) → ~80% mặt đất trơn.
+  Cây/đá/cỏ hoa thưa hơn nhiều (`decor_rules`). Quảng trường Thanh Vân Thành (Đá lát cổ) giữ ô gốc. Vùng Đen làm tối 38%.
 - **Thoát kẹt**: Cài đặt → nút "Bị kẹt? Về Thanh Vân Thành" (máy chủ đưa về trận pháp giữa thành, RPC `respawn_at_town`).
 - Số lớn hiện gọn: 123,5k · 4,57tr · 2,3 tỷ (`src/core/format.js`).
 
