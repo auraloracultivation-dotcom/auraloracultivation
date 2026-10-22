@@ -30,7 +30,7 @@ export function showSheet({ title, tabs, render, onAction, note }) {
   body.addEventListener('click', (e) => {
     const b = e.target.closest('[data-act]');
     if (!b || b.disabled) return;
-    onAction(b.dataset.act, b.dataset.arg);
+    onAction(b.dataset.act, b.dataset.arg, close); // close: nơi gọi tự đóng bảng (vd. vào bí cảnh)
     paint();
   });
   const timer = setInterval(paint, 1500); // tiến độ đổi khi đang mở (quái chết sau lưng…)

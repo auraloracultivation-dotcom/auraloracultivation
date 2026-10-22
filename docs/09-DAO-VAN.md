@@ -77,4 +77,12 @@ Chủ dự án muốn chất My Heroes: chọn đúng bộ + hệ + thẻ thì c
      - Thổ: chấn choáng.
    - Mỗi món cùng hệ đang mặc: +15% sát thương trận.
 4. ✅ **Luyện hồn thú cưng**: thú nuốt hồn 1 con cùng loài đang nghỉ trong Kho thì +1★, tối đa 5★. Mỗi sao +35% công và khí huyết.
-5. Chuyển kết quả có giá trị lên máy chủ (Mốc 3–4): máy chủ chỉ kiểm hợp lý, không mô phỏng từng khung hình.
+5. ✅ **Huyết Sát Bí Cảnh** (`data/build/bi-canh.json`, `src/game/bicanh.js`):
+   - Mở ở Nhiệm vụ → tab Bí Cảnh, phải đứng ngoài thành, mỗi ngày 3 lượt.
+   - Vòng cấm chế đỏ quanh chỗ đứng. 10 đợt quái tầng của mình ùa vào: đợt 5 có tinh anh, đợt 10 có boss, mỗi đợt 50 giây.
+   - Thua khi chết, ra khỏi vòng hoặc hết giờ. Khi đang trong bí cảnh, Tự động chỉ đánh quái trong vòng.
+   - Thưởng:
+     - Mỗi đợt qua: Linh thạch + Vàng.
+     - Qua đợt 3 / 6 / 9: được Thần Phù.
+     - Qua hết: Phôi Pháp Bảo + cơ hội rơi đồ ngũ hành.
+6. Chuyển kết quả có giá trị lên máy chủ (Mốc 3–4): máy chủ chỉ kiểm hợp lý, không mô phỏng từng khung hình.
