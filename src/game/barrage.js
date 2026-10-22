@@ -152,8 +152,20 @@ export function createBarrage(c) {
     }
   }
 
+  // Báo khi bộ ngũ hành lên / xuống mốc (đổi đồ): "Kích hoạt Vạn Kiếm Quy Tông 8/8 — ĐẠI THÀNH"
+  let lastMods = null, lastTop = {};
+  function announce() {
+    const md = dv.mods(); if (md === lastMods) return;
+    const first = lastMods === null; lastMods = md;
+    const now = {}; for (const st of md.sets) now[st.he] = st.tiers[st.tiers.length - 1].t;
+    if (!first) for (const st of md.sets) if ((lastTop[st.he] || 0) < now[st.he]) {
+      const t = now[st.he]; c.toast?.(`${t === 8 ? '✦ ĐẠI THÀNH ✦ ' : 'Kích hoạt '}${st.name} ${t}/8`, t === 8 ? 3200 : 2000);
+      if (t === 8) { play('vong-lua', me.x, me.y - 6, 60); zaps.push({ kind: 'ring', x: me.x, y: me.y, r: 70, t: 0.9, color: st.color }); }
+    }
+    lastTop = now;
+  }
   function update(dt) {
-    T += dt;
+    T += dt; announce();
     for (let i = echoes.length - 1; i >= 0; i--) { echoes[i].t -= dt; if (echoes[i].t <= 0) { const e = echoes.splice(i, 1)[0]; e.fn(); } }
     updateBolts(dt);
     if (!c.dead()) passives(dt);
@@ -204,5 +216,28 @@ export function createBarrage(c) {
       }
     }
   }
-  return { fire, basic, maybeEcho, update, render, hitAround };
+  // Hào quang dưới chân theo mốc bộ cao nhất: 6/8 vòng mờ, 8/8 (đại thành) hai vòng phù văn xoay + đốm sáng bay lên
+  function renderGround(ctx, at, now) {
+    const md = dv.mods(); if (c.dead() || !md.sets.length) return;
+    const top = md.sets.reduce((a, s) => (s.tiers.at(-1).t > (a?.tiers.at(-1).t || 0) ? s : a), null), t = top.tiers.at(-1).t;
+    if (t < 6) return;
+    const p = at(me), k = now / 1000, col = top.color;
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    const g = ctx.createRadialGradient(p.x, p.y, 2, p.x, p.y, t === 8 ? 34 : 24);
+    g.addColorStop(0, col + (t === 8 ? '88' : '44')); g.addColorStop(1, col + '00');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(p.x, p.y, t === 8 ? 34 : 24, t === 8 ? 15 : 10, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = col; ctx.lineWidth = 1.2;
+    for (const [r, sp, a] of t === 8 ? [[26, 0.8, 0.8], [33, -0.5, 0.5]] : [[22, 0.5, 0.4]]) {
+      ctx.globalAlpha = a; ctx.setLineDash([5, 4]); ctx.lineDashOffset = -k * sp * 30;
+      ctx.beginPath(); ctx.ellipse(p.x, p.y, r, r * 0.42, 0, 0, Math.PI * 2); ctx.stroke();
+    }
+    ctx.setLineDash([]);
+    if (t === 8) for (let i = 0; i < 10; i++) { // đốm linh khí bay lên
+      const ph = (k * 0.6 + i / 10) % 1, a = i * 2.4 + k * 0.3;
+      ctx.globalAlpha = (1 - ph) * 0.9; ctx.fillStyle = col;
+      ctx.fillRect(p.x + Math.cos(a) * 24 * (1 - ph * 0.4), p.y + Math.sin(a) * 9 - ph * 46, 1.6, 1.6);
+    }
+    ctx.restore();
+  }
+  return { fire, basic, maybeEcho, update, render, renderGround, hitAround };
 }
