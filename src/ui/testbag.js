@@ -36,6 +36,7 @@ export function createTestBag(userId, defs) {
       for (const [sl, x] of Object.entries(st.equipped)) if (x === id) delete st.equipped[sl];
       st.items = st.items.filter((x) => x !== id); save();
     },
+    wipe() { st = { items: [], equipped: {} }; try { localStorage.removeItem(key); } catch { /* bỏ qua */ } }, // tọa hóa: xoá Kho (tải lại sẽ nhận quà tân thủ mới)
     unequip(slot) { if (st.equipped[slot]) { delete st.equipped[slot]; save(); } },
     grantAll() {
       const before = st.items.length;

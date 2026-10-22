@@ -88,7 +88,9 @@ export async function openCodex(o) {
   });
   const npcs = npcDef.npcs.map((n) => ({ id: n.id, name: n.name, status: 'ok', anim: npcAnim(n), info: [`Trang phục #${n.outfit + 1} · vũ khí #${n.weapon + 1} · ${n.home.area === 'town' ? 'trong thành' : 'dọc đường'}`] }));
   const misc = [
-    { id: 'linh-thach', name: 'Linh thạch', img: icon('linh-thach'), status: 'tam', note: 'Icon gói miễn phí', info: ['Tiền tệ: mua ở Vạn Bảo Lâu, hồi sinh tại chỗ'] },
+    { id: 'cur.vang', name: 'Vàng', img: icon('cur.vang'), status: 'ok', note: 'Ảnh chủ dự án 23/10', info: ['Tiền phàm nhân: rơi từ quái, mua đồ thường dân (Phàm phẩm)'] },
+    { id: 'linh-thach', name: 'Linh thạch', img: icon('linh-thach'), status: 'ok', note: 'Ảnh chủ dự án 23/10', info: ['Tiền tu sĩ: mua ở Vạn Bảo Lâu, thức tỉnh, hồi sinh tại chỗ'] },
+    { id: 'cur.tien-ngoc', name: 'Tiên ngọc', img: icon('cur.tien-ngoc'), status: 'ok', note: 'Ảnh chủ dự án 23/10', info: ['Tiền tiên giới: mua được mọi món, kể cả tiên đan tăng tu vi; sau này chỉ có khi nạp'] },
     ...Object.keys(SLOT).map((sl) => ({ id: `slot.${sl}`, name: `Icon ô ${SLOT[sl]}`, img: icon(`slot.${sl}`), status: 'tam', note: 'Icon gói miễn phí (bảng Nhân vật, ô trống)', info: [] })),
     ...qItems.items.map((d) => iconEntry(d)),
   ];

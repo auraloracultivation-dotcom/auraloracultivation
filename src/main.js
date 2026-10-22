@@ -11,7 +11,7 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catc
 import {
   showLoading, showLogin, shouldForgetSession, showCreateCharacter, showNewPassword,
   showConfirm, showFatal, toast, createHud, showCharacterPanel, showSettings, showWorldMap, drawRoundMap, createStatsDock, enableFastTap,
-  showBag, showItemActions, showSlotPicker, loadSettings, createTestBag, showLeaderboard,
+  showBag, showItemActions, showSlotPicker, loadSettings, createTestBag, showLeaderboard, showToaHoa,
 } from './ui/index.js';
 
 async function boot() {
@@ -182,6 +182,13 @@ async function boot() {
     me.flying = false; hud.setToggle('bay', 0); zone.sendMove(me.x, me.y, false, false); toast('Đã về Thanh Vân Thành');
   }
 
+  // Tọa hóa → chuyển thế: xoá tiến trình + Kho trên máy, đưa về trận pháp giữa thành, tải lại (bắt đầu lại từ Luyện Khí 1)
+  async function rebirth() {
+    game.reincarnate(); bag.wipe();
+    try { const row = await net.respawnAtTown(); if (row) { me.x = row.x; me.y = row.y; } await saver.flush(); } catch (e) { console.warn('Về thành lỗi', e); }
+    location.reload();
+  }
+
   async function logout() {
     if (!(await showConfirm('Đăng xuất', 'Rời Tu Chân giới và đăng xuất?', { yes: 'Đăng xuất' }))) return;
     await saver.flush();
@@ -205,7 +212,7 @@ async function boot() {
     onSettings() { showSettings({ onLogout: logout, onRedeem: redeemCode, onChange: (st) => audio.apply(st), onRecall: recall }); },
     onOpenBag() {
       showBag({
-        categories: itemsDef.categories, getEntries: () => game.bagEntries(), note: 'Đồ thử nghiệm: chỉ lưu trên máy này, chưa lưu máy chủ.',
+        categories: itemsDef.categories, getEntries: () => game.bagEntries(), wallet: () => game.wallet.list(), note: 'Đồ thử nghiệm: chỉ lưu trên máy này, chưa lưu máy chủ.',
         onAction: (it, a) => game.itemAction(it.key, a), // Sử dụng / Tháo / Thức tỉnh / Phân rã / Vứt / Dùng / Luyện
       });
     },
@@ -251,7 +258,8 @@ async function boot() {
   game = await createGameplay({ onRespawn: async () => { // máy chủ xác nhận vị trí hồi sinh (dịch chuyển xa bị chặn kiểm tốc độ)
     try { const row = await net.respawnAtTown(); if (row) { me.x = row.x; me.y = row.y; } } catch (e) { console.warn('Hồi sinh máy chủ lỗi', e); }
     zone.sendMove(me.x, me.y, false, false); hud.setToggle('bay', 0);
-  }, loadJSON, map, me, hud, pt, toast, audio, userId: me.id, bag, onLook: () => onLookChanged(), onRealm: (r) => zone.setRealm(r), serverNow: net.serverNow });
+  }, loadJSON, map, me, hud, pt, toast, audio, userId: me.id, bag, onLook: () => onLookChanged(), onRealm: (r) => zone.setRealm(r), serverNow: net.serverNow, timeSynced: net.timeSynced,
+    onToaHoa: (sum) => showToaHoa({ name: me.name, ...sum, onRebirth: rebirth }) }); // thọ nguyên tận → chết hẳn
   me.onAutoSwing = swing;
   const rank = createRankReporter({ gp: game.gp, info: game.rankInfo, me, submit: net.submitLeaderboard }); // ảnh chụp tiến trình → bảng xếp hạng
   const dock = createStatsDock({ getValue: (id) => game.statValue(id) });

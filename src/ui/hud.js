@@ -225,7 +225,11 @@ export function createHud(opts) {
     setOnline(count, max) { online.textContent = `· ${count}/${max}`; },
     // Đặt trạng thái nút bật/tắt từ ngoài (vd. hết linh lực → tự hạ cánh)
     setToggle(id, s) { actions.find((a) => a.id === id)?.setState?.(s); },
-    setRealm(text) { info.querySelector('[data-realm]').textContent = text; },
+    setRealm(text) { // "Kết Đan Sơ kỳ (Thọ nguyên 43/102 năm)" → cảnh giới dòng trên, thọ nguyên dòng nhỏ dưới
+      const el = info.querySelector('[data-realm]'), i = text.indexOf(' (');
+      el.replaceChildren(i < 0 ? text : text.slice(0, i));
+      if (i >= 0) { const sm = document.createElement('small'); sm.textContent = text.slice(i + 1); el.append(sm); }
+    },
     // Khoá / mở nút kỹ năng theo cảnh giới
     // hint: lý do riêng (vd. "chưa đeo linh thú"); bỏ trống = chưa mở theo cảnh giới (lockedHint)
     setLocked(id, on, hint) {

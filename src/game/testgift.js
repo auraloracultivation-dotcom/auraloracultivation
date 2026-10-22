@@ -1,6 +1,6 @@
 // Mã thử nghiệm "đầy đủ" (data/codes.json → grant: 'full'): nguyên liệu, đan, đan phương / công thức / bí kíp, đồ cửa hàng,
-// Linh thạch và 1 phôi mỗi ô trang bị (để thử Thức tỉnh). Chỉ vào kho trên máy (localStorage) — bản chơi thử, chưa lưu máy chủ.
-export function grantFull({ progress, gift, mats, pills, recipes, shop, blanks }) {
+// Linh thạch, Vàng, Tiên ngọc và 1 phôi mỗi ô trang bị (để thử Thức tỉnh). Chỉ vào kho trên máy (localStorage) — bản chơi thử, chưa lưu máy chủ.
+export function grantFull({ progress, wallet, gift, mats, pills, recipes, shop, blanks }) {
   let n = 0;
   const add = (id, k) => { progress.add(id, k); n++; };
   for (const m of mats.materials) add(m.id, gift.materials);
@@ -9,6 +9,8 @@ export function grantFull({ progress, gift, mats, pills, recipes, shop, blanks }
   for (const s of shop.stock) if (!progress.count(s.id)) add(s.id, gift.shop);
   for (const b of blanks.blanks) { progress.newGear(b.slot, b.sample_names[0]); n++; }
   progress.addStone(gift.stone);
+  if (gift.gold) wallet.add('vang', gift.gold);
+  if (gift.jade) wallet.add('tien-ngoc', gift.jade);
   progress.changed();
   return n;
 }

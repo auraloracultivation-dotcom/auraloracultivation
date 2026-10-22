@@ -15,7 +15,7 @@ from scipy import ndimage
 
 sys.path.insert(0, str(Path(__file__).parent))
 from monster_sheets import key  # noqa: E402
-from cut_objects import drop_labels  # noqa: E402
+from cut_objects import drop_labels, objects  # noqa: E402
 
 SRC = Path('assets/items/_source')
 SPRITES = Path('data/art/sprites.json')
@@ -95,6 +95,29 @@ def cells(name, cols, rows, yr, ids):
     return out
 
 
+def fit(im):
+    im = im.copy(); im.thumbnail((S - 6, S - 6), Image.LANCZOS)
+    tile = Image.new('RGBA', (S, S)); tile.alpha_composite(im, ((S - im.width) // 2, (S - im.height) // 2))
+    return tile
+
+
+def recolor(t, hue, sat=1.0):
+    """Xoay sắc độ (0–1) + nhân độ bão hoà, giữ kênh trong suốt."""
+    a = t.getchannel('A')
+    h, s_, v = t.convert('RGB').convert('HSV').split()
+    h = h.point(lambda x: (x + int(hue * 255)) % 256)
+    s_ = s_.point(lambda x: min(255, int(x * sat)))
+    out = Image.merge('HSV', (h, s_, v)).convert('RGB').convert('RGBA'); out.putalpha(a)
+    return out
+
+
+# mã mới → (icon gốc, xoay sắc độ, độ bão hoà)
+DERIVED = {'item.thao.tho-nguyen.001': ('item.thao.thanh-tam.001', 0.78, 1.2),  # cỏ vàng óng
+           'item.dan.tang-tho.001': ('item.dan.truc-co.001', 0.1, 1.1),
+           'item.dan.tu-vi.001': ('item.dan.hoi-linh.001', 0.5, 1.0),
+           'item.dan.vien-man.001': ('item.dan.hoa-than.001', 0.75, 1.3)}
+
+
 def main():
     sp = json.loads(SPRITES.read_text())
     old = sp['icons']
@@ -122,6 +145,11 @@ def main():
         elif k.startswith('item.congthuc.'):
             src = 'slot.' + k.split('.')[2]
             if src in new: new[k] = with_scroll(new[src])
+    # Tiền tệ (23/10): tấm 3 hình không nhãn — thỏi vàng, linh thạch, tiên ngọc
+    for k, (_, im) in zip(['cur.vang', 'linh-thach', 'cur.tien-ngoc'], objects(SRC / 'icon-tien-te.webp', merge=24)):
+        new[k] = fit(im)
+    # Thọ nguyên / tiên đan: chưa có ảnh riêng → đổi màu icon có sẵn
+    for k, (src, hue, sat) in DERIVED.items(): new[k] = recolor(new[src], hue, sat)
     tiles.update(new)
     cols = 16
     keys = list(tiles)

@@ -1,0 +1,20 @@
+{
+  "_status": "test",
+  "_nguon": "Chủ dự án, 23/10/2026",
+  "_ghi_chu": "Ba loại tiền. Vàng: tiền phàm nhân, rẻ, mua đồ thường. Linh thạch: tiền tu sĩ (như cũ). Tiên ngọc: tiền tiên giới — sau này chỉ có khi nạp; mua được MỌI món trong Vạn Bảo Lâu, kể cả tiên đan tăng tu vi. Từ Vấn Đỉnh đến Âm Hư chạm được một phần trang bị tiên giới (chưa mở: người chơi hiện dừng ở Hóa Thần). Bản chơi thử: số dư nằm trong localStorage (src/game/progress.js), Mốc 4 chuyển lên máy chủ — nạp tiền thật BẮT BUỘC qua máy chủ.",
+  "order": ["vang", "linh-thach", "tien-ngoc"],
+  "kinds": {
+    "vang": { "name": "Vàng", "short": "Vàng", "icon": "cur.vang", "state": "gold", "info": "Tiền phàm nhân: rơi từ quái, mua đồ thường dân ở quầy Phàm phẩm." },
+    "linh-thach": { "name": "Linh thạch", "short": "LT", "icon": "linh-thach", "state": "stone", "info": "Tiền tu sĩ: rơi từ quái, mua đan phương / công thức / công pháp, thức tỉnh, hồi sinh tại chỗ." },
+    "tien-ngoc": { "name": "Tiên ngọc", "short": "TN", "icon": "cur.tien-ngoc", "state": "jade", "info": "Tiền tiên giới: mua được mọi món trong Vạn Bảo Lâu, kể cả tiên đan tăng tu vi. Sau này chỉ có khi nạp." }
+  },
+  "_ghi_chu_ty_gia": "Giá Tiên ngọc của món bán bằng Linh thạch = làm tròn lên (giá LT × jade_per_stone), ít nhất 1. Món bán bằng Vàng cũng mua được bằng Tiên ngọc theo gold → LT → TN.",
+  "stone_per_gold": 0.01,
+  "jade_per_stone": 0.01,
+  "gold_per_kill_stone": 8,
+  "celestial_gear": {
+    "_ghi_chu": "Tiên khí — trang bị tiên giới, chỉ mua bằng Tiên ngọc, cần Vấn Đỉnh trở lên. Chưa mở (người chơi dừng ở Hóa Thần Hậu kỳ).",
+    "min_realm": "realm.van-dinh",
+    "open": false
+  }
+}

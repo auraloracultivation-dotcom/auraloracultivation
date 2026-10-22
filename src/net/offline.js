@@ -19,6 +19,7 @@ export const savePosition = async () => null;
 export const respawnAtTown = async () => null;
 export const syncServerTime = async () => {};
 export const serverNow = () => Date.now();
+export const timeSynced = () => true;
 // Bảng xếp hạng chơi một mình: chỉ có mình
 let mine = null;
 const row = () => mine && { user_id: USER, name: 'Đạo hữu thử', stage_index: mine.stageIndex, stage_name: mine.stageName, exp: mine.exp,

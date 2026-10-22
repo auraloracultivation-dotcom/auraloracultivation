@@ -5,7 +5,10 @@ import { wrapDelta } from '../map/index.js';
 export function createGather({ gp, mats, map }) {
   const G = gp.gather;
   const byZone = {};
-  for (const m of mats.materials) if (m.group === 'thao' || m.group === 'khoang') (byZone[m.zone] ||= { thao: [], khoang: [] })[m.group].push(m);
+  for (const m of mats.materials) if (m.group === 'thao' || m.group === 'khoang') {
+    const z = (byZone[m.zone] ||= { thao: [], khoang: [], share: [] });
+    if (m.spawn_share) z.share.push(m); else z[m.group].push(m); // spawn_share: cỏ mọc theo tỷ lệ riêng (Thọ Nguyên Thảo)
+  }
   const list = [];
   let timer = 0;
   const dist = (n, me) => Math.hypot(wrapDelta(n.x - me.x, map.width), wrapDelta(n.y - me.y, map.height));
@@ -20,10 +23,11 @@ export function createGather({ gp, mats, map }) {
       const herbP = f.forest > f.rock ? G.herb_ratio + (1 - G.herb_ratio) * f.forest * 0.8 : G.herb_ratio * (1 - f.rock * 0.8);
       const group = Math.random() < herbP ? 'thao' : 'khoang';
       // món đầu danh sách mỗi vùng là món phổ biến nhất → hay gặp hơn
+      const sp = group === 'thao' && pool.share.find((m) => Math.random() < m.spawn_share);
       const arr = pool[group], w = arr.map((_, i) => 1 / (i + 1)), sum = w.reduce((s, v) => s + v, 0);
       let r = Math.random() * sum, i = 0;
       while ((r -= w[i]) > 0) i++;
-      list.push({ x, y, item: arr[i], group, n: G.amount[0] + Math.floor(Math.random() * (G.amount[1] - G.amount[0] + 1)), sway: Math.random() * 6 });
+      list.push({ x, y, item: sp || arr[i], group, n: G.amount[0] + Math.floor(Math.random() * (G.amount[1] - G.amount[0] + 1)), sway: Math.random() * 6 });
       return;
     }
   }
