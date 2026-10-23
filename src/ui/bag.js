@@ -71,7 +71,10 @@ export function showBag({ categories, getEntries, onAction, note, wallet, tab, t
   grid.addEventListener('click', (e) => {
     const b = e.target.closest('[data-key]');
     if (!b) return;
-    sel = sel === b.dataset.key ? null : b.dataset.key;
+    // Chọn (không bật/tắt): điện thoại có thể bắn 2 lần click cho một chạm (fasttap + click thật sau khi lưới vẽ lại)
+    // → kiểu bật/tắt cũ chọn rồi bỏ chọn ngay = "chớp một cái rồi không có gì". Đóng thẻ bằng nút ✕.
+    if (sel === b.dataset.key) return;
+    sel = b.dataset.key;
     render();
   });
   render();

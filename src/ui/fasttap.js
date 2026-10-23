@@ -29,7 +29,8 @@ export function enableFastTap(root = document.getElementById('ui')) {
   root.addEventListener('pointercancel', finish, true);
 
   root.addEventListener('click', (e) => {
-    if (e.isTrusted && suppressEl && performance.now() < suppressUntil && suppressEl.contains(e.target)) {
+    // nút cũ đã bị vẽ lại (bảng render lại sau cú bấm) → click thật rơi vào nút MỚI cùng chỗ: vẫn phải chặn, không thì bấm 2 lần
+    if (e.isTrusted && suppressEl && performance.now() < suppressUntil && (suppressEl.contains(e.target) || !suppressEl.isConnected)) {
       e.stopImmediatePropagation();
       e.preventDefault();
       suppressEl = null;
