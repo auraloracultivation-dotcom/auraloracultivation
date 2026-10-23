@@ -48,7 +48,7 @@ export function createGuide(c) {
       <div class="row"><b class="gd-h">Kỹ năng hệ ${E(he)}</b><div class="gd-grid">${skills || '<span>—</span>'}</div>
       <p class="gd-note">Kỹ năng bắn đạn được bộ + Thần Phù nhân lên (bắn quạt, nảy, tách…).</p></div>
       <div class="row"><b class="gd-h">Cùng hệ</b><p>Bố Cấm Chế khi mặc nhiều đồ ${E(he)} nhất: <b>${E(cc.name)}</b> — ${E(cc.desc)}.</p>
-      ${pbs.length ? `<div class="gd-grid">${pbs.map((d) => `<div class="gd-skill">${pic(iconUrl(d.id))}<span><b>${E(d.name)}</b>Pháp bảo</span></div>`).join('')}</div>` : ''}</div>`;
+      ${pbs.length ? `<div class="gd-grid">${pbs.map((d) => `<div class="gd-skill">${pic(d.icon_url || iconUrl(d.id))}<span><b>${E(d.name)}</b>Pháp bảo</span></div>`).join('')}</div>` : ''}</div>`;
   }
 
   function activeTab() {

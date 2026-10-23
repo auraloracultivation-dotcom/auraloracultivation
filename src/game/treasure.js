@@ -13,7 +13,7 @@ const STAT = { hp: 'Khí huyết', linh: 'Tấn công', def: 'Phòng thủ', xuy
 export function createTreasure(c) {
   const { def, S, progress, craft, barrage, mobs, me, play, toast } = c;
   const byId = new Map(def.list.map((t) => [t.id, t]));
-  const pic = (d) => iconUrl(d.id) || fxIconUrl(...d.icon); // ảnh chủ dự án (icons atlas) — thiếu thì mượn icon hiệu ứng
+  const pic = (d) => d.icon_url || iconUrl(d.id) || fxIconUrl(...d.icon); // ảnh chủ dự án (icons atlas) — thiếu thì mượn icon hiệu ứng
   const DICH = 'item.dich.on-duong.001'; // Ôn Dưỡng Linh Dịch
   const dichNeed = (t) => def.lv_dich?.[(t.lv || 0) + 1] || 0;
   const list = () => (progress.state.treasures ||= []);
@@ -68,7 +68,7 @@ export function createTreasure(c) {
       }
       case 'seal': {
         const m = tgt || { x: me.x + me.facing * 40, y: me.y };
-        play(d.fx, m.x, m.y + 4, d.h, { ground: true }); play('k.bao-tho', m.x, m.y + 4, d.r * 1.6, { ground: true }); // tho-vong cũ bị lẹm khung
+        play(d.fx, m.x, m.y + 4, d.h, { ground: true }); // hoạt ảnh Trấn Sơn Ấn mới đã có nổ đá + đất nứt (chủ dự án 23/10)
         barrage.zap({ kind: 'ring', x: m.x, y: m.y, r: d.r, t: 0.6, color: he.color });
         barrage.hitAround(m.x, m.y, d.r, mul, 'skill', d.stun);
         break;

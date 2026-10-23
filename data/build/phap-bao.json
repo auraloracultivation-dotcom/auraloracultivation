@@ -138,13 +138,15 @@
    "r": 70,
    "stun": 2,
    "fx": "k.pb-tran-son",
-   "h": 90,
+   "h": 140,
    "icon": [
     "v.dia-thu",
     2
    ],
    "desc": "Ấn núi giáng xuống mục tiêu: sát thương lớn bán kính {r}, choáng {stun} giây",
-   "cast_fx": "k.pb-tran-son"
+   "cast_fx": "k.pb-tran-son",
+   "icon_url": "assets/ui/skills/pb-tran-son-an.png",
+   "_ghi_chu": "Chủ dự án 23/10 11:50 vẽ lại (tools/tran_son_sheet.py): ấn núi mọc lên → giáng nổ đá → đất nứt, khói tan (17 khung)."
   },
   {
    "id": "pb.loi-linh-chau",
