@@ -51,7 +51,7 @@
     "8": {
      "multishot": 10,
      "pierce": 2,
-     "_mo_ta": "ĐẠI THÀNH: mọi chiêu bắn quạt 15 kiếm khí xuyên giáp"
+     "_mo_ta": "ĐẠI THÀNH: mọi chiêu bắn quạt 13 kiếm khí (thêm 10, cộng bậc 2), xuyên 2 quái"
     }
    },
    "hit": "k.bao-kim"
@@ -282,7 +282,7 @@
     "8": {
      "multishot": 10,
      "pierce": 2,
-     "_mo_ta": "ĐẠI THÀNH: mọi chiêu bắn quạt 15 kiếm khí xuyên giáp"
+     "_mo_ta": "ĐẠI THÀNH: mọi chiêu bắn quạt 13 kiếm khí (thêm 10, cộng bậc 2), xuyên 2 quái"
     }
    },
    "hit": "k.bao-kim",

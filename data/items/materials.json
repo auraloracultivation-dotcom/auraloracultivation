@@ -1,7 +1,7 @@
 {
  "_status": "design",
  "_nguon": "Auralora Lab v3 (21/10/2026)",
- "_ghi_chu": "THIẾT KẾ từ Lab — CHƯA triển khai trong game, CHƯA kiểm thử cân bằng. Số liệu là baseline để thử nghiệm.",
+ "_ghi_chu": "Gốc từ Lab, ĐANG DÙNG trong game (cập nhật 23/10/2026). Cân bằng sinh bằng tools/ (gen_balance.py, shop_balance.py) — sửa hằng số trong tool rồi chạy lại.",
  "_ghi_chu_rieng": "Linh thảo + khoáng dùng chung cho luyện đan, luyện phôi và công pháp. ID linh thảo giữ đúng Lab; khoáng/đặc biệt Lab chưa có ID nên đặt theo quy tắc docs/02.",
  "materials": [
   {
@@ -10,7 +10,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "xanh",
-   "use": "Hồi HP, Trúc Cơ Đan · phụ phôi Kiếm/Đạo bào"
+   "use": "Đan: Trúc Cơ Đan, Tiểu Hồi Huyết Đan, Trường Sinh Đan · Phôi: Vũ khí, Dây chuyền"
   },
   {
    "id": "item.thao.linh-chi-non.001",
@@ -18,7 +18,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "xanh",
-   "use": "Hồi Linh Lực · phụ phôi Nhẫn/Dây chuyền"
+   "use": "Đan: Trúc Cơ Đan, Hồi Linh Đan · Phôi: Trang phục, Mặt nạ · Tu luyện: Luyện Khí Quyết, Thanh Tâm Tĩnh Khí Quyết"
   },
   {
    "id": "item.thao.bat-nha.001",
@@ -26,7 +26,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "xanh",
-   "use": "Đan tăng chỉ số · phụ phôi sơ"
+   "use": "Phôi: Nhẫn"
   },
   {
    "id": "item.thao.huyet-linh.001",
@@ -34,7 +34,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "cam",
-   "use": "Kết Đan Đan, Cường Công · phụ phôi Mặt nạ"
+   "use": "Đan: Kết Đan Đan, Cường Công Đan"
   },
   {
    "id": "item.thao.diem-chi.001",
@@ -42,7 +42,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "cam",
-   "use": "Hồi LL trung · phụ phôi"
+   "use": "Đan: Kết Đan Đan, Hồi Linh Đan · Tu luyện: Kiếm Khí Quyết, Hồi Linh Thuật"
   },
   {
    "id": "item.thao.xich-qua.001",
@@ -50,7 +50,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "cam",
-   "use": "Bảo hộ đột phá"
+   "use": "Tu luyện: Luyện Khí Quyết, Thanh Tâm Tĩnh Khí Quyết"
   },
   {
    "id": "item.thao.han-linh.001",
@@ -58,7 +58,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "trang",
-   "use": "Nguyên Anh Đan, Cường Thể · phụ phôi Linh thú"
+   "use": "Đan: Hóa Thần Đan, Cường Thể Đan · Phôi: Cánh · Tu luyện: Kiếm Khí Quyết, Linh Thú Khế Ước, Hồi Linh Thuật, Lăng Ba Vi Bộ"
   },
   {
    "id": "item.thao.bang-chi.001",
@@ -66,7 +66,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "trang",
-   "use": "Hồi LL cao · phụ phôi"
+   "use": "Đan: Hóa Thần Đan, Hồi Linh Đan · Tu luyện: Luyện Khí Quyết, Thanh Tâm Tĩnh Khí Quyết"
   },
   {
    "id": "item.thao.tuyet-lien.001",
@@ -74,7 +74,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "trang",
-   "use": "Bảo hộ cao cấp"
+   "use": "Tu luyện: Thiên Phong Dực Quyết"
   },
   {
    "id": "item.thao.huyen-linh.001",
@@ -82,7 +82,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "xam",
-   "use": "Hóa Thần Đan, Duy Trì · phụ phôi Cánh"
+   "use": "Đan: Nguyên Anh Đan · Phôi: Linh thú · Tu luyện: Luyện Khí Quyết, Thanh Tâm Tĩnh Khí Quyết"
   },
   {
    "id": "item.thao.u-minh.001",
@@ -90,7 +90,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "xam",
-   "use": "Giảm tiêu hao Pháp Tướng"
+   "use": "Đan: Nguyên Anh Đan, Duy Trì Đan"
   },
   {
    "id": "item.thao.co-lien.001",
@@ -98,7 +98,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "xam",
-   "use": "Bảo hộ tối cao"
+   "use": "Tu luyện: Kiếm Khí Quyết, Linh Thú Khế Ước, Hồi Linh Thuật, Lăng Ba Vi Bộ"
   },
   {
    "id": "item.thao.hac-linh.001",
@@ -106,7 +106,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "than",
-   "use": "Đan end-game · phụ phôi Pháp Tướng"
+   "use": "Đan: Anh Biến Đan · Phôi: Pháp tướng · Tu luyện: Linh Thú Khế Ước, Thiên Phong Dực Quyết, Pháp Tướng Thiên Thư, Lăng Ba Vi Bộ"
   },
   {
    "id": "item.thao.tan-the.001",
@@ -114,7 +114,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "than",
-   "use": "Giảm tiêu hao PT mạnh"
+   "use": "Tu luyện: Kiếm Khí Quyết, Linh Thú Khế Ước, Thiên Phong Dực Quyết, Pháp Tướng Thiên Thư, Hồi Linh Thuật, Lăng Ba Vi Bộ"
   },
   {
    "id": "item.thao.hu-khong.001",
@@ -122,7 +122,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "than",
-   "use": "Đan tối thượng"
+   "use": "Tu luyện: Luyện Khí Quyết, Kiếm Khí Quyết, Linh Thú Khế Ước, Thiên Phong Dực Quyết, Pháp Tướng Thiên Thư, Thanh Tâm Tĩnh Khí Quyết, Hồi Linh Thuật, Lăng Ba Vi Bộ"
   },
   {
    "id": "item.khoang.huyen-thiet-vun.001",
@@ -130,7 +130,7 @@
    "cat": "khac",
    "group": "khoang",
    "zone": "xanh",
-   "use": "Khoáng chính phôi Kiếm/Đạo bào · phụ Trúc Cơ Đan"
+   "use": "Đan: Trúc Cơ Đan · Phôi: Vũ khí, Trang phục · Tu luyện: Luyện Khí Quyết, Thanh Tâm Tĩnh Khí Quyết"
   },
   {
    "id": "item.khoang.tinh-sa.001",
@@ -138,7 +138,7 @@
    "cat": "khac",
    "group": "khoang",
    "zone": "xanh",
-   "use": "Khoáng chính phôi Nhẫn, Dây chuyền"
+   "use": "Phôi: Nhẫn, Dây chuyền, Mặt nạ"
   },
   {
    "id": "item.khoang.xich-thiet.001",
@@ -146,7 +146,7 @@
    "cat": "khac",
    "group": "khoang",
    "zone": "cam",
-   "use": "Khoáng chính phôi Tím–Cam · phụ Kết Đan Đan"
+   "use": "Đan: Kết Đan Đan, Cường Công Đan · Tu luyện: Luyện Khí Quyết, Kiếm Khí Quyết, Thanh Tâm Tĩnh Khí Quyết, Hồi Linh Thuật"
   },
   {
    "id": "item.khoang.huyet-ngoc.001",
@@ -154,7 +154,7 @@
    "cat": "khac",
    "group": "khoang",
    "zone": "cam",
-   "use": "Phôi trang sức Cam"
+   "use": "Chưa dùng vào công thức nào (để dành)"
   },
   {
    "id": "item.khoang.han-thiet.001",
@@ -162,7 +162,7 @@
    "cat": "khac",
    "group": "khoang",
    "zone": "trang",
-   "use": "Khoáng chính phôi Linh thú / Cam–Vàng"
+   "use": "Đan: Hóa Thần Đan · Phôi: Cánh · Tu luyện: Luyện Khí Quyết, Kiếm Khí Quyết, Linh Thú Khế Ước, Thiên Phong Dực Quyết, Thanh Tâm Tĩnh Khí Quyết, Hồi Linh Thuật, Lăng Ba Vi Bộ"
   },
   {
    "id": "item.khoang.bang-ngoc.001",
@@ -170,7 +170,7 @@
    "cat": "khac",
    "group": "khoang",
    "zone": "trang",
-   "use": "Phôi trang sức Vàng · phụ Linh thú"
+   "use": "Phôi: Cánh"
   },
   {
    "id": "item.khoang.huyen-thiet.001",
@@ -178,7 +178,7 @@
    "cat": "khac",
    "group": "khoang",
    "zone": "xam",
-   "use": "Khoáng chính phôi Cánh / Vàng–Đỏ"
+   "use": "Đan: Nguyên Anh Đan · Phôi: Linh thú · Tu luyện: Luyện Khí Quyết, Kiếm Khí Quyết, Linh Thú Khế Ước, Thanh Tâm Tĩnh Khí Quyết, Hồi Linh Thuật, Lăng Ba Vi Bộ"
   },
   {
    "id": "item.khoang.u-ngoc.001",
@@ -186,7 +186,7 @@
    "cat": "khac",
    "group": "khoang",
    "zone": "xam",
-   "use": "Phôi đồ Đỏ"
+   "use": "Phôi: Linh thú"
   },
   {
    "id": "item.khoang.hac-thiet.001",
@@ -194,7 +194,7 @@
    "cat": "khac",
    "group": "khoang",
    "zone": "than",
-   "use": "Khoáng chính phôi Pháp Tướng / Đỏ–Đen"
+   "use": "Đan: Anh Biến Đan · Phôi: Pháp tướng · Tu luyện: Luyện Khí Quyết, Kiếm Khí Quyết, Linh Thú Khế Ước, Thiên Phong Dực Quyết, Pháp Tướng Thiên Thư, Thanh Tâm Tĩnh Khí Quyết, Hồi Linh Thuật, Lăng Ba Vi Bộ"
   },
   {
    "id": "item.khoang.hu-ngoc.001",
@@ -202,7 +202,7 @@
    "cat": "khac",
    "group": "khoang",
    "zone": "than",
-   "use": "Phôi đồ Truyền thuyết (đen)"
+   "use": "Phôi: Pháp tướng"
   },
   {
    "id": "item.dacbiet.huyet-yeu-tinh.001",
@@ -210,7 +210,7 @@
    "cat": "khac",
    "group": "dacbiet",
    "zone": "cam",
-   "use": "Kết Đan Đan (bắt buộc)"
+   "use": "Đan: Kết Đan Đan"
   },
   {
    "id": "item.dacbiet.hon-thu-tinh.001",
@@ -218,7 +218,7 @@
    "cat": "khac",
    "group": "dacbiet",
    "zone": "trang",
-   "use": "Hóa Thần Đan (bắt buộc) · bắt buộc phôi Cánh"
+   "use": "Đan: Hóa Thần Đan · Phôi: Cánh"
   },
   {
    "id": "item.dacbiet.tinh-hon.001",
@@ -226,7 +226,7 @@
    "cat": "khac",
    "group": "dacbiet",
    "zone": "xam",
-   "use": "Nguyên Anh Đan (bắt buộc) · bắt buộc phôi Linh thú"
+   "use": "Đan: Nguyên Anh Đan, Duy Trì Đan · Phôi: Linh thú"
   },
   {
    "id": "item.dacbiet.tinh-hon-co.001",
@@ -234,7 +234,7 @@
    "cat": "khac",
    "group": "dacbiet",
    "zone": "than",
-   "use": "Bắt buộc phôi Pháp Tướng (cực hiếm)"
+   "use": "Đan: Anh Biến Đan · Phôi: Pháp tướng"
   },
   {
    "id": "item.thao.hac-diem.001",
@@ -242,7 +242,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "den",
-   "use": "Anh Biến Đan · Vấn Đỉnh Đan",
+   "use": "Đan: Vấn Đỉnh Đan",
    "_nguon": "Claude đề xuất 23/10 (vùng mới)"
   },
   {
@@ -251,7 +251,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "den",
-   "use": "Vấn Đỉnh Đan",
+   "use": "Đan: Vấn Đỉnh Đan",
    "_nguon": "Claude đề xuất 23/10 (vùng mới)"
   },
   {
@@ -260,7 +260,7 @@
    "cat": "khac",
    "group": "khoang",
    "zone": "den",
-   "use": "Vấn Đỉnh Đan",
+   "use": "Đan: Vấn Đỉnh Đan",
    "_nguon": "Claude đề xuất 23/10 (vùng mới)"
   },
   {
@@ -269,7 +269,7 @@
    "cat": "khac",
    "group": "dacbiet",
    "zone": "den",
-   "use": "Vấn Đỉnh Đan",
+   "use": "Đan: Vấn Đỉnh Đan",
    "_nguon": "Claude đề xuất 23/10 (vùng mới)"
   },
   {
@@ -323,7 +323,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "xanh",
-   "use": "Luyện Trường Sinh Đan (1 cây = 1 viên)",
+   "use": "Đan: Trường Sinh Đan",
    "spawn_share": 0.3,
    "_ghi_chu": "Cỏ mọc khắp Vùng Xanh ngay ngoài thành, hái miễn phí. spawn_share: tỷ lệ trong số linh thảo mọc ở vùng này (không theo thứ tự phổ biến)."
   }

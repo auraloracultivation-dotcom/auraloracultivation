@@ -69,13 +69,6 @@ for b in blanks['blanks']:
     report.append(('Phôi', b['slot'], st, ' + '.join(f"{M[i['id']]['name']} {i['count']}" for i in inp), ' + '.join(f"{M.get(i['id'], {'name': i['id']})['name']} {i['count']}" for i in old)))
 blanks['_ghi_chu_can_bang'] = 'Nguyên liệu phôi: tools/shop_balance.py (≈15 phút farm vùng của cảnh giới mở ô; đồ đặc biệt bắt buộc lấy đúng vùng đó). Không sửa tay.'
 W('data/equipment/blanks.json', blanks)
-# ghi chú công dụng đồ đặc biệt cho khớp
-for m in mats['materials']:
-    if m['id'] == 'item.dacbiet.tinh-hon.001': m['use'] = 'Nguyên Anh Đan (bắt buộc) · bắt buộc phôi Linh thú'
-    if m['id'] == 'item.dacbiet.hon-thu-tinh.001': m['use'] = 'Hóa Thần Đan (bắt buộc) · bắt buộc phôi Cánh'
-    if m['id'] == 'item.dacbiet.tinh-hon-co.001': m['use'] = 'Bắt buộc phôi Pháp Tướng (cực hiếm)'
-    if m['id'] == 'item.dacbiet.huyet-yeu-tinh.001': m['use'] = 'Kết Đan Đan (bắt buộc)'
-W('data/items/materials.json', mats)
 
 # ---- R4: công pháp — cấp n mở ở đại cảnh giới (mở + n − 1), nguyên liệu vùng đó ----
 for s in cp['skills']:
@@ -90,6 +83,25 @@ for s in cp['skills']:
     s['levels'] = lv
 cp['_ghi_chu_cap'] = 'Chủ dự án 23/10 21h: bí kíp học VĨNH VIỄN (không tính lượt). levels[n-1] = cấp n: mở ở cảnh giới unlock, nguyên liệu vùng của cảnh giới đó (tools/shop_balance.py). 5 cấp đi cùng 5 đại cảnh giới.'
 W('data/skills/cong-phap.json', cp)
+
+# ---- Công dụng nguyên liệu (materials.json → use): sinh từ công thức thật, không viết tay ----
+SLOT_VN = {'vu-khi': 'Vũ khí', 'trang-phuc': 'Trang phục', 'nhan': 'Nhẫn', 'day-chuyen': 'Dây chuyền', 'mat-na': 'Mặt nạ',
+           'linh-thu': 'Linh thú', 'canh': 'Cánh', 'phap-tuong': 'Pháp tướng'}
+def uses(mid):
+    out = {'Đan': [], 'Phôi': [], 'Tu luyện': []}
+    for p in PL:
+        r = p.get('recipe') or {}
+        if any(i['id'] == mid for g in [r.get('inputs', [])] + r.get('alt_inputs', []) for i in g): out['Đan'].append(p['name'])
+    for b in blanks['blanks']:
+        if any(i['id'] == mid for i in b.get('inputs', [])): out['Phôi'].append(SLOT_VN.get(b['slot'], b['slot']))
+    for s in cp['skills']:
+        if any(i['id'] == mid for lv in s.get('levels', []) for i in lv.get('inputs', [])): out['Tu luyện'].append(s['name'])
+    return ' · '.join(f"{k}: {', '.join(dict.fromkeys(v))}" for k, v in out.items() if v)
+for m in mats['materials']:
+    u = uses(m['id'])
+    if u: m['use'] = u
+    elif m.get('use') and '(chưa dùng)' not in m['use'] and 'chưa chốt' not in m['use']: m['use'] = 'Chưa dùng vào công thức nào (để dành)'
+W('data/items/materials.json', mats)
 for s in cp['skills']:
     report.append(('Công pháp', s['name'], s['unlock'], ' | '.join(f"c{n+1} {L['unlock']}: " + ' + '.join(f"{M[i['id']]['name']} {i['count']}" for i in L['inputs']) for n, L in enumerate(s['levels'])), ''))
 
@@ -97,6 +109,11 @@ for s in cp['skills']:
 REC = {x['id']: x for x in J('data/items/recipes.json')['items']}
 SKU = {s['id']: s['unlock'] for s in cp['skills']}
 BL = {b['id']: b['unlock'] for b in blanks['blanks']}
+ZST = {'xanh': 'lk3', 'cam': 'tc_so', 'xam': 'kd_so', 'trang': 'na_so', 'than': 'ht_so'}
+PILL = {p['id']: p for p in PL}
+def pill_stage(pid):  # tầng sớm nhất farm đủ nguyên liệu của đan (vùng xa nhất trong các nguyên liệu)
+    zs = [ZST[M[i['id']]['zone']] for i in PILL.get(pid, {}).get('recipe', {}).get('inputs', []) if i['id'] in M]
+    return max(zs, key=list(ZST.values()).index) if zs else 'lk3'
 def price_for(s):
     i, cur = s['id'], s.get('currency', 'linh-thach')
     r = REC.get(i)
@@ -104,10 +121,13 @@ def price_for(s):
     if r and r.get('cat') == 'cong-phap': return nice(lt_min(SKU[r['teaches']]) * BOOK_MIN), 'bí kíp · 30 phút LT ở cảnh giới mở'
     if r and r.get('cat') == 'dan-phuong':
         st = BT.get(r['teaches'])
-        return (nice(lt_min(st) * RECIPE_PILL_MIN), 'đan phương đột phá · 30 phút LT') if st else (nice(lt_min('lk3') * 15), 'đan phương thường · 15 phút LT Luyện Khí')
+        if st: return nice(lt_min(st) * RECIPE_PILL_MIN), 'đan phương đột phá · 30 phút LT'
+        st = pill_stage(r['teaches'])  # đan thường: theo vùng của nguyên liệu khó nhất — chưa tới vùng đó thì chưa bán
+        if st != 'lk3': s['min_stage'] = st
+        return nice(lt_min(st) * 15), f'đan phương thường · 15 phút LT ở {st}'
     if r and r.get('cat') == 'phap-khi': return nice(lt_min(BL[r['teaches']]) * RECIPE_BLANK_MIN), 'công thức phôi · 20 phút LT ở cảnh giới mở ô'
     if i in M and cur == 'linh-thach':
-        m = M[i]; st = {'xanh': 'lk3', 'cam': 'tc_so', 'xam': 'kd_so', 'trang': 'na_so', 'than': 'ht_so'}[m['zone']]
+        m = M[i]; st = ZST[m['zone']]
         return nice(lt_min(st) / per_min(i, st) * RETAIL_MUL), 'nguyên liệu · giá farm × 1,5'
     if i in M and cur == 'vang':
         m = M[i]; st = 'lk3'

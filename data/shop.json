@@ -33,11 +33,13 @@
   },
   {
    "id": "item.danphuong.cuong-cong.001",
-   "price": 54
+   "price": 460,
+   "min_stage": "tc_so"
   },
   {
    "id": "item.danphuong.cuong-the.001",
-   "price": 54
+   "price": 1500,
+   "min_stage": "na_so"
   },
   {
    "id": "item.danphuong.truc-co.001",

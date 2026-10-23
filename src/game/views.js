@@ -266,7 +266,7 @@ export function createViews(o) {
       : `<em>${s.daily_limit ? `Hôm nay còn ${left}/${s.daily_limit}` : `có ${progress.count(s.id)}`}</em>`;
     // Nút mua: tiền gốc của món + Tiên ngọc (mua được mọi món)
     const pays = [...new Set([CUR(s), 'tien-ngoc'])], q = bulkOk(s, d) ? Math.max(1, Math.min(qty, left)) : 1;
-    const btns = pays.map((k) => { const p = W.price(s, k); return btn('buy', `${k}|${s.id}`, `${k === CUR(s) ? `Mua${q > 1 ? ` ×${q}` : ''} · ` : q > 1 ? `×${q} · ` : ''}${W.label(k, p * q)}`, ok && p !== null && W.get(k) >= p * q); }).join(' ');
+    const btns = pays.map((k) => { const p = W.price(s, k); return btn('buy', `${k}|${s.id}|${o.shop.stock.indexOf(s)}`, `${k === CUR(s) ? `Mua${q > 1 ? ` ×${q}` : ''} · ` : q > 1 ? `×${q} · ` : ''}${W.label(k, p * q)}`, ok && p !== null && W.get(k) >= p * q); }).join(' ');
     return `<div class="row"><div class="row-h"><b>${ico(s.id)}${E(d.name)}${n > 1 ? ` ×${n}` : ''}</b>${note}</div>
       <p class="src">${E(o.info.effect(d))}${isRecipe && o.ru ? ` · mỗi cuốn dùng ${o.ru.max(s.id)} lần` : isBook ? ' · học một lần dùng mãi, 5 cấp mở theo 5 đại cảnh giới' : ''}</p>${need && !owned ? `<p class="need">${need}</p>` : ''}
       ${owned ? '' : btns}</div>`;
@@ -288,8 +288,8 @@ export function createViews(o) {
       onAction(act, arg) {
         if (act === 'qty') { qty = +arg; return; }
         if (act !== 'buy') return;
-        const [k, id] = arg.split('|');
-        const s = shop.stock.find((x) => x.id === id), d = itemDefs.get(id);
+        const [k, id, i] = arg.split('|'); // i: dòng hàng — cùng món có thể có 2 dòng (Linh thạch / Vàng / Tiên ngọc)
+        const s = shop.stock[+i]?.id === id ? shop.stock[+i] : shop.stock.find((x) => x.id === id), d = itemDefs.get(id);
         if (!s || W.price(s, k) === null) return;
         if (s.min_stage && !craft.stageOk(s.min_stage)) return toast(`Cần cảnh giới ${stageName(s.min_stage)}`, 1500);
         if (d.cat === 'cong-phap' && progress.count(id) > 0) return toast('Đã học bí kíp này', 1200); // bí kíp học vĩnh viễn

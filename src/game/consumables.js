@@ -33,7 +33,7 @@ export function createConsumables(c) {
     if (!g?.tier) return 'Phôi phải thức tỉnh trước';
     if (!progress.take(STONE, 1)) return `Cần ${itemDefs.get(STONE).name} (Vạn Bảo Lâu → Tiên Bảo)`;
     const others = c.heOrder.slice(0, 6).filter((h) => h !== g.he); // chỉ đổi trong ngũ hành
-    g.he = others[Math.floor(Math.random() * others.length)];
+    g.he = others[Math.floor(Math.random() * others.length)]; g.art = null; // bỏ hình cũ: ensureArt bốc lại hình theo hệ mới (không thì hệ bị kéo về theo hình)
     c.recompute(); progress.changed();
     return `${g.name} đổi sang hệ ${g.he}`;
   }
