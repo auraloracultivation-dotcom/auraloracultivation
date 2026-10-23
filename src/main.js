@@ -1,10 +1,10 @@
 // Điểm khởi động: nối các module lại với nhau. Không chứa luật gameplay chi tiết.
 import { loadJSON, startLoop, createScreen, createCamera, followCamera, createInput, drawStick, createSaver, sha256 } from './core/index.js';
 import { createMap, wrapDelta } from './map/index.js';
-import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, setTextScale, loadRig, rigAttack, artInfo, renderPortrait, avatarFx } from './entity/index.js';
+import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, setTextScale, loadRig, rigAttack, artInfo, renderPortrait, avatarFx, iconUrl } from './entity/index.js';
 import { createAudio } from './audio/index.js';
 import { createPhapTuong } from './combat/index.js';
-import { createGameplay, createRankReporter, createFlight, hudActions } from './game/index.js';
+import { createGameplay, createRankReporter, createFlight, hudActions, createNavi, createQuickPill } from './game/index.js';
 
 // Luôn lấy code mới nhất (xem sw.js) — tránh lẫn code cũ với dữ liệu mới sau mỗi lần cập nhật
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
@@ -63,7 +63,7 @@ async function boot() {
   const me = createLocalPlayer(character);
   me.rig = {};
   const bag = createTestBag(character.user_id, itemsDef.items);
-  let game = null, dock = null; // luật chơi thử nghiệm: quái, chiến đấu, tu vi, nhiệm vụ (src/game)
+  let game = null, dock = null, navi = null, pills = null; // luật chơi thử nghiệm: quái, chiến đấu, tu vi, nhiệm vụ (src/game)
   const hasAvatar = () => !!(bag.equippedItem('phap-tuong') || game?.forgedLook().avatar);
   const lookNow = () => { // đồ đang mặc + pháp tướng (chỉ khi kỹ năng đang bật)
     const forged = game?.forgedLook() || {}; // đồ luyện từ phôi đang mặc
@@ -221,7 +221,8 @@ async function boot() {
     onTreasure: () => game?.skill('phap-bao'), // nút Pháp Bảo: dùng pháp bảo đang đeo
     onCards: () => openBag('than-phu'), // nút Thần Phù: gắn phù (Thần Phù là bị động, đổi cách đạn bay)
     onShop: () => game?.openShop(),
-    ...hudActions({ game: () => game, S, attack, usePhapTuong, flight: () => flight, toast, onPills: () => openBag('linh-dan') }), // nút đánh, ô kỹ năng, Tự động, Đan
+    onTrack: (id) => navi?.start(id), // chạm dòng nhiệm vụ → dẫn đường
+    ...hudActions({ game: () => game, S, attack, usePhapTuong, flight: () => flight, toast }), // nút đánh, ô kỹ năng, Tự động, 2 ô đan
   });
   hud.setOnline(onlineN, maxPlayers);
   const flight = createFlight({ me, map, hud, pt, toast, radius: config.player.radius_px, cfg: config.player, sendMove: (fl) => zone.sendMove(me.x, me.y, me.moving, fl) });
@@ -234,6 +235,9 @@ async function boot() {
   }, loadJSON, map, me, hud, pt, toast, audio, userId: me.id, bag, onLook: () => onLookChanged(), onRealm: (r) => zone.setRealm(r), serverNow: net.serverNow, bornAt: character.created_at, timeSynced: net.timeSynced,
     onToaHoa: (sum) => showToaHoa({ name: me.name, ...sum, onRebirth: rebirth }) }); // thọ nguyên tận → chết hẳn
   me.onAutoSwing = swing;
+  navi = createNavi({ map, me, game, flight, toast }); // dẫn đường tới nơi làm nhiệm vụ
+  pills = createQuickPill({ game: () => game, hud, pick: showSlotPicker, iconUrl, toast }); // 2 ô đan dùng nhanh
+  hud.setRoundIcon('pb', iconUrl('item.phapbao.phoi.001')); hud.setRoundIcon('phu', iconUrl('card.phu.lien-thanh'));
   const rank = createRankReporter({ gp: game.gp, info: game.rankInfo, me, submit: net.submitLeaderboard }); // ảnh chụp tiến trình → bảng xếp hạng
   dock = createStatsDock({ getValue: (id) => game.statValue(id), compact: false }); // HUD v3: bảng chỉ số mở bằng nút Nhân Vật
   game.setDock(dock);
@@ -263,7 +267,8 @@ async function boot() {
   function update(dt) {
     // Cần điều khiển luôn ưu tiên; thả tay mà đang bật Tự động thì đi theo hướng autoplay (quái / nguyên liệu gần nhất)
     const stick = game.stunned() ? { x: 0, y: 0 } : input.getMove(), ad = game.stunned() ? null : game.autoDir(); // bị boss trói: đứng yên
-    const dir = stick.x || stick.y || !ad ? stick : ad;
+    const nd = navi?.update(dt, !!(stick.x || stick.y)); // đang tự đi theo dẫn đường
+    const dir = stick.x || stick.y ? stick : nd || (ad || stick);
     if (dir === ad && ad.fly !== undefined && ad.fly !== !!me.flying && !game.dead) flight.set(ad.fly, true); else if (stick.x || stick.y) game.autoMoved(); // Tự động: bay qua chướng ngại rồi hạ; tự kéo cần thì neo vùng farm đi theo
     const wasMoving = me.moving;
     me.moving = dir.x !== 0 || dir.y !== 0;
@@ -307,7 +312,7 @@ async function boot() {
     if (miniTimer <= 0) {
       miniTimer = 0.25;
       drawRoundMap(hud.miniCanvas, (off) => map.drawMinimap(off, me.x, me.y, 40, markers()));
-      dock.refresh(); hud.setWallet(game.wallet.list()); hud.setQuests(game.questBrief()); hud.setLevel(game.rankInfo().stageIndex + 1); // ô tiền, khung nhiệm vụ, số tầng
+      dock.refresh(); hud.setWallet(game.wallet.list()); hud.setQuests(game.questBrief()); pills.refresh(); // ô tiền, khung nhiệm vụ, ô đan
     }
     followCamera(cam, me, screen, map.width, map.height, zoneDef.wrap);
   }
@@ -350,6 +355,7 @@ async function boot() {
     ctx.imageSmoothingEnabled = false;
     for (const p of people) drawLabel(ctx, p, now, sprite);
     game.renderAbove(ctx, now); // tên/máu quái, số sát thương, kiếm khí
+    navi.render(ctx, now); // mũi tên dẫn đường
 
     drawStick(ctx, input.stick, dpr);
   }

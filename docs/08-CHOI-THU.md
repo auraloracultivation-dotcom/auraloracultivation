@@ -208,3 +208,7 @@ Lý do: người chơi Hóa Thần Hậu kỳ chém chết Âm Hư sau khoảng 
   Phần thưởng chính: **Ngày** (3 việc ~15 phút, reset 0h giờ VN), **Tuần** (3 việc khó, khoáng + đặc biệt + Phôi Pháp Bảo,
   reset 0h thứ Hai giờ VN), **Tiến độ** (bậc 1→n không reset, thưởng tăng dần). Sinh theo vùng của đại cảnh giới —
   `src/game/routine.js`, số liệu `data/quests/quests.json → routine`.
+- **Dẫn đường** (23/10, `src/game/navi.js`): mũi tên vàng quanh nhân vật chỉ tới nơi làm nhiệm vụ đang theo (vùng quái / nguyên liệu,
+  hoặc về thành nếu phải luyện đồ). Chạm một dòng ở khung Nhiệm vụ → tự đi (ngự kiếm nếu được) tới đúng vành vùng, tới nơi bật Tự động.
+  Kéo cần điều khiển là huỷ.
+- **2 ô đan dùng nhanh** (`src/game/quick-pill.js`): ô trống chạm để ghim đan, ô đã ghim chạm để uống, giữ để đổi.

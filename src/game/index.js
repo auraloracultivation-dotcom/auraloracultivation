@@ -4,3 +4,5 @@ export { simulateDuel } from './spar.js';
 export { createRankReporter, powerOf } from './rank.js';
 export { createFlight } from './flight.js';
 export { hudActions } from './hud-actions.js';
+export { createNavi } from './navi.js';
+export { createQuickPill } from './quick-pill.js';
