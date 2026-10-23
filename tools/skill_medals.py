@@ -63,6 +63,19 @@ def clean(im):
     return im.crop((xs.min(), ys.min(), xs.max() + 1, ys.max() + 1))
 
 
+def largest(im):
+    """Chỉ giữ mảng hình lớn nhất (nút tròn trong tấm vẽ thường dính mẩu nút bên cạnh ở mép)."""
+    a = np.array(im)
+    mask = a[:, :, 3] > 24
+    lab, n = ndimage.label(mask)
+    if n == 0:
+        return im
+    big = 1 + int(np.argmax(ndimage.sum(mask, lab, range(1, n + 1))))
+    a[lab != big] = 0
+    ys, xs = np.nonzero(lab == big)
+    return Image.fromarray(a).crop((xs.min(), ys.min(), xs.max() + 1, ys.max() + 1))
+
+
 def is_round(im):
     """Nút tròn có sẵn: gần vuông và lấp gần kín hình tròn nội tiếp."""
     w, h = im.size
@@ -74,7 +87,7 @@ def is_round(im):
     return a[inside].mean() > 0.88
 
 
-def medal(src, color):
+def medal(src, color, badge=False):
     c = np.array(hexrgb(color), dtype=float)
     S = SIZE
     yy, xx = np.mgrid[:S, :S]
@@ -83,10 +96,12 @@ def medal(src, color):
     t = np.clip(r, 0, 1)[..., None]
     bg = (c * 0.38) * (1 - t) + np.array([14, 10, 24]) * t
     base = Image.fromarray(np.dstack([bg, np.full((S, S), 255)]).astype('uint8'), 'RGBA')
-    art = clean(src)
-    if is_round(art):
-        fit = S
+    core = largest(src) if badge else None
+    if core is not None and is_round(core):
+        # nút tròn có sẵn: phóng 110% để viền tối của nút rơi ra ngoài, chỉ còn 1 viền màu hệ (chủ dự án 23/10 11:09)
+        art, fit = core, int(S * 1.1)
     else:
+        art = clean(src)
         fit = int(S * 0.8)
         glow = Image.new('RGBA', (S, S), (0, 0, 0, 0))
         ImageDraw.Draw(glow).ellipse((S * .22, S * .22, S * .78, S * .78), fill=(*hexrgb(color), 90))
@@ -125,7 +140,7 @@ def main():
             src = erase(src, ERASE[sid])
         color = he.get(s.get('he') or '', {}).get('color', NEUTRAL)
         p = OUT / f'{sid}.png'
-        medal(src, color).save(p, optimize=True)
+        medal(src, color, badge=bool(s.get('icon_url'))).save(p, optimize=True)
         s['medal'] = str(p)
         made.append((sid, p))
     open('data/gameplay.json', 'w').write(json.dumps(gp, ensure_ascii=False, indent=1) + '\n')
