@@ -1,10 +1,13 @@
 // Nhiệm vụ THỬ NGHIỆM (data/quests/quests.json): nhận, đếm tiến độ theo sự kiện, nhận thưởng đúng một lần.
-// Daily làm lại mỗi ngày (theo giờ máy). Mục tiêu trỏ NPC/địa điểm chưa có → "Hoàn thành tạm".
+// Daily làm lại mỗi ngày (0h giờ VN). Mục tiêu trỏ NPC/địa điểm chưa có → "Hoàn thành tạm".
+// Nhiệm vụ Ngày / Tuần / Tiến độ sinh tự động (src/game/routine.js) được đăng ký thêm vào danh sách và tự nhận.
+import { createRoutine } from './routine.js';
 const MAJOR = { lk: 0, tc: 1, kd: 2, na: 3, ht: 4, ab: 5, vd: 6 };
-const today = () => new Date().toLocaleDateString('sv'); // YYYY-MM-DD theo giờ máy
+const today = () => new Date(Date.now() + 7 * 3600e3).toISOString().slice(0, 10); // YYYY-MM-DD giờ VN
 
-export function createQuests(def, progress, realmMajor) {
-  const all = def.quests;
+// extra: { realms, gp, mats } — có thì bật nhiệm vụ Ngày / Tuần / Tiến độ
+export function createQuests(def, progress, realmMajor, extra = null) {
+  const all = [...def.quests];
   const byId = new Map(all.map((q) => [q.id, q]));
   const placeholders = new Set(def.placeholders);
   const Q = () => progress.state.quests;
@@ -13,7 +16,22 @@ export function createQuests(def, progress, realmMajor) {
   const isDone = (q) => (isDaily(q) ? doneToday(q) : !!Q().done[q.id]);
   const chained = new Set(all.flatMap((q) => q.next)); // chỉ mở khi xong nhiệm vụ trước
 
+  // ---- Ngày / Tuần / Tiến độ ----
+  const routine = extra && def.routine ? createRoutine({ R: def.routine, progress, realmMajor, ...extra }) : null;
+  const register = (q) => { if (!byId.has(q.id)) { all.push(q); byId.set(q.id, q); } };
+  routine?.all().forEach(register);
+  function sync() {
+    if (!routine) return;
+    const r = routine.ensure((id) => !!Q().done[id]);
+    for (const id of r.drop) { // hết ngày / hết tuần: bỏ nhiệm vụ cũ
+      delete Q().active[id]; delete Q().done[id]; byId.delete(id);
+      const i = all.findIndex((q) => q.id === id); if (i >= 0) all.splice(i, 1);
+    }
+    for (const q of r.add) { register(q); accept(q.id); }
+  }
+
   function available() {
+    sync();
     const major = realmMajor();
     return all.filter((q) => !Q().active[q.id] && !isDone(q) && (MAJOR[q.realm] ?? 0) <= major
       && (!chained.has(q.id) || all.some((p) => p.next.includes(q.id) && Q().done[p.id])));
@@ -41,6 +59,7 @@ export function createQuests(def, progress, realmMajor) {
         if (a.p[i] >= g.count) return;
         let n = 0;
         if ((g.type === 'kill' || g.type === 'boss') && type === 'kill' && g.target === e.id) n = 1;
+        else if (g.type === 'kill_zone' && type === 'kill' && e.zone === g.target && (!g.rank || g.rank === e.rank)) n = 1;
         else if (g.type === 'boss_unique' && type === 'kill' && e.rank === 'boss' && !a.seen.includes(e.id)) { a.seen.push(e.id); n = 1; }
         else if (g.type === 'collect' && type === 'gain' && g.target === e.id) n = e.n;
         else if (g.type === 'craft' && type === 'craft' && (g.target === e.id || (g.target === 'equipment.blank_item' && e.kind === 'blank'))) n = 1;
@@ -75,7 +94,7 @@ export function createQuests(def, progress, realmMajor) {
     return q.rewards;
   }
 
-  const active = () => Object.keys(Q().active).map((id) => ({ q: byId.get(id), a: Q().active[id] })).filter((x) => x.q);
+  const active = () => (sync(), Object.keys(Q().active)).map((id) => ({ q: byId.get(id), a: Q().active[id] })).filter((x) => x.q);
   const done = () => all.filter(isDone);
-  return { available, active, done, accept, claim, emit, complete, fakeGoal, isPlaceholder: (t) => placeholders.has(t), byId };
+  return { available, active, done, accept, claim, emit, complete, fakeGoal, isPlaceholder: (t) => placeholders.has(t), byId, ladderStep: () => routine?.ladderStep() || 0 };
 }

@@ -5,8 +5,8 @@ import { compactNum as N } from '../core/index.js';
 
 const GOAL = { talk: 'Nói chuyện', reach: 'Đến', collect: 'Thu thập', craft: 'Luyện', kill: 'Hạ', boss: 'Hạ boss', dodge_heavy: 'Né đòn nặng',
   discover: 'Khám phá', complete_daily: 'Hoàn thành nhiệm vụ ngày', awaken: 'Thức tỉnh trang bị', use: 'Dùng',
-  discover_unique: 'Nhặt các loại linh thảo khác nhau', boss_unique: 'Hạ các boss khác nhau' };
-const TYPE = { main: 'Chính tuyến', daily: 'Hằng ngày', explore: 'Khám phá', craft: 'Chế tạo', combat: 'Chiến đấu', long: 'Dài hạn' };
+  discover_unique: 'Nhặt các loại linh thảo khác nhau', boss_unique: 'Hạ các boss khác nhau', kill_zone: 'Hạ' };
+const TYPE = { main: 'Chính tuyến', daily: 'Hằng ngày', weekly: 'Hằng tuần · reset thứ Hai', ladder: 'Tiến độ · không reset', explore: 'Khám phá', craft: 'Chế tạo', combat: 'Chiến đấu', long: 'Dài hạn' };
 const SLOT = { 'mat-na': 'Mặt nạ', 'trang-phuc': 'Trang phục', 'vu-khi': 'Vũ khí', nhan: 'Nhẫn', canh: 'Cánh', 'linh-thu': 'Linh thú',
   'day-chuyen': 'Dây chuyền', 'phap-tuong': 'Pháp tướng' };
 const STAT = { hp: 'Khí huyết', mp: 'Linh lực (MP)', linh: 'Tấn công (Linh Lực)', def: 'Phòng thủ', xuyen: 'Xuyên giáp', chinh: 'Chính xác',
@@ -45,7 +45,7 @@ export function createViews(o) {
   function questRow(q, a) {
     const goals = q.goals.map((g, i) => {
       const cur = a ? a.p[i] : 0, ok = cur >= g.count;
-      const what = g.target === 'any' || g.type.endsWith('unique') ? '' : ` ${E(name(g.target))}`;
+      const what = g.label ? ` ${E(g.label)}` : g.target === 'any' || g.type.endsWith('unique') ? '' : ` ${E(name(g.target))}`;
       const fake = a && !ok && quests.isPlaceholder(g.target) ? btn('fake', `${q.id}|${i}`, 'Hoàn thành tạm') : '';
       return `<li class="${ok ? 'ok' : ''}">${GOAL[g.type] || g.type}${what} <b>${cur}/${g.count}</b> ${fake}</li>`;
     }).join('');
@@ -57,10 +57,11 @@ export function createViews(o) {
   const QCOL = { luc: '#6fdc76', lam: '#6aa8ff', tim: '#c58cff', cam: '#ffa94d', vang: '#ffd84a', do: '#ff5a4a', den: '#ff4f7a' };
   function questBrief() {
     for (const q of quests.available()) if (q.auto) quests.accept(q.id); // chuỗi Tầm Bảo: đủ cảnh giới là tự nhận
-    const tag = (q) => (q.type === 'main' ? 'Chính' : q.type === 'daily' ? 'Ngày' : 'Phụ');
-    return quests.active().sort((x, y) => (x.q.type === 'main' ? -1 : 0) - (y.q.type === 'main' ? -1 : 0)).slice(0, 3).map(({ q, a }) => {
+    const tag = (q) => ({ main: 'Chính', daily: 'Ngày', weekly: 'Tuần', ladder: `Tiến độ ${quests.ladderStep()}` }[q.type] || 'Phụ');
+    const ORD = { main: 0, ladder: 1, daily: 2, weekly: 3 }, rank = (x) => (quests.complete(x.q.id) ? -1 : ORD[x.q.type] ?? 4); // xong rồi (chờ nhận thưởng) lên đầu
+    return quests.active().sort((x, y) => rank(x) - rank(y)).slice(0, 3).map(({ q, a }) => {
       const i = Math.max(0, q.goals.findIndex((g, k) => a.p[k] < g.count)), g = q.goals[i];
-      const what = g.target === 'any' || g.type.endsWith('unique') ? '' : ` ${name(g.target)}`;
+      const what = g.label ? ` ${g.label}` : g.target === 'any' || g.type.endsWith('unique') ? '' : ` ${name(g.target)}`;
       return { tag: tag(q), title: q.title, color: QCOL[q.tier] || (q.type === 'main' ? '#f7cf6b' : q.type === 'daily' ? '#7fe08a' : '#7fb4ff'),
         goal: `${GOAL[g.type] || g.type}${what} (${a.p[i]}/${g.count})`, ready: quests.complete(q.id) };
     });
@@ -71,7 +72,8 @@ export function createViews(o) {
       tabs: [{ id: 'active', name: 'Đang làm' }, { id: 'avail', name: 'Có thể nhận' }, { id: 'done', name: 'Đã xong' }, { id: 'bc', name: 'Bí Cảnh' }],
       render(tab) {
         if (tab === 'bc') return biCanhTab();
-        const rows = tab === 'active' ? quests.active().map(({ q, a }) => questRow(q, a))
+        const ORD = { ladder: 0, daily: 1, weekly: 2, main: 3 };
+        const rows = tab === 'active' ? quests.active().sort((x, y) => (ORD[x.q.type] ?? 4) - (ORD[y.q.type] ?? 4)).map(({ q, a }) => questRow(q, a))
           : tab === 'avail' ? quests.available().map((q) => questRow(q, null))
             : quests.done().map((q) => `<div class="row done"><b>${E(q.title)}</b> <em>✓</em></div>`);
         return rows.join('') || '<p class="bag-empty">Trống</p>';

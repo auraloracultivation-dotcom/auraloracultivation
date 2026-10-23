@@ -942,5 +942,179 @@
   "equipment.blank_item": "bất kỳ phôi pháp bảo",
   "herb": "mỗi loại linh thảo khác nhau từng nhặt được"
  },
- "_ghi_chu_tam_bao": "Chuỗi Tầm Bảo (chủ dự án 23/10/2026): nhiệm vụ chính dẫn người chơi đi tìm khoáng quý luyện trang bị, từ vùng xanh tới vùng than. tier = màu độ hiếm / độ khó trên HUD (luc, lam, tim, cam, vang, do, den — giống phẩm trang bị). auto = tự nhận khi đủ cảnh giới."
+ "_ghi_chu_tam_bao": "Chuỗi Tầm Bảo (chủ dự án 23/10/2026): nhiệm vụ chính dẫn người chơi đi tìm khoáng quý luyện trang bị, từ vùng xanh tới vùng than. tier = màu độ hiếm / độ khó trên HUD (luc, lam, tim, cam, vang, do, den — giống phẩm trang bị). auto = tự nhận khi đủ cảnh giới.",
+ "routine": {
+  "_ghi_chu": "Nhiệm vụ Ngày / Tuần / Tiến độ (chủ dự án 23/10/2026: game tu tiên + idle — giết quái nhận ít, phần thưởng chính đến từ nhiệm vụ). Sinh tự động theo VÙNG của đại cảnh giới hiện tại (src/game/routine.js). Ngày reset 0h giờ VN, Tuần reset 0h thứ Hai giờ VN, Tiến độ là bậc thang 1→n không reset. exp_bar = phần vạch tu vi của tầng đang tu; stone_kills = số Linh thạch bằng ngần ấy con quái thường tầng hiện tại.",
+  "tz_offset_h": 7,
+  "zone_names": {
+   "xanh": "Đồng cỏ",
+   "cam": "Cát vàng",
+   "xam": "Sỏi đá xám",
+   "trang": "Băng tuyết",
+   "than": "Hắc thổ",
+   "den": "Hắc thạch",
+   "tim": "Tử vực"
+  },
+  "zone_order": [
+   "xanh",
+   "cam",
+   "xam",
+   "trang",
+   "than",
+   "den",
+   "tim"
+  ],
+  "daily": [
+   {
+    "title": "Trừ yêu {zone}",
+    "tier": "luc",
+    "goal": {
+     "type": "kill_zone",
+     "rank": "thuong",
+     "count": 30
+    },
+    "desc": "Hạ 30 yêu thú thường ở vùng {zone}. Bật Tự động là xong trong vài phút."
+   },
+   {
+    "title": "Hái thuốc {zone}",
+    "tier": "luc",
+    "goal": {
+     "type": "collect",
+     "group": "thao",
+     "count": 8
+    },
+    "desc": "Hái {item} quanh vùng {zone} (cây thuốc mọc rải rác, quái cũng rơi)."
+   },
+   {
+    "title": "Săn tinh anh {zone}",
+    "tier": "lam",
+    "goal": {
+     "type": "kill_zone",
+     "rank": "elite",
+     "count": 2
+    },
+    "desc": "Tinh anh xuất hiện sâu trong vành vùng {zone}. Hạ 2 con."
+   }
+  ],
+  "daily_reward": {
+   "exp_bar": {
+    "lk": 0.5,
+    "tc": 0.3,
+    "kd": 0.2,
+    "na": 0.12,
+    "ht": 0.08,
+    "ab": 0.06,
+    "vd": 0.05
+   },
+   "stone_kills": 40,
+   "herb": 3
+  },
+  "weekly": [
+   {
+    "title": "Tuần: Quét sạch {zone}",
+    "tier": "tim",
+    "goal": {
+     "type": "kill_zone",
+     "rank": "thuong",
+     "count": 400
+    },
+    "desc": "Hạ 400 yêu thú vùng {zone} trong tuần. Thưởng nhiều khoáng luyện phôi."
+   },
+   {
+    "title": "Tuần: Thợ săn tinh anh",
+    "tier": "cam",
+    "goal": {
+     "type": "kill_zone",
+     "rank": "elite",
+     "count": 20
+    },
+    "desc": "Hạ 20 tinh anh vùng {zone} trong tuần."
+   },
+   {
+    "title": "Tuần: Trảm thủ lĩnh",
+    "tier": "do",
+    "goal": {
+     "type": "kill_zone",
+     "rank": "boss",
+     "count": 3
+    },
+    "desc": "Hạ 3 thủ lĩnh vùng {zone} trong tuần. Thưởng Phôi Pháp Bảo."
+   }
+  ],
+  "weekly_reward": {
+   "exp_bar": {
+    "lk": 2,
+    "tc": 1.2,
+    "kd": 0.8,
+    "na": 0.5,
+    "ht": 0.35,
+    "ab": 0.3,
+    "vd": 0.25
+   },
+   "stone_kills": [
+    300,
+    500,
+    800
+   ],
+   "ore": [
+    25,
+    30,
+    40
+   ],
+   "special": [
+    1,
+    2,
+    4
+   ],
+   "phoi_pb": [
+    0,
+    0,
+    1
+   ]
+  },
+  "ladder": {
+   "title": "Tiến độ {n}: Tầm đạo {zone}",
+   "kill_base": 60,
+   "kill_step": 20,
+   "kill_max": 600,
+   "ore_every": 2,
+   "ore_base": 10,
+   "ore_step": 4,
+   "ore_max": 120,
+   "exp_bar": 0.15,
+   "stone_kills_base": 120,
+   "stone_kills_step": 30,
+   "reward_ore_base": 12,
+   "reward_ore_step": 3,
+   "special_every": 2,
+   "phoi_pb_every": 5,
+   "tiers": [
+    [
+     5,
+     "lam"
+    ],
+    [
+     10,
+     "tim"
+    ],
+    [
+     20,
+     "cam"
+    ],
+    [
+     35,
+     "vang"
+    ],
+    [
+     50,
+     "do"
+    ],
+    [
+     9999,
+     "den"
+    ]
+   ],
+   "desc": "Bậc {n} của chuỗi Tiến độ (không reset). Mỗi bậc khó hơn, thưởng nhiều tài nguyên quý hơn."
+  }
+ }
 }
