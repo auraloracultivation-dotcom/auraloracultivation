@@ -1,7 +1,8 @@
 /* HUD v3 (chủ dự án 23/10/2026) — mảnh ảnh assets/ui/frames|icons/hud-*.png, bố cục ở src/ui/hud.js.
    Ưu tiên màn dọc 390×844; màn ngang dời khung Nhiệm vụ sang trái. */
 :root { --h3-L: min(250px, 60vw); --h3-R: 104px; --h3-top: max(4px, env(safe-area-inset-top)); }
-.h3-left, .h3-right { position: absolute; top: var(--h3-top); pointer-events: none; z-index: 5; }
+.h3-left, .h3-right { position: absolute; top: var(--h3-top); z-index: 5; }
+#ui > .h3-left, #ui > .h3-right { pointer-events: none; } /* chỉ nút nhận chạm, khoảng trống giữa nút để chạm xuống bản đồ */
 .h3-left > *, .h3-right > * { pointer-events: auto; }
 .h3-left button, .h3-right button, .h3-side, .h3-chatbox button { padding: 0; border: 0; background: none; cursor: pointer; }
 .h3-left { left: max(6px, env(safe-area-inset-left)); width: var(--h3-L); container-type: inline-size; }
@@ -112,7 +113,6 @@
 .act.slot .act-art { inset: 11%; width: 78%; height: 78%; border-radius: 50%; object-fit: cover; image-rendering: auto; filter: none; }
 .act.slot .act-art[src*="/skills/m/"] { inset: 11%; width: 78%; height: 78%; }
 .act.slot.locked .act-art { filter: grayscale(1) brightness(.35); }
-.act.round-icon .act-art { inset: 20%; width: 60%; height: 60%; }
 
 /* ---- thông báo: băng "Nhặt" nhỏ góc trái, dưới khung nhân vật ---- */
 .toast { left: max(6px, env(safe-area-inset-left)); top: calc(var(--h3-top) + 175px); transform: none; max-width: calc(100vw - var(--h3-R) - 24px);
@@ -126,7 +126,7 @@
   .h3-mini { grid-area: mini; }
   .h3-menu { grid-area: menu; }
   .h3-round { grid-area: round; grid-template-columns: repeat(4, 1fr); }
-  .h3-quest { position: fixed; left: max(6px, env(safe-area-inset-left)); top: calc(var(--h3-top) + 165px); width: 190px; }
+  .h3-quest { position: fixed; left: max(6px, env(safe-area-inset-left)); top: calc(var(--h3-top) + 182px); width: 190px; }
   .toast { top: auto; bottom: 12px; left: 50%; transform: translateX(-50%); }
   .h3-side { width: 44px; }
   .h3-kho { bottom: max(6px, env(safe-area-inset-bottom)); left: calc(max(6px, env(safe-area-inset-left)) + 50px); }

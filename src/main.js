@@ -63,7 +63,7 @@ async function boot() {
   const me = createLocalPlayer(character);
   me.rig = {};
   const bag = createTestBag(character.user_id, itemsDef.items);
-  let game = null; // luật chơi thử nghiệm: quái, chiến đấu, tu vi, nhiệm vụ (src/game)
+  let game = null, dock = null; // luật chơi thử nghiệm: quái, chiến đấu, tu vi, nhiệm vụ (src/game)
   const hasAvatar = () => !!(bag.equippedItem('phap-tuong') || game?.forgedLook().avatar);
   const lookNow = () => { // đồ đang mặc + pháp tướng (chỉ khi kỹ năng đang bật)
     const forged = game?.forgedLook() || {}; // đồ luyện từ phôi đang mặc
@@ -217,10 +217,10 @@ async function boot() {
         draw: (off, radiusTiles) => map.drawMinimap(off, me.x, me.y, radiusTiles, markers()),
       });
     },
-    onStats: () => dock.openFull(), // nút Nhân Vật: bảng chỉ số đầy đủ
-    onTreasure: () => game.skill('phap-bao'), // nút Pháp Bảo: dùng pháp bảo đang đeo
+    onStats: () => dock?.openFull(), // nút Nhân Vật: bảng chỉ số đầy đủ
+    onTreasure: () => game?.skill('phap-bao'), // nút Pháp Bảo: dùng pháp bảo đang đeo
     onCards: () => openBag('than-phu'), // nút Thần Phù: gắn phù (Thần Phù là bị động, đổi cách đạn bay)
-    onShop: () => game.openShop(),
+    onShop: () => game?.openShop(),
     ...hudActions({ game: () => game, S, attack, usePhapTuong, flight: () => flight, toast, onPills: () => openBag('linh-dan') }), // nút đánh, ô kỹ năng, Tự động, Đan
   });
   hud.setOnline(onlineN, maxPlayers);
@@ -235,7 +235,7 @@ async function boot() {
     onToaHoa: (sum) => showToaHoa({ name: me.name, ...sum, onRebirth: rebirth }) }); // thọ nguyên tận → chết hẳn
   me.onAutoSwing = swing;
   const rank = createRankReporter({ gp: game.gp, info: game.rankInfo, me, submit: net.submitLeaderboard }); // ảnh chụp tiến trình → bảng xếp hạng
-  const dock = createStatsDock({ getValue: (id) => game.statValue(id), compact: false }); // HUD v3: bảng chỉ số mở bằng nút Nhân Vật
+  dock = createStatsDock({ getValue: (id) => game.statValue(id), compact: false }); // HUD v3: bảng chỉ số mở bằng nút Nhân Vật
   game.setDock(dock);
   enableFastTap(); // nút bấm được cả khi tay kia đang giữ cần điều khiển
   let targetId = null; // đạo hữu đang được chọn (chạm vào nhân vật bằng tay phải)

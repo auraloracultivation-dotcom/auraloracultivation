@@ -73,7 +73,7 @@ export function createStatsDock({ getValue = () => null, compact = true } = {}) 
     </div>`;
     root.appendChild(full);
     // phóng từ vị trí thanh gọn ra
-    const d = dock.getBoundingClientRect();
+    const d = (compact ? dock : document.querySelector('[data-r="stats"]') || dock).getBoundingClientRect();
     full.style.setProperty('--ox', `${d.left + d.width / 2}px`);
     full.style.setProperty('--oy', `${d.top + d.height / 2}px`);
     requestAnimationFrame(() => full.classList.add('open'));
