@@ -246,3 +246,14 @@
 .set2-logout { flex: 1; height: 44px; border-radius: 10px; border: 2px solid #e9a0a0; cursor: pointer;
   background: linear-gradient(#e2525a, #a82835); color: #fff; font-size: 18px; font-weight: 700; text-shadow: 0 1px 2px #000; }
 .set2 button { touch-action: manipulation !important; }
+
+/* ---- Nút Đạo Vận / Pháp Bảo / Thần Phù và 2 ô đan: hiện ảnh vật phẩm như ô Kho (chủ dự án 23/10/2026) ---- */
+.h3-round .has-ic > img:first-child { visibility: hidden; }
+.h3-round .has-ic .h3-r-ic { left: 6%; top: 3%; width: 88% !important; height: 70% !important; padding: 7%; box-sizing: border-box; object-fit: contain;
+  border-radius: 10px; border: 1px solid rgba(201, 163, 90, .75); background: rgba(12, 12, 26, .9); box-shadow: inset 0 0 8px rgba(0, 0, 0, .55); image-rendering: auto; filter: none; }
+.h3-round .has-ic span { top: 75%; height: 22%; border-radius: 6px; background: rgba(12, 12, 26, .85); border: 1px solid rgba(201, 163, 90, .55); }
+.act.pill .act-base { visibility: hidden; }
+.act.pill { border-radius: 10px; border: 1px solid rgba(201, 163, 90, .75); background: rgba(12, 12, 26, .9); box-shadow: inset 0 0 8px rgba(0, 0, 0, .55); }
+.act.pill .act-art { inset: 5%; width: 90%; height: 90%; image-rendering: auto; filter: none; }
+.act.pill .act-badge { right: 4px; bottom: 2px; font-size: 13px; }
+.act.pill.empty { border-style: dashed; background: rgba(12, 12, 26, .55); }

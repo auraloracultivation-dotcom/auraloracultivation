@@ -43,7 +43,7 @@ import { createHopNhat } from './hopnhat.js';
 import { createSkillLearn } from './skill-learn.js';
 import { simulateDuel } from './spar.js';
 import { placeholderIcon, showRevive } from '../ui/index.js';
-import { artInfo, iconUrl, fxIconUrl } from '../entity/index.js';
+import { artInfo, iconUrl, fxIconUrl, cardArt } from '../entity/index.js';
 
 const MAJOR_OF = (id) => ({ lk: 0, tc: 1, kd: 2, na: 3, ht: 4, ab: 5, vd: 6 }[id.slice(0, 2)] ?? 0);
 const HEAL_PILL = 'item.dan.tieu-hoi-huyet.001';
@@ -393,6 +393,6 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     realmName: () => progress.stageDef.name, gp, grantFull: (gift) => grantFull({ progress, wallet, gift, mats, pills, recipes, shop, blanks }), grantHopNhat: (gift) => grantHopNhat({ progress, cards, treasure, learn, dvDef, pbDef, gift }), grantGod: (gift) => { const n = grantGod({ progress, bag, awaken, gp, mdef: monDef, gift }); recompute(); return n; }, // mã thử 'full' // gp: thông số chơi thử (bảng xếp hạng dùng trọng số lực chiến)
     spar: (op) => simulateDuel(ps, op, stats, gp.spar), // luận bàn với bóng chỉ số người trên bảng xếp hạng
     rankInfo: () => ({ stageIndex: progress.state.stage, stageName: progress.stageDef.name, exp: progress.state.exp, stats: ps, voidKills: progress.state.voidKillCount || 0 }),
-    markers: () => voids.markers(), // Âm Hư đang xuất hiện (chấm tím trên bản đồ)
+    markers: () => voids.markers(), hudArt: () => { const c = cards.equippedDefs()[0]; return { pb: treasure.view()?.thumb || iconUrl('item.phapbao.phoi.001'), phu: c ? iconUrl(`card.${c.id}`) || cardArt(c.id, 'den') : iconUrl('card.phu.lien-thanh'), dv: cardArt('summary', 'den') }; }, // Âm Hư (bản đồ) · ảnh vật phẩm cho nút Pháp Bảo / Thần Phù / Đạo Vận
   };
 }

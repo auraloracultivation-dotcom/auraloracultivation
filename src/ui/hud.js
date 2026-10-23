@@ -25,7 +25,7 @@ const MENU = [
   { id: 'settings', name: 'Cài đặt', icon: 'cai-dat-v2' },
 ];
 // Nút tròn: Đạo Vận thay chỗ Túi (guide.js gắn chữ + màu vào [data-r="dv"]), Nhân Vật giữ ảnh gốc
-const ROUND = [ // glyph: chữ dự phòng (\uFE0E = dạng chữ, iPhone không vẽ thành emoji ô tím); ảnh thật gắn sau bằng setRoundIcon
+const ROUND = [ // nút Đạo Vận / Pháp Bảo / Thần Phù hiện ẢNH VẬT PHẨM như ô Kho (setRoundIcon, chủ dự án 23/10); glyph chỉ dự phòng
   { id: 'dv', name: 'Đạo Vận', glyph: '☯\uFE0E' },
   { id: 'stats', name: 'Nhân Vật', img: I('nut-nhan-vat') },
   { id: 'pb', name: 'Pháp Bảo', glyph: '❖' },
