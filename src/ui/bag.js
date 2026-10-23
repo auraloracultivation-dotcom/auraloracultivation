@@ -13,8 +13,9 @@ function overlay(cls) {
 // Kho: categories [[id, tên]]; getEntries() → [{ item, count }]; mỗi item có key, name, cat, thumb, sub, detail, equipped,
 // actions [{ id, label, disabled, danger, confirm }]. onAction(item, actionId) → Promise | void (luật do nơi gọi xử lý).
 // Giao diện Kho kiểu bảng trong (chủ dự án 23/10/2026): nền mờ trong suốt nhìn thấy thế giới phía sau, chỉ ô đồ đậm;
-// mục có icon (tabIcons[id] = ảnh), ví 3 loại tiền + nút + (onShop), lưới 5 cột lật trang 25 ô / trang.
-const PER_PAGE = 25;
+// mục có icon (tabIcons[id] = ảnh), ví 3 loại tiền + nút + (onShop), lưới 6 cột × 5 hàng lật trang.
+// Khung CỐ ĐỊNH: luôn vẽ đủ 30 ô (ô trống mờ) nên bảng không co giãn theo số đồ (chủ dự án 23/10).
+const COLS = 6, ROWS = 5, PER_PAGE = COLS * ROWS;
 export function showBag({ categories, getEntries, onAction, note, wallet, tab, tabIcons = {}, onShop }) { // tab: mở sẵn mục (vd. 'linh-dan')
   const { wrap, close } = overlay('bag-wrap');
   const box = el(`<div class="bag bag-v2" role="dialog" aria-label="Kho">
@@ -48,11 +49,12 @@ export function showBag({ categories, getEntries, onAction, note, wallet, tab, t
     pager.querySelector('b').textContent = `${page + 1} / ${pages}`;
     pager.querySelectorAll('[data-pg]').forEach((b) => { b.disabled = (b.dataset.pg < 0 && page === 0) || (b.dataset.pg > 0 && page === pages - 1); });
     const shown = list.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
-    grid.innerHTML = shown.length ? shown.map(({ item, count }) => `
+    grid.innerHTML = shown.map(({ item, count }) => `
       <button type="button" class="bag-cell ${item.equipped ? 'on' : ''} ${item.tier ? `tier-${item.tier}` : ''} ${sel === item.key ? 'sel' : ''}" data-key="${escapeHtml(item.key)}"
         aria-label="${escapeHtml(item.name)}">
         <img src="${item.thumb || ''}" alt="" loading="lazy">${count > 1 ? `<i>${count}</i>` : ''}${item.equipped ? '<em>Đang dùng</em>' : ''}
-      </button>`).join('') : '<p class="bag-empty">Chưa có vật phẩm</p>';
+      </button>`).join('') + '<i class="bag-cell blank"></i>'.repeat(PER_PAGE - shown.length)
+      + (list.length ? '' : '<p class="bag-empty">Chưa có vật phẩm</p>');
     const it = list.find((e) => e.item.key === sel)?.item;
     detail.hidden = !it;
     if (it) { // thẻ chi tiết: có nút đóng, cuộn được khi dài (đồ 10 dòng) — không che hết lưới đồ
