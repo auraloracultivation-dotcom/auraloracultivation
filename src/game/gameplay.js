@@ -296,7 +296,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
       m.tele = m.state === 'cast' ? mobs.telegraph(m, at) : null; // vùng chiêu boss sắp đánh
       drawMonster(ctx, m, x, y, t);
     }
-    tame.render(ctx, at, t);
+    tame.render(ctx, at, t); mobs.drawOrbs(ctx, at, t); // linh cầu quái bắn
     if (pet) drawFx(ctx, [{ ...pet, kind: 'pet', ...at(pet) }], 0, 0);
   }
   function renderAbove(ctx, t) {

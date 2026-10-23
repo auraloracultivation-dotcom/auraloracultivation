@@ -3,6 +3,7 @@
 // Mỗi máy tự có quái riêng — người chơi khác không thấy cùng con quái (Mốc 3: máy chủ quản lý quái).
 import { wrapDelta } from '../map/index.js';
 import { createMobSkills } from './mob-skills.js';
+import { createMobOrbs } from './mob-orbs.js';
 
 const rint = (a, b) => Math.round(a + Math.random() * (b - a));
 
@@ -11,6 +12,7 @@ export function createMonsters({ gp, mdef, map }) {
   const P = gp.monster;
   const defs = mdef.monsters;
   const mskills = createMobSkills({ lib: mdef.skills || {}, map }); // kỹ năng boss
+  const orbs = createMobOrbs({ cfg: P.orb, map }); // đạn sáng chậm của tinh anh / boss
   const byZone = {};
   for (const d of defs) if (!d.void) (byZone[d.zone] ||= { thuong: [], elite: [], boss: [], stages: [] })[d.rank].push(d);
   for (const z of Object.values(byZone)) z.stages = [...new Set(z.thuong.flatMap((d) => d.stages))]; // tầng của vùng, yếu → mạnh
@@ -101,6 +103,7 @@ export function createMonsters({ gp, mdef, map }) {
     const inTown = map.safeAt(me.x, me.y); // trong thành: quái coi như không thấy người chơi
     spawnT -= dt;
     if (spawnT <= 0 && list.length < P.max_alive) { spawnT = P.spawn_every_s; spawn(me); }
+    orbs.update(dt, { ...env, inTown });
     for (let i = list.length - 1; i >= 0; i--) {
       const m = list[i];
       const d = distTo(m, me);
@@ -125,6 +128,7 @@ export function createMonsters({ gp, mdef, map }) {
       } else if (m.state === 'chase') {
         if (!env.alive || inTown || homeDist(m) > (m.leash || P.leash_px)) { m.state = 'return'; continue; }
         if (mskills.tryCast(m, me, d)) continue; // boss vận chiêu (vòng / dải đỏ báo trước)
+        orbs.tryFire(m, me, d, dt); // tinh anh / boss: bắn linh cầu chậm khi còn xa
         if (d > P.attack_range_px + m.r * 0.5) step(m, me.x, me.y, speed, dt);
         else if (m.cd <= 0) {
           m.cd = P.attack_every_s; m.n++;
@@ -188,5 +192,5 @@ export function createMonsters({ gp, mdef, map }) {
   }
   const removeVoid = (key) => { const i = list.findIndex((m) => m.voidKey === key && m.state !== 'dead'); if (i >= 0) list.splice(i, 1); };
 
-  return { ringOf: (z) => ring[z] && { cx, cy, min: ring[z].min, max: ring[z].max }, depth, list, update, addVoid, removeVoid, spawnAt, telegraph: mskills.telegraph, damage, nearest, within, distTo, rel, calmAll() { for (const m of list) if (m.state !== 'dead') { m.state = 'return'; m.cast = null; } } };
+  return { ringOf: (z) => ring[z] && { cx, cy, min: ring[z].min, max: ring[z].max }, depth, list, update, addVoid, removeVoid, spawnAt, telegraph: mskills.telegraph, drawOrbs: orbs.draw, damage, nearest, within, distTo, rel, calmAll() { orbs.clear(); for (const m of list) if (m.state !== 'dead') { m.state = 'return'; m.cast = null; } } };
 }
