@@ -11,7 +11,7 @@ if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catc
 import {
   showLoading, showLogin, shouldForgetSession, showCreateCharacter, showNewPassword,
   showConfirm, showFatal, toast, createHud, showCharacterPanel, showSettings, showWorldMap, drawRoundMap, createStatsDock, enableFastTap,
-  showBag, showItemActions, showSlotPicker, loadSettings, createTestBag, showLeaderboard, showToaHoa,
+  showBag, showItemActions, showSlotPicker, loadSettings, createTestBag, showLeaderboard, showToaHoa, showSpar,
 } from './ui/index.js';
 
 async function boot() {
@@ -221,8 +221,8 @@ async function boot() {
       if (id === 'quests') game.openQuests();
       else if (id === 'skills') game.openCodex(); // nút sách = Đồ giám (Tu luyện vẫn mở ở Lò luyện đan / Tế đàn trong thành)
       else if (id === 'sect') game.openShop(); // Vạn Bảo Lâu (chỉ mở trong Thanh Vân Thành)
-      else if (id === 'rank') showLeaderboard({ myId: me.id, fetchBoard: (k) => net.fetchLeaderboard(k), fetchMine: (k) => net.fetchMyRank(k, me.id),
-        portrait: (look) => { try { return renderPortrait(look, { body: true, zoom: 2 }).toDataURL(); } catch { return null; } } }); // Bảng xếp hạng
+      else if (id === 'rank') showLeaderboard({ myId: me.id, fetchBoard: (k) => net.fetchLeaderboard(k), fetchMine: (k) => net.fetchMyRank(k, me.id), myLook: me.look, portrait: (look) => { try { return renderPortrait(look, { body: true, zoom: 2 }).toDataURL(); } catch { return null; } }, // Bảng xếp hạng
+        onSpar: (r, img, mine) => showSpar({ a: { name: me.name, sub: game.realmName(), img: mine }, b: { name: r.name, sub: r.stage_name, img }, run: () => game.spar(r.stats) }) }); // luận bàn
       else return false;
       return true;
     },

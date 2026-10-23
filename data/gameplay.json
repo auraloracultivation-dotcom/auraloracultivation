@@ -1224,5 +1224,13 @@
    "realm.nguyen-anh": "nguyen-anh",
    "realm.hoa-than": "hac-dong"
   }
+  },
+ "spar": {
+  "_ghi_chu": "Luận bàn trên Bảng xếp hạng (src/game/spar.js): đấu thử với bóng chỉ số, không thưởng/không mất. hp_mul kéo dài trận, dmg_mul giảm sát thương PvP, mỗi skill_every_s giây tung 1 chiêu ×skill_mul, tối đa max_s giây.",
+  "hp_mul": 3,
+  "dmg_mul": 0.6,
+  "skill_every_s": 4,
+  "skill_mul": 2.2,
+  "max_s": 90
  }
 }

@@ -10,7 +10,7 @@ const STAT_NAMES = [['hp', 'Khí huyết'], ['mp', 'Linh lực (MP)'], ['linh', 
 const MEDAL = ['🥇', '🥈', '🥉'];
 
 // fetchBoard(kind) → [hàng]; fetchMine(kind) → { rank, row } | null; portrait(look) → dataURL | null
-export function showLeaderboard({ myId, fetchBoard, fetchMine, portrait }) {
+export function showLeaderboard({ myId, fetchBoard, fetchMine, portrait, onSpar, myLook }) {
   const cache = {};
   const load = (kind, force = false) => {
     if (cache[kind] && !force) return;
@@ -46,11 +46,12 @@ export function showLeaderboard({ myId, fetchBoard, fetchMine, portrait }) {
     const stats = STAT_NAMES.filter(([k]) => r.stats?.[k] !== undefined)
       .map(([k, n]) => `<div class="rank-stat"><span>${n}</span><b>${N(r.stats[k])}</b></div>`).join('');
     showSheet({
-      title: r.name, tabs: [{ id: 'info', name: 'Chỉ số' }], onAction: () => {},
+      title: r.name, tabs: [{ id: 'info', name: 'Chỉ số' }], onAction: (act) => { if (act === 'spar') onSpar?.(r, img, myLook ? portrait(myLook) : null); },
       note: r.source === 'client' ? 'Chỉ số do máy người chơi gửi lên (bản thử nghiệm) — chỉ để tham khảo.' : '',
       render: () => `<div class="rank-card">${img ? `<img src="${img}" alt="">` : ''}
         <div><b>${E(r.stage_name)}</b><small>Lực chiến ${N(r.power)} · ${N(r.exp)} tu vi · trảm ${r.void_kills} Âm Hư</small></div></div>
-        <div class="rank-stats">${stats || '<p class="rank-empty">Chưa có chỉ số.</p>'}</div>`,
+        <div class="rank-stats">${stats || '<p class="rank-empty">Chưa có chỉ số.</p>'}</div>
+        ${onSpar && r.user_id !== myId && r.stats?.hp ? '<button type="button" class="bag-act rank-spar" data-act="spar">⚔ Luận bàn (đấu thử)</button>' : ''}`,
     });
   }
 
