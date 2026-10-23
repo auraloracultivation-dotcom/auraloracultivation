@@ -383,7 +383,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     toggleAuto() { if (dead) return; auto = !auto; autoDir = null; auto ? autoPlay.start() : autoPlay.reset(); hud.setActive('auto', auto); toast(auto ? 'Tự động đánh: bật — farm quanh neo, kéo cần để dời neo' : 'Tự động đánh: tắt', 1600); },
     healPill: () => usePill(HEAL_PILL), usePill, pillCount: (id) => progress.count(id), isAuto: () => auto, autoDir: () => (auto ? autoDir : null), autoMoved: () => auto && autoPlay.moved(), // kéo cần khi Tự động: dời neo
     openCodex: () => openCodex({ loadJSON, gp, mats, pills, recipes, cp, monsters: monDef.monsters, mobSkills: monDef.skills, blanks, qItems, artDef, info, cpText: cpFx.text, fxDuration }), // Đồ giám (nút sách)
-    statValue: views.statValue, openQuests: views.openQuests, questBrief: views.questBrief, naviGoal: views.naviGoal, track: views.track, pillChoices: views.pillChoices, zoneRing: (z) => mobs.ringOf(z), // dẫn đường + đan dùng nhanh openCultivate: views.openCultivate,
+    statValue: views.statValue, openQuests: views.openQuests, questBrief: views.questBrief, naviGoal: views.naviGoal, track: views.track, pillChoices: views.pillChoices, zoneRing: (z) => mobs.ringOf(z), openCultivate: views.openCultivate, // dẫn đường + đan dùng nhanh
     forgedLook,
     setDock(d) { views.refreshDock = d.refresh; },
     bagEntries: () => [...inv.entries().map(({ item, count }) => { const a = item.key.startsWith('gear:') && usable.gearAction(progress.gear(+item.key.slice(5)));

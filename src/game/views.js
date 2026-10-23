@@ -76,7 +76,7 @@ export function createViews(o) {
   };
   function naviGoal() {
     const list = order().filter((x) => !quests.complete(x.q.id));
-    const cur = list.find((x) => x.q.id === tracked) || list.find((x) => goalPlace(x.q, x.a));
+    const cur = list.find((x) => x.q.id === tracked && goalPlace(x.q, x.a)) || list.find((x) => goalPlace(x.q, x.a));
     if (!cur) return null;
     const pl = goalPlace(cur.q, cur.a);
     return pl && { ...pl, id: cur.q.id, title: cur.q.title };

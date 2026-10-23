@@ -39,6 +39,7 @@ export function createQuickPill({ game, hud, pick, iconUrl, toast, defaults = ['
     };
     btn.addEventListener('pointerup', up);
     btn.addEventListener('pointercancel', () => { clearTimeout(timer); held = true; });
+    btn.addEventListener('pointerleave', () => { clearTimeout(timer); held = true; }); // kéo ngón ra ngoài nút: huỷ
   });
   paint();
   return { refresh: paint };

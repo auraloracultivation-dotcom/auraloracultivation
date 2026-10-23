@@ -43,7 +43,7 @@ export function createHud(opts) {
       <button type="button" class="h3-avatar" style="${NV(37, 37, 152, 152)}" aria-label="Bảng trang bị"><canvas width="128" height="128"></canvas></button>
       <div class="h3-name" style="${NV(210, 52, 330, 38)}"><b data-name></b></div>
       ${['hp', 'mp', 'xp'].map((k, i) => `<div class="h3-bar ${k}" style="${NV(252, [99, 133, 170][i], 285, [23, 26, 25][i])}"><i data-${k}></i><b data-${k}-t></b></div>`).join('')}
-      <b class="h3-lv" style="${NV(175, 183, 0, 35)}" data-life title="Thọ nguyên (năm)"></b>
+      <b class="h3-lv" style="${NV(175, 183, 0, 35)}" data-life title="Thọ nguyên (năm)" hidden></b>
       <button type="button" class="h3-up" style="${NV(531, 153, 70, 67)}" aria-label="Đột phá"></button>
     </div>
     <small class="h3-realm" data-realm></small>
@@ -64,7 +64,7 @@ export function createHud(opts) {
       <button type="button" class="h3-map" aria-label="Mở bản đồ"><canvas></canvas></button><img class="h3-mini-frame" src="${F('ban-do-nho')}" alt="">
       <div class="h3-zone"><b>${escapeHtml(zoneName)}</b> · T${line} <em data-online></em></div>
     </div>
-    <div class="h3-menu">${MENU.map((m) => `<button type="button" class="glow" data-menu="${m.id}" aria-label="${m.name}" title="${m.name}"><img src="${I(m.icon)}" alt=""></button>`).join('')}</div>
+    <div class="h3-menu">${MENU.map((m) => `<button type="button" class="glow" data-menu="${m.id}" aria-label="${m.name}" title="${m.name}"><img src="assets/ui/icons/${m.icon}.png" alt=""></button>`).join('')}</div>
     <div class="h3-round">${ROUND.map((r) => `<button type="button" class="glow" data-r="${r.id}" aria-label="${r.name}">
       ${r.img ? `<img src="${r.img}" alt="">` : `<img src="${F('nut-tron')}" alt=""><i>${r.glyph}</i><img class="h3-r-ic" alt="" hidden><span>${r.name}</span>`}</button>`).join('')}</div>
   </div>`);
