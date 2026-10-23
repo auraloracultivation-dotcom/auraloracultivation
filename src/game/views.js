@@ -20,7 +20,7 @@ export function createViews(o) {
   const { progress, quests, craft, itemDefs, pills, blanks, awaken, cp, realms, gp, toast } = o;
   const st = () => progress.state;
   const monNames = new Map(o.monsters.map((m) => [m.id, m.name]));
-  const name = (id) => itemDefs.get(id)?.name || monNames.get(id) || `${id} (chưa có trong game)`;
+  const name = (id) => (id === 'equipment.blank_item' ? 'phôi trang bị bất kỳ' : itemDefs.get(id)?.name || monNames.get(id) || `${id} (chưa có trong game)`);
   const need = (inputs) => inputs.map((i) => {
     const have = progress.count(i.id);
     return `<span class="${have >= i.count ? 'ok' : 'no'}">${E(name(i.id))} ${have}/${i.count}</span>`;

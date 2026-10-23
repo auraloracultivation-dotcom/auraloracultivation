@@ -16,19 +16,29 @@ export function createNavi({ map, me, game, flight, toast }) {
     const cx = map.width / 2, cy = map.height / 2;
     if (g.town) return { x: cx, y: cy + 40, label: 'Thanh Vân Thành', town: true };
     const R = game.zoneRing(g.zone); if (!R) return null;
-    let dx = wrapDelta(me.x - cx, map.width), dy = wrapDelta(me.y - cy, map.height), d = Math.hypot(dx, dy);
-    if (d < 1) { dx = 0; dy = 1; d = 1; }
-    const r = R.min + (R.max - R.min) * (BAND[g.rank] ?? 0.35);
-    return { x: map.wrapX(cx + (dx / d) * r), y: map.wrapY(cy + (dy / d) * r), zone: g.zone, rank: g.rank, gather: g.gather, label: ZN[g.zone] || g.zone };
+    // Vành vùng không tròn đều (ảnh bản đồ vẽ tay): dò thật trên bản đồ một điểm ĐÚNG vùng, đứng được, gần độ sâu cần,
+    // bắt đầu từ hướng của người chơi rồi xoay dần sang hai bên — không chỉ vào chỗ trống / chỗ nước như trước.
+    let a0 = Math.atan2(wrapDelta(me.y - cy, map.height), wrapDelta(me.x - cx, map.width));
+    if (!Number.isFinite(a0)) a0 = Math.PI / 2;
+    const want = R.min + (R.max - R.min) * (BAND[g.rank] ?? 0.35), span = R.max - R.min;
+    for (let k = 0; k <= 72; k++) {
+      const a = a0 + (k % 2 ? 1 : -1) * Math.ceil(k / 2) * (Math.PI / 36); // 0, ±5°, ±10° …
+      for (const f of [0, 0.08, -0.08, 0.16, -0.16, 0.25, -0.25, 0.35]) {
+        const r = want + f * span, x = map.wrapX(cx + Math.cos(a) * r), y = map.wrapY(cy + Math.sin(a) * r);
+        if (map.typeAt(x, y).zone === g.zone && map.canStand(x, y, 8))
+          return { x, y, zone: g.zone, rank: g.rank, gather: g.gather, label: ZN[g.zone] || g.zone };
+      }
+    }
+    return null;
   }
   function arrived(t) {
     if (!t) return true;
     if (t.town) return map.safeAt(me.x, me.y);
+    if (Math.hypot(wrapDelta(t.x - me.x, map.width), wrapDelta(t.y - me.y, map.height)) < 60) return true; // tới đúng điểm đã dò
     const z = map.typeAt(me.x, me.y).zone; if (z !== t.zone) return false;
     const R = game.zoneRing(t.zone), cx = map.width / 2, cy = map.height / 2;
     const dep = (Math.hypot(wrapDelta(me.x - cx, map.width), wrapDelta(me.y - cy, map.height)) - R.min) / (R.max - R.min || 1);
-    const near = Math.hypot(wrapDelta(t.x - me.x, map.width), wrapDelta(t.y - me.y, map.height)) < 140;
-    return near || dep >= (BAND[t.rank] ?? 0.35) - 0.05; // đi vào đúng độ sâu (tinh anh / boss chỉ ở phần ngoài vành), không dừng ở mép vùng
+    return dep >= (BAND[t.rank] ?? 0.35) - 0.05; // đi vào đúng độ sâu (tinh anh / boss chỉ ở phần ngoài vành), không dừng ở mép vùng
   }
 
   // Tới nơi: bật Tự động NHẮM nhiệm vụ — chỉ đánh quái vùng đó (đúng loại trước), nhiệm vụ hái thì mới đi hái
@@ -48,7 +58,7 @@ export function createNavi({ map, me, game, flight, toast }) {
   // Mỗi khung hình. stick: cần điều khiển đang kéo. Trả về hướng đi khi đang tự đi, không thì null.
   function update(dt, stick) {
     refresh -= dt;
-    if (refresh <= 0) { refresh = 0.5; goal = game.naviGoal(); if (!travel) target = aim(goal); }
+    if (refresh <= 0) { refresh = 0.5; const g = game.naviGoal(); if (!travel && (g?.id !== goal?.id || !target || g?.zone !== target.zone)) target = aim(g); goal = g; }
     if (!travel) return null;
     if (stick || game.dead) { travel = false; toast('Đã huỷ dẫn đường', 900); return null; }
     if (arrived(target)) {
