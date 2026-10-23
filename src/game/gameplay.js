@@ -13,6 +13,7 @@ import { createStats } from './stats.js';
 import { createMonsters } from './monsters.js';
 import { createQuests } from './quests.js';
 import { createCraft } from './craft.js';
+import { createRecipeUses } from './recipe-uses.js';
 import { createViews } from './views.js';
 import { createSkillBar } from './skillbar.js';
 import { createAutoPlay } from './autoplay.js';
@@ -68,9 +69,8 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const voids = createVoid({ mdef: monDef, mobs, map, progress, toast, me, serverNow });
   const quests = createQuests(questDef, progress, () => MAJOR_OF(progress.stageDef.id), { realms, gp, mats }); // + Ngày / Tuần / Tiến độ (routine.js)
   // Đan phương / công thức / bí kíp: món id được dạy bởi vật phẩm nào; có trong kho mới luyện được
-  const teacher = new Map(recipes.items.filter((r) => r.teaches).map((r) => [r.teaches, r.id]));
-  const owns = (id) => !teacher.has(id) || progress.count(teacher.get(id)) > 0;
-  const craft = createCraft({ progress, pills, blanks, awaken, skills: cp, gp, owns });
+  const ru = createRecipeUses({ progress, recipes: recipes.items, toast: (...a) => toast(...a) }), { teacher, owns } = ru; // công thức có số lần dùng
+  const craft = createCraft({ progress, pills, blanks, awaken, skills: cp, gp, owns, spend: ru.spend });
   craft.migrateLines(); // dòng cũ (số phẳng) → % chỉ số gốc
   const gather = createGather({ gp, mats, map });
   const info = createItemInfo({ monsters: monDef.monsters, shop, pills, blanks, realms, gp, cpText: (id) => cpFx.text(id) }); // tác dụng + nơi có của vật phẩm
@@ -346,11 +346,11 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     return true;
   }
 
-  const views = createViews({ biCanh, gapR, info, shop, owns, teacher, bag, onLook, monsters: monDef.monsters, realmMajor: () => MAJOR_OF(progress.stageDef.id), progress, quests, craft, itemDefs, mats, pills, blanks, awaken, cp, realms, gp, toast,
+  const views = createViews({ ru, biCanh, gapR, info, shop, owns, teacher, bag, onLook, monsters: monDef.monsters, realmMajor: () => MAJOR_OF(progress.stageDef.id), progress, quests, craft, itemDefs, mats, pills, blanks, awaken, cp, realms, gp, toast,
     wallet, life, getStats: () => ps, getHp: () => hp, onReward: (r) => { if (r.exp) addExp(r.exp); if (r.spiritStone) progress.addStone(r.spiritStone);
       for (const i of r.items || []) progress.add(i.id, i.count); }, recompute, usePill, emit: quests.emit });
 
-  const inv = createInventory({ recipes: { pills: pills.pills, blanks: blanks.blanks, skills: cp.skills }, info, progress, bag, craft, itemDefs, awaken, gp, art: (a) => artInfo(a)?.file || artFile(a), icon: iconUrl, fallbackIcon: placeholderIcon,
+  const inv = createInventory({ ru, recipes: { pills: pills.pills, blanks: blanks.blanks, skills: cp.skills }, info, progress, bag, craft, itemDefs, awaken, gp, art: (a) => artInfo(a)?.file || artFile(a), icon: iconUrl, fallbackIcon: placeholderIcon,
     onLook, recompute, usePill, breakthrough: () => breakthrough(), btPills: new Set(realms.realms.filter((r) => r.breakthrough).map((r) => r.breakthrough.pill)), openCultivate: (tab) => views.openCultivate(tab) });
   const stageName = (id) => gp.player.stages.find((x) => x.id === id)?.name || id;
   const bar = createSkillBar({ learn, hud, S, gp, progress, pt, cds, slotItem: (s) => inv.slotItem(s), icon: iconUrl, fxIcon: fxIconUrl, loadout, stageName, treasure: () => treasure.view() });

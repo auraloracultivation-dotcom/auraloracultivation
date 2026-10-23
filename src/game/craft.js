@@ -3,7 +3,7 @@
 const rnd = (a, b) => a + Math.random() * (b - a);
 
 // owns(id): người chơi có đan phương / công thức / bí kíp dạy món id trong kho chưa (data/items/recipes.json)
-export function createCraft({ progress, pills, blanks, awaken, skills, gp, owns = () => true }) {
+export function createCraft({ progress, pills, blanks, awaken, skills, gp, owns = () => true, spend = () => {} }) { // spend(id): trừ 1 lượt công thức (recipe-uses.js)
   const loseRange = pills.fail_material_loss;
   const A = gp.awaken;
 
@@ -22,7 +22,7 @@ export function createCraft({ progress, pills, blanks, awaken, skills, gp, owns 
     if (!inputs) return { ok: false, msg: 'Thiếu nguyên liệu' };
     if (Math.random() < p.recipe.rate) {
       for (const i of inputs) progress.take(i.id, i.count);
-      progress.add(p.id, 1);
+      progress.add(p.id, 1); spend(p.id);
       return { ok: true, msg: `Luyện thành ${p.name}`, event: ['craft', { id: p.id, kind: 'pill' }] };
     }
     loseSome(inputs);
@@ -38,7 +38,7 @@ export function createCraft({ progress, pills, blanks, awaken, skills, gp, owns 
     if (Math.random() < b.rate) {
       for (const i of b.inputs) progress.take(i.id, i.count);
       const name = b.sample_names[Math.floor(Math.random() * b.sample_names.length)];
-      progress.newGear(b.slot, name);
+      progress.newGear(b.slot, name); spend(b.id);
       return { ok: true, msg: `Luyện thành phôi ${name} — hãy Thức tỉnh`, event: ['craft', { id: b.id, kind: 'blank' }] };
     }
     loseSome(b.inputs);
@@ -126,7 +126,7 @@ export function createCraft({ progress, pills, blanks, awaken, skills, gp, owns 
     const inputs = s.learn.inputs.map((i) => ({ id: i.id, count: i.count * (lv + 1) }));
     if (!progress.has(inputs)) return { ok: false, msg: 'Thiếu nguyên liệu' };
     for (const i of inputs) progress.take(i.id, i.count);
-    progress.state.cp[id] = lv + 1; progress.changed();
+    progress.state.cp[id] = lv + 1; spend(id); progress.changed();
     return { ok: true, msg: `${s.name} lên cấp ${lv + 1}` };
   }
 
