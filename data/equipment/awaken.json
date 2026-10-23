@@ -7,7 +7,7 @@
  "tiers": [
   {
    "id": "luc",
-   "name": "Phàm Phẩm",
+   "name": "Tàn",
    "rate_at_gearQ0": 0.42,
    "lines": [
     1,
@@ -25,7 +25,7 @@
   },
   {
    "id": "lam",
-   "name": "Nhân Phẩm",
+   "name": "Thường",
    "rate_at_gearQ0": 0.28,
    "lines": [
     2,
@@ -43,7 +43,7 @@
   },
   {
    "id": "tim",
-   "name": "Địa Phẩm",
+   "name": "Xịn",
    "rate_at_gearQ0": 0.16,
    "lines": [
     3,
@@ -61,7 +61,7 @@
   },
   {
    "id": "cam",
-   "name": "Thiên Phẩm",
+   "name": "Hiếm",
    "rate_at_gearQ0": 0.08,
    "lines": [
     4,
@@ -79,7 +79,7 @@
   },
   {
    "id": "vang",
-   "name": "Tiên Phẩm",
+   "name": "Sử thi",
    "rate_at_gearQ0": 0.035,
    "lines": [
     5,
@@ -97,7 +97,7 @@
   },
   {
    "id": "do",
-   "name": "Thần Phẩm",
+   "name": "Huyền thoại",
    "rate_at_gearQ0": 0.018,
    "lines": [
     7,
@@ -115,7 +115,7 @@
   },
   {
    "id": "den",
-   "name": "Tiên Nghịch",
+   "name": "Truyền thuyết",
    "rate_at_gearQ0": 0.007,
    "lines": [
     9,
@@ -378,7 +378,7 @@
    "lam": 0.08
   }
  },
- "_ten_pham": "Tên phẩm chốt 23/10 (chủ dự án): Phàm → Nhân → Địa → Thiên → Tiên → Thần → Tiên Nghịch (mạnh nhất, đặt theo tên truyện \"Tiên Nghịch\" — nghịch thiên). Màu giữ nguyên: Lục, Lam, Tím, Cam, Vàng, Đỏ, Đen (chữ đen, quầng đỏ huyền bí). color_old = tên màu cũ.",
+ "_ten_pham": "Tên phẩm chốt lại 23/10 13:16 (chủ dự án, bỏ tên Tiên Nghịch): Tàn (lục) → Thường (lam) → Xịn (tím) → Hiếm (cam) → Sử thi (vàng) → Huyền thoại (đỏ) → Truyền thuyết (đen, quầng đỏ — cao nhất). Màu giữ nguyên. color_old = tên màu cũ.",
  "line_ranges_v1": {
   "hp": [
    [

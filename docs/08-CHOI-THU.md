@@ -26,8 +26,8 @@ song song với việc hoàn thành Mốc 1. Đây là **bản chơi thử**, ch
   **Từ Nguyên Anh Hậu kỳ, quái mỗi tầng mạnh gấp đôi tầng trước** (HP + Công ×2), còn người chơi chỉ ×1,4 mỗi tầng → càng lên càng phải dựa trang bị, đan, pháp tướng.
   Hạ quái thường Hóa Thần Hậu kỳ ≈ 16 đòn, bị đánh ≈ 8 đòn là gục (trước: vài giây). Tu vi cần tăng mạnh: ≈ 9.700 quái thường để từ Luyện Khí 1 lên Hóa Thần Hậu kỳ.
   Boss HP còn ×1,8 (thay vì ×3) để giữ luật boss cảnh giới dưới < quái thường cảnh giới trên. Tất cả số ở đầu `tools/gen_balance.py`.
-- **Tên phẩm trang bị / dòng thức tỉnh** (`data/equipment/awaken.json`): Phàm (lục) → Nhân (lam) → Địa (tím) → Thiên (cam) → Tiên (vàng) → Thần (đỏ)
-  → **Tiên Nghịch** (cao nhất, chữ đen quầng đỏ huyền bí, viền ô đỏ thở chậm).
+- **Tên phẩm trang bị / dòng thức tỉnh** (`data/equipment/awaken.json`): Tàn (lục) → Thường (lam) → Xịn (tím) → Hiếm (cam) → Sử thi (vàng) → Huyền thoại (đỏ)
+  → **Truyền thuyết** (cao nhất, chữ đen quầng đỏ huyền bí, viền ô đỏ thở chậm). Đổi tên 23/10, bỏ tên Tiên Nghịch.
 - **Mã thử**: đã xoá hết (qqqqq, lkjhg, lkjhb — chủ dự án 23/10). Code cấp quà vẫn giữ (`src/game/testgift.js`: grant `full`, `god`) để dùng lại khi có mã mới; mã thật nên chuyển lên máy chủ.
 - **Ô đất bản 4** (23/10): bộ ảnh 7 vùng + nước của chủ dự án (`assets/tiles/_source/v2-*.png`): `python3 -I tools/tiles_v2.py` rồi `python3 -I tools/atlas_compact.py`.
   Mỗi khối 2×2 = một ô 32 điểm, nhạt màu 42%, sáng +10%, mép hoà liền. Mỗi vùng có 4 ô **trơn** (lọc bỏ sỏi/cỏ, trọng số 6) + 4 ô chi tiết (trọng số 1) → ~80% mặt đất trơn.

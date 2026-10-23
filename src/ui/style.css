@@ -501,7 +501,7 @@ img { image-rendering: pixelated; }
 .ic-lines { display: flex; flex-wrap: wrap; gap: 3px 8px; margin-top: 3px; }
 .ln { font-style: normal; font-size: 12px; font-weight: 700; }
 .ln.tier-luc { color: #6fdc76; } .ln.tier-lam { color: #6aa8ff; } .ln.tier-tim { color: #c58cff; } .ln.tier-cam { color: #ffa94d; }
-.ln.tier-vang { color: #ffd84a; } .ln.tier-do { color: #ff5a4a; } /* Tiên Nghịch (phẩm cao nhất): chữ ĐEN, quầng đỏ huyền bí bao quanh, thở chậm */
+.ln.tier-vang { color: #ffd84a; } .ln.tier-do { color: #ff5a4a; } /* Truyền thuyết (phẩm cao nhất): chữ ĐEN, quầng đỏ huyền bí bao quanh, thở chậm */
 .ln.tier-den { color: #050005; font-weight: 700; padding: 0 3px;
   text-shadow: 0 0 1px #ff2a4a, 0 0 3px #e0002a, 0 0 6px #a8001f, 0 0 10px #6a0014; animation: tnText 2.4s ease-in-out infinite; }
 @keyframes tnText { 50% { text-shadow: 0 0 1px #ff5a70, 0 0 4px #ff0033, 0 0 9px #c0002a, 0 0 14px #7a0018; } }
