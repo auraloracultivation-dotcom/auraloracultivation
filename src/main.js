@@ -152,7 +152,10 @@ async function boot() {
         onPick: (key) => { game.itemAction(key, 'equip'); reopen(); } }),
     });
   }
-  const openBag = (tab) => showBag({ tab, categories: itemsDef.categories, getEntries: () => game.bagEntries(), wallet: () => game.wallet.list(), note: 'Đồ thử nghiệm: chỉ lưu trên máy này, chưa lưu máy chủ.',
+  const BAG_IC = () => ({ 'tat-ca': 'assets/ui/icons/tui-do.png', 'linh-duoc': iconUrl('item.thao.linh-chi-non.001'), 'linh-dan': iconUrl('item.dan.tieu-hoi-huyet.001'), 'dan-phuong': iconUrl('item.danphuong.truc-co.001'),
+    'phap-khi': 'assets/ui/icons/tan-cong.png', 'cong-phap': iconUrl('item.congphap.tamphap.luyen-khi.001'), 'trang-bi': 'assets/ui/icons/nguoi.png', 'thu-cung': S('linh-thu'),
+    'phap-bao': iconUrl('item.phapbao.phoi.001'), 'than-phu': iconUrl('card.phu.lien-thanh'), khac: iconUrl('item.khoang.huyen-thiet.001') }); // icon mục Kho (atlas nạp xong mới có)
+  const openBag = (tab) => showBag({ tab, tabIcons: Object.fromEntries(Object.entries(BAG_IC()).filter(([, v]) => v)), onShop: () => game.openShop(), categories: itemsDef.categories, getEntries: () => game.bagEntries(), wallet: () => game.wallet.list(), note: 'Đồ thử nghiệm: chỉ lưu trên máy này, chưa lưu máy chủ.',
     onAction: (it, a) => game.itemAction(it.key, a) }); // Sử dụng / Tháo / Thức tỉnh / Phân rã / Vứt / Dùng / Luyện
   function onLookChanged() { // đồ trên người đổi từ bảng Tu luyện
     if (pt.active && !hasAvatar()) { pt.cancel(); phapTuongOff(); } else setLook();
