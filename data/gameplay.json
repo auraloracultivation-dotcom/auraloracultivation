@@ -1182,10 +1182,10 @@
   "use_skills": true,
   "fly_when_stuck": true,
   "_ghi_chu_23_10": "Tự động dùng kỹ năng trong ô (trừ Lướt / Pháp tướng); kẹt vướng cây, nước thì tự ngự kiếm bay qua rồi hạ xuống farm tiếp (cần cầm kiếm + đủ linh lực)",
-  "anchor_radius_px": 320,
+  "anchor_radius_px": 640,
   "anchor_idle_frac": 0.35,
   "anchor_leash_px": 60,
-  "_ghi_chu_neo": "Neo vùng farm (chủ dự án 23/10): bật Tự động cắm neo tại chỗ; chỉ đánh / hái trong bán kính anchor_radius_px (320 ≈ 2 màn hình iPhone dọc ở zoom 0.75). Quái chạy ra quá anchor_leash_px ngoài vòng thì bỏ. Hết mục tiêu mà xa neo hơn anchor_idle_frac × bán kính thì đi về neo, gần thì đứng chờ quái hồi sinh. Kéo cần = dời neo."
+  "_ghi_chu_neo": "Neo vùng farm (chủ dự án 23/10): bật Tự động cắm neo tại chỗ; chỉ đánh / hái trong bán kính anchor_radius_px (640, gấp đôi bản đầu theo chủ dự án 23/10 13:20; không vẽ vòng neo). Quái chạy ra quá anchor_leash_px ngoài vòng thì bỏ. Hết mục tiêu mà xa neo hơn anchor_idle_frac × bán kính thì đi về neo, gần thì đứng chờ quái hồi sinh. Kéo cần = dời neo."
  },
  "luc_chien": {
   "_ghi_chu": "Lực chiến (bảng xếp hạng) = tổng chỉ số × trọng số. Số TẠM, chỉnh thoải mái. src/game/rank.js",
