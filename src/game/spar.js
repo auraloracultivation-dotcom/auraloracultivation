@@ -5,7 +5,13 @@ const KEYS = ['hp', 'linh', 'def', 'xuyen', 'chinh', 'ne', 'crit', 'hut', 'tocda
 
 export function simulateDuel(mine, theirs, stats, cfg, rnd = Math.random) {
   const side = (s) => { const o = {}; for (const k of KEYS) o[k] = Number(s?.[k]) || 0; o.hp = Math.max(1, o.hp * cfg.hp_mul); return o; };
-  const F = [side(mine), side(theirs)], hp = [F[0].hp, F[1].hp];
+  const F = [side(mine), side(theirs)];
+  // Cảnh giới cao: sát thương ≫ khí huyết → 1 đòn là xong. Ước thời gian hạ nhau (trung bình 24 đòn thử),
+  // nếu bên nhanh nhất dưới target_s giây thì nhân khí huyết CẢ HAI bên cùng hệ số (công bằng) để trận kéo dài ~target_s.
+  const ttk = (a, d) => { let s = 0; for (let k = 0; k < 24; k++) s += stats.hit(F[a], F[d], { atkMul: cfg.dmg_mul }, rnd).dmg; return F[d].hp / Math.max(1e-9, (s / 24) / stats.interval(F[a])); };
+  const tmin = Math.min(ttk(0, 1), ttk(1, 0));
+  if (tmin < cfg.target_s) for (const f of F) f.hp *= cfg.target_s / tmin;
+  const hp = [F[0].hp, F[1].hp];
   const next = [stats.interval(F[0]) * rnd(), stats.interval(F[1]) * rnd()], nSkill = [cfg.skill_every_s, cfg.skill_every_s * 1.15];
   const ev = [];
   let t = 0;
