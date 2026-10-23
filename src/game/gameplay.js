@@ -112,7 +112,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const cpBonus = (skill) => cpFx.skillMul(skill);
   const ptMul = () => (pt.active ? S['phap-tuong'].atk_mul * cpFx.skillMul('phap-tuong') : 1);
   const HEAD = 30; // độ cao đầu nhân vật (điểm)
-  const healMe = (n) => { if (n > 0) { hp = Math.min(ps.hp, hp + n); say(me.x, me.y - HEAD, `+${Math.round(n)} hút máu`, '#5dff7a'); } };
+  const healMe = (n) => { if (n > 0 && !dead) { hp = Math.min(ps.hp, hp + n); say(me.x, me.y - HEAD, `+${Math.round(n)} hút máu`, '#5dff7a'); } }; // linh hồn không hút máu (chủ dự án 23/10)
   const midY = (m) => m.y - (m.def.art?.h || m.r * 2) / 2;
   const HIT_FX = { attack: ['chem-x', 18], 'kiem-khi': ['kiem-bang-no', 28], 'linh-thu': ['chem-x', 14] };
 
@@ -229,10 +229,10 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   // ---------- Đạo Vận: bộ ngũ hành + Thần Phù → đạn xoè quạt, nảy, tách, phi kiếm, mưa kiếm, liên thanh (daovan / cards / barrage) ----------
   const cards = createCards({ def: dvDef, tiers: awaken.tiers, progress, stageOk: (id) => craft.stageOk(id), toast, play });
   const dv = createDaoVan({ def: dvDef, bag, cards, progress });
-  const barrage = createBarrage({ dv, me, mobs, map, bolts, play, strike, toast, dead: () => dead, maxHp: () => ps.hp, heal: (n) => { hp = Math.min(ps.hp, hp + n); } });
+  const barrage = createBarrage({ dv, me, mobs, map, bolts, play, strike, toast, dead: () => dead, maxHp: () => ps.hp, heal: (n) => { if (!dead) hp = Math.min(ps.hp, hp + n); } });
   treasure = createTreasure({ def: pbDef, S, progress, craft, awaken, barrage, mobs, me, map, buffs, recompute, target, play, say, toast, heOf: dv.heOf,
-    stageOk: (id) => craft.stageOk(id), now: () => now, maxHp: () => ps.hp, heal: (n) => { hp = Math.min(ps.hp, hp + n); } });
-  const camChe = createCamChe({ def: ccDef, dv, barrage, me, mobs, target, play, toast, dead: () => dead, maxHp: () => ps.hp, heal: (n) => { hp = Math.min(ps.hp, hp + n); } });
+    stageOk: (id) => craft.stageOk(id), now: () => now, maxHp: () => ps.hp, heal: (n) => { if (!dead) hp = Math.min(ps.hp, hp + n); } });
+  const camChe = createCamChe({ def: ccDef, dv, barrage, me, mobs, target, play, toast, dead: () => dead, maxHp: () => ps.hp, heal: (n) => { if (!dead) hp = Math.min(ps.hp, hp + n); } });
   const biCanh = createBiCanh({ def: bcDef, mdef: monDef, mobs, map, me, progress, life, wallet, cards, cardDef: dvDef.cards, dv, pbItem: pbDef.items[0].id,
     toast, play, say, dead: () => dead, stageId: () => progress.stageDef.id, itemName: (id) => itemDefs.get(id)?.name || id });
   const hopNhat = createHopNhat({ def: dvDef.hop_nhat, bag, treasure, cards, loadout, S, cardName: (id) => dvDef.cards.list.find((x) => x.id === id)?.name || id, learned: (id) => learn.learned(id), target, pt, ps: () => ps, dead: () => dead, toast }); // Thiên Cơ Hợp Nhất
@@ -240,7 +240,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     art: (a) => artInfo(a)?.file || artFile(a), equip: (id) => itemAction(`bag:${id}`, 'equip'), toast }); // nút + bảng Cẩm nang Đạo Vận
   const usable = createConsumables({ itemDefs, progress, wallet, cards, cardDef: dvDef.cards, treasure, biCanh, heOrder: dvDef.he_order, play, me, recompute });
   const skills = createSkills({ hopOn: () => !!hopNhat.active(), useTreasure: (q) => treasure.use(q), camChe: (s) => camChe.cast(s), S, me, mobs, map, pt, cds, toast, say, play, fx, bolts, strike, target, buffs, recompute, mods: dv.mods, fire: barrage.fire, maybeEcho: barrage.maybeEcho, mover: barrage.mover, schedule: barrage.schedule, healPets: (f) => tame.healAll(f),
-    get bar() { return bar; }, heal: (n) => { hp = Math.min(ps.hp, hp + n); say(me.x, me.y - HEAD, `+${Math.round(n)} khí huyết`, '#5dff7a', true); },
+    get bar() { return bar; }, heal: (n) => { if (dead) return; hp = Math.min(ps.hp, hp + n); say(me.x, me.y - HEAD, `+${Math.round(n)} khí huyết`, '#5dff7a', true); },
     maxHp: () => ps.hp, now: () => now, dead: () => dead,
     summonPet() { const a = bag.equippedItem('linh-thu')?.art || progress.equipped().find((x) => x.slot === 'linh-thu')?.art, f = a && artFile(a); // hình linh thú đang mặc
       pet = { until: now + S['linh-thu'].last_s, next: now, x: me.x - 14, y: me.y, t: 0, face: 1, moving: false, img: f ? Object.assign(new Image(), { src: f }) : null }; play('vong-lua', me.x - 14, me.y - 6, 34); toast('Linh thú hiện thân', 1000); } });
@@ -288,6 +288,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
       f.t -= dt; if (f.t <= 0) fx.splice(i, 1);
     }
     if (!Number.isFinite(hp)) hp = ps.hp;
+    if (dead) hp = 0; // linh hồn: cột khí huyết luôn trống tới khi hồi sinh
     hud.setBar('hp', Math.max(0, Math.round(hp)), ps.hp);
     me.hpR = hp / ps.hp; // thanh máu trên đầu
     hud.setBar('xp', progress.state.exp, progress.stageDef.exp_need);
