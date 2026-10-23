@@ -106,6 +106,7 @@ export function drawEffect(ctx, id, p, x, y, h, rot = 0, alpha = 1) {
   return true;
 }
 export const fxGlow = (id) => DEF?.fx[id]?.glow || 0; // hiệu ứng Thiên hệ (t.*): đạn có vệt đuôi
+export const fxRatio = (id) => (DEF?.fx[id] ? DEF.fx[id].fw / DEF.fx[id].fh : 1); // rộng / cao một khung (tia dài pháp bảo)
 export const fxDuration = (id) => (DEF?.fx[id] ? DEF.fx[id].anims.play.n / DEF.fx[id].fps : 0.5);
 
 // Icon vật phẩm / công pháp / ô trang bị (64×64 trong atlas). Trả về data URL để dùng trong <img>, hoặc null nếu chưa có.

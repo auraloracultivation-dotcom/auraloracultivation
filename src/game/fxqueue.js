@@ -10,9 +10,10 @@ export function createFxQueue(fx, fxDuration) {
       text: compactText(text), color, big, t: 1.1, life: 1.1 });
   };
   // Hiệu ứng hình (data/art/sprites.json → fx). ground: mọc từ mặt đất (đáy ở chân). delay: chờ rồi mới chạy
-  const play = (id, x, y, h, { ground = false, delay = 0, rot = 0 } = {}) => {
+  // glow: màu '#rrggbb' → thêm quầng sáng dưới hiệu ứng (pháp bảo Thiên hệ)
+  const play = (id, x, y, h, { ground = false, delay = 0, rot = 0, glow = null } = {}) => {
     const life = fxDuration(id);
-    fx.push({ kind: 'sprite', fx: id, x, y, h, lift: ground ? h / 2 : 0, rot, t: life, life, delay });
+    fx.push({ kind: 'sprite', fx: id, x, y, h, lift: ground ? h / 2 : 0, rot, t: life, life, delay, glow });
   };
   return { say, play };
 }

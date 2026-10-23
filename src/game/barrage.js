@@ -3,6 +3,7 @@
 // Mọi sát thương đi qua c.strike (áp chế cảnh giới, tu vi, rơi đồ như đánh thường). Giới hạn số đạn: dao-van.json → limits.
 import { wrapDelta } from '../map/index.js';
 import { drawEffect, loadFx } from '../entity/index.js';
+import { glow } from './glow.js';
 
 // c: { dv, S, me, mobs, map, bolts, strike(m, mul, label), heal(n), maxHp(), play, say, dead() }
 export function createBarrage(c) {
@@ -11,7 +12,7 @@ export function createBarrage(c) {
   const FX = dv.fx || {};
   loadFx([...['Kim', 'Ám', 'Thủy', 'Hỏa', 'Mộc', 'Thổ'].flatMap((h) => [dv.heOf(h).hit, dv.heOf(h).bolt]), FX.chain, FX.dai_thanh, FX.burn].filter(Boolean)); // nạp trước ảnh hiệu ứng
   let hitFxBudget = 0; // số hiệu ứng nổ mỗi nhịp (hồi 6 mỗi 0,1 giây)
-  const zones = [], zaps = [], echoes = [], timers = {}, tasks = [], extraOrbits = [], totems = []; // totems: vật đứng tại chỗ (lôi tháp) // tasks: chiêu kéo dài (pháp bảo)
+  const zones = [], zaps = [], echoes = [], timers = {}, tasks = [], extraOrbits = [], totems = [], layers = []; // layers: lớp vẽ thêm (tia pháp bảo Thiên phẩm) // totems: vật đứng tại chỗ (lôi tháp) // tasks: chiêu kéo dài (pháp bảo)
   const orbitHit = new Map(); // uid quái → lúc phi kiếm được chém tiếp
   let T = 0, orbitA = 0;
   const rel = (a, b) => ({ dx: wrapDelta(a.x - b.x, map.width), dy: wrapDelta(a.y - b.y, map.height) });
@@ -199,12 +200,13 @@ export function createBarrage(c) {
       if (z.t <= 0) zones.splice(i, 1);
     }
     for (let i = zaps.length - 1; i >= 0; i--) { zaps[i].t -= dt; if (zaps[i].t <= 0) zaps.splice(i, 1); }
+    for (const l of layers) l.update?.(dt);
     if (orbitHit.size > 200) orbitHit.clear();
   }
 
   // ---- Vẽ (toạ độ màn hình qua at()) — gọi trước drawFx đạn ----
   function render(ctx, at, now) {
-    renderTotems(ctx, at, now); renderMovers(ctx, at, now);
+    renderTotems(ctx, at, now); renderMovers(ctx, at, now); for (const l of layers) l.render?.(ctx, at, now);
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
     for (const z of zones) { // đất cháy: ảnh lửa (lặp khung giữa) + quầng sáng
@@ -274,12 +276,13 @@ export function createBarrage(c) {
   function updateMovers(dt) {
     for (let i = movers.length - 1; i >= 0; i--) {
       const o = movers[i];
-      if (o.until <= T) { movers.splice(i, 1); continue; }
+      if (o.until <= T) { movers.splice(i, 1); o.onEnd?.(o); continue; }
       if (o.follow) { o.x = map.wrapX(me.x + o.ox * me.facing); o.y = map.wrapY(me.y + o.oy); }
       else { o.x = map.wrapX(o.x + (o.vx || 0) * dt); o.y = map.wrapY(o.y + (o.vy || 0) * dt); }
       if ((o.tick -= dt) > 0) continue;
       o.tick = o.every;
       if (o.r) hitAround(o.x, o.y, o.r, o.mul, 'skill', o.stun);
+      o.onTick?.(o);
       if (o.shoot) { const m = nearestTo(o, 220); if (m) { const r = rel(m, o), d = Math.hypot(r.dx, r.dy - 10) || 1;
         fire({ id: 'dao', x: o.x, y: o.y - 14, dx: r.dx / d, dy: (r.dy - 10) / d, speed: 460, range: 240, fx: o.shoot, size: 18, mul: o.mul, homing: 0.6 }); } }
     }
@@ -287,7 +290,9 @@ export function createBarrage(c) {
   function renderMovers(ctx, at, now) {
     for (const o of movers) {
       const p = at(o), t = T - o.born;
-      const q = t < 0.3 ? (t / 0.3) * 0.3 : o.until - T < 0.3 ? 0.8 + (1 - (o.until - T) / 0.3) * 0.19 : 0.3 + ((t * (o.loop || 1)) % 1) * 0.5;
+      const A = o.a ?? 0.3, B = o.b ?? 0.8, tin = o.tin ?? 0.3; // khung mở đầu [0, A) · lặp [A, B) · kết thúc [B, 1) (pháp bảo Thiên phẩm đặt riêng)
+      const q = t < tin ? (t / tin) * A : o.until - T < 0.3 ? B + (1 - (o.until - T) / 0.3) * (0.99 - B) : A + ((t * (o.loop || 1)) % 1) * (B - A);
+      if (o.glow) glow(ctx, p.x, p.y - (o.glowY ?? 4), o.glowR || o.h * 0.7, o.glow, (o.glowA ?? 0.55) * Math.min(1, t * 4, (o.until - T) / 0.4) * (0.85 + 0.15 * Math.sin(now / 70 + o.born)), 0.6);
       ctx.save(); ctx.globalAlpha = o.alpha ?? 1; if (o.follow && me.facing < 0) { ctx.translate(p.x, 0); ctx.scale(-1, 1); ctx.translate(-p.x, 0); }
       drawEffect(ctx, o.fx, q, p.x, p.y - o.h / 2 + 4, o.h); ctx.restore();
     }
@@ -302,5 +307,6 @@ export function createBarrage(c) {
       ctx.drawImage(o.im, p.x - w / 2, p.y - o.h - 4 + b, w, o.h); ctx.restore();
     }
   }
-  return { fire, basic, maybeEcho, update, render, renderGround, renderTotems, hitAround, schedule, addOrbit, nearestTo, totem, mover, zap: (z) => zaps.push(z) };
+  const strikeOne = (m, mul, stun) => { c.strike(m, mul, 'skill'); if (stun && alive(m)) m.stun = Math.max(m.stun || 0, stun); };
+  return { strikeOne, layer: (l) => layers.push(l), fire, basic, maybeEcho, update, render, renderGround, renderTotems, hitAround, schedule, addOrbit, nearestTo, totem, mover, zap: (z) => zaps.push(z) };
 }
