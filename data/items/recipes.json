@@ -5,25 +5,25 @@
  "items": [
   {
    "id": "item.danphuong.truc-co.001",
-   "name": "Đan phương Trúc Cơ Đan",
+   "name": "Đan phương Ngưng Mạch Đan",
    "cat": "dan-phuong",
    "teaches": "item.dan.truc-co.001"
   },
   {
    "id": "item.danphuong.ket-dan.001",
-   "name": "Đan phương Kết Đan Đan",
+   "name": "Đan phương Tụ Tinh Đan",
    "cat": "dan-phuong",
    "teaches": "item.dan.ket-dan.001"
   },
   {
    "id": "item.danphuong.nguyen-anh.001",
-   "name": "Đan phương Nguyên Anh Đan",
+   "name": "Đan phương Hóa Nguyệt Đan",
    "cat": "dan-phuong",
    "teaches": "item.dan.nguyen-anh.001"
   },
   {
    "id": "item.danphuong.hoa-than.001",
-   "name": "Đan phương Hóa Thần Đan",
+   "name": "Đan phương Phá Nhật Đan",
    "cat": "dan-phuong",
    "teaches": "item.dan.hoa-than.001",
    "drop": {
@@ -45,7 +45,7 @@
   },
   {
    "id": "item.danphuong.anh-bien.001",
-   "name": "Đan phương Anh Biến Đan",
+   "name": "Đan phương Hợp Đạo Đan",
    "cat": "dan-phuong",
    "teaches": "item.dan.anh-bien.001",
    "drop": {
@@ -149,7 +149,7 @@
   },
   {
    "id": "item.congphap.tamphap.luyen-khi.001",
-   "name": "Bí kíp Luyện Khí Quyết",
+   "name": "Bí kíp Khai Linh Quyết",
    "cat": "cong-phap",
    "teaches": "skill.tamphap.luyen-khi.001"
   },

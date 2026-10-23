@@ -8,7 +8,7 @@ export function createPillUse(c) {
     if (!p || c.dead()) return false;
     if ((cds.pill || 0) > now) { toast('Đan dược đang hồi', 900); return false; }
     if (p.life_add) { const r = life.canEat(); if (!r.ok) { toast(r.msg, 2200); return false; } }
-    const sid = progress.stageDef.id, major = sid.startsWith('lk') ? 'lk' : sid.slice(0, 2), ORD = c.majors || [];
+    const sid = progress.stageDef.tier, major = sid.startsWith('lk') ? 'lk' : sid.slice(0, 2), ORD = c.majors || []; // mã đại cảnh giới (lk/tc/…) theo bậc tương ứng của cấp
     if (p.realm && p.realm !== major) { toast(`Chỉ dùng ở ${c.realmName?.(p.realm) || p.realm} — đang ở ${progress.stageDef.name}`, 2200); return false; } // Viên Mãn Đan theo đại cảnh giới
     if (p.realm_max && ORD.indexOf(major) > ORD.indexOf(p.realm_max)) { toast(`${itemDefs.get(id)?.name || 'Đan'} không còn tác dụng ở ${progress.stageDef.name}`, 2200); return false; }
     const full = (p.exp_pct || p.exp_fill) && (progress.atPeak() || progress.state.exp >= progress.stageDef.exp_need);

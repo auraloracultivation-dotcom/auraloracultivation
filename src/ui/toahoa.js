@@ -10,7 +10,7 @@ export function showToaHoa({ name, realm, age, max, lived, onRebirth }) {
     <p class="th-name">${escapeHtml(name)} tọa hóa</p>
     <p>Cảnh giới cuối: <b>${escapeHtml(realm)}</b></p>
     <p>Hưởng thọ <b>${age}</b> năm (thọ nguyên tối đa ${max}) · tu hành ${lived} ngày</p>
-    <p class="th-note">Tu vi, đan dược, nguyên liệu, tiền và Kho đồ đều tan theo thân xác. Chuyển thế để bắt đầu lại từ Luyện Khí tầng 1.</p>
+    <p class="th-note">Tu vi, đan dược, nguyên liệu, tiền và Kho đồ đều tan theo thân xác. Chuyển thế để bắt đầu lại từ Khai Linh tầng 1.</p>
     <button type="button" class="bag-act">Chuyển thế</button>
   </div>`;
   document.body.appendChild(wrap);

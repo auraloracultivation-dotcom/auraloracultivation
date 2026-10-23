@@ -46,7 +46,6 @@ import { simulateDuel } from './spar.js';
 import { placeholderIcon, showRevive } from '../ui/index.js';
 import { artInfo, iconUrl, fxIconUrl, cardArt } from '../entity/index.js';
 
-const MAJOR_OF = (id) => ({ lk: 0, tc: 1, kd: 2, na: 3, ht: 4, ab: 5, vd: 6 }[id.slice(0, 2)] ?? 0);
 const HEAL_PILL = 'item.dan.tieu-hoi-huyet.001', MP_PILL = 'item.dan.hoi-linh.001';
 
 // bag: Kho đồ 6 hệ (src/ui/testbag.js) — đồ trong Kho thức tỉnh được; onLook(): báo main.js cập nhật hình mặc trên người
@@ -67,7 +66,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const stats = createStats(statsDef, gp);
   const mobs = createMonsters({ gp, mdef: monDef, map }), gapR = createRealmGap({ gp, mdef: monDef, progress, today: () => life.today(), toast: (...a) => toast(...a) }), late = createLateRealm({ gp, progress, gapR, toast: (...a) => toast(...a) }); // áp chế cảnh giới
   const voids = createVoid({ mdef: monDef, mobs, map, progress, toast, me, serverNow });
-  const quests = createQuests(questDef, progress, () => MAJOR_OF(progress.stageDef.id), { realms, gp, mats, now: serverNow || Date.now }); // + Ngày / Tuần / Tiến độ (routine.js)
+  const quests = createQuests(questDef, progress, () => (progress.stageDef.major ?? 0), { realms, gp, mats, now: serverNow || Date.now }); // + Ngày / Tuần / Tiến độ (routine.js)
   // Đan phương / công thức / bí kíp: món id được dạy bởi vật phẩm nào; có trong kho mới luyện được
   const ru = createRecipeUses({ progress, recipes: recipes.items, toast: (...a) => toast(...a) }), { teacher, owns } = ru; // công thức có số lần dùng
   const craft = createCraft({ progress, pills, blanks, awaken, skills: cp, gp, owns, spend: ru.spend });
@@ -118,7 +117,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
 
   // ---------- Người chơi đánh quái ----------
   function strike(m, mul, skill) {
-    const sup = gapR.mul(m.stage, progress.stageDef.id), r = stats.hit(ps, stats.monster(m), { atkMul: mul * ptMul() * cpBonus(skill) * sup });
+    const sup = gapR.mul(m.stage, progress.stageDef.tier), r = stats.hit(ps, stats.monster(m), { atkMul: mul * ptMul() * cpBonus(skill) * sup });
     const top = m.y - (m.def.art?.h || m.r * 2) - 4;
     if (r.miss) { say(m.x, top, 'Trượt', '#cfd6e6'); return; }
     say(m.x, top, `${r.crit ? 'Bạo kích ' : ''}-${r.dmg}${sup < 1 ? ' · bị áp chế' : ''}`, sup < 1 ? '#b9a6d6' : r.crit ? '#ffd23a' : '#ffffff', r.crit);
@@ -232,13 +231,13 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const cards = createCards({ def: dvDef, tiers: awaken.tiers, progress, stageOk: (id) => craft.stageOk(id), toast, play });
   const dv = createDaoVan({ def: dvDef, bag, cards, progress });
   const barrage = createBarrage({ dv, me, mobs, map, bolts, play, strike, toast, dead: () => dead, maxHp: () => ps.hp, heal: (n) => { if (!dead) hp = Math.min(ps.hp, hp + n); } });
-  treasure = createTreasure({ stageName: (id) => gp.player.stages.find((x) => x.id === id)?.name || id, def: pbDef, S, progress, craft, awaken, barrage, mobs, me, map, buffs, recompute, target, play, say, toast, heOf: dv.heOf,
+  treasure = createTreasure({ stageName: progress.stageName, def: pbDef, S, progress, craft, awaken, barrage, mobs, me, map, buffs, recompute, target, play, say, toast, heOf: dv.heOf,
     stageOk: (id) => craft.stageOk(id), now: () => now, maxHp: () => ps.hp, rewind: () => { for (const k in cds) if (k !== 'phap-bao') cds[k] = 0; }, heal: (n) => { if (!dead) hp = Math.min(ps.hp, hp + n); } });
   const camChe = createCamChe({ def: ccDef, dv, barrage, me, mobs, target, play, toast, dead: () => dead, maxHp: () => ps.hp, heal: (n) => { if (!dead) hp = Math.min(ps.hp, hp + n); } });
   const biCanh = createBiCanh({ def: bcDef, mdef: monDef, mobs, map, me, progress, life, wallet, cards, cardDef: dvDef.cards, dv, pbItem: pbDef.items[0].id,
-    toast, play, say, dead: () => dead, stageId: () => progress.stageDef.id, stageName: (id) => gp.player.stages.find((x) => x.id === id)?.name || id, itemName: (id) => itemDefs.get(id)?.name || bag.nameOf?.(id) || id, S, pbList: pbDef.list, learn: () => learn, treasure: () => treasure });
+    toast, play, say, dead: () => dead, stageId: () => progress.stageDef.tier, stageName: progress.stageName, itemName: (id) => itemDefs.get(id)?.name || bag.nameOf?.(id) || id, S, pbList: pbDef.list, learn: () => learn, treasure: () => treasure });
   const hopNhat = createHopNhat({ def: dvDef.hop_nhat, forged: (he, sl) => progress.equipped().some((g) => g.tier && g.he === he && g.slot === sl), bag, treasure, cards, loadout, S, cardName: (id) => dvDef.cards.list.find((x) => x.id === id)?.name || id, learned: (id) => learn.learned(id), target, pt, ps: () => ps, dead: () => dead, toast, src: { pb: pbDef, cards: dvDef.cards.drop, set: dvDef.set_drop, skill: gp.skill_drop, realms: realms.realms } }); // Thiên Cơ Hợp Nhất (src: nguồn để chỉ cách lấy)
-  const guide = createGuide({ hopNhat, learn, dvDef, ccDef, pbDef, items: (await loadJSON('data/items/items.json')).items, S, dv, cards, bag, progress, loadout, stageName: (id) => gp.player.stages.find((x) => x.id === id)?.name || id,
+  const guide = createGuide({ hopNhat, learn, dvDef, ccDef, pbDef, items: (await loadJSON('data/items/items.json')).items, S, dv, cards, bag, progress, loadout, stageName: progress.stageName,
     art: (a) => artInfo(a)?.file || artFile(a), equip: (id) => itemAction(`bag:${id}`, 'equip'), toast }); // nút + bảng Cẩm nang Đạo Vận
   const usable = createConsumables({ itemDefs, progress, wallet, cards, cardDef: dvDef.cards, treasure, biCanh, heOrder: dvDef.he_order, play, me, recompute });
   const skills = createSkills({ hopOn: () => !!hopNhat.active(), useTreasure: (q) => treasure.use(q), camChe: (s) => camChe.cast(s), S, me, mobs, map, pt, cds, toast, say, play, fx, bolts, strike, target, buffs, recompute, mods: dv.mods, fire: barrage.fire, maybeEcho: barrage.maybeEcho, mover: barrage.mover, schedule: barrage.schedule, healPets: (f) => tame.healAll(f),
@@ -346,13 +345,13 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     return true;
   }
 
-  const views = createViews({ ru, biCanh, gapR, info, shop, owns, teacher, bag, onLook, monsters: monDef.monsters, realmMajor: () => MAJOR_OF(progress.stageDef.id), progress, quests, craft, itemDefs, mats, pills, blanks, awaken, cp, realms, gp, toast,
+  const views = createViews({ ru, biCanh, gapR, info, shop, owns, teacher, bag, onLook, monsters: monDef.monsters, realmMajor: () => (progress.stageDef.major ?? 0), progress, quests, craft, itemDefs, mats, pills, blanks, awaken, cp, realms, gp, toast,
     wallet, life, getStats: () => ps, getHp: () => hp, onReward: (r) => { if (r.exp) addExp(late.questExp(r.exp)); if (r.spiritStone) progress.addStone(r.spiritStone); if (r.gold) wallet.add('vang', r.gold);
       for (const i of r.items || []) progress.add(i.id, i.count); }, recompute, usePill, emit: quests.emit });
 
   const inv = createInventory({ ru, recipes: { pills: pills.pills, blanks: blanks.blanks, skills: cp.skills }, info, progress, bag, craft, itemDefs, awaken, gp, art: (a) => artInfo(a)?.file || artFile(a), icon: iconUrl, fallbackIcon: placeholderIcon,
     onLook, recompute, usePill, breakthrough: () => breakthrough(), btPills: new Set(realms.realms.filter((r) => r.breakthrough).map((r) => r.breakthrough.pill)), openCultivate: (tab) => views.openCultivate(tab) });
-  const stageName = (id) => gp.player.stages.find((x) => x.id === id)?.name || id;
+  const stageName = progress.stageName;
   const bar = createSkillBar({ learn, hud, S, gp, progress, pt, cds, slotItem: (s) => inv.slotItem(s), icon: iconUrl, fxIcon: fxIconUrl, loadout, stageName, treasure: () => treasure.view() });
   function itemAction(key, action) {
     const r = tame.isPet(key) ? tame.act(key, action) : cards.isCard(key) ? cards.act(key, action) : treasure.isTreasure(key) ? treasure.act(key, action)

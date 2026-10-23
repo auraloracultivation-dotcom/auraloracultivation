@@ -13,7 +13,9 @@ export function createTame({ cfg, progress, monsters, mdef, mobs, map, me, stats
   const pets = () => (progress.state.pets ||= []);
   const following = () => pets().filter((p) => p.follow);
   const live = new Map(); // uid → vị trí / trạng thái vẽ (không lưu)
-  const stageName = (s) => gp.player.stages.find((x) => x.id === s)?.name || s;
+  const stageName = (s) => mdef.stage_names?.[s] || s; // thú cưng mang bậc quái (Luyện Khí … Âm Hư), không phải cảnh giới người chơi
+  // Bản lưu cũ (progress.migrateV1): công thú cưng theo bảng chỉ số quái cũ → đổi theo tỷ lệ bảng mới, giữ sức mạnh tương đối
+  for (const p of pets()) if (p.rescale) { const o = gp.migrate_v2?.pet_atk?.[p.stage], n = mdef.stage_stats[p.stage]?.atk; if (o && n) p.atk = Math.max(1, Math.round(p.atk * n / o)); delete p.rescale; }
 
   // Gọi khi hạ quái: có quy phục không
   function tryTame(m) {

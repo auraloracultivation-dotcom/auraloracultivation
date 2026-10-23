@@ -8,49 +8,49 @@
    "name": "Tu Vi Đan",
    "cat": "linh-dan",
    "premium": true,
-   "use": "Tăng tu vi tầng hiện tại (tới Hóa Thần)"
+   "use": "Tăng tu vi tầng hiện tại (tới Phá Nhật)"
   },
   {
    "id": "item.dan.vien-man.001",
    "name": "Viên Mãn Đan",
    "cat": "linh-dan",
    "premium": true,
-   "use": "Lấp đầy vạch tu vi tầng hiện tại (tới Hóa Thần; đại cảnh giới mới vẫn phải bấm Đột phá). Bản cũ — Vạn Bảo Lâu nay bán theo từng cảnh giới."
+   "use": "Lấp đầy vạch tu vi tầng hiện tại (tới Phá Nhật; đại cảnh giới mới vẫn phải bấm Đột phá). Bản cũ — Vạn Bảo Lâu nay bán theo từng cảnh giới."
   },
   {
    "id": "item.dan.vien-man.lk",
-   "name": "Viên Mãn Đan · Luyện Khí",
+   "name": "Viên Mãn Đan · Khai Linh",
    "cat": "linh-dan",
    "premium": true,
-   "use": "Lấp đầy vạch tu vi tầng hiện tại — chỉ dùng khi đang ở Luyện Khí (đại cảnh giới mới vẫn phải bấm Đột phá)"
+   "use": "Lấp đầy vạch tu vi tầng hiện tại — chỉ dùng khi đang ở Khai Linh (đại cảnh giới mới vẫn phải bấm Đột phá)"
   },
   {
    "id": "item.dan.vien-man.tc",
-   "name": "Viên Mãn Đan · Trúc Cơ",
+   "name": "Viên Mãn Đan · Ngưng Mạch",
    "cat": "linh-dan",
    "premium": true,
-   "use": "Lấp đầy vạch tu vi tầng hiện tại — chỉ dùng khi đang ở Trúc Cơ (đại cảnh giới mới vẫn phải bấm Đột phá)"
+   "use": "Lấp đầy vạch tu vi tầng hiện tại — chỉ dùng khi đang ở Ngưng Mạch (đại cảnh giới mới vẫn phải bấm Đột phá)"
   },
   {
    "id": "item.dan.vien-man.kd",
-   "name": "Viên Mãn Đan · Kết Đan",
+   "name": "Viên Mãn Đan · Tụ Tinh",
    "cat": "linh-dan",
    "premium": true,
-   "use": "Lấp đầy vạch tu vi tầng hiện tại — chỉ dùng khi đang ở Kết Đan (đại cảnh giới mới vẫn phải bấm Đột phá)"
+   "use": "Lấp đầy vạch tu vi tầng hiện tại — chỉ dùng khi đang ở Tụ Tinh (đại cảnh giới mới vẫn phải bấm Đột phá)"
   },
   {
    "id": "item.dan.vien-man.na",
-   "name": "Viên Mãn Đan · Nguyên Anh",
+   "name": "Viên Mãn Đan · Hóa Nguyệt",
    "cat": "linh-dan",
    "premium": true,
-   "use": "Lấp đầy vạch tu vi tầng hiện tại — chỉ dùng khi đang ở Nguyên Anh (đại cảnh giới mới vẫn phải bấm Đột phá)"
+   "use": "Lấp đầy vạch tu vi tầng hiện tại — chỉ dùng khi đang ở Hóa Nguyệt (đại cảnh giới mới vẫn phải bấm Đột phá)"
   },
   {
    "id": "item.dan.vien-man.ht",
-   "name": "Viên Mãn Đan · Hóa Thần",
+   "name": "Viên Mãn Đan · Phá Nhật",
    "cat": "linh-dan",
    "premium": true,
-   "use": "Lấp đầy vạch tu vi tầng hiện tại — chỉ dùng khi đang ở Hóa Thần (đại cảnh giới mới vẫn phải bấm Đột phá)"
+   "use": "Lấp đầy vạch tu vi tầng hiện tại — chỉ dùng khi đang ở Phá Nhật (đại cảnh giới mới vẫn phải bấm Đột phá)"
   }
  ]
 }

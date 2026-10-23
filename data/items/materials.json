@@ -10,7 +10,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "xanh",
-   "use": "Đan: Trúc Cơ Đan, Tiểu Hồi Huyết Đan, Trường Sinh Đan · Phôi: Vũ khí, Dây chuyền"
+   "use": "Đan: Ngưng Mạch Đan, Tiểu Hồi Huyết Đan, Trường Sinh Đan · Phôi: Vũ khí, Dây chuyền"
   },
   {
    "id": "item.thao.linh-chi-non.001",
@@ -18,7 +18,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "xanh",
-   "use": "Đan: Trúc Cơ Đan, Hồi Linh Đan · Phôi: Trang phục, Mặt nạ · Tu luyện: Luyện Khí Quyết, Thanh Tâm Tĩnh Khí Quyết"
+   "use": "Đan: Ngưng Mạch Đan, Hồi Linh Đan · Phôi: Trang phục, Mặt nạ · Tu luyện: Khai Linh Quyết, Thanh Tâm Tĩnh Khí Quyết"
   },
   {
    "id": "item.thao.bat-nha.001",
@@ -34,7 +34,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "cam",
-   "use": "Đan: Kết Đan Đan, Cường Công Đan"
+   "use": "Đan: Tụ Tinh Đan, Cường Công Đan"
   },
   {
    "id": "item.thao.diem-chi.001",
@@ -42,7 +42,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "cam",
-   "use": "Đan: Kết Đan Đan, Hồi Linh Đan · Tu luyện: Kiếm Khí Quyết, Hồi Linh Thuật"
+   "use": "Đan: Tụ Tinh Đan, Hồi Linh Đan · Tu luyện: Kiếm Khí Quyết, Hồi Linh Thuật"
   },
   {
    "id": "item.thao.xich-qua.001",
@@ -50,7 +50,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "cam",
-   "use": "Tu luyện: Luyện Khí Quyết, Thanh Tâm Tĩnh Khí Quyết"
+   "use": "Tu luyện: Khai Linh Quyết, Thanh Tâm Tĩnh Khí Quyết"
   },
   {
    "id": "item.thao.han-linh.001",
@@ -58,7 +58,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "trang",
-   "use": "Đan: Hóa Thần Đan, Cường Thể Đan · Phôi: Cánh · Tu luyện: Kiếm Khí Quyết, Linh Thú Khế Ước, Hồi Linh Thuật, Lăng Ba Vi Bộ"
+   "use": "Đan: Phá Nhật Đan, Cường Thể Đan · Phôi: Cánh · Tu luyện: Kiếm Khí Quyết, Linh Thú Khế Ước, Hồi Linh Thuật, Lăng Ba Vi Bộ"
   },
   {
    "id": "item.thao.bang-chi.001",
@@ -66,7 +66,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "trang",
-   "use": "Đan: Hóa Thần Đan, Hồi Linh Đan · Tu luyện: Luyện Khí Quyết, Thanh Tâm Tĩnh Khí Quyết"
+   "use": "Đan: Phá Nhật Đan, Hồi Linh Đan · Tu luyện: Khai Linh Quyết, Thanh Tâm Tĩnh Khí Quyết"
   },
   {
    "id": "item.thao.tuyet-lien.001",
@@ -82,7 +82,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "xam",
-   "use": "Đan: Nguyên Anh Đan · Phôi: Linh thú · Tu luyện: Luyện Khí Quyết, Thanh Tâm Tĩnh Khí Quyết"
+   "use": "Đan: Hóa Nguyệt Đan · Phôi: Linh thú · Tu luyện: Khai Linh Quyết, Thanh Tâm Tĩnh Khí Quyết"
   },
   {
    "id": "item.thao.u-minh.001",
@@ -90,7 +90,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "xam",
-   "use": "Đan: Nguyên Anh Đan, Duy Trì Đan"
+   "use": "Đan: Hóa Nguyệt Đan, Duy Trì Đan"
   },
   {
    "id": "item.thao.co-lien.001",
@@ -106,7 +106,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "than",
-   "use": "Đan: Anh Biến Đan · Phôi: Pháp tướng · Tu luyện: Linh Thú Khế Ước, Thiên Phong Dực Quyết, Pháp Tướng Thiên Thư, Lăng Ba Vi Bộ"
+   "use": "Đan: Hợp Đạo Đan · Phôi: Pháp tướng · Tu luyện: Linh Thú Khế Ước, Thiên Phong Dực Quyết, Pháp Tướng Thiên Thư, Lăng Ba Vi Bộ"
   },
   {
    "id": "item.thao.tan-the.001",
@@ -114,7 +114,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "than",
-   "use": "Đan: Anh Biến Đan · Tu luyện: Kiếm Khí Quyết, Linh Thú Khế Ước, Thiên Phong Dực Quyết, Pháp Tướng Thiên Thư, Hồi Linh Thuật, Lăng Ba Vi Bộ"
+   "use": "Đan: Hợp Đạo Đan · Tu luyện: Kiếm Khí Quyết, Linh Thú Khế Ước, Thiên Phong Dực Quyết, Pháp Tướng Thiên Thư, Hồi Linh Thuật, Lăng Ba Vi Bộ"
   },
   {
    "id": "item.thao.hu-khong.001",
@@ -122,7 +122,7 @@
    "cat": "linh-duoc",
    "group": "thao",
    "zone": "than",
-   "use": "Tu luyện: Luyện Khí Quyết, Kiếm Khí Quyết, Linh Thú Khế Ước, Thiên Phong Dực Quyết, Pháp Tướng Thiên Thư, Thanh Tâm Tĩnh Khí Quyết, Hồi Linh Thuật, Lăng Ba Vi Bộ"
+   "use": "Tu luyện: Khai Linh Quyết, Kiếm Khí Quyết, Linh Thú Khế Ước, Thiên Phong Dực Quyết, Pháp Tướng Thiên Thư, Thanh Tâm Tĩnh Khí Quyết, Hồi Linh Thuật, Lăng Ba Vi Bộ"
   },
   {
    "id": "item.khoang.huyen-thiet-vun.001",
@@ -130,7 +130,7 @@
    "cat": "khac",
    "group": "khoang",
    "zone": "xanh",
-   "use": "Đan: Trúc Cơ Đan · Phôi: Vũ khí, Trang phục · Tu luyện: Luyện Khí Quyết, Thanh Tâm Tĩnh Khí Quyết"
+   "use": "Đan: Ngưng Mạch Đan · Phôi: Vũ khí, Trang phục · Tu luyện: Khai Linh Quyết, Thanh Tâm Tĩnh Khí Quyết"
   },
   {
    "id": "item.khoang.tinh-sa.001",
@@ -146,7 +146,7 @@
    "cat": "khac",
    "group": "khoang",
    "zone": "cam",
-   "use": "Đan: Kết Đan Đan, Cường Công Đan · Tu luyện: Luyện Khí Quyết, Kiếm Khí Quyết, Thanh Tâm Tĩnh Khí Quyết, Hồi Linh Thuật"
+   "use": "Đan: Tụ Tinh Đan, Cường Công Đan · Tu luyện: Khai Linh Quyết, Kiếm Khí Quyết, Thanh Tâm Tĩnh Khí Quyết, Hồi Linh Thuật"
   },
   {
    "id": "item.khoang.huyet-ngoc.001",
@@ -162,7 +162,7 @@
    "cat": "khac",
    "group": "khoang",
    "zone": "trang",
-   "use": "Đan: Hóa Thần Đan · Phôi: Cánh · Tu luyện: Luyện Khí Quyết, Kiếm Khí Quyết, Linh Thú Khế Ước, Thiên Phong Dực Quyết, Thanh Tâm Tĩnh Khí Quyết, Hồi Linh Thuật, Lăng Ba Vi Bộ"
+   "use": "Đan: Phá Nhật Đan · Phôi: Cánh · Tu luyện: Khai Linh Quyết, Kiếm Khí Quyết, Linh Thú Khế Ước, Thiên Phong Dực Quyết, Thanh Tâm Tĩnh Khí Quyết, Hồi Linh Thuật, Lăng Ba Vi Bộ"
   },
   {
    "id": "item.khoang.bang-ngoc.001",
@@ -178,7 +178,7 @@
    "cat": "khac",
    "group": "khoang",
    "zone": "xam",
-   "use": "Đan: Nguyên Anh Đan · Phôi: Linh thú · Tu luyện: Luyện Khí Quyết, Kiếm Khí Quyết, Linh Thú Khế Ước, Thanh Tâm Tĩnh Khí Quyết, Hồi Linh Thuật, Lăng Ba Vi Bộ"
+   "use": "Đan: Hóa Nguyệt Đan · Phôi: Linh thú · Tu luyện: Khai Linh Quyết, Kiếm Khí Quyết, Linh Thú Khế Ước, Thanh Tâm Tĩnh Khí Quyết, Hồi Linh Thuật, Lăng Ba Vi Bộ"
   },
   {
    "id": "item.khoang.u-ngoc.001",
@@ -194,7 +194,7 @@
    "cat": "khac",
    "group": "khoang",
    "zone": "than",
-   "use": "Đan: Anh Biến Đan · Phôi: Pháp tướng · Tu luyện: Luyện Khí Quyết, Kiếm Khí Quyết, Linh Thú Khế Ước, Thiên Phong Dực Quyết, Pháp Tướng Thiên Thư, Thanh Tâm Tĩnh Khí Quyết, Hồi Linh Thuật, Lăng Ba Vi Bộ"
+   "use": "Đan: Hợp Đạo Đan · Phôi: Pháp tướng · Tu luyện: Khai Linh Quyết, Kiếm Khí Quyết, Linh Thú Khế Ước, Thiên Phong Dực Quyết, Pháp Tướng Thiên Thư, Thanh Tâm Tĩnh Khí Quyết, Hồi Linh Thuật, Lăng Ba Vi Bộ"
   },
   {
    "id": "item.khoang.hu-ngoc.001",
@@ -210,7 +210,7 @@
    "cat": "khac",
    "group": "dacbiet",
    "zone": "cam",
-   "use": "Đan: Kết Đan Đan"
+   "use": "Đan: Tụ Tinh Đan"
   },
   {
    "id": "item.dacbiet.hon-thu-tinh.001",
@@ -218,7 +218,7 @@
    "cat": "khac",
    "group": "dacbiet",
    "zone": "trang",
-   "use": "Đan: Hóa Thần Đan · Phôi: Cánh"
+   "use": "Đan: Phá Nhật Đan · Phôi: Cánh"
   },
   {
    "id": "item.dacbiet.tinh-hon.001",
@@ -226,7 +226,7 @@
    "cat": "khac",
    "group": "dacbiet",
    "zone": "xam",
-   "use": "Đan: Nguyên Anh Đan, Duy Trì Đan · Phôi: Linh thú"
+   "use": "Đan: Hóa Nguyệt Đan, Duy Trì Đan · Phôi: Linh thú"
   },
   {
    "id": "item.dacbiet.tinh-hon-co.001",
@@ -234,7 +234,7 @@
    "cat": "khac",
    "group": "dacbiet",
    "zone": "than",
-   "use": "Đan: Anh Biến Đan · Phôi: Pháp tướng"
+   "use": "Đan: Hợp Đạo Đan · Phôi: Pháp tướng"
   },
   {
    "id": "item.thao.hac-diem.001",

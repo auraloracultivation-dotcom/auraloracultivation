@@ -25,7 +25,7 @@ export function createViews(o) {
     const have = progress.count(i.id);
     return `<span class="${have >= i.count ? 'ok' : 'no'}">${E(name(i.id))} ${have}/${i.count}</span>`;
   }).join(' · ');
-  const stageName = (id) => gp.player.stages.find((s) => s.id === id)?.name || id;
+  const stageName = progress.stageName;
   const tierName = (id) => awaken.tiers.find((t) => t.id === id)?.name || id;
   // Thọ nguyên trong bảng Cảnh giới
   const lifeLine = () => { const L = o.life, ate = st().life?.pillDay === L.today();
@@ -146,8 +146,8 @@ export function createViews(o) {
     }
     const rows = Object.keys(STAT).map((k) => `<span>${STAT[k]}</span><b>${k === 'hp' ? `${Math.round(o.getHp())}/${ps.hp}` : ps[k]}</b>`).join('');
     return `<div class="row"><div class="row-h"><b>${E(s.name)}</b><em>${N(st().exp)}/${N(s.exp_need)} tu vi</em></div>
-      <p>${bt}</p>${gp.late_realm?.prefixes?.some((x) => s.id.startsWith(x)) ? `<p>Cảnh giới cao: linh khí mỗi ngày rất ít (quái + nhiệm vụ chung một mức). Bị quái giết mất nhiều tu vi${st().injured ? ' — <b>ĐANG TRỌNG THƯƠNG: chết lần nữa sẽ thụt cảnh giới</b>' : '; không đủ để mất thì trọng thương, chết tiếp sẽ thụt cảnh giới'}.</p>` : ''}${lifeLine()}</div>${o.wallet.html()}<div class="row grid2">${rows}</div>
-      <div class="row"><p>Kỹ năng mở theo cảnh giới: Kiếm khí + Khống chế (Trúc Cơ), Linh thú + Lướt (Kết Đan), Diện rộng (Nguyên Anh).</p></div>`;
+      <p>${bt}</p>${gp.late_realm?.prefixes?.some((x) => s.tier.startsWith(x)) ? `<p>Cảnh giới cao: linh khí mỗi ngày rất ít (quái + nhiệm vụ chung một mức). Bị quái giết mất nhiều tu vi${st().injured ? ' — <b>ĐANG TRỌNG THƯƠNG: chết lần nữa sẽ thụt cảnh giới</b>' : '; không đủ để mất thì trọng thương, chết tiếp sẽ thụt cảnh giới'}.</p>` : ''}${lifeLine()}</div>${o.wallet.html()}<div class="row grid2">${rows}</div>
+      <div class="row"><p>Kỹ năng mở theo cảnh giới: Kiếm khí + Khống chế (Ngưng Mạch), Linh thú + Lướt (Tụ Tinh), Diện rộng (Hóa Nguyệt).</p></div>`;
   }
   // Chỉ hiện công thức ĐANG CÓ trong kho (đan phương / công thức phôi / bí kíp). Muốn thêm → về Vạn Bảo Lâu trong thành mua.
   const none = (what) => `<p class="bag-empty">Kho chưa có ${what} nào.<br>Về Vạn Bảo Lâu trong Thanh Vân Thành để mua (nút Tông môn khi ở trong thành), hoặc săn boss.</p>`;

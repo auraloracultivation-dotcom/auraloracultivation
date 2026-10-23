@@ -1,6 +1,6 @@
 // Tiến trình người chơi THỬ NGHIỆM: cảnh giới, tu vi, Linh thạch, túi nguyên liệu/đan, trang bị luyện ra, công pháp, nhiệm vụ.
 // Lưu localStorage theo tài khoản — CHƯA lưu máy chủ, người chơi sửa được. Mốc 4 chuyển lên máy chủ (RPC).
-const VERSION = 1;
+const VERSION = 2; // 2 = Ngũ Thiên Đạo Cảnh 60 cấp (24/10/2026). Bản 1 (25 bậc Luyện Khí … Anh Biến) tự đổi khi tải — migrateV1.
 
 export function createProgress(userId, gp) {
   const key = `tc.progress.${userId}`;
@@ -8,7 +8,8 @@ export function createProgress(userId, gp) {
   let st = fresh();
   try {
     const saved = JSON.parse(localStorage.getItem(key) || 'null');
-    if (saved && saved.v === VERSION) st = { ...st, ...saved };
+    if (saved && saved.v === 1) st = { ...st, ...migrateV1(saved, gp) };
+    else if (saved && saved.v === VERSION) st = { ...st, ...saved };
   } catch { /* hỏng thì làm lại từ đầu */ }
   st.stage = Math.max(0, Math.min(stages.length - 1, st.stage | 0));
   st.itemAw ||= {}; // thức tỉnh của đồ trong Kho (6 hệ): mã vật phẩm → { tier, lines, spent }
@@ -26,7 +27,9 @@ export function createProgress(userId, gp) {
   return {
     get state() { return st; },
     get stageDef() { return stages[st.stage]; },
-    stageIndex: (id) => stages.findIndex((s) => s.id === id),
+    // Mã cấp (lv12) hoặc mã bậc cũ trong data (tc_so… — mở khoá kỹ năng / vật phẩm): bậc cũ = cấp đầu tiên tương ứng (gp.player.tier_first)
+    stageIndex: (id) => { const i = stages.findIndex((s) => s.id === id); return i >= 0 ? i : (gp.player.tier_first?.[id] ?? -1); },
+    stageName: (id) => { const i = stages.findIndex((s) => s.id === id); const j = i >= 0 ? i : gp.player.tier_first?.[id]; return stages[j]?.name || id; },
     nextStageDef: () => stages[st.stage + 1] || null,
     onChange(fn) { listener = fn; },
     changed() { touch(); listener(); },
@@ -88,3 +91,13 @@ export function createProgress(userId, gp) {
     equipped: () => Object.values(st.eq).map((u) => st.gear.find((g) => g.uid === u)).filter(Boolean),
   };
 }
+
+// Bản lưu cũ (25 bậc) → Ngũ Thiên Đạo Cảnh: bậc cũ → cấp CUỐI khoảng tương ứng (Hóa Thần Hậu kỳ → Phá Nhật tầng 10), tu vi về 0.
+// Chủ dự án 24/10: chỉ tặng, không trừ. Thú cưng giữ sức mạnh tương đối (công × công quái mới / cũ cùng bậc).
+function migrateV1(old, gp) {
+  const M = gp.migrate_v2 || {}, oldId = M.old_order?.[old.stage | 0];
+  const lv = gp.player.old_to_level?.[oldId] ?? 0;
+  const out = { ...old, v: VERSION, stage: lv, exp: 0, hp: null, lk: undefined, injured: false, pets: (old.pets || []).map((p) => ({ ...p, rescale: true })) };
+  return out;
+}
+
