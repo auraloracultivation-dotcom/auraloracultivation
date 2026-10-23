@@ -60,5 +60,5 @@ export function createDaoVan({ def, bag, cards, progress }) {
     const id = miss[Math.floor(Math.random() * miss.length)]; bag.give(id);
     toast('Nhặt được đồ ngũ hành! Xem Kho → Trang bị', 2600);
   }
-  return { mods, heOf, counts, onKill, limits: def.limits };
+  return { mods, heOf, counts, onKill, limits: def.limits, fx: def.fx };
 }

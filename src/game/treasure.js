@@ -40,9 +40,11 @@ export function createTreasure(c) {
     const aim = (m) => { if (!m) return { dx: me.facing, dy: 0 }; const r = mobs.rel(m, me), L = Math.hypot(r.dx, r.dy - 10) || 1; return { dx: r.dx / L, dy: (r.dy - 10) / L }; };
     const shot = (dx, dy, extra = {}) => barrage.fire({ id: 'pb', x: me.x, y: me.y - 14, dx, dy, speed: 420, range: 260, fx: d.fx || he.bolt, size: d.size || 18, mul, color: he.color, ...extra });
     c.say(me.x, me.y - 44, d.name, he.color, true);
+    if (d.cast_fx && !['stream', 'seal', 'shield', 'storm'].includes(d.kind)) play(d.cast_fx, me.x, me.y + 4, 52, { ground: true }); // ảnh hoạt ảnh pháp bảo
     switch (d.kind) {
       case 'ring_burst': for (let k = 0; k < n; k++) { const a = (k / n) * Math.PI * 2; shot(Math.cos(a), Math.sin(a), { homing: 0.9 }); } break;
-      case 'stream': { // phun liên tục về phía mục tiêu (đổi mục tiêu khi con cũ chết)
+      case 'stream': { // phun liên tục về phía mục tiêu (đổi mục tiêu khi con cũ chết) + luồng lửa hồ lô
+        if (d.cast_fx) { const { dx, dy } = aim(tgt); barrage.schedule(d.s, 0.5, () => { const a = Math.atan2(dy, dx); play(d.cast_fx, me.x + dx * 90, me.y - 12 + dy * 90, 26, { rot: a }); }); }
         barrage.schedule(d.s, d.s / n, () => { const m = c.target(260) || tgt, { dx, dy } = aim(m), j = (Math.random() - 0.5) * 0.25; shot(dx * Math.cos(j) - dy * Math.sin(j), dx * Math.sin(j) + dy * Math.cos(j)); });
         break;
       }
@@ -147,7 +149,7 @@ export function createTreasure(c) {
     const d = byId.get(t.id);
     if (action === 'pb-bind') {
       if (progress.state.stone < def.bind_cost) return 'Không đủ Linh thạch';
-      progress.addStone(-def.bind_cost); t.known = true; progress.changed(); play('vong-lua', me.x, me.y - 10, 44);
+      progress.addStone(-def.bind_cost); t.known = true; progress.changed(); play(def.bind_fx || 'vong-lua', me.x, me.y + 4, 60, { ground: true });
       return `Nhận chủ thành công: ${d.name}!`;
     }
     if (action === 'pb-wear') {
@@ -174,6 +176,6 @@ export function createTreasure(c) {
   // Dòng thức tỉnh của pháp bảo đang đeo (gộp vào chỉ số như trang bị)
   const worn = () => { const t = on(); return t?.aw?.tier ? [t.aw] : []; };
   const view = () => { const t = on(), d = t && byId.get(t.id); return d ? { thumb: pic(d), cd: d.cd_s, name: d.name } : null; };
-  syncSkill(); loadFx([...def.list.map((d) => d.icon[0]), 'v.cong-hu']); // icon pháp bảo trong Kho / ô kỹ năng
+  syncSkill(); loadFx([...def.list.map((d) => d.icon[0]), 'v.cong-hu', ...def.list.map((d) => d.cast_fx).filter(Boolean), def.bind_fx].filter(Boolean)); // icon pháp bảo trong Kho / ô kỹ năng
   return { use, openBlank, onKill, entries, act, worn, view, isTreasure: (key) => key.startsWith('pb:'), grant: (id, lv = 0) => { list().push({ uid: progress.state.uid++, id, lv, known: true, aw: { tier: null, lines: [], spent: 0 } }); progress.changed(); } };
 }

@@ -56,7 +56,8 @@
      "pierce": 2,
      "_mo_ta": "ĐẠI THÀNH: mọi chiêu bắn quạt 15 kiếm khí xuyên giáp, hồi chiêu ×0,15, linh lực hồi liên tục"
     }
-   }
+   },
+   "hit": "k.bao-kim"
   },
   "Ám": {
    "name": "U Minh Phệ Hồn",
@@ -95,7 +96,8 @@
      },
      "_mo_ta": "ĐẠI THÀNH: 10 phi kiếm u minh, đạn tách 4 hồn đạn, hồi chiêu ×0,15, linh lực hồi liên tục"
     }
-   }
+   },
+   "hit": "k.bao-am"
   },
   "Thủy": {
    "name": "Thương Hải Lưu Ba",
@@ -131,7 +133,8 @@
      },
      "_mo_ta": "ĐẠI THÀNH: đạn ×5 nảy 7 lần, thủy triều 2 giây một lần, hồi chiêu ×0,15"
     }
-   }
+   },
+   "hit": "k.bao-thuy"
   },
   "Hỏa": {
    "name": "Xích Diệm Phần Thiên",
@@ -177,7 +180,8 @@
      },
      "_mo_ta": "ĐẠI THÀNH: quạt 7 hỏa cầu nổ lớn, thiên hỏa dày đặc, hồi chiêu ×0,15"
     }
-   }
+   },
+   "hit": "v.no-hoa"
   },
   "Mộc": {
    "name": "Thanh Mộc Trường Sinh",
@@ -214,12 +218,13 @@
      "multishot": 2,
      "_mo_ta": "ĐẠI THÀNH: liên thanh 4 lá mỗi 0,25 giây, mỗi đạn ×3, hồi chiêu ×0,15"
     }
-   }
+   },
+   "hit": "k.bao-moc"
   },
   "Thổ": {
    "name": "Hậu Thổ Trấn Sơn",
    "color": "#e0a95a",
-   "bolt": "v.dan-phong",
+   "bolt": "k.dan-tho-bay",
    "tiers": {
     "2": {
      "stat": {
@@ -265,7 +270,8 @@
      },
      "_mo_ta": "ĐẠI THÀNH: sóng chấn choáng, địa thứ trồi liên tục, hồi chiêu ×0,15"
     }
-   }
+   },
+   "hit": "k.bao-tho"
   }
  },
  "cards": {
@@ -431,5 +437,11 @@
   "boss": 0.025,
   "void": 0.5,
   "dup_stone": 500
+ },
+ "fx": {
+  "chain": "k.loi-lien",
+  "dai_thanh": "k.dai-thanh",
+  "burn": "k.dat-chay",
+  "_ghi_chu": "Ảnh chủ dự án 23/10 (tools/skill_sheets.py): nổ khi trúng theo hệ (he.*.hit), sét lan, hào quang đại thành, đất cháy."
  }
 }

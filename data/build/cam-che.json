@@ -62,7 +62,8 @@
    "mul": 0.5,
    "stun": 0.25,
    "fx": "v.dia-thu",
-   "desc": "Đất chấn liên hồi, quái trong trận choáng váng"
+   "desc": "Đất chấn liên hồi, quái trong trận choáng váng",
+   "anim": "k.cc-tho"
   }
  },
  "cast_fx": "k.bo-cam-che"
