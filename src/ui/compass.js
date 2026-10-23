@@ -1,6 +1,6 @@
 // Bản đồ tròn: game vẽ bản đồ thật vào lòng tròn, rồi đặt khung la bàn của chủ dự án
 // (frames/khung-ban-do.png, sinh bằng tools/map_frame.py) đè lên trên. Dùng chung cho bản đồ nhỏ và bản đồ thế giới.
-const FRAME_SRC = 'assets/ui/frames/khung-ban-do.png';
+const FRAME_SRC = 'assets/ui/frames/khung-ban-do.webp'; // webp 92KB (png gốc 1,3MB làm chậm lúc vào game)
 const FRAME = { w: 995, h: 980, cx: 497, cy: 500, r: 376 }; // toạ độ lòng tròn trên ảnh khung
 
 const frameImg = new Image();

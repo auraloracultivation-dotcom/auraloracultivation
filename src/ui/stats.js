@@ -14,9 +14,9 @@ export const STATS = [
   { id: 'xuyen-giap', name: 'Xuyên giáp' }, { id: 'ngu-thu', name: 'Ngự thú' },
 ];
 
-const GON = { src: 'assets/ui/frames/chi-so-gon.png', w: 495, h: 1329,
+const GON = { src: 'assets/ui/frames/chi-so-gon.webp', w: 495, h: 1329,
   slots: [[118, 161, 311, 313], [118, 539, 312, 300]], up: [132, 954, 130, 125], down: [131, 1122, 130, 122] };
-const FULL = { src: 'assets/ui/frames/chi-so-day-du.png', w: 881, h: 1518,
+const FULL = { src: 'assets/ui/frames/chi-so-day-du.webp', w: 881, h: 1518,
   // tâm ô số, theo thứ tự STATS (cột trái 8, cột phải 8)
   nums: [[425, 260], [425, 401], [425, 543], [425, 691], [425, 834], [425, 982], [425, 1125], [425, 1271],
     [735, 261], [735, 401], [735, 544], [735, 691], [735, 841], [735, 986], [735, 1127], [735, 1272]] };

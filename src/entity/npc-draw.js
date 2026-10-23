@@ -7,7 +7,7 @@ const imgs = {};
 export async function loadNpcArt(art) {
   ART = art;
   await Promise.all(['outfits', 'weapons'].map((k) => new Promise((res) => {
-    const im = new Image(); im.onload = () => { imgs[k] = im; res(); }; im.onerror = () => res(); im.src = art[k].src;
+    const im = new Image(); im.onload = () => { imgs[k] = im; res(); }; im.onerror = () => res(); im.src = art[k].src; setTimeout(res, 12000); // mạng chậm: không chờ mãi
   })));
 }
 

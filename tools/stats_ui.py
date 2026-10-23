@@ -49,7 +49,7 @@ def main():
         Image.fromarray(full[iy0 + k:iy0 + 124 - k, ix0 + k:ix1 - k]).save(f'assets/ui/icons/cs-{sid}.png', optimize=True)
         rgb[y0 - 4:y1 + 5, x0:x1] = BG
     img, box = cut(rgb, alpha)
-    img.save('assets/ui/frames/chi-so-day-du.png', optimize=True)
+    img.save('assets/ui/frames/chi-so-day-du.png', optimize=True); img.save('assets/ui/frames/chi-so-day-du.webp', 'WEBP', quality=88, method=6)  # game dùng webp
     ox, oy = box[:2]
     print('day-du', img.size, 'so (cx, cy) theo hàng:')
     for col in (0, 1):
@@ -62,7 +62,7 @@ def main():
         rgb[y0 + 2:y1 - 2, x0 + c:x1 - c] = BG
         rgb[y0 + c:y1 - c, x0 + 2:x1 - 2] = BG
     img, box = cut(rgb, alpha)
-    img.save('assets/ui/frames/chi-so-gon.png', optimize=True)
+    img.save('assets/ui/frames/chi-so-gon.png', optimize=True); img.save('assets/ui/frames/chi-so-gon.webp', 'WEBP', quality=88, method=6)  # game dùng webp
     ox, oy = box[:2]
     print('gon', img.size, 'slots', [(a - ox, b - oy, c - a, d - b) for a, b, c, d in GON_SLOTS],
           'arrows', [(a - ox, b - oy, c - a, d - b) for a, b, c, d in GON_ARROWS])

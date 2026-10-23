@@ -332,7 +332,7 @@ img { image-rendering: pixelated; }
 /* ---- Chỉ số cạnh trái ---- */
 .stats-dock {
   position: absolute; left: max(4px, env(safe-area-inset-left));
-  background: url("../../assets/ui/frames/chi-so-gon.png") center / 100% 100% no-repeat; container-type: inline-size;
+  background: url("../../assets/ui/frames/chi-so-gon.webp") center / 100% 100% no-repeat; container-type: inline-size;
 }
 .stats-dock > button { position: absolute; padding: 0; border: 0; background: none; cursor: pointer; }
 .sd-slot { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2%; }
@@ -346,7 +346,7 @@ img { image-rendering: pixelated; }
 .stats-full-wrap.open { background: rgba(7,11,22,.35); }
 .stats-full {
   position: relative; height: min(46dvh, 330px); max-width: 60vw; container-type: inline-size; /* nửa cỡ cũ */
-  background: url("../../assets/ui/frames/chi-so-day-du.png") center / 100% 100% no-repeat;
+  background: url("../../assets/ui/frames/chi-so-day-du.webp") center / 100% 100% no-repeat;
   transform-origin: left center; transform: scale(.25); opacity: 0; transition: transform .2s ease-out, opacity .2s;
 }
 .stats-full-wrap.open .stats-full { transform: none; opacity: 1; }

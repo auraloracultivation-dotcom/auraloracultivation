@@ -1,5 +1,5 @@
 import './compat.js'; // vá tính năng cho trình duyệt cũ — phải nạp trước mọi thứ
-export { loadJSON } from './data.js';
+export { loadJSON, prefetchJSON } from './data.js';
 export { startLoop } from './loop.js';
 export { createScreen } from './screen.js';
 export { createCamera, followCamera } from './camera.js';

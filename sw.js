@@ -1,6 +1,6 @@
 // Luôn ưu tiên bản mới nhất từ máy chủ (network-first), có mạng thì không bao giờ dùng code cũ.
 // Tránh lỗi "code cũ + dữ liệu mới" sau mỗi lần cập nhật. Mất mạng thì dùng bản đã lưu.
-const CACHE = 'tu-chan-v2'; // đổi tên khi cần dọn sạch bản lưu cũ
+const CACHE = 'tu-chan-v3'; // đổi tên khi cần dọn sạch bản lưu cũ
 
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', (e) => e.waitUntil((async () => { // xoá các bản cache cũ (v1…) cho đỡ đầy bộ nhớ máy
@@ -12,6 +12,17 @@ self.addEventListener('fetch', (e) => {
   const req = e.request;
   const url = new URL(req.url);
   if (req.method !== 'GET' || url.origin !== self.location.origin) return;
+  // Hình / âm thanh (assets/): đã lưu thì trả NGAY rồi lặng lẽ hỏi bản mới cho lần sau — vào game nhanh trên 4G.
+  // Code + dữ liệu vẫn hỏi máy chủ trước (không bao giờ chạy code cũ với dữ liệu mới).
+  if (url.pathname.includes('/assets/')) {
+    e.respondWith((async () => {
+      const cache = await caches.open(CACHE), key = url.origin + url.pathname, hit = await cache.match(key);
+      const fresh = fetch(req).then((res) => { if (res.ok) cache.put(key, res.clone()); return res; });
+      if (hit) { e.waitUntil(fresh.catch(() => {})); return hit; }
+      return fresh;
+    })());
+    return;
+  }
   e.respondWith((async () => {
     try {
       const res = await fetch(req, { cache: 'no-cache' }); // hỏi lại máy chủ; không đổi thì nhận 304, rất nhẹ

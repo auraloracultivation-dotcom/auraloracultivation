@@ -1,7 +1,7 @@
 // Điểm khởi động: nối các module lại với nhau. Không chứa luật gameplay chi tiết.
-import { loadJSON, startLoop, createScreen, createCamera, followCamera, createInput, drawStick, createSaver, sha256 } from './core/index.js';
+import { loadJSON, prefetchJSON, startLoop, createScreen, createCamera, followCamera, createInput, drawStick, createSaver, sha256 } from './core/index.js';
 import { createMap, wrapDelta } from './map/index.js';
-import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, setTextScale, loadRig, rigAttack, artInfo, renderPortrait, avatarFx, iconUrl } from './entity/index.js';
+import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, setTextScale, loadRig, rigAttack, artInfo, renderPortrait, avatarFx, iconUrl, loadSprites } from './entity/index.js';
 import { createAudio } from './audio/index.js';
 import { createPhapTuong } from './combat/index.js';
 import { createGameplay, createRankReporter, createFlight, hudActions, createNavi, createQuickPill, createStations } from './game/index.js';
@@ -21,6 +21,7 @@ async function boot() {
   // ?offline: chơi thử một mình không cần mạng (src/net/offline.js) — để thử luật chơi và kiểm thử tự động
   const net = await import(new URLSearchParams(location.search).has('offline') ? './net/offline.js' : './net/index.js');
   const config = await loadJSON('data/config.json');
+  prefetchJSON(config.preload_json || []); loadJSON('data/art/sprites.json').then(loadSprites).catch(() => {}); // tải sẵn dữ liệu + hình trong lúc đăng nhập
   const screen = createScreen(document.getElementById('game'), config.camera?.zoom || 1);
   loading.set(30, 'Kiểm tra đạo tịch…');
 
