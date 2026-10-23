@@ -131,7 +131,7 @@ async function boot() {
     const hex = await sha256(code.trim().toLowerCase());
     const c = codesDef.codes.find((x) => x.sha256 === hex);
     if (!c) throw new Error('Mã không đúng hoặc đã hết hạn.');
-    const n = bag.grantAll(c.grant === 'thien' ? (d) => d.thien : undefined) + (c.grant === 'admin' ? game.grantFull(c.gift) + game.grantHopNhat(c.gift) + game.grantGod(c.gift) // 'admin': gộp tất cả (thử game)
+    const n = bag.grantAll(c.grant === 'thien' ? (d) => d.thien : undefined) + (c.grant === 'admin' ? (c.gift.stage ? game.grantStage(c.gift.stage) : 0) + game.grantFull(c.gift) + game.grantHopNhat(c.gift) + game.grantGod(c.gift) // 'admin': gộp tất cả (thử game)
       : c.grant === 'full' ? game.grantFull(c.gift) : c.grant === 'god' ? game.grantGod(c.gift) : c.grant === 'hopnhat' ? game.grantHopNhat(c.gift) : 0); // 'full': nguyên liệu, đan, phôi, tiền · 'god': đồ 10 dòng Đen + thú Âm Hư
     return `${c.message}: ${n} vật phẩm vào Kho`;
   }
