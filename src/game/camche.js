@@ -10,7 +10,7 @@ export function createCamChe(c) {
   let T = 0;
 
   function cast(s) {
-    const md = dv.mods(), he = md.he, d = def.he[he] || def.he.Kim, n = dv.counts()[he] || 0;
+    const md = dv.mods(), he = md.he, d = def.he[he] || def.he[dv.heOf(he)?.twin] || def.he.Kim, n = dv.counts()[he] || 0;
     const m = c.target(s.range_px || 200), at = m ? { x: m.x, y: m.y } : { x: me.x, y: me.y };
     if (list.length >= def.max_active) list.shift(); // đủ 3 trận: trận cũ nhất tan
     list.push({ ...d, he, x: at.x, y: at.y, left: d.s, tick: 0, mul: d.mul * (1 + def.set_bonus * n), color: dv.heOf(he).color, born: T });

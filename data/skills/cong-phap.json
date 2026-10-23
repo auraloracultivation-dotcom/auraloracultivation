@@ -1,7 +1,7 @@
 {
  "_status": "design",
  "_nguon": "Auralora Lab v3 (21/10/2026)",
- "_ghi_chu": "THIẾT KẾ từ Lab — CHƯA triển khai trong game, CHƯA kiểm thử cân bằng. Số liệu là baseline để thử nghiệm.",
+ "_ghi_chu": "Gốc từ Lab, ĐANG DÙNG trong game (cập nhật 23/10/2026). Cân bằng sinh bằng tools/ (gen_balance.py, shop_balance.py) — sửa hằng số trong tool rồi chạy lại.",
  "_ghi_chu_rieng": "Luyện/nâng công pháp CHỈ tốn nguyên liệu, KHÔNG tốn Linh thạch; cấp 1→5. 3 công pháp cuối Lab chưa ghi nguyên liệu. Lab v3.1: Luyện Khí Quyết dùng Huyền Thiết VỤN. skill.phaptuong.basic.001 (phap-tuong.json) là kỹ năng hoá hình đang chạy thử. Lab v3.1: Luyện Khí Quyết dùng Huyền Thiết VỤN. skill.phaptuong.basic.001 (phap-tuong.json) là kỹ năng hoá hình đang chạy thử.",
  "skills": [
   {

@@ -1,7 +1,7 @@
 {
  "_status": "design",
  "_nguon": "Auralora Lab v3 (21/10/2026)",
- "_ghi_chu": "THIẾT KẾ từ Lab — CHƯA triển khai trong game, CHƯA kiểm thử cân bằng. Số liệu là baseline để thử nghiệm.",
+ "_ghi_chu": "Gốc từ Lab, ĐANG DÙNG trong game (cập nhật 23/10/2026). Cân bằng sinh bằng tools/ (gen_balance.py, shop_balance.py) — sửa hằng số trong tool rồi chạy lại.",
  "_ghi_chu_rieng": "Luyện đan CHỈ tốn nguyên liệu, KHÔNG tốn Linh thạch. Thất bại mất 30–50% nguyên liệu. Hiệu ứng số của đan hồi/cường hoá Lab CHƯA ghi — để trống, không tự điền.",
  "fail_material_loss": [
   0.3,

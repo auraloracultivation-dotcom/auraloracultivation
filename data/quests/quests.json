@@ -473,7 +473,7 @@
    "realm": "tc",
    "time": 15,
    "level": 10,
-   "desc": "Luyện một phôi trang bị bằng thảo dược và khoáng phù hợp.",
+   "desc": "Luyện một phôi trang bị, gom thêm Xích Thiết ở vùng Cát vàng (Trúc Cơ).",
    "goals": [
     {
      "type": "craft",
@@ -482,9 +482,9 @@
     },
     {
      "type": "collect",
-     "target": "item.khoang.huyen-thiet.001",
+     "target": "item.khoang.xich-thiet.001",
      "count": 5,
-     "lab_target": "ore.huyen-thiet"
+     "lab_target": "ore.xich-thiet"
     }
    ],
    "rewards": {
@@ -802,7 +802,7 @@
    "realm": "kd",
    "time": 15,
    "level": 1,
-   "desc": "Huyền Thiết và U Ngọc nằm sâu trong vùng Sỏi đá xám (Kết Đan) — khoáng của phôi Cánh, đồ Vàng–Đỏ.",
+   "desc": "Huyền Thiết và U Ngọc nằm sâu trong vùng Sỏi đá xám (Kết Đan) — khoáng của phôi Linh thú, đồ Đỏ.",
    "goals": [
     {
      "type": "collect",
@@ -838,7 +838,7 @@
    "realm": "na",
    "time": 15,
    "level": 1,
-   "desc": "Hàn Thiết và Băng Ngọc chỉ có ở vùng Băng tuyết (Nguyên Anh) — phôi Linh thú, trang sức Vàng. Gió tuyết làm chậm bước, quái tinh anh đi theo đàn.",
+   "desc": "Hàn Thiết và Băng Ngọc chỉ có ở vùng Băng tuyết (Nguyên Anh) — phôi Cánh, trang sức Vàng. Gió tuyết làm chậm bước, quái tinh anh đi theo đàn.",
    "goals": [
     {
      "type": "collect",
