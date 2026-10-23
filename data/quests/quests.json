@@ -62,8 +62,8 @@
     }
    ],
    "rewards": {
-    "exp": 60,
-    "spiritStone": 20,
+    "exp": 20,
+    "spiritStone": 28,
     "unlock": [
      "quest_board",
      "safe_area_guide"
@@ -102,7 +102,7 @@
     }
    ],
    "rewards": {
-    "exp": 100,
+    "exp": 20,
     "items": [
      {
       "id": "item.thao.bat-nha.001",
@@ -113,7 +113,7 @@
       "count": 1
      }
     ],
-    "spiritStone": 25
+    "spiritStone": 28
    },
    "next": [
     "q.craft.001"
@@ -137,8 +137,8 @@
     }
    ],
    "rewards": {
-    "exp": 120,
-    "spiritStone": 20,
+    "exp": 20,
+    "spiritStone": 28,
     "unlock": [
      "alchemy_tutorial"
     ]
@@ -170,8 +170,8 @@
     }
    ],
    "rewards": {
-    "exp": 180,
-    "spiritStone": 45,
+    "exp": 31,
+    "spiritStone": 38,
     "items": [
      {
       "id": "item.dan.tieu-hoi-huyet.001",
@@ -208,8 +208,8 @@
     }
    ],
    "rewards": {
-    "exp": 350,
-    "spiritStone": 100,
+    "exp": 31,
+    "spiritStone": 38,
     "choiceReward": [
      "weapon_blueprint",
      "alchemy_bundle"
@@ -245,7 +245,7 @@
     }
    ],
    "rewards": {
-    "exp": 220,
+    "exp": 52,
     "unlock": [
      "hidden_legacy_branch"
     ],
@@ -277,8 +277,8 @@
     }
    ],
    "rewards": {
-    "exp": 150,
-    "spiritStone": 40,
+    "exp": 20,
+    "spiritStone": 28,
     "unlock": [
      "daily_system",
      "streak_7_light"
@@ -488,8 +488,8 @@
     }
    ],
    "rewards": {
-    "exp": 450,
-    "spiritStone": 120,
+    "exp": 3100,
+    "spiritStone": 360,
     "unlock": [
      "awakening_guide"
     ]
@@ -520,8 +520,8 @@
     }
    ],
    "rewards": {
-    "exp": 600,
-    "spiritStone": 180,
+    "exp": 3100,
+    "spiritStone": 360,
     "items": [
      {
       "id": "item.thao.xich-qua.001",
@@ -555,8 +555,8 @@
     }
    ],
    "rewards": {
-    "exp": 1000,
-    "spiritStone": 300,
+    "exp": 510000,
+    "spiritStone": 2500,
     "choiceReward": [
      "cold_resist_gear",
      "technique_fragment"
@@ -582,7 +582,7 @@
    ],
    "rewards": {
     "title": "Người hiểu thảo mộc",
-    "exp": 500,
+    "exp": 260,
     "unlock": [
      "herb_codex"
     ],
@@ -625,7 +625,7 @@
    ],
    "rewards": {
     "title": "Thợ săn tinh anh",
-    "exp": 1200,
+    "exp": 10400,
     "cosmetic": "boss_hunter_aura",
     "milestones": [
      {
@@ -668,7 +668,7 @@
    ],
    "rewards": {
     "title": "Người kế thừa",
-    "exp": 2000,
+    "exp": 1700000,
     "unlock": [
      "legacy_build_option"
     ],
@@ -713,8 +713,8 @@
     }
    ],
    "rewards": {
-    "exp": 500,
-    "spiritStone": 60,
+    "exp": 31,
+    "spiritStone": 38,
     "items": [
      {
       "id": "item.khoang.huyen-thiet-vun.001",
@@ -744,8 +744,8 @@
     }
    ],
    "rewards": {
-    "exp": 800,
-    "spiritStone": 120,
+    "exp": 52,
+    "spiritStone": 38,
     "items": [
      {
       "id": "item.khoang.tinh-sa.001",
@@ -780,8 +780,8 @@
     }
    ],
    "rewards": {
-    "exp": 15000,
-    "spiritStone": 400,
+    "exp": 6200,
+    "spiritStone": 720,
     "items": [
      {
       "id": "item.khoang.xich-thiet.001",
@@ -816,8 +816,8 @@
     }
    ],
    "rewards": {
-    "exp": 180000,
-    "spiritStone": 1500,
+    "exp": 80000,
+    "spiritStone": 1920,
     "items": [
      {
       "id": "item.khoang.u-ngoc.001",
@@ -852,8 +852,8 @@
     }
    ],
    "rewards": {
-    "exp": 2200000,
-    "spiritStone": 6000,
+    "exp": 1020000,
+    "spiritStone": 5000,
     "items": [
      {
       "id": "item.khoang.bang-ngoc.001",
@@ -888,8 +888,8 @@
     }
    ],
    "rewards": {
-    "exp": 20000000,
-    "spiritStone": 25000,
+    "exp": 9000000,
+    "spiritStone": 11600,
     "items": [
      {
       "id": "item.khoang.hac-thiet.001",
@@ -924,8 +924,8 @@
     }
    ],
    "rewards": {
-    "exp": 60000000,
-    "spiritStone": 80000,
+    "exp": 28000000,
+    "spiritStone": 13800,
     "items": [
      {
       "id": "item.khoang.hu-ngoc.001",
@@ -1494,5 +1494,6 @@
    }
   },
   "_ghi_chu_table": "Chủ dự án 23/10: thưởng là SỐ CỐ ĐỊNH theo tầng, không tính %. Mỗi tầng: daily/weekly/chapter = [tu vi, Linh thạch, Vàng] cho MỖI việc. Ngày/Tuần theo tầng người chơi đang ở lúc sinh; Tiến độ dùng cột chapter của tầng gắn với bậc. Bảng đầy đủ trong doc 'Cốt truyện & thiết kế lại nhiệm vụ'."
- }
+ },
+ "_ghi_chu_huong_dan": "Chủ dự án 23/10 21h30: giảm tu vi nhiệm vụ hướng dẫn / Tầm Bảo / Lâu dài — thưởng = 1 chương (15% vạch tầng làm nhiệm vụ đó, routine.table[...].chapter) cho nhiệm vụ thường, 2 chương cho Tầm Bảo và nhiệm vụ Lâu dài. Trước đây cả chuỗi Luyện Khí cho ~3.000 tu vi (nhảy thẳng LK1 → LK6), Tầm Bảo VI + VII cho 80 triệu."
 }
