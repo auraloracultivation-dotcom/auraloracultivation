@@ -40,6 +40,7 @@ import { createBiCanh } from './bicanh.js';
 import { createConsumables } from './consumables.js';
 import { createGuide } from './guide.js';
 import { createSkillLearn } from './skill-learn.js';
+import { simulateDuel } from './spar.js';
 import { placeholderIcon, showRevive } from '../ui/index.js';
 import { artInfo, iconUrl, fxIconUrl } from '../entity/index.js';
 
@@ -386,6 +387,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     openShop() { if (!map.safeAt(me.x, me.y)) return toast(`${shop.name} ở ${map.town?.name || 'trong thành'} — hãy vào thành`, 1800); views.openShop(); },
     onProp: (id) => { const f = { 'kho-hang': () => views.openShop(), 'lo-luyen-dan': () => views.openCultivate('dan'), 'te-dan': () => views.openCultivate('realm') }[id]; f?.(); return !!f; }, // chạm công trình
     realmName: () => progress.stageDef.name, gp, grantFull: (gift) => grantFull({ progress, wallet, gift, mats, pills, recipes, shop, blanks }), grantGod: (gift) => { const n = grantGod({ progress, bag, awaken, gp, mdef: monDef, gift }); recompute(); return n; }, // mã thử 'full' // gp: thông số chơi thử (bảng xếp hạng dùng trọng số lực chiến)
+    spar: (op) => simulateDuel(ps, op, stats, gp.spar), // luận bàn với bóng chỉ số người trên bảng xếp hạng
     rankInfo: () => ({ stageIndex: progress.state.stage, stageName: progress.stageDef.name, exp: progress.state.exp, stats: ps, voidKills: progress.state.voidKillCount || 0 }),
     markers: () => voids.markers(), // Âm Hư đang xuất hiện (chấm tím trên bản đồ)
   };

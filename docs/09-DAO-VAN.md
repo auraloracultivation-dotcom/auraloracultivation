@@ -124,3 +124,8 @@ Chủ dự án muốn chất My Heroes: chọn đúng bộ + hệ + thẻ thì c
 - Mỗi đại cảnh giới **tặng 1 kỹ năng** (`skill_drop.realm_gift`): Luyện Khí Hỏa Cầu, Trúc Cơ Kiếm Khí, Kết Đan Thiên Hà, Nguyên Anh Nguyên Anh, Hóa Thần Hắc Động.
 - Kỹ năng hệ thống (`skill_drop.free`) vẫn mở theo cảnh giới. Người chơi cũ giữ kỹ năng đã mở trước bản này (không phạt).
 - Code: `src/game/skill-learn.js`; lưu `progress.state.learned` (máy khách, Mốc 4 lên máy chủ).
+
+## Luận bàn trên Bảng xếp hạng (23/10/2026)
+- Bảng xếp hạng → chạm người chơi → **⚔ Luận bàn (đấu thử)**: đấu với "bóng" chỉ số họ gửi lên, tính ngay trên máy mình bằng đúng công thức đòn đánh (`stats.hit`).
+- Không thưởng, không mất gì, không ghi máy chủ, người kia không bị ảnh hưởng. Số liệu `gameplay.json → spar`. Code: `src/game/spar.js`, `src/ui/spar.js`.
+- Sau này (Mốc 4, khi chỉ số do máy chủ giữ) mới có đấu xếp hạng thật có thưởng.

@@ -611,3 +611,34 @@ img { image-rendering: pixelated; }
 .gd-tier b { color: var(--c); min-width: 34px; } .gd-tier.lit { opacity: 1; background: color-mix(in srgb, var(--c) 16%, transparent); }
 .gd-count { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; font-size: 12px; align-items: baseline; }
 .gd-count b { color: var(--gold); font-size: 16px; text-align: right; }
+/* Luận bàn (src/ui/spar.js) */
+.spar { width: min(420px, 94vw); background: #150f26; border: 1px solid #4a3866; border-radius: 14px; padding: 12px; color: var(--text); }
+.spar-head { display: flex; justify-content: space-between; align-items: center; color: var(--gold); margin-bottom: 8px; }
+.spar-field { display: grid; grid-template-columns: 1fr auto 1fr; align-items: end; gap: 6px; }
+.spar-vs { color: #ff6a5a; font-weight: 900; font-size: 20px; align-self: center; }
+.spar-side { display: flex; flex-direction: column; align-items: center; gap: 3px; text-align: center; transition: opacity .4s, filter .4s; min-width: 0; }
+.spar-side b { color: var(--gold); font-size: 13px; overflow: hidden; text-overflow: ellipsis; max-width: 100%; white-space: nowrap; }
+.spar-side small { color: var(--muted); font-size: 10px; }
+.spar-bar { width: 100%; height: 8px; border-radius: 4px; background: #2a1f3d; overflow: hidden; }
+.spar-bar i { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, #e2463c, #ff9a5a); transition: width .15s; }
+.spar-fig { position: relative; width: 110px; height: 120px; display: flex; align-items: flex-end; justify-content: center; }
+.spar-fig img { width: 110px; height: 110px; object-fit: contain; image-rendering: pixelated; }
+.s1 .spar-fig img { transform: scaleX(-1); }
+.spar-none { font-size: 40px; color: var(--muted); }
+.spar-side.lunge .spar-fig { animation: spar-lunge .22s; }
+.s1.lunge .spar-fig { animation-name: spar-lunge-l; }
+.spar-side.hurt .spar-fig img { animation: spar-hurt .25s; }
+.spar-side.lost { opacity: .45; filter: grayscale(1); }
+@keyframes spar-lunge { 50% { transform: translateX(14px); } }
+@keyframes spar-lunge-l { 50% { transform: translateX(-14px); } }
+@keyframes spar-hurt { 30% { filter: brightness(3) sepia(1) hue-rotate(-40deg); transform: translateX(-3px); } }
+.spar-pop { position: absolute; top: 45%; transform: translateX(-50%); font-weight: 900; font-size: 13px; color: #fff; text-shadow: 0 1px 2px #000, 0 0 3px #000; pointer-events: none; animation: spar-pop .9s ease-out forwards; white-space: nowrap; }
+.spar-pop.crit { color: #ff5a3c; font-size: 17px; }
+.spar-pop.skill { color: #ffd76a; }
+.spar-pop.heal { color: #6aff8a; }
+.spar-pop.miss { color: #9ab; }
+@keyframes spar-pop { to { transform: translate(-50%, -46px); opacity: 0; } }
+.spar-msg { text-align: center; margin: 10px 0 6px; font-size: 13px; min-height: 18px; }
+.spar-msg .win { color: #ffd76a; } .spar-msg .lose { color: #ff6a5a; }
+.spar-acts { display: flex; gap: 8px; } .spar-acts .bag-act { flex: 1; }
+.sheet .rank-spar { margin-top: 10px; width: 100%; }
