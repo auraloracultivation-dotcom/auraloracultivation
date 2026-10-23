@@ -1195,5 +1195,16 @@
    "fx": "k.hon-tinh"
   },
   "_ghi_chu_luyen_hon": "Luyện hồn (23/10): thú cưng nuốt hồn một con CÙNG LOÀI đang nghỉ trong Kho → +1 sao (tối đa max_star), công và khí huyết ×(1 + per_star × sao)."
+ },
+ "daily_linh_khi": {
+  "_ghi_chu": "Chủ dự án 23/10 (mọi người max Hóa Thần trong 3 giờ): mỗi ngày (giờ VN) hạ quái chỉ nhận trọn tu vi tới bars × vạch tu vi tầng hiện tại (theo đại cảnh giới); quá mức chỉ nhận over_mul. Đan tu vi (Tu Vi Đan, Viên Mãn Đan) không bị giới hạn. Mục tiêu ≈ 3–4 tuần chơi đều lên Hóa Thần Hậu kỳ.",
+  "bars": {
+   "lk": 3,
+   "tc": 1.5,
+   "kd": 1,
+   "na": 0.6,
+   "ht": 0.35
+  },
+  "over_mul": 0.1
  }
 }

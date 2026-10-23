@@ -29,7 +29,8 @@ export function createViews(o) {
   const tierName = (id) => awaken.tiers.find((t) => t.id === id)?.name || id;
   // Thọ nguyên trong bảng Cảnh giới
   const lifeLine = () => { const L = o.life, ate = st().life?.pillDay === L.today();
-    return `<p>Thọ nguyên: <b>${L.age()}/${L.max()} năm</b> (còn ${L.left()} năm · mỗi ngày +1 tuổi theo giờ Việt Nam). Trường Sinh Đan hôm nay: ${ate ? 'đã dùng' : '<b>chưa dùng</b>'}.</p>`; };
+    const left = o.gapR.dailyLeft(progress.stageDef.exp_need, progress.stageDef.id);
+    return `<p>Linh khí hôm nay: còn <b>${Math.round(left * 100)}% vạch</b> tu vi nhận trọn từ quái (hết thì chỉ ${Math.round(o.gapR.overMul * 100)}%, qua 0h giờ VN hồi lại).</p><p>Thọ nguyên: <b>${L.age()}/${L.max()} năm</b> (còn ${L.left()} năm · mỗi ngày +1 tuổi theo giờ Việt Nam). Trường Sinh Đan hôm nay: ${ate ? 'đã dùng' : '<b>chưa dùng</b>'}.</p>`; };
   const msg = (r) => { if (!r) return; toast(r.msg, 1800); if (r.event) quests.emit(...r.event); o.recompute(); };
 
   // ---------- Nhiệm vụ ----------
@@ -119,7 +120,7 @@ export function createViews(o) {
     }, 'công thức phôi');
   }
   // Dòng thức tỉnh, mỗi dòng tô màu phẩm riêng
-  const linesText = (a) => `<span class="ic-lines">${craft.norm(a).lines.map((l, n) => `<i class="ln tier-${l.t}">${n + 1}. ${STAT[l.k]} +${l.v}</i>`).join('')}</span>`;
+  const linesText = (a) => `<span class="ic-lines">${craft.norm(a).lines.map((l, n) => `<i class="ln tier-${l.t}">${n + 1}. ${STAT[l.k]} +${l.v}${l.p ? '%' : ''}</i>`).join('')}</span>`;
   const awakenBtn = (act, arg, a) => { const c = craft.awakenCost(a); return c === null ? btn(act, arg, 'Đã đạt giới hạn', false) : btn(act, arg, `Thức tỉnh dòng ${a.lines.length + 1} (${c} LT)`, st().stone >= c); };
   // Đồ trong Kho (6 hệ, có hình): thức tỉnh để có chỉ số, mặc/tháo như trong Kho
   function bagGearRows() {

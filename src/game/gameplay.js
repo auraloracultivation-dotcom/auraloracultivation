@@ -61,13 +61,14 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const life = createLifespan({ def: lifeDef, progress, stages: gp.player.stages, serverNow, bornAt }); // thọ nguyên theo ngày giờ Việt Nam
   const { ensureArt, forgedLook, artFile } = createForgedArt(artIdx, progress, dvDef.he_order); // hình ngẫu nhiên cho đồ luyện từ phôi
   const stats = createStats(statsDef, gp);
-  const mobs = createMonsters({ gp, mdef: monDef, map }), gapR = createRealmGap({ gp, mdef: monDef }); // áp chế cảnh giới
+  const mobs = createMonsters({ gp, mdef: monDef, map }), gapR = createRealmGap({ gp, mdef: monDef, progress, today: () => life.today(), toast: (...a) => toast(...a) }); // áp chế cảnh giới
   const voids = createVoid({ mdef: monDef, mobs, map, progress, toast, me, serverNow });
   const quests = createQuests(questDef, progress, () => MAJOR_OF(progress.stageDef.id));
   // Đan phương / công thức / bí kíp: món id được dạy bởi vật phẩm nào; có trong kho mới luyện được
   const teacher = new Map(recipes.items.filter((r) => r.teaches).map((r) => [r.teaches, r.id]));
   const owns = (id) => !teacher.has(id) || progress.count(teacher.get(id)) > 0;
   const craft = createCraft({ progress, pills, blanks, awaken, skills: cp, gp, owns });
+  craft.migrateLines(); // dòng cũ (số phẳng) → % chỉ số gốc
   const gather = createGather({ gp, mats, map });
   const info = createItemInfo({ monsters: monDef.monsters, shop, pills, blanks, realms, gp, cpText: (id) => cpFx.text(id) }); // tác dụng + nơi có của vật phẩm
   const npcs = createNpcs({ def: await loadJSON('data/npcs.json'), map, mobs, stats, stages: gp.player.stages });
@@ -160,7 +161,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     if (targetUid === m.uid) targetUid = null;
     play('khoi', m.x, m.y, Math.max(16, (m.def.art?.h || 20) * 0.7), { ground: true, delay: 0.4 });
     const rank = m.def.rank, k = gp.monster.exp_mul[rank];
-    const exp = gapR.capExp(Math.round((m.maxHp / 10) * k * cpFx.expMul()), m, progress.stageDef.exp_need), stone = m.stone || 1; // Linh thạch theo tầng quái (data/gameplay.json → monster.stone_by_stage)
+    const exp = gapR.daily(gapR.capExp(Math.round((m.maxHp / 10) * k * cpFx.expMul()), m, progress.stageDef.exp_need), progress.stageDef.exp_need, progress.stageDef.id), stone = m.stone || 1; // Linh thạch theo tầng quái (data/gameplay.json → monster.stone_by_stage)
     const gold = wallet.goldPerKill(stone);
     addExp(exp); progress.addStone(stone); wallet.add('vang', gold);
     const got = rollLoot(m);
@@ -338,7 +339,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     return true;
   }
 
-  const views = createViews({ biCanh, info, shop, owns, teacher, bag, onLook, monsters: monDef.monsters, progress, quests, craft, itemDefs, mats, pills, blanks, awaken, cp, realms, gp, toast,
+  const views = createViews({ biCanh, gapR, info, shop, owns, teacher, bag, onLook, monsters: monDef.monsters, progress, quests, craft, itemDefs, mats, pills, blanks, awaken, cp, realms, gp, toast,
     wallet, life, getStats: () => ps, getHp: () => hp, onReward: (r) => { if (r.exp) addExp(r.exp); if (r.spiritStone) progress.addStone(r.spiritStone);
       for (const i of r.items || []) progress.add(i.id, i.count); }, recompute, usePill, emit: quests.emit });
 

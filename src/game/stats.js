@@ -8,7 +8,9 @@ export function createStats(statsDef, gp) {
   // Chỉ số người chơi = nền theo tầng cảnh giới + dòng trang bị + bùa/đan đang có hiệu lực
   function player(stageDef, gearList, buffs = {}) {
     const s = { ...gp.player.base_other, hp: stageDef.hp, linh: stageDef.linh, def: stageDef.def, mp: stageDef.mp };
-    for (const g of gearList) for (const l of g.lines) s[l.k] = (s[l.k] || 0) + l.v;
+    const base = { hp: s.hp, linh: s.linh, def: s.def };
+    // hp / def / linh: dòng mới (p) là % chỉ số gốc theo cảnh giới — trang bị quyết định sức mạnh; dòng khác cộng thẳng
+    for (const g of gearList) for (const l of g.lines) s[l.k] = (s[l.k] || 0) + (l.p && base[l.k] !== undefined ? (base[l.k] * l.v) / 100 : l.v);
     if (buffs.linh) s.linh *= buffs.linh;
     if (buffs.def) s.def *= buffs.def;
     if (buffs.ne) s.ne *= buffs.ne;

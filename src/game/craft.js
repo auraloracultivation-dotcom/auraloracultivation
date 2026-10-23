@@ -99,7 +99,7 @@ export function createCraft({ progress, pills, blanks, awaken, skills, gp, owns 
     const k = A.line_keys[Math.floor(Math.random() * A.line_keys.length)];
     const [lo, hi] = awaken.line_ranges[k][ti];
     const v = rnd(lo, hi);
-    g.lines.push({ k, v: ['crit', 'hut', 'phan'].includes(k) ? Math.round(v * 10) / 10 : Math.round(v), t });
+    g.lines.push({ k, v: Math.round(v * 10) / 10, t, ...(['hp', 'def', 'linh'].includes(k) ? { p: 1 } : {}) }); // p: dòng % chỉ số gốc
     g.tier = bestTier(g);
     progress.changed();
     const full = g.lines.length >= g.cap;
@@ -130,5 +130,16 @@ export function createCraft({ progress, pills, blanks, awaken, skills, gp, owns 
     return { ok: true, msg: `${s.name} lên cấp ${lv + 1}` };
   }
 
-  return { awakenObj: awakenTarget, norm, dismantleRefund, brewPill, forgeBlank, awakenGear, awakenItem, dismantle, trainSkill, awakenCost, gearQ, pickInputs, stageOk };
+  // Đổi dòng cũ (số phẳng hp / def / linh) sang % theo cùng vị trí trong khoảng phẩm (awaken.json → line_ranges_v1) — chạy 1 lần lúc tải
+  function migrateLines() {
+    const st = progress.state, old = awaken.line_ranges_v1 || {}, ti = (t) => Math.max(0, awaken.tiers.findIndex((x) => x.id === t));
+    const fix = (a) => { for (const l of a?.lines || []) if (!l.p && old[l.k]) {
+      const i = ti(l.t), [lo, hi] = old[l.k][i], [nl, nh] = awaken.line_ranges[l.k][i], f = Math.max(0, Math.min(1, (l.v - lo) / (hi - lo || 1)));
+      l.v = Math.round((nl + (nh - nl) * f) * 10) / 10; l.p = 1;
+    } };
+    for (const g of st.gear || []) fix(g);
+    for (const a of Object.values(st.itemAw || {})) fix(a);
+    for (const t of st.treasures || []) fix(t.aw);
+  }
+  return { migrateLines, awakenObj: awakenTarget, norm, dismantleRefund, brewPill, forgeBlank, awakenGear, awakenItem, dismantle, trainSkill, awakenCost, gearQ, pickInputs, stageOk };
 }

@@ -106,3 +106,15 @@ Chủ dự án muốn chất My Heroes: chọn đúng bộ + hệ + thẻ thì c
   - Phá Không Thoa: thoa xuyên qua mọi quái, nảy 8 lần.
 - **Bán ở Vạn Bảo Lâu**: Phù Chỉ Trống, Linh Dịch, Huyết Sát Lệnh, Hồn Tinh (Linh thạch); Ngũ Hành Linh Thạch (Tiên ngọc).
 - **Bí Cảnh thưởng thêm**: mỗi 3 đợt 1 món (Linh Dịch / Hồn Tinh / Túi Vàng). Qua hết được Rương Linh Thạch + Phù Chỉ Trống, 10% có Rương Tiên Ngọc.
+
+## Cân bằng 23/10 (chủ dự án: max Hóa Thần trong 3 giờ, trang bị gần như vô dụng)
+- **Dòng trang bị**: hp / def / linh giờ là **% chỉ số gốc theo cảnh giới**.
+  - Dòng Đen cho 25–40% mỗi dòng; dòng Lục chỉ 1–2%.
+  - 8 món × 10 dòng Đen làm tấn công tăng khoảng ×5–6. Đồ thường chỉ +30–60%.
+  - Dòng cũ (số phẳng) tự đổi sang % theo đúng vị trí trong khoảng phẩm (`craft.migrateLines`, bảng cũ ở `awaken.json → line_ranges_v1`).
+  - Tỷ lệ ra Đen giữ nguyên, 0,7–1,7% mỗi dòng, nên 10 dòng Đen gần như 0%.
+- **Linh khí mỗi ngày** (`gameplay.json → daily_linh_khi`, `realm-gap.js → daily`):
+  - Mỗi ngày (giờ Việt Nam) hạ quái chỉ nhận trọn tu vi tới một phần vạch tầng hiện tại: LK 3 vạch, TC 1,5, KĐ 1, NA 0,6, HT 0,35. Vượt mức thì chỉ nhận 10%.
+  - Tu Vi Đan và Viên Mãn Đan không bị giới hạn.
+  - Tối thiểu khoảng 22 ngày đánh quái mới lên Hóa Thần Hậu kỳ.
+- **Đạn thêm của Đạo Vận** (bắn quạt) mạnh 40% viên chính (`dao-van.json → limits.extra_mul`).

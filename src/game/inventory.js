@@ -27,7 +27,7 @@ export function createInventory({ recipes, info, progress, bag, craft, itemDefs,
     return null;
   }
   const needText = (inputs) => inputs.map((i) => `${nm(i.id)} ${progress.count(i.id)}/${i.count}`).join(' · ');
-  const lines = (a) => (craft.norm(a)?.lines || []).map((l) => ({ text: `${STAT[l.k] || l.k} +${l.v}`, tier: l.t }));
+  const lines = (a) => (craft.norm(a)?.lines || []).map((l) => ({ text: `${STAT[l.k] || l.k} +${l.v}${l.p ? '%' : ''}`, tier: l.t }));
 
   // Thao tác chung cho một món trang bị. a = dữ liệu thức tỉnh (tier, lines, spent)
   function gearActions(a, equipped) {
