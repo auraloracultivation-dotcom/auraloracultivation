@@ -153,8 +153,9 @@ export function showWorldMap({ zoneName, draw }) {
     };
     tick();
   });
+  const mine = document.querySelectorAll('.modal-map'); const myWrap = mine[mine.length - 1]; // bảng bản đồ của lần mở này
   const obs = new MutationObserver(() => {
-    if (!document.querySelector('.modal-map')) { cancelAnimationFrame(raf); obs.disconnect(); }
+    if (!myWrap?.isConnected) { cancelAnimationFrame(raf); obs.disconnect(); }
   });
   obs.observe(document.getElementById('ui'), { childList: true });
   return done;

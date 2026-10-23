@@ -45,7 +45,7 @@ export function createTestBag(userId, defs) {
       const before = st.items.length;
       for (const d of defs) if (pick(d) && !st.items.includes(d.id)) st.items.push(d.id);
       save();
-      return st.items.length - before || st.items.length;
+      return st.items.length - before; // số món MỚI (không có thì 0)
     },
     look() {
       const l = {};

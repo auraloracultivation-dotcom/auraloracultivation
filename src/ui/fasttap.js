@@ -5,7 +5,7 @@ const MOVE_TOL = 14;
 
 export function enableFastTap(root = document.getElementById('ui')) {
   const downs = new Map();
-  let suppressUntil = 0, suppressEl = null;
+  let suppressUntil = 0, suppressEl = null, upX = 0, upY = 0;
 
   root.addEventListener('pointerdown', (e) => {
     const el = e.target.closest('button, [data-tap]');
@@ -21,7 +21,7 @@ export function enableFastTap(root = document.getElementById('ui')) {
     const under = document.elementFromPoint(e.clientX, e.clientY);
     if (!under || !d.el.contains(under)) return;
     if (e.pointerType === 'mouse') return; // chuột: click thật luôn đến, không cần
-    suppressEl = d.el;
+    suppressEl = d.el; upX = e.clientX; upY = e.clientY;
     suppressUntil = performance.now() + 500;
     d.el.click();
   };
@@ -30,7 +30,8 @@ export function enableFastTap(root = document.getElementById('ui')) {
 
   root.addEventListener('click', (e) => {
     // nút cũ đã bị vẽ lại (bảng render lại sau cú bấm) → click thật rơi vào nút MỚI cùng chỗ: vẫn phải chặn, không thì bấm 2 lần
-    if (e.isTrusted && suppressEl && performance.now() < suppressUntil && (suppressEl.contains(e.target) || !suppressEl.isConnected)) {
+    if (e.isTrusted && suppressEl && performance.now() < suppressUntil && (suppressEl.contains(e.target) || !suppressEl.isConnected || Math.hypot(e.clientX - upX, e.clientY - upY) <= MOVE_TOL * 2)) {
+      // click thật cùng chỗ vừa nhấc tay: nút đó vừa mở bảng mới → click rơi vào bảng (đóng bảng Nhân Vật, đổi tab Chat…) — chặn luôn
       e.stopImmediatePropagation();
       e.preventDefault();
       suppressEl = null;

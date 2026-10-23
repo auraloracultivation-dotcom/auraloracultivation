@@ -105,8 +105,9 @@ async function boot() {
       },
       onMove: (p) => others.onMove(p),
       onChat: (p) => {
+        if (typeof p.text !== 'string') return; // chat chung (lobby) có cả người khu khác nên không đòi có trong Presence; cắt độ dài khi nhận
         others.onChat(p, performance.now(), config.net.chat_bubble_s);
-        hud?.addChatLine(others.list.get(p.id)?.name || (typeof p.name === 'string' ? p.name.slice(0, 16) : 'Đạo hữu'), p.text);
+        hud?.addChatLine(others.list.get(p.id)?.name || (typeof p.name === 'string' ? p.name.slice(0, 16) : 'Đạo hữu'), p.text.slice(0, config.net.chat_max_chars || 60));
       },
     },
   });
