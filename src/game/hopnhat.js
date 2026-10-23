@@ -1,5 +1,5 @@
 // THIÊN CƠ HỢP NHẤT (chủ dự án 23/10/2026): bắn liên thanh không nghỉ, hồi chiêu tối đa, linh lực hồi liên tục
-// CHỈ có khi đủ cùng lúc (theo một hệ): 8 món trang bị chỉ định của hệ (đồ có tên, phôi luyện không tính)
+// CHỈ có khi đủ cùng lúc (theo một hệ): 8 món trang bị cùng hệ (đồ rơi hay phôi luyện đã thức tỉnh đều tính — chủ dự án 23/10 22h50)
 // + 1 pháp bảo cùng hệ đang đeo + 1 Thần Phù chỉ định + 1 kỹ năng "sịn" + 1 kỹ năng "cùi" chỉ định trong ô kỹ năng.
 // Khi kích: chỉ PHÁP BẢO được buff — tự phóng liên tục, không tốn linh lực; kỹ năng khác không được buff gì.
 // Công thức từng hệ: data/build/dao-van.json → hop_nhat. THỬ NGHIỆM phía máy khách.
@@ -13,7 +13,7 @@ export function createHopNhat(c) {
   // Cách lấy từng thứ (chạm dấu ! ở Cẩm nang). Số rơi lấy thẳng từ dữ liệu (c.src) nên đổi tỷ lệ là chữ tự đổi theo.
   // Không ghi tỷ lệ rơi (chủ dự án 23/10 17h: ẩn mọi tỷ lệ để người chơi tự khám phá) — chỉ nói nguồn nào có thể rơi.
   const src = (d, k = ['boss', 'elite', 'void']) => k.filter((x) => d[x]).map((x) => ({ thuong: 'quái thường', elite: 'tinh anh', boss: 'thủ lĩnh', void: 'Âm Hư' })[x]).join(', ') || 'quái';
-  const howSet = (he) => { const d = c.src?.set || {}, th = def.he?.[he]?.twin; return `${th ? 'Đồ Thiên hệ' : 'Đồ ngũ hành hệ'} ${he} có thể rơi khi hạ ${th ? src(d, d.thien_from || ['void']) : src(d)} (mỗi lần ra 1 món còn thiếu). Mặc ở Kho → Trang bị; xem món còn thiếu ở mục "Trang bị cần mặc" bên dưới. Đồ luyện từ phôi không tính.`; };
+  const howSet = (he) => { const d = c.src?.set || {}, th = def.he?.[he]?.twin; return `${th ? 'Đồ Thiên hệ' : 'Đồ ngũ hành hệ'} ${he} có thể rơi khi hạ ${th ? src(d, d.thien_from || ['void']) : src(d)} (mỗi lần ra 1 món còn thiếu). Mặc ở Kho → Trang bị; xem món còn thiếu ở mục "Trang bị cần mặc" bên dưới. Phôi luyện đã thức tỉnh đúng hệ cũng tính.`; };
   const howPb = (he) => { const P = c.src?.pb, names = (P?.list || []).filter((t) => t.he === he).map((t) => t.name).join(', '), d = P?.drop || {};
     return `Pháp bảo hệ ${he}: ${names || '—'}. Có từ Phôi Pháp Bảo (mua ở Vạn Bảo Lâu, hoặc có thể rơi từ ${src(d)}, nhiệm vụ Tuần / Tiến độ) → Kho → Luyện hóa → Nhận chủ (ra ngẫu nhiên, cần đúng hệ). Đeo ở Kho → Pháp Bảo.`; };
   const howCard = (id) => { const d = c.src?.cards || {}; return `${c.cardName(id)} có thể rơi khi hạ ${src(d, ['thuong', 'elite', 'boss', 'void'])} (loại phù ngẫu nhiên). Gắn ở Kho → Thần Phù (ô phù mở theo cảnh giới).`; };
@@ -24,11 +24,11 @@ export function createHopNhat(c) {
   function check(he) {
     const r = def.he[he];
     if (!r) return [];
-    const nSet = SLOTS.filter((sl) => bag.equippedItem(sl)?.he === he).length; const nF = c.forged?.(he) || 0;
+    const nSet = SLOTS.filter((sl) => bag.equippedItem(sl)?.he === he || c.forged?.(he, sl)).length; // mỗi ô tính 1 lần
     const pb = c.treasure.current?.(), cardsOn = c.cards.equippedDefs().map((x) => x.id), sk = c.loadout.ids();
     const skill = (id) => ({ ok: sk.includes(id) && c.learned(id), text: `Trang bị kỹ năng: ${c.S[id]?.name}${c.learned(id) ? '' : ' (chưa lĩnh ngộ)'}`, how: howSkill(id) });
     return [
-      { ok: nSet === 8, text: `8 món đồ rơi hệ ${he} (đang mặc ${nSet}/8${nF ? ` · ${nF} món phôi luyện chỉ tính Đạo Vận` : ''})`, how: howSet(he) }, // phôi luyện tính bộ Đạo Vận nhưng KHÔNG tính Hợp Nhất
+      { ok: nSet === 8, text: `8 món trang bị hệ ${he} (đang mặc ${nSet}/8)`, how: howSet(he) },
       { ok: pb?.he === he || (!!r.twin && pb?.he === r.twin), text: `Pháp bảo hệ ${r.twin ? `${he} / ${r.twin}` : he} đang đeo${pb ? ` (đang: ${pb.name})` : ''}`, how: howPb(r.twin || he) }, // Thiên hệ: pháp bảo hệ ngũ hành song sinh
       { ok: cardsOn.includes(r.card), text: `Thần Phù: ${c.cardName(r.card)}`, how: howCard(r.card) },
       skill(r.skill_sin), skill(r.skill_cui),
