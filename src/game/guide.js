@@ -13,7 +13,7 @@ export function createGuide(c) {
   const HE = dvDef.he_order;
   const pic = (src, cls = 'gd-ico') => (src ? `<img class="${cls}" src="${src}" alt="">` : '<span class="gd-ico gd-none"></span>');
   const owned = new Set(bag.entries().map((e) => e.item?.id));
-  const skillIcon = (s) => s.icon_url || (s.icon && fxIconUrl(...s.icon)) || null;
+  const skillIcon = (s) => s.medal || s.icon_url || (s.icon && fxIconUrl(...s.icon)) || null;
   const stageOk = (id) => !id || progress.stageIndex(id) <= progress.state.stage;
   const skOk = (id, s) => c.learn.learned(id) && stageOk(s.unlock);
 
