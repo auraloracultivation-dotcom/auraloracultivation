@@ -18,7 +18,9 @@ export function createAutoPlay({ me, mobs, gather, map, cfg, reach, canFly = () 
   const skip = new Map(); // mục tiêu đang tạm bỏ → hết hạn lúc
   const rel = (o) => ({ dx: wrapDelta(o.x - me.x, map.width), dy: wrapDelta(o.y - me.y, map.height) });
   const far = (o, c) => Math.hypot(wrapDelta(o.x - c.x, map.width), wrapDelta(o.y - c.y, map.height));
-  const alive = (g) => g && (g.kind === 'mob' ? g.o.state !== 'dead' : g.kind === 'spot' ? false : gather.list.includes(g.o));
+  const alive = (g) => g && (g.kind === 'mob' ? g.o.state !== 'dead' : g.kind === 'spot' ? true : gather.list.includes(g.o)); // điểm về neo: giữ tới khi tới nơi
+  const same = (a, b) => a?.o === b?.o || (a?.kind === 'spot' && b?.kind === 'spot' && a.o.x === b.o.x && a.o.y === b.o.y);
+  let side = 1, sideT = 0; // kẹt mà không bay được: lách sang bên một lúc (như dẫn đường)
   const free = (o, now) => !(skip.get(o) > now);
   const area = () => zone() || anchor; // bí cảnh ưu tiên hơn neo
 
@@ -47,7 +49,7 @@ export function createAutoPlay({ me, mobs, gather, map, cfg, reach, canFly = () 
     const f = hpFrac(); if (f < (cfg.rest_below ?? 0)) resting = true; else if (f >= (cfg.rest_until ?? 1)) resting = false;
     if (resting && !(goal?.kind === 'mob' && alive(goal) && goal.o.state !== 'idle' && goal.o.state !== 'return')) { goal = null; return { x: 0, y: 0, fly, rest: true }; }
     const a = area(), out = goal?.kind === 'mob' && a && far(goal.o, a) > a.r + cfg.anchor_leash_px; // quái chạy ra khỏi vùng: bỏ, không đuổi theo
-    if (!alive(goal) || out || repick <= 0) { const g = pick(now); if (g?.o !== goal?.o) stuckT = 0; goal = g; repick = cfg.repick_s; }
+    if (!alive(goal) || out || repick <= 0) { const g = pick(now); if (!same(g, goal)) stuckT = 0; goal = g; repick = cfg.repick_s; }
     // đang bay vượt chướng ngại: bay ≥ 1 giây rồi hạ ngay khi dưới chân đứng được và (gần mục tiêu hoặc đã bay lâu)
     if (fly) { flyT += dt; if (flyT > 1 && map.canStand(me.x, me.y, 6) && (!goal || flyT > 6 || mobs.distTo(goal.o, me) < reach * 2)) fly = false; }
     if (!goal) return fly ? { x: 0, y: 0, fly } : null;
@@ -60,15 +62,18 @@ export function createAutoPlay({ me, mobs, gather, map, cfg, reach, canFly = () 
     if (stuckT > cfg.stuck_s) {
       stuckT = 0;
       if (cfg.fly_when_stuck && goal.kind !== 'node' && !me.flying && canFly()) { fly = true; flyT = 0; return { x: dx / d, y: dy / d, fly }; }
-      if (goal.kind !== 'spot') skip.set(goal.o, now + cfg.skip_s);
-      goal = null; return { x: 0, y: 0, fly };
+      if (goal.kind !== 'spot') { skip.set(goal.o, now + cfg.skip_s); goal = null; return { x: 0, y: 0, fly }; }
+      side = -side; sideT = 0.9; // về neo mà vướng (nhà, đá, nước): lách sang bên rồi đi tiếp, không đứng im mãi
     }
+    if (sideT > 0) { sideT -= dt; const a = side * 1.1, c = Math.cos(a), s = Math.sin(a); return { x: (dx * c - dy * s) / d, y: (dx * s + dy * c) / d, fly }; }
     return { x: dx / d, y: dy / d, fly };
   }
 
   return {
     step,
-    start(f = null) { focus = f; anchor = { x: me.x, y: me.y, r: cfg.anchor_radius_px }; goal = null; stuckT = 0; fly = false; skip.clear(); },
+    // at: neo cũ (hồi sinh ở thành thì đi lại chỗ farm cũ); không có thì neo tại chỗ đứng
+    start(f = null, at = null) { focus = f; anchor = { x: at?.x ?? me.x, y: at?.y ?? me.y, r: cfg.anchor_radius_px }; resting = false; goal = null; stuckT = 0; fly = false; skip.clear(); },
+    snapshot: () => (anchor ? { focus, at: { x: anchor.x, y: anchor.y } } : null),
     reset() { focus = null; anchor = null; goal = null; stuckT = 0; fly = false; },
     moved() { if (anchor) { anchor.x = me.x; anchor.y = me.y; goal = null; } }, // người chơi tự kéo cần: neo đi theo
   };
