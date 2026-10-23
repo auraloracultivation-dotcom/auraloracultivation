@@ -1,0 +1,136 @@
+/* HUD v3 (chủ dự án 23/10/2026) — mảnh ảnh assets/ui/frames|icons/hud-*.png, bố cục ở src/ui/hud.js.
+   Ưu tiên màn dọc 390×844; màn ngang dời khung Nhiệm vụ sang trái. */
+:root { --h3-L: min(250px, 60vw); --h3-R: 104px; --h3-top: max(4px, env(safe-area-inset-top)); }
+.h3-left, .h3-right { position: absolute; top: var(--h3-top); z-index: 5; }
+#ui > .h3-left, #ui > .h3-right { pointer-events: none; } /* chỉ nút nhận chạm, khoảng trống giữa nút để chạm xuống bản đồ */
+.h3-left > *, .h3-right > * { pointer-events: auto; }
+.h3-left button, .h3-right button, .h3-side, .h3-chatbox button { padding: 0; border: 0; background: none; cursor: pointer; }
+.h3-left { left: max(6px, env(safe-area-inset-left)); width: var(--h3-L); container-type: inline-size; }
+
+/* ---- khung nhân vật ---- */
+.h3-me { position: relative; aspect-ratio: 615 / 241; background: url("../../assets/ui/frames/hud-khung-nv.png") center / 100% 100% no-repeat; }
+.h3-me > * { position: absolute; }
+.h3-avatar { border-radius: 50%; }
+.h3-avatar canvas { width: 100%; height: 100%; border-radius: 50%; image-rendering: pixelated; }
+.h3-name { display: flex; align-items: center; gap: 2.5cqw; padding-left: 2cqw; white-space: nowrap; overflow: hidden; pointer-events: none;
+  font-size: 4.3cqw; line-height: 1; text-shadow: 0 1px 2px #000; }
+.h3-name b { color: #fff1cf; font-weight: 700; overflow: hidden; text-overflow: ellipsis; max-width: 45%; }
+.h3-name i { font-style: normal; color: var(--gold); font-weight: 600; overflow: hidden; text-overflow: ellipsis; }
+.h3-name i::before { content: "· "; color: #8c8fb0; }
+.h3-bar { border-radius: 2cqw; overflow: hidden; pointer-events: none; }
+.h3-bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; border-radius: inherit; transition: width .3s; }
+.h3-bar.hp i { background: linear-gradient(#ff7179, #e2343e 55%, #b31f2b); }
+.h3-bar.mp i { background: linear-gradient(#7cc1ff, #3392fa 55%, #2266c9); }
+.h3-bar.xp i { background: linear-gradient(#ffd27a, #f8ad3a 55%, #d4831f); }
+.h3-bar b { position: absolute; right: 2.5cqw; top: 50%; transform: translateY(-50%); font-size: 3.8cqw; line-height: 1; font-weight: 700;
+  color: #fff; text-shadow: 0 1px 1px #000, 0 0 2px #000; white-space: nowrap; }
+.h3-lv { display: grid; place-items: center; font-size: 4cqw; font-weight: 800; color: #fff1cf; text-shadow: 0 1px 1px #000; pointer-events: none; }
+.h3-up { border-radius: 30%; animation: up-glow 2.4s ease-in-out infinite; }
+.h3-up:active { transform: scale(.94); }
+.h3-life { display: block; margin: -1px 0 2px 2cqw; font-size: 3.6cqw; color: #bfe9ff; text-shadow: 0 0 3px #000, 0 1px 2px #000; pointer-events: none !important; }
+
+/* ---- 3 ô tiền ---- */
+.h3-wallet { display: flex; gap: 1.2cqw; }
+.h3-coin { position: relative; flex: 1; aspect-ratio: 239 / 71; }
+.h3-coin > * { position: absolute; }
+.h3-coin-bg { inset: 0; width: 100%; height: 100%; }
+.h3-coin-ic { left: 10%; top: 31%; height: 40%; aspect-ratio: 1; object-fit: contain; image-rendering: pixelated; }
+.h3-coin b { left: 26%; right: 21%; top: 0; bottom: 0; display: flex; align-items: center; font-size: 4cqw; font-weight: 700; color: #fff1cf;
+  text-shadow: 0 1px 1px #000; white-space: nowrap; overflow: hidden; }
+.h3-plus { right: 3%; top: 10%; width: 18%; height: 80%; border-radius: 4px; }
+
+/* ---- băng Tự động ---- */
+.h3-auto { margin-top: 1.5cqw; aspect-ratio: 542 / 67; display: flex; align-items: center; justify-content: center; padding: 0 12%;
+  background: url("../../assets/ui/frames/hud-bang-tu-dong.png") center / 100% 100% no-repeat;
+  font-size: 3.6cqw; white-space: nowrap; overflow: hidden; color: #9ff0a8; text-shadow: 0 1px 1px #000; pointer-events: none !important; }
+.h3-auto[hidden] { display: none; }
+.h3-auto b { font-weight: 700; animation: h3-breathe 1.6s ease-in-out infinite; }
+@keyframes h3-breathe { 50% { opacity: .55; } }
+
+/* ---- trên phải ---- */
+.h3-right { right: max(6px, env(safe-area-inset-right)); width: var(--h3-R); display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+.h3-mini { position: relative; width: 100%; aspect-ratio: 230 / 241; background: url("../../assets/ui/frames/hud-ban-do-nho.png") center / 100% 100% no-repeat; }
+.h3-map { position: absolute; left: 14.3%; top: 9.5%; width: 77%; height: 73.4%; border-radius: 50%; overflow: hidden; line-height: 0; }
+.h3-map canvas { width: 100% !important; height: 100% !important; display: block; }
+.h3-zone { position: absolute; left: 6%; right: 6%; top: 86%; height: 10.5%; display: flex; align-items: center; justify-content: center; gap: 2px;
+  font-size: 7.5px; color: #f2d79b; white-space: nowrap; overflow: hidden; text-shadow: 0 1px 1px #000; pointer-events: none; }
+.h3-zone b { color: #fff1cf; overflow: hidden; text-overflow: ellipsis; }
+.h3-zone em { font-style: normal; color: #b9bdd8; }
+.h3-menu { width: 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+.h3-menu button { aspect-ratio: 87 / 80; }
+.h3-menu img, .h3-round img { width: 100%; height: 100%; display: block; object-fit: contain; }
+.h3-round { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px 4px; }
+.h3-round button { position: relative; aspect-ratio: 123 / 133; }
+.h3-round i { position: absolute; left: 18%; top: 19%; width: 62%; height: 52%; display: grid; place-items: center;
+  font-style: normal; font-size: 22px; line-height: 1; color: var(--c, #f2c77f); text-shadow: 0 0 6px var(--c, #f2c77f), 0 1px 2px #000; pointer-events: none; }
+.h3-round span { position: absolute; left: 14%; right: 14%; top: 72%; height: 22%; display: grid; place-items: center;
+  font-size: 7.5px; font-weight: 700; color: #fff1cf; white-space: nowrap; text-shadow: 0 1px 1px #000; pointer-events: none; }
+.h3-round [data-r="dv"] span { color: var(--c, #fff1cf); }
+
+/* ---- khung Nhiệm vụ ---- */
+.h3-quest { position: relative; width: min(210px, 54vw); aspect-ratio: 451 / 316; container-type: inline-size;
+  background: url("../../assets/ui/frames/hud-khung-nhiem-vu.png") top / 100% auto no-repeat; }
+.h3-quest.min { aspect-ratio: 451 / 64; }
+.h3-quest.min .h3-q-list { display: none; }
+.h3-quest > * { position: absolute; }
+.h3-q-tog { border-radius: 30%; }
+.h3-quest.min .h3-q-tog { animation: up-glow 2.4s ease-in-out infinite; }
+.h3-q-list { display: flex; flex-direction: column; gap: 1.5cqw; overflow: hidden; cursor: pointer; }
+.h3-q-row { display: flex; flex-direction: column; gap: .6cqw; padding-bottom: 1.2cqw; border-bottom: 1px solid rgba(242,199,127,.18); line-height: 1.15; }
+.h3-q-row:last-child { border-bottom: 0; }
+.h3-q-row b { font-size: 4.6cqw; font-weight: 700; color: var(--c); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 1px #000; }
+.h3-q-row b em { font-style: normal; }
+.h3-q-row span { font-size: 4.1cqw; color: #e7e3f4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.h3-q-row.ready span { color: #9ff0a8; font-weight: 700; }
+.h3-q-row.empty span { color: #9aa0bf; white-space: normal; }
+
+/* ---- Kho, Chat ---- */
+.h3-side { position: absolute; left: max(6px, env(safe-area-inset-left)); width: 50px; z-index: 5; }
+.h3-side img { width: 100%; display: block; }
+.h3-kho { bottom: calc(max(8px, env(safe-area-inset-bottom)) + 228px); }
+.h3-chat { bottom: calc(max(8px, env(safe-area-inset-bottom)) + 166px); }
+.h3-chat.on { filter: brightness(1.25) drop-shadow(0 0 6px rgba(242,199,127,.7)); }
+.chat-log { left: calc(max(6px, env(safe-area-inset-left)) + 58px); bottom: calc(max(8px, env(safe-area-inset-bottom)) + 166px); width: min(62vw, 280px); }
+.chat-log[hidden] { display: none; }
+
+.h3-chatbox { position: fixed; z-index: 30; left: max(6px, env(safe-area-inset-left)); bottom: calc(max(8px, env(safe-area-inset-bottom)) + 160px);
+  width: min(96vw, 430px); aspect-ratio: 665 / 279; container-type: inline-size; animation: fade-in .15s; }
+.h3-chatbox[hidden] { display: none; }
+.h3-chatbox.typing { top: 4px; bottom: auto; }
+.h3-chatbox > * { position: absolute; }
+.h3-chat-bg { inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.h3-tab { border-radius: 6px; }
+.h3-tab.on { box-shadow: inset 0 0 0 2px rgba(255, 214, 120, .9), 0 0 8px rgba(255, 214, 120, .5); }
+.h3-chat-lines { overflow-y: auto; display: flex; flex-direction: column; gap: 2px; font-size: 3.1cqw; line-height: 1.3; color: #e7e3f4; overscroll-behavior: contain; }
+.h3-line { overflow-wrap: anywhere; text-shadow: 0 1px 1px #000; }
+.h3-line b { color: #9fd0ff; } .h3-line b.self { color: var(--gold); }
+.h3-line.sys { color: #c9b6ff; } .h3-line.empty { color: #8c8fb0; }
+.h3-chat-in { background: transparent; border: 0; outline: none; color: #fff; font-size: 16px; padding: 0 4px; -webkit-user-select: text; user-select: text; }
+.h3-chat-in::placeholder { color: #8c8fb0; }
+.h3-chat-send { border-radius: 8px; }
+
+/* ---- ô kỹ năng khung mới: hình kỹ năng nằm trong lòng tròn ---- */
+.act.slot .act-art { inset: 11%; width: 78%; height: 78%; border-radius: 50%; object-fit: cover; image-rendering: auto; filter: none; }
+.act.slot .act-art[src*="/skills/m/"] { inset: 11%; width: 78%; height: 78%; }
+.act.slot.locked .act-art { filter: grayscale(1) brightness(.35); }
+
+/* ---- thông báo: băng "Nhặt" nhỏ góc trái, dưới khung nhân vật ---- */
+.toast { left: max(6px, env(safe-area-inset-left)); top: calc(var(--h3-top) + 175px); transform: none; max-width: calc(100vw - var(--h3-R) - 24px);
+  border: solid transparent; border-width: 7px 8px 7px 34px; border-radius: 0; padding: 4px 8px 4px 4px; background: none;
+  border-image: url("../../assets/ui/frames/hud-bang-nhat.png") 14 16 14 76 fill / 7px 8px 7px 34px stretch;
+  font-size: 12px; line-height: 1.3; color: #fff1cf; text-shadow: 0 1px 1px #000; }
+
+@media (orientation: landscape) {
+  :root { --h3-L: min(240px, 30vw); --h3-R: 236px; }
+  .h3-right { display: grid; grid-template-columns: 1fr 100px; grid-template-areas: "menu mini" "round mini"; align-items: start; gap: 3px 6px; }
+  .h3-mini { grid-area: mini; }
+  .h3-menu { grid-area: menu; }
+  .h3-round { grid-area: round; grid-template-columns: repeat(4, 1fr); }
+  .h3-quest { position: fixed; left: max(6px, env(safe-area-inset-left)); top: calc(var(--h3-top) + 182px); width: 190px; }
+  .toast { top: auto; bottom: 12px; left: 50%; transform: translateX(-50%); }
+  .h3-side { width: 44px; }
+  .h3-kho { bottom: max(6px, env(safe-area-inset-bottom)); left: calc(max(6px, env(safe-area-inset-left)) + 50px); }
+  .h3-chat { bottom: max(6px, env(safe-area-inset-bottom)); }
+  .chat-log { left: calc(max(6px, env(safe-area-inset-left)) + 100px); bottom: 10px; }
+  .h3-chatbox { bottom: 64px; width: min(60vw, 420px); }
+}

@@ -4,7 +4,7 @@ import { createMap, wrapDelta } from './map/index.js';
 import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, setTextScale, loadRig, rigAttack, artInfo, renderPortrait, avatarFx } from './entity/index.js';
 import { createAudio } from './audio/index.js';
 import { createPhapTuong } from './combat/index.js';
-import { createGameplay, createRankReporter, createFlight } from './game/index.js';
+import { createGameplay, createRankReporter, createFlight, hudActions } from './game/index.js';
 
 // Luôn lấy code mới nhất (xem sw.js) — tránh lẫn code cũ với dữ liệu mới sau mỗi lần cập nhật
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
@@ -63,7 +63,7 @@ async function boot() {
   const me = createLocalPlayer(character);
   me.rig = {};
   const bag = createTestBag(character.user_id, itemsDef.items);
-  let game = null; // luật chơi thử nghiệm: quái, chiến đấu, tu vi, nhiệm vụ (src/game)
+  let game = null, dock = null; // luật chơi thử nghiệm: quái, chiến đấu, tu vi, nhiệm vụ (src/game)
   const hasAvatar = () => !!(bag.equippedItem('phap-tuong') || game?.forgedLook().avatar);
   const lookNow = () => { // đồ đang mặc + pháp tướng (chỉ khi kỹ năng đang bật)
     const forged = game?.forgedLook() || {}; // đồ luyện từ phôi đang mặc
@@ -114,7 +114,6 @@ async function boot() {
   const drawMe = (ctx) => drawPlayer(ctx, { x: 0, y: 0, facing: 1, walkT: 0, isLocal: true }, 1); // ảnh đại diện lúc mới vào (trước khi nạp chân dung)
   const SLOT_ORDER = ['mat-na', 'trang-phuc', 'vu-khi', 'nhan', 'canh', 'phap-tuong', 'linh-thu', 'day-chuyen']; // thứ tự ô bảng Nhân vật
   const S = (n) => `assets/ui/skills/${n}.png`;
-  const fan = (deg, r = 122) => ({ dx: Math.round(Math.cos((deg * Math.PI) / 180) * r), dy: -Math.round(Math.sin((deg * Math.PI) / 180) * r) });
   const markers = () => [...(game?.markers() || []), { x: me.x, y: me.y, self: true }, ...[...others.list.values()].map((p) => ({ x: p.x, y: p.y }))];
 
   function attack() { if (game.attack()) swing(); }
@@ -153,6 +152,8 @@ async function boot() {
         onPick: (key) => { game.itemAction(key, 'equip'); reopen(); } }),
     });
   }
+  const openBag = (tab) => showBag({ tab, categories: itemsDef.categories, getEntries: () => game.bagEntries(), wallet: () => game.wallet.list(), note: 'Đồ thử nghiệm: chỉ lưu trên máy này, chưa lưu máy chủ.',
+    onAction: (it, a) => game.itemAction(it.key, a) }); // Sử dụng / Tháo / Thức tỉnh / Phân rã / Vứt / Dùng / Luyện
   function onLookChanged() { // đồ trên người đổi từ bảng Tu luyện
     if (pt.active && !hasAvatar()) { pt.cancel(); phapTuongOff(); } else setLook();
   }
@@ -164,17 +165,6 @@ async function boot() {
     stopPtSound = audio.play(ptDef.sound);
     setLook(); // ô kỹ năng tự sáng viền khi pháp tướng đang hiện (skillbar.js)
   }
-  // Ô kỹ năng tự xếp: kỹ năng nằm ở ô i (bảng Kỹ năng). Pháp tướng / đan dược xử lý ở đây, còn lại là chiêu.
-  function useSlot(i) {
-    const id = game.slotSkill(i);
-    if (!id) return game.openSkills(i);
-    if (id === 'phap-tuong') return usePhapTuong();
-    if (id === 'dan-duoc') return game.healPill();
-    game.skill(id);
-  }
-  const slot = (i, pos, size) => ({ id: `s${i + 1}`, name: `Ô kỹ năng ${i + 1}`, icon: S('trong'), ...pos, size, locked: true,
-    onUse: () => useSlot(i), onLocked: () => (game.slotSkill(i) ? false : (game.openSkills(i), true)) });
-
   async function recall() { // thoát kẹt (cây đá vây kín, vị trí lỗi): máy chủ đưa về trận pháp giữa thành
     if (!(await showConfirm('Về Thanh Vân Thành', 'Dịch chuyển về trận pháp giữa thành?', { yes: 'Về thành' }))) return;
     try { const row = await net.respawnAtTown(); if (row) { me.x = row.x; me.y = row.y; } else ({ x: me.x, y: me.y } = map.nearestStand(map.width / 2, map.height / 2 + 30, radius, 30)); }
@@ -210,12 +200,7 @@ async function boot() {
     },
     onOpenCharacter: () => openCharacter(),
     onSettings() { showSettings({ onLogout: logout, onRedeem: redeemCode, onChange: (st) => audio.apply(st), onRecall: recall }); },
-    onOpenBag() {
-      showBag({
-        categories: itemsDef.categories, getEntries: () => game.bagEntries(), wallet: () => game.wallet.list(), note: 'Đồ thử nghiệm: chỉ lưu trên máy này, chưa lưu máy chủ.',
-        onAction: (it, a) => game.itemAction(it.key, a), // Sử dụng / Tháo / Thức tỉnh / Phân rã / Vứt / Dùng / Luyện
-      });
-    },
+    onOpenBag: () => openBag(),
     onBreakthrough: () => game.breakthrough(),
     onMenu(id) {
       if (id === 'quests') game.openQuests();
@@ -232,23 +217,11 @@ async function boot() {
         draw: (off, radiusTiles) => map.drawMinimap(off, me.x, me.y, radiusTiles, markers()),
       });
     },
-    // Bộ kỹ năng hình quạt (yêu cầu chủ dự án 2026-10-20). dx/dy tính từ tâm nút Tấn công; chưa có hệ thống → khoá.
-    blankIcon: S('trong'), // ô kỹ năng: khung xám trống; hình kỹ năng / đan / linh thú / pháp tướng hiện bên trong khi có
-    actions: [
-      { id: 'attack', name: 'Đánh thường', icon: S('tan-cong'), dx: 0, dy: 0, size: 96, onUse: () => attack() },
-      // 7 ô kỹ năng tự xếp (chủ dự án 23/10): vòng quạt 4 ô, 2 ô bên trái, 1 ô phía trên — chọn kỹ năng ở bảng Kỹ năng
-      slot(0, fan(184), 60), slot(1, fan(151), 60), slot(2, fan(118), 60), slot(3, fan(85), 60),
-      slot(4, { dx: -200, dy: -66 }, 54), slot(5, { dx: -200, dy: 4 }, 54), slot(6, { dx: -92, dy: -192 }, 50),
-      { id: 'ky-nang', name: 'Kỹ năng: xếp ô', icon: 'assets/ui/icons/ky-nang.png', dx: -200, dy: -132, size: 44, onUse: () => game.openSkills() },
-      {
-        id: 'bay', name: 'Bay', icons: [S('bay'), S('chay')], names: ['Bay', 'Chạy bộ'], dx: -34, dy: -200, size: 50,
-        onUse: (state) => { // ngự kiếm (src/game/flight.js): phải cầm kiếm; bay tốn linh lực theo thời gian
-          if (game.dead) { toast('Linh hồn không dùng được kỹ năng', 1200); return 'keep'; }
-          if (!flight.set(state === 1)) return 'keep';
-        },
-      },
-      { id: 'auto', name: 'Tự động đánh', icon: S('auto'), dx: 26, dy: -192, size: 50, onUse: () => game.toggleAuto() }, // cùng hàng Lướt, sát phải
-    ],
+    onStats: () => dock?.openFull(), // nút Nhân Vật: bảng chỉ số đầy đủ
+    onTreasure: () => game?.skill('phap-bao'), // nút Pháp Bảo: dùng pháp bảo đang đeo
+    onCards: () => openBag('than-phu'), // nút Thần Phù: gắn phù (Thần Phù là bị động, đổi cách đạn bay)
+    onShop: () => game?.openShop(),
+    ...hudActions({ game: () => game, S, attack, usePhapTuong, flight: () => flight, toast, onPills: () => openBag('linh-dan') }), // nút đánh, ô kỹ năng, Tự động, Đan
   });
   hud.setOnline(onlineN, maxPlayers);
   const flight = createFlight({ me, map, hud, pt, toast, radius: config.player.radius_px, cfg: config.player, sendMove: (fl) => zone.sendMove(me.x, me.y, me.moving, fl) });
@@ -262,7 +235,7 @@ async function boot() {
     onToaHoa: (sum) => showToaHoa({ name: me.name, ...sum, onRebirth: rebirth }) }); // thọ nguyên tận → chết hẳn
   me.onAutoSwing = swing;
   const rank = createRankReporter({ gp: game.gp, info: game.rankInfo, me, submit: net.submitLeaderboard }); // ảnh chụp tiến trình → bảng xếp hạng
-  const dock = createStatsDock({ getValue: (id) => game.statValue(id) });
+  dock = createStatsDock({ getValue: (id) => game.statValue(id), compact: false }); // HUD v3: bảng chỉ số mở bằng nút Nhân Vật
   game.setDock(dock);
   enableFastTap(); // nút bấm được cả khi tay kia đang giữ cần điều khiển
   let targetId = null; // đạo hữu đang được chọn (chạm vào nhân vật bằng tay phải)
@@ -334,7 +307,7 @@ async function boot() {
     if (miniTimer <= 0) {
       miniTimer = 0.25;
       drawRoundMap(hud.miniCanvas, (off) => map.drawMinimap(off, me.x, me.y, 40, markers()));
-      dock.refresh();
+      dock.refresh(); hud.setWallet(game.wallet.list()); hud.setQuests(game.questBrief()); hud.setLevel(game.rankInfo().stageIndex + 1); // ô tiền, khung nhiệm vụ, số tầng
     }
     followCamera(cam, me, screen, map.width, map.height, zoneDef.wrap);
   }

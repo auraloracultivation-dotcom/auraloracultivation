@@ -79,14 +79,27 @@ export function createInput(canvas) {
   };
 }
 
+// Cần điều khiển: khung tròn HUD v3 (assets/ui/frames/hud-can-dieu-khien.png) — chưa tải xong thì vẽ hình tròn mờ như cũ
+const stickImg = typeof Image === 'undefined' ? null : Object.assign(new Image(), { src: 'assets/ui/frames/hud-can-dieu-khien.png' });
 export function drawStick(ctx, stick, dpr) {
   if (!stick.active) return;
   ctx.save();
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx.globalAlpha = 0.35;
-  ctx.fillStyle = '#fff';
-  ctx.beginPath(); ctx.arc(stick.ox, stick.oy, stick.radius, 0, Math.PI * 2); ctx.fill();
-  ctx.globalAlpha = 0.7;
-  ctx.beginPath(); ctx.arc(stick.ox + stick.dx, stick.oy + stick.dy, 20, 0, Math.PI * 2); ctx.fill();
+  const R = stick.radius, kx = stick.ox + stick.dx, ky = stick.oy + stick.dy;
+  if (stickImg?.complete && stickImg.naturalWidth) {
+    ctx.imageSmoothingEnabled = true; ctx.globalAlpha = 0.85;
+    const s = R * 2.3; // ảnh có viền trang trí ngoài vòng
+    ctx.drawImage(stickImg, stick.ox - s / 2, stick.oy - s / 2, s, s);
+    ctx.globalAlpha = 0.95; // núm: vòng tím sáng
+    const g = ctx.createRadialGradient(kx - 5, ky - 6, 2, kx, ky, 20);
+    g.addColorStop(0, '#e2c3ff'); g.addColorStop(0.55, '#9b62e0'); g.addColorStop(1, '#5a2f93');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(kx, ky, 19, 0, Math.PI * 2); ctx.fill();
+    ctx.lineWidth = 2.5; ctx.strokeStyle = '#f2c77f'; ctx.stroke();
+  } else {
+    ctx.globalAlpha = 0.35; ctx.fillStyle = '#fff';
+    ctx.beginPath(); ctx.arc(stick.ox, stick.oy, R, 0, Math.PI * 2); ctx.fill();
+    ctx.globalAlpha = 0.7;
+    ctx.beginPath(); ctx.arc(kx, ky, 20, 0, Math.PI * 2); ctx.fill();
+  }
   ctx.restore();
 }

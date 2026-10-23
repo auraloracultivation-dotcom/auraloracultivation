@@ -3,3 +3,4 @@ export { createGameplay } from './gameplay.js';
 export { simulateDuel } from './spar.js';
 export { createRankReporter, powerOf } from './rank.js';
 export { createFlight } from './flight.js';
+export { hudActions } from './hud-actions.js';

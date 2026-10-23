@@ -7,9 +7,11 @@ const frameImg = new Image();
 frameImg.src = FRAME_SRC;
 
 // cssWidth: chiều rộng hiển thị của cả khung; canvas có cùng tỉ lệ với ảnh khung
-export function setupRoundCanvas(canvas, cssWidth) {
+// bare = true: chỉ lòng tròn, không vẽ khung la bàn (khung HUD v3 là ảnh riêng đặt đè lên)
+export function setupRoundCanvas(canvas, cssWidth, bare = false) {
   const dpr = window.devicePixelRatio || 1;
-  const cssH = (cssWidth * FRAME.h) / FRAME.w;
+  const cssH = bare ? cssWidth : (cssWidth * FRAME.h) / FRAME.w;
+  canvas._bare = bare;
   canvas.style.width = `${cssWidth}px`;
   canvas.style.height = `${cssH}px`;
   canvas.width = Math.round(cssWidth * dpr);
@@ -19,8 +21,8 @@ export function setupRoundCanvas(canvas, cssWidth) {
 
 // drawMap(offCanvas, size): vẽ bản đồ vào ô vuông size×size (tâm = vị trí mình)
 export function drawRoundMap(canvas, drawMap) {
-  const k = canvas.width / FRAME.w;
-  const cx = FRAME.cx * k, cy = FRAME.cy * k, R = FRAME.r * k;
+  const k = canvas.width / FRAME.w, bare = canvas._bare;
+  const cx = bare ? canvas.width / 2 : FRAME.cx * k, cy = bare ? canvas.height / 2 : FRAME.cy * k, R = bare ? canvas.width / 2 - 1 : FRAME.r * k;
   const size = Math.max(16, Math.round(R * 2));
   const off = (canvas._off ||= document.createElement('canvas'));
   if (off.width !== size) { off.width = off.height = size; }
@@ -35,7 +37,7 @@ export function drawRoundMap(canvas, drawMap) {
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(off, cx - R, cy - R, R * 2, R * 2);
   ctx.restore();
-  if (frameImg.complete && frameImg.naturalWidth) {
+  if (!bare && frameImg.complete && frameImg.naturalWidth) {
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
     ctx.drawImage(frameImg, 0, 0, canvas.width, canvas.height);
