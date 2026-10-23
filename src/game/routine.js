@@ -20,7 +20,7 @@ export function createRoutine({ R, progress, realmMajor, realms, gp, mats }) {
     const of = (z, g) => mats.materials.filter((m) => m.zone === z && m.group === g);
     const zi = R.zone_order.indexOf(zone);
     const special = of(zone, 'dacbiet').length ? of(zone, 'dacbiet') : of(R.zone_order[zi + 1] || zone, 'dacbiet'); // vùng đầu chưa có đồ đặc biệt → mượn vùng sau
-    return { major, code, zone, zname: R.zone_names[zone] || zone, need: stage.exp_need, stone, herbs: of(zone, 'thao'), ores: of(zone, 'khoang'), special };
+    return { major, code, zone, zname: R.zone_names[zone] || zone, need: stage.exp_need, stone, T: R.table?.[stage.id], herbs: of(zone, 'thao'), ores: of(zone, 'khoang'), special };
   }
   const fill = (s, c, extra = {}) => s.replace(/\{(\w+)\}/g, (_, k) => (k === 'zone' ? c.zname : extra[k] ?? ''));
   function goalOf(t, c, key) {
@@ -29,6 +29,8 @@ export function createRoutine({ R, progress, realmMajor, realms, gp, mats }) {
     const rk = { thuong: 'yêu thú', elite: 'tinh anh', boss: 'thủ lĩnh' }[g.rank] || 'yêu thú';
     return { goal: { type: 'kill_zone', target: c.zone, rank: g.rank, count: g.count, label: `${rk} vùng ${c.zname}` } };
   }
+  // Thưởng cố định theo bảng (R.table[tầng] = [tu vi, Linh thạch, Vàng]); tầng không có trong bảng mới dùng cách cũ
+  const fixed = (row, exp, stone) => (row ? { exp: row[0], spiritStone: row[1], gold: row[2] } : { exp: Math.round(exp), spiritStone: stone });
   const items = (list) => list.filter((x) => x.it && x.n > 0).map((x) => ({ id: x.it.id, count: x.n }));
 
   function makeDaily(c, key) {
@@ -36,7 +38,7 @@ export function createRoutine({ R, progress, realmMajor, realms, gp, mats }) {
     return R.daily.map((t, i) => {
       const { goal, item } = goalOf(t, c, `${key}.${i}`);
       return { id: `q.r.d.${key}.${i}`, type: 'daily', routine: 'd', tier: t.tier, realm: c.code, title: fill(t.title, c), desc: fill(t.desc, c, { item }), goals: [goal], next: [],
-        rewards: { exp: Math.round(c.need * (W.exp_bar[c.code] ?? 0.05)), spiritStone: c.stone * W.stone_kills, items: items([{ it: pick(c.herbs, `${key}.h${i}`), n: W.herb }]) } };
+        rewards: { ...fixed(c.T?.daily, c.need * (W.exp_bar[c.code] ?? 0.05), c.stone * W.stone_kills), items: items([{ it: pick(c.herbs, `${key}.h${i}`), n: W.herb }]) } };
     });
   }
   function makeWeekly(c, key) {
@@ -44,7 +46,7 @@ export function createRoutine({ R, progress, realmMajor, realms, gp, mats }) {
     return R.weekly.map((t, i) => {
       const { goal } = goalOf(t, c, `${key}.${i}`);
       return { id: `q.r.w.${key}.${i}`, type: 'weekly', routine: 'w', tier: t.tier, realm: c.code, title: fill(t.title, c), desc: fill(t.desc, c), goals: [goal], next: [],
-        rewards: { exp: Math.round(c.need * (W.exp_bar[c.code] ?? 0.2)), spiritStone: c.stone * W.stone_kills[i],
+        rewards: { ...fixed(c.T?.weekly, c.need * (W.exp_bar[c.code] ?? 0.2), c.stone * W.stone_kills[i]),
           items: items([{ it: pick(c.ores, `${key}.o${i}`), n: W.ore[i] }, { it: pick(c.special, `${key}.s${i}`), n: W.special[i] }, { it: { id: 'item.phapbao.phoi.001' }, n: W.phoi_pb[i] }]) } };
     });
   }
@@ -73,7 +75,7 @@ export function createRoutine({ R, progress, realmMajor, realms, gp, mats }) {
     const tier = extra ? (extra > 20 ? 'den' : 'do') : ['luc', 'lam', 'tim', 'cam', 'vang'][mj] || 'vang';
     return { id: `q.r.l.${n}`, type: 'ladder', routine: 'l', tier, realm: MAJOR[mj], step: n,
       title: `Tiến độ ${n}: ${st.name} · ${zname}`, desc: fill(L.desc, { zname }, { n }), goals, next: [],
-      rewards: { exp, spiritStone: stone * (lk ? 40 : 80) + stone * 10 * extra,
+      rewards: { ...(R.table?.[st.id] && !extra ? fixed(R.table[st.id].chapter) : { exp, spiritStone: stone * (lk ? 40 : 80) + stone * 10 * extra }),
         items: items([{ it: ores[0], n: extra ? Math.min(150, 30 + 5 * extra) : lk ? 5 + (SI.get(st.id) || 0) : 10 + 5 * k + 5 * mj }, // khoáng thường: nhiều
           { it: ores[1], n: extra ? 1 + Math.floor(extra / 5) : lk ? 0 : k + (mj >= 3 ? 0 : 1) }, // khoáng quý (Hư Ngọc, U Ngọc…): ít
           { it: sp.length ? pick(sp, `${key}.s`) : null, n: n % 3 === 0 ? 1 + Math.floor(n / 15) : 0 },

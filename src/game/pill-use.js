@@ -37,11 +37,12 @@ export function createPillUse(c) {
     play('set-danh', me.x, me.y, 70, { ground: true, delay: 0.7 });
     const charm = progress.take('item.phu.bao-ho.001', 1); // bảo hộ phù: +15 điểm %, tự dùng nếu có
     const rate = Math.min(1, realm.breakthrough.rate + (charm ? realms.breakthrough_rules.protect_charm.add_rate_points : 0));
-    if (charm) toast('Dùng Bảo hộ phù: +15% tỷ lệ', 1500);
+    if (charm) toast('Bảo hộ phù sáng lên — vận khí tăng', 1500);
     if (Math.random() < rate) {
       progress.advanceStage(); c.setHp(Infinity); c.recompute(); c.setHp(c.ps().hp);
       toast(`Đột phá thành công: ${progress.stageDef.name}! Thọ nguyên tối đa ${life.max()} năm`, 3000);
-    } else toast(`Đột phá thất bại (${Math.round(rate * 100)}%) — mất ${pill.name}, tu vi giữ nguyên`, 3000);
+    } else { const lost = Math.floor(progress.state.exp * (gp.breakthrough_fail_exp_loss ?? 0.5)); progress.state.exp -= lost; progress.changed?.();
+      toast(`Đột phá thất bại — thiên kiếp phản phệ: mất ${pill.name} và ${lost.toLocaleString('vi')} tu vi`, 3500); }
     progress.changed();
   }
   return { usePill, breakthrough };

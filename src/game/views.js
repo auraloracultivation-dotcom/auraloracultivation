@@ -30,7 +30,7 @@ export function createViews(o) {
   // Thọ nguyên trong bảng Cảnh giới
   const lifeLine = () => { const L = o.life, ate = st().life?.pillDay === L.today();
     const left = o.gapR.dailyLeft(progress.stageDef.exp_need, progress.stageDef.id);
-    return `<p>Linh khí hôm nay: còn <b>${Math.round(left * 100)}% vạch</b> tu vi nhận trọn từ quái (hết thì chỉ ${Math.round(o.gapR.overMul * 100)}%, qua 0h giờ VN hồi lại).</p><p>Thọ nguyên: <b>${L.age()}/${L.max()} năm</b> (còn ${L.left()} năm · mỗi ngày +1 tuổi theo giờ Việt Nam). Trường Sinh Đan hôm nay: ${ate ? 'đã dùng' : '<b>chưa dùng</b>'}.</p>`; };
+    return `<p>Linh khí hôm nay: <b>${left > 0.6 ? 'dồi dào' : left > 0.3 ? 'loãng dần' : left > 0.1 ? 'thưa thớt' : 'gần cạn'}</b> — càng hạ nhiều quái tu vi nhận càng ít, qua 0h giờ VN hồi lại.</p><p>Thọ nguyên: <b>${L.age()}/${L.max()} năm</b> (còn ${L.left()} năm · mỗi ngày +1 tuổi theo giờ Việt Nam). Trường Sinh Đan hôm nay: ${ate ? 'đã dùng' : '<b>chưa dùng</b>'}.</p>`; };
   const msg = (r) => { if (!r) return; toast(r.msg, 1800); if (r.event) quests.emit(...r.event); o.recompute(); };
 
   // ---------- Nhiệm vụ ----------
@@ -38,6 +38,7 @@ export function createViews(o) {
     const parts = [];
     if (r.exp) parts.push(`${N(r.exp)} tu vi`);
     if (r.spiritStone) parts.push(`${r.spiritStone} Linh thạch`);
+    if (r.gold) parts.push(`${N(r.gold)} Vàng`);
     for (const i of r.items || []) parts.push(`${name(i.id)} ×${i.count}`);
     const later = [r.title && `danh hiệu "${r.title}"`, r.cosmetic && 'trang trí', r.choiceReward && 'rương chọn thưởng'].filter(Boolean);
     return parts.join(', ') + (later.length ? ` <i>(+ ${later.join(', ')} — chưa có hệ thống)</i>` : '');
