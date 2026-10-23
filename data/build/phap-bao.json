@@ -24,7 +24,7 @@
   100000
  ],
  "mul_per_lv": 0.15,
- "dismantle_refund": 0.4,
+ "dismantle_refund": 0.25,
  "items": [
   {
    "id": "item.phapbao.phoi.001",
@@ -295,5 +295,6 @@
   5,
   6
  ],
- "bind_fx": "k.nhan-chu"
+ "bind_fx": "k.nhan-chu",
+ "_ghi_chu_phan_ra": "Chủ dự án 23/10 20:36: phân rã chỉ giữ lại 1/4 số LT đã đầu tư (thức tỉnh + ôn dưỡng). Cũ 0.4."
 }

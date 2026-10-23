@@ -1115,15 +1115,15 @@
   "_ghi_chu": "Lab v3.2 — thức tỉnh TỪNG DÒNG: mỗi lần bấm thêm 1 dòng, màu (phẩm) của dòng bốc ngẫu nhiên theo tỷ lệ phẩm Lab (data/equipment/awaken.json → gearQ). Mỗi món có giới hạn dòng ẩn 1–10 (bốc lúc thức tỉnh lần đầu, KHÔNG báo trước); đủ giới hạn thì nút thức tỉnh tắt. Giá (Linh thạch) tăng theo số thứ tự dòng — số tạm.",
   "line_cost": [
    80,
-   120,
    180,
-   260,
-   360,
-   500,
-   700,
-   950,
-   1300,
-   1800
+   400,
+   850,
+   1900,
+   4100,
+   9000,
+   20000,
+   44000,
+   97000
   ],
   "cap_weights": [
    14,
@@ -1138,7 +1138,7 @@
    4
   ],
   "_cap_weights": "trọng số giới hạn 1..10 dòng (ít dòng hay gặp hơn)",
-  "dismantle_refund": 0.5,
+  "dismantle_refund": 0.25,
   "line_keys": [
    "hp",
    "def",
@@ -1147,7 +1147,8 @@
    "crit",
    "hut",
    "phan"
-  ]
+  ],
+  "_ghi_chu_23_10_toi": "Chủ dự án 23/10 20:36: càng nhiều dòng càng đắt theo cấp số nhân (~×2,2 mỗi dòng) — 3 dòng đầu ~660 LT cho tân thủ, đủ 10 dòng ~180.000 LT / món để đốt LT của người mạnh. Phân rã chỉ hoàn 1/4 số LT đã bỏ vào. (cũ: [80, 120, 180, 260, 360, 500, 700, 950, 1300, 1800], hoàn 0.5)"
  },
  "breakthrough_fail_loss": 0.4,
  "daily_reset": "theo ngày trên máy",
