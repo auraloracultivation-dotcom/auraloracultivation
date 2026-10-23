@@ -63,7 +63,7 @@ img { image-rendering: pixelated; }
 /* ---------- Đăng nhập ---------- */
 .login-form { position: absolute; inset: 0; }
 .field {
-  background: var(--navy); color: var(--text); border: 0; outline: none;
+  background: #101b37; /* đúng màu ô vẽ sẵn trên nền đăng nhập, che chữ gợi ý vẽ sẵn */ color: var(--text); border: 0; outline: none;
   font-size: max(11px, min(4.2cqh, 4.6cqw)); padding: 0 2%; border-radius: 4px;
   -webkit-user-select: text; user-select: text;
 }
@@ -80,11 +80,27 @@ img { image-rendering: pixelated; }
 }
 .check-cover[hidden] { display: none; }
 .pct-cover { background: #0e1424; border-radius: 4px; }
-.login-msg {
-  font-size: max(11px, min(3.4cqh, 4cqw)); text-align: center; color: #ffb38a;
-  text-shadow: 0 1px 3px #000, 0 0 6px #000;
+.login-msg { /* dòng trạng thái dưới bảng đăng nhập: lỗi (cam), xong (xanh), đang chờ (vòng xoay) */
+  display: flex; align-items: center; justify-content: center; gap: .6em;
+  font-size: max(12px, min(2.6cqh, 4cqw)); font-weight: 700; text-align: center; color: #ffb38a;
+  background: rgba(10, 14, 32, .72); border: 1px solid rgba(242,199,127,.45); border-radius: 999px; padding: 0 1em;
+  text-shadow: 0 1px 2px #000;
 }
-.login-msg.ok { color: #b7e6a8; }
+.login-msg[hidden] { display: none; }
+.login-msg.ok { color: #c9f0b8; }
+.login-msg .spin { display: none; width: 1.1em; height: 1.1em; flex: none; border-radius: 50%;
+  border: .18em solid rgba(242,199,127,.25); border-top-color: var(--gold); animation: spin .8s linear infinite; }
+.login-msg.wait .spin { display: block; }
+.login-msg.wait span::after { content: ""; animation: dots 1.2s steps(4) infinite; }
+@keyframes spin { to { transform: rotate(360deg) } }
+@keyframes dots { 0% { content: "" } 25% { content: "." } 50% { content: ".." } 75% { content: "..." } }
+.login-cover { /* lúc chỉ đang chờ (đã nhớ đăng nhập): làm mờ bảng vẽ sẵn */
+  background: rgba(8, 10, 28, .55); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+  border-radius: 6%; pointer-events: none; transition: opacity .25s;
+}
+.login-cover[hidden] { display: block; opacity: 0; }
+.login-form.busy ~ .hot, .login-form.busy .field { opacity: .55; }
+.hot.eye.on { background: rgba(242,199,127,.18); box-shadow: inset 0 0 0 1px rgba(242,199,127,.5); }
 
 /* ---------- Bảng khung mây (tạo nhân vật, xác nhận…) ---------- */
 .frame-panel {
