@@ -2108,13 +2108,13 @@
   "_ghi_chu": "Nút Tự động: tự tìm quái / nguyên liệu gần nhất trong search_px, tự đánh, tự hái, tự uống đan hồi máu khi khí huyết dưới hp_pill_below (nếu trong kho có). Kẹt quá stuck_s thì bỏ mục tiêu đó skip_s giây. Cần điều khiển luôn được ưu tiên.",
   "search_px": 900,
   "hp_pill_below": 0.3,
-  "stuck_s": 1.2,
+  "stuck_s": 1.0,
   "skip_s": 10,
-  "repick_s": 0.5,
+  "repick_s": 0.4,
   "use_skills": true,
   "fly_when_stuck": true,
   "_ghi_chu_23_10": "Tự động dùng kỹ năng trong ô (trừ Lướt / Pháp tướng); kẹt vướng cây, nước thì tự ngự kiếm bay qua rồi hạ xuống farm tiếp (cần cầm kiếm + đủ linh lực)",
-  "anchor_radius_px": 640,
+  "anchor_radius_px": 1000,
   "anchor_idle_frac": 0.35,
   "anchor_leash_px": 60,
   "_ghi_chu_neo": "Neo vùng farm (chủ dự án 23/10): bật Tự động cắm neo tại chỗ; chỉ đánh / hái trong bán kính anchor_radius_px (640, gấp đôi bản đầu theo chủ dự án 23/10 13:20; không vẽ vòng neo). Quái chạy ra quá anchor_leash_px ngoài vòng thì bỏ. Hết mục tiêu mà xa neo hơn anchor_idle_frac × bán kính thì đi về neo, gần thì đứng chờ quái hồi sinh. Kéo cần = dời neo.",
@@ -2122,7 +2122,10 @@
   "rest_until": 0.9,
   "_ghi_chu_nghi": "Chủ dự án 23/10 tối (cứu tân thủ): Tự động thấy khí huyết dưới rest_below thì đứng nghỉ, chỉ đánh trả con đang đánh mình, hồi tới rest_until mới tìm quái tiếp. Khí huyết tự hồi player.regen_hp_per_s mỗi giây sau player.regen_after_s giây thôi giao chiến (trước đây có số nhưng code chưa dùng).",
   "mp_pill_below": 0.3,
-  "_ghi_chu_mp": "Chủ dự án 23/10 21h37: Tự động uống Hồi Linh Đan khi linh lực dưới mp_pill_below (đan máu ưu tiên trước); hết linh lực vẫn đánh thường. Chết lúc đang Tự động → hồi sinh xong tự bật lại (về thành thì tự đi lại vùng neo cũ)."
+  "_ghi_chu_mp": "Chủ dự án 23/10 21h37: Tự động uống Hồi Linh Đan khi linh lực dưới mp_pill_below (đan máu ưu tiên trước); hết linh lực vẫn đánh thường. Chết lúc đang Tự động → hồi sinh xong tự bật lại (về thành thì tự đi lại vùng neo cũ).",
+  "defend_px": 220,
+  "idle_expand_s": 3,
+  "_ghi_chu_24_10": "Viết lại 24/10 (src/game/autoplay.js): Tự farm và Tự làm nhiệm vụ tách riêng. Quái đang đánh mình trong defend_px luôn đánh trước; neo 1000 px (≥ vòng sinh quái 460–820 quanh người) — trước 640 nên quái sinh ngoài neo bị bỏ qua, đủ 18 con ngoài neo là không sinh thêm → đứng im mãi. Hết quái quanh neo idle_expand_s giây thì đi tìm rộng hơn và dời neo theo. Tự farm không đi hái."
  },
  "luc_chien": {
   "_ghi_chu": "Lực chiến (bảng xếp hạng) = tổng chỉ số × trọng số. Số TẠM, chỉnh thoải mái. src/game/rank.js",

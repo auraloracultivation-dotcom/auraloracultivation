@@ -40,6 +40,7 @@ import { createCamChe } from './camche.js';
 import { createBiCanh } from './bicanh.js';
 import { createConsumables } from './consumables.js';
 import { createGuide } from './guide.js';
+import { createHurt } from './hurt.js';
 import { createHopNhat } from './hopnhat.js';
 import { createSkillLearn } from './skill-learn.js';
 import { simulateDuel } from './spar.js';
@@ -92,6 +93,10 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   let guardUntil = 0, npcTarget = null; // bảo vệ sau hồi sinh; NPC đang nhắm
   me.shield = progress.state.shield ?? true; // khiên bảo vệ (mặc định bật)
   let stunUntil = 0; // bị boss trói: không đi được
+  function setAuto(mode, focus = null) { // mode: 'farm' | 'quest' | null
+    if (dead && mode) return; auto = !!mode; autoDir = null; mode ? autoPlay.start(mode, focus) : autoPlay.reset();
+    hud.setActive('auto', mode === 'farm'); hud.setActive('autoq', mode === 'quest');
+  }
   let hp = 0, dead = false, autoDir = null, hurtAt = -99, attackCd = 0, auto = false, resumeAuto = null, targetUid = null, pet = null, now = 0;
   const fx = [], bolts = [];
   const { say, play } = createFxQueue(fx, fxDuration); // số bay trên đầu + hiệu ứng hình
@@ -183,35 +188,12 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     recompute(); hp = Math.min(hp, ps.hp);
   }
 
-  // ---------- Quái đánh người chơi ----------
-  const env = {
-    me, alive: true,
-    hitPlayer(m, mul, skillName) {
-      if (dead) return; const r = stats.hit(stats.monster(m), ps, { atkMul: mul, defMul: pt.active ? S['phap-tuong'].def_mul : 1 });
-      hurtAt = now;
-      if (r.miss) { say(me.x, me.y - HEAD, 'Né', '#9fe8ff'); return; }
-      hp -= r.dmg;
-      say(me.x, me.y - HEAD, `${skillName ? `${skillName} ` : mul > 1 ? 'Đòn nặng ' : r.crit ? 'Bạo kích ' : ''}-${r.dmg}`, mul > 1 ? '#ff5a3a' : '#ff9a8a', mul > 1 || r.crit);
-      if (mul > 1 && !skillName) play(m.def.rank === 'boss' ? 'hoa-cot' : 'sao-den', me.x, me.y, m.def.rank === 'boss' ? 46 : 34, { ground: m.def.rank === 'boss' });
-      else play('cham-mau', me.x, me.y - 12, 16);
-      if (r.reflect) { say(m.x, m.y - (m.def.art?.h || m.r * 2) - 4, `Phản đòn -${r.reflect}`, '#c58cff'); if (mobs.damage(m, r.reflect)) onKill(m); }
-      if (hp <= 0) die();
-    },
-    dodged(m, skillName) { say(me.x, me.y - HEAD, skillName ? `Né ${skillName}!` : 'Né đòn nặng!', '#7dff8a', true); quests.emit('dodge'); },
-    fx: (id, x, y, h, ground, rot = 0) => play(id, x, y, h, { ground, rot }), // hiệu ứng chiêu boss
-    stunPlayer(s) { stunUntil = Math.max(stunUntil, now + s); say(me.x, me.y - HEAD - 10, 'Bị trói!', '#ffe36a', true); },
-  };
-  function hitByNpc(n) {
-    if (dead) return; const r = stats.hit(n.st, ps, { defMul: pt.active ? S['phap-tuong'].def_mul : 1 });
-    hurtAt = now;
-    if (r.miss) { say(me.x, me.y - HEAD, 'Né', '#9fe8ff'); return; }
-    hp -= r.dmg; say(me.x, me.y - HEAD, `${r.crit ? 'Bạo kích ' : ''}-${r.dmg}`, '#ff9a8a', r.crit); play('cham-mau', me.x, me.y - 12, 16);
-    if (r.reflect) { say(n.x, n.y - HEAD, `Phản đòn -${r.reflect}`, '#c58cff'); npcs.damage(n, r.reflect, 'me'); }
-    if (hp <= 0) { die(); toast(`Bị ${n.name} hạ gục`, 2500); }
-  }
+  // ---------- Quái / NPC đánh người chơi (src/game/hurt.js) ----------
+  const { env, hitByNpc } = createHurt({ me, stats, S, pt, mobs, npcs, quests, say, play, toast, HEAD, onKill: (m) => onKill(m), die: () => die(),
+    get: () => ({ hp, dead, ps }), setHp: (v) => { hp = v; }, hurt: () => { hurtAt = now; }, stun: (s) => { stunUntil = Math.max(stunUntil, now + s); } });
   function die() {
     if (dead) return; // nhiều đòn cùng khung: chỉ chết một lần (không trừ tu vi 2 lần, không mất Tự động bật lại)
-    hp = 0; dead = true; mobs.calmAll(); resumeAuto = auto ? autoPlay.snapshot() : null; auto = false; hud.setActive('auto', false); autoDir = null; autoPlay.reset(); const dmsg = late.death(); if (dmsg) toast(dmsg, 3000); // mất tu vi khi chết: late-realm.js (Anh Biến: trọng thương / thụt cảnh giới)
+    hp = 0; dead = true; mobs.calmAll(); resumeAuto = auto ? autoPlay.snapshot() : null; auto = false; hud.setActive('auto', false); hud.setActive('autoq', false); autoDir = null; autoPlay.reset(); const dmsg = late.death(); if (dmsg) toast(dmsg, 3000); // mất tu vi khi chết: late-realm.js (Anh Biến: trọng thương / thụt cảnh giới)
     if (pt.active) pt.cancel();
     soul.start();
   }
@@ -219,7 +201,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     soul.end(); dead = false; hp = ps.hp; guardUntil = now + PV.revive_guard_s;
     if (!here && map.town) { me.x = map.town.cx; me.y = map.town.cy + 30; onRespawn(me.x, me.y); }
     else if (!map.canStand(me.x, me.y, 4)) ({ x: me.x, y: me.y } = map.nearestStand(me.x, me.y, 4, 30));
-    play('vong-lua', me.x, me.y - 8, 40); toast(`Hồi sinh${here ? ' tại chỗ' : ` tại trận pháp ${map.town?.name || ''}`} — được bảo vệ ${PV.revive_guard_s} giây`, 2000); if (resumeAuto) { const r = resumeAuto; resumeAuto = null; auto = true; autoPlay.start(r.focus, here ? null : r.at); hud.setActive('auto', true); toast('Tự động bật lại — quay về chỗ farm cũ', 1800); } // về thành thì tự đi lại vùng neo cũ
+    play('vong-lua', me.x, me.y - 8, 40); toast(`Hồi sinh${here ? ' tại chỗ' : ` tại trận pháp ${map.town?.name || ''}`} — được bảo vệ ${PV.revive_guard_s} giây`, 2000); if (resumeAuto) { const r = resumeAuto; resumeAuto = null; auto = true; autoPlay.start(r.mode, r.focus, here ? null : r.at); hud.setActive(r.mode === 'quest' ? 'autoq' : 'auto', true); toast('Tự động bật lại — quay về chỗ farm cũ', 1800); } // về thành thì tự đi lại vùng neo cũ
   }
   const tame = createTame({ cfg: gp.tame, progress, monsters: monDef.monsters, mdef: monDef, mobs, map, me, stats, gp, toast, say: (...a) => say(...a), play: (...a) => play(...a), onKill: (m) => onKill(m), placeholder: placeholderIcon, suppress: (m, p) => gapR.mul(m.stage, p.stage) });
   const soul = createSoul({ me, hud, progress, cfg: gp.soul, townName: map.town?.name || 'thành', toast, showRevive, onRevive: revive, autoBack: () => !!resumeAuto }); // đang Tự động mà chết: 10 giây không chọn thì tự về thành
@@ -251,7 +233,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   // ---------- Mỗi khung hình ----------
   // Thọ nguyên (lifespan.js): qua 0h giờ VN cập nhật nhãn; hết thọ → tọa hóa (chết hẳn), main.js hiện bảng chuyển thế
   const lifeHooks = { synced: timeSynced, onWarn: (w) => toast(w, 4000), onTick: () => { if (me.realm !== life.label(progress.stageDef.name)) recompute(); },
-    onDead(sum) { dead = true; auto = false; hud.setActive('auto', false); autoDir = null; autoPlay.reset(); mobs.calmAll(); if (pt.active) pt.cancel(); onToaHoa({ ...sum, realm: progress.stageDef.name }); } };
+    onDead(sum) { dead = true; auto = false; hud.setActive('auto', false); hud.setActive('autoq', false); autoDir = null; autoPlay.reset(); mobs.calmAll(); if (pt.active) pt.cancel(); onToaHoa({ ...sum, realm: progress.stageDef.name }); } };
   function update(dt) {
     now += dt;
     life.watch(dt, lifeHooks);
@@ -380,7 +362,9 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     stunned: () => now < stunUntil,
     _debug: { late, me, map, progress, mobs, voids, mdef: monDef, bag, gather, npcs, die, revive, tame, dv, cards, bolts, get treasure() { return treasure; }, cds, biCanh, learn, pt, get hopNhat() { return hopNhat; }, get bar() { return bar; }, get hp() { return hp; }, set hp(v) { hp = v; }, get ps() { return ps; } }, // chỉ cho kiểm thử (?debug)
     speed: () => buffs.speed?.mul || null,
-    toggleAuto(focus = null) { if (dead) return; auto = !auto; autoDir = null; auto ? autoPlay.start(focus) : autoPlay.reset(); hud.setActive('auto', auto); if (!focus) toast(auto ? 'Tự động đánh: bật — farm quanh neo, kéo cần để dời neo' : 'Tự động đánh: tắt', 1600); }, // focus: nhiệm vụ (navi.js)
+    // Tự farm (nút Tự farm) và farm theo nhiệm vụ (questauto.js / navi.js) là hai chế độ riêng của autoplay.js
+    toggleAuto() { if (dead) return; const on = !(auto && autoPlay.mode() === 'farm'); setAuto(on ? 'farm' : null); toast(on ? 'Tự farm: bật — đánh quái quanh đây, kéo cần để dời chỗ' : 'Tự farm: tắt', 1600); },
+    setAuto, autoMode: () => (auto ? autoPlay.mode() : null),
     healPill: () => usePill(HEAL_PILL), usePill, pillCount: (id) => progress.count(id), isAuto: () => auto, autoDir: () => (auto ? autoDir : null), autoMoved: () => auto && autoPlay.moved(), // kéo cần khi Tự động: dời neo
     openCodex: () => openCodex({ loadJSON, gp, mats, pills, recipes, cp, monsters: monDef.monsters, mobSkills: monDef.skills, blanks, qItems, artDef, info, cpText: cpFx.text, fxDuration }), // Đồ giám (nút sách)
     statValue: views.statValue, openQuests: views.openQuests, questBrief: views.questBrief, naviGoal: views.naviGoal, track: views.track, setGo: views.setGo, pillChoices: views.pillChoices, zoneRing: (z) => mobs.ringOf(z), openCultivate: views.openCultivate, // dẫn đường + đan dùng nhanh

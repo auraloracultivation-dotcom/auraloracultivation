@@ -1,58 +1,72 @@
-// Nút Tự động (yêu cầu chủ dự án 21/10): tự tìm thứ GẦN NHẤT — quái hoặc linh thảo / khoáng — rồi đi tới;
-// tới quái thì đứng đánh, tới nguyên liệu thì gather.js tự hái. Kẹt (vướng cây, nước) đi đánh quái thì tự ngự kiếm bay qua
-// (chủ dự án 23/10), tới nơi / qua chướng ngại thì hạ xuống farm tiếp; không bay được thì tạm bỏ mục tiêu đó.
-// Neo vùng farm (chủ dự án 23/10, người chơi chê "auto mà cứ chạy lung tung"): bật Tự động = cắm neo tại chỗ đứng,
-// chỉ đánh / hái trong vòng anchor_radius_px (~4 màn hình iPhone); hết quái thì về gần neo đứng chờ quái hồi sinh.
-// Không vẽ vòng hay cọc neo (chủ dự án 23/10 13:20): game tự biết vùng, người chơi không cần thấy.
-// Kéo cần điều khiển khi đang Tự động = dời neo theo người chơi (moved()).
-// Chỉ trả về hướng đi; cần điều khiển của người chơi luôn được ưu tiên (main.js). Số ở data/gameplay.json → auto.
+// TỰ ĐỘNG (viết lại 24/10/2026 — chủ dự án: "đang farm tự đứng lại, quái gần không đánh mà cứ đi tìm đâu";
+// tách hẳn Tự farm và Tự làm nhiệm vụ). Chỉ trả về hướng đi; cần điều khiển của người chơi luôn được ưu tiên (main.js).
+//
+// Hai chế độ:
+//  - 'farm'  : cắm neo tại chỗ bật, đánh quái gần nhất quanh neo. KHÔNG đi hái. Quanh neo hết quái quá idle_expand_s giây
+//              thì đi tới con gần nhất trong search_px và dời neo theo (không còn cảnh đứng chờ mãi).
+//  - 'quest' : giống farm nhưng chỉ đánh quái đúng nhiệm vụ (focus: vùng / hạng), nhiệm vụ hái thì đi hái. Do questauto.js điều khiển.
+// Luật chung:
+//  - Quái ĐANG ĐÁNH MÌNH trong defend_px luôn được đánh trước, bất kể vùng / neo / nhiệm vụ.
+//  - Đứng đủ gần mục tiêu thì đứng yên để gameplay tự đánh; không đổi mục tiêu khi con hiện tại còn sống và trong tầm.
+//  - Khí huyết dưới rest_below và không ai đánh mình: đứng nghỉ (khí huyết tự hồi sau player.regen_after_s) tới rest_until.
+//  - Kẹt (cây, nước): ngự kiếm bay qua nếu được, không thì lách sang bên; vẫn kẹt thì tạm bỏ mục tiêu skip_s giây.
+// Số ở data/gameplay.json → auto.
 import { wrapDelta } from '../map/index.js';
 
-// zone(): { x, y, r } khi đang ở bí cảnh — chỉ đánh quái trong vòng, không đi hái, không có gì thì về giữa vòng (thay cho neo)
-// hpFrac(): khí huyết hiện tại / tối đa. Dưới rest_below thì NGHỈ (không tìm quái mới, chỉ đánh trả con đang đánh mình)
-// tới khi hồi lên rest_until — chủ dự án 23/10 tối: tân thủ bật Tự động chết liên tục vì lao vào con này tới con khác.
+const FIGHTING = new Set(['chase', 'windup', 'cast']);
+
+// zone(): { x, y, r } khi đang ở bí cảnh — chỉ đánh quái trong vòng (thay neo). hpFrac(): khí huyết hiện / tối đa.
 export function createAutoPlay({ me, mobs, gather, map, cfg, reach, canFly = () => false, zone = () => null, hpFrac = () => 1 }) {
-  let goal = null, repick = 0, stuckT = 0, lx = me.x, ly = me.y, fly = false, flyT = 0, anchor = null;
-  let resting = false;
-  let focus = null; // { zone, rank, gather } khi bật từ dẫn đường nhiệm vụ: chỉ đánh quái đúng vùng (ưu tiên đúng loại), không đánh quái vùng khác
-  const skip = new Map(); // mục tiêu đang tạm bỏ → hết hạn lúc
+  let mode = null, focus = null, anchor = null, goal = null, repick = 0, idleT = 0, resting = false;
+  let stuckT = 0, lx = me.x, ly = me.y, fly = false, flyT = 0, side = 1, sideT = 0;
+  const skip = new Map(); // mục tiêu tạm bỏ → hết hạn lúc
   const rel = (o) => ({ dx: wrapDelta(o.x - me.x, map.width), dy: wrapDelta(o.y - me.y, map.height) });
   const far = (o, c) => Math.hypot(wrapDelta(o.x - c.x, map.width), wrapDelta(o.y - c.y, map.height));
-  const alive = (g) => g && (g.kind === 'mob' ? g.o.state !== 'dead' : g.kind === 'spot' ? true : gather.list.includes(g.o)); // điểm về neo: giữ tới khi tới nơi
-  const same = (a, b) => a?.o === b?.o || (a?.kind === 'spot' && b?.kind === 'spot' && a.o.x === b.o.x && a.o.y === b.o.y);
-  let side = 1, sideT = 0; // kẹt mà không bay được: lách sang bên một lúc (như dẫn đường)
+  const area = () => zone() || anchor;
   const free = (o, now) => !(skip.get(o) > now);
-  const area = () => zone() || anchor; // bí cảnh ưu tiên hơn neo
+  const alive = (g) => g && (g.kind === 'mob' ? g.o.state !== 'dead' : g.kind === 'spot' ? true : gather.list.includes(g.o));
+  const usable = (m, now) => free(m, now) && !m.void && !map.safeAt(m.x, m.y); // không tự lao vào Âm Hư, không đánh trong thành
+  const wanted = (m) => !focus || (m.def.zone === focus.zone && (!focus.rank || m.def.rank === focus.rank));
+  const inArea = (o) => { const a = area(); return !a || far(o, a) < a.r; };
 
   function pick(now) {
-    let best = null;
-    const z = zone(), a = area(), inA = (o) => !a || far(o, a) < a.r;
-    const ok = (x) => free(x, now) && !x.void && !map.safeAt(x.x, x.y) && inA(x); // không tự lao vào Âm Hư
-    const m = focus ? mobs.nearest(me, cfg.search_px, (x) => ok(x) && x.def.zone === focus.zone && (!focus.rank || x.def.rank === focus.rank))
-        || mobs.nearest(me, cfg.search_px, (x) => ok(x) && x.def.zone === focus.zone) // nhiệm vụ: đúng loại trước, rồi cùng vùng
-      : mobs.nearest(me, cfg.search_px, ok);
-    if (m) best = { kind: 'mob', o: m, d: mobs.distTo(m, me) };
-    if (z) return best || { kind: 'spot', o: { x: z.x, y: z.y }, d: 0 }; // bí cảnh: không hái, không có quái thì về giữa vòng
-    if (!me.flying && (!focus || focus.gather)) for (const n of gather.list) { // đang bay thì không hái được; nhiệm vụ đánh quái thì không đi hái
-      if (!free(n, now) || !inA(n)) continue;
-      const r = rel(n), d = Math.hypot(r.dx, r.dy);
+    // 1) con đang đánh mình ở gần: đánh trả trước mọi thứ
+    const foe = mobs.nearest(me, cfg.defend_px, (m) => usable(m, now) && FIGHTING.has(m.state));
+    if (foe) return { kind: 'mob', o: foe };
+    // 2) quái đúng chế độ trong vùng neo (nhiệm vụ: đúng loại trước, rồi cùng vùng)
+    let m = mobs.nearest(me, cfg.search_px, (x) => usable(x, now) && inArea(x) && wanted(x));
+    if (!m && focus?.rank) m = mobs.nearest(me, cfg.search_px, (x) => usable(x, now) && inArea(x) && x.def.zone === focus.zone);
+    let best = m ? { kind: 'mob', o: m, d: mobs.distTo(m, me) } : null;
+    if (zone()) return best || { kind: 'spot', o: { x: zone().x, y: zone().y } }; // bí cảnh: không có quái thì về giữa vòng
+    // 3) nhiệm vụ hái: nguyên liệu gần hơn quái thì đi hái (chế độ farm không hái)
+    if (mode === 'quest' && focus?.gather && !me.flying) for (const n of gather.list) {
+      if (!free(n, now) || !inArea(n)) continue;
+      const { dx, dy } = rel(n), d = Math.hypot(dx, dy);
       if (d <= cfg.search_px && (!best || d < best.d)) best = { kind: 'node', o: n, d };
     }
-    // vùng neo trống: lạc xa neo thì đi về gần neo, đã ở gần thì đứng chờ quái hồi sinh
-    if (!best && anchor && far(me, anchor) > anchor.r * cfg.anchor_idle_frac) best = { kind: 'spot', o: { x: anchor.x, y: anchor.y }, d: 0 };
-    return best;
+    if (best) { idleT = 0; return best; }
+    // 4) quanh neo trống: chờ một chút, rồi đi tới con gần nhất (rộng hơn) và dời neo theo
+    if (idleT > cfg.idle_expand_s) {
+      const n = mobs.nearest(me, cfg.search_px * 1.6, (x) => usable(x, now) && wanted(x));
+      if (n) { idleT = 0; if (anchor) { anchor.x = n.x; anchor.y = n.y; } return { kind: 'mob', o: n }; }
+    }
+    if (anchor && far(me, anchor) > anchor.r * cfg.anchor_idle_frac) return { kind: 'spot', o: { x: anchor.x, y: anchor.y } };
+    return null;
   }
 
-  // Mỗi khung hình khi đang bật Tự động. Trả về { x, y } hướng đi (0,0 = đứng yên) hoặc null nếu không có gì quanh đây.
   function step(dt, now) {
+    if (!mode) return null;
     repick -= dt;
-    const f = hpFrac(); if (f < (cfg.rest_below ?? 0)) resting = true; else if (f >= (cfg.rest_until ?? 1)) resting = false;
-    if (resting && !(goal?.kind === 'mob' && alive(goal) && goal.o.state !== 'idle' && goal.o.state !== 'return')) { goal = null; return { x: 0, y: 0, fly, rest: true }; }
-    const a = area(), out = goal?.kind === 'mob' && a && far(goal.o, a) > a.r + cfg.anchor_leash_px; // quái chạy ra khỏi vùng: bỏ, không đuổi theo
-    if (!alive(goal) || out || repick <= 0) { const g = pick(now); if (!same(g, goal)) stuckT = 0; goal = g; repick = cfg.repick_s; }
-    // đang bay vượt chướng ngại: bay ≥ 1 giây rồi hạ ngay khi dưới chân đứng được và (gần mục tiêu hoặc đã bay lâu)
-    if (fly) { flyT += dt; if (flyT > 1 && map.canStand(me.x, me.y, 6) && (!goal || flyT > 6 || mobs.distTo(goal.o, me) < reach * 2)) fly = false; }
-    if (!goal) return fly ? { x: 0, y: 0, fly } : null;
+    const f = hpFrac(); if (f < cfg.rest_below) resting = true; else if (f >= cfg.rest_until) resting = false;
+    const hold = goal?.kind === 'mob' && alive(goal) && mobs.distTo(goal.o, me) <= reach * 1.2; // đang đứng đánh: giữ mục tiêu
+    if (!alive(goal) || (!hold && repick <= 0)) {
+      const g = pick(now);
+      if (g?.o !== goal?.o) stuckT = 0;
+      goal = g; repick = cfg.repick_s;
+    }
+    if (!goal) { idleT += dt; return fly ? { x: 0, y: 0, fly } : { x: 0, y: 0, idle: true }; }
+    if (resting && !(goal.kind === 'mob' && FIGHTING.has(goal.o.state))) return { x: 0, y: 0, rest: true };
+    if (fly) { flyT += dt; if (flyT > 1 && map.canStand(me.x, me.y, 6) && (flyT > 6 || mobs.distTo(goal.o, me) < reach * 2)) fly = false; }
     const { dx, dy } = rel(goal.o), d = Math.hypot(dx, dy) || 1;
     if (goal.kind === 'spot' && d < 30) { goal = null; return { x: 0, y: 0, fly }; }
     if (goal.kind === 'mob' && d <= reach * 0.8) { stuckT = 0; lx = me.x; ly = me.y; return { x: 0, y: 0, fly }; } // đủ gần: đứng đánh
@@ -62,19 +76,23 @@ export function createAutoPlay({ me, mobs, gather, map, cfg, reach, canFly = () 
     if (stuckT > cfg.stuck_s) {
       stuckT = 0;
       if (cfg.fly_when_stuck && goal.kind !== 'node' && !me.flying && canFly()) { fly = true; flyT = 0; return { x: dx / d, y: dy / d, fly }; }
-      if (goal.kind !== 'spot') { skip.set(goal.o, now + cfg.skip_s); goal = null; return { x: 0, y: 0, fly }; }
-      side = -side; sideT = 0.9; // về neo mà vướng (nhà, đá, nước): lách sang bên rồi đi tiếp, không đứng im mãi
+      if (goal.kind !== 'spot' && sideT <= -1) { skip.set(goal.o, now + cfg.skip_s); goal = null; return { x: 0, y: 0, fly }; }
+      side = -side; sideT = 0.9; // lách sang bên một lúc rồi đi tiếp
     }
-    if (sideT > 0) { sideT -= dt; const a = side * 1.1, c = Math.cos(a), s = Math.sin(a); return { x: (dx * c - dy * s) / d, y: (dx * s + dy * c) / d, fly }; }
+    if (sideT > -1) sideT -= dt;
+    if (sideT > 0) { const a = side * 1.1, c = Math.cos(a), s = Math.sin(a); return { x: (dx * c - dy * s) / d, y: (dx * s + dy * c) / d, fly }; }
     return { x: dx / d, y: dy / d, fly };
   }
 
+  function start(m, f = null, at = null) {
+    mode = m; focus = f; anchor = { x: at?.x ?? me.x, y: at?.y ?? me.y, r: cfg.anchor_radius_px };
+    resting = false; goal = null; stuckT = 0; idleT = 0; fly = false; sideT = -1; skip.clear();
+  }
   return {
-    step,
-    // at: neo cũ (hồi sinh ở thành thì đi lại chỗ farm cũ); không có thì neo tại chỗ đứng
-    start(f = null, at = null) { focus = f; anchor = { x: at?.x ?? me.x, y: at?.y ?? me.y, r: cfg.anchor_radius_px }; resting = false; goal = null; stuckT = 0; fly = false; skip.clear(); },
-    snapshot: () => (anchor ? { focus, at: { x: anchor.x, y: anchor.y } } : null),
-    reset() { focus = null; anchor = null; goal = null; stuckT = 0; fly = false; },
+    step, start,
+    mode: () => mode,
+    snapshot: () => (mode ? { mode, focus, at: anchor && { x: anchor.x, y: anchor.y } } : null),
+    reset() { mode = null; focus = null; anchor = null; goal = null; stuckT = 0; fly = false; },
     moved() { if (anchor) { anchor.x = me.x; anchor.y = me.y; goal = null; } }, // người chơi tự kéo cần: neo đi theo
   };
 }
