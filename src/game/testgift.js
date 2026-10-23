@@ -33,3 +33,19 @@ export function grantGod({ progress, bag, awaken, gp, mdef, gift }) {
   progress.changed();
   return n;
 }
+
+// Mã thử "Hợp Nhất" (data/codes.json → grant: 'hopnhat', chủ dự án 23/10): đủ nguyên liệu cho Thiên Cơ Hợp Nhất của cả 6 hệ —
+// đồ Kho (bag.grantAll ở main.js), Thần Phù chỉ định phẩm cao nhất, mọi pháp bảo (đã nhận chủ), lĩnh ngộ kỹ năng sịn + cùi.
+// Không tặng lại thứ đã có. Chỉ trên máy (localStorage).
+export function grantHopNhat({ progress, cards, treasure, learn, dvDef, pbDef, gift = {} }) {
+  const tier = gift.card_tier ?? dvDef.cards.tier_weights.length - 1;
+  const st = progress.state;
+  let n = 0;
+  for (const r of Object.values(dvDef.hop_nhat.he)) {
+    if (!(st.cards || []).some((x) => x.id === r.card && x.tier >= tier)) { cards.grant(r.card, tier); n++; }
+    for (const id of [r.skill_sin, r.skill_cui]) if (!learn.learned(id)) { learn.grant(id); n++; }
+  }
+  for (const d of pbDef.list) if (!(st.treasures || []).some((t) => t.id === d.id && t.known)) { treasure.grant(d.id, gift.pb_lv || 0); n++; }
+  progress.changed();
+  return n;
+}

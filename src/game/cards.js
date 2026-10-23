@@ -74,5 +74,16 @@ export function createCards({ def, tiers, progress, stageOk, toast, play }) {
     }
     return null;
   }
-  return { onKill, grant, value, text, equippedDefs, signature, entries, act, isCard: (key) => key.startsWith('card:') };
+  // Gắn Thần Phù mã id (bản phẩm cao nhất đang có) — nút "Mặc cả bộ" của Cẩm nang. Ô phù đầy thì thay ô mở cuối.
+  function wear(id) {
+    const own = list().filter((x) => x.id === id).sort((a, b) => b.tier - a.tier)[0];
+    if (!own) return false;
+    const s = slots();
+    if (s.includes(own.uid) || s.some((u) => list().find((x) => x.uid === u)?.id === id)) return true;
+    let i = s.findIndex((u, k) => !u && open(k));
+    if (i < 0) i = s.map((_, k) => k).filter(open).pop() ?? -1;
+    if (i < 0) return false;
+    s[i] = own.uid; progress.changed(); return true;
+  }
+  return { wear, onKill, grant, value, text, equippedDefs, signature, entries, act, isCard: (key) => key.startsWith('card:') };
 }

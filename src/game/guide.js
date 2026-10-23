@@ -40,10 +40,9 @@ export function createGuide(c) {
     const skills = Object.entries(S).filter(([, s]) => s && s.he === he).map(([id, s]) =>
       `<div class="gd-skill ${skOk(id, s) ? '' : 'lock'}">${pic(skillIcon(s))}<span><b>${E(s.name)}</b>${!c.learn.learned(id) ? 'Chưa lĩnh ngộ (boss 0,5%)' : stageOk(s.unlock) ? 'Đã có' : `Mở ở ${E(c.stageName(s.unlock))}`}</span></div>`).join('');
     const cc = c.ccDef.he[he], pbs = c.pbDef.list.filter((d) => d.he === he);
-    const canWear = c.items.some((d) => d.he === he && d.slot && (mine.has(d.id)) && bag.equippedItem(d.slot)?.id !== d.id);
     return `<div class="row"><div class="row-h"><b style="color:${h.color}">${E(h.name)}</b><em>Hệ ${E(he)} · đang mặc ${n}/8</em></div>
       <p>Mặc càng nhiều món cùng hệ, chiêu càng biến đổi. Đủ 8 = Đại Thành.</p>${tiers}
-      ${c.equip ? `<button type="button" class="bag-act sm" data-act="wear" data-arg="${E(he)}" ${canWear ? '' : 'disabled'}>Mặc cả bộ ${E(he)} (đồ có trong Kho)</button>` : ''}</div>
+      ${c.equip ? `<button type="button" class="bag-act sm" data-act="wear" data-arg="${E(he)}">Mặc cả bộ ${E(he)} (đồ + pháp bảo + phù + kỹ năng có sẵn)</button>` : ''}</div>
       ${hopRow(he)}
       <div class="row"><b class="gd-h">Trang bị cần mặc</b>${rows}<p class="gd-note">Phôi tự luyện mang hệ ${E(he)} (thức tỉnh rồi) cũng tính vào bộ.</p></div>
       <div class="row"><b class="gd-h">Kỹ năng hệ ${E(he)}</b><div class="gd-grid">${skills || '<span>—</span>'}</div>
@@ -97,7 +96,8 @@ export function createGuide(c) {
           const d = c.items.find((x) => x.he === he && x.slot === sl && bag.entries().some((e) => e.item?.id === x.id));
           if (d && bag.equippedItem(sl)?.id !== d.id) { c.equip(d.id); n++; }
         }
-        c.toast(n ? `Đã mặc ${n} món hệ ${he}` : 'Không có thêm đồ hệ này trong Kho', 1600);
+        const k = c.hopNhat?.wear(he) || 0; // pháp bảo + Thần Phù + 2 kỹ năng của Thiên Cơ Hợp Nhất (thiếu thì bảng ghi ✗)
+        c.toast(n || k ? `Đã mặc ${n} món hệ ${he}${k ? ` + ${k} món Hợp Nhất (pháp bảo / phù / kỹ năng)` : ''}` : 'Không có thêm đồ hệ này trong Kho', 2000);
       },
     });
   }

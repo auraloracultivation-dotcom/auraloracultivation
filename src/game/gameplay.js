@@ -22,7 +22,7 @@ import { openCodex } from './codex.js';
 import { createGather } from './gather.js';
 import { createInventory } from './inventory.js';
 import { createVoid } from './void.js';
-import { grantFull, grantGod } from './testgift.js';
+import { grantFull, grantGod, grantHopNhat } from './testgift.js';
 import { createSkills } from './skills.js';
 import { createLoadout } from './loadout.js';
 import { openSkillPanel } from './skillview.js';
@@ -235,7 +235,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const camChe = createCamChe({ def: ccDef, dv, barrage, me, mobs, target, play, toast, dead: () => dead, maxHp: () => ps.hp, heal: (n) => { hp = Math.min(ps.hp, hp + n); } });
   const biCanh = createBiCanh({ def: bcDef, mdef: monDef, mobs, map, me, progress, life, wallet, cards, cardDef: dvDef.cards, dv, pbItem: pbDef.items[0].id,
     toast, play, say, dead: () => dead, stageId: () => progress.stageDef.id, itemName: (id) => itemDefs.get(id)?.name || id });
-  const hopNhat = createHopNhat({ def: dvDef.hop_nhat, bag, treasure, cards, loadout, S, cardName: (id) => dvDef.cards.list.find((x) => x.id === id)?.name || id, target, pt, ps: () => ps, dead: () => dead, toast }); // Thiên Cơ Hợp Nhất
+  const hopNhat = createHopNhat({ def: dvDef.hop_nhat, bag, treasure, cards, loadout, S, cardName: (id) => dvDef.cards.list.find((x) => x.id === id)?.name || id, learned: (id) => learn.learned(id), target, pt, ps: () => ps, dead: () => dead, toast }); // Thiên Cơ Hợp Nhất
   const guide = createGuide({ hopNhat, learn, dvDef, ccDef, pbDef, items: (await loadJSON('data/items/items.json')).items, S, dv, cards, bag, progress, loadout, stageName: (id) => gp.player.stages.find((x) => x.id === id)?.name || id,
     art: (a) => artInfo(a)?.file || artFile(a), equip: (id) => itemAction(`bag:${id}`, 'equip'), toast }); // nút + bảng Cẩm nang Đạo Vận
   const usable = createConsumables({ itemDefs, progress, wallet, cards, cardDef: dvDef.cards, treasure, biCanh, heOrder: dvDef.he_order, play, me, recompute });
@@ -388,7 +388,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
       return { item: a ? { ...item, actions: [...item.actions.slice(0, -1), a, item.actions.at(-1)] } : item, count }; }), ...tame.entries(), ...cards.entries(dv.mods()), ...treasure.entries()], slotItem: inv.slotItem, slotCandidates: inv.slotCandidates, itemAction,
     openShop() { if (!map.safeAt(me.x, me.y)) return toast(`${shop.name} ở ${map.town?.name || 'trong thành'} — hãy vào thành`, 1800); views.openShop(); },
     onProp: (id) => { const f = { 'kho-hang': () => views.openShop(), 'lo-luyen-dan': () => views.openCultivate('dan'), 'te-dan': () => views.openCultivate('realm') }[id]; f?.(); return !!f; }, // chạm công trình
-    realmName: () => progress.stageDef.name, gp, grantFull: (gift) => grantFull({ progress, wallet, gift, mats, pills, recipes, shop, blanks }), grantGod: (gift) => { const n = grantGod({ progress, bag, awaken, gp, mdef: monDef, gift }); recompute(); return n; }, // mã thử 'full' // gp: thông số chơi thử (bảng xếp hạng dùng trọng số lực chiến)
+    realmName: () => progress.stageDef.name, gp, grantFull: (gift) => grantFull({ progress, wallet, gift, mats, pills, recipes, shop, blanks }), grantHopNhat: (gift) => grantHopNhat({ progress, cards, treasure, learn, dvDef, pbDef, gift }), grantGod: (gift) => { const n = grantGod({ progress, bag, awaken, gp, mdef: monDef, gift }); recompute(); return n; }, // mã thử 'full' // gp: thông số chơi thử (bảng xếp hạng dùng trọng số lực chiến)
     spar: (op) => simulateDuel(ps, op, stats, gp.spar), // luận bàn với bóng chỉ số người trên bảng xếp hạng
     rankInfo: () => ({ stageIndex: progress.state.stage, stageName: progress.stageDef.name, exp: progress.state.exp, stats: ps, voidKills: progress.state.voidKillCount || 0 }),
     markers: () => voids.markers(), // Âm Hư đang xuất hiện (chấm tím trên bản đồ)
