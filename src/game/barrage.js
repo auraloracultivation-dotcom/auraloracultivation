@@ -182,6 +182,7 @@ export function createBarrage(c) {
   function update(dt) {
     T += dt; announce();
     if ((budgetT -= dt) <= 0) { budgetT = 0.1; hitFxBudget = 6; }
+    updateMovers(dt);
     for (let i = tasks.length - 1; i >= 0; i--) {
       const q = tasks[i]; q.left -= dt; q.acc += dt;
       while (q.acc >= q.every && q.left > -1e-6) { q.acc -= q.every; q.fn(q.k++); }
@@ -203,7 +204,7 @@ export function createBarrage(c) {
 
   // ---- Vẽ (toạ độ màn hình qua at()) — gọi trước drawFx đạn ----
   function render(ctx, at, now) {
-    renderTotems(ctx, at, now);
+    renderTotems(ctx, at, now); renderMovers(ctx, at, now);
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
     for (const z of zones) { // đất cháy: ảnh lửa (lặp khung giữa) + quầng sáng
@@ -266,6 +267,31 @@ export function createBarrage(c) {
     }
     ctx.restore();
   }
+  // Vật hiệu ứng di chuyển / đi theo (lốc lửa, phân thân nguyên thần): lặp các khung giữa của fx, mỗi `every` giây đánh
+  // quanh mình (r) hoặc bắn đạn tự đuổi vào quái gần (shoot). follow: bám theo người chơi lệch (ox, oy).
+  const movers = [];
+  const mover = (o) => movers.push({ every: 0.4, tick: 0, ...o, until: T + o.s, born: T });
+  function updateMovers(dt) {
+    for (let i = movers.length - 1; i >= 0; i--) {
+      const o = movers[i];
+      if (o.until <= T) { movers.splice(i, 1); continue; }
+      if (o.follow) { o.x = map.wrapX(me.x + o.ox * me.facing); o.y = map.wrapY(me.y + o.oy); }
+      else { o.x = map.wrapX(o.x + (o.vx || 0) * dt); o.y = map.wrapY(o.y + (o.vy || 0) * dt); }
+      if ((o.tick -= dt) > 0) continue;
+      o.tick = o.every;
+      if (o.r) hitAround(o.x, o.y, o.r, o.mul, 'skill', o.stun);
+      if (o.shoot) { const m = nearestTo(o, 220); if (m) { const r = rel(m, o), d = Math.hypot(r.dx, r.dy - 10) || 1;
+        fire({ id: 'dao', x: o.x, y: o.y - 14, dx: r.dx / d, dy: (r.dy - 10) / d, speed: 460, range: 240, fx: o.shoot, size: 18, mul: o.mul, homing: 0.6 }); } }
+    }
+  }
+  function renderMovers(ctx, at, now) {
+    for (const o of movers) {
+      const p = at(o), t = T - o.born;
+      const q = t < 0.3 ? (t / 0.3) * 0.3 : o.until - T < 0.3 ? 0.8 + (1 - (o.until - T) / 0.3) * 0.19 : 0.3 + ((t * (o.loop || 1)) % 1) * 0.5;
+      ctx.save(); ctx.globalAlpha = o.alpha ?? 1; if (o.follow && me.facing < 0) { ctx.translate(p.x, 0); ctx.scale(-1, 1); ctx.translate(-p.x, 0); }
+      drawEffect(ctx, o.fx, q, p.x, p.y - o.h / 2 + 4, o.h); ctx.restore();
+    }
+  }
   // Vật đứng tại chỗ (pháp bảo Cửu Tiêu Lôi Tháp): ảnh icon, nhún nhẹ, mờ dần cuối thời gian
   function totem(o) { const img = new Image(); img.src = o.img; totems.push({ ...o, im: img, until: T + o.s, born: T }); }
   function renderTotems(ctx, at, now) {
@@ -276,5 +302,5 @@ export function createBarrage(c) {
       ctx.drawImage(o.im, p.x - w / 2, p.y - o.h - 4 + b, w, o.h); ctx.restore();
     }
   }
-  return { fire, basic, maybeEcho, update, render, renderGround, renderTotems, hitAround, schedule, addOrbit, nearestTo, totem, zap: (z) => zaps.push(z) };
+  return { fire, basic, maybeEcho, update, render, renderGround, renderTotems, hitAround, schedule, addOrbit, nearestTo, totem, mover, zap: (z) => zaps.push(z) };
 }

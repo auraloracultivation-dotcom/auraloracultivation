@@ -76,6 +76,50 @@ export function createSkills(c) {
       }
       return true;
     }
+    if (s.kind === 'wave') { // sóng / đất nứt quét thẳng phía trước: mọi quái trong dải dài len, rộng w
+      const { dx, dy } = dirTo(c.target(s.len)), w = s.w / 2;
+      for (let j = 1; j <= 3; j++) play(s.fx, me.x + dx * s.len * j / 3.3, me.y + dy * s.len * j / 3.3 + 4, s.fx_h, { ground: true, delay: j * 0.08 });
+      for (const m of mobs.within(me, s.len + 20)) {
+        const r = mobs.rel(m, me), along = r.dx * dx + r.dy * dy, across = Math.abs(-r.dx * dy + r.dy * dx);
+        if (along < -10 || along > s.len || across > w) continue;
+        c.strike(m, s.mul, 'skill'); if (s.stun_s && m.state !== 'dead') m.stun = Math.max(m.stun || 0, s.stun_s);
+        if (s.push && m.state !== 'dead') { m.x += dx * s.push; m.y += dy * s.push; }
+      }
+      return true;
+    }
+    if (s.kind === 'tornado') { // lốc lửa đi về phía mục tiêu, cháy mọi quái nó đi qua
+      const { dx, dy } = dirTo(c.target(240));
+      c.mover({ fx: s.fx, h: s.fx_h, x: me.x + dx * 20, y: me.y + dy * 20, vx: dx * s.speed, vy: dy * s.speed, s: s.last_s, r: s.radius_px, mul: s.mul, every: 0.3, loop: 2 });
+      return true;
+    }
+    if (s.kind === 'storm') { // thiên kiếp: sét đánh liên tục quái ngẫu nhiên quanh mình
+      c.schedule(s.last_s, s.every, () => {
+        const near = mobs.within(me, s.radius_px).filter((m) => m.state !== 'dead'); if (!near.length) return;
+        const m = near[Math.floor(Math.random() * near.length)];
+        play(s.fx, m.x, m.y + 2, s.fx_h, { ground: true }); hitAround(m.x, m.y, { ...s, radius_px: 26 });
+      });
+      return true;
+    }
+    if (s.kind === 'blink') { // hư không thuấn di: ra sau lưng mục tiêu, chém
+      const m = c.target(s.range_px); if (!m) { cds[id] = 0; if (!quiet) toast('Không có mục tiêu', 900); return false; }
+      play(s.fx, me.x, me.y - 12, s.fx_h);
+      const side = mobs.rel(m, me).dx >= 0 ? 1 : -1;
+      me.x = m.x + side * (m.r + 14); me.y = m.y; me.facing = -side;
+      play(s.fx, me.x, me.y - 12, s.fx_h, { delay: 0.1 });
+      c.strike(m, s.mul, 'skill');
+      return true;
+    }
+    if (s.kind === 'clone') { // nguyên thần xuất khiếu: phân thân đứng cạnh, tự bắn đạn đạo pháp
+      c.mover({ fx: s.fx, h: s.fx_h, follow: true, ox: -22, oy: -4, x: me.x, y: me.y, s: s.last_s, mul: s.mul, every: s.every, shoot: c.mods().bolt, loop: 0.8, alpha: 0.9 });
+      return true;
+    }
+    if (s.kind === 'seal') { // cấm chế phong ấn: khoá quái (cả tinh anh / boss) — choáng + không vận chiêu
+      const m = c.target(s.range_px); if (!m) { cds[id] = 0; if (!quiet) toast('Không có mục tiêu', 900); return false; }
+      play(s.fx, m.x, m.y + 4, s.fx_h, { ground: true });
+      m.stun = Math.max(m.stun || 0, s.stun_s); m.sealed = s.seal_s; m.cast = null; if (m.state === 'cast') m.state = 'chase';
+      c.strike(m, s.mul, 'skill'); say(m.x, m.y - (m.def.art?.h || 20) - 6, 'Phong ấn', '#ff6a6a');
+      return true;
+    }
     if (s.kind === 'pull') { // U Minh Quỷ Trảo: kéo quái quanh mình về trước mặt, đánh + choáng
       const near = mobs.within(me, s.radius_px); if (!near.length) { if (!quiet) toast('Không có quái quanh đây', 900); }
       const fx0 = { x: me.x + me.facing * 34, y: me.y };
@@ -101,6 +145,7 @@ export function createSkills(c) {
       hitAround(me.x, me.y, s);
     } else if (s.kind === 'heal') {
       play(s.fx, me.x, me.y + 4, s.fx_h, { ground: true });
+      if (s.pets) c.healPets?.(s.heal);
       c.heal(c.maxHp() * s.heal);
     } else if (s.kind === 'buff') {
       c.buffs[s.buff] = { mul: s.buff_mul, until: now + s.last_s }; c.recompute();

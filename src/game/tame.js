@@ -178,5 +178,6 @@ export function createTame({ cfg, progress, monsters, mdef, mobs, map, me, stats
     }
     return null;
   }
-  return { tryTame, update, render, entries, act, isPet: (key) => key.startsWith('pet:'), live };
+  const healAll = (f) => { for (const s of live.values()) if (s.mode !== 'dead') s.hp = Math.min(s.maxHp, s.hp + s.maxHp * f); };
+  return { healAll, tryTame, update, render, entries, act, isPet: (key) => key.startsWith('pet:'), live };
 }
