@@ -203,3 +203,8 @@ Lý do: người chơi Hóa Thần Hậu kỳ chém chết Âm Hư sau khoảng 
 - **Chuỗi Tầm Bảo** (23/10, `data/quests/quests.json` → `q.main.tb1…tb7`): nhiệm vụ chính dẫn đi đào khoáng quý luyện phôi,
   từ Đồng cỏ (Luyện Khí) tới Hắc thổ (Hóa Thần), kết ở Hư Ngọc — phôi đồ Truyền thuyết. Đủ cảnh giới là tự nhận.
   Mọi nhiệm vụ có `tier` = màu độ hiếm / độ khó (giống phẩm trang bị) hiện trên khung Nhiệm vụ ở HUD.
+- **Tu tiên + idle** (chủ dự án 23/10): hạ quái chỉ còn 30% tu vi, 25% Linh thạch, 50% Vàng, 30% rơi đồ (Thần Phù, Phôi Pháp Bảo,
+  đồ ngũ hành) — `data/gameplay.json → kill_rewards`. Thảo dược / khoáng từ quái giữ nguyên để làm nhiệm vụ.
+  Phần thưởng chính: **Ngày** (3 việc ~15 phút, reset 0h giờ VN), **Tuần** (3 việc khó, khoáng + đặc biệt + Phôi Pháp Bảo,
+  reset 0h thứ Hai giờ VN), **Tiến độ** (bậc 1→n không reset, thưởng tăng dần). Sinh theo vùng của đại cảnh giới —
+  `src/game/routine.js`, số liệu `data/quests/quests.json → routine`.

@@ -66,7 +66,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const stats = createStats(statsDef, gp);
   const mobs = createMonsters({ gp, mdef: monDef, map }), gapR = createRealmGap({ gp, mdef: monDef, progress, today: () => life.today(), toast: (...a) => toast(...a) }); // áp chế cảnh giới
   const voids = createVoid({ mdef: monDef, mobs, map, progress, toast, me, serverNow });
-  const quests = createQuests(questDef, progress, () => MAJOR_OF(progress.stageDef.id));
+  const quests = createQuests(questDef, progress, () => MAJOR_OF(progress.stageDef.id), { realms, gp, mats }); // + Ngày / Tuần / Tiến độ (routine.js)
   // Đan phương / công thức / bí kíp: món id được dạy bởi vật phẩm nào; có trong kho mới luyện được
   const teacher = new Map(recipes.items.filter((r) => r.teaches).map((r) => [r.teaches, r.id]));
   const owns = (id) => !teacher.has(id) || progress.count(teacher.get(id)) > 0;
@@ -164,15 +164,16 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     if (targetUid === m.uid) targetUid = null;
     play('khoi', m.x, m.y, Math.max(16, (m.def.art?.h || 20) * 0.7), { ground: true, delay: 0.4 });
     const rank = m.def.rank, k = gp.monster.exp_mul[rank];
-    const exp = gapR.daily(gapR.capExp(Math.round((m.maxHp / 10) * k * cpFx.expMul()), m, progress.stageDef.exp_need), progress.stageDef.exp_need, progress.stageDef.id), stone = m.stone || 1; // Linh thạch theo tầng quái (data/gameplay.json → monster.stone_by_stage)
-    const gold = wallet.goldPerKill(stone);
+    const KR = gp.kill_rewards, fr = (x) => Math.floor(x) + (Math.random() < x % 1 ? 1 : 0); // giết quái nhận ít (tu tiên + idle, chủ dự án 23/10) — phần lẻ thành xác suất
+    const exp = gapR.daily(gapR.capExp(Math.round((m.maxHp / 10) * k * cpFx.expMul() * KR.exp_mul), m, progress.stageDef.exp_need), progress.stageDef.exp_need, progress.stageDef.id), stone = fr((m.stone || 1) * KR.stone_mul); // Linh thạch theo tầng quái × stone_mul
+    const gold = fr(wallet.goldPerKill(m.stone || 1) * KR.gold_mul);
     addExp(exp); progress.addStone(stone); wallet.add('vang', gold);
     const got = rollLoot(m);
     for (const g of got) gain(g.id, g.n);
     if (rank === 'boss' && !progress.state.bosses.includes(m.def.id)) progress.state.bosses.push(m.def.id);
-    tame.tryTame(m); cards.onKill(m); treasure.onKill(m); dv.onKill(m, toast); learn.onKill(m); // 0,5% quái quy phục làm thú cưng · rơi Thần Phù
-    quests.emit('kill', { id: m.def.id, rank });
-    say(m.x, m.y - m.r * 3, `+${exp} tu vi · +${stone} Linh thạch · +${gold} Vàng`, '#9fe8ff');
+    tame.tryTame(m); if (Math.random() < KR.gear_drop_mul) { cards.onKill(m); treasure.onKill(m); dv.onKill(m, toast); } learn.onKill(m); // thú cưng · Thần Phù / phôi pháp bảo / đồ ngũ hành (giảm theo gear_drop_mul)
+    quests.emit('kill', { id: m.def.id, rank, zone: m.def.zone });
+    say(m.x, m.y - m.r * 3, `+${exp} tu vi${stone ? ` · +${stone} Linh thạch` : ''}${gold ? ` · +${gold} Vàng` : ''}`, '#9fe8ff');
     if (got.length) toast(`Nhặt: ${got.map((g) => g.label).join(', ')}`, 1800);
     progress.changed();
   }

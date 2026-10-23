@@ -1172,6 +1172,13 @@
   "here_stone_base": 10,
   "here_stone_per_stage": 5
  },
+ "kill_rewards": {
+  "_ghi_chu": "Chủ dự án 23/10/2026: game tu tiên + idle — hạ quái nhận ÍT (tu vi, Linh thạch, Vàng, rơi đồ: Thần Phù, Phôi Pháp Bảo, đồ ngũ hành). Thảo dược / khoáng từ quái giữ nguyên để làm nhiệm vụ. Phần thưởng chính: nhiệm vụ Ngày / Tuần / Tiến độ (data/quests/quests.json → routine).",
+  "exp_mul": 0.3,
+  "stone_mul": 0.25,
+  "gold_mul": 0.5,
+  "gear_drop_mul": 0.3
+ },
  "auto": {
   "_ghi_chu": "Nút Tự động: tự tìm quái / nguyên liệu gần nhất trong search_px, tự đánh, tự hái, tự uống đan hồi máu khi khí huyết dưới hp_pill_below (nếu trong kho có). Kẹt quá stuck_s thì bỏ mục tiêu đó skip_s giây. Cần điều khiển luôn được ưu tiên.",
   "search_px": 900,
