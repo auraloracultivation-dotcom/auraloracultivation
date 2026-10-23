@@ -180,6 +180,186 @@
    "file": "assets/equipment/phap-tuong/art.avatar.he.6.webp",
    "w": 261,
    "h": 302
+  },
+  "art.outfit.he.7": {
+   "id": "art.outfit.he.7",
+   "file": "assets/equipment/trang-phuc/art.outfit.he.7.webp",
+   "w": 217,
+   "h": 240,
+   "hem": 236
+  },
+  "art.outfit.he.8": {
+   "id": "art.outfit.he.8",
+   "file": "assets/equipment/trang-phuc/art.outfit.he.8.webp",
+   "w": 186,
+   "h": 240,
+   "hem": 236
+  },
+  "art.outfit.he.9": {
+   "id": "art.outfit.he.9",
+   "file": "assets/equipment/trang-phuc/art.outfit.he.9.webp",
+   "w": 184,
+   "h": 240,
+   "hem": 236
+  },
+  "art.outfit.he.10": {
+   "id": "art.outfit.he.10",
+   "file": "assets/equipment/trang-phuc/art.outfit.he.10.webp",
+   "w": 225,
+   "h": 240,
+   "hem": 236
+  },
+  "art.outfit.he.11": {
+   "id": "art.outfit.he.11",
+   "file": "assets/equipment/trang-phuc/art.outfit.he.11.webp",
+   "w": 210,
+   "h": 240,
+   "hem": 236
+  },
+  "art.outfit.he.12": {
+   "id": "art.outfit.he.12",
+   "file": "assets/equipment/trang-phuc/art.outfit.he.12.webp",
+   "w": 197,
+   "h": 240,
+   "hem": 236
+  },
+  "art.weapon.he.7": {
+   "id": "art.weapon.he.7",
+   "file": "assets/equipment/vu-khi/art.weapon.he.7.webp",
+   "w": 225,
+   "h": 280,
+   "grip": [
+    26.3,
+    243.8
+   ],
+   "angle": 38.3
+  },
+  "art.weapon.he.8": {
+   "id": "art.weapon.he.8",
+   "file": "assets/equipment/vu-khi/art.weapon.he.8.webp",
+   "w": 227,
+   "h": 280,
+   "grip": [
+    26.2,
+    245.8
+   ],
+   "angle": 39.1
+  },
+  "art.weapon.he.9": {
+   "id": "art.weapon.he.9",
+   "file": "assets/equipment/vu-khi/art.weapon.he.9.webp",
+   "w": 223,
+   "h": 280,
+   "grip": [
+    26.4,
+    244.6
+   ],
+   "angle": 38.4
+  },
+  "art.weapon.he.10": {
+   "id": "art.weapon.he.10",
+   "file": "assets/equipment/vu-khi/art.weapon.he.10.webp",
+   "w": 230,
+   "h": 280,
+   "grip": [
+    28.4,
+    245.5
+   ],
+   "angle": 39.3
+  },
+  "art.weapon.he.11": {
+   "id": "art.weapon.he.11",
+   "file": "assets/equipment/vu-khi/art.weapon.he.11.webp",
+   "w": 258,
+   "h": 280,
+   "grip": [
+    30.6,
+    246.2
+   ],
+   "angle": 41.1
+  },
+  "art.weapon.he.12": {
+   "id": "art.weapon.he.12",
+   "file": "assets/equipment/vu-khi/art.weapon.he.12.webp",
+   "w": 208,
+   "h": 280,
+   "grip": [
+    22.6,
+    245.6
+   ],
+   "angle": 34.8
+  },
+  "art.wing.he.7": {
+   "id": "art.wing.he.7",
+   "file": "assets/equipment/canh/art.wing.he.7.webp",
+   "w": 250,
+   "h": 168
+  },
+  "art.wing.he.8": {
+   "id": "art.wing.he.8",
+   "file": "assets/equipment/canh/art.wing.he.8.webp",
+   "w": 250,
+   "h": 165
+  },
+  "art.wing.he.9": {
+   "id": "art.wing.he.9",
+   "file": "assets/equipment/canh/art.wing.he.9.webp",
+   "w": 250,
+   "h": 169
+  },
+  "art.wing.he.10": {
+   "id": "art.wing.he.10",
+   "file": "assets/equipment/canh/art.wing.he.10.webp",
+   "w": 250,
+   "h": 166
+  },
+  "art.wing.he.11": {
+   "id": "art.wing.he.11",
+   "file": "assets/equipment/canh/art.wing.he.11.webp",
+   "w": 250,
+   "h": 163
+  },
+  "art.wing.he.12": {
+   "id": "art.wing.he.12",
+   "file": "assets/equipment/canh/art.wing.he.12.webp",
+   "w": 250,
+   "h": 177
+  },
+  "art.avatar.he.7": {
+   "id": "art.avatar.he.7",
+   "file": "assets/equipment/phap-tuong/art.avatar.he.7.webp",
+   "w": 295,
+   "h": 300
+  },
+  "art.avatar.he.8": {
+   "id": "art.avatar.he.8",
+   "file": "assets/equipment/phap-tuong/art.avatar.he.8.webp",
+   "w": 319,
+   "h": 300
+  },
+  "art.avatar.he.9": {
+   "id": "art.avatar.he.9",
+   "file": "assets/equipment/phap-tuong/art.avatar.he.9.webp",
+   "w": 292,
+   "h": 300
+  },
+  "art.avatar.he.10": {
+   "id": "art.avatar.he.10",
+   "file": "assets/equipment/phap-tuong/art.avatar.he.10.webp",
+   "w": 307,
+   "h": 300
+  },
+  "art.avatar.he.11": {
+   "id": "art.avatar.he.11",
+   "file": "assets/equipment/phap-tuong/art.avatar.he.11.webp",
+   "w": 274,
+   "h": 300
+  },
+  "art.avatar.he.12": {
+   "id": "art.avatar.he.12",
+   "file": "assets/equipment/phap-tuong/art.avatar.he.12.webp",
+   "w": 317,
+   "h": 300
   }
  },
  "hand_open": "assets/characters/base/ban-tay.tung-chieu.webp",
@@ -807,6 +987,714 @@
     }
    },
    "saved_at": "2026-10-20T17:17:56.148Z"
+  },
+  {
+   "id": "he.7",
+   "name": "Bộ Thánh Quang",
+   "he": "Quang",
+   "thien": true,
+   "outfit": "art.outfit.he.7",
+   "weapon": "art.weapon.he.7",
+   "wing": "art.wing.he.7",
+   "avatar": "art.avatar.he.7",
+   "region": {
+    "footL": [
+     132,
+     226,
+     150,
+     238
+    ],
+    "footR": [
+     88,
+     228,
+     113,
+     239
+    ],
+    "handL": [
+     67,
+     174,
+     92,
+     192
+    ],
+    "handR": [
+     149,
+     176,
+     169,
+     191
+    ],
+    "neck": 0.59
+   },
+   "region_shared": null,
+   "shared_from": null,
+   "toggles": {
+    "flip": false,
+    "flipOpen": false,
+    "swap": false,
+    "swapOpen": false
+   },
+   "params": {
+    "bong": {
+     "a": 0.56,
+     "fly": 0.35,
+     "h": 0.05,
+     "s": 0.6,
+     "x": -0.005,
+     "y": -0.028
+    },
+    "canh": {
+     "a": 1,
+     "s": 1.72,
+     "sh": 1,
+     "sw": 1.15,
+     "x": -0.05,
+     "y": -0.62
+    },
+    "giay": {
+     "lift": 0.015,
+     "s": 1,
+     "x": 0.005,
+     "y": -0.028
+    },
+    "honthu": {
+     "a": 1,
+     "bob": 0.017,
+     "s": 0.36,
+     "x": -0.99,
+     "y": -0.6
+    },
+    "matna": {
+     "a": 1,
+     "s": 0.75,
+     "x": 0.105,
+     "y": 0.335
+    },
+    "phaptuong": {
+     "a": 0.45,
+     "s": 2.2,
+     "sh": 1.24,
+     "sw": 1.23,
+     "x": 0.175,
+     "y": -0.115
+    },
+    "tay": {
+     "grow": 0.29,
+     "hold": 0.58,
+     "orot": 30,
+     "os": 1.18,
+     "reach": 0.015,
+     "rot": 0,
+     "ry": 0.07,
+     "s": 1,
+     "swing": 0.015,
+     "x": 0,
+     "y": 0
+    },
+    "than": {
+     "bodyBob": 0.03,
+     "headBob": 0.024,
+     "headLag": 0.74,
+     "overlap": 0.03,
+     "scale": 1,
+     "step": 4.4
+    },
+    "vukhi": {
+     "rest": -41,
+     "s": 3.34,
+     "x": 0.42,
+     "y": -0.005
+    }
+   },
+   "saved_at": "2026-10-23T13:16:42.979Z"
+  },
+  {
+   "id": "he.8",
+   "name": "Bộ Lôi Đình",
+   "he": "Lôi",
+   "thien": true,
+   "outfit": "art.outfit.he.8",
+   "weapon": "art.weapon.he.8",
+   "wing": "art.wing.he.8",
+   "avatar": "art.avatar.he.8",
+   "region": {
+    "footL": [
+     57,
+     224,
+     87,
+     240
+    ],
+    "footR": [
+     98,
+     224,
+     128,
+     240
+    ],
+    "handL": [
+     46,
+     166,
+     73,
+     194
+    ],
+    "handR": [
+     132,
+     166,
+     158,
+     194
+    ],
+    "neck": 0.59
+   },
+   "region_shared": null,
+   "shared_from": null,
+   "toggles": {
+    "flip": false,
+    "flipOpen": false,
+    "swap": false,
+    "swapOpen": false
+   },
+   "params": {
+    "bong": {
+     "a": 0.56,
+     "fly": 0.35,
+     "h": 0.05,
+     "s": 0.6,
+     "x": -0.005,
+     "y": -0.028
+    },
+    "canh": {
+     "a": 1,
+     "s": 1.72,
+     "sh": 1,
+     "sw": 1.15,
+     "x": -0.05,
+     "y": -0.62
+    },
+    "giay": {
+     "lift": 0.015,
+     "s": 1,
+     "x": 0.005,
+     "y": -0.028
+    },
+    "honthu": {
+     "a": 1,
+     "bob": 0.017,
+     "s": 0.36,
+     "x": -0.99,
+     "y": -0.6
+    },
+    "matna": {
+     "a": 1,
+     "s": 0.75,
+     "x": 0.105,
+     "y": 0.335
+    },
+    "phaptuong": {
+     "a": 0.45,
+     "s": 2.2,
+     "sh": 1.24,
+     "sw": 1.23,
+     "x": 0.175,
+     "y": -0.115
+    },
+    "tay": {
+     "grow": 0.29,
+     "hold": 0.58,
+     "orot": 30,
+     "os": 1.18,
+     "reach": 0.015,
+     "rot": 0,
+     "ry": 0.07,
+     "s": 1,
+     "swing": 0.015,
+     "x": 0,
+     "y": 0
+    },
+    "than": {
+     "bodyBob": 0.03,
+     "headBob": 0.024,
+     "headLag": 0.74,
+     "overlap": 0.03,
+     "scale": 1,
+     "step": 4.4
+    },
+    "vukhi": {
+     "rest": -41,
+     "s": 3.34,
+     "x": 0.42,
+     "y": -0.005
+    }
+   },
+   "saved_at": "2026-10-23T13:16:57.579Z"
+  },
+  {
+   "id": "he.9",
+   "name": "Bộ Hàn Băng",
+   "he": "Băng",
+   "thien": true,
+   "outfit": "art.outfit.he.9",
+   "weapon": "art.weapon.he.9",
+   "wing": "art.wing.he.9",
+   "avatar": "art.avatar.he.9",
+   "region": {
+    "footL": [
+     56,
+     224,
+     86,
+     240
+    ],
+    "footR": [
+     97,
+     224,
+     127,
+     240
+    ],
+    "handL": [
+     46,
+     166,
+     72,
+     194
+    ],
+    "handR": [
+     130,
+     166,
+     157,
+     194
+    ],
+    "neck": 0.59
+   },
+   "region_shared": null,
+   "shared_from": null,
+   "toggles": {
+    "flip": false,
+    "flipOpen": false,
+    "swap": false,
+    "swapOpen": false
+   },
+   "params": {
+    "bong": {
+     "a": 0.56,
+     "fly": 0.35,
+     "h": 0.05,
+     "s": 0.6,
+     "x": -0.005,
+     "y": -0.028
+    },
+    "canh": {
+     "a": 1,
+     "s": 1.72,
+     "sh": 1,
+     "sw": 1.15,
+     "x": -0.05,
+     "y": -0.62
+    },
+    "giay": {
+     "lift": 0.015,
+     "s": 1,
+     "x": 0.005,
+     "y": -0.028
+    },
+    "honthu": {
+     "a": 1,
+     "bob": 0.017,
+     "s": 0.36,
+     "x": -0.99,
+     "y": -0.6
+    },
+    "matna": {
+     "a": 1,
+     "s": 0.75,
+     "x": 0.105,
+     "y": 0.335
+    },
+    "phaptuong": {
+     "a": 0.45,
+     "s": 2.2,
+     "sh": 1.24,
+     "sw": 1.23,
+     "x": 0.175,
+     "y": -0.115
+    },
+    "tay": {
+     "grow": 0.29,
+     "hold": 0.58,
+     "orot": 30,
+     "os": 1.18,
+     "reach": 0.015,
+     "rot": 0,
+     "ry": 0.07,
+     "s": 1,
+     "swing": 0.015,
+     "x": 0,
+     "y": 0
+    },
+    "than": {
+     "bodyBob": 0.03,
+     "headBob": 0.024,
+     "headLag": 0.74,
+     "overlap": 0.03,
+     "scale": 1,
+     "step": 4.4
+    },
+    "vukhi": {
+     "rest": -41,
+     "s": 3.34,
+     "x": 0.42,
+     "y": -0.005
+    }
+   },
+   "saved_at": "2026-10-23T13:17:00.618Z"
+  },
+  {
+   "id": "he.10",
+   "name": "Bộ Phong Linh",
+   "he": "Phong",
+   "thien": true,
+   "outfit": "art.outfit.he.10",
+   "weapon": "art.weapon.he.10",
+   "wing": "art.wing.he.10",
+   "avatar": "art.avatar.he.10",
+   "region": {
+    "footL": [
+     69,
+     224,
+     106,
+     240
+    ],
+    "footR": [
+     118,
+     224,
+     155,
+     240
+    ],
+    "handL": [
+     56,
+     166,
+     88,
+     194
+    ],
+    "handR": [
+     159,
+     166,
+     192,
+     194
+    ],
+    "neck": 0.59
+   },
+   "region_shared": null,
+   "shared_from": null,
+   "toggles": {
+    "flip": false,
+    "flipOpen": false,
+    "swap": false,
+    "swapOpen": false
+   },
+   "params": {
+    "bong": {
+     "a": 0.56,
+     "fly": 0.35,
+     "h": 0.05,
+     "s": 0.6,
+     "x": -0.005,
+     "y": -0.028
+    },
+    "canh": {
+     "a": 1,
+     "s": 1.72,
+     "sh": 1,
+     "sw": 1.15,
+     "x": -0.05,
+     "y": -0.62
+    },
+    "giay": {
+     "lift": 0.015,
+     "s": 1,
+     "x": 0.005,
+     "y": -0.028
+    },
+    "honthu": {
+     "a": 1,
+     "bob": 0.017,
+     "s": 0.36,
+     "x": -0.99,
+     "y": -0.6
+    },
+    "matna": {
+     "a": 1,
+     "s": 0.75,
+     "x": 0.05,
+     "y": 0.335
+    },
+    "phaptuong": {
+     "a": 0.45,
+     "s": 2.2,
+     "sh": 1.24,
+     "sw": 1.23,
+     "x": 0.175,
+     "y": -0.115
+    },
+    "tay": {
+     "grow": 0.29,
+     "hold": 0.58,
+     "orot": 30,
+     "os": 1.18,
+     "reach": 0.015,
+     "rot": 0,
+     "ry": 0.07,
+     "s": 1,
+     "swing": 0.015,
+     "x": 0,
+     "y": 0
+    },
+    "than": {
+     "bodyBob": 0.03,
+     "headBob": 0.024,
+     "headLag": 0.74,
+     "overlap": 0.03,
+     "scale": 1,
+     "step": 4.4
+    },
+    "vukhi": {
+     "rest": -41,
+     "s": 3.34,
+     "x": 0.42,
+     "y": -0.005
+    }
+   },
+   "saved_at": "2026-10-23T13:17:21.556Z"
+  },
+  {
+   "id": "he.11",
+   "name": "Bộ Hư Không",
+   "he": "Hư",
+   "thien": true,
+   "outfit": "art.outfit.he.11",
+   "weapon": "art.weapon.he.11",
+   "wing": "art.wing.he.11",
+   "avatar": "art.avatar.he.11",
+   "region": {
+    "footL": [
+     64,
+     224,
+     98,
+     240
+    ],
+    "footR": [
+     111,
+     224,
+     145,
+     240
+    ],
+    "handL": [
+     52,
+     166,
+     82,
+     194
+    ],
+    "handR": [
+     149,
+     166,
+     179,
+     194
+    ],
+    "neck": 0.59
+   },
+   "region_shared": null,
+   "shared_from": null,
+   "toggles": {
+    "flip": false,
+    "flipOpen": false,
+    "swap": false,
+    "swapOpen": false
+   },
+   "params": {
+    "bong": {
+     "a": 0.56,
+     "fly": 0.35,
+     "h": 0.05,
+     "s": 0.6,
+     "x": -0.005,
+     "y": -0.028
+    },
+    "canh": {
+     "a": 1,
+     "s": 1.72,
+     "sh": 1,
+     "sw": 1.15,
+     "x": -0.05,
+     "y": -0.62
+    },
+    "giay": {
+     "lift": 0.015,
+     "s": 1,
+     "x": 0.005,
+     "y": -0.028
+    },
+    "honthu": {
+     "a": 1,
+     "bob": 0.017,
+     "s": 0.36,
+     "x": -0.99,
+     "y": -0.6
+    },
+    "matna": {
+     "a": 1,
+     "s": 0.75,
+     "x": 0.05,
+     "y": 0.335
+    },
+    "phaptuong": {
+     "a": 0.45,
+     "s": 2.2,
+     "sh": 1.24,
+     "sw": 1.23,
+     "x": 0.175,
+     "y": -0.115
+    },
+    "tay": {
+     "grow": 0.29,
+     "hold": 0.58,
+     "orot": 30,
+     "os": 1.18,
+     "reach": 0.015,
+     "rot": 0,
+     "ry": 0.07,
+     "s": 1,
+     "swing": 0.015,
+     "x": 0,
+     "y": 0
+    },
+    "than": {
+     "bodyBob": 0.03,
+     "headBob": 0.024,
+     "headLag": 0.74,
+     "overlap": 0.03,
+     "scale": 1,
+     "step": 4.4
+    },
+    "vukhi": {
+     "rest": -41,
+     "s": 3.34,
+     "x": 0.42,
+     "y": -0.005
+    }
+   },
+   "saved_at": "2026-10-23T13:17:35.934Z"
+  },
+  {
+   "id": "he.12",
+   "name": "Bộ Thời Không",
+   "he": "Thời",
+   "thien": true,
+   "outfit": "art.outfit.he.12",
+   "weapon": "art.weapon.he.12",
+   "wing": "art.wing.he.12",
+   "avatar": "art.avatar.he.12",
+   "region": {
+    "footL": [
+     60,
+     224,
+     92,
+     240
+    ],
+    "footR": [
+     104,
+     224,
+     136,
+     240
+    ],
+    "handL": [
+     49,
+     166,
+     77,
+     194
+    ],
+    "handR": [
+     140,
+     166,
+     168,
+     194
+    ],
+    "neck": 0.59
+   },
+   "region_shared": null,
+   "shared_from": null,
+   "toggles": {
+    "flip": false,
+    "flipOpen": false,
+    "swap": false,
+    "swapOpen": false
+   },
+   "params": {
+    "bong": {
+     "a": 0.56,
+     "fly": 0.35,
+     "h": 0.05,
+     "s": 0.6,
+     "x": -0.005,
+     "y": -0.028
+    },
+    "canh": {
+     "a": 1,
+     "s": 1.72,
+     "sh": 1,
+     "sw": 1.15,
+     "x": -0.05,
+     "y": -0.62
+    },
+    "giay": {
+     "lift": 0.015,
+     "s": 1,
+     "x": 0.005,
+     "y": -0.028
+    },
+    "honthu": {
+     "a": 1,
+     "bob": 0.017,
+     "s": 0.36,
+     "x": -0.99,
+     "y": -0.6
+    },
+    "matna": {
+     "a": 1,
+     "s": 0.75,
+     "x": 0.095,
+     "y": 0.335
+    },
+    "phaptuong": {
+     "a": 0.45,
+     "s": 2.2,
+     "sh": 1.24,
+     "sw": 1.23,
+     "x": 0.175,
+     "y": -0.115
+    },
+    "tay": {
+     "grow": 0.29,
+     "hold": 0.58,
+     "orot": 30,
+     "os": 1.18,
+     "reach": 0.015,
+     "rot": 0,
+     "ry": 0.07,
+     "s": 1,
+     "swing": 0.015,
+     "x": 0,
+     "y": 0
+    },
+    "than": {
+     "bodyBob": 0.03,
+     "headBob": 0.024,
+     "headLag": 0.74,
+     "overlap": 0.03,
+     "scale": 1,
+     "step": 4.4
+    },
+    "vukhi": {
+     "rest": -41,
+     "s": 3.34,
+     "x": 0.42,
+     "y": -0.005
+    }
+   },
+   "saved_at": "2026-10-23T13:17:48.825Z"
   }
  ],
  "mask_default": {
@@ -815,5 +1703,6 @@
   "y": 0.66,
   "s": 0.66,
   "a": 1
- }
+ },
+ "_ghi_chu_thien_he": "he.7–12 = 6 Thiên hệ (chủ dự án 23/10 21h), sinh bằng tools/equip_thien_he.py từ kết quả lưu trên Tủ Đồ Tu Chân."
 }

@@ -118,5 +118,65 @@
    130.0,
    247
   ]
+ },
+ {
+  "id": "art.pet.he.13",
+  "file": "art.pet.he.13.webp",
+  "w": 184,
+  "h": 230,
+  "anchor": [
+   92.0,
+   230
+  ]
+ },
+ {
+  "id": "art.pet.he.14",
+  "file": "art.pet.he.14.webp",
+  "w": 201,
+  "h": 230,
+  "anchor": [
+   100.5,
+   230
+  ]
+ },
+ {
+  "id": "art.pet.he.15",
+  "file": "art.pet.he.15.webp",
+  "w": 191,
+  "h": 230,
+  "anchor": [
+   95.5,
+   230
+  ]
+ },
+ {
+  "id": "art.pet.he.16",
+  "file": "art.pet.he.16.webp",
+  "w": 183,
+  "h": 230,
+  "anchor": [
+   91.5,
+   230
+  ]
+ },
+ {
+  "id": "art.pet.he.17",
+  "file": "art.pet.he.17.webp",
+  "w": 187,
+  "h": 230,
+  "anchor": [
+   93.5,
+   230
+  ]
+ },
+ {
+  "id": "art.pet.he.18",
+  "file": "art.pet.he.18.webp",
+  "w": 202,
+  "h": 230,
+  "anchor": [
+   101.0,
+   230
+  ]
  }
 ]

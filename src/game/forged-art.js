@@ -9,7 +9,7 @@ const RIG = { 'trang-phuc': 'outfit', 'vu-khi': 'weapon', canh: 'wing', 'phap-tu
 export function createForgedArt(artIdx, progress, heOrder = ['Kim', 'Ám', 'Thủy', 'Hỏa', 'Mộc', 'Thổ']) {
   const heOfArt = (id) => { const n = id?.match(/\.he\.(\d+)$/)?.[1]; return n ? heOrder[(+n - 1) % 6] : null; };
   const pool = (slot) => (RIG[slot] ? [1, 2, 3, 4, 5, 6].map((n) => ({ id: `art.${RIG[slot]}.he.${n}` }))
-    : (artIdx[slot] || []).filter((a) => /\.he\./.test(a.id)));
+    : (artIdx[slot] || []).filter((a) => { const n = +a.id.match(/\.he\.(\d+)$/)?.[1]; return n && n <= (slot === 'linh-thu' ? 12 : 6); })); // phôi chỉ ra hình ngũ hành (Thiên hệ chỉ rơi từ Âm Hư)
   function ensureArt(g) {
     const p = pool(g.slot);
     if (g.art && !p.some((x) => x.id === g.art)) g.art = null; // hình tạm cũ đã xoá → bốc lại theo hệ của phôi

@@ -64,3 +64,10 @@ Hai tấm GPT chủ dự án gửi: `assets/town/_source/tran-phap-gpt.png` (12 
 kích thước ghi ở `data/art/stations-art.json` (gộp vào props khi dựng bản đồ). Mỗi vùng 1 trận nhãn ở
 `data/zones/zone.start.json → town.stations` (trận pháp + 1 nhà + 2 NPC canh giữ trong `data/npcs.json`, `guard`).
 Các hình chưa dùng (điện lớn, tháp, chợ…) để dành cho tông môn / thị trấn sau này.
+
+## 6 Thiên hệ (23/10/2026 21h)
+Quang · Lôi · Băng · Phong · Hư · Thời, mỗi hệ 8 món. Nguồn + kết quả chủ dự án xếp trên Tủ Đồ Tu Chân:
+`assets/equipment/_source/thien-he/` (hình đã cắt, `meta.json`, `presets.json`, 2 tấm gốc). Chạy `python3 -I tools/equip_thien_he.py`
+→ hình `art.<loại>.he.7–12` (linh thú `art.pet.he.13–18`), bộ he.7–12 trong `data/equipment/he6.json`, 48 món trong
+`data/items/items.json` (`thien: true`), Đạo Vận / Hợp Nhất trong `data/build/dao-van.json` (soi số theo hệ ngũ hành song sinh).
+Đồ Thiên hệ chỉ rơi từ Âm Hư; phôi luyện vẫn chỉ ra hình ngũ hành.

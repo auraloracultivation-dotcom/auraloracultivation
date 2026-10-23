@@ -32,7 +32,7 @@ export function createConsumables(c) {
     const g = progress.gear(uid);
     if (!g?.tier) return 'Phôi phải thức tỉnh trước';
     if (!progress.take(STONE, 1)) return `Cần ${itemDefs.get(STONE).name} (Vạn Bảo Lâu → Tiên Bảo)`;
-    const others = c.heOrder.filter((h) => h !== g.he);
+    const others = c.heOrder.slice(0, 6).filter((h) => h !== g.he); // chỉ đổi trong ngũ hành
     g.he = others[Math.floor(Math.random() * others.length)];
     c.recompute(); progress.changed();
     return `${g.name} đổi sang hệ ${g.he}`;

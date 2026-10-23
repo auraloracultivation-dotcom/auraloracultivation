@@ -254,6 +254,249 @@
     }
    },
    "hit": "k.bao-tho"
+  },
+  "Quang": {
+   "name": "Thánh Quang Thiên Trận",
+   "color": "#fff1b0",
+   "bolt": "v.dan-kim",
+   "tiers": {
+    "2": {
+     "basic_shot": 1,
+     "_mo_ta": "Đánh thường phóng thêm 1 kiếm khí"
+    },
+    "4": {
+     "multishot": 2,
+     "_mo_ta": "Mọi đạn bắn thêm 2 viên xoè quạt"
+    },
+    "6": {
+     "rain": {
+      "every_s": 2.5,
+      "n": 4,
+      "mul": 1.2,
+      "fx": "v.van-kiem",
+      "h": 46,
+      "radius": 26
+     },
+     "_mo_ta": "Mưa kiếm: 2,5 giây giáng 4 thanh kiếm xuống quái gần"
+    },
+    "8": {
+     "multishot": 10,
+     "pierce": 2,
+     "_mo_ta": "ĐẠI THÀNH: mọi chiêu bắn quạt 15 kiếm khí xuyên giáp"
+    }
+   },
+   "hit": "k.bao-kim",
+   "thien": true,
+   "twin": "Kim"
+  },
+  "Lôi": {
+   "name": "Cửu Tiêu Lôi Đình",
+   "color": "#b98cff",
+   "bolt": "v.dan-hoa",
+   "tiers": {
+    "2": {
+     "explode": 26,
+     "_mo_ta": "Đạn nổ lan"
+    },
+    "4": {
+     "burn": {
+      "mul": 0.35,
+      "s": 3,
+      "r": 24
+     },
+     "_mo_ta": "Chỗ trúng cháy 3 giây"
+    },
+    "6": {
+     "rain": {
+      "every_s": 3,
+      "n": 3,
+      "mul": 1.5,
+      "fx": "v.no-hoa",
+      "h": 44,
+      "radius": 34
+     },
+     "_mo_ta": "Thiên hỏa: 3 giây rơi 3 quả cầu lửa"
+    },
+    "8": {
+     "multishot": 6,
+     "explode": 14,
+     "rain": {
+      "every_s": 1.5,
+      "n": 3,
+      "mul": 1.5,
+      "fx": "v.no-hoa",
+      "h": 44,
+      "radius": 34
+     },
+     "_mo_ta": "ĐẠI THÀNH: quạt 7 hỏa cầu nổ lớn, thiên hỏa dày đặc"
+    }
+   },
+   "hit": "v.no-hoa",
+   "thien": true,
+   "twin": "Hỏa"
+  },
+  "Băng": {
+   "name": "Hàn Băng Vạn Lý",
+   "color": "#8fd8ff",
+   "bolt": "v.dan-thuy",
+   "tiers": {
+    "2": {
+     "bounce": 2,
+     "_mo_ta": "Đạn bật nảy sang 2 quái khác"
+    },
+    "4": {
+     "bounce": 2,
+     "chain": 2,
+     "_mo_ta": "Nảy thêm 2 lần, trúng thì lan sang 2 quái"
+    },
+    "6": {
+     "split": 3,
+     "_mo_ta": "Đạn trúng tách 3 giọt thủy"
+    },
+    "8": {
+     "multishot": 4,
+     "bounce": 3,
+     "rain": {
+      "every_s": 2,
+      "n": 3,
+      "mul": 1.6,
+      "fx": "v.thuy-ba",
+      "h": 56,
+      "radius": 44
+     },
+     "_mo_ta": "ĐẠI THÀNH: đạn ×5 nảy 7 lần, thủy triều 2 giây một lần"
+    }
+   },
+   "hit": "k.bao-thuy",
+   "thien": true,
+   "twin": "Thủy"
+  },
+  "Phong": {
+   "name": "Phong Linh Cửu Chuyển",
+   "color": "#9ff0c8",
+   "bolt": "v.dan-moc",
+   "tiers": {
+    "2": {
+     "heal_on_hit": 0.004,
+     "_mo_ta": "Mỗi lần trúng hồi 0,4% khí huyết"
+    },
+    "4": {
+     "turret": {
+      "every_s": 0.9,
+      "n": 1,
+      "mul": 0.5
+     },
+     "_mo_ta": "Lá phi đao tự bắn liên thanh"
+    },
+    "6": {
+     "turret": {
+      "n": 1
+     },
+     "homing": 0.8,
+     "_mo_ta": "Bắn 2 lá mỗi loạt, đạn tự đuổi"
+    },
+    "8": {
+     "turret": {
+      "every_s": 0,
+      "n": 3
+     },
+     "multishot": 2,
+     "_mo_ta": "ĐẠI THÀNH: mỗi loạt liên thanh 4 lá, mỗi đạn ×3"
+    }
+   },
+   "hit": "k.bao-moc",
+   "thien": true,
+   "twin": "Mộc"
+  },
+  "Hư": {
+   "name": "Hư Không Phệ Diệt",
+   "color": "#7a5cff",
+   "bolt": "v.dan-am",
+   "tiers": {
+    "2": {
+     "stat": {
+      "hut": 5
+     },
+     "heal_on_hit": 0.002,
+     "_mo_ta": "Hút máu +5%"
+    },
+    "4": {
+     "orbit": {
+      "n": 3,
+      "r": 26,
+      "mul": 0.5
+     },
+     "_mo_ta": "3 phi kiếm u minh xoay quanh người"
+    },
+    "6": {
+     "orbit": {
+      "n": 3
+     },
+     "homing": 0.6,
+     "_mo_ta": "Thêm 3 phi kiếm, đạn tự đuổi mục tiêu"
+    },
+    "8": {
+     "split": 4,
+     "orbit": {
+      "n": 4
+     },
+     "_mo_ta": "ĐẠI THÀNH: 10 phi kiếm u minh, đạn tách 4 hồn đạn"
+    }
+   },
+   "hit": "k.bao-am",
+   "thien": true,
+   "twin": "Ám"
+  },
+  "Thời": {
+   "name": "Thời Không Luân Hồi",
+   "color": "#e6c98a",
+   "bolt": "k.dan-tho-bay",
+   "tiers": {
+    "2": {
+     "stat": {
+      "def": 1.1
+     },
+     "_mo_ta": "Phòng thủ +10%"
+    },
+    "4": {
+     "shock": {
+      "r": 40,
+      "mul": 0.6
+     },
+     "_mo_ta": "Đánh thường tạo sóng chấn"
+    },
+    "6": {
+     "rain": {
+      "every_s": 3,
+      "n": 5,
+      "mul": 1.3,
+      "fx": "v.dia-thu",
+      "h": 40,
+      "radius": 28,
+      "stun": 0.5
+     },
+     "_mo_ta": "Địa thứ: 3 giây trồi 5 cột đá, choáng"
+    },
+    "8": {
+     "shock": {
+      "r": 22,
+      "stun": 0.4
+     },
+     "rain": {
+      "every_s": 1.5,
+      "n": 6,
+      "mul": 1.3,
+      "fx": "v.dia-thu",
+      "h": 40,
+      "radius": 28,
+      "stun": 0.5
+     },
+     "_mo_ta": "ĐẠI THÀNH: sóng chấn choáng, địa thứ trồi liên tục"
+    }
+   },
+   "hit": "k.bao-tho",
+   "thien": true,
+   "twin": "Thổ"
   }
  },
  "cards": {
@@ -415,7 +658,13 @@
   "Thủy",
   "Hỏa",
   "Mộc",
-  "Thổ"
+  "Thổ",
+  "Quang",
+  "Lôi",
+  "Băng",
+  "Phong",
+  "Hư",
+  "Thời"
  ],
  "set_drop": {
   "_ghi_chu": "Đồ Kho 6 hệ rơi khi hạ quái (chưa có thì vào Kho, có rồi thì đổi Linh thạch). Phôi luyện ra cũng mang hệ ngẫu nhiên (lộ khi thức tỉnh) và tính vào bộ ngũ hành.",
@@ -423,7 +672,11 @@
   "boss": 0.01,
   "void": 0.2,
   "dup_stone": 500,
-  "_do_hiem": "Chủ dự án 23/10 10:18: đủ 8 món cùng hệ phải rất hiếm để người chơi chăm cày — boss 1%/lần ra 1 món ngũ hành (ngẫu nhiên trong 48 món còn thiếu), tinh anh 0,1%, Âm Hư 20%. Dòng Đen khi thức tỉnh vẫn ~0,7%/món (awaken.json)."
+  "_do_hiem": "Chủ dự án 23/10 10:18: đủ 8 món cùng hệ phải rất hiếm để người chơi chăm cày — boss 1%/lần ra 1 món ngũ hành (ngẫu nhiên trong 48 món còn thiếu), tinh anh 0,1%, Âm Hư 20%. Dòng Đen khi thức tỉnh vẫn ~0,7%/món (awaken.json).",
+  "thien_from": [
+   "void"
+  ],
+  "_thien": "Đồ Thiên hệ (items.json → thien) chỉ rơi từ các nguồn trong thien_from; quái thường / tinh anh / thủ lĩnh chỉ rơi đồ ngũ hành."
  },
  "fx": {
   "chain": "k.loi-lien",
@@ -474,7 +727,50 @@
     "card": "phu.kiem-luan",
     "skill_sin": "dia-liet",
     "skill_cui": "dia-thu"
+   },
+   "Quang": {
+    "name": "Thánh Quang Phổ Chiếu",
+    "card": "phu.phan-quang",
+    "skill_sin": "van-kiem",
+    "skill_cui": "phong-nhan",
+    "twin": "Kim"
+   },
+   "Lôi": {
+    "name": "Lôi Đình Diệt Thế",
+    "card": "phu.liet-diem",
+    "skill_sin": "phuong-hoang",
+    "skill_cui": "hoa-cau",
+    "twin": "Hỏa"
+   },
+   "Băng": {
+    "name": "Băng Phong Vạn Cổ",
+    "card": "phu.phan-liet",
+    "skill_sin": "bang-phong",
+    "skill_cui": "bang-tien",
+    "twin": "Thủy"
+   },
+   "Phong": {
+    "name": "Phong Quyển Tàn Vân",
+    "card": "phu.phong-bao",
+    "skill_sin": "van-moc",
+    "skill_cui": "moc-lien",
+    "twin": "Mộc"
+   },
+   "Hư": {
+    "name": "Hư Không Quy Nhất",
+    "card": "phu.truy-hon",
+    "skill_sin": "hac-dong",
+    "skill_cui": "u-minh-trao",
+    "twin": "Ám"
+   },
+   "Thời": {
+    "name": "Thời Quang Đảo Lưu",
+    "card": "phu.kiem-luan",
+    "skill_sin": "dia-liet",
+    "skill_cui": "dia-thu",
+    "twin": "Thổ"
    }
   }
- }
+ },
+ "_ghi_chu_thien_he": "Chủ dự án 23/10 21h: thêm 6 Thiên hệ (Quang, Lôi, Băng, Phong, Hư, Thời). Số liệu Đạo Vận / Hợp Nhất soi theo hệ ngũ hành \"twin\" (cùng sức mạnh, khác tên + màu) — chỉnh riêng sau. Đồ Thiên hệ chỉ rơi từ Âm Hư (set_drop.thien_from)."
 }
