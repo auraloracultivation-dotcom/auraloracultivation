@@ -18,7 +18,7 @@ export function grantFull({ progress, wallet, gift, mats, pills, recipes, shop, 
 // (giá trị cao nhất của phẩm Đen), + `gift.void_pets` thú cưng Âm Hư đi theo (các thú khác vào nghỉ). Chỉ trên máy (localStorage).
 export function grantGod({ progress, bag, awaken, gp, mdef, gift }) {
   const keys = gp.awaken.line_keys, ti = awaken.tiers.findIndex((t) => t.id === 'den');
-  const line = (k) => { const v = awaken.line_ranges[k][ti][1]; return { k, v: ['crit', 'hut', 'phan'].includes(k) ? Math.round(v * 10) / 10 : Math.round(v), t: 'den' }; };
+  const line = (k) => { const v = awaken.line_ranges[k][ti][1]; return { k, v: Math.round(v * 10) / 10, t: 'den', ...(['hp', 'def', 'linh'].includes(k) ? { p: 1 } : {}) }; };
   let n = 0;
   for (const { item } of bag.entries()) {
     if (!item?.slot) continue;

@@ -32,7 +32,7 @@ export function createBarrage(c) {
     for (let k = 0; k < n && bolts.length < L.max_bolts; k++) {
       const a = a0 + (k - (n - 1) / 2) * step;
       bolts.push({ kind: 'bolt', id: spec.id, he: spec.he || md.he, fx: spec.fx, size: spec.size || 22, x: spec.x, y: spec.y, vx: Math.cos(a) * spec.speed, vy: Math.sin(a) * spec.speed,
-        left: spec.range, mul: spec.mul, base: spec.base || {}, label: spec.label || 'skill', child: !!spec.child, hit: new Set(),
+        left: spec.range, mul: k === 0 || spec.child ? spec.mul : spec.mul * (L.extra_mul ?? 1), base: spec.base || {}, label: spec.label || 'skill', child: !!spec.child, hit: new Set(),
         pierce: spec.child ? 0 : (md.pierce || 0) + (spec.base?.pierce ? 99 : 0) + (spec.pierce || 0), bounce: spec.child ? 0 : (md.bounce || 0) + (spec.bounce || 0),
         homing: md.homing || spec.homing || 0, color: spec.color || md.color, trail: [] });
     }

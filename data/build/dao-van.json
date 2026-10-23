@@ -420,7 +420,9 @@
   "bounce_px": 150,
   "orbit_hit_s": 0.45,
   "turret_range_px": 220,
-  "rain_range_px": 240
+  "rain_range_px": 240,
+  "extra_mul": 0.4,
+  "_extra_mul": "Viên đạn thêm (bắn quạt) mạnh 40% viên chính — màn hình vẫn đầy đạn nhưng sức mạnh không nhân thẳng theo số viên (23/10)."
  },
  "_ghi_chu_dai_thanh": "Chủ dự án 23/10 05:38: đủ bộ là 'thành' — bắn hàng trăm đạn hình quạt liên tục, linh lực hồi liên tục; sai 1 món là tụt về bộ 6 (bắn từng viên, chờ hồi chiêu). Vì vậy mốc 8/8 (mọi ô cùng hệ) là ĐẠI THÀNH: hồi chiêu ×cd_mul, hồi linh lực mp_regen (phần linh lực tối đa mỗi giây), tốn linh lực ×mp_mul, kèm hiệu ứng riêng của hệ.",
  "he_order": [

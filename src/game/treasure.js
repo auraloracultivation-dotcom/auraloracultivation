@@ -133,7 +133,7 @@ export function createTreasure(c) {
       actions: [{ id: 'pb-bind', label: `Nhận chủ (${def.bind_cost} LT)`, disabled: progress.state.stone < def.bind_cost },
         { id: 'pb-break', label: 'Phân rã', danger: true, confirm: 'Phân rã pháp bảo chưa nhận chủ?' }] };
     const worn = progress.state.treasureOn === t.uid, cost = def.lv_cost[(t.lv || 0) + 1], aw = craft.awakenCost(t.aw);
-    const lines = (craft.norm(t.aw)?.lines || []).map((l) => ({ text: `${STAT[l.k] || l.k} +${l.v}`, tier: l.t }));
+    const lines = (craft.norm(t.aw)?.lines || []).map((l) => ({ text: `${STAT[l.k] || l.k} +${l.v}${l.p ? '%' : ''}`, tier: l.t }));
     return { id: `pb:${t.uid}`, key: `pb:${t.uid}`, name: `${d.name}${t.lv ? ` +${t.lv}` : ''}`, cat: 'phap-bao', thumb: pic(d), equipped: worn, tier: t.aw.tier,
       sub: `Pháp bảo · hệ ${d.he} · cấp ${t.lv || 0}/${def.max_lv}${t.aw.tier ? ` · ${tierName(t.aw.tier)}` : ''}`, lines,
       detail: `${fill(d, t)}\nHồi ${d.cd_s} giây · ${d.mp} linh lực · sát thương ×${scale(t).toFixed(2)}. Xếp kỹ năng "Pháp Bảo" vào ô kỹ năng để dùng.`,
