@@ -5,7 +5,7 @@
 // Chỉ đọc trạng thái rồi gọi hud; mỗi khung hình chỉ cập nhật khi có thay đổi.
 const HEAL_PILL = 'item.dan.tieu-hoi-huyet.001';
 
-export function createSkillBar({ hud, S, gp, progress, pt, cds, slotItem, icon, fxIcon, loadout, stageName, treasure = () => null }) {
+export function createSkillBar({ learn, hud, S, gp, progress, pt, cds, slotItem, icon, fxIcon, loadout, stageName, treasure = () => null }) {
   const last = {};
   const put = (key, val, fn) => { if (last[key] !== val) { last[key] = val; fn(); } };
 
@@ -14,7 +14,7 @@ export function createSkillBar({ hud, S, gp, progress, pt, cds, slotItem, icon, 
     const s = S[id];
     if (!s) return { off: 'ô trống — chạm để chọn kỹ năng', art: null, cd: [0, 1] };
     const locked = s.unlock && progress.stageIndex(s.unlock) > progress.state.stage;
-    const lockMsg = locked ? `mở ở ${stageName(s.unlock)}` : null;
+    const lockMsg = !learn.learned(id) ? 'chưa lĩnh ngộ — chỉ rơi khi hạ boss' : locked ? `mở ở ${stageName(s.unlock)}` : null;
     if (id === 'linh-thu') {
       const pet = slotItem('linh-thu');
       return { off: lockMsg || (pet ? null : 'chưa đeo linh thú (Kho → Trang bị)'), art: !locked && pet ? pet.thumb : null, cd: [(cds[id] || 0) - now, s.cd_s] };

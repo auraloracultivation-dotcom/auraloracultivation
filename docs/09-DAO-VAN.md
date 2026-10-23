@@ -118,3 +118,9 @@ Chủ dự án muốn chất My Heroes: chọn đúng bộ + hệ + thẻ thì c
   - Tu Vi Đan và Viên Mãn Đan không bị giới hạn.
   - Tối thiểu khoảng 22 ngày đánh quái mới lên Hóa Thần Hậu kỳ.
 - **Đạn thêm của Đạo Vận** (bắn quạt) mạnh 40% viên chính (`dao-van.json → limits.extra_mul`).
+
+## Kỹ năng lĩnh ngộ (23/10/2026)
+- Kỹ năng chiến đấu chỉ có khi **hạ boss** (kể cả Âm Hư): 0,5%/lần lĩnh ngộ 1 kỹ năng chưa có — `gameplay.json → skill_drop.chance`.
+- Mỗi đại cảnh giới **tặng 1 kỹ năng** (`skill_drop.realm_gift`): Luyện Khí Hỏa Cầu, Trúc Cơ Kiếm Khí, Kết Đan Thiên Hà, Nguyên Anh Nguyên Anh, Hóa Thần Hắc Động.
+- Kỹ năng hệ thống (`skill_drop.free`) vẫn mở theo cảnh giới. Người chơi cũ giữ kỹ năng đã mở trước bản này (không phạt).
+- Code: `src/game/skill-learn.js`; lưu `progress.state.learned` (máy khách, Mốc 4 lên máy chủ).

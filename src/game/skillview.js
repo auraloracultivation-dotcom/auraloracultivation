@@ -4,13 +4,14 @@ import { showSheet, escapeHtml as E } from '../ui/index.js';
 
 const fill = (text, s) => text.replace(/\{(\w+)(%?)\}/g, (_, k, pct) => (s[k] === undefined ? '' : pct ? `${Math.round(s[k] * 100)}%` : s[k]));
 
-export function openSkillPanel({ S, loadout, bar, progress, stageName, slot = -1, toast }) {
+export function openSkillPanel({ S, loadout, bar, progress, stageName, slot = -1, toast, learn }) {
   let sel = null; // kỹ năng đang chọn để xếp
-  const unlocked = (s) => !s.unlock || progress.stageIndex(s.unlock) <= progress.state.stage;
+  const realmOk = (s) => !s.unlock || progress.stageIndex(s.unlock) <= progress.state.stage;
+  const unlocked = (s, id) => learn.learned(id) && realmOk(s);
 
   function row(id) {
-    const s = S[id], ok = unlocked(s), at = loadout.slotOf(id), img = bar.art(id);
-    const meta = ok ? [s.mp ? `${s.mp} linh lực` : null, s.cd_s ? `hồi ${s.cd_s}s` : null].filter(Boolean).join(' · ') : `mở ở ${E(stageName(s.unlock))}`;
+    const s = S[id], ok = unlocked(s, id), at = loadout.slotOf(id), img = bar.art(id);
+    const meta = ok ? [s.mp ? `${s.mp} linh lực` : null, s.cd_s ? `hồi ${s.cd_s}s` : null].filter(Boolean).join(' · ') : !learn.learned(id) ? '🔒 Chưa lĩnh ngộ — chỉ rơi khi hạ boss (0,5%)' : `${learn.gift(id) ? '🎁 Quà đại cảnh giới — ' : ''}mở ở ${E(stageName(s.unlock))}`;
     const slots = sel === id ? `<div class="sk-slots">${Array.from({ length: loadout.size }, (_, i) =>
       `<button type="button" class="bag-act sm ${at === i ? 'on' : ''}" data-act="put" data-arg="${E(`${id}|${i}`)}">Ô ${i + 1}${loadout.get(i) && loadout.get(i) !== id ? ` · ${E(S[loadout.get(i)]?.name || '')}` : ''}</button>`).join('')}
       ${at >= 0 ? `<button type="button" class="bag-act sm" data-act="off" data-arg="${E(id)}">Bỏ khỏi ô</button>` : ''}</div>` : '';
@@ -23,7 +24,7 @@ export function openSkillPanel({ S, loadout, bar, progress, stageName, slot = -1
 
   showSheet({
     title: 'Kỹ năng',
-    tabs: [{ id: 'all', name: slot >= 0 ? `Chọn kỹ năng cho ô ${slot + 1}` : 'Chạm kỹ năng → chọn ô' }],
+    tabs: [{ id: 'all', name: slot >= 0 ? `Chọn kỹ năng cho ô ${slot + 1}` : `Đã lĩnh ngộ ${learn.count()}/${learn.total()} · chạm → chọn ô` }],
     note: 'Ô kỹ năng lưu trên máy này (bản thử nghiệm). Tự động đánh sẽ dùng các kỹ năng trong ô.',
     render: () => loadout.catalog().map(row).join(''),
     onAction(act, arg) {

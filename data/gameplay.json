@@ -1206,5 +1206,23 @@
    "ht": 0.35
   },
   "over_mul": 0.1
+ },
+ "skill_drop": {
+  "_ghi_chu": "Chủ dự án 23/10: kỹ năng chiến đấu chỉ có khi hạ boss (kể cả Âm Hư), tỷ lệ 0,5% mỗi lần lĩnh ngộ 1 kỹ năng chưa có. free = kỹ năng hệ thống mở theo cảnh giới (src/game/skill-learn.js). realm_gift = mỗi đại cảnh giới tặng sẵn 1 kỹ năng (mở khi đạt cảnh giới của kỹ năng đó, không cần rơi).",
+  "chance": 0.005,
+  "free": [
+   "linh-thu",
+   "luot",
+   "phap-tuong",
+   "dan-duoc",
+   "phap-bao"
+  ],
+  "realm_gift": {
+   "realm.luyen-khi": "hoa-cau",
+   "realm.truc-co": "kiem-khi",
+   "realm.ket-dan": "thien-ha",
+   "realm.nguyen-anh": "nguyen-anh",
+   "realm.hoa-than": "hac-dong"
+  }
  }
 }
