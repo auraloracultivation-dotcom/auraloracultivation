@@ -53,7 +53,7 @@ export function createBarrage(c) {
       }
     }
     if (md.shock) {
-      play('tho-vong', m.x, m.y + 2, md.shock.r * 1.6, { ground: true });
+      play('k.bao-tho', m.x, m.y + 2, md.shock.r * 1.6, { ground: true }); // tho-vong cũ bị lẹm khung
       zaps.push({ kind: 'ring', x: m.x, y: m.y, r: md.shock.r, t: 0.35, color: dv.heOf('Thổ').color });
       hitAround(m.x, m.y, md.shock.r, md.shock.mul || 0.6, 'skill', md.shock.stun);
     }

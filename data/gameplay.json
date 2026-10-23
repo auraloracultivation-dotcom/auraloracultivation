@@ -483,8 +483,8 @@
    "radius_px": 85,
    "name": "Nguyên Anh Chấn",
    "icon": [
-    "tho-vong",
-    3
+    "k.bao-tho",
+    4
    ],
    "desc": "Đánh mọi quái quanh mình (bán kính {radius_px})",
    "medal": "assets/ui/skills/m/nguyen-anh.png"

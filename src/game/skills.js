@@ -62,7 +62,7 @@ export function createSkills(c) {
         c.recompute(); toast('Lăng Ba Vi Bộ', 900); return true;
       case 'nguyen-anh':
         fx.push({ kind: 'ring', x: me.x, y: me.y, r: s.radius_px, color: '#c9a6ff', t: 0.5, life: 0.5 });
-        play('tho-vong', me.x, me.y + 4, s.radius_px * 1.1, { ground: true });
+        play('k.bao-tho', me.x, me.y + 4, s.radius_px * 1.1, { ground: true }); // tho-vong cũ bị lẹm khung (chủ dự án 23/10)
         for (const m of mobs.within(me, s.radius_px)) c.strike(m, s.mul, 'nguyen-anh');
         return true;
       default: break;
