@@ -43,8 +43,7 @@ export function createNavi({ map, me, game, flight, toast }) {
 
   // Tới nơi: bật Tự động NHẮM nhiệm vụ — chỉ đánh quái vùng đó (đúng loại trước), nhiệm vụ hái thì mới đi hái
   function startQuestAuto() {
-    if (game.isAuto()) game.toggleAuto();
-    game.toggleAuto({ zone: target.zone, rank: target.rank, gather: !!target.gather });
+    game.setAuto('quest', { zone: target.zone, rank: target.rank, gather: !!target.gather });
   }
   function start(id) {
     goal = id ? game.track(id) : game.naviGoal(); target = aim(goal);
@@ -52,7 +51,7 @@ export function createNavi({ map, me, game, flight, toast }) {
     if (arrived(target)) { travel = false; if (!target.town) startQuestAuto(); toast(target.town ? 'Đang ở trong thành' : `Đã ở ${target.label} — tự động farm tại đây`, 1800); return; }
     travel = true; stuckT = 0; lx = me.x; ly = me.y;
     toast(`Dẫn đường: tới ${target.label}${goal.title ? ` (${goal.title})` : ''} — kéo cần để huỷ`, 2200);
-    if (game.isAuto()) game.toggleAuto(); // tắt farm để đi, tới nơi bật lại
+    if (game.isAuto()) game.setAuto(null); // tắt farm để đi, tới nơi bật lại
   }
 
   // Mỗi khung hình. stick: cần điều khiển đang kéo. Trả về hướng đi khi đang tự đi, không thì null.
