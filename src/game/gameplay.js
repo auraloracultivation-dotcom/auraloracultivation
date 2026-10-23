@@ -381,7 +381,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     stunned: () => now < stunUntil,
     _debug: { me, map, progress, mobs, voids, mdef: monDef, bag, gather, npcs, die, revive, tame, dv, cards, bolts, get treasure() { return treasure; }, cds, biCanh, learn, pt, get hopNhat() { return hopNhat; }, get bar() { return bar; }, get hp() { return hp; }, set hp(v) { hp = v; }, get ps() { return ps; } }, // chỉ cho kiểm thử (?debug)
     speed: () => buffs.speed?.mul || null,
-    toggleAuto() { if (dead) return; auto = !auto; autoDir = null; auto ? autoPlay.start() : autoPlay.reset(); hud.setActive('auto', auto); toast(auto ? 'Tự động đánh: bật — farm quanh neo, kéo cần để dời neo' : 'Tự động đánh: tắt', 1600); },
+    toggleAuto(focus = null) { if (dead) return; auto = !auto; autoDir = null; auto ? autoPlay.start(focus) : autoPlay.reset(); hud.setActive('auto', auto); if (!focus) toast(auto ? 'Tự động đánh: bật — farm quanh neo, kéo cần để dời neo' : 'Tự động đánh: tắt', 1600); }, // focus: nhiệm vụ (navi.js)
     healPill: () => usePill(HEAL_PILL), usePill, pillCount: (id) => progress.count(id), isAuto: () => auto, autoDir: () => (auto ? autoDir : null), autoMoved: () => auto && autoPlay.moved(), // kéo cần khi Tự động: dời neo
     openCodex: () => openCodex({ loadJSON, gp, mats, pills, recipes, cp, monsters: monDef.monsters, mobSkills: monDef.skills, blanks, qItems, artDef, info, cpText: cpFx.text, fxDuration }), // Đồ giám (nút sách)
     statValue: views.statValue, openQuests: views.openQuests, questBrief: views.questBrief, naviGoal: views.naviGoal, track: views.track, setGo: views.setGo, pillChoices: views.pillChoices, zoneRing: (z) => mobs.ringOf(z), openCultivate: views.openCultivate, // dẫn đường + đan dùng nhanh

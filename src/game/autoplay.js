@@ -11,6 +11,7 @@ import { wrapDelta } from '../map/index.js';
 // zone(): { x, y, r } khi đang ở bí cảnh — chỉ đánh quái trong vòng, không đi hái, không có gì thì về giữa vòng (thay cho neo)
 export function createAutoPlay({ me, mobs, gather, map, cfg, reach, canFly = () => false, zone = () => null }) {
   let goal = null, repick = 0, stuckT = 0, lx = me.x, ly = me.y, fly = false, flyT = 0, anchor = null;
+  let focus = null; // { zone, rank, gather } khi bật từ dẫn đường nhiệm vụ: chỉ đánh quái đúng vùng (ưu tiên đúng loại), không đánh quái vùng khác
   const skip = new Map(); // mục tiêu đang tạm bỏ → hết hạn lúc
   const rel = (o) => ({ dx: wrapDelta(o.x - me.x, map.width), dy: wrapDelta(o.y - me.y, map.height) });
   const far = (o, c) => Math.hypot(wrapDelta(o.x - c.x, map.width), wrapDelta(o.y - c.y, map.height));
@@ -21,10 +22,13 @@ export function createAutoPlay({ me, mobs, gather, map, cfg, reach, canFly = () 
   function pick(now) {
     let best = null;
     const z = zone(), a = area(), inA = (o) => !a || far(o, a) < a.r;
-    const m = mobs.nearest(me, cfg.search_px, (x) => free(x, now) && !x.void && !map.safeAt(x.x, x.y) && inA(x)); // không tự lao vào Âm Hư
+    const ok = (x) => free(x, now) && !x.void && !map.safeAt(x.x, x.y) && inA(x); // không tự lao vào Âm Hư
+    const m = focus ? mobs.nearest(me, cfg.search_px, (x) => ok(x) && x.def.zone === focus.zone && (!focus.rank || x.def.rank === focus.rank))
+        || mobs.nearest(me, cfg.search_px, (x) => ok(x) && x.def.zone === focus.zone) // nhiệm vụ: đúng loại trước, rồi cùng vùng
+      : mobs.nearest(me, cfg.search_px, ok);
     if (m) best = { kind: 'mob', o: m, d: mobs.distTo(m, me) };
     if (z) return best || { kind: 'spot', o: { x: z.x, y: z.y }, d: 0 }; // bí cảnh: không hái, không có quái thì về giữa vòng
-    if (!me.flying) for (const n of gather.list) { // đang bay thì không hái được
+    if (!me.flying && (!focus || focus.gather)) for (const n of gather.list) { // đang bay thì không hái được; nhiệm vụ đánh quái thì không đi hái
       if (!free(n, now) || !inA(n)) continue;
       const r = rel(n), d = Math.hypot(r.dx, r.dy);
       if (d <= cfg.search_px && (!best || d < best.d)) best = { kind: 'node', o: n, d };
@@ -59,8 +63,8 @@ export function createAutoPlay({ me, mobs, gather, map, cfg, reach, canFly = () 
 
   return {
     step,
-    start() { anchor = { x: me.x, y: me.y, r: cfg.anchor_radius_px }; goal = null; stuckT = 0; fly = false; skip.clear(); },
-    reset() { anchor = null; goal = null; stuckT = 0; fly = false; },
+    start(f = null) { focus = f; anchor = { x: me.x, y: me.y, r: cfg.anchor_radius_px }; goal = null; stuckT = 0; fly = false; skip.clear(); },
+    reset() { focus = null; anchor = null; goal = null; stuckT = 0; fly = false; },
     moved() { if (anchor) { anchor.x = me.x; anchor.y = me.y; goal = null; } }, // người chơi tự kéo cần: neo đi theo
   };
 }
