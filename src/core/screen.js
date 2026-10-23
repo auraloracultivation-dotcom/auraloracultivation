@@ -1,3 +1,4 @@
+import { lowEnd } from './device.js';
 // Canvas sắc nét theo mật độ điểm ảnh; tự chọn độ phóng để pixel art to rõ trên điện thoại.
 // zoom: hệ số camera từ data/config.json (camera.zoom); < 1 là thu nhỏ, thấy rộng hơn
 export function createScreen(canvas, zoom = 1) {
@@ -5,7 +6,7 @@ export function createScreen(canvas, zoom = 1) {
   const screen = { canvas, ctx, width: 0, height: 0, scale: 2, dpr: 1 };
 
   function resize() {
-    screen.dpr = Math.min(window.devicePixelRatio || 1, 3);
+    screen.dpr = lowEnd ? 1 : Math.min(window.devicePixelRatio || 1, 3); // máy yếu: vẽ 1×, nhẹ GPU gấp 4 lần ở màn 2×
     screen.width = window.innerWidth;
     screen.height = window.innerHeight;
     canvas.width = Math.round(screen.width * screen.dpr);
