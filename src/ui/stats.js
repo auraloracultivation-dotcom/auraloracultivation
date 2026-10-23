@@ -76,7 +76,7 @@ export function createStatsDock({ getValue = () => null, compact = true } = {}) 
     const d = (compact ? dock : document.querySelector('[data-r="stats"]') || dock).getBoundingClientRect();
     full.style.setProperty('--ox', `${d.left + d.width / 2}px`);
     full.style.setProperty('--oy', `${d.top + d.height / 2}px`);
-    requestAnimationFrame(() => full.classList.add('open'));
+    const f = full; requestAnimationFrame(() => f?.classList.add('open')); // đóng ngay trước khung sau: không lỗi null
     full.addEventListener('click', closeFull); // chạm bất kỳ đâu để thu nhỏ
   }
   function closeFull() {

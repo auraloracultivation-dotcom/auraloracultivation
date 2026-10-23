@@ -153,7 +153,7 @@ function createZoneLink({ lobby, line, zoneId, me, handlers, world, cellPx, pres
     },
     async leave() {
       closed = true;
-      clearTimeout(trackTimer);
+      clearTimeout(trackTimer); clearTimeout(syncTimer); syncTimer = null;
       for (const k of [...cells.keys()]) closeCell(k);
       await supabase.removeChannel(lobby);
     },

@@ -1,9 +1,12 @@
 // Luôn ưu tiên bản mới nhất từ máy chủ (network-first), có mạng thì không bao giờ dùng code cũ.
 // Tránh lỗi "code cũ + dữ liệu mới" sau mỗi lần cập nhật. Mất mạng thì dùng bản đã lưu.
-const CACHE = 'tu-chan-v1';
+const CACHE = 'tu-chan-v2'; // đổi tên khi cần dọn sạch bản lưu cũ
 
 self.addEventListener('install', () => self.skipWaiting());
-self.addEventListener('activate', (e) => e.waitUntil(self.clients.claim()));
+self.addEventListener('activate', (e) => e.waitUntil((async () => { // xoá các bản cache cũ (v1…) cho đỡ đầy bộ nhớ máy
+  for (const k of await caches.keys()) if (k !== CACHE) await caches.delete(k);
+  await self.clients.claim();
+})()));
 
 self.addEventListener('fetch', (e) => {
   const req = e.request;
@@ -14,11 +17,12 @@ self.addEventListener('fetch', (e) => {
       const res = await fetch(req, { cache: 'no-cache' }); // hỏi lại máy chủ; không đổi thì nhận 304, rất nhẹ
       if (res.ok) {
         const cache = await caches.open(CACHE);
-        cache.put(req, res.clone());
+        // bỏ query (?v=129, ?offline…) khi lưu: mỗi file chỉ một bản, không phình theo số phiên bản
+        cache.put(url.pathname === '/' || url.pathname.endsWith('.html') ? req : url.origin + url.pathname, res.clone());
       }
       return res;
     } catch (err) {
-      const hit = await caches.match(req);
+      const hit = (await caches.match(req)) || (await caches.match(url.origin + url.pathname));
       if (hit) return hit;
       throw err;
     }

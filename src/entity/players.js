@@ -57,6 +57,8 @@ export function createRemotePlayers(worldW, worldH) {
       for (const id of list.keys()) if (!present.has(id)) list.delete(id);
     },
     onMove({ id, x, y, moving, flying }) {
+      // chỉ tin người có trong Presence + toạ độ là số (payload broadcast ai cũng gửi được)
+      if (!list.has(id) || !Number.isFinite(x) || !Number.isFinite(y)) return;
       const p = ensure(id, null, x, y);
       const dx = wrap(x - p.tx, worldW);
       if (dx) p.facing = dx > 0 ? 1 : -1;
@@ -64,8 +66,8 @@ export function createRemotePlayers(worldW, worldH) {
     },
     onChat({ id, text }, now, seconds) {
       const p = list.get(id);
-      if (!p) return;
-      p.chat = text; p.chatUntil = now + seconds * 1000;
+      if (!p || typeof text !== 'string') return;
+      p.chat = text.slice(0, 80); p.chatUntil = now + seconds * 1000;
     },
     update(dt) {
       const k = Math.min(1, dt * 8);
