@@ -199,3 +199,7 @@ Lý do: người chơi Hóa Thần Hậu kỳ chém chết Âm Hư sau khoảng 
   - Đánh quái cao hơn mình quá 1 tầng thì sát thương ×0,5 cho mỗi tầng vượt; áp chế cả thú cưng. Số bay hiện "bị áp chế".
   - Hóa Thần Hậu kỳ đánh Âm Hư (cách 7 tầng) chỉ còn 1/64 sát thương. Mô phỏng: cần khoảng 13 triệu đòn (đồ ×5 vẫn khoảng 2,6 triệu đòn).
 - **Trần tu vi mỗi lần hạ quái** (`monster.exp_cap`): tối đa 0,5% / 2% / 5% / 8% vạch tu vi tầng hiện tại cho quái thường / tinh anh / boss / Âm Hư.
+
+- **Chuỗi Tầm Bảo** (23/10, `data/quests/quests.json` → `q.main.tb1…tb7`): nhiệm vụ chính dẫn đi đào khoáng quý luyện phôi,
+  từ Đồng cỏ (Luyện Khí) tới Hắc thổ (Hóa Thần), kết ở Hư Ngọc — phôi đồ Truyền thuyết. Đủ cảnh giới là tự nhận.
+  Mọi nhiệm vụ có `tier` = màu độ hiếm / độ khó (giống phẩm trang bị) hiện trên khung Nhiệm vụ ở HUD.

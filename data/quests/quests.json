@@ -76,8 +76,10 @@
     ]
    },
    "next": [
-    "q.explore.001"
-   ]
+    "q.explore.001",
+    "q.main.tb1"
+   ],
+   "tier": "lam"
   },
   {
    "id": "q.explore.001",
@@ -115,7 +117,8 @@
    },
    "next": [
     "q.craft.001"
-   ]
+   ],
+   "tier": "lam"
   },
   {
    "id": "q.craft.001",
@@ -142,7 +145,8 @@
    },
    "next": [
     "q.combat.001"
-   ]
+   ],
+   "tier": "tim"
   },
   {
    "id": "q.combat.001",
@@ -178,7 +182,8 @@
    },
    "next": [
     "q.main.002"
-   ]
+   ],
+   "tier": "cam"
   },
   {
    "id": "q.main.002",
@@ -221,7 +226,8 @@
    },
    "next": [
     "q.explore.002"
-   ]
+   ],
+   "tier": "lam"
   },
   {
    "id": "q.explore.002",
@@ -252,7 +258,8 @@
    },
    "next": [
     "q.daily.intro"
-   ]
+   ],
+   "tier": "lam"
   },
   {
    "id": "q.daily.intro",
@@ -277,7 +284,8 @@
      "streak_7_light"
     ]
    },
-   "next": []
+   "next": [],
+   "tier": "lam"
   },
   {
    "id": "q.daily.lk.collect",
@@ -304,7 +312,8 @@
      }
     ]
    },
-   "next": []
+   "next": [],
+   "tier": "luc"
   },
   {
    "id": "q.daily.lk.craft",
@@ -326,7 +335,8 @@
     "exp": 70,
     "spiritStone": 12
    },
-   "next": []
+   "next": [],
+   "tier": "luc"
   },
   {
    "id": "q.daily.lk.combat",
@@ -348,7 +358,8 @@
     "exp": 90,
     "spiritStone": 20
    },
-   "next": []
+   "next": [],
+   "tier": "luc"
   },
   {
    "id": "q.daily.lk.hot",
@@ -377,7 +388,8 @@
      }
     ]
    },
-   "next": []
+   "next": [],
+   "tier": "tim"
   },
   {
    "id": "q.daily.tc.collect",
@@ -404,7 +416,8 @@
     "exp": 140,
     "spiritStone": 35
    },
-   "next": []
+   "next": [],
+   "tier": "lam"
   },
   {
    "id": "q.daily.tc.craft",
@@ -428,7 +441,8 @@
      "awakening_reminder"
     ]
    },
-   "next": []
+   "next": [],
+   "tier": "lam"
   },
   {
    "id": "q.daily.tc.hot",
@@ -449,7 +463,8 @@
     "exp": 280,
     "spiritStone": 80
    },
-   "next": []
+   "next": [],
+   "tier": "tim"
   },
   {
    "id": "q.craft.002",
@@ -479,7 +494,8 @@
      "awakening_guide"
     ]
    },
-   "next": []
+   "next": [],
+   "tier": "tim"
   },
   {
    "id": "q.combat.002",
@@ -513,7 +529,8 @@
      }
     ]
    },
-   "next": []
+   "next": [],
+   "tier": "cam"
   },
   {
    "id": "q.combat.003",
@@ -545,7 +562,8 @@
      "technique_fragment"
     ]
    },
-   "next": []
+   "next": [],
+   "tier": "cam"
   },
   {
    "id": "q.long.001",
@@ -587,7 +605,8 @@
      }
     ]
    },
-   "next": []
+   "next": [],
+   "tier": "vang"
   },
   {
    "id": "q.long.002",
@@ -623,7 +642,8 @@
      }
     ]
    },
-   "next": []
+   "next": [],
+   "tier": "vang"
   },
   {
    "id": "q.long.003",
@@ -667,6 +687,252 @@
      }
     ]
    },
+   "next": [],
+   "tier": "vang"
+  },
+  {
+   "id": "q.main.tb1",
+   "title": "Tầm Bảo I: Quặng xanh bìa rừng",
+   "type": "main",
+   "tier": "luc",
+   "auto": true,
+   "realm": "lk",
+   "time": 15,
+   "level": 1,
+   "desc": "Đào Huyền Thiết Vụn và Tinh Sa Thô ở Đồng cỏ quanh Thanh Vân Thành — khoáng chính để luyện phôi Kiếm, Đạo bào, Nhẫn, Dây chuyền.",
+   "goals": [
+    {
+     "type": "collect",
+     "target": "item.khoang.huyen-thiet-vun.001",
+     "count": 10
+    },
+    {
+     "type": "collect",
+     "target": "item.khoang.tinh-sa.001",
+     "count": 5
+    }
+   ],
+   "rewards": {
+    "exp": 500,
+    "spiritStone": 60,
+    "items": [
+     {
+      "id": "item.khoang.huyen-thiet-vun.001",
+      "count": 5
+     }
+    ]
+   },
+   "next": [
+    "q.main.tb2"
+   ]
+  },
+  {
+   "id": "q.main.tb2",
+   "title": "Tầm Bảo II: Phôi đồ đầu tay",
+   "type": "main",
+   "tier": "lam",
+   "auto": true,
+   "realm": "lk",
+   "time": 15,
+   "level": 1,
+   "desc": "Mang khoáng về Lò luyện trong thành, tự tay luyện một phôi trang bị.",
+   "goals": [
+    {
+     "type": "craft",
+     "target": "equipment.blank_item",
+     "count": 1
+    }
+   ],
+   "rewards": {
+    "exp": 800,
+    "spiritStone": 120,
+    "items": [
+     {
+      "id": "item.khoang.tinh-sa.001",
+      "count": 5
+     }
+    ]
+   },
+   "next": [
+    "q.main.tb3"
+   ]
+  },
+  {
+   "id": "q.main.tb3",
+   "title": "Tầm Bảo III: Xích Thiết cát vàng",
+   "type": "main",
+   "tier": "tim",
+   "auto": true,
+   "realm": "tc",
+   "time": 15,
+   "level": 1,
+   "desc": "Ở vùng Cát vàng (Trúc Cơ) có Xích Thiết (phôi Tím–Cam) và Huyết Ngọc Thô (trang sức Cam). Quái vùng này mạnh hơn hẳn — mang đủ đan.",
+   "goals": [
+    {
+     "type": "collect",
+     "target": "item.khoang.xich-thiet.001",
+     "count": 10
+    },
+    {
+     "type": "collect",
+     "target": "item.khoang.huyet-ngoc.001",
+     "count": 3
+    }
+   ],
+   "rewards": {
+    "exp": 15000,
+    "spiritStone": 400,
+    "items": [
+     {
+      "id": "item.khoang.xich-thiet.001",
+      "count": 5
+     }
+    ]
+   },
+   "next": [
+    "q.main.tb4"
+   ]
+  },
+  {
+   "id": "q.main.tb4",
+   "title": "Tầm Bảo IV: Huyền Thiết núi xám",
+   "type": "main",
+   "tier": "cam",
+   "auto": true,
+   "realm": "kd",
+   "time": 15,
+   "level": 1,
+   "desc": "Huyền Thiết và U Ngọc nằm sâu trong vùng Sỏi đá xám (Kết Đan) — khoáng của phôi Cánh, đồ Vàng–Đỏ.",
+   "goals": [
+    {
+     "type": "collect",
+     "target": "item.khoang.huyen-thiet.001",
+     "count": 10
+    },
+    {
+     "type": "collect",
+     "target": "item.khoang.u-ngoc.001",
+     "count": 3
+    }
+   ],
+   "rewards": {
+    "exp": 180000,
+    "spiritStone": 1500,
+    "items": [
+     {
+      "id": "item.khoang.u-ngoc.001",
+      "count": 1
+     }
+    ]
+   },
+   "next": [
+    "q.main.tb5"
+   ]
+  },
+  {
+   "id": "q.main.tb5",
+   "title": "Tầm Bảo V: Hàn Thiết tuyết sơn",
+   "type": "main",
+   "tier": "vang",
+   "auto": true,
+   "realm": "na",
+   "time": 15,
+   "level": 1,
+   "desc": "Hàn Thiết và Băng Ngọc chỉ có ở vùng Băng tuyết (Nguyên Anh) — phôi Linh thú, trang sức Vàng. Gió tuyết làm chậm bước, quái tinh anh đi theo đàn.",
+   "goals": [
+    {
+     "type": "collect",
+     "target": "item.khoang.han-thiet.001",
+     "count": 10
+    },
+    {
+     "type": "collect",
+     "target": "item.khoang.bang-ngoc.001",
+     "count": 3
+    }
+   ],
+   "rewards": {
+    "exp": 2200000,
+    "spiritStone": 6000,
+    "items": [
+     {
+      "id": "item.khoang.bang-ngoc.001",
+      "count": 2
+     }
+    ]
+   },
+   "next": [
+    "q.main.tb6"
+   ]
+  },
+  {
+   "id": "q.main.tb6",
+   "title": "Tầm Bảo VI: Hắc Thiết dung nham",
+   "type": "main",
+   "tier": "do",
+   "auto": true,
+   "realm": "ht",
+   "time": 15,
+   "level": 1,
+   "desc": "Hắc Thiết — khoáng phôi Pháp Tướng, đồ Đỏ–Đen — kết tinh ở vùng Hắc thổ – Dung nham (Hóa Thần). Chỉ tu sĩ Hóa Thần mới chịu nổi sức nóng.",
+   "goals": [
+    {
+     "type": "collect",
+     "target": "item.khoang.hac-thiet.001",
+     "count": 10
+    },
+    {
+     "type": "craft",
+     "target": "equipment.blank_item",
+     "count": 1
+    }
+   ],
+   "rewards": {
+    "exp": 20000000,
+    "spiritStone": 25000,
+    "items": [
+     {
+      "id": "item.khoang.hac-thiet.001",
+      "count": 5
+     }
+    ]
+   },
+   "next": [
+    "q.main.tb7"
+   ]
+  },
+  {
+   "id": "q.main.tb7",
+   "title": "Tầm Bảo VII: Hư Ngọc truyền thuyết",
+   "type": "main",
+   "tier": "den",
+   "auto": true,
+   "realm": "ht",
+   "time": 15,
+   "level": 1,
+   "desc": "Hư Ngọc — phôi đồ Truyền thuyết — cực hiếm trong vùng Hắc thổ – Dung nham (Hóa Thần). Gom đủ 5 viên và luyện một phôi để chạm tới phẩm cao nhất.",
+   "goals": [
+    {
+     "type": "collect",
+     "target": "item.khoang.hu-ngoc.001",
+     "count": 5
+    },
+    {
+     "type": "craft",
+     "target": "equipment.blank_item",
+     "count": 1
+    }
+   ],
+   "rewards": {
+    "exp": 60000000,
+    "spiritStone": 80000,
+    "items": [
+     {
+      "id": "item.khoang.hu-ngoc.001",
+      "count": 1
+     }
+    ]
+   },
    "next": []
   }
  ],
@@ -675,5 +941,6 @@
   "boss": "bất kỳ boss (mỗi boss tính một lần)",
   "equipment.blank_item": "bất kỳ phôi pháp bảo",
   "herb": "mỗi loại linh thảo khác nhau từng nhặt được"
- }
+ },
+ "_ghi_chu_tam_bao": "Chuỗi Tầm Bảo (chủ dự án 23/10/2026): nhiệm vụ chính dẫn người chơi đi tìm khoáng quý luyện trang bị, từ vùng xanh tới vùng than. tier = màu độ hiếm / độ khó trên HUD (luc, lam, tim, cam, vang, do, den — giống phẩm trang bị). auto = tự nhận khi đủ cảnh giới."
 }

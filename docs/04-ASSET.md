@@ -46,3 +46,9 @@ nên nhiều vật phẩm (cấp khác nhau) dùng chung một hình được.
 
 ## Nguồn
 Ghi tác giả và giấy phép của asset tải ngoài vào `assets/CREDITS.md`.
+
+## HUD v3 (23/10/2026)
+Ảnh GPT chủ dự án chọn: `assets/ui/_source/hud-v3-gpt.png`. Cắt lại bằng `python3 -I tools/hud_v3_slice.py`
+(xoá chữ / số vẽ sẵn ở chỗ game tự ghi) → `assets/ui/frames/hud-*.png` (khung) và `assets/ui/icons/hud-*.png` (nút).
+Bố cục: `src/ui/hud.js` + `src/ui/hud.css`, khung chat `src/ui/hud-chat.js`, khung nhiệm vụ `src/ui/hud-quest.js`,
+vị trí nút kỹ năng `src/game/hud-actions.js`.

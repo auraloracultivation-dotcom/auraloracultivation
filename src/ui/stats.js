@@ -25,7 +25,8 @@ const pct = (f, x, y, w, h) =>
   `left:${(x / f.w) * 100}%;top:${(y / f.h) * 100}%;width:${(w / f.w) * 100}%;height:${(h / f.h) * 100}%`;
 const fmt = (v) => (v === null || v === undefined ? '—' : typeof v === 'number' ? compactNum(v) : String(v));
 
-export function createStatsDock({ getValue = () => null } = {}) {
+// compact = false (HUD v3): không hiện thanh gọn bên trái; bảng đầy đủ mở bằng nút Nhân Vật (openFull)
+export function createStatsDock({ getValue = () => null, compact = true } = {}) {
   const root = document.getElementById('ui');
   const dock = document.createElement('div');
   dock.className = 'stats-dock';
@@ -35,7 +36,7 @@ export function createStatsDock({ getValue = () => null } = {}) {
       <img alt=""><b></b></button>`).join('')}
     <button type="button" class="sd-arrow" data-dir="-1" aria-label="Chỉ số trước" style="${pct(GON, ...GON.up)}"></button>
     <button type="button" class="sd-arrow" data-dir="1" aria-label="Chỉ số sau" style="${pct(GON, ...GON.down)}"></button>`;
-  root.appendChild(dock);
+  if (compact) root.appendChild(dock);
 
   let index = 3; // bắt đầu ở Tấn công / Phòng thủ như thiết kế
   const slots = [...dock.querySelectorAll('.sd-slot')];
@@ -98,9 +99,7 @@ export function createStatsDock({ getValue = () => null } = {}) {
     Object.assign(dock.style, { top: `${top}px`, width: `${w}px` });
     if (chat) chat.style.left = portrait ? '' : `${dock.getBoundingClientRect().right + 8}px`; // ngang: Chat dời sang phải thanh
   }
-  layout();
-  requestAnimationFrame(layout);
-  addEventListener('resize', layout);
+  if (compact) { layout(); requestAnimationFrame(layout); addEventListener('resize', layout); }
   paint();
-  return { refresh: paint, layout };
+  return { refresh: () => { if (compact) paint(); if (full) full.querySelectorAll('.sf-num').forEach((b, i) => { b.textContent = fmt(getValue(STATS[i].id)); }); }, layout, openFull };
 }

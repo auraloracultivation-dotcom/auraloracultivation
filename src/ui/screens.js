@@ -224,6 +224,7 @@ export function toast(text, ms = 2500) {
   const t = el(`<div class="toast">${escapeHtml(text)}</div>`);
   document.getElementById('ui').appendChild(t);
   setTimeout(() => t.remove(), ms);
+  window.dispatchEvent(new CustomEvent('tc-toast', { detail: text })); // khung Chat → tab Hệ Thống (src/ui/hud-chat.js)
 }
 
 export function escapeHtml(s) {

@@ -69,7 +69,7 @@ export function createQuests(def, progress, realmMajor) {
     delete Q().active[id];
     Q().done[id] = isDaily(q) ? today() : true;
     for (const u of q.rewards.unlock || []) if (!progress.state.flags.includes(u)) progress.state.flags.push(u);
-    for (const n of q.next) accept(n);
+    for (const n of q.next) if ((MAJOR[byId.get(n)?.realm] ?? 0) <= realmMajor()) accept(n); // chưa đủ cảnh giới: để ở "Có thể nhận" (auto thì tự nhận khi đủ)
     progress.changed();
     if (isDaily(q)) emit('daily');
     return q.rewards;

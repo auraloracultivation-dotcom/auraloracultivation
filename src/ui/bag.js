@@ -12,12 +12,12 @@ function overlay(cls) {
 
 // Kho: categories [[id, tên]]; getEntries() → [{ item, count }]; mỗi item có key, name, cat, thumb, sub, detail, equipped,
 // actions [{ id, label, disabled, danger, confirm }]. onAction(item, actionId) → Promise | void (luật do nơi gọi xử lý).
-export function showBag({ categories, getEntries, onAction, note, wallet }) {
+export function showBag({ categories, getEntries, onAction, note, wallet, tab }) { // tab: mở sẵn mục (vd. 'linh-dan')
   const { wrap, close } = overlay('bag-wrap');
   const box = el(`<div class="bag" role="dialog" aria-label="Kho">
     <div class="bag-head"><b>Kho</b><button type="button" class="bag-x" aria-label="Đóng">✕</button></div>
     <div class="bag-tabs" role="tablist">${categories.map(([id, n], i) =>
-    `<button type="button" data-cat="${id}" aria-pressed="${i === 0}">${escapeHtml(n)}</button>`).join('')}</div>
+    `<button type="button" data-cat="${id}" aria-pressed="${tab ? id === tab : i === 0}">${escapeHtml(n)}</button>`).join('')}</div>
     ${wallet ? '<div class="wallet"></div>' : ''}
     <div class="bag-grid"></div>
     <div class="bag-detail" hidden></div>
@@ -26,7 +26,7 @@ export function showBag({ categories, getEntries, onAction, note, wallet }) {
   wrap.appendChild(box);
   box.querySelector('.bag-x').addEventListener('click', close);
   const grid = box.querySelector('.bag-grid'), detail = box.querySelector('.bag-detail');
-  let cat = categories[0][0], sel = null;
+  let cat = categories.some(([id]) => id === tab) ? tab : categories[0][0], sel = null;
 
   const render = () => {
     if (wallet) box.querySelector('.wallet').innerHTML = wallet().map((c) => `<span title="${escapeHtml(c.name)}">${c.img ? `<img src="${c.img}" alt="">` : ''}<b>${escapeHtml(c.text)}</b><i>${escapeHtml(c.name)}</i></span>`).join('');

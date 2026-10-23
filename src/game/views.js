@@ -50,8 +50,20 @@ export function createViews(o) {
       return `<li class="${ok ? 'ok' : ''}">${GOAL[g.type] || g.type}${what} <b>${cur}/${g.count}</b> ${fake}</li>`;
     }).join('');
     const action = !a ? btn('accept', q.id, 'Nhận') : quests.complete(q.id) ? btn('claim', q.id, 'Nhận thưởng') : '';
-    return `<div class="row"><div class="row-h"><b>${E(q.title)}</b><em>${TYPE[q.type] || q.type}</em></div>
+    return `<div class="row"><div class="row-h"><b style="color:${QCOL[q.tier] || ''}">${E(q.title)}</b><em>${TYPE[q.type] || q.type}</em></div>
       <p>${E(q.desc)}</p><ul>${goals}</ul><p class="rw">Thưởng: ${rewardText(q.rewards)}</p>${action}</div>`;
+  }
+  // Khung Nhiệm vụ trên HUD: tối đa 3 nhiệm vụ đang làm (chính tuyến trước), mục tiêu chưa xong đầu tiên, màu theo tier (độ hiếm / khó)
+  const QCOL = { luc: '#6fdc76', lam: '#6aa8ff', tim: '#c58cff', cam: '#ffa94d', vang: '#ffd84a', do: '#ff5a4a', den: '#ff4f7a' };
+  function questBrief() {
+    for (const q of quests.available()) if (q.auto) quests.accept(q.id); // chuỗi Tầm Bảo: đủ cảnh giới là tự nhận
+    const tag = (q) => (q.type === 'main' ? 'Chính' : q.type === 'daily' ? 'Ngày' : 'Phụ');
+    return quests.active().sort((x, y) => (x.q.type === 'main' ? -1 : 0) - (y.q.type === 'main' ? -1 : 0)).slice(0, 3).map(({ q, a }) => {
+      const i = Math.max(0, q.goals.findIndex((g, k) => a.p[k] < g.count)), g = q.goals[i];
+      const what = g.target === 'any' || g.type.endsWith('unique') ? '' : ` ${name(g.target)}`;
+      return { tag: tag(q), title: q.title, color: QCOL[q.tier] || (q.type === 'main' ? '#f7cf6b' : q.type === 'daily' ? '#7fe08a' : '#7fb4ff'),
+        goal: `${GOAL[g.type] || g.type}${what} (${a.p[i]}/${g.count})`, ready: quests.complete(q.id) };
+    });
   }
   function openQuests() {
     showSheet({
@@ -253,5 +265,5 @@ export function createViews(o) {
     });
   }
 
-  return { openQuests, openCultivate, openShop, statValue, refreshDock: null };
+  return { openQuests, questBrief, openCultivate, openShop, statValue, refreshDock: null };
 }

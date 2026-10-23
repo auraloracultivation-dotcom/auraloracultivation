@@ -1,109 +1,106 @@
-// Giao diện trong game, bố cục kiểu MOBA:
-//   trên trái  — đạo hiệu + khung nhân vật (chạm ảnh đại diện mở bảng Nhân vật)
-//   trên phải  — menu (Bản đồ, Kỹ năng, Nhiệm vụ, Tông môn, Cài đặt), bản đồ nhỏ, tên khu
-//   dưới trái  — cần điều khiển (chạm nền), nút Chat, nút Kho ngay dưới
-//   dưới phải  — nút tấn công + ô kỹ năng, Phi hành, Tốc biến
-// Khung lấy từ assets/ui (thiết kế chủ dự án).
+// Giao diện trong game — bộ HUD v3 (chủ dự án 23/10/2026, ảnh GPT: assets/ui/_source/hud-v3-gpt.png):
+//   trên trái  — khung nhân vật (chạm ảnh = bảng trang bị), 3 ô tiền Vàng / Linh thạch / Tiên ngọc, băng "Tự động"
+//   trên phải  — bản đồ nhỏ, 6 nút (menu, bản đồ, đồ giám, nhiệm vụ, cửa hàng, cài đặt),
+//                4 nút tròn: Đạo Vận · Nhân Vật (bảng chỉ số) · Pháp bảo · Thần phù, khung nhiệm vụ bật/tắt
+//   dưới trái  — Kho, Chat (bấm mới hiện khung chat, chạm chỗ khác thì tắt) — src/ui/hud-chat.js
+//   dưới phải  — nút đánh + ô kỹ năng + Tự động + Đan (vị trí ở src/game/hud-actions.js)
+// Mảnh ảnh: assets/ui/frames/hud-*.png, assets/ui/icons/hud-*.png. Toạ độ dưới đây là điểm ảnh trên từng mảnh.
 import { escapeHtml, toast } from './screens.js';
-import { crispWidth } from './stage.js';
 import { setupRoundCanvas } from './compass.js';
 import { compactNum } from '../core/index.js';
+import { createHudChat } from './hud-chat.js';
+import { createQuestBox } from './hud-quest.js';
 
-// Đặt kích thước nút/khung theo bội số nguyên điểm ảnh gốc → viền sắc, đều
-const crisp = (node, srcW, maxCss, square = false) => {
-  const { width, pixelated } = crispWidth(srcW, maxCss);
-  node.style.width = `${width}px`;
-  if (square) node.style.height = `${width}px`;
-  node.style.imageRendering = pixelated ? 'pixelated' : 'auto';
-};
-
-const FRAME = { w: 887, h: 394 }; // frames/khung-nhan-vat-v2.png (sinh bằng tools/hud_frame.py)
-const ICON = (n) => `assets/ui/icons/${n}.png`;
-// Menu góc trên phải. id 'map' / 'settings' mở bảng; còn lại chưa có hệ thống → báo "sắp có"
+const F = (n) => `assets/ui/frames/hud-${n}.png`;
+const I = (n) => `assets/ui/icons/hud-${n}.png`;
+const box = (W, H, x, y, w, h) => `left:${(x / W) * 100}%;top:${(y / H) * 100}%;width:${(w / W) * 100}%;height:${(h / H) * 100}%`;
+const NV = (x, y, w, h) => box(615, 241, x, y, w, h); // khung nhân vật 615×241
 const MENU = [
-  { id: 'map', name: 'Bản đồ', icon: 'ban-do-v2' },
-  { id: 'skills', name: 'Đồ giám', icon: 'ky-nang' },
-  { id: 'quests', name: 'Nhiệm vụ', icon: 'nhiem-vu' },
-  { id: 'sect', name: 'Tông môn', icon: 'tong-mon' },
-  { id: 'rank', name: 'Bảng xếp hạng', icon: 'bxh' },
-  { id: 'settings', name: 'Cài đặt', icon: 'cai-dat-v2' },
+  { id: 'rank', name: 'Bảng xếp hạng', icon: 'nut-menu' },
+  { id: 'map', name: 'Bản đồ', icon: 'nut-ban-do' },
+  { id: 'skills', name: 'Đồ giám', icon: 'nut-do-giam' },
+  { id: 'quests', name: 'Nhiệm vụ', icon: 'nut-nhiem-vu' },
+  { id: 'sect', name: 'Vạn Bảo Lâu', icon: 'nut-cua-hang' },
+  { id: 'settings', name: 'Cài đặt', icon: 'nut-cai-dat' },
 ];
-const pct = (x, y, w, h) =>
-  `left:${(x / FRAME.w) * 100}%;top:${(y / FRAME.h) * 100}%;width:${(w / FRAME.w) * 100}%;height:${(h / FRAME.h) * 100}%`;
+// Nút tròn: Đạo Vận thay chỗ Túi (guide.js gắn chữ + màu vào [data-r="dv"]), Nhân Vật giữ ảnh gốc
+const ROUND = [
+  { id: 'dv', name: 'Đạo Vận', glyph: '☯' },
+  { id: 'stats', name: 'Nhân Vật', img: I('nut-nhan-vat') },
+  { id: 'pb', name: 'Pháp Bảo', glyph: '❖' },
+  { id: 'phu', name: 'Thần Phù', glyph: '✧' },
+];
 
 export function createHud(opts) {
-  const { zoneName, line, player, maxChars, actions, blankIcon } = opts; // blankIcon: ô trống xám (chưa mở / chưa có)
+  const { zoneName, line, player, maxChars, actions, blankIcon } = opts;
   const root = document.getElementById('ui');
+  const add = (html) => { const t = document.createElement('template'); t.innerHTML = html.trim(); const n = t.content.firstElementChild; root.appendChild(n); return n; };
 
-  // ---- Trên trái: khung nhân vật ----
-  const info = document.createElement('div');
-  info.className = 'player-info';
-  info.innerHTML = `
-    <div class="pi-name" data-name></div>
-    <div class="pi-frame">
-      <button type="button" class="pi-avatar glow" style="${pct(80, 50, 192, 192)}" aria-label="Thông tin nhân vật">
-        <canvas width="128" height="128"></canvas></button>
-      <div class="pi-bar" style="${pct(382, 87, 404, 36)}"><i class="fill hp" data-hp></i><span>Khí huyết</span><b data-hp-t></b></div>
-      <div class="pi-bar" style="${pct(382, 155, 404, 36)}"><i class="fill mp" data-mp></i><span>Linh lực</span><b data-mp-t></b></div>
-      <div class="pi-bar" style="${pct(382, 224, 321, 38)}"><i class="fill xp" data-xp></i><span>Tu vi</span><b data-xp-t></b></div>
-      <img class="pi-icon" src="${ICON('sen')}" alt="" style="${pct(317, 216, 50, 50)}">
-      <button type="button" class="pi-up" style="${pct(723, 198, 84, 84)}" aria-label="Đột phá"></button>
-      <div class="pi-realm" style="${pct(61, 282, 212, 39)}" data-realm></div>
-    </div>`;
-  root.appendChild(info);
-  const portrait = window.innerHeight > window.innerWidth;
-  info.style.width = `${Math.min(270, window.innerWidth * (portrait ? 0.42 : 0.3))}px`; // khung độ phân giải cao, thu nhỏ mượt
-  info.querySelector('[data-name]').textContent = player.name;
-  info.querySelector('[data-realm]').textContent = player.realmName;
-  drawAvatar(info.querySelector('.pi-avatar canvas'), player.drawAvatar);
-  info.querySelector('.pi-up').addEventListener('click', opts.onBreakthrough);
-  info.querySelector('.pi-avatar').addEventListener('click', opts.onOpenCharacter);
-
-  // ---- Trên phải: Bản đồ, Cài đặt, bản đồ nhỏ, tên khu ----
-  const right = document.createElement('div');
-  right.className = 'top-right';
-  right.innerHTML = `
-    <div class="tr-buttons">${MENU.map((m) => `
-      <button type="button" class="menu-btn glow" data-menu="${m.id}" aria-label="${m.name}" title="${m.name}">
-        <img src="${ICON(m.icon)}" alt=""></button>`).join('')}
+  // ---- Trên trái: khung nhân vật + ô tiền + băng Tự động ----
+  const me = add(`<div class="h3-left">
+    <div class="h3-me">
+      <button type="button" class="h3-avatar" style="${NV(37, 37, 152, 152)}" aria-label="Bảng trang bị"><canvas width="128" height="128"></canvas></button>
+      <div class="h3-name" style="${NV(210, 52, 330, 38)}"><b data-name></b><i data-realm></i></div>
+      ${['hp', 'mp', 'xp'].map((k, i) => `<div class="h3-bar ${k}" style="${NV(252, [99, 133, 170][i], 285, [23, 26, 25][i])}"><i data-${k}></i><b data-${k}-t></b></div>`).join('')}
+      <b class="h3-lv" style="${NV(149, 183, 52, 35)}" data-lv></b>
+      <button type="button" class="h3-up" style="${NV(531, 153, 70, 67)}" aria-label="Đột phá"></button>
     </div>
-    <div class="tr-mini">
-      <button type="button" class="minimap" aria-label="Mở bản đồ"><canvas></canvas></button>
-      <div class="zone-tag"><b>${escapeHtml(zoneName)}</b><span>Tuyến ${line} <em data-online></em></span></div>
-    </div>`;
-  root.appendChild(right);
-  right.querySelector('.tr-buttons').addEventListener('click', (e) => {
-    const b = e.target.closest('[data-menu]');
-    if (!b) return;
+    <small class="h3-life" data-life></small>
+    <div class="h3-wallet" data-wallet></div>
+    <div class="h3-auto" hidden><b>● Tự động</b><span data-rate></span></div>
+  </div>`);
+  me.querySelector('[data-name]').textContent = player.name;
+  me.querySelector('[data-realm]').textContent = player.realmName;
+  me.querySelector('.h3-up').addEventListener('click', opts.onBreakthrough);
+  me.querySelector('.h3-avatar').addEventListener('click', opts.onOpenCharacter);
+  drawAvatar(me.querySelector('.h3-avatar canvas'), player.drawAvatar);
+  const walletEl = me.querySelector('[data-wallet]');
+  walletEl.addEventListener('click', (e) => { if (e.target.closest('.h3-plus')) opts.onShop?.(); });
+
+  // ---- Trên phải: bản đồ nhỏ, nút menu, nút tròn, nhiệm vụ ----
+  const right = add(`<div class="h3-right">
+    <div class="h3-mini">
+      <button type="button" class="h3-map" aria-label="Mở bản đồ"><canvas></canvas></button>
+      <div class="h3-zone"><b>${escapeHtml(zoneName)}</b> · T${line} <em data-online></em></div>
+    </div>
+    <div class="h3-menu">${MENU.map((m) => `<button type="button" class="glow" data-menu="${m.id}" aria-label="${m.name}" title="${m.name}"><img src="${I(m.icon)}" alt=""></button>`).join('')}</div>
+    <div class="h3-round">${ROUND.map((r) => `<button type="button" class="glow" data-r="${r.id}" aria-label="${r.name}">
+      ${r.img ? `<img src="${r.img}" alt="">` : `<img src="${F('nut-tron')}" alt=""><i>${r.glyph}</i><span>${r.name}</span>`}</button>`).join('')}</div>
+  </div>`);
+  right.querySelector('.h3-menu').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-menu]'); if (!b) return;
     const id = b.dataset.menu;
     if (id === 'map') opts.onOpenMap();
     else if (id === 'settings') opts.onSettings();
-    else if (opts.onMenu?.(id)) return; // Nhiệm vụ, Kỹ năng (Tu luyện)… do main.js quyết
-    else toast(`${b.getAttribute('aria-label')}: sắp có`);
+    else if (id === 'quests') quest.toggle();
+    else if (!opts.onMenu?.(id)) toast(`${b.getAttribute('aria-label')}: sắp có`);
   });
-  right.querySelector('.minimap').addEventListener('click', opts.onOpenMap);
+  right.querySelector('.h3-round').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-r]'); if (!b) return;
+    const id = b.dataset.r;
+    if (id === 'stats') opts.onStats?.();
+    else if (id === 'pb') opts.onTreasure?.();
+    else if (id === 'phu') opts.onCards?.();
+    else if (id === 'dv') b._open?.(); // guide.js gắn hàm mở Cẩm nang
+  });
+  right.querySelector('.h3-map').addEventListener('click', opts.onOpenMap);
   const online = right.querySelector('[data-online]');
-  const miniCanvas = setupRoundCanvas(right.querySelector('.minimap canvas'), portrait ? 86 : 92);
-  crisp(right.querySelector('.zone-tag'), 308, 130);
+  const miniCanvas = setupRoundCanvas(right.querySelector('.h3-map canvas'), 76, true);
+  const quest = createQuestBox(right, { onOpen: () => opts.onMenu?.('quests') });
 
-  // ---- Dưới phải: bộ kỹ năng hình quạt kiểu MOBA ----
-  // Mỗi nút đặt theo (dx, dy) tính từ TÂM nút Tấn công (góc dưới phải), cỡ `size` (px). Ảnh nút: assets/ui/skills/*.png
-  // (đã gồm khung tròn của chủ dự án, 256×256). Xem bố cục ở FAN_LAYOUT trong src/main.js.
-  const pad = document.createElement('div');
-  pad.className = 'action-pad';
-  pad.innerHTML = actions.map((a) => `
-    <button type="button" class="act ${a.locked ? 'locked' : ''}" data-act="${a.id}" aria-label="${escapeHtml(a.name)}"
+  // ---- Dưới phải: nút đánh + ô kỹ năng (dx, dy tính từ tâm nút đánh) ----
+  const pad = add(`<div class="action-pad">${actions.map((a) => `
+    <button type="button" class="act ${a.locked ? 'locked' : ''} ${a.cls || ''}" data-act="${a.id}" aria-label="${escapeHtml(a.name)}"
       style="width:${a.size}px;height:${a.size}px;left:${a.dx - a.size / 2}px;top:${a.dy - a.size / 2}px">
       <img class="act-base" src="${a.locked && blankIcon ? blankIcon : a.icon || a.icons[0]}" alt=""><img class="act-art" alt="" hidden><b class="act-badge"></b><i class="act-cd" hidden><em></em></i><span>${escapeHtml(a.name)}</span>
-    </button>`).join('');
-  root.appendChild(pad);
+    </button>`).join('')}</div>`);
   for (const a of actions) {
     const btn = pad.querySelector(`[data-act="${a.id}"]`);
     let state = 0; // nút bật/tắt (vd. Bay ↔ Chạy): đổi ảnh + tên theo trạng thái
     a.setState = (s) => { state = s; btn.querySelector('.act-base').src = a.icons[s]; btn.setAttribute('aria-label', a.names[s]); };
     btn.addEventListener('pointerdown', (e) => {
       e.preventDefault();
-      if (btn.classList.contains('locked') && a.onLocked?.()) return; // vd. ô kỹ năng trống → mở bảng Kỹ năng
+      if (btn.classList.contains('locked') && a.onLocked?.()) return; // ô kỹ năng trống → mở bảng Kỹ năng
       if (btn.classList.contains('locked')) { toast(a.offHint ? `${a.name}: ${a.offHint}` : `${a.name}: chưa mở${a.lockedHint ? ` — ${a.lockedHint}` : ''}`, 1600); return; }
       btn.classList.remove('pulse'); void btn.offsetWidth; btn.classList.add('pulse');
       if (a.icons) {
@@ -116,105 +113,29 @@ export function createHud(opts) {
     });
   }
 
-  // ---- Dưới trái: Chat ----
-  // iPhone: khi ô nhập ở sát đáy, Safari đẩy cả trang lên để tránh bàn phím (màn game giật lên rồi bị kéo về).
-  // Cách tránh: lúc mở, đưa thanh chat lên TRÊN CÙNG màn hình rồi mới focus → Safari không cần đẩy trang;
-  // khi bàn phím hiện xong (visualViewport đổi cỡ) mới đặt thanh chat ngay trên mép bàn phím. Game không bị động tới.
-  const bar = document.createElement('form');
-  bar.className = 'chatbar';
-  bar.setAttribute('action', '');
-  bar.innerHTML = `<button class="round-btn glow" type="button" aria-label="Chat">Chat</button>
-    <input class="field framed" type="text" maxlength="${maxChars}" placeholder="Nói gì đó…" enterkeyhint="send" autocomplete="off" hidden>
-    <button class="chat-send glow" type="submit" aria-label="Gửi"><img src="assets/ui/icons/gui.png" alt=""></button>`;
-  root.appendChild(bar);
-  crisp(bar.querySelector('.round-btn'), 122, 56, true);
-  const input = bar.querySelector('input');
-  const open = bar.querySelector('.round-btn');
-  const sendBtn = bar.querySelector('.chat-send');
-  sendBtn.addEventListener('pointerdown', (e) => e.preventDefault()); // không làm ô nhập mất tiêu điểm trước khi gửi
-  const vv = window.visualViewport;
-  let fullH = vv ? vv.height : window.innerHeight; // chiều cao khi chưa có bàn phím
-  const placeAboveKeyboard = () => {
-    if (!bar.classList.contains('typing')) return;
-    const h = vv ? vv.height : window.innerHeight;
-    const top = vv ? vv.offsetTop : 0;
-    if (h < fullH - 80) bar.style.top = `${top + h - bar.offsetHeight - 8}px`; // bàn phím đang mở
-  };
-  vv?.addEventListener('resize', () => {
-    if (!bar.classList.contains('typing')) fullH = Math.max(fullH * 0.5, vv.height);
-    placeAboveKeyboard();
-  });
-  vv?.addEventListener('scroll', placeAboveKeyboard);
-  const startTyping = () => {
-    input.hidden = false;
-    bar.style.top = '';
-    bar.classList.add('typing'); // CSS: thanh chat nằm trên cùng màn hình
-    input.focus({ preventScroll: true });
-    window.scrollTo(0, 0);
-    setTimeout(placeAboveKeyboard, 350); // phòng khi trình duyệt không báo đổi cỡ
-  };
-  const close = () => {
-    input.hidden = true;
-    bar.classList.remove('typing');
-    bar.style.top = '';
-    input.blur();
-    window.scrollTo(0, 0); // phòng khi Safari đã lỡ cuộn
-  };
-  const send = () => {
-    const text = input.value.trim().slice(0, maxChars);
-    if (text) opts.onChat(text);
-    input.value = '';
-    close();
-  };
-  // giữ tiêu điểm ở ô nhập khi chạm nút Chat (nếu không, ô nhập mất tiêu điểm và tự đóng trước khi kịp gửi)
-  open.addEventListener('pointerdown', (e) => { if (!input.hidden) e.preventDefault(); });
-  open.addEventListener('click', () => { if (input.hidden) startTyping(); else send(); });
-  bar.addEventListener('submit', (e) => { e.preventDefault(); send(); });
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') { input.value = ''; close(); }
-    // bộ gõ tiếng Việt: Enter lúc đang ghép chữ đôi khi không tạo submit → tự gửi khi ghép xong
-    if (e.key === 'Enter' && (e.isComposing || e.keyCode === 229)) {
-      e.preventDefault();
-      input.addEventListener('compositionend', () => setTimeout(send, 0), { once: true });
-    }
-  });
-  input.addEventListener('blur', () => setTimeout(() => { if (document.activeElement !== input) close(); }, 0));
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && input.hidden && document.activeElement === document.body) startTyping();
-  });
+  // ---- Dưới trái: Kho + Chat ----
+  const bagBtn = add(`<button type="button" class="h3-side h3-kho glow" aria-label="Kho"><img src="${I('nut-kho')}" alt=""></button>`);
+  bagBtn.addEventListener('click', () => opts.onOpenBag?.());
+  const chat = createHudChat({ root, maxChars, onSend: opts.onChat, chatIcon: I('nut-chat'), frame: F('khung-chat') });
 
-  // Kho (túi trữ vật): ngay dưới nút Chat (yêu cầu chủ dự án 2026-10-21)
-  const bagBtn = document.createElement('button');
-  bagBtn.type = 'button';
-  bagBtn.className = 'bag-btn glow';
-  bagBtn.setAttribute('aria-label', 'Kho');
-  bagBtn.innerHTML = `<img src="${ICON('tui-do')}" alt=""><span>Kho</span>`;
-  bagBtn.addEventListener('click', () => (opts.onOpenBag ? opts.onOpenBag() : toast('Kho: sắp có')));
-  root.appendChild(bagBtn);
-
-  // Nhật ký chat: vài dòng gần nhất phía trên nút Chat, mờ dần sau một lúc
-  const log = document.createElement('div');
-  log.className = 'chat-log';
-  root.appendChild(log);
-  const addChatLine = (name, text, self = false) => {
-    const line = document.createElement('div');
-    line.className = `chat-line${self ? ' self' : ''}`;
-    line.innerHTML = `<b>${escapeHtml(name)}:</b> ${escapeHtml(text)}`;
-    log.appendChild(line);
-    while (log.children.length > 5) log.firstChild.remove();
-    setTimeout(() => line.classList.add('fade'), 12000);
-    setTimeout(() => line.remove(), 13000);
+  // ---- Tu vi / phút khi Tự động: cộng phần tu vi tăng trong 60 giây gần nhất ----
+  const autoEl = me.querySelector('.h3-auto'), rateEl = me.querySelector('[data-rate]');
+  let lastXp = null, gains = [], autoOn = false;
+  const noteXp = (v) => {
+    const t = performance.now();
+    if (lastXp !== null && v > lastXp) gains.push([t, v - lastXp]);
+    lastXp = v;
+    while (gains.length && t - gains[0][0] > 60000) gains.shift();
+    if (autoOn) { const sum = gains.reduce((s, g) => s + g[1], 0); rateEl.textContent = sum ? ` · +${compactNum(sum)} tu vi/phút` : ''; }
   };
 
-  const els = Object.fromEntries(['hp', 'mp', 'xp'].map((k) => [k, {
-    fill: info.querySelector(`[data-${k}]`), text: info.querySelector(`[data-${k}-t]`),
-  }]));
+  const els = Object.fromEntries(['hp', 'mp', 'xp'].map((k) => [k, { fill: me.querySelector(`[data-${k}]`), text: me.querySelector(`[data-${k}-t]`) }]));
+  let walletKey = '';
   return {
     miniCanvas,
-    addChatLine,
-    // Ảnh đại diện: lấy nửa trên của chân dung (đầu + vai), cắt tròn trong khung
-    setPortrait(img) {
-      const cv = info.querySelector('.pi-avatar canvas'), g = cv.getContext('2d'), S = cv.width;
+    addChatLine: chat.addLine,
+    setPortrait(img) { // nửa trên chân dung (đầu + vai), cắt tròn trong khung
+      const cv = me.querySelector('.h3-avatar canvas'), g = cv.getContext('2d'), S = cv.width;
       g.clearRect(0, 0, S, S);
       g.save(); g.beginPath(); g.arc(S / 2, S / 2, S / 2, 0, Math.PI * 2); g.clip();
       const cropH = img.height * 0.62, k = Math.min(S / img.width, S / cropH) * 1.05;
@@ -223,50 +144,50 @@ export function createHud(opts) {
       g.restore();
     },
     setOnline(count, max) { online.textContent = `· ${count}/${max}`; },
-    // Đặt trạng thái nút bật/tắt từ ngoài (vd. hết linh lực → tự hạ cánh)
     setToggle(id, s) { actions.find((a) => a.id === id)?.setState?.(s); },
-    setRealm(text) { // "Kết Đan Sơ kỳ (Thọ nguyên 43/102 năm)" → cảnh giới dòng trên, thọ nguyên dòng nhỏ dưới
-      const el = info.querySelector('[data-realm]'), i = text.indexOf(' (');
-      el.replaceChildren(i < 0 ? text : text.slice(0, i));
-      if (i >= 0) { const sm = document.createElement('small'); sm.textContent = text.slice(i + 1); el.append(sm); }
+    setRealm(text) { // "Kết Đan Sơ kỳ (Thọ nguyên 43/102 năm)" → cảnh giới cạnh tên, thọ nguyên dòng nhỏ dưới khung
+      const i = text.indexOf(' (');
+      me.querySelector('[data-realm]').textContent = i < 0 ? text : text.slice(0, i);
+      me.querySelector('[data-life]').textContent = i < 0 ? '' : text.slice(i + 2, -1);
     },
-    // Khoá / mở nút kỹ năng theo cảnh giới
-    // hint: lý do riêng (vd. "chưa đeo linh thú"); bỏ trống = chưa mở theo cảnh giới (lockedHint)
+    setLevel(n) { me.querySelector('[data-lv]').textContent = n ?? ''; },
     setLocked(id, on, hint) {
       const a = actions.find((x) => x.id === id), btn = pad.querySelector(`[data-act="${id}"]`);
       if (!a || !btn) return;
       a.offHint = hint; btn.classList.toggle('locked', !!on);
-      if (blankIcon) btn.querySelector('.act-base').src = on ? blankIcon : a.icon || a.icons[0]; // khoá → ô trống xám, không lộ hình
+      if (blankIcon) btn.querySelector('.act-base').src = on ? blankIcon : a.icon || a.icons[0];
     },
-    // Hình thứ đang dùng trong ô (đan, linh thú, pháp tướng); null = hình mặc định của ô
     setArt(id, url) { const i = pad.querySelector(`[data-act="${id}"] .act-art`); if (i) { i.hidden = !url; if (url) i.src = url; } },
     setBadge(id, text) { const b = pad.querySelector(`[data-act="${id}"] .act-badge`); if (b) b.textContent = text ?? ''; },
-    // Hồi chiêu: bóng tối quét theo phần còn lại + số giây
     setCooldown(id, left, total) {
       const c = pad.querySelector(`[data-act="${id}"] .act-cd`); if (!c) return;
       c.hidden = !(left > 0); if (c.hidden) return;
       c.style.setProperty('--p', `${Math.min(100, (left / total) * 100)}%`);
       c.firstChild.textContent = left >= 1 ? Math.ceil(left) : left.toFixed(1);
     },
-    // Nút đang bật (vd. pháp tướng đang hiện): sáng viền
-    setActive(id, on) { pad.querySelector(`[data-act="${id}"]`)?.classList.toggle('on', !!on); },
-    // value/max: số thật khi có dữ liệu chỉ số; chưa có thì max = 0 → hiện thanh đầy, không ghi số
+    setActive(id, on) {
+      pad.querySelector(`[data-act="${id}"]`)?.classList.toggle('on', !!on);
+      if (id === 'auto') { autoOn = !!on; autoEl.hidden = !on; gains = []; rateEl.textContent = ''; }
+    },
     setBar(kind, value, max) {
       const e = els[kind];
       const r = max > 0 ? Math.max(0, Math.min(1, value / max)) : (kind === 'xp' ? 0 : 1);
       e.fill.style.width = `${r * 100}%`;
-      e.text.textContent = max > 0 ? `${compactNum(value)}/${compactNum(max)}` : '';
+      e.text.textContent = max > 0 ? (kind === 'xp' ? `${Math.floor(r * 100)}%` : `${compactNum(value)} / ${compactNum(max)}`) : '';
+      if (kind === 'xp') noteXp(value);
     },
+    // Ví: [{ k, img, name, text }] (game.wallet.list) — Vàng, Linh thạch, Tiên ngọc
+    setWallet(list) {
+      const key = list.map((c) => c.text).join('|'); if (key === walletKey) return; walletKey = key;
+      walletEl.innerHTML = list.map((c) => `<div class="h3-coin" title="${escapeHtml(c.name)}"><img src="${F('o-tien')}" alt="" class="h3-coin-bg">
+        ${c.img ? `<img src="${c.img}" alt="" class="h3-coin-ic">` : ''}<b>${escapeHtml(c.text)}</b><button type="button" class="h3-plus" aria-label="Vạn Bảo Lâu"></button></div>`).join('');
+    },
+    setQuests: quest.set, // [{ tag, kind, title, goal, ready }]
   };
 }
 
 function drawAvatar(canvas, draw) {
   const ctx = canvas.getContext('2d');
   ctx.imageSmoothingEnabled = false;
-  ctx.save();
-  ctx.translate(64, 124);
-  ctx.scale(3.8, 3.8);
-  draw(ctx);
-  ctx.restore();
+  ctx.save(); ctx.translate(64, 124); ctx.scale(3.8, 3.8); draw(ctx); ctx.restore();
 }
-
