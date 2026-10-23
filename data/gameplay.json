@@ -1201,7 +1201,9 @@
   "_ghi_chu_neo": "Neo vùng farm (chủ dự án 23/10): bật Tự động cắm neo tại chỗ; chỉ đánh / hái trong bán kính anchor_radius_px (640, gấp đôi bản đầu theo chủ dự án 23/10 13:20; không vẽ vòng neo). Quái chạy ra quá anchor_leash_px ngoài vòng thì bỏ. Hết mục tiêu mà xa neo hơn anchor_idle_frac × bán kính thì đi về neo, gần thì đứng chờ quái hồi sinh. Kéo cần = dời neo.",
   "rest_below": 0.4,
   "rest_until": 0.9,
-  "_ghi_chu_nghi": "Chủ dự án 23/10 tối (cứu tân thủ): Tự động thấy khí huyết dưới rest_below thì đứng nghỉ, chỉ đánh trả con đang đánh mình, hồi tới rest_until mới tìm quái tiếp. Khí huyết tự hồi player.regen_hp_per_s mỗi giây sau player.regen_after_s giây thôi giao chiến (trước đây có số nhưng code chưa dùng)."
+  "_ghi_chu_nghi": "Chủ dự án 23/10 tối (cứu tân thủ): Tự động thấy khí huyết dưới rest_below thì đứng nghỉ, chỉ đánh trả con đang đánh mình, hồi tới rest_until mới tìm quái tiếp. Khí huyết tự hồi player.regen_hp_per_s mỗi giây sau player.regen_after_s giây thôi giao chiến (trước đây có số nhưng code chưa dùng).",
+  "mp_pill_below": 0.3,
+  "_ghi_chu_mp": "Chủ dự án 23/10 21h37: Tự động uống Hồi Linh Đan khi linh lực dưới mp_pill_below (đan máu ưu tiên trước); hết linh lực vẫn đánh thường. Chết lúc đang Tự động → hồi sinh xong tự bật lại (về thành thì tự đi lại vùng neo cũ)."
  },
  "luc_chien": {
   "_ghi_chu": "Lực chiến (bảng xếp hạng) = tổng chỉ số × trọng số. Số TẠM, chỉnh thoải mái. src/game/rank.js",

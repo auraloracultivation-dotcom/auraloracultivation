@@ -47,7 +47,7 @@ import { placeholderIcon, showRevive } from '../ui/index.js';
 import { artInfo, iconUrl, fxIconUrl, cardArt } from '../entity/index.js';
 
 const MAJOR_OF = (id) => ({ lk: 0, tc: 1, kd: 2, na: 3, ht: 4, ab: 5, vd: 6 }[id.slice(0, 2)] ?? 0);
-const HEAL_PILL = 'item.dan.tieu-hoi-huyet.001';
+const HEAL_PILL = 'item.dan.tieu-hoi-huyet.001', MP_PILL = 'item.dan.hoi-linh.001';
 
 // bag: Kho đồ 6 hệ (src/ui/testbag.js) — đồ trong Kho thức tỉnh được; onLook(): báo main.js cập nhật hình mặc trên người
 export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, hud, pt, toast, audio, userId, bag, onLook = () => {}, onRealm = () => {}, serverNow, bornAt = null, timeSynced = () => true, onToaHoa = () => {} }) {
@@ -93,7 +93,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   let guardUntil = 0, npcTarget = null; // bảo vệ sau hồi sinh; NPC đang nhắm
   me.shield = progress.state.shield ?? true; // khiên bảo vệ (mặc định bật)
   let stunUntil = 0; // bị boss trói: không đi được
-  let hp = 0, dead = false, autoDir = null, hurtAt = -99, attackCd = 0, auto = false, targetUid = null, pet = null, now = 0;
+  let hp = 0, dead = false, autoDir = null, hurtAt = -99, attackCd = 0, auto = false, resumeAuto = null, targetUid = null, pet = null, now = 0;
   const fx = [], bolts = [];
   const { say, play } = createFxQueue(fx, fxDuration); // số bay trên đầu + hiệu ứng hình
 
@@ -211,7 +211,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     if (hp <= 0) { die(); toast(`Bị ${n.name} hạ gục`, 2500); }
   }
   function die() {
-    hp = 0; dead = true; mobs.calmAll(); auto = false; hud.setActive('auto', false); autoDir = null; autoPlay.reset(); const lost = Math.floor(progress.state.exp * (gp.death_exp_loss || 0)); if (lost > 0) { progress.state.exp -= lost; toast(`Thân tử đạo tổn: mất ${lost.toLocaleString('vi')} tu vi`, 2500); progress.changed(); }
+    hp = 0; dead = true; mobs.calmAll(); resumeAuto = auto ? autoPlay.snapshot() : null; auto = false; hud.setActive('auto', false); // đang Tự động thì hồi sinh xong bật lại autoDir = null; autoPlay.reset(); const lost = Math.floor(progress.state.exp * (gp.death_exp_loss || 0)); if (lost > 0) { progress.state.exp -= lost; toast(`Thân tử đạo tổn: mất ${lost.toLocaleString('vi')} tu vi`, 2500); progress.changed(); }
     if (pt.active) pt.cancel();
     soul.start();
   }
@@ -219,7 +219,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     soul.end(); dead = false; hp = ps.hp; guardUntil = now + PV.revive_guard_s;
     if (!here && map.town) { me.x = map.town.cx; me.y = map.town.cy + 30; onRespawn(me.x, me.y); }
     else if (!map.canStand(me.x, me.y, 4)) ({ x: me.x, y: me.y } = map.nearestStand(me.x, me.y, 4, 30));
-    play('vong-lua', me.x, me.y - 8, 40); toast(`Hồi sinh${here ? ' tại chỗ' : ` tại trận pháp ${map.town?.name || ''}`} — được bảo vệ ${PV.revive_guard_s} giây`, 2000);
+    play('vong-lua', me.x, me.y - 8, 40); toast(`Hồi sinh${here ? ' tại chỗ' : ` tại trận pháp ${map.town?.name || ''}`} — được bảo vệ ${PV.revive_guard_s} giây`, 2000); if (resumeAuto) { const r = resumeAuto; resumeAuto = null; auto = true; autoPlay.start(r.focus, here ? null : r.at); hud.setActive('auto', true); toast('Tự động bật lại — quay về chỗ farm cũ', 1800); } // về thành thì tự đi lại vùng neo cũ
   }
   const tame = createTame({ cfg: gp.tame, progress, monsters: monDef.monsters, mdef: monDef, mobs, map, me, stats, gp, toast, say: (...a) => say(...a), play: (...a) => play(...a), onKill: (m) => onKill(m), placeholder: placeholderIcon, suppress: (m, p) => gapR.mul(m.stage, p.stage) });
   const soul = createSoul({ me, hud, progress, cfg: gp.soul, townName: map.town?.name || 'thành', toast, showRevive, onRevive: revive });
@@ -267,7 +267,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     npcs.update(dt, { me, playerCanFight: canFight, hitPlayer: hitByNpc });
     for (const n of gather.update(dt, me, !dead)) { gain(n.item.id, n.n); say(n.x, n.y - 10, `+${n.n} ${n.item.name}`, n.group === 'thao' ? '#9dff8a' : '#d6dbe8'); progress.changed(); }
     if (auto && !dead) { // Tự động: uống đan khi máu thấp, đi tới quái / nguyên liệu gần nhất, đánh
-      if (hp < ps.hp * gp.auto.hp_pill_below && progress.count(HEAL_PILL) && (cds.pill || 0) <= now) usePill(HEAL_PILL);
+      if (hp < ps.hp * gp.auto.hp_pill_below && progress.count(HEAL_PILL) && (cds.pill || 0) <= now) usePill(HEAL_PILL); else if (pt.mp < pt.max * (gp.auto.mp_pill_below ?? 0.3) && progress.count(MP_PILL) && (cds.pill || 0) <= now) usePill(MP_PILL); // linh lực dưới 30%: tự uống Hồi Linh Đan; hết đan vẫn đánh thường
       autoDir = autoPlay.step(dt, now);
       if (gp.auto.use_skills && target(260)) skills.autoCast(loadout.ids(), hp / ps.hp); // tự dùng kỹ năng trong ô
       if (target(PL.attack_range_px) && attackCd <= 0) { attack(); me.onAutoSwing?.(); }
