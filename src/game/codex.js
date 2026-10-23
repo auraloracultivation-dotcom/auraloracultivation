@@ -71,7 +71,7 @@ export async function openCodex(o) {
     { ...skill('skill.linh-thu', 'Linh thú', `${U}linh-thu.png`, [], [`Gọi linh thú đánh cùng ${S['linh-thu'].last_s}s · hồi ${S['linh-thu'].cd_s}s · mở ở Kết Đan, cần đeo linh thú`]),
       status: 'tam', img: null, anim: sheetAnim('cho-trang', ['idle', 'walk']), note: 'Linh thú đang dùng chó trắng (gói miễn phí) · chưa có hình linh thú riêng' },
     skill('skill.luot', 'Lướt', `${U}luot.png`, [], [`Tăng né ×${S.luot.ne_mul} và tốc độ trong ${S.luot.last_s}s · hồi ${S.luot.cd_s}s · mở ở Kết Đan`]),
-    skill('skill.nguyen-anh', 'Nguyên Anh (diện rộng)', `${U}nguyen-anh.png`, ['tho-vong'], [`Đánh quanh mình ×${S['nguyen-anh'].mul} · ${S['nguyen-anh'].mp} linh lực · mở ở Nguyên Anh`]),
+    skill('skill.nguyen-anh', 'Nguyên Anh (diện rộng)', `${U}nguyen-anh.png`, ['k.bao-tho'], [`Đánh quanh mình ×${S['nguyen-anh'].mul} · ${S['nguyen-anh'].mp} linh lực · mở ở Nguyên Anh`]),
     skill('skill.phap-tuong', 'Pháp tướng hoá hình', `${U}phap-tuong.png`, [], [`+${Math.round((S['phap-tuong'].atk_mul - 1) * 100)}% công, +${Math.round((S['phap-tuong'].def_mul - 1) * 100)}% thủ khi hiện; tốn linh lực liên tục`], 'Hình = pháp tướng đang đeo (xem Trang bị)'),
     ...S._order.filter((id) => S[id]?.kind && S[id].fx).map((id) => skill(`skill.${id}`, S[id].name, `${U}trong.png`, [S[id].fx, S[id].hit_fx].filter(Boolean),
       [`${S[id].desc.replace(/\{(\w+)(%?)\}/g, (_, k, p) => (p ? `${Math.round(S[id][k] * 100)}%` : S[id][k]))} · ${S[id].mp} linh lực · hồi ${S[id].cd_s}s`], 'Hiệu ứng: tấm chủ dự án 23/10')),

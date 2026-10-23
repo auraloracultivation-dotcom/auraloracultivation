@@ -68,7 +68,7 @@ export function createTreasure(c) {
       }
       case 'seal': {
         const m = tgt || { x: me.x + me.facing * 40, y: me.y };
-        play(d.fx, m.x, m.y + 4, d.h, { ground: true }); play('tho-vong', m.x, m.y + 4, d.r * 1.6, { ground: true });
+        play(d.fx, m.x, m.y + 4, d.h, { ground: true }); play('k.bao-tho', m.x, m.y + 4, d.r * 1.6, { ground: true }); // tho-vong cũ bị lẹm khung
         barrage.zap({ kind: 'ring', x: m.x, y: m.y, r: d.r, t: 0.6, color: he.color });
         barrage.hitAround(m.x, m.y, d.r, mul, 'skill', d.stun);
         break;
