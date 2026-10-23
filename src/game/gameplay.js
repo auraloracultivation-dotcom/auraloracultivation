@@ -30,7 +30,7 @@ import { openSkillPanel } from './skillview.js';
 import { createWallet } from './currency.js';
 import { createLifespan } from './lifespan.js';
 import { createTame } from './tame.js';
-import { createRealmGap } from './realm-gap.js'; import { createLateRealm } from './late-realm.js';
+import { createRealmGap } from './realm-gap.js'; import { createLateRealm } from './late-realm.js'; import { juice } from './juice.js';
 import { createPillUse } from './pill-use.js';
 import { createDaoVan } from './daovan.js';
 import { createCards } from './cards.js';
@@ -233,10 +233,10 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const dv = createDaoVan({ def: dvDef, bag, cards, progress });
   const barrage = createBarrage({ dv, me, mobs, map, bolts, play, strike, toast, dead: () => dead, maxHp: () => ps.hp, heal: (n) => { if (!dead) hp = Math.min(ps.hp, hp + n); } });
   treasure = createTreasure({ def: pbDef, S, progress, craft, awaken, barrage, mobs, me, map, buffs, recompute, target, play, say, toast, heOf: dv.heOf,
-    stageOk: (id) => craft.stageOk(id), now: () => now, maxHp: () => ps.hp, heal: (n) => { if (!dead) hp = Math.min(ps.hp, hp + n); } });
+    stageOk: (id) => craft.stageOk(id), now: () => now, maxHp: () => ps.hp, rewind: () => { for (const k in cds) if (k !== 'phap-bao') cds[k] = 0; }, heal: (n) => { if (!dead) hp = Math.min(ps.hp, hp + n); } });
   const camChe = createCamChe({ def: ccDef, dv, barrage, me, mobs, target, play, toast, dead: () => dead, maxHp: () => ps.hp, heal: (n) => { if (!dead) hp = Math.min(ps.hp, hp + n); } });
   const biCanh = createBiCanh({ def: bcDef, mdef: monDef, mobs, map, me, progress, life, wallet, cards, cardDef: dvDef.cards, dv, pbItem: pbDef.items[0].id,
-    toast, play, say, dead: () => dead, stageId: () => progress.stageDef.id, stageName: (id) => gp.player.stages.find((x) => x.id === id)?.name || id, itemName: (id) => itemDefs.get(id)?.name || bag.nameOf?.(id) || id });
+    toast, play, say, dead: () => dead, stageId: () => progress.stageDef.id, stageName: (id) => gp.player.stages.find((x) => x.id === id)?.name || id, itemName: (id) => itemDefs.get(id)?.name || bag.nameOf?.(id) || id, S, pbList: pbDef.list, learn: () => learn, treasure: () => treasure });
   const hopNhat = createHopNhat({ def: dvDef.hop_nhat, forged: (he, sl) => progress.equipped().some((g) => g.tier && g.he === he && g.slot === sl), bag, treasure, cards, loadout, S, cardName: (id) => dvDef.cards.list.find((x) => x.id === id)?.name || id, learned: (id) => learn.learned(id), target, pt, ps: () => ps, dead: () => dead, toast, src: { pb: pbDef, cards: dvDef.cards.drop, set: dvDef.set_drop, skill: gp.skill_drop, realms: realms.realms } }); // Thiên Cơ Hợp Nhất (src: nguồn để chỉ cách lấy)
   const guide = createGuide({ hopNhat, learn, dvDef, ccDef, pbDef, items: (await loadJSON('data/items/items.json')).items, S, dv, cards, bag, progress, loadout, stageName: (id) => gp.player.stages.find((x) => x.id === id)?.name || id,
     art: (a) => artInfo(a)?.file || artFile(a), equip: (id) => itemAction(`bag:${id}`, 'equip'), toast }); // nút + bảng Cẩm nang Đạo Vận
@@ -316,7 +316,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     for (const m of mobs.list) { const p = at(m); if (Math.abs(p.x - me.x) < 800 && Math.abs(p.y - me.y) < 1000) drawMonsterLabel(ctx, m, p.x, p.y, m.uid === targetUid, t); }
     for (const n of npcs.list) { const p = at(n); if (Math.abs(p.x - me.x) < 700 && Math.abs(p.y - me.y) < 700) drawNpcLabel(ctx, n, p.x, p.y, npcs.height, performance.now(), npcs.guarded(n)); }
     barrage.render(ctx, at, t); // vệt sáng, sét, đất cháy, phi kiếm (Đạo Vận)
-    drawFx(ctx, [...bolts, ...fx].map((f) => ({ ...f, ...at(f) })), 0, 0);
+    juice.frame(ctx, t, me.x, me.y); drawFx(ctx, [...bolts, ...fx].map((f) => ({ ...f, ...at(f) })), 0, 0); // juice: tối màn hình khi gồng chiêu lớn (hiệu ứng vẽ đè lên vẫn sáng)
   }
 
   // Chạm vào quái → chọn mục tiêu. Trả về true nếu đã xử lý (main.js khỏi xét người chơi)

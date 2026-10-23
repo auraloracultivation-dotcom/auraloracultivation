@@ -731,46 +731,41 @@
    "Quang": {
     "name": "Thánh Quang Phổ Chiếu",
     "card": "phu.phan-quang",
-    "skill_sin": "van-kiem",
-    "skill_cui": "phong-nhan",
-    "twin": "Kim"
+    "skill_sin": "thanh-quang-phan-quyet",
+    "skill_cui": "trieu-duong-ho-the"
    },
    "Lôi": {
     "name": "Lôi Đình Diệt Thế",
     "card": "phu.liet-diem",
-    "skill_sin": "phuong-hoang",
-    "skill_cui": "hoa-cau",
-    "twin": "Hỏa"
+    "skill_sin": "loi-long-pha-khong",
+    "skill_cui": "tu-dien-bo"
    },
    "Băng": {
     "name": "Băng Phong Vạn Cổ",
     "card": "phu.phan-liet",
-    "skill_sin": "bang-phong",
-    "skill_cui": "bang-tien",
-    "twin": "Thủy"
+    "skill_sin": "bang-phach-thien-nguc",
+    "skill_cui": "huyen-bang-lien-hoa"
    },
    "Phong": {
     "name": "Phong Quyển Tàn Vân",
     "card": "phu.phong-bao",
-    "skill_sin": "van-moc",
-    "skill_cui": "moc-lien",
-    "twin": "Mộc"
+    "skill_sin": "cuu-u-phong-bao",
+    "skill_cui": "thanh-phong-toai-anh"
    },
    "Hư": {
     "name": "Hư Không Quy Nhất",
     "card": "phu.truy-hon",
-    "skill_sin": "hac-dong",
-    "skill_cui": "u-minh-trao",
-    "twin": "Ám"
+    "skill_sin": "hu-khong-thon-phe",
+    "skill_cui": "tich-diet-tram"
    },
    "Thời": {
     "name": "Thời Quang Đảo Lưu",
     "card": "phu.kiem-luan",
-    "skill_sin": "dia-liet",
-    "skill_cui": "dia-thu",
-    "twin": "Thổ"
+    "skill_sin": "thien-thu-nhat-thuan",
+    "skill_cui": "tue-nguyet-dinh-chi"
    }
-  }
+  },
+  "_ghi_chu_thien": "Chủ dự án 24/10: Hợp Nhất Thiên hệ dùng kỹ năng + pháp bảo riêng (tools/thien_skills.py); Thần Phù vẫn dùng chung với hệ ngũ hành tương ứng."
  },
  "_ghi_chu_thien_he": "Chủ dự án 23/10 21h: thêm 6 Thiên hệ (Quang, Lôi, Băng, Phong, Hư, Thời). Số liệu Đạo Vận / Hợp Nhất soi theo hệ ngũ hành \"twin\" (cùng sức mạnh, khác tên + màu) — chỉnh riêng sau. Đồ Thiên hệ chỉ rơi từ Âm Hư (set_drop.thien_from)."
 }

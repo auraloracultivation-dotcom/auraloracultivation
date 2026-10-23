@@ -15,9 +15,10 @@ export function createHopNhat(c) {
   const src = (d, k = ['boss', 'elite', 'void']) => k.filter((x) => d[x]).map((x) => ({ thuong: 'quái thường', elite: 'tinh anh', boss: 'thủ lĩnh', void: 'Âm Hư' })[x]).join(', ') || 'quái';
   const howSet = (he) => { const d = c.src?.set || {}, th = def.he?.[he]?.twin; return `${th ? 'Đồ Thiên hệ' : 'Đồ ngũ hành hệ'} ${he} có thể rơi khi hạ ${th ? `${src(d, d.thien_from || ['void'])}, hoặc qua hết Cửu Thiên Bí Cảnh (Nhiệm vụ → Bí Cảnh, mỗi ngày 1 lượt)` : src(d)} (mỗi lần ra 1 món còn thiếu). Mặc ở Kho → Trang bị; xem món còn thiếu ở mục "Trang bị cần mặc" bên dưới. Phôi luyện đã thức tỉnh đúng hệ cũng tính.`; };
   const howPb = (he) => { const P = c.src?.pb, names = (P?.list || []).filter((t) => t.he === he).map((t) => t.name).join(', '), d = P?.drop || {};
+    if ((P?.list || []).some((t) => t.he === he && t.thien)) return `Pháp bảo hệ ${he}: ${names}. Chỉ có từ Thiên Cơ Truyền Thừa (Nhiệm vụ → Bí Cảnh, mỗi ngày 1 lượt; qua hết nhận 1 kỹ năng hoặc pháp bảo Thiên hệ). Đeo ở Kho → Pháp Bảo.`;
     return `Pháp bảo hệ ${he}: ${names || '—'}. Có từ Phôi Pháp Bảo (mua ở Vạn Bảo Lâu, hoặc có thể rơi từ ${src(d)}, nhiệm vụ Tuần / Tiến độ) → Kho → Luyện hóa → Nhận chủ (ra ngẫu nhiên, cần đúng hệ). Đeo ở Kho → Pháp Bảo.`; };
   const howCard = (id) => { const d = c.src?.cards || {}; return `${c.cardName(id)} có thể rơi khi hạ ${src(d, ['thuong', 'elite', 'boss', 'void'])} (loại phù ngẫu nhiên). Gắn ở Kho → Thần Phù (ô phù mở theo cảnh giới).`; };
-  const howSkill = (id) => { const K = c.src?.skill || {}, rg = Object.entries(K.realm_gift || {}).find(([, s]) => s === id)?.[0];
+  const howSkill = (id) => { if (c.S[id]?.thien) return `${c.S[id].name}: kỹ năng Thiên hệ — nhận từ Thiên Cơ Truyền Thừa (Nhiệm vụ → Bí Cảnh, mỗi ngày 1 lượt). Xếp vào ô kỹ năng ở nút ✦.`; const K = c.src?.skill || {}, rg = Object.entries(K.realm_gift || {}).find(([, s]) => s === id)?.[0];
     const rn = rg && (c.src.realms || []).find((x) => x.id === rg)?.name;
     return `${c.S[id]?.name || id}: ${rn ? `tặng sẵn khi đạt cảnh giới ${rn}.` : `lĩnh ngộ khi hạ thủ lĩnh hoặc Âm Hư (hiếm khi ngộ ra, mỗi lần 1 kỹ năng chưa có).`} Xếp vào ô kỹ năng ở nút ✦ cạnh cụm kỹ năng.`; };
   // Từng điều kiện của một hệ: [{ ok, text, how }]
