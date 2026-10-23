@@ -13,5 +13,6 @@ export { showSheet, placeholderIcon } from './sheet.js';
 export { escapeHtml } from './screens.js';
 export { showRevive } from './revive.js';
 export { showToaHoa } from './toahoa.js';
+export { createBuildChip } from './buildchip.js';
 export { showCodex } from './codex.js';
 export { showLeaderboard } from './rank.js';

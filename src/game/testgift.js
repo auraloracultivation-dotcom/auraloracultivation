@@ -10,7 +10,6 @@ export function grantFull({ progress, wallet, gift, mats, pills, recipes, shop, 
   for (const b of blanks.blanks) { progress.newGear(b.slot, b.sample_names[0]); n++; }
   progress.addStone(gift.stone);
   if (gift.gold) wallet.add('vang', gift.gold);
-  if (gift.jade) wallet.add('tien-ngoc', gift.jade);
   progress.changed();
   return n;
 }

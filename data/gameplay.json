@@ -434,7 +434,8 @@
     "kiem-bang-bay",
     0
    ],
-   "desc": "Phóng kiếm khí bay thẳng tới mục tiêu"
+   "desc": "Phóng kiếm khí bay thẳng tới mục tiêu",
+   "he": "Kim"
   },
   "khong-che": {
    "unlock": "tc_so",
@@ -447,7 +448,8 @@
     "moc-troi",
     2
    ],
-   "desc": "Rễ cây trói mục tiêu, choáng {stun_s} giây"
+   "desc": "Rễ cây trói mục tiêu, choáng {stun_s} giây",
+   "he": "Mộc"
   },
   "linh-thu": {
    "unlock": "kd_so",
@@ -563,7 +565,8 @@
     "v.dan-hoa",
     0
    ],
-   "desc": "Cầu lửa bay tới mục tiêu, nổ lan {splash_px} quanh chỗ trúng"
+   "desc": "Cầu lửa bay tới mục tiêu, nổ lan {splash_px} quanh chỗ trúng",
+   "he": "Hỏa"
   },
   "bang-tien": {
    "name": "Băng Phách Tiễn",
@@ -583,7 +586,8 @@
     "v.dan-bang",
     0
    ],
-   "desc": "Mũi tên băng, đóng băng mục tiêu {stun_s} giây"
+   "desc": "Mũi tên băng, đóng băng mục tiêu {stun_s} giây",
+   "he": "Thủy"
   },
   "moc-lien": {
    "name": "Mộc Liên Hồi Xuân",
@@ -598,7 +602,8 @@
     "v.moc-lien",
     1
    ],
-   "desc": "Sen xanh nở dưới chân, hồi {heal%} khí huyết"
+   "desc": "Sen xanh nở dưới chân, hồi {heal%} khí huyết",
+   "he": "Mộc"
   },
   "phong-nhan": {
    "name": "Phong Nhận Trảm",
@@ -618,7 +623,8 @@
     "v.dan-phong",
     0
    ],
-   "desc": "Lưỡi gió xuyên qua mọi quái trên đường bay"
+   "desc": "Lưỡi gió xuyên qua mọi quái trên đường bay",
+   "he": "Kim"
   },
   "loi-kich": {
    "name": "Cửu Thiên Lôi Kích",
@@ -653,7 +659,8 @@
     "v.dia-thu",
     1
    ],
-   "desc": "Gai đá trồi lên quanh mục tiêu, choáng {stun_s} giây"
+   "desc": "Gai đá trồi lên quanh mục tiêu, choáng {stun_s} giây",
+   "he": "Thổ"
   },
   "thuy-long": {
    "name": "Thủy Long Ba",
@@ -669,7 +676,8 @@
     "v.long-thuy",
     0
    ],
-   "desc": "Rồng nước cuộn quanh mình, đánh mọi quái trong {radius_px}"
+   "desc": "Rồng nước cuộn quanh mình, đánh mọi quái trong {radius_px}",
+   "he": "Thủy"
   },
   "ho-the": {
    "name": "Kim Cang Hộ Thể",
@@ -686,7 +694,8 @@
     "v.ho-the",
     1
    ],
-   "desc": "Khiên thần hộ thể: phòng thủ ×{buff_mul} trong {last_s} giây"
+   "desc": "Khiên thần hộ thể: phòng thủ ×{buff_mul} trong {last_s} giây",
+   "he": "Thổ"
   },
   "van-kiem": {
    "name": "Vạn Kiếm Quy Tông",
@@ -702,7 +711,8 @@
     "v.van-kiem",
     1
    ],
-   "desc": "Kiếm vàng mưa xuống quanh mình (bán kính {radius_px})"
+   "desc": "Kiếm vàng mưa xuống quanh mình (bán kính {radius_px})",
+   "he": "Kim"
   },
   "hac-dong": {
    "name": "Hư Không Hắc Động",
@@ -720,7 +730,8 @@
     "v.hac-dong",
     0
    ],
-   "desc": "Hố đen nuốt quái quanh mục tiêu, choáng {stun_s} giây"
+   "desc": "Hố đen nuốt quái quanh mục tiêu, choáng {stun_s} giây",
+   "he": "Ám"
   },
   "phuong-hoang": {
    "name": "Phượng Hoàng Niết Bàn",
@@ -741,7 +752,8 @@
     "v.phuong-hoang",
     0
    ],
-   "desc": "Phượng lửa lao qua hàng quái, nổ lan {splash_px}"
+   "desc": "Phượng lửa lao qua hàng quái, nổ lan {splash_px}",
+   "he": "Hỏa"
   },
   "_order": [
    "hoa-cau",
@@ -826,7 +838,8 @@
    "hit_h": 40,
    "cast_fx": "k.canh-kim-tram",
    "icon_url": "assets/ui/skills/canh-kim-tram.png",
-   "desc": "Chém ra vầng trăng kiếm khí khổng lồ xuyên qua mọi quái (Kim)"
+   "desc": "Chém ra vầng trăng kiếm khí khổng lồ xuyên qua mọi quái (Kim)",
+   "he": "Kim"
   },
   "van-kiem-trieu": {
    "name": "Vạn Kiếm Triều Tông",
@@ -843,7 +856,8 @@
    "fx_size": 22,
    "cast_fx": "k.van-kiem-trieu",
    "icon_url": "assets/ui/skills/van-kiem-trieu.png",
-   "desc": "Triệu {n} thanh kiếm từ đất bay xoè quạt về phía trước (Kim)"
+   "desc": "Triệu {n} thanh kiếm từ đất bay xoè quạt về phía trước (Kim)",
+   "he": "Kim"
   },
   "u-minh-trao": {
    "name": "U Minh Quỷ Trảo",
@@ -857,7 +871,8 @@
    "fx": "k.u-minh-trao",
    "fx_h": 60,
    "icon_url": "assets/ui/skills/u-minh-trao.png",
-   "desc": "Móng vuốt u minh kéo mọi quái trong {radius_px} về trước mặt, choáng {stun_s} giây (Ám)"
+   "desc": "Móng vuốt u minh kéo mọi quái trong {radius_px} về trước mặt, choáng {stun_s} giây (Ám)",
+   "he": "Ám"
   },
   "phe-hon-diem": {
    "name": "Phệ Hồn Ma Diễm",
@@ -872,7 +887,8 @@
    "fx": "k.phe-hon-diem",
    "fx_h": 70,
    "icon_url": "assets/ui/skills/phe-hon-diem.png",
-   "desc": "Lửa tím thiêu quái quanh mục tiêu, mỗi con trúng hồi 2% khí huyết (Ám)"
+   "desc": "Lửa tím thiêu quái quanh mục tiêu, mỗi con trúng hồi 2% khí huyết (Ám)",
+   "he": "Ám"
   },
   "thien-ha": {
    "name": "Thiên Hà Đảo Quyển",
@@ -887,7 +903,8 @@
    "fx": "k.thien-ha",
    "fx_h": 60,
    "desc": "Sóng lớn quét thẳng phía trước, đẩy lùi quái (Thủy)",
-   "icon_url": "assets/ui/skills/thien-ha.png"
+   "icon_url": "assets/ui/skills/thien-ha.png",
+   "he": "Thủy"
   },
   "bang-phong": {
    "name": "Băng Phong Vạn Lý",
@@ -901,7 +918,8 @@
    "fx": "k.bang-phong",
    "fx_h": 80,
    "desc": "Đóng băng mọi quái trong bán kính {radius_px}, {stun_s} giây (Thủy)",
-   "icon_url": "assets/ui/skills/bang-phong.png"
+   "icon_url": "assets/ui/skills/bang-phong.png",
+   "he": "Thủy"
   },
   "phan-thien": {
    "name": "Phần Thiên Liệt Diễm",
@@ -916,7 +934,8 @@
    "fx": "k.phan-thien",
    "fx_h": 64,
    "desc": "Lốc lửa đi về phía trước {last_s} giây, thiêu mọi quái nó đi qua (Hỏa)",
-   "icon_url": "assets/ui/skills/phan-thien.png"
+   "icon_url": "assets/ui/skills/phan-thien.png",
+   "he": "Hỏa"
   },
   "hoa-long": {
    "name": "Hỏa Long Phệ Thiên",
@@ -933,7 +952,8 @@
    "hit_fx": "v.no-hoa",
    "hit_h": 40,
    "desc": "Rồng lửa lao thẳng, xuyên qua mọi quái (Hỏa)",
-   "icon_url": "assets/ui/skills/hoa-long.png"
+   "icon_url": "assets/ui/skills/hoa-long.png",
+   "he": "Hỏa"
   },
   "van-moc": {
    "name": "Vạn Mộc Hồi Xuân",
@@ -946,7 +966,8 @@
    "fx": "k.van-moc",
    "fx_h": 56,
    "desc": "Hồi {heal%} khí huyết cho mình và thú cưng (Mộc)",
-   "icon_url": "assets/ui/skills/van-moc.png"
+   "icon_url": "assets/ui/skills/van-moc.png",
+   "he": "Mộc"
   },
   "kinh-cuc": {
    "name": "Kinh Cức Đằng Lao",
@@ -960,7 +981,8 @@
    "fx": "k.kinh-cuc",
    "fx_h": 66,
    "desc": "Gai mọc khắp quanh mình, trói quái {stun_s} giây (Mộc)",
-   "icon_url": "assets/ui/skills/kinh-cuc.png"
+   "icon_url": "assets/ui/skills/kinh-cuc.png",
+   "he": "Mộc"
   },
   "thai-son": {
    "name": "Thái Sơn Áp Đỉnh",
@@ -975,7 +997,8 @@
    "fx": "k.thai-son",
    "fx_h": 80,
    "desc": "Núi đá giáng xuống mục tiêu, choáng {stun_s} giây (Thổ)",
-   "icon_url": "assets/ui/skills/thai-son.png"
+   "icon_url": "assets/ui/skills/thai-son.png",
+   "he": "Thổ"
   },
   "dia-liet": {
    "name": "Địa Liệt Thiên Băng",
@@ -990,7 +1013,8 @@
    "fx": "k.dia-liet",
    "fx_h": 56,
    "desc": "Mặt đất nứt toác lan ra phía trước, choáng quái (Thổ)",
-   "icon_url": "assets/ui/skills/dia-liet.png"
+   "icon_url": "assets/ui/skills/dia-liet.png",
+   "he": "Thổ"
   },
   "thien-kiep": {
    "name": "Thiên Kiếp Lôi Phạt",

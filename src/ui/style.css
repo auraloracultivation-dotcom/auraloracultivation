@@ -588,3 +588,26 @@ img { image-rendering: pixelated; }
 .bag-detail-x { position: sticky; top: 0; align-self: flex-end; margin-bottom: -26px; z-index: 2; width: 30px; height: 30px; flex-shrink: 0;
   border-radius: 50%; border: 1px solid var(--gold-dark); background: #2a1f3d; color: var(--gold); font-size: 14px; line-height: 1; }
 .bag-detail .ic-lines { display: grid; grid-template-columns: 1fr 1fr; column-gap: 8px; }
+
+/* ---- Cẩm nang Đạo Vận: nút cạnh trái + bảng ---- */
+.build-chip { position: absolute; left: max(6px, env(safe-area-inset-left)); top: calc(max(6px, env(safe-area-inset-top)) + 196px); z-index: 6;
+  display: flex; align-items: center; gap: 4px; padding: 4px 10px 4px 6px; border-radius: 14px; pointer-events: auto;
+  background: rgba(16,12,28,.82); border: 1px solid var(--c, #c9b98a); color: var(--c, #c9b98a); font: 700 12px system-ui, sans-serif;
+  box-shadow: 0 0 8px color-mix(in srgb, var(--c, #c9b98a) 45%, transparent); }
+.build-chip i { font-style: normal; font-size: 15px; }
+.gd-h { display: block; color: var(--gold); font-size: 13px; margin-bottom: 4px; }
+.gd-note { font-size: 11px; color: var(--muted); margin: 4px 0 0; }
+.gd-slot, .gd-skill { display: flex; align-items: center; gap: 8px; padding: 3px 0; font-size: 12px; }
+.gd-slot span, .gd-skill span { display: flex; flex-direction: column; flex: 1; min-width: 0; color: var(--muted); }
+.gd-slot span b, .gd-skill span b { color: var(--text); font-size: 12px; }
+.gd-slot em { font-style: normal; font-size: 11px; color: var(--muted); } .gd-slot em.ok { color: #7dff8a; } .gd-slot em.no { color: #ff9a8a; }
+.gd-slot.on { background: rgba(125,255,138,.08); border-radius: 6px; }
+.gd-ico { width: 34px; height: 34px; object-fit: contain; flex-shrink: 0; background: rgba(0,0,0,.25); border-radius: 6px; }
+.gd-none { display: inline-block; }
+.gd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 8px; }
+.gd-skill.lock { opacity: .5; }
+.gd-tier { display: flex; gap: 8px; align-items: baseline; padding: 4px 6px; margin: 3px 0; border-radius: 6px; font-size: 12px; opacity: .5;
+  border-left: 3px solid var(--c); background: rgba(0,0,0,.2); }
+.gd-tier b { color: var(--c); min-width: 34px; } .gd-tier.lit { opacity: 1; background: color-mix(in srgb, var(--c) 16%, transparent); }
+.gd-count { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; font-size: 12px; align-items: baseline; }
+.gd-count b { color: var(--gold); font-size: 16px; text-align: right; }
