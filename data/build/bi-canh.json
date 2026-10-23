@@ -74,6 +74,28 @@
     "set_item_at": 99,
     "thien_item": 1
    }
+  },
+  {
+   "id": "truyen-thua",
+   "name": "Thiên Cơ Truyền Thừa",
+   "state_key": "biCanhTT",
+   "tries_per_day": 1,
+   "hp_per_wave": 0.3,
+   "base_count": 8,
+   "per_wave": 3,
+   "desc": "Mỗi ngày 1 lượt. Vượt hết 10 đợt quái cảnh giới của bạn để nhận 1 truyền thừa Thiên hệ chưa có: một trong 12 kỹ năng (2 mỗi hệ Quang · Lôi · Băng · Phong · Hư · Thời) hoặc một trong 6 pháp bảo Thiên hệ. Đủ cả thì đổi Linh thạch.",
+   "reward": {
+    "stone_per_wave": 400,
+    "gold_per_wave": 1000,
+    "card_at": [],
+    "card_min_tier": [],
+    "items_per_3": [],
+    "full_clear": [],
+    "treasure_blank_at": 99,
+    "set_item_at": 99,
+    "thien_skill": 1,
+    "dup_stone": 3000
+   }
   }
  ],
  "_ghi_chu_extra": "Chủ dự án 23/10 23h28: thêm Cửu Thiên Bí Cảnh — trường thiếu lấy theo Huyết Sát (bicanh.js). Sinh bằng tools/anh_bien.py."

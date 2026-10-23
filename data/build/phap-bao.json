@@ -280,6 +280,127 @@
    ],
    "desc": "Phóng {n} thoa xé không: xuyên mọi quái, nảy qua lại 8 lần",
    "cast_fx": "k.pb-pha-khong"
+  },
+  {
+   "id": "pb.dai-nhat-kim-luan",
+   "name": "Đại Nhật Kim Luân",
+   "he": "Quang",
+   "kind": "ring_burst",
+   "mp": 22,
+   "cd_s": 10,
+   "mul": 1.3,
+   "n": 18,
+   "fx": "t.quang-dan",
+   "size": 26,
+   "icon": [
+    "t.quang-ho-the",
+    2
+   ],
+   "cast_fx": "t.quang-ho-the",
+   "shake": 2,
+   "desc": "Kim luân toả {n} tia nắng vàng quanh mình rồi tự đuổi quái",
+   "thien": true
+  },
+  {
+   "id": "pb.tu-dien-loi-ky",
+   "name": "Tử Điện Lôi Kỳ",
+   "he": "Lôi",
+   "kind": "tower",
+   "mp": 30,
+   "cd_s": 22,
+   "mul": 0.7,
+   "r": 200,
+   "s": 10,
+   "every": 0.35,
+   "fx": "t.loi-tru",
+   "h": 70,
+   "icon": [
+    "t.loi-cong",
+    0
+   ],
+   "cast_fx": "t.loi-no",
+   "desc": "Cắm lôi kỳ xuống đất: {s} giây sét đánh liên hồi quái quanh cờ",
+   "thien": true
+  },
+  {
+   "id": "pb.luu-ly-tran",
+   "name": "Băng Phách Lưu Ly Trản",
+   "he": "Băng",
+   "kind": "nova",
+   "mp": 26,
+   "cd_s": 16,
+   "mul": 1.2,
+   "r": 120,
+   "stun": 2.5,
+   "fx": "t.bang-xoay",
+   "h": 90,
+   "icon": [
+    "t.bang-dan",
+    0
+   ],
+   "cast_fx": "t.bang-sen",
+   "shake": 3,
+   "dim": 0.35,
+   "desc": "Rót lửa băng lưu ly: đóng băng mọi quái quanh mình",
+   "thien": true
+  },
+  {
+   "id": "pb.phong-an-phien",
+   "name": "Càn Khôn Phong Ấn Phiến",
+   "he": "Phong",
+   "kind": "sweep",
+   "mp": 22,
+   "cd_s": 12,
+   "mul": 0.9,
+   "n": 18,
+   "s": 1.0,
+   "fx": "t.phong-nhan",
+   "size": 34,
+   "icon": [
+    "t.phong-nhan",
+    1
+   ],
+   "cast_fx": "t.phong-no",
+   "desc": "Quạt một cái: {n} lưỡi gió quét quạt trước mặt",
+   "thien": true
+  },
+  {
+   "id": "pb.hu-khong-ban",
+   "name": "Vô Cực Hư Không Bàn",
+   "he": "Hư",
+   "kind": "net",
+   "mp": 22,
+   "cd_s": 14,
+   "mul": 0.9,
+   "r": 130,
+   "stun": 2,
+   "fx": "t.hu-xoay",
+   "icon": [
+    "t.hu-xoay",
+    2
+   ],
+   "cast_fx": "t.hu-tru",
+   "shake": 3,
+   "desc": "Mở cổng hư không: kéo quái về một chỗ, trói và đánh",
+   "thien": true
+  },
+  {
+   "id": "pb.tue-nguyet-sa-lau",
+   "name": "Tuế Nguyệt Sa Lậu",
+   "he": "Thời",
+   "kind": "rewind",
+   "mp": 30,
+   "cd_s": 40,
+   "heal": 0.3,
+   "fx": "t.thoi-sa-lau",
+   "h": 90,
+   "icon": [
+    "t.thoi-sa-lau",
+    4
+   ],
+   "dim": 0.4,
+   "desc": "Lật ngược đồng hồ cát: hồi khí huyết và làm mới hồi chiêu mọi kỹ năng",
+   "thien": true
   }
  ],
  "lv_dich": [
@@ -296,5 +417,6 @@
   6
  ],
  "bind_fx": "k.nhan-chu",
- "_ghi_chu_phan_ra": "Chủ dự án 23/10 20:36: phân rã chỉ giữ lại 1/4 số LT đã đầu tư (thức tỉnh + ôn dưỡng). Cũ 0.4."
+ "_ghi_chu_phan_ra": "Chủ dự án 23/10 20:36: phân rã chỉ giữ lại 1/4 số LT đã đầu tư (thức tỉnh + ôn dưỡng). Cũ 0.4.",
+ "_ghi_chu_thien": "Chủ dự án 24/10: 6 pháp bảo Thiên hệ (thien: true) — không ra từ Phôi Pháp Bảo, chỉ từ phó bản Thiên Cơ Truyền Thừa. kind rewind: hồi máu + làm mới hồi chiêu."
 }

@@ -101,9 +101,11 @@ export function drawEffect(ctx, id, p, x, y, h, rot = 0, alpha = 1) {
   ctx.imageSmoothingEnabled = true;
   ctx.translate(x, y); if (rot) ctx.rotate(rot);
   ctx.drawImage(im, f * s.fw, 0, s.fw, s.fh, -w / 2, -h / 2, w, h);
+  if (s.glow) { ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha *= s.glow; ctx.drawImage(im, f * s.fw, 0, s.fw, s.fh, -w / 2, -h / 2, w, h); } // cộng sáng kiểu My Heroes: rực, chồng nhau cháy trắng
   ctx.restore();
   return true;
 }
+export const fxGlow = (id) => DEF?.fx[id]?.glow || 0; // hiệu ứng Thiên hệ (t.*): đạn có vệt đuôi
 export const fxDuration = (id) => (DEF?.fx[id] ? DEF.fx[id].anims.play.n / DEF.fx[id].fps : 0.5);
 
 // Icon vật phẩm / công pháp / ô trang bị (64×64 trong atlas). Trả về data URL để dùng trong <img>, hoặc null nếu chưa có.

@@ -1,4 +1,5 @@
 // Điểm khởi động: nối các module lại với nhau. Không chứa luật gameplay chi tiết.
+import { juice } from './game/juice.js';
 import { loadJSON, prefetchJSON, startLoop, createScreen, createCamera, followCamera, createInput, drawStick, createSaver, sha256 } from './core/index.js';
 import { createMap, wrapDelta } from './map/index.js';
 import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, setTextScale, loadRig, rigAttack, artInfo, renderPortrait, avatarFx, iconUrl, loadSprites } from './entity/index.js';
@@ -333,7 +334,7 @@ async function boot() {
     ctx.fillRect(0, 0, screen.canvas.width, screen.canvas.height);
     ctx.imageSmoothingEnabled = false;
     const s = dpr * scale;
-    ctx.setTransform(s, 0, 0, s, Math.round(-cam.x * s), Math.round(-cam.y * s));
+    const sh = juice.offset(); ctx.setTransform(s, 0, 0, s, Math.round((-cam.x + sh.x) * s), Math.round((-cam.y + sh.y) * s)); // rung màn hình khi chiêu lớn nổ
     ctx.imageSmoothingEnabled = true; // ô đất vẽ ở độ phân giải cao, thu nhỏ mượt
     map.drawGround(ctx, cam);
     map.town?.drawGround(ctx, cam); // pháp trận, cầu đá

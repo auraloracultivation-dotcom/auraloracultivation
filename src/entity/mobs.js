@@ -1,7 +1,7 @@
 // Vẽ quái HÌNH TẠM bằng code (chưa có sprite chính thức trong assets/monsters/).
 // Khi có ảnh thật: thêm "art" vào data/monsters/monsters.json và đổi hàm này sang vẽ ảnh — không phải sửa AI.
 import { textScale } from './draw.js';
-import { drawSheet, drawEffect, drawIcon, hasSheet } from './sprites.js';
+import { drawSheet, drawEffect, drawIcon, hasSheet, fxDuration, fxGlow } from './sprites.js';
 import { drawVoid } from './void-draw.js';
 
 const ZONE_COLOR = { xanh: '#5fbf5a', cam: '#e08a3a', xam: '#8d8f99', trang: '#cfe6f2', than: '#4a3b46', den: '#1d1a24', tim: '#7a3fb0', huvo: '#2a0f3d' };
@@ -132,6 +132,10 @@ export function drawFx(ctx, fx, ox, oy) {
       ctx.restore();
     } else if (f.kind === 'sprite') { // hiệu ứng hình: f.fx, tiến độ theo thời gian còn lại
       drawEffect(ctx, f.fx, 1 - f.t / f.life, x, y - (f.lift || 0), f.h, f.rot || 0);
+    } else if (f.kind === 'bolt' && fxGlow(f.fx)) { // đạn Thiên hệ: chạy khung + 3 bóng mờ kéo đuôi (bay nhanh kiểu My Heroes)
+      const r = Math.atan2(f.vy, f.vx), sp = Math.hypot(f.vx, f.vy) || 1, p = (performance.now() / 1000 / fxDuration(f.fx)) % 1, sz = f.size || 22;
+      for (let k = 3; k >= 1; k--) drawEffect(ctx, f.fx, p, x - (f.vx / sp) * sz * 0.45 * k, y - (f.vy / sp) * sz * 0.45 * k, sz * (1 - k * 0.12), r, 0.5 - k * 0.12);
+      drawEffect(ctx, f.fx, p, x, y, sz, r);
     } else if (f.kind === 'bolt' && drawEffect(ctx, f.fx || 'kiem-bang-bay', 0, x, y, f.size || 22, Math.atan2(f.vy, f.vx))) {
       // đạn chiêu (kiếm khí, hỏa cầu, băng tiễn…) bay theo hướng
     } else if (f.kind === 'bolt') {
