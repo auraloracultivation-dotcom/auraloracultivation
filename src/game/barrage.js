@@ -8,7 +8,7 @@ import { drawEffect } from '../entity/index.js';
 export function createBarrage(c) {
   const { dv, me, mobs, map, bolts, play } = c;
   const L = dv.limits;
-  const zones = [], zaps = [], echoes = [], timers = {}, tasks = [], extraOrbits = []; // tasks: chiêu kéo dài (pháp bảo)
+  const zones = [], zaps = [], echoes = [], timers = {}, tasks = [], extraOrbits = [], totems = []; // totems: vật đứng tại chỗ (lôi tháp) // tasks: chiêu kéo dài (pháp bảo)
   const orbitHit = new Map(); // uid quái → lúc phi kiếm được chém tiếp
   let T = 0, orbitA = 0;
   const rel = (a, b) => ({ dx: wrapDelta(a.x - b.x, map.width), dy: wrapDelta(a.y - b.y, map.height) });
@@ -30,7 +30,7 @@ export function createBarrage(c) {
       const a = a0 + (k - (n - 1) / 2) * step;
       bolts.push({ kind: 'bolt', id: spec.id, fx: spec.fx, size: spec.size || 22, x: spec.x, y: spec.y, vx: Math.cos(a) * spec.speed, vy: Math.sin(a) * spec.speed,
         left: spec.range, mul: spec.mul, base: spec.base || {}, label: spec.label || 'skill', child: !!spec.child, hit: new Set(),
-        pierce: spec.child ? 0 : (md.pierce || 0) + (spec.base?.pierce ? 99 : 0), bounce: spec.child ? 0 : md.bounce || 0,
+        pierce: spec.child ? 0 : (md.pierce || 0) + (spec.base?.pierce ? 99 : 0) + (spec.pierce || 0), bounce: spec.child ? 0 : (md.bounce || 0) + (spec.bounce || 0),
         homing: md.homing || spec.homing || 0, color: spec.color || md.color, trail: [] });
     }
   }
@@ -182,6 +182,7 @@ export function createBarrage(c) {
       if (q.left <= 0) tasks.splice(i, 1);
     }
     for (let i = extraOrbits.length - 1; i >= 0; i--) if (extraOrbits[i].until <= T) extraOrbits.splice(i, 1);
+    for (let i = totems.length - 1; i >= 0; i--) if (totems[i].until <= T) totems.splice(i, 1);
     for (let i = echoes.length - 1; i >= 0; i--) { echoes[i].t -= dt; if (echoes[i].t <= 0) { const e = echoes.splice(i, 1)[0]; e.fn(); } }
     updateBolts(dt);
     if (!c.dead()) passives(dt);
@@ -196,6 +197,7 @@ export function createBarrage(c) {
 
   // ---- Vẽ (toạ độ màn hình qua at()) — gọi trước drawFx đạn ----
   function render(ctx, at, now) {
+    renderTotems(ctx, at, now);
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
     for (const z of zones) { // đất cháy
@@ -255,5 +257,15 @@ export function createBarrage(c) {
     }
     ctx.restore();
   }
-  return { fire, basic, maybeEcho, update, render, renderGround, hitAround, schedule, addOrbit, nearestTo, zap: (z) => zaps.push(z) };
+  // Vật đứng tại chỗ (pháp bảo Cửu Tiêu Lôi Tháp): ảnh icon, nhún nhẹ, mờ dần cuối thời gian
+  function totem(o) { const img = new Image(); img.src = o.img; totems.push({ ...o, im: img, until: T + o.s, born: T }); }
+  function renderTotems(ctx, at, now) {
+    for (const o of totems) {
+      if (!o.im.complete || !o.im.naturalWidth) continue;
+      const p = at(o), w = o.h * o.im.naturalWidth / o.im.naturalHeight, b = Math.sin(now / 300) * 1.5;
+      ctx.save(); ctx.globalAlpha = Math.min(1, (o.until - T) / 0.6, (T - o.born) * 4);
+      ctx.drawImage(o.im, p.x - w / 2, p.y - o.h - 4 + b, w, o.h); ctx.restore();
+    }
+  }
+  return { fire, basic, maybeEcho, update, render, renderGround, renderTotems, hitAround, schedule, addOrbit, nearestTo, totem, zap: (z) => zaps.push(z) };
 }

@@ -24,15 +24,15 @@ export async function openCodex(o) {
   const { loadJSON, gp, mats, pills, recipes, cp, monsters, blanks, qItems, artDef, info, cpText, fxDuration, mobSkills = {} } = o;
   const isOwner = (sh) => OWNER_SHEETS.has(sh) || sh?.startsWith('m.'); // m.* = tấm quái chủ dự án gửi 23/10
   const [items, he6, artIdx, npcDef] = await Promise.all(['data/items/items.json', 'data/equipment/he6.json', 'data/equipment/art.json', 'data/npcs.json'].map((p) => loadJSON(p)));
-  const [dvDef, pbDef, ccDef] = await Promise.all(['data/build/dao-van.json', 'data/build/phap-bao.json', 'data/build/cam-che.json'].map((p) => loadJSON(p)));
+  const [dvDef, pbDef, ccDef, miscDef] = await Promise.all(['data/build/dao-van.json', 'data/build/phap-bao.json', 'data/build/cam-che.json', 'data/items/misc.json'].map((p) => loadJSON(p)));
   await loadFx([...Object.values(dvDef.he).map((h) => h.bolt), ...pbDef.list.map((d) => d.icon[0]), 'v.tran-phap']);
   // Đạo Vận: bộ ngũ hành, Thần Phù, pháp bảo, cấm chế — hình đang vẽ bằng code / mượn hiệu ứng → chủ dự án gửi ảnh riêng thì thay
   const daoVan = [
     ...Object.entries(dvDef.he).map(([he, h]) => ({ id: `dv.${he}`, name: `Bộ ${he}: ${h.name}`, img: fxIconUrl(h.bolt, 0), status: 'tam', note: 'Mượn hình đạn hiệu ứng',
       info: Object.entries(h.tiers).map(([t, v]) => `${t}/8 món: ${v._mo_ta}`) })),
-    ...dvDef.cards.list.map((d) => ({ id: d.id, name: d.name, img: cardArt(d.id, 'tim'), status: 'none', note: 'Lá bùa vẽ bằng code — cần ảnh lá phù',
+    ...dvDef.cards.list.map((d) => ({ id: d.id, name: d.name, img: icon(`card.${d.id}`) || cardArt(d.id, 'tim'), status: icon(`card.${d.id}`) ? 'ok' : 'none', note: icon(`card.${d.id}`) ? 'Ảnh chủ dự án 23/10' : 'Lá bùa vẽ bằng code — cần ảnh lá phù',
       info: [`Thần Phù · ${d.desc.replace('{v}', 'N')}`, 'Rơi khi hạ quái, phẩm Lục → Đen'] })),
-    ...pbDef.list.map((d) => ({ id: d.id, name: d.name, img: fxIconUrl(...d.icon), status: 'none', note: 'Mượn icon hiệu ứng — cần ảnh pháp bảo',
+    ...pbDef.list.map((d) => ({ id: d.id, name: d.name, img: icon(d.id) || fxIconUrl(...d.icon), status: icon(d.id) ? 'ok' : 'none', note: icon(d.id) ? 'Ảnh chủ dự án 23/10' : 'Mượn icon hiệu ứng — cần ảnh pháp bảo',
       info: [`Pháp bảo hệ ${d.he} · hồi ${d.cd_s} giây · ${d.mp} linh lực`, d.desc.replace(/\{(\w+)%?\}/g, (_, k) => d[k] ?? k)] })),
     ...Object.entries(ccDef.he).map(([he, d]) => ({ id: `cc.${he}`, name: d.name, img: fxIconUrl('v.tran-phap', 0), status: 'tam', note: 'Vòng phù văn vẽ bằng code',
       info: [`Cấm chế hệ ${he} (kỹ năng Bố Cấm Chế)`, d.desc] })),
@@ -106,6 +106,7 @@ export async function openCodex(o) {
     { id: 'cur.tien-ngoc', name: 'Tiên ngọc', img: icon('cur.tien-ngoc'), status: 'ok', note: 'Ảnh chủ dự án 23/10', info: ['Tiền tiên giới: mua được mọi món, kể cả tiên đan tăng tu vi; sau này chỉ có khi nạp'] },
     ...Object.keys(SLOT).map((sl) => ({ id: `slot.${sl}`, name: `Icon ô ${SLOT[sl]}`, img: icon(`slot.${sl}`), status: 'tam', note: 'Icon gói miễn phí (bảng Nhân vật, ô trống)', info: [] })),
     ...qItems.items.map((d) => iconEntry(d)),
+    ...[...miscDef.items, ...pbDef.items].map((d) => iconEntry(d)),
   ];
   const mat = (g) => mats.materials.filter((d) => d.group === g).map((d) => iconEntry(d, [ZONE[d.zone]]));
   const cpList = cp.skills.map((s) => ({ id: s.id, name: s.name, img: icon(s.id), status: icon(s.id) ? 'ok' : 'none', note: 'Ảnh = sách bí kíp',

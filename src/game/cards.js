@@ -2,7 +2,7 @@
 // Gắn vào ô phù (mở theo cảnh giới) để đổi cách đạn bay: bắn thêm, xuyên, đuổi, tách, sét lan, liên thanh…
 // Số liệu: data/build/dao-van.json → cards. Lưu progress.state.cards = [{ uid, id, tier }], progress.state.cardSlots = [uid|null].
 // THỬ NGHIỆM phía máy khách (localStorage) — Mốc 4 lên máy chủ.
-import { cardArt } from '../entity/index.js';
+import { cardArt, iconUrl } from '../entity/index.js';
 
 export function createCards({ def, tiers, progress, stageOk, toast, play }) {
   const C = def.cards, byId = new Map(C.list.map((c) => [c.id, c]));
@@ -43,7 +43,7 @@ export function createCards({ def, tiers, progress, stageOk, toast, play }) {
     const actions = at >= 0 ? [{ id: 'card-off', label: `Gỡ khỏi ô phù ${at + 1}` }]
       : [{ id: 'card-on', label: free >= 0 ? `Gắn vào ô phù ${free + 1}` : 'Ô phù đã đầy — gỡ bớt trước', disabled: free < 0 }];
     actions.push({ id: 'card-break', label: `Phân rã (+${C.dismantle_stone[c.tier]} LT)`, confirm: `Phân rã ${d.name}?` });
-    return { id: `card:${c.uid}`, key: `card:${c.uid}`, name: d.name, cat: 'than-phu', thumb: cardArt(c.id, tierId(c.tier)), tier: tierId(c.tier),
+    return { id: `card:${c.uid}`, key: `card:${c.uid}`, name: d.name, cat: 'than-phu', thumb: iconUrl(`card.${c.id}`) || cardArt(c.id, tierId(c.tier)), // ảnh chủ dự án; viền màu phẩm do ô Kho (tier-*) tier: tierId(c.tier),
       equipped: at >= 0, sub: `Thần Phù · phẩm ${tierName(c.tier)}${at >= 0 ? ` · ô ${at + 1}` : ''}`, detail: text(card), actions };
   }
   function summary(mods) {

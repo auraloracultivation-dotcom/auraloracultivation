@@ -6,6 +6,8 @@
 import { wrapDelta } from '../map/index.js';
 import { drawMonster, sheetThumb } from '../entity/index.js';
 
+const HON = 'item.dacbiet.hon-tinh.001'; // Hồn Tinh: luyện hồn thay con cùng loài
+
 export function createTame({ cfg, progress, monsters, mdef, mobs, map, me, stats, gp, toast, say, play, onKill, placeholder, suppress = () => 1 }) {
   const defOf = new Map(monsters.map((d) => [d.id, d]));
   const pets = () => (progress.state.pets ||= []);
@@ -146,7 +148,8 @@ export function createTame({ cfg, progress, monsters, mdef, mobs, map, me, stats
       p.follow ? { id: 'pet-rest', label: 'Cho nghỉ (vào Kho)' }
         : { id: 'pet-follow', label: `Cho đi theo (${n}/${cfg.max_follow})`, disabled: n >= cfg.max_follow },
       star >= cfg.merge.max_star ? { id: 'pet-merge', label: 'Luyện hồn: đã tối đa', disabled: true }
-        : { id: 'pet-merge', label: `Luyện hồn lên ${star + 1}★ (nuốt 1 ${d.name} đang nghỉ · có ${mates})`, disabled: !mates, confirm: `Nuốt hồn 1 con ${d.name} khác để lên ${star + 1}★?` },
+        : mates ? { id: 'pet-merge', label: `Luyện hồn lên ${star + 1}★ (nuốt 1 ${d.name} đang nghỉ · có ${mates})`, confirm: `Nuốt hồn 1 con ${d.name} khác để lên ${star + 1}★?` }
+          : { id: 'pet-merge', label: `Luyện hồn lên ${star + 1}★ bằng ${cfg.merge.hon_tinh} Hồn Tinh (có ${progress.count(HON)})`, disabled: progress.count(HON) < cfg.merge.hon_tinh },
       { id: 'pet-free', label: 'Thả về rừng', danger: true, confirm: `Thả ${d.name} đi? Không lấy lại được.` },
     ];
     return { id: `pet:${p.uid}`, key: `pet:${p.uid}`, name: `${d.name}${star ? ` ${'★'.repeat(star)}` : ''}`, cat: 'thu-cung', thumb, equipped: p.follow,
@@ -162,13 +165,17 @@ export function createTame({ cfg, progress, monsters, mdef, mobs, map, me, stats
       p.follow = true; const s = st(p); s.x = me.x; s.y = me.y; progress.changed(); return `${name} đi theo bạn`;
     }
     if (action === 'pet-merge') {
-      const q = kin(p)[0]; if (!q) return `Cần thêm 1 ${name} cùng loài đang nghỉ trong Kho`;
       if ((p.star || 0) >= cfg.merge.max_star) return 'Đã tối đa';
-      progress.state.pets = pets().filter((x) => x !== q); p.star = (p.star || 0) + 1; live.delete(p.uid); progress.changed();
+      const q = kin(p)[0]; // ưu tiên nuốt con cùng loài; không có thì dùng Hồn Tinh
+      if (q) progress.state.pets = pets().filter((x) => x !== q);
+      else if (!progress.take(HON, cfg.merge.hon_tinh)) return `Cần 1 ${name} cùng loài đang nghỉ, hoặc ${cfg.merge.hon_tinh} Hồn Tinh`; p.star = (p.star || 0) + 1; live.delete(p.uid); progress.changed();
       play('vong-lua', me.x, me.y - 8, 40); return `${name} luyện hồn thành công: ${'★'.repeat(p.star)}`;
     }
     if (action === 'pet-rest') { p.follow = false; progress.changed(); return `${name} vào Kho nghỉ`; }
-    if (action === 'pet-free' || action === 'discard') { progress.state.pets = pets().filter((x) => x !== p); progress.changed(); return `Đã thả ${name} về rừng`; }
+    if (action === 'pet-free' || action === 'discard') { // thả đi: để lại Hồn Tinh (thêm theo sao)
+      const n = cfg.merge.free_hon_tinh + (p.star || 0);
+      progress.state.pets = pets().filter((x) => x !== p); progress.add(HON, n); progress.changed(); return `Đã thả ${name} về rừng · nhận ${n} Hồn Tinh`;
+    }
     return null;
   }
   return { tryTame, update, render, entries, act, isPet: (key) => key.startsWith('pet:'), live };

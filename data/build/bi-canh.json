@@ -27,6 +27,31 @@
    4
   ],
   "treasure_blank_at": 10,
-  "set_item_at": 10
+  "set_item_at": 10,
+  "items_per_3": [
+   [
+    "item.dich.on-duong.001",
+    1
+   ],
+   [
+    "item.dacbiet.hon-tinh.001",
+    2
+   ],
+   [
+    "item.tui.vang.001",
+    1
+   ]
+  ],
+  "full_clear": [
+   [
+    "item.ruong.linh-thach.001",
+    1
+   ],
+   [
+    "item.phu.chi-trong.001",
+    1
+   ]
+  ],
+  "jade_chest_chance": 0.1
  }
 }

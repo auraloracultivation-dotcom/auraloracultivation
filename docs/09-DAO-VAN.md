@@ -86,3 +86,23 @@ Chủ dự án muốn chất My Heroes: chọn đúng bộ + hệ + thẻ thì c
      - Qua đợt 3 / 6 / 9: được Thần Phù.
      - Qua hết: Phôi Pháp Bảo + cơ hội rơi đồ ngũ hành.
 6. Chuyển kết quả có giá trị lên máy chủ (Mốc 3–4): máy chủ chỉ kiểm hợp lý, không mô phỏng từng khung hình.
+
+## 48 món ảnh chủ dự án (23/10)
+- `tools/icons_v2.py → grid_cut + ICON48`: 3 tấm 4×4 (`assets/items/_source/icon-48-*.webp`), không nhãn, ghép theo thứ tự danh sách.
+  - Thay hình tạm: nguyên liệu Vùng Đen / Tím, Âm Hư Tinh Hạch, Anh Biến / Vấn Đỉnh / Trường Sinh / Tu Vi / Viên Mãn Đan, Thọ Nguyên Thảo, Bảo Hộ Phù, Phôi Pháp Bảo.
+  - Thêm: 10 Thần Phù (`card.phu.*`), 13 pháp bảo (`pb.*`).
+- **Vật phẩm mới** (`data/items/misc.json`, `src/game/consumables.js`):
+  - Huyết Sát Lệnh: +1 lượt Bí Cảnh trong ngày.
+  - Phù Chỉ Trống: vẽ ra 1 Thần Phù ngẫu nhiên.
+  - Túi Vàng / Rương Linh Thạch / Rương Tiên Ngọc: mở ra tiền.
+  - Ngũ Hành Linh Thạch: đổi hệ một phôi luyện đã thức tỉnh.
+  - Hồn Tinh: 3 viên thay cho 1 con cùng loài khi luyện hồn. Thả thú về rừng được Hồn Tinh.
+  - Ôn Dưỡng Linh Dịch: cần để ôn dưỡng pháp bảo từ cấp 4.
+- **5 pháp bảo mới**:
+  - Huyền Băng Kính: đóng băng quanh mình.
+  - Phệ Hồn Cổ Đăng: rút hồn, hồi máu.
+  - Thiên La Võng: kéo quái về một chỗ rồi trói.
+  - Cửu Tiêu Lôi Tháp: dựng tháp giáng sét.
+  - Phá Không Thoa: thoa xuyên qua mọi quái, nảy 8 lần.
+- **Bán ở Vạn Bảo Lâu**: Phù Chỉ Trống, Linh Dịch, Huyết Sát Lệnh, Hồn Tinh (Linh thạch); Ngũ Hành Linh Thạch (Tiên ngọc).
+- **Bí Cảnh thưởng thêm**: mỗi 3 đợt 1 món (Linh Dịch / Hồn Tinh / Túi Vàng). Qua hết được Rương Linh Thạch + Phù Chỉ Trống, 10% có Rương Tiên Ngọc.

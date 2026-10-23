@@ -11,7 +11,7 @@ export function checkRefs() {
     ids.set(id, file);
   };
   const lists = [
-    ['data/items/items.json', 'items'], ['data/items/materials.json', 'materials'], ['data/items/pills.json', 'pills'], ['data/items/quest-items.json', 'items'], ['data/items/recipes.json', 'items'], ['data/items/premium.json', 'items'], ['data/build/phap-bao.json', 'items'],
+    ['data/items/items.json', 'items'], ['data/items/materials.json', 'materials'], ['data/items/pills.json', 'pills'], ['data/items/quest-items.json', 'items'], ['data/items/recipes.json', 'items'], ['data/items/premium.json', 'items'], ['data/build/phap-bao.json', 'items'], ['data/items/misc.json', 'items'],
     ['data/monsters/monsters.json', 'monsters'], ['data/skills/cong-phap.json', 'skills'],
     ['data/equipment/blanks.json', 'blanks'], ['data/quests/quests.json', 'quests'], ['data/realms.json', 'realms'],
   ];

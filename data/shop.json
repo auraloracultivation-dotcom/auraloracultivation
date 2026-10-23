@@ -168,6 +168,26 @@
    "min_stage": "tc_so"
   },
   {
+   "id": "item.phu.chi-trong.001",
+   "price": 2500,
+   "daily_limit": 3
+  },
+  {
+   "id": "item.dich.on-duong.001",
+   "price": 900,
+   "daily_limit": 5
+  },
+  {
+   "id": "item.lenh.huyet-sat.001",
+   "price": 6000,
+   "daily_limit": 1
+  },
+  {
+   "id": "item.dacbiet.hon-tinh.001",
+   "price": 1500,
+   "daily_limit": 3
+  },
+  {
    "id": "item.dan.tang-tho.001",
    "price": 500,
    "currency": "vang"
@@ -208,6 +228,12 @@
   {
    "id": "item.dan.vien-man.001",
    "price": 120,
+   "currency": "tien-ngoc",
+   "daily_limit": 3
+  },
+  {
+   "id": "item.khoang.ngu-hanh.001",
+   "price": 25,
    "currency": "tien-ngoc",
    "daily_limit": 3
   }
