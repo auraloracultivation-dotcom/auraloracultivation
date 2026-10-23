@@ -41,9 +41,9 @@ export function createTestBag(userId, defs) {
     // Nhận 1 món (rơi từ quái): false nếu đã có
     give(id) { if (!byId.has(id) || st.items.includes(id)) return false; st.items.push(id); save(); return true; },
     missing: (filter) => defs.filter((d) => !st.items.includes(d.id) && filter(d)).map((d) => d.id),
-    grantAll() {
+    grantAll(pick = () => true) { // pick(d): chỉ tặng món thoả điều kiện (mã 'thien': 48 món Thiên hệ)
       const before = st.items.length;
-      for (const d of defs) if (!st.items.includes(d.id)) st.items.push(d.id);
+      for (const d of defs) if (pick(d) && !st.items.includes(d.id)) st.items.push(d.id);
       save();
       return st.items.length - before || st.items.length;
     },
