@@ -249,6 +249,11 @@ export function createViews(o) {
   const today = () => String(o.life.today()); // ngày theo giờ Việt Nam (giờ máy chủ) — giới hạn mua mỗi ngày
   // Vạn Bảo Lâu: chỉ nói công dụng + giá. Công thức / bí kíp: "Đã có" (xanh) / "Chưa có" (xám). Nguyên liệu: số đang có.
   const W = o.wallet, CUR = (s) => s.currency || 'linh-thach';
+  // Mua số lượng lớn (chủ dự án 23/10 21h52): đan dược / nguyên liệu mua ×1 · ×10 · ×50 · ×100 một lần bấm; công thức, bí kíp, món đổi đồ luôn ×1
+  let qty = 1;
+  const QTY = [1, 10, 50, 100];
+  const bulkOk = (s, d) => !d.teaches && !s.cost_items;
+  const qtyRow = () => `<div class="row qty-row"><span>Số lượng:</span> ${QTY.map((n) => btn('qty', n, n === qty ? `✓ ×${n}` : `×${n}`, true)).join(' ')}</div>`;
   function shopRow(s) {
     const d = itemDefs.get(s.id), n = s.stack || 1, isBook = d.cat === 'cong-phap', isRecipe = !!d.teaches && !isBook, owned = isBook && progress.count(s.id) > 0, uses = isRecipe && o.ru ? o.ru.total(s.id) : 0; // công thức có số lần dùng; bí kíp học vĩnh viễn (mua 1 lần)
     const bought = st().shopDay?.date === today() ? (st().shopDay.n[s.id] || 0) : 0;
@@ -260,8 +265,8 @@ export function createViews(o) {
     const note = isBook ? (owned ? '<em class="own yes">Đã học</em>' : '<em class="own">Chưa có</em>') : isRecipe ? (uses ? `<em class="own yes">Còn ${uses} lần</em>` : '<em class="own">Chưa có</em>')
       : `<em>${s.daily_limit ? `Hôm nay còn ${left}/${s.daily_limit}` : `có ${progress.count(s.id)}`}</em>`;
     // Nút mua: tiền gốc của món + Tiên ngọc (mua được mọi món)
-    const pays = [...new Set([CUR(s), 'tien-ngoc'])];
-    const btns = pays.map((k) => btn('buy', `${k}|${s.id}`, `${k === CUR(s) ? 'Mua · ' : ''}${W.label(k, W.price(s, k))}`, ok && W.can(s, k))).join(' ');
+    const pays = [...new Set([CUR(s), 'tien-ngoc'])], q = bulkOk(s, d) ? Math.max(1, Math.min(qty, left)) : 1;
+    const btns = pays.map((k) => { const p = W.price(s, k); return btn('buy', `${k}|${s.id}`, `${k === CUR(s) ? `Mua${q > 1 ? ` ×${q}` : ''} · ` : q > 1 ? `×${q} · ` : ''}${W.label(k, p * q)}`, ok && p !== null && W.get(k) >= p * q); }).join(' ');
     return `<div class="row"><div class="row-h"><b>${ico(s.id)}${E(d.name)}${n > 1 ? ` ×${n}` : ''}</b>${note}</div>
       <p class="src">${E(o.info.effect(d))}${isRecipe && o.ru ? ` · mỗi cuốn dùng ${o.ru.max(s.id)} lần` : isBook ? ' · học một lần dùng mãi, 5 cấp mở theo 5 đại cảnh giới' : ''}</p>${need && !owned ? `<p class="need">${need}</p>` : ''}
       ${owned ? '' : btns}</div>`;
@@ -278,13 +283,23 @@ export function createViews(o) {
       title: shop.name, note: 'Giá tạm. Tiên ngọc mua được mọi món — sau này chỉ có khi nạp.',
       tabs: [{ id: 'dp', name: 'Đan phương' }, { id: 'ct', name: 'Công thức' }, { id: 'cp', name: 'Công pháp' }, { id: 'nl', name: 'Nguyên liệu' },
         { id: 'pp', name: 'Phàm phẩm' }, { id: 'tb', name: 'Tiên Bảo' }],
-      render: (tab) => `<div class="row">${W.html()}</div>`
+      render: (tab) => `<div class="row">${W.html()}</div>` + (tab === 'nl' || tab === 'pp' || tab === 'tb' ? qtyRow() : '')
         + shop.stock.filter((s) => SHOP_TABS[tab](s, itemDefs.get(s.id))).map(shopRow).join('') + (tab === 'tb' ? celestialRow() : ''),
       onAction(act, arg) {
+        if (act === 'qty') { qty = +arg; return; }
         if (act !== 'buy') return;
         const [k, id] = arg.split('|');
         const s = shop.stock.find((x) => x.id === id), d = itemDefs.get(id);
         if (!s || W.price(s, k) === null) return;
+        let times = bulkOk(s, d) ? qty : 1, got = 0;
+        if (st().shopDay?.date !== today()) st().shopDay = { date: today(), n: {} };
+        if (s.daily_limit) times = Math.min(times, s.daily_limit - (st().shopDay.n[id] || 0));
+        if (times > 1) { // mua nhiều: đủ tiền cho cả lượt mới mua
+          if (W.get(k) < W.price(s, k) * times) return toast(`Không đủ ${W.name(k)} cho ${times} món`, 1400);
+          for (let t = 0; t < times; t++) { W.pay(s, k); progress.add(id, s.stack || 1); st().shopDay.n[id] = (st().shopDay.n[id] || 0) + 1; got += s.stack || 1; }
+          o.emit('gain', { id, n: got }); progress.changed();
+          return toast(`Đã mua ${d.name} ×${got} (−${W.label(k, W.price(s, k) * times)})`, 1600);
+        }
         // công thức mua thêm được: mỗi cuốn có số lần dùng (recipe-uses.js)
         if (!W.can(s, k)) return toast(`Không đủ ${W.name(k)}`, 1200);
         if (s.min_stage && !craft.stageOk(s.min_stage)) return toast(`Cần cảnh giới ${stageName(s.min_stage)}`, 1500);
