@@ -791,11 +791,8 @@
    "mp": 18,
    "cd_s": 6,
    "range_px": 200,
-   "icon": [
-    "v.tran-phap",
-    0
-   ],
-   "desc": "Đặt trận cấm chế theo hệ chủ đạo (tối đa 3 trận) — Kim kiếm, Ám hút hồn, Thủy giam, Hỏa thiêu, Mộc trói, Thổ chấn"
+   "desc": "Đặt trận cấm chế theo hệ chủ đạo (tối đa 3 trận) — Kim kiếm, Ám hút hồn, Thủy giam, Hỏa thiêu, Mộc trói, Thổ chấn",
+   "icon_url": "assets/ui/skills/bo-cam-che.png"
   }
  },
  "awaken": {

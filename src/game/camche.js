@@ -14,7 +14,7 @@ export function createCamChe(c) {
     const m = c.target(s.range_px || 200), at = m ? { x: m.x, y: m.y } : { x: me.x, y: me.y };
     if (list.length >= def.max_active) list.shift(); // đủ 3 trận: trận cũ nhất tan
     list.push({ ...d, he, x: at.x, y: at.y, left: d.s, tick: 0, mul: d.mul * (1 + def.set_bonus * n), color: dv.heOf(he).color, born: T });
-    play('v.tran-phap', at.x, at.y + 6, d.r * 1.1, { ground: true });
+    play(def.cast_fx || 'v.tran-phap', at.x, at.y + 6, d.r * 1.4, { ground: true });
     c.toast(`${d.name}${n ? ` (bộ ${he} ${n}/8)` : ''}`, 1000);
     return true;
   }
@@ -56,7 +56,12 @@ export function createCamChe(c) {
         const a = k * 0.8 + (i / 6) * Math.PI * 2, x = p.x + Math.cos(a) * r * 0.86, y = p.y + Math.sin(a) * r * 0.39;
         ctx.globalAlpha = 0.9 * fade; ctx.fillStyle = z.color; ctx.fillRect(x - 1.5, y - 1.5, 3, 3);
       }
-      ctx.globalAlpha = 0.5 * fade; drawEffect(ctx, 'v.tran-phap', (k * 0.5) % 1, p.x, p.y + r * 0.2, r * 0.9);
+      if (z.anim) { // hoạt ảnh trận theo hệ: mọc lên (0,6 giây) → lặp các khung lớn → tan (0,6 giây cuối)
+        const t = T - z.born, h = r * 1.15;
+        const q = t < 0.6 ? (t / 0.6) * 0.5 : z.left < 0.6 ? 0.75 + (1 - z.left / 0.6) * 0.249 : 0.5 + ((t * 1.2) % 1) * 0.25;
+        ctx.globalAlpha = 0.9 * Math.min(1, z.left / 0.4); ctx.globalCompositeOperation = 'source-over';
+        drawEffect(ctx, z.anim, q, p.x, p.y + r * 0.35 - h / 2, h);
+      } else { ctx.globalAlpha = 0.5 * fade; drawEffect(ctx, 'v.tran-phap', (k * 0.5) % 1, p.x, p.y + r * 0.2, r * 0.9); }
     }
     ctx.restore();
   }
