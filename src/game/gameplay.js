@@ -39,6 +39,7 @@ import { createCamChe } from './camche.js';
 import { createBiCanh } from './bicanh.js';
 import { createConsumables } from './consumables.js';
 import { createGuide } from './guide.js';
+import { createHopNhat } from './hopnhat.js';
 import { createSkillLearn } from './skill-learn.js';
 import { simulateDuel } from './spar.js';
 import { placeholderIcon, showRevive } from '../ui/index.js';
@@ -234,10 +235,11 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const camChe = createCamChe({ def: ccDef, dv, barrage, me, mobs, target, play, toast, dead: () => dead, maxHp: () => ps.hp, heal: (n) => { hp = Math.min(ps.hp, hp + n); } });
   const biCanh = createBiCanh({ def: bcDef, mdef: monDef, mobs, map, me, progress, life, wallet, cards, cardDef: dvDef.cards, dv, pbItem: pbDef.items[0].id,
     toast, play, say, dead: () => dead, stageId: () => progress.stageDef.id, itemName: (id) => itemDefs.get(id)?.name || id });
-  const guide = createGuide({ learn, dvDef, ccDef, pbDef, items: (await loadJSON('data/items/items.json')).items, S, dv, cards, bag, progress, loadout, stageName: (id) => gp.player.stages.find((x) => x.id === id)?.name || id,
+  const hopNhat = createHopNhat({ def: dvDef.hop_nhat, bag, treasure, cards, loadout, S, cardName: (id) => dvDef.cards.list.find((x) => x.id === id)?.name || id, target, pt, ps: () => ps, dead: () => dead, toast }); // Thiên Cơ Hợp Nhất
+  const guide = createGuide({ hopNhat, learn, dvDef, ccDef, pbDef, items: (await loadJSON('data/items/items.json')).items, S, dv, cards, bag, progress, loadout, stageName: (id) => gp.player.stages.find((x) => x.id === id)?.name || id,
     art: (a) => artInfo(a)?.file || artFile(a), equip: (id) => itemAction(`bag:${id}`, 'equip'), toast }); // nút + bảng Cẩm nang Đạo Vận
   const usable = createConsumables({ itemDefs, progress, wallet, cards, cardDef: dvDef.cards, treasure, biCanh, heOrder: dvDef.he_order, play, me, recompute });
-  const skills = createSkills({ useTreasure: (q) => treasure.use(q), camChe: (s) => camChe.cast(s), S, me, mobs, map, pt, cds, toast, say, play, fx, bolts, strike, target, buffs, recompute, mods: dv.mods, fire: barrage.fire, maybeEcho: barrage.maybeEcho, mover: barrage.mover, schedule: barrage.schedule, healPets: (f) => tame.healAll(f),
+  const skills = createSkills({ hopOn: () => !!hopNhat.active(), useTreasure: (q) => treasure.use(q), camChe: (s) => camChe.cast(s), S, me, mobs, map, pt, cds, toast, say, play, fx, bolts, strike, target, buffs, recompute, mods: dv.mods, fire: barrage.fire, maybeEcho: barrage.maybeEcho, mover: barrage.mover, schedule: barrage.schedule, healPets: (f) => tame.healAll(f),
     get bar() { return bar; }, heal: (n) => { hp = Math.min(ps.hp, hp + n); say(me.x, me.y - HEAD, `+${Math.round(n)} khí huyết`, '#5dff7a', true); },
     maxHp: () => ps.hp, now: () => now, dead: () => dead,
     summonPet() { const a = bag.equippedItem('linh-thu')?.art || progress.equipped().find((x) => x.slot === 'linh-thu')?.art, f = a && artFile(a); // hình linh thú đang mặc
@@ -269,7 +271,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
       if (gp.auto.use_skills && target(260)) skills.autoCast(loadout.ids(), hp / ps.hp); // tự dùng kỹ năng trong ô
       if (target(PL.attack_range_px) && attackCd <= 0) { attack(); me.onAutoSwing?.(); }
     }
-    guide.tick(); learn.tick(); barrage.update(dt); camChe.update(dt); biCanh.update(dt); const md = dv.mods(); if (md.mp_regen && !dead) pt.gain(ps.mp * md.mp_regen * dt); // đạn + bị động Đạo Vận, linh lực hồi liên tục
+    guide.tick(); learn.tick(); hopNhat.update(dt); barrage.update(dt); camChe.update(dt); biCanh.update(dt); const md = dv.mods(); if (md.mp_regen && !dead) pt.gain(ps.mp * md.mp_regen * dt); // đạn + bị động Đạo Vận, linh lực hồi liên tục
     if (pet) {
       if (now > pet.until || dead) pet = null;
       else {
@@ -374,7 +376,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     wallet, life, // tiền tệ (Kho / Vạn Bảo Lâu) + thọ nguyên
     reincarnate() { progress.reset(); life.reborn(); progress.flush(); }, // tọa hóa → chuyển thế: xoá tiến trình (main.js xoá thêm Kho rồi tải lại)
     stunned: () => now < stunUntil,
-    _debug: { me, map, progress, mobs, voids, mdef: monDef, bag, gather, npcs, die, revive, tame, dv, cards, bolts, get treasure() { return treasure; }, cds, biCanh, learn, pt, get bar() { return bar; }, get hp() { return hp; }, set hp(v) { hp = v; }, get ps() { return ps; } }, // chỉ cho kiểm thử (?debug)
+    _debug: { me, map, progress, mobs, voids, mdef: monDef, bag, gather, npcs, die, revive, tame, dv, cards, bolts, get treasure() { return treasure; }, cds, biCanh, learn, pt, get hopNhat() { return hopNhat; }, get bar() { return bar; }, get hp() { return hp; }, set hp(v) { hp = v; }, get ps() { return ps; } }, // chỉ cho kiểm thử (?debug)
     speed: () => buffs.speed?.mul || null,
     toggleAuto() { if (dead) return; auto = !auto; autoDir = null; autoPlay.reset(); hud.setActive('auto', auto); toast(auto ? 'Tự động đánh: bật' : 'Tự động đánh: tắt', 1000); },
     healPill: () => usePill(HEAL_PILL), autoDir: () => (auto ? autoDir : null),

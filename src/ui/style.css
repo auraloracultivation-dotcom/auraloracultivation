@@ -645,3 +645,8 @@ img { image-rendering: pixelated; }
 /* Huy hiệu kỹ năng tròn (tools/skill_medals.py) khít đúng lỗ tròn khung ô: lỗ tâm 50%, đường kính 68,75% */
 .act .act-art[src*="/skills/m/"] { inset: 15.6%; width: 68.8%; height: 68.8%; border-radius: 50%; image-rendering: auto; filter: none; }
 .act.locked .act-art[src*="/skills/m/"] { filter: grayscale(1) brightness(.35); }
+/* Thiên Cơ Hợp Nhất trong Cẩm nang Đạo Vận */
+.sheet .gd-hop { border: 1px solid #6a5420; background: linear-gradient(180deg, #2a1f10, #1b1430); }
+.sheet .gd-hop.on { border-color: #ffd76a; box-shadow: 0 0 12px #ffd76a55; }
+.sheet .gd-cond { font-size: 12px; color: #ff8a7a; padding: 2px 0; }
+.sheet .gd-cond.ok { color: #7dff8a; }

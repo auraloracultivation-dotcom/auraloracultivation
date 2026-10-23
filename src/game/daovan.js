@@ -37,7 +37,7 @@ export function createDaoVan({ def, bag, cards, progress }) {
       const v = cards.value(card);
       add(m, card.def.mod, card.def.obj ? { ...card.def.obj, [card.def.key]: v } : v, null, `phu:${card.uid}`);
     }
-    m.turrets = Object.values(m.turretBy).map((t) => ({ ...t, every_s: Math.max(0.25, t.every_s || 1) })); // liên thanh nhanh nhất 4 loạt / giây
+    m.turrets = Object.values(m.turretBy).map((t) => ({ ...t, every_s: Math.max(def.limits.turret_min_s, t.every_s || 1) })); // liên thanh nhanh nhất 0,6 giây/loạt (không nghỉ chỉ ở Hợp Nhất)
     // hệ chủ đạo (nhiều món nhất): hình + màu đạn đạo pháp (đánh thường bắn thêm, liên thanh)
     const top = Object.entries(c).sort((a, b) => b[1] - a[1])[0];
     m.he = top && def.he[top[0]] ? top[0] : 'Kim';
