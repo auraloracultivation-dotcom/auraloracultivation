@@ -7,7 +7,7 @@ export function createAudio(def, settings) {
   const raw = new Map(); // id → ArrayBuffer (tải trước khi chạm)
   const buf = new Map(); // id → AudioBuffer (giải mã sau khi mở khoá)
   const on = { sound: settings.sound !== false, music: settings.music !== false };
-  let ctx = null, sfxGain = null, musicGain = null, musicSrc = null, musicId = null;
+  let ctx = null, sfxGain = null, musicGain = null, musicSrc = null, musicId = null, vol = { sfx: settings.soundVol ?? 1, music: settings.musicVol ?? 1 }; // âm lượng từ Cài đặt (0..1)
 
   // Tải trước dữ liệu (không chặn vào game); lỗi tải một file thì bỏ qua file đó
   const loading = Promise.all(Object.entries(entries).map(async ([id, e]) => {
@@ -27,7 +27,7 @@ export function createAudio(def, settings) {
     if (!ctx) {
       try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch { /* iOS < 16.4 */ }
       ctx = new AC();
-      sfxGain = ctx.createGain(); sfxGain.connect(ctx.destination);
+      sfxGain = ctx.createGain(); sfxGain.connect(ctx.destination); sfxGain.gain.value = vol.sfx;
       musicGain = ctx.createGain(); musicGain.connect(ctx.destination);
       await loading;
       await Promise.all([...raw].map(async ([id, data]) => {
@@ -66,7 +66,7 @@ export function createAudio(def, settings) {
     musicSrc.loop = e.loop !== false;
     [musicSrc.loopStart, musicSrc.loopEnd] = loopPoints(b);
     musicGain.gain.setValueAtTime(0, ctx.currentTime); // vào nhạc nhẹ nhàng
-    musicGain.gain.linearRampToValueAtTime(e.volume ?? 0.5, ctx.currentTime + 1.5);
+    musicGain.gain.linearRampToValueAtTime((e.volume ?? 0.5) * vol.music, ctx.currentTime + 1.5);
     musicSrc.connect(musicGain);
     musicSrc.start(0, musicSrc.loopStart);
   }
@@ -97,6 +97,9 @@ export function createAudio(def, settings) {
     apply(s) {
       on.sound = s.sound !== false;
       on.music = s.music !== false;
+      vol = { sfx: s.soundVol ?? 1, music: s.musicVol ?? 1 };
+      if (sfxGain) sfxGain.gain.value = vol.sfx;
+      if (musicGain && musicSrc) musicGain.gain.setTargetAtTime((entries[musicId]?.volume ?? 0.5) * vol.music, ctx.currentTime, 0.05);
       if (on.music && musicId) { unlock(); startMusic(musicId); } else stopMusic();
     },
   };
