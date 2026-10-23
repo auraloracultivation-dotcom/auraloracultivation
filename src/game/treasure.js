@@ -178,5 +178,12 @@ export function createTreasure(c) {
   const worn = () => { const t = on(); return t?.aw?.tier ? [t.aw] : []; };
   const view = () => { const t = on(), d = t && byId.get(t.id); return d ? { thumb: pic(d), cd: d.cd_s, name: d.name } : null; };
   syncSkill(); loadFx([...def.list.map((d) => d.icon[0]), 'v.cong-hu', ...def.list.map((d) => d.cast_fx).filter(Boolean), def.bind_fx].filter(Boolean)); // icon pháp bảo trong Kho / ô kỹ năng
-  return { current: () => { const x = on(); return x ? byId.get(x.id) : null; }, use, openBlank, onKill, entries, act, worn, view, isTreasure: (key) => key.startsWith('pb:'), grant: (id, lv = 0) => { list().push({ uid: progress.state.uid++, id, lv, known: true, aw: { tier: null, lines: [], spent: 0 } }); progress.changed(); } };
+  // Đeo pháp bảo hệ he (đã nhận chủ, cấp cao nhất) — nút "Mặc cả bộ" của Cẩm nang
+  function wearHe(he) {
+    if (on() && byId.get(on().id)?.he === he) return true;
+    const t = list().filter((x) => x.known && byId.get(x.id)?.he === he).sort((a, b) => (b.lv || 0) - (a.lv || 0))[0];
+    if (!t || !c.stageOk(def.unlock)) return false;
+    progress.state.treasureOn = t.uid; syncSkill(); c.recompute(); progress.changed(); return true;
+  }
+  return { wearHe, current: () => { const x = on(); return x ? byId.get(x.id) : null; }, use, openBlank, onKill, entries, act, worn, view, isTreasure: (key) => key.startsWith('pb:'), grant: (id, lv = 0) => { list().push({ uid: progress.state.uid++, id, lv, known: true, aw: { tier: null, lines: [], spent: 0 } }); progress.changed(); } };
 }

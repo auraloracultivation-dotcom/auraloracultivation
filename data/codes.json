@@ -1,4 +1,15 @@
 {
-  "_ghi_chu": "Mã quà tặng. Chỉ lưu dấu SHA-256 của mã (không lưu mã gốc). Chủ dự án xoá hết mã thử (qqqqq, lkjhg, lkjhb) ngày 23/10/2026. Sau này mã thật nên chuyển lên máy chủ (bảng mã + RPC kiểm lượt), không để trong máy khách. grant hỗ trợ: 'all' (mọi vật phẩm items.json), 'full' (+ nguyên liệu, đan, tiền — testgift.grantFull), 'god' (+ đồ 10 dòng Đen, thú Âm Hư — testgift.grantGod).",
-  "codes": []
+  "_ghi_chu": "Mã quà tặng. Chỉ lưu dấu SHA-256 của mã (không lưu mã gốc). Chủ dự án xoá hết mã thử (qqqqq, lkjhg, lkjhb) ngày 23/10/2026. Sau này mã thật nên chuyển lên máy chủ (bảng mã + RPC kiểm lượt), không để trong máy khách. grant hỗ trợ: 'all' (mọi vật phẩm items.json), 'full' (+ nguyên liệu, đan, tiền — testgift.grantFull), 'god' (+ đồ 10 dòng Đen, thú Âm Hư — testgift.grantGod), 'hopnhat' (+ Thần Phù chỉ định, mọi pháp bảo, kỹ năng Hợp Nhất — testgift.grantHopNhat).",
+  "codes": [
+    {
+      "sha256": "8d942c0cf9421cb313197d36976e32515b492f3fb08e45bc929bb2a2b669bd59",
+      "grant": "hopnhat",
+      "gift": {
+        "card_tier": 6,
+        "pb_lv": 0
+      },
+      "message": "Mã Thiên Cơ Hợp Nhất: đủ đồ 6 hệ, Thần Phù chỉ định, mọi pháp bảo, kỹ năng sịn + cùi",
+      "_ghi_chu": "Chủ dự án 23/10 10:42 — mã thử combo Hợp Nhất."
+    }
+  ]
 }
