@@ -21,8 +21,9 @@ export function createInventory({ ru, recipes, info, progress, bag, craft, itemD
     if (s) {
       const lv = progress.state.cp[s.id] || 0;
       if (!s.learn) return { kind: 'skill', def: s, inputs: [], label: 'Lab chưa ghi nguyên liệu', none: true };
-      return { kind: 'skill', def: s, lv, inputs: s.learn.inputs.map((i) => ({ id: i.id, count: i.count * (lv + 1) })),
-        label: lv >= s.max_level ? 'Đã tối đa' : lv ? `Tu luyện lên cấp ${lv + 1}` : 'Tu luyện cấp 1', max: lv >= s.max_level, locked: !craft.stageOk(s.unlock) };
+      const L = craft.skillLevel(s, Math.min(lv, s.max_level - 1));
+      return { kind: 'skill', def: s, lv, inputs: L?.inputs || [],
+        label: lv >= s.max_level ? 'Đã tối đa' : lv ? `Tu luyện lên cấp ${lv + 1}` : 'Tu luyện cấp 1', max: lv >= s.max_level, locked: !L || !craft.stageOk(L.unlock) };
     }
     return null;
   }
@@ -66,7 +67,7 @@ export function createInventory({ ru, recipes, info, progress, bag, craft, itemD
     const src = info.source(d);
     if (rc) { // cuốn công thức: hiện thứ luyện ra + nguyên liệu cần, luyện ngay trong kho
       const what = rc.kind === 'skill' ? `${rc.def.name} — cấp ${rc.lv || 0}/${rc.def.max_level}` : rc.kind === 'pill' ? `Luyện ra: ${rc.def.name} (có ${progress.count(rc.def.id)})` : 'Luyện ra: phôi (thức tỉnh để có chỉ số)';
-      const uses = ru ? ` · Còn ${ru.total(id)} lần dùng (cuốn này ${ru.left(id)}/${ru.max(id)})` : ''; // công thức có số lần dùng
+      const uses = ru && d.cat !== 'cong-phap' ? ` · Còn ${ru.total(id)} lần dùng (cuốn này ${ru.left(id)}/${ru.max(id)})` : d.cat === 'cong-phap' ? ' · Học vĩnh viễn' : ''; // công thức có số lần dùng; bí kíp thì không
       return { ...d, key: `item:${id}`, thumb: icon(id) || fallbackIcon(d.name, 'nhiemvu'), count, sub: what + uses,
         detail: [`Công dụng: ${info.effect(d)}`, rc.inputs.length && `Cần: ${needText(rc.inputs)}`, rc.locked && 'Cảnh giới chưa đủ', src && `Nơi có: ${src}`].filter(Boolean).join('\n'), actions };
     }

@@ -210,7 +210,7 @@
    "cat": "khac",
    "group": "dacbiet",
    "zone": "cam",
-   "use": "Kết Đan Đan (bắt buộc) · bonus phôi Cam"
+   "use": "Kết Đan Đan (bắt buộc)"
   },
   {
    "id": "item.dacbiet.hon-thu-tinh.001",
@@ -218,7 +218,7 @@
    "cat": "khac",
    "group": "dacbiet",
    "zone": "trang",
-   "use": "Nguyên Anh Đan · bắt buộc phôi Linh thú"
+   "use": "Hóa Thần Đan (bắt buộc) · bắt buộc phôi Cánh"
   },
   {
    "id": "item.dacbiet.tinh-hon.001",
@@ -226,7 +226,7 @@
    "cat": "khac",
    "group": "dacbiet",
    "zone": "xam",
-   "use": "Hóa Thần Đan · bắt buộc phôi Cánh"
+   "use": "Nguyên Anh Đan (bắt buộc) · bắt buộc phôi Linh thú"
   },
   {
    "id": "item.dacbiet.tinh-hon-co.001",
@@ -234,7 +234,7 @@
    "cat": "khac",
    "group": "dacbiet",
    "zone": "than",
-   "use": "Hóa Thần Đan · bắt buộc phôi Pháp Tướng / đồ Đen (cực hiếm)"
+   "use": "Bắt buộc phôi Pháp Tướng (cực hiếm)"
   },
   {
    "id": "item.thao.hac-diem.001",

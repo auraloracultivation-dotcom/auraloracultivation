@@ -17,35 +17,35 @@
  ],
  "name": "Vạn Bảo Lâu",
  "where": "Kho hàng trong Thanh Vân Thành (chạm vào, hoặc nút Tông môn khi đang ở trong thành)",
- "_ghi_chu_gia": "Giá (Linh thạch) là số TẠM Claude đặt — Lab chưa có. stack = số lượng mỗi lần mua. daily_limit = giới hạn mua mỗi ngày. min_stage = cảnh giới tối thiểu để mua; cost_items = vật phẩm phải nộp kèm (mất khi mua).",
+ "_ghi_chu_gia": "Giá tính bằng tools/shop_balance.py theo \"phút farm\" ở cảnh giới dùng món (chủ dự án 23/10 21h). Sửa hằng số trong tool rồi chạy lại, không sửa tay.",
  "stock": [
   {
    "id": "item.danphuong.tang-tho.001",
-   "price": 20
+   "price": 54
   },
   {
    "id": "item.danphuong.tieu-hoi-huyet.001",
-   "price": 30
+   "price": 54
   },
   {
    "id": "item.danphuong.hoi-linh.001",
-   "price": 40
+   "price": 54
   },
   {
    "id": "item.danphuong.cuong-cong.001",
-   "price": 120
+   "price": 54
   },
   {
    "id": "item.danphuong.cuong-the.001",
-   "price": 120
+   "price": 54
   },
   {
    "id": "item.danphuong.truc-co.001",
-   "price": 200
+   "price": 400
   },
   {
    "id": "item.danphuong.ket-dan.001",
-   "price": 900
+   "price": 1300
   },
   {
    "id": "item.danphuong.nguyen-anh.001",
@@ -53,7 +53,7 @@
   },
   {
    "id": "item.danphuong.hoa-than.001",
-   "price": 60000,
+   "price": 4300,
    "min_stage": "na_hau",
    "cost_items": [
     {
@@ -69,31 +69,41 @@
   },
   {
    "id": "item.congthuc.vu-khi.001",
-   "price": 60
+   "price": 54
   },
   {
    "id": "item.congthuc.trang-phuc.001",
-   "price": 60
+   "price": 54
   },
   {
    "id": "item.congthuc.nhan.001",
-   "price": 60
+   "price": 54
   },
   {
    "id": "item.congthuc.day-chuyen.001",
-   "price": 100
+   "price": 72
   },
   {
    "id": "item.congthuc.mat-na.001",
-   "price": 150
+   "price": 110
   },
   {
    "id": "item.congthuc.linh-thu.001",
-   "price": 1500
+   "price": 1600
+  },
+  {
+   "id": "item.congthuc.canh.001",
+   "price": 2000,
+   "min_stage": "na_so"
+  },
+  {
+   "id": "item.congthuc.phap-tuong.001",
+   "price": 2100,
+   "min_stage": "ht_so"
   },
   {
    "id": "item.congphap.tamphap.luyen-khi.001",
-   "price": 50
+   "price": 80
   },
   {
    "id": "item.congphap.tamphap.thanh-tam.001",
@@ -101,15 +111,15 @@
   },
   {
    "id": "item.congphap.chieu.kiem-khi.001",
-   "price": 600
+   "price": 920
   },
   {
    "id": "item.congphap.chieu.hoi-linh.001",
-   "price": 300
+   "price": 920
   },
   {
    "id": "item.congphap.than.lang-ba.001",
-   "price": 1200
+   "price": 2400
   },
   {
    "id": "item.phu.bao-ho.001",
@@ -118,47 +128,47 @@
   },
   {
    "id": "item.thao.thanh-tam.001",
-   "price": 12,
+   "price": 7,
    "stack": 5
   },
   {
    "id": "item.thao.linh-chi-non.001",
-   "price": 12,
+   "price": 7,
    "stack": 5
   },
   {
    "id": "item.thao.bat-nha.001",
-   "price": 12,
+   "price": 7,
    "stack": 5
   },
   {
    "id": "item.thao.huyet-linh.001",
-   "price": 40,
+   "price": 25,
    "stack": 5
   },
   {
    "id": "item.thao.diem-chi.001",
-   "price": 40,
+   "price": 25,
    "stack": 5
   },
   {
    "id": "item.khoang.huyen-thiet-vun.001",
-   "price": 12,
+   "price": 8,
    "stack": 5
   },
   {
    "id": "item.khoang.tinh-sa.001",
-   "price": 12,
+   "price": 8,
    "stack": 5
   },
   {
    "id": "item.khoang.xich-thiet.001",
-   "price": 40,
+   "price": 36,
    "stack": 5
   },
   {
    "id": "item.khoang.huyet-ngoc.001",
-   "price": 40,
+   "price": 36,
    "stack": 5
   },
   {
@@ -194,23 +204,23 @@
   },
   {
    "id": "item.dan.tieu-hoi-huyet.001",
-   "price": 300,
+   "price": 86,
    "currency": "vang"
   },
   {
    "id": "item.dan.hoi-linh.001",
-   "price": 400,
+   "price": 110,
    "currency": "vang"
   },
   {
    "id": "item.thao.thanh-tam.001",
-   "price": 250,
+   "price": 110,
    "stack": 5,
    "currency": "vang"
   },
   {
    "id": "item.khoang.tinh-sa.001",
-   "price": 300,
+   "price": 120,
    "stack": 5,
    "currency": "vang"
   },

@@ -115,18 +115,22 @@ export function createCraft({ progress, pills, blanks, awaken, skills, gp, owns 
   }
 
   // Công pháp cấp 1→5: cấp n tốn n lần nguyên liệu gốc
+  // Cấp kế tiếp của công pháp: levels[lv] (mở ở cảnh giới riêng, nguyên liệu vùng đó — tools/shop_balance.py); data cũ: learn.inputs × cấp
+  const skillLevel = (s, lv) => (s.levels?.[lv] ? { unlock: s.levels[lv].unlock, inputs: s.levels[lv].inputs }
+    : s.learn ? { unlock: s.unlock, inputs: s.learn.inputs.map((i) => ({ id: i.id, count: i.count * (lv + 1) })) } : null);
   function trainSkill(id) {
     const s = skills.skills.find((x) => x.id === id);
     if (!s) return { ok: false, msg: 'Không có công pháp' };
     if (!owns(s.id)) return { ok: false, msg: `Cần Bí kíp ${s.name} trong kho` };
-    if (!s.learn) return { ok: false, msg: 'Lab chưa ghi nguyên liệu cho công pháp này' };
-    if (!stageOk(s.unlock)) return { ok: false, msg: 'Cảnh giới chưa đủ' };
     const lv = progress.state.cp[id] || 0;
     if (lv >= s.max_level) return { ok: false, msg: 'Đã đạt cấp tối đa' };
-    const inputs = s.learn.inputs.map((i) => ({ id: i.id, count: i.count * (lv + 1) }));
+    const L = skillLevel(s, lv);
+    if (!L) return { ok: false, msg: 'Lab chưa ghi nguyên liệu cho công pháp này' };
+    if (!stageOk(L.unlock)) return { ok: false, msg: `Cấp ${lv + 1} mở ở cảnh giới cao hơn` };
+    const inputs = L.inputs;
     if (!progress.has(inputs)) return { ok: false, msg: 'Thiếu nguyên liệu' };
     for (const i of inputs) progress.take(i.id, i.count);
-    progress.state.cp[id] = lv + 1; spend(id); progress.changed();
+    progress.state.cp[id] = lv + 1; progress.changed(); // bí kíp học vĩnh viễn: không trừ lượt
     return { ok: true, msg: `${s.name} lên cấp ${lv + 1}` };
   }
 
@@ -141,5 +145,5 @@ export function createCraft({ progress, pills, blanks, awaken, skills, gp, owns 
     for (const a of Object.values(st.itemAw || {})) fix(a);
     for (const t of st.treasures || []) fix(t.aw);
   }
-  return { migrateLines, awakenObj: awakenTarget, norm, dismantleRefund, brewPill, forgeBlank, awakenGear, awakenItem, dismantle, trainSkill, awakenCost, gearQ, pickInputs, stageOk };
+  return { migrateLines, awakenObj: awakenTarget, norm, dismantleRefund, brewPill, forgeBlank, awakenGear, awakenItem, dismantle, trainSkill, skillLevel, awakenCost, gearQ, pickInputs, stageOk };
 }

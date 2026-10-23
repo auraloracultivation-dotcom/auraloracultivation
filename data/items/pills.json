@@ -17,15 +17,15 @@
     "inputs": [
      {
       "id": "item.thao.thanh-tam.001",
-      "count": 30
-     },
-     {
-      "id": "item.khoang.huyen-thiet-vun.001",
-      "count": 10
+      "count": 34
      },
      {
       "id": "item.thao.linh-chi-non.001",
-      "count": 8
+      "count": 21
+     },
+     {
+      "id": "item.khoang.huyen-thiet-vun.001",
+      "count": 32
      }
     ],
     "rate": 0.85
@@ -41,15 +41,19 @@
     "inputs": [
      {
       "id": "item.thao.huyet-linh.001",
-      "count": 50
+      "count": 82
+     },
+     {
+      "id": "item.thao.diem-chi.001",
+      "count": 49
      },
      {
       "id": "item.khoang.xich-thiet.001",
-      "count": 20
+      "count": 57
      },
      {
       "id": "item.dacbiet.huyet-yeu-tinh.001",
-      "count": 5
+      "count": 10
      }
     ],
     "rate": 0.7
@@ -65,15 +69,19 @@
     "inputs": [
      {
       "id": "item.thao.huyen-linh.001",
-      "count": 80
+      "count": 130
+     },
+     {
+      "id": "item.thao.u-minh.001",
+      "count": 77
      },
      {
       "id": "item.khoang.huyen-thiet.001",
-      "count": 30
+      "count": 88
      },
      {
       "id": "item.dacbiet.tinh-hon.001",
-      "count": 3
+      "count": 16
      }
     ],
     "rate": 0.5
@@ -90,15 +98,19 @@
     "inputs": [
      {
       "id": "item.thao.han-linh.001",
-      "count": 120
+      "count": 91
+     },
+     {
+      "id": "item.thao.bang-chi.001",
+      "count": 55
      },
      {
       "id": "item.khoang.han-thiet.001",
-      "count": 50
+      "count": 63
      },
      {
       "id": "item.dacbiet.hon-thu-tinh.001",
-      "count": 1
+      "count": 12
      }
     ],
     "rate": 0.3
@@ -287,5 +299,6 @@
    "shop": "co",
    "_ghi_chu": "Cần Đan phương Trường Sinh Đan (Vạn Bảo Lâu, rẻ). 2 Thanh Tâm Thảo hoặc 1 Thọ Nguyên Thảo = 1 viên. +2 thọ nguyên tối đa, mỗi ngày (giờ Việt Nam) chỉ dùng 1 viên — data/lifespan.json → pill."
   }
- ]
+ ],
+ "_ghi_chu_can_bang": "Nguyên liệu đan đột phá: tools/shop_balance.py (≈45 phút farm vùng hiện tại). Không sửa tay."
 }
