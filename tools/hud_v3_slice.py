@@ -49,7 +49,7 @@ for n,b in [('menu',(1115,61,74,70)),('ban-do',(1195,60,79,72)),('do-giam',(1280
     C(b).save(OUT+f'/nut-{n}.png')
 # 4 bản đồ nhỏ: xoá ảnh bản đồ trong vòng + chữ tên khu
 B=(1422,16,236,247); im=C(B)
-circ(im,off(B,(1546,130)),88,(14,20,40,255))
+circ(im,off(B,(1546,137)),81,(0,0,0,0))  # lòng bản đồ trong suốt: canvas bản đồ nằm DƯỚI khung
 rect(im,ob(B,(1436,226,1648,252)),px(im,*off(B,(1440,240))))
 im.save(OUT+'/ban-do-nho.png')
 # 5 băng chữ Tự động / Nhặt

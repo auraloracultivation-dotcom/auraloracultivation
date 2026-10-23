@@ -15,17 +15,18 @@ const F = (n) => `assets/ui/frames/hud-${n}.png`;
 const I = (n) => `assets/ui/icons/hud-${n}.png`;
 const box = (W, H, x, y, w, h) => `left:${(x / W) * 100}%;top:${(y / H) * 100}%;width:${(w / W) * 100}%;height:${(h / H) * 100}%`;
 const NV = (x, y, w, h) => box(615, 241, x, y, w, h); // khung nhân vật 615×241
+// 6 nút góc phải: icon game cũ (chủ dự án 23/10 thích icon cũ hơn) — assets/ui/icons/<icon>.png
 const MENU = [
-  { id: 'rank', name: 'Bảng xếp hạng', icon: 'nut-menu' },
-  { id: 'map', name: 'Bản đồ', icon: 'nut-ban-do' },
-  { id: 'skills', name: 'Đồ giám', icon: 'nut-do-giam' },
-  { id: 'quests', name: 'Nhiệm vụ', icon: 'nut-nhiem-vu' },
-  { id: 'sect', name: 'Vạn Bảo Lâu', icon: 'nut-cua-hang' },
-  { id: 'settings', name: 'Cài đặt', icon: 'nut-cai-dat' },
+  { id: 'rank', name: 'Bảng xếp hạng', icon: 'bxh' },
+  { id: 'map', name: 'Bản đồ', icon: 'ban-do-v2' },
+  { id: 'skills', name: 'Đồ giám', icon: 'ky-nang' },
+  { id: 'quests', name: 'Nhiệm vụ', icon: 'nhiem-vu' },
+  { id: 'sect', name: 'Vạn Bảo Lâu', icon: 'tong-mon' },
+  { id: 'settings', name: 'Cài đặt', icon: 'cai-dat-v2' },
 ];
 // Nút tròn: Đạo Vận thay chỗ Túi (guide.js gắn chữ + màu vào [data-r="dv"]), Nhân Vật giữ ảnh gốc
-const ROUND = [
-  { id: 'dv', name: 'Đạo Vận', glyph: '☯' },
+const ROUND = [ // glyph: chữ dự phòng (\uFE0E = dạng chữ, iPhone không vẽ thành emoji ô tím); ảnh thật gắn sau bằng setRoundIcon
+  { id: 'dv', name: 'Đạo Vận', glyph: '☯\uFE0E' },
   { id: 'stats', name: 'Nhân Vật', img: I('nut-nhan-vat') },
   { id: 'pb', name: 'Pháp Bảo', glyph: '❖' },
   { id: 'phu', name: 'Thần Phù', glyph: '✧' },
@@ -40,12 +41,12 @@ export function createHud(opts) {
   const me = add(`<div class="h3-left">
     <div class="h3-me">
       <button type="button" class="h3-avatar" style="${NV(37, 37, 152, 152)}" aria-label="Bảng trang bị"><canvas width="128" height="128"></canvas></button>
-      <div class="h3-name" style="${NV(210, 52, 330, 38)}"><b data-name></b><i data-realm></i></div>
+      <div class="h3-name" style="${NV(210, 52, 330, 38)}"><b data-name></b></div>
       ${['hp', 'mp', 'xp'].map((k, i) => `<div class="h3-bar ${k}" style="${NV(252, [99, 133, 170][i], 285, [23, 26, 25][i])}"><i data-${k}></i><b data-${k}-t></b></div>`).join('')}
-      <b class="h3-lv" style="${NV(149, 183, 52, 35)}" data-lv></b>
+      <b class="h3-lv" style="${NV(175, 183, 0, 35)}" data-life title="Thọ nguyên (năm)" hidden></b>
       <button type="button" class="h3-up" style="${NV(531, 153, 70, 67)}" aria-label="Đột phá"></button>
     </div>
-    <small class="h3-life" data-life></small>
+    <small class="h3-realm" data-realm></small>
     <div class="h3-wallet" data-wallet></div>
     <div class="h3-auto" hidden><b>● Tự động</b><span data-rate></span></div>
   </div>`);
@@ -60,12 +61,12 @@ export function createHud(opts) {
   // ---- Trên phải: bản đồ nhỏ, nút menu, nút tròn, nhiệm vụ ----
   const right = add(`<div class="h3-right">
     <div class="h3-mini">
-      <button type="button" class="h3-map" aria-label="Mở bản đồ"><canvas></canvas></button>
+      <button type="button" class="h3-map" aria-label="Mở bản đồ"><canvas></canvas></button><img class="h3-mini-frame" src="${F('ban-do-nho')}" alt="">
       <div class="h3-zone"><b>${escapeHtml(zoneName)}</b> · T${line} <em data-online></em></div>
     </div>
-    <div class="h3-menu">${MENU.map((m) => `<button type="button" class="glow" data-menu="${m.id}" aria-label="${m.name}" title="${m.name}"><img src="${I(m.icon)}" alt=""></button>`).join('')}</div>
+    <div class="h3-menu">${MENU.map((m) => `<button type="button" class="glow" data-menu="${m.id}" aria-label="${m.name}" title="${m.name}"><img src="assets/ui/icons/${m.icon}.png" alt=""></button>`).join('')}</div>
     <div class="h3-round">${ROUND.map((r) => `<button type="button" class="glow" data-r="${r.id}" aria-label="${r.name}">
-      ${r.img ? `<img src="${r.img}" alt="">` : `<img src="${F('nut-tron')}" alt=""><i>${r.glyph}</i><span>${r.name}</span>`}</button>`).join('')}</div>
+      ${r.img ? `<img src="${r.img}" alt="">` : `<img src="${F('nut-tron')}" alt=""><i>${r.glyph}</i><img class="h3-r-ic" alt="" hidden><span>${r.name}</span>`}</button>`).join('')}</div>
   </div>`);
   right.querySelector('.h3-menu').addEventListener('click', (e) => {
     const b = e.target.closest('[data-menu]'); if (!b) return;
@@ -86,7 +87,7 @@ export function createHud(opts) {
   right.querySelector('.h3-map').addEventListener('click', opts.onOpenMap);
   const online = right.querySelector('[data-online]');
   const miniCanvas = setupRoundCanvas(right.querySelector('.h3-map canvas'), 76, true);
-  const quest = createQuestBox(right, { onOpen: () => opts.onMenu?.('quests') });
+  const quest = createQuestBox(root, { onOpen: () => opts.onMenu?.('quests'), onTrack: (id) => opts.onTrack?.(id) }); // khung riêng: dọc nằm cột trái
 
   // ---- Dưới phải: nút đánh + ô kỹ năng (dx, dy tính từ tâm nút đánh) ----
   const pad = add(`<div class="action-pad">${actions.map((a) => `
@@ -145,12 +146,15 @@ export function createHud(opts) {
     },
     setOnline(count, max) { online.textContent = `· ${count}/${max}`; },
     setToggle(id, s) { actions.find((a) => a.id === id)?.setState?.(s); },
-    setRealm(text) { // "Kết Đan Sơ kỳ (Thọ nguyên 43/102 năm)" → cảnh giới cạnh tên, thọ nguyên dòng nhỏ dưới khung
-      const i = text.indexOf(' (');
+    setRealm(text) { // "Kết Đan Sơ kỳ (Thọ nguyên 43/102 năm)" → cảnh giới dòng dưới khung, "43/102" vào ô nhỏ cạnh ảnh (chủ dự án 23/10)
+      const i = text.indexOf(' ('), life = i < 0 ? '' : (/(\d+\s*\/\s*\d+)/.exec(text.slice(i)) || [])[1] || '';
       me.querySelector('[data-realm]').textContent = i < 0 ? text : text.slice(0, i);
-      me.querySelector('[data-life]').textContent = i < 0 ? '' : text.slice(i + 2, -1);
+      const b = me.querySelector('[data-life]'); b.textContent = life.replace(/\s/g, ''); b.hidden = !life;
     },
-    setLevel(n) { me.querySelector('[data-lv]').textContent = n ?? ''; },
+    setRoundIcon(id, url) { // ảnh thật cho nút tròn (Pháp Bảo, Thần Phù…); null = chữ dự phòng
+      const b = right.querySelector(`[data-r="${id}"]`), im = b?.querySelector('.h3-r-ic'); if (!im) return;
+      im.hidden = !url; if (url && im.getAttribute('src') !== url) im.src = url; b.classList.toggle('has-ic', !!url);
+    },
     setLocked(id, on, hint) {
       const a = actions.find((x) => x.id === id), btn = pad.querySelector(`[data-act="${id}"]`);
       if (!a || !btn) return;

@@ -188,5 +188,5 @@ export function createMonsters({ gp, mdef, map }) {
   }
   const removeVoid = (key) => { const i = list.findIndex((m) => m.voidKey === key && m.state !== 'dead'); if (i >= 0) list.splice(i, 1); };
 
-  return { list, update, addVoid, removeVoid, spawnAt, telegraph: mskills.telegraph, damage, nearest, within, distTo, rel, calmAll() { for (const m of list) if (m.state !== 'dead') { m.state = 'return'; m.cast = null; } } };
+  return { ringOf: (z) => ring[z] && { cx, cy, min: ring[z].min, max: ring[z].max }, depth, list, update, addVoid, removeVoid, spawnAt, telegraph: mskills.telegraph, damage, nearest, within, distTo, rel, calmAll() { for (const m of list) if (m.state !== 'dead') { m.state = 'return'; m.cast = null; } } };
 }

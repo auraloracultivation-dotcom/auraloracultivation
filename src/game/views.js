@@ -55,17 +55,47 @@ export function createViews(o) {
   }
   // Khung Nhiệm vụ trên HUD: tối đa 3 nhiệm vụ đang làm (chính tuyến trước), mục tiêu chưa xong đầu tiên, màu theo tier (độ hiếm / khó)
   const QCOL = { luc: '#6fdc76', lam: '#6aa8ff', tim: '#c58cff', cam: '#ffa94d', vang: '#ffd84a', do: '#ff5a4a', den: '#ff4f7a' };
+  // Dẫn đường (chủ dự án 23/10: map rộng, không biết đi đâu): nhiệm vụ đang theo → { zone, rank } hoặc { town } (luyện / dùng đồ ở thành)
+  const monById = new Map(o.monsters.map((m) => [m.id, m]));
+  const matZone = (id) => o.mats.materials.find((m) => m.id === id)?.zone;
+  const MZ = ['xanh', 'cam', 'xam', 'trang', 'than', 'den', 'tim'];
+  let tracked = null;
+  function goalPlace(q, a) {
+    const i = Math.max(0, q.goals.findIndex((g, k) => a.p[k] < g.count)), g = q.goals[i];
+    if (g.type === 'kill_zone') return { zone: g.target, rank: g.rank || 'thuong' };
+    if ((g.type === 'kill' || g.type === 'boss') && monById.has(g.target)) { const m = monById.get(g.target); return { zone: m.zone, rank: m.rank }; }
+    if (g.type === 'boss_unique') return { zone: MZ[o.realmMajor()] || 'xanh', rank: 'boss' };
+    if (g.type === 'collect' && matZone(g.target)) return { zone: matZone(g.target), rank: 'thuong' };
+    if (g.type === 'collect' || g.type === 'discover_unique') return { zone: MZ[o.realmMajor()] || 'xanh', rank: 'thuong' };
+    if (g.type === 'craft' || g.type === 'use' || g.type === 'awaken') return { town: true };
+    return null;
+  }
+  const order = () => {
+    const ORD = { main: 0, ladder: 1, daily: 2, weekly: 3 }, rank = (x) => (quests.complete(x.q.id) ? -1 : ORD[x.q.type] ?? 4); // xong rồi (chờ nhận thưởng) lên đầu
+    return quests.active().sort((x, y) => rank(x) - rank(y));
+  };
+  function naviGoal() {
+    const list = order().filter((x) => !quests.complete(x.q.id));
+    const cur = list.find((x) => x.q.id === tracked && goalPlace(x.q, x.a)) || list.find((x) => goalPlace(x.q, x.a));
+    if (!cur) return null;
+    const pl = goalPlace(cur.q, cur.a);
+    return pl && { ...pl, id: cur.q.id, title: cur.q.title };
+  }
+  const track = (id) => { tracked = id; return naviGoal(); };
   function questBrief() {
     for (const q of quests.available()) if (q.auto) quests.accept(q.id); // chuỗi Tầm Bảo: đủ cảnh giới là tự nhận
     const tag = (q) => ({ main: 'Chính', daily: 'Ngày', weekly: 'Tuần', ladder: `Tiến độ ${quests.ladderStep()}` }[q.type] || 'Phụ');
-    const ORD = { main: 0, ladder: 1, daily: 2, weekly: 3 }, rank = (x) => (quests.complete(x.q.id) ? -1 : ORD[x.q.type] ?? 4); // xong rồi (chờ nhận thưởng) lên đầu
-    return quests.active().sort((x, y) => rank(x) - rank(y)).slice(0, 3).map(({ q, a }) => {
+    const nav = naviGoal()?.id;
+    return order().slice(0, 3).map(({ q, a }) => {
       const i = Math.max(0, q.goals.findIndex((g, k) => a.p[k] < g.count)), g = q.goals[i];
       const what = g.label ? ` ${g.label}` : g.target === 'any' || g.type.endsWith('unique') ? '' : ` ${name(g.target)}`;
-      return { tag: tag(q), title: q.title, color: QCOL[q.tier] || (q.type === 'main' ? '#f7cf6b' : q.type === 'daily' ? '#7fe08a' : '#7fb4ff'),
-        goal: `${GOAL[g.type] || g.type}${what} (${a.p[i]}/${g.count})`, ready: quests.complete(q.id) };
+      return { id: q.id, tag: tag(q), title: q.title, color: QCOL[q.tier] || (q.type === 'main' ? '#f7cf6b' : q.type === 'daily' ? '#7fe08a' : '#7fb4ff'),
+        goal: `${GOAL[g.type] || g.type}${what} (${a.p[i]}/${g.count})`, ready: quests.complete(q.id), tracked: q.id === nav, nav: !!goalPlace(q, a) };
     });
   }
+  // Đan dùng nhanh: đan đang có trong kho dùng được (data/gameplay.json → pills)
+  const pillChoices = () => Object.keys(gp.pills).filter((id) => typeof gp.pills[id] === 'object' && progress.count(id) > 0)
+    .map((id) => ({ key: id, name: `${name(id)} ×${progress.count(id)}`, thumb: iconUrl(id) || '' }));
   function openQuests() {
     showSheet({
       title: 'Nhiệm vụ', note: 'Thử nghiệm: tiến độ lưu trên máy này. "Hoàn thành tạm" dành cho NPC/địa điểm chưa có trong game.',
@@ -267,5 +297,5 @@ export function createViews(o) {
     });
   }
 
-  return { openQuests, questBrief, openCultivate, openShop, statValue, refreshDock: null };
+  return { openQuests, questBrief, naviGoal, track, pillChoices, openCultivate, openShop, statValue, refreshDock: null };
 }

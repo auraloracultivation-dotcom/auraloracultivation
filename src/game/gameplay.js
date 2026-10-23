@@ -346,7 +346,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     return true;
   }
 
-  const views = createViews({ biCanh, gapR, info, shop, owns, teacher, bag, onLook, monsters: monDef.monsters, progress, quests, craft, itemDefs, mats, pills, blanks, awaken, cp, realms, gp, toast,
+  const views = createViews({ biCanh, gapR, info, shop, owns, teacher, bag, onLook, monsters: monDef.monsters, realmMajor: () => MAJOR_OF(progress.stageDef.id), progress, quests, craft, itemDefs, mats, pills, blanks, awaken, cp, realms, gp, toast,
     wallet, life, getStats: () => ps, getHp: () => hp, onReward: (r) => { if (r.exp) addExp(r.exp); if (r.spiritStone) progress.addStone(r.spiritStone);
       for (const i of r.items || []) progress.add(i.id, i.count); }, recompute, usePill, emit: quests.emit });
 
@@ -381,9 +381,9 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     _debug: { me, map, progress, mobs, voids, mdef: monDef, bag, gather, npcs, die, revive, tame, dv, cards, bolts, get treasure() { return treasure; }, cds, biCanh, learn, pt, get hopNhat() { return hopNhat; }, get bar() { return bar; }, get hp() { return hp; }, set hp(v) { hp = v; }, get ps() { return ps; } }, // chỉ cho kiểm thử (?debug)
     speed: () => buffs.speed?.mul || null,
     toggleAuto() { if (dead) return; auto = !auto; autoDir = null; auto ? autoPlay.start() : autoPlay.reset(); hud.setActive('auto', auto); toast(auto ? 'Tự động đánh: bật — farm quanh neo, kéo cần để dời neo' : 'Tự động đánh: tắt', 1600); },
-    healPill: () => usePill(HEAL_PILL), autoDir: () => (auto ? autoDir : null), autoMoved: () => auto && autoPlay.moved(), // kéo cần khi Tự động: dời neo
+    healPill: () => usePill(HEAL_PILL), usePill, pillCount: (id) => progress.count(id), isAuto: () => auto, autoDir: () => (auto ? autoDir : null), autoMoved: () => auto && autoPlay.moved(), // kéo cần khi Tự động: dời neo
     openCodex: () => openCodex({ loadJSON, gp, mats, pills, recipes, cp, monsters: monDef.monsters, mobSkills: monDef.skills, blanks, qItems, artDef, info, cpText: cpFx.text, fxDuration }), // Đồ giám (nút sách)
-    statValue: views.statValue, openQuests: views.openQuests, questBrief: views.questBrief, openCultivate: views.openCultivate,
+    statValue: views.statValue, openQuests: views.openQuests, questBrief: views.questBrief, naviGoal: views.naviGoal, track: views.track, pillChoices: views.pillChoices, zoneRing: (z) => mobs.ringOf(z), openCultivate: views.openCultivate, // dẫn đường + đan dùng nhanh
     forgedLook,
     setDock(d) { views.refreshDock = d.refresh; },
     bagEntries: () => [...inv.entries().map(({ item, count }) => { const a = item.key.startsWith('gear:') && usable.gearAction(progress.gear(+item.key.slice(5)));

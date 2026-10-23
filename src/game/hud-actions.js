@@ -1,12 +1,12 @@
 // Bộ nút góc dưới phải (HUD v3, chủ dự án 23/10/2026): dx/dy tính từ TÂM nút Đánh, size = đường kính (px).
-//   vòng trong 4 ô kỹ năng, vòng ngoài 3 ô + Bay + Tự động, mép trái nút xếp kỹ năng (✦) và Đan (mở Kho → Linh đan).
+//   vòng trong 4 ô kỹ năng, vòng ngoài 3 ô + Bay + Tự động, mép trái nút xếp kỹ năng (✦) và 2 ô đan dùng nhanh.
 // Ô kỹ năng tự xếp: kỹ năng nằm ở ô i (bảng Kỹ năng). Pháp tướng / đan dược xử lý ở đây, còn lại là chiêu.
 const ICON = (n) => `assets/ui/icons/hud-${n}.png`;
 const SLOT = 'assets/ui/frames/hud-o-ky-nang.png'; // ô trống: khung tròn, hình kỹ năng hiện trong lòng
 const fan = (deg, r = 122) => ({ dx: Math.round(Math.cos((deg * Math.PI) / 180) * r), dy: -Math.round(Math.sin((deg * Math.PI) / 180) * r) });
 
 // game(): gameplay (tạo sau HUD); S(n): ảnh nút cũ assets/ui/skills/<n>.png
-export function hudActions({ game, S, attack, usePhapTuong, flight, toast, onPills }) {
+export function hudActions({ game, S, attack, usePhapTuong, flight, toast }) {
   function useSlot(i) {
     const g = game(), id = g.slotSkill(i);
     if (!id) return g.openSkills(i);
@@ -32,7 +32,9 @@ export function hudActions({ game, S, attack, usePhapTuong, flight, toast, onPil
         },
       },
       { id: 'auto', name: 'Tự động đánh', icon: ICON('nut-tu-dong'), ...fan(90, 200), size: 54, onUse: () => game().toggleAuto() },
-      { id: 'dan', name: 'Đan dược', icon: ICON('nut-dan'), dx: -262, dy: -40, size: 52, onUse: onPills }, // nhiều loại đan → mở Kho mục Linh đan
+      // 2 ô đan dùng nhanh: chạm ô trống = chọn đan ghim, chạm ô đã ghim = uống, giữ = đổi (src/game/quick-pill.js xử lý)
+      { id: 'dan1', name: 'Đan dùng nhanh 1', icon: 'assets/ui/frames/hud-o-nho.png', cls: 'pill', dx: -262, dy: -40, size: 50, onUse: () => {} },
+      { id: 'dan2', name: 'Đan dùng nhanh 2', icon: 'assets/ui/frames/hud-o-nho.png', cls: 'pill', dx: -262, dy: 30, size: 50, onUse: () => {} },
     ],
   };
 }

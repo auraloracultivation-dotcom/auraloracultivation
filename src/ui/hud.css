@@ -14,9 +14,7 @@
 .h3-avatar canvas { width: 100%; height: 100%; border-radius: 50%; image-rendering: pixelated; }
 .h3-name { display: flex; align-items: center; gap: 2.5cqw; padding-left: 2cqw; white-space: nowrap; overflow: hidden; pointer-events: none;
   font-size: 4.3cqw; line-height: 1; text-shadow: 0 1px 2px #000; }
-.h3-name b { color: #fff1cf; font-weight: 700; overflow: hidden; text-overflow: ellipsis; max-width: 45%; }
-.h3-name i { font-style: normal; color: var(--gold); font-weight: 600; overflow: hidden; text-overflow: ellipsis; }
-.h3-name i::before { content: "· "; color: #8c8fb0; }
+.h3-name b { color: #fff1cf; font-weight: 700; font-size: 4.8cqw; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
 .h3-bar { border-radius: 2cqw; overflow: hidden; pointer-events: none; }
 .h3-bar i { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; border-radius: inherit; transition: width .3s; }
 .h3-bar.hp i { background: linear-gradient(#ff7179, #e2343e 55%, #b31f2b); }
@@ -24,10 +22,14 @@
 .h3-bar.xp i { background: linear-gradient(#ffd27a, #f8ad3a 55%, #d4831f); }
 .h3-bar b { position: absolute; right: 2.5cqw; top: 50%; transform: translateY(-50%); font-size: 3.8cqw; line-height: 1; font-weight: 700;
   color: #fff; text-shadow: 0 1px 1px #000, 0 0 2px #000; white-space: nowrap; }
-.h3-lv { display: grid; place-items: center; font-size: 4cqw; font-weight: 800; color: #fff1cf; text-shadow: 0 1px 1px #000; pointer-events: none; }
+.h3-lv { /* thọ nguyên "4/411" đè lên ô số nhỏ cạnh ảnh đại diện — tự giãn theo chữ */
+  width: auto !important; transform: translateX(-50%); display: grid; place-items: center; padding: 0 1.6cqw; min-width: 8.5cqw;
+  background: #121a33; border: 1px solid #e9c27a; border-radius: 1.6cqw; box-shadow: 0 0 0 1px #2a1d44;
+  font-size: 3.7cqw; font-weight: 800; color: #bfe9ff; white-space: nowrap; text-shadow: 0 1px 1px #000; pointer-events: none; }
+.h3-lv[hidden] { display: none; }
 .h3-up { border-radius: 30%; animation: up-glow 2.4s ease-in-out infinite; }
 .h3-up:active { transform: scale(.94); }
-.h3-life { display: block; margin: -1px 0 2px 2cqw; font-size: 3.6cqw; color: #bfe9ff; text-shadow: 0 0 3px #000, 0 1px 2px #000; pointer-events: none !important; }
+.h3-realm { display: block; margin: -1px 0 2px 2cqw; font-size: 4cqw; font-weight: 700; color: var(--gold); text-shadow: 0 0 3px #000, 0 1px 2px #000; pointer-events: none !important; }
 
 /* ---- 3 ô tiền ---- */
 .h3-wallet { display: flex; gap: 1.2cqw; }
@@ -49,8 +51,10 @@
 
 /* ---- trên phải ---- */
 .h3-right { right: max(6px, env(safe-area-inset-right)); width: var(--h3-R); display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
-.h3-mini { position: relative; width: 100%; aspect-ratio: 230 / 241; background: url("../../assets/ui/frames/hud-ban-do-nho.png") center / 100% 100% no-repeat; }
-.h3-map { position: absolute; left: 14.3%; top: 9.5%; width: 77%; height: 73.4%; border-radius: 50%; overflow: hidden; line-height: 0; }
+.h3-mini { position: relative; width: 100%; aspect-ratio: 230 / 241; }
+/* bản đồ nằm DƯỚI khung (lòng khung trong suốt, toạ độ lỗ 40,37 163×163 trên ảnh 230×241) — nhỉnh hơn lỗ 2px để không hở */
+.h3-map { position: absolute; left: 16.5%; top: 14.6%; width: 72%; height: 68.8%; border-radius: 50%; overflow: hidden; line-height: 0; background: #10192d; }
+.h3-mini-frame { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none !important; }
 .h3-map canvas { width: 100% !important; height: 100% !important; display: block; }
 .h3-zone { position: absolute; left: 6%; right: 6%; top: 86%; height: 10.5%; display: flex; align-items: center; justify-content: center; gap: 2px;
   font-size: 7.5px; color: #f2d79b; white-space: nowrap; overflow: hidden; text-shadow: 0 1px 1px #000; pointer-events: none; }
@@ -66,9 +70,14 @@
 .h3-round span { position: absolute; left: 14%; right: 14%; top: 72%; height: 22%; display: grid; place-items: center;
   font-size: 7.5px; font-weight: 700; color: #fff1cf; white-space: nowrap; text-shadow: 0 1px 1px #000; pointer-events: none; }
 .h3-round [data-r="dv"] span { color: var(--c, #fff1cf); }
+.h3-round i { font-family: "Segoe UI Symbol", "Apple Symbols", "Noto Sans Symbols", sans-serif; }
+.h3-r-ic { position: absolute; left: 22%; top: 15%; width: 56% !important; height: 52% !important; object-fit: contain; image-rendering: pixelated; pointer-events: none; filter: drop-shadow(0 0 3px rgba(0,0,0,.8)); }
+.h3-r-ic[hidden] { display: none; }
+.h3-round .has-ic i { display: none; }
 
 /* ---- khung Nhiệm vụ ---- */
-.h3-quest { position: relative; width: min(210px, 54vw); aspect-ratio: 451 / 316; container-type: inline-size;
+.h3-quest { position: absolute; z-index: 5; left: max(6px, env(safe-area-inset-left)); top: calc(var(--h3-top) + 172px); /* dọc: cột trái dưới ô tiền / băng Tự động */
+  width: min(184px, 47vw); aspect-ratio: 451 / 316; container-type: inline-size;
   background: url("../../assets/ui/frames/hud-khung-nhiem-vu.png") top / 100% auto no-repeat; }
 .h3-quest.min { aspect-ratio: 451 / 64; }
 .h3-quest.min .h3-q-list { display: none; }
@@ -83,6 +92,9 @@
 .h3-q-row span { font-size: 4.1cqw; color: #e7e3f4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .h3-q-row.ready span { color: #9ff0a8; font-weight: 700; }
 .h3-q-row.empty span { color: #9aa0bf; white-space: normal; }
+.h3-q-row { cursor: pointer; border-radius: 4px; padding-left: 1.5cqw; }
+.h3-q-row.on { background: linear-gradient(90deg, rgba(255,213,106,.18), transparent 80%); box-shadow: inset 2px 0 0 #ffd56a; }
+.h3-q-row:active { background: rgba(255,255,255,.08); }
 
 /* ---- Kho, Chat ---- */
 .h3-side { position: absolute; left: max(6px, env(safe-area-inset-left)); width: 50px; z-index: 5; }
@@ -109,13 +121,23 @@
 .h3-chat-in::placeholder { color: #8c8fb0; }
 .h3-chat-send { border-radius: 8px; }
 
+/* ---- màn dọc: cụm nút đánh / kỹ năng thu nhỏ (gốc toạ độ = tâm nút đánh, góc dưới phải) ---- */
+@media (orientation: portrait) {
+  .action-pad { transform: scale(.84); transform-origin: 0 0; right: calc(max(8px, env(safe-area-inset-right)) + 44px); bottom: calc(max(8px, env(safe-area-inset-bottom)) + 46px); }
+}
+/* ---- 2 ô đan dùng nhanh ---- */
+.act.pill .act-art { inset: 20%; width: 60%; height: 60%; image-rendering: pixelated; filter: drop-shadow(0 0 2px #000); }
+.act.pill.empty::after { content: "+ Đan"; position: absolute; inset: 0; display: grid; place-items: center; font: 800 11px/1 system-ui, sans-serif;
+  color: #ffd56a; text-shadow: 0 1px 2px #000; animation: h3-breathe 1.4s ease-in-out infinite; pointer-events: none; }
+.act.pill.empty { animation: up-glow 2.4s ease-in-out infinite; }
+.act.pill.out .act-art { filter: grayscale(1) brightness(.5); }
 /* ---- ô kỹ năng khung mới: hình kỹ năng nằm trong lòng tròn ---- */
 .act.slot .act-art { inset: 11%; width: 78%; height: 78%; border-radius: 50%; object-fit: cover; image-rendering: auto; filter: none; }
 .act.slot .act-art[src*="/skills/m/"] { inset: 11%; width: 78%; height: 78%; }
 .act.slot.locked .act-art { filter: grayscale(1) brightness(.35); }
 
 /* ---- thông báo: băng "Nhặt" nhỏ góc trái, dưới khung nhân vật ---- */
-.toast { left: max(6px, env(safe-area-inset-left)); top: calc(var(--h3-top) + 175px); transform: none; max-width: calc(100vw - var(--h3-R) - 24px);
+.toast { left: max(6px, env(safe-area-inset-left)); top: calc(var(--h3-top) + 312px); transform: none; max-width: min(300px, calc(100vw - var(--h3-R) - 24px));
   border: solid transparent; border-width: 7px 8px 7px 34px; border-radius: 0; padding: 4px 8px 4px 4px; background: none;
   border-image: url("../../assets/ui/frames/hud-bang-nhat.png") 14 16 14 76 fill / 7px 8px 7px 34px stretch;
   font-size: 12px; line-height: 1.3; color: #fff1cf; text-shadow: 0 1px 1px #000; }
@@ -126,7 +148,7 @@
   .h3-mini { grid-area: mini; }
   .h3-menu { grid-area: menu; }
   .h3-round { grid-area: round; grid-template-columns: repeat(4, 1fr); }
-  .h3-quest { position: fixed; left: max(6px, env(safe-area-inset-left)); top: calc(var(--h3-top) + 182px); width: 190px; }
+  .h3-quest { top: calc(var(--h3-top) + 182px); width: 190px; }
   .toast { top: auto; bottom: 12px; left: 50%; transform: translateX(-50%); }
   .h3-side { width: 44px; }
   .h3-kho { bottom: max(6px, env(safe-area-inset-bottom)); left: calc(max(6px, env(safe-area-inset-left)) + 50px); }
