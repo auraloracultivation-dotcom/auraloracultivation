@@ -10,7 +10,7 @@
  "pills": [
   {
    "id": "item.dan.truc-co.001",
-   "name": "Trúc Cơ Đan",
+   "name": "Ngưng Mạch Đan",
    "cat": "linh-dan",
    "when": "LK → TC",
    "recipe": {
@@ -34,7 +34,7 @@
   },
   {
    "id": "item.dan.ket-dan.001",
-   "name": "Kết Đan Đan",
+   "name": "Tụ Tinh Đan",
    "cat": "linh-dan",
    "when": "TC → KD",
    "recipe": {
@@ -62,7 +62,7 @@
   },
   {
    "id": "item.dan.nguyen-anh.001",
-   "name": "Nguyên Anh Đan",
+   "name": "Hóa Nguyệt Đan",
    "cat": "linh-dan",
    "when": "KD → NA",
    "recipe": {
@@ -91,7 +91,7 @@
   },
   {
    "id": "item.dan.hoa-than.001",
-   "name": "Hóa Thần Đan",
+   "name": "Phá Nhật Đan",
    "cat": "linh-dan",
    "when": "NA → HT",
    "recipe": {
@@ -120,7 +120,7 @@
   },
   {
    "id": "item.dan.anh-bien.001",
-   "name": "Anh Biến Đan",
+   "name": "Hợp Đạo Đan",
    "cat": "linh-dan",
    "when": "HT → AB",
    "recipe": {

@@ -6,7 +6,7 @@
  "realms": [
   {
    "id": "realm.luyen-khi",
-   "name": "Luyện Khí",
+   "name": "Khai Linh",
    "short": "LK",
    "stages": [
     "lk1",
@@ -21,11 +21,12 @@
     "lk10"
    ],
    "unlock_skill": "danh-thuong",
-   "zone": "xanh"
+   "zone": "xanh",
+   "monster_name": "Luyện Khí"
   },
   {
    "id": "realm.truc-co",
-   "name": "Trúc Cơ",
+   "name": "Ngưng Mạch",
    "short": "TC",
    "stages": [
     "so",
@@ -35,13 +36,14 @@
    "unlock_skill": "skill.chieu.kiem-khi.001",
    "zone": "cam",
    "breakthrough": {
-    "rate": 0.85,
+    "rate": 0.9,
     "pill": "item.dan.truc-co.001"
-   }
+   },
+   "monster_name": "Trúc Cơ"
   },
   {
    "id": "realm.ket-dan",
-   "name": "Kết Đan",
+   "name": "Tụ Tinh",
    "short": "KD",
    "stages": [
     "so",
@@ -51,13 +53,14 @@
    "unlock_skill": "skill.khe.linh-thu.001",
    "zone": "xam",
    "breakthrough": {
-    "rate": 0.7,
+    "rate": 0.8,
     "pill": "item.dan.ket-dan.001"
-   }
+   },
+   "monster_name": "Kết Đan"
   },
   {
    "id": "realm.nguyen-anh",
-   "name": "Nguyên Anh",
+   "name": "Hóa Nguyệt",
    "short": "NA",
    "stages": [
     "so",
@@ -67,13 +70,14 @@
    "unlock_skill": "skill.than.canh-phong.001",
    "zone": "trang",
    "breakthrough": {
-    "rate": 0.5,
+    "rate": 0.7,
     "pill": "item.dan.nguyen-anh.001"
-   }
+   },
+   "monster_name": "Nguyên Anh"
   },
   {
    "id": "realm.hoa-than",
-   "name": "Hóa Thần",
+   "name": "Phá Nhật",
    "short": "HT",
    "stages": [
     "so",
@@ -83,13 +87,14 @@
    "unlock_skill": "skill.phap-tuong.thien-thu.001",
    "zone": "than",
    "breakthrough": {
-    "rate": 0.3,
+    "rate": 0.6,
     "pill": "item.dan.hoa-than.001"
-   }
+   },
+   "monster_name": "Hóa Thần"
   },
   {
    "id": "realm.anh-bien",
-   "name": "Anh Biến",
+   "name": "Hợp Đạo",
    "short": "AB",
    "stages": [
     "so",
@@ -99,11 +104,10 @@
    "unlock_skill": "chua-co",
    "zone": "den",
    "breakthrough": {
-    "rate": 0.02,
-    "pill": "item.dan.anh-bien.001",
-    "fail_to": "ht_trung",
-    "charm_add": 0.005
-   }
+    "rate": 0.5,
+    "pill": "item.dan.anh-bien.001"
+   },
+   "monster_name": "Anh Biến"
   },
   {
    "id": "realm.van-dinh",
@@ -174,5 +178,6 @@
    "_ghi_chu": "cộng 15 điểm %, không nhân; giới hạn lần/ngày (số lần CHƯA chốt)"
   },
   "_ghi_chu": "Tỷ lệ là giả thuyết thiết kế, chưa mô phỏng."
- }
+ },
+ "_ghi_chu_thien_dao": "24/10: name = tên cảnh giới NGƯỜI CHƠI (Ngũ Thiên Đạo Cảnh); monster_name = tên bậc quái cũ. id giữ nguyên."
 }

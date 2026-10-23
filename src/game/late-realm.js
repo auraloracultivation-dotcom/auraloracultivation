@@ -7,7 +7,7 @@
 // Thông số: data/gameplay.json → late_realm. Các tầng khác giữ luật cũ (death_exp_loss).
 export function createLateRealm({ gp, progress, gapR, toast }) {
   const L = gp.late_realm || {};
-  const on = () => (L.prefixes || []).some((p) => progress.stageDef.id.startsWith(p));
+  const on = () => (L.prefixes || []).some((p) => progress.stageDef.tier.startsWith(p)); // theo bậc quái tương ứng (ab = Hợp Đạo)
   const need = () => progress.stageDef.exp_need;
   // Thưởng nhiệm vụ: ở cảnh giới cao bị chặn 1 lượt + đi chung giới hạn ngày với quái
   function questExp(n) {

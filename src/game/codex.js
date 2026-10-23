@@ -66,12 +66,12 @@ export async function openCodex(o) {
   const U = 'assets/ui/skills/';
   const skills = [
     skill('skill.attack', 'Đánh thường', `${U}tan-cong.png`, ['chem-x'], ['Chém vũ khí vào mục tiêu gần nhất']),
-    skill('skill.kiem-khi', 'Kiếm khí', `${U}kiem-khi.png`, ['kiem-bang-bay', 'kiem-bang-no'], [`Bắn kiếm khí ×${S['kiem-khi'].mul} sát thương · ${S['kiem-khi'].mp} linh lực · hồi ${S['kiem-khi'].cd_s}s · mở ở Trúc Cơ`]),
-    skill('skill.khong-che', 'Khống chế', `${U}khong-che.png`, ['moc-troi'], [`Trói mục tiêu ${S['khong-che'].stun_s}s · ${S['khong-che'].mp} linh lực · hồi ${S['khong-che'].cd_s}s · mở ở Trúc Cơ`]),
-    { ...skill('skill.linh-thu', 'Linh thú', `${U}linh-thu.png`, [], [`Gọi linh thú đánh cùng ${S['linh-thu'].last_s}s · hồi ${S['linh-thu'].cd_s}s · mở ở Kết Đan, cần đeo linh thú`]),
+    skill('skill.kiem-khi', 'Kiếm khí', `${U}kiem-khi.png`, ['kiem-bang-bay', 'kiem-bang-no'], [`Bắn kiếm khí ×${S['kiem-khi'].mul} sát thương · ${S['kiem-khi'].mp} linh lực · hồi ${S['kiem-khi'].cd_s}s · mở ở Ngưng Mạch`]),
+    skill('skill.khong-che', 'Khống chế', `${U}khong-che.png`, ['moc-troi'], [`Trói mục tiêu ${S['khong-che'].stun_s}s · ${S['khong-che'].mp} linh lực · hồi ${S['khong-che'].cd_s}s · mở ở Ngưng Mạch`]),
+    { ...skill('skill.linh-thu', 'Linh thú', `${U}linh-thu.png`, [], [`Gọi linh thú đánh cùng ${S['linh-thu'].last_s}s · hồi ${S['linh-thu'].cd_s}s · mở ở Tụ Tinh, cần đeo linh thú`]),
       status: 'tam', img: null, anim: sheetAnim('cho-trang', ['idle', 'walk']), note: 'Linh thú đang dùng chó trắng (gói miễn phí) · chưa có hình linh thú riêng' },
-    skill('skill.luot', 'Lướt', `${U}luot.png`, [], [`Tăng né ×${S.luot.ne_mul} và tốc độ trong ${S.luot.last_s}s · hồi ${S.luot.cd_s}s · mở ở Kết Đan`]),
-    skill('skill.nguyen-anh', 'Nguyên Anh (diện rộng)', `${U}nguyen-anh.png`, ['k.bao-tho'], [`Đánh quanh mình ×${S['nguyen-anh'].mul} · ${S['nguyen-anh'].mp} linh lực · mở ở Nguyên Anh`]),
+    skill('skill.luot', 'Lướt', `${U}luot.png`, [], [`Tăng né ×${S.luot.ne_mul} và tốc độ trong ${S.luot.last_s}s · hồi ${S.luot.cd_s}s · mở ở Tụ Tinh`]),
+    skill('skill.nguyen-anh', 'Hóa Nguyệt Chấn (diện rộng)', `${U}nguyen-anh.png`, ['k.bao-tho'], [`Đánh quanh mình ×${S['nguyen-anh'].mul} · ${S['nguyen-anh'].mp} linh lực · mở ở Hóa Nguyệt`]),
     skill('skill.phap-tuong', 'Pháp tướng hoá hình', `${U}phap-tuong.png`, [], [`+${Math.round((S['phap-tuong'].atk_mul - 1) * 100)}% công, +${Math.round((S['phap-tuong'].def_mul - 1) * 100)}% thủ khi hiện; tốn linh lực liên tục`], 'Hình = pháp tướng đang đeo (xem Trang bị)'),
     ...S._order.filter((id) => S[id]?.kind && S[id].fx).map((id) => skill(`skill.${id}`, S[id].name, `${U}trong.png`, [S[id].fx, S[id].hit_fx].filter(Boolean),
       [`${S[id].desc.replace(/\{(\w+)(%?)\}/g, (_, k, p) => (p ? `${Math.round(S[id][k] * 100)}%` : S[id][k]))} · ${S[id].mp} linh lực · hồi ${S[id].cd_s}s`], 'Hiệu ứng: tấm chủ dự án 23/10')),

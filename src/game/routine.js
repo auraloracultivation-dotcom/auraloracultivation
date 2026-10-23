@@ -16,7 +16,7 @@ export function createRoutine({ R, progress, realmMajor, realms, gp, mats, now =
   // Bối cảnh lúc sinh: vùng, tầng tu, số tu vi / Linh thạch gốc
   function ctx() {
     const major = realmMajor(), code = MAJOR[major] || 'lk', zone = realms.realms[major]?.zone || 'xanh';
-    const stage = progress.stageDef, stone = gp.monster.stone_by_stage[stage.id] || 1;
+    const stage = progress.stageDef, stone = gp.monster.stone_by_stage[stage.tier] || 1;
     const of = (z, g) => mats.materials.filter((m) => m.zone === z && m.group === g);
     const zi = R.zone_order.indexOf(zone);
     const special = of(zone, 'dacbiet').length ? of(zone, 'dacbiet') : of(R.zone_order[zi + 1] || zone, 'dacbiet'); // vùng đầu chưa có đồ đặc biệt → mượn vùng sau
@@ -54,15 +54,15 @@ export function createRoutine({ R, progress, realmMajor, realms, gp, mats, now =
   // (Luyện Khí: 1 bậc / tầng, Trúc Cơ → Hóa Thần: 3 bậc / tầng), vùng + thưởng theo tầng đó, không theo cảnh giới người chơi.
   // Chưa tới tầng của bậc thì mục tiêu đầu là "Đạt <tầng>". Hết 46 bậc: bậc hậu kỳ (Hóa Thần Hậu kỳ) thưởng tăng dần.
   const STAGES = gp.player.stages, SI = new Map(STAGES.map((x, i) => [x.id, i]));
-  const STEPS = STAGES.flatMap((x) => (x.id.startsWith('lk') ? [{ st: x, k: 0, per: 1 }] : [0, 1, 2].map((k) => ({ st: x, k, per: 3 }))));
+  const STEPS = STAGES.map((x) => ({ st: x, k: 0, per: 1 })); // Ngũ Thiên Đạo Cảnh: 1 bậc Tiến độ / cấp (60 bậc)
   const stepOf = (n) => (n <= STEPS.length ? STEPS[n - 1] : { st: STAGES.at(-1), k: 3 + n - STEPS.length, per: 0, extra: n - STEPS.length });
-  const majorOf = (id) => Math.max(0, MAJOR.indexOf(id.slice(0, 2)));
+  const majorOf = (id) => STAGES.find((x) => x.id === id)?.major ?? 0;
   const firstStepOfMajor = (m) => 1 + STEPS.findIndex((x) => majorOf(x.st.id) === m);
   const stageReached = (id) => (SI.get(progress.stageDef.id) ?? 0) >= (SI.get(id) ?? 0);
 
   function makeLadder(_c, n) {
     const L = R.ladder, { st, k, per, extra = 0 } = stepOf(n), mj = majorOf(st.id), zone = realms.realms[mj]?.zone || 'xanh';
-    const zname = R.zone_names[zone] || zone, key = `L${n}`, lk = mj === 0, stone = gp.monster.stone_by_stage[st.id] || 1;
+    const zname = R.zone_names[zone] || zone, key = `L${n}`, lk = mj === 0, stone = gp.monster.stone_by_stage[st.tier] || 1;
     const of = (g) => mats.materials.filter((m) => m.zone === zone && m.group === g);
     const ores = of('khoang').length ? of('khoang') : mats.materials.filter((m) => m.group === 'khoang');
     const sp = of('dacbiet').length ? of('dacbiet') : mats.materials.filter((m) => m.zone === (realms.realms[mj + 1]?.zone || zone) && m.group === 'dacbiet');
@@ -89,9 +89,9 @@ export function createRoutine({ R, progress, realmMajor, realms, gp, mats, now =
     let c = null; const C = () => (c ||= ctx());
     if (s.day !== d) { out.drop.push(...s.daily.map((q) => q.id)); s.day = d; s.daily = makeDaily(C(), d); out.add.push(...s.daily); }
     if (s.week !== w) { out.drop.push(...s.weekly.map((q) => q.id)); s.week = w; s.weekly = makeWeekly(C(), w); out.add.push(...s.weekly); }
-    if (s.lv !== 2) { // Tiến độ kiểu mới (bậc theo tầng tu): người đang ở cảnh giới cao bắt đầu từ bậc đầu của đại cảnh giới hiện tại
+    if (s.lv !== 3) { // Ngũ Thiên Đạo Cảnh (24/10): 1 bậc / cấp — bắt đầu từ bậc đầu của cảnh giới hiện tại
       if (s.lq) out.drop.push(s.lq.id);
-      s.lv = 2; s.lq = null; s.ladder = Math.max(1, firstStepOfMajor(realmMajor()));
+      s.lv = 3; s.lq = null; s.ladder = Math.max(1, firstStepOfMajor(realmMajor()));
     }
     if (!s.lq || isDone(s.lq.id)) { if (s.lq) s.ladder = (s.ladder || 1) + 1; s.lq = makeLadder(null, s.ladder || 1); out.add.push(s.lq); }
     if (out.add.length || out.drop.length) progress.changed();
