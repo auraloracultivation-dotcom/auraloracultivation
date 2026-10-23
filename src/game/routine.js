@@ -93,7 +93,8 @@ export function createRoutine({ R, progress, realmMajor, realms, gp, mats, now =
       if (s.lq) out.drop.push(s.lq.id);
       s.lv = 3; s.lq = null; s.ladder = Math.max(1, firstStepOfMajor(realmMajor()));
     }
-    if (!s.lq || isDone(s.lq.id)) { if (s.lq) s.ladder = (s.ladder || 1) + 1; s.lq = makeLadder(null, s.ladder || 1); out.add.push(s.lq); }
+    if (R.ladder.enabled === false) { if (s.lq) { out.drop.push(s.lq.id); s.lq = null; } } // 24/10: Tiến độ thay bằng Con đường Đạo Tâm
+    else if (!s.lq || isDone(s.lq.id)) { if (s.lq) s.ladder = (s.ladder || 1) + 1; s.lq = makeLadder(null, s.ladder || 1); out.add.push(s.lq); }
     if (out.add.length || out.drop.length) progress.changed();
     return out;
   }

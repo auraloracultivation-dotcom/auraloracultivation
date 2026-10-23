@@ -10,7 +10,9 @@ const today = () => new Date(NOW() + 7 * 3600e3).toISOString().slice(0, 10); // 
 export function createQuests(def, progress, realmMajor, extra = null) {
   if (extra?.now) NOW = extra.now;
   // Có nhiệm vụ Ngày / Tuần / Tiến độ tự sinh thì bỏ các nhiệm vụ "Daily" cũ của Lab (thưởng cố định rất nhỏ, lệch xa thưởng mới)
-  const retired = new Set(extra && def.routine ? def.quests.filter((q) => q.type === 'daily').map((q) => q.id) : []);
+  // 24/10: chuỗi chính cũ (main, Tầm Bảo, explore…) thay bằng Con đường Đạo Tâm (daotam.js) — quests.json → retired_types
+  const RT = new Set(def.retired_types || []);
+  const retired = new Set(def.quests.filter((q) => (extra && def.routine && q.type === 'daily') || RT.has(q.type)).map((q) => q.id));
   const all = def.quests.filter((q) => !retired.has(q.id));
   const byId = new Map(all.map((q) => [q.id, q]));
   const placeholders = new Set(def.placeholders);
@@ -53,12 +55,14 @@ export function createQuests(def, progress, realmMajor, extra = null) {
     return true;
   }
   // Nhiệm vụ chính đầu tiên tự nhận
-  if (!Q().done['q.main.001'] && !Q().active['q.main.001']) accept('q.main.001');
+  if (byId.has('q.main.001') && !Q().done['q.main.001'] && !Q().active['q.main.001']) accept('q.main.001');
 
   const complete = (id) => { const q = byId.get(id), a = Q().active[id]; return q && a && q.goals.every((g, i) => a.p[i] >= g.count); };
 
   // Sự kiện từ gameplay: kill {id, rank}, gain {id, n}, craft {id, kind}, use {id}, awaken, dodge, daily
+  const listeners = [];
   function emit(type, e = {}) {
+    for (const f of listeners) f(type, e); // Con đường Đạo Tâm (daotam.js) nghe chung sự kiện
     let changed = false;
     for (const [qid, a] of Object.entries(Q().active)) {
       const q = byId.get(qid);
@@ -104,5 +108,5 @@ export function createQuests(def, progress, realmMajor, extra = null) {
 
   const active = () => (sync(), Object.keys(Q().active)).map((id) => ({ q: byId.get(id), a: Q().active[id] })).filter((x) => x.q);
   const done = () => all.filter(isDone);
-  return { available, active, done, accept, claim, emit, complete, fakeGoal, isPlaceholder: (t) => placeholders.has(t), byId, ladderStep: () => routine?.ladderStep() || 0 };
+  return { onEmit: (f) => listeners.push(f), available, active, done, accept, claim, emit, complete, fakeGoal, isPlaceholder: (t) => placeholders.has(t), byId, ladderStep: () => routine?.ladderStep() || 0 };
 }

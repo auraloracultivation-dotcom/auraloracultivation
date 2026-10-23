@@ -1114,7 +1114,8 @@
      "den"
     ]
    ],
-   "desc": "Con đường chính từ Luyện Khí tầng 1 (không reset). Mỗi bậc gắn với một tầng tu: tới tầng đó, hạ yêu thú vùng tương ứng để nhận tài nguyên luyện trang bị."
+   "desc": "Con đường chính từ Luyện Khí tầng 1 (không reset). Mỗi bậc gắn với một tầng tu: tới tầng đó, hạ yêu thú vùng tương ứng để nhận tài nguyên luyện trang bị.",
+   "enabled": false
   },
   "_ghi_chu_tien_do": "Tiến độ kiểu mới (chủ dự án 23/10): bậc n gắn với một tầng tu cố định (Luyện Khí 1 bậc/tầng, Trúc Cơ→Hóa Thần 3 bậc/tầng, tổng 46 bậc, sau đó bậc hậu kỳ). Vùng + thưởng theo tầng của bậc. Chưa tới tầng thì có mục tiêu 'Tu luyện tới <tầng>'. Người đã ở cảnh giới cao bắt đầu từ bậc đầu của đại cảnh giới hiện tại. Các nhiệm vụ Daily cũ của Lab bị bỏ khỏi game (vẫn giữ trong file) vì Ngày / Tuần mới thay thế. Số liệu trong src/game/routine.js → makeLadder.",
   "table": {
@@ -1546,5 +1547,13 @@
   },
   "_ghi_chu_table": "Chủ dự án 23/10: thưởng là SỐ CỐ ĐỊNH theo tầng, không tính %. Mỗi tầng: daily/weekly/chapter = [tu vi, Linh thạch, Vàng] cho MỖI việc. Ngày/Tuần theo tầng người chơi đang ở lúc sinh; Tiến độ dùng cột chapter của tầng gắn với bậc. Bảng đầy đủ trong doc 'Cốt truyện & thiết kế lại nhiệm vụ'."
  },
- "_ghi_chu_huong_dan": "Chủ dự án 23/10 21h30: giảm tu vi nhiệm vụ hướng dẫn / Tầm Bảo / Lâu dài — thưởng = 1 chương (15% vạch tầng làm nhiệm vụ đó, routine.table[...].chapter) cho nhiệm vụ thường, 2 chương cho Tầm Bảo và nhiệm vụ Lâu dài. Trước đây cả chuỗi Luyện Khí cho ~3.000 tu vi (nhảy thẳng LK1 → LK6), Tầm Bảo VI + VII cho 80 triệu."
+ "_ghi_chu_huong_dan": "Chủ dự án 23/10 21h30: giảm tu vi nhiệm vụ hướng dẫn / Tầm Bảo / Lâu dài — thưởng = 1 chương (15% vạch tầng làm nhiệm vụ đó, routine.table[...].chapter) cho nhiệm vụ thường, 2 chương cho Tầm Bảo và nhiệm vụ Lâu dài. Trước đây cả chuỗi Luyện Khí cho ~3.000 tu vi (nhảy thẳng LK1 → LK6), Tầm Bảo VI + VII cho 80 triệu.",
+ "retired_types": [
+  "main",
+  "explore",
+  "craft",
+  "combat",
+  "long"
+ ],
+ "_ghi_chu_24_10": "Chủ dự án 24/10: chuỗi chính cũ (main/explore/craft/combat/long, Tầm Bảo) và Tiến độ (routine.ladder) nhiều lỗi, thay bằng Con đường Đạo Tâm (data/quests/dao-tam.json). Giữ nhiệm vụ Ngày / Tuần."
 }

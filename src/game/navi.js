@@ -8,11 +8,13 @@ const BAND = { thuong: 0.35, elite: 0.62, boss: 0.82 }; // độ sâu trong vàn
 const ZN = { xanh: 'Đồng cỏ', cam: 'Cát vàng', xam: 'Sỏi đá xám', trang: 'Băng tuyết', than: 'Hắc thổ', den: 'Hắc thạch', tim: 'Tử vực', huvo: 'Hư Vô' };
 
 export function createNavi({ map, me, game, flight, toast }) {
+  let fixed = false; // đang đi theo questauto.go (không lấy đích từ khung Nhiệm vụ)
   let flyTry = 0, travel = false, stuckT = 0, side = 0, sideT = 0, lx = 0, ly = 0, goal = null, target = null, refresh = 0;
 
   // Điểm đích: cùng hướng từ tâm bản đồ tới người chơi, ở đúng độ sâu trong vành vùng
   function aim(g) {
     if (!g) return null;
+    if (g.point) return { x: g.point.x, y: g.point.y, label: g.label || 'Nơi cần tới', point: true }; // NPC / trận nhãn (daotam.js)
     const cx = map.width / 2, cy = map.height / 2;
     if (g.town) return { x: cx, y: cy + 40, label: 'Thanh Vân Thành', town: true };
     const R = game.zoneRing(g.zone); if (!R) return null;
@@ -34,6 +36,7 @@ export function createNavi({ map, me, game, flight, toast }) {
   function arrived(t) {
     if (!t) return true;
     if (t.town) return map.safeAt(me.x, me.y);
+    if (t.point) return Math.hypot(wrapDelta(t.x - me.x, map.width), wrapDelta(t.y - me.y, map.height)) < 50;
     if (Math.hypot(wrapDelta(t.x - me.x, map.width), wrapDelta(t.y - me.y, map.height)) < 60) return true; // tới đúng điểm đã dò
     const z = map.typeAt(me.x, me.y).zone; if (z !== t.zone) return false;
     const R = game.zoneRing(t.zone), cx = map.width / 2, cy = map.height / 2;
@@ -57,13 +60,13 @@ export function createNavi({ map, me, game, flight, toast }) {
   // Mỗi khung hình. stick: cần điều khiển đang kéo. Trả về hướng đi khi đang tự đi, không thì null.
   function update(dt, stick) {
     refresh -= dt;
-    if (refresh <= 0) { refresh = 0.5; const g = game.naviGoal(); if (!travel && (g?.id !== goal?.id || !target || g?.zone !== target.zone)) target = aim(g); goal = g; }
+    if (refresh <= 0 && !fixed) { refresh = 0.5; const g = game.naviGoal(); if (!travel && (g?.id !== goal?.id || !target || g?.zone !== target.zone)) target = aim(g); goal = g; }
     if (!travel) return null;
-    if (stick || game.dead) { travel = false; toast('Đã huỷ dẫn đường', 900); return null; }
+    if (stick || game.dead) { travel = false; fixed = false; toast('Đã huỷ dẫn đường', 900); return null; }
     if (arrived(target)) {
-      travel = false; flight.set(false, true);
-      if (!target.town) startQuestAuto();
-      toast(target.town ? 'Đã về Thanh Vân Thành' : `Tới ${target.label} — tự động farm tại đây`, 1800);
+      travel = false; fixed = false; flight.set(false, true);
+      if (!target.town && !target.point) startQuestAuto();
+      toast(target.town || target.point ? `Đã tới ${target.label}` : `Tới ${target.label} — tự động farm tại đây`, 1800);
       return null;
     }
     flyTry -= dt; if (!me.flying && flyTry <= 0) { flyTry = 2; flight.set(true, true); } // ngự kiếm nếu được (cầm kiếm + đủ linh lực): nhanh, qua sông hồ
@@ -94,5 +97,14 @@ export function createNavi({ map, me, game, flight, toast }) {
     ctx.strokeText(txt, 0, ty); ctx.fillText(txt, 0, ty);
     ctx.restore();
   }
-  return { start, update, render, active: () => travel };
+  // Tự làm nhiệm vụ (questauto.js): đi tới một nơi cho sẵn ({ zone, rank, gather } hoặc { point, label }), không cần id nhiệm vụ
+  function go(pl) {
+    goal = pl; target = aim(pl);
+    if (!target) return;
+    if (arrived(target)) { if (!target.point && !target.town) startQuestAuto(); return; }
+    travel = true; stuckT = 0; lx = me.x; ly = me.y; fixed = true;
+    if (game.isAuto()) game.setAuto(null);
+  }
+  const cancel = () => { travel = false; fixed = false; };
+  return { start, go, cancel, update, render, active: () => travel, traveling: () => travel };
 }

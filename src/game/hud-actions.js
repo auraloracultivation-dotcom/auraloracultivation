@@ -31,7 +31,9 @@ export function hudActions({ game, S, attack, usePhapTuong, flight, toast }) {
           if (!flight().set(state === 1)) return 'keep';
         },
       },
-      { id: 'auto', name: 'Tự động đánh', icon: ICON('nut-tu-dong'), ...fan(90, 172), size: 50, onUse: () => game().toggleAuto() },
+      { id: 'auto', name: 'Tự farm', icon: ICON('nut-tu-dong'), ...fan(90, 172), size: 50, onUse: () => game().toggleAuto() },
+      // Tự làm nhiệm vụ (chủ dự án 24/10: tách hẳn khỏi Tự farm) — src/game/questauto.js
+      { id: 'autoq', name: 'Tự nhiệm vụ', icon: ICON('nut-nhiem-vu'), dx: -164, dy: -246, size: 46, onUse: () => game().toggleQuestAuto?.() },
       // 2 ô đan dùng nhanh: chạm ô trống = chọn đan ghim, chạm ô đã ghim = uống, giữ = đổi (src/game/quick-pill.js xử lý)
       { id: 'dan1', name: 'Đan dùng nhanh 1', icon: 'assets/ui/frames/hud-o-nho.png', cls: 'pill', dx: -112, dy: -246, size: 46, onUse: () => {} },
       { id: 'dan2', name: 'Đan dùng nhanh 2', icon: 'assets/ui/frames/hud-o-nho.png', cls: 'pill', dx: -60, dy: -246, size: 46, onUse: () => {} },

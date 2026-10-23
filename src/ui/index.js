@@ -18,3 +18,4 @@ export { createBuildChip } from './buildchip.js';
 export { showCodex } from './codex.js';
 export { showLeaderboard } from './rank.js';
 export { showSpar } from './spar.js';
+export { showDialog, showHeChooser } from './dialog.js';

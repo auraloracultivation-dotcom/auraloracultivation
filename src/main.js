@@ -5,7 +5,7 @@ import { createMap, wrapDelta } from './map/index.js';
 import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, setTextScale, loadRig, rigAttack, artInfo, renderPortrait, avatarFx, iconUrl, loadSprites } from './entity/index.js';
 import { createAudio } from './audio/index.js';
 import { createPhapTuong } from './combat/index.js';
-import { createGameplay, createRankReporter, createFlight, hudActions, createNavi, createQuickPill, createStations } from './game/index.js';
+import { createGameplay, createRankReporter, createFlight, hudActions, createNavi, createQuickPill, createStations, createQuestAuto } from './game/index.js';
 
 // Luôn lấy code mới nhất (xem sw.js) — tránh lẫn code cũ với dữ liệu mới sau mỗi lần cập nhật
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
@@ -229,7 +229,7 @@ async function boot() {
     onTreasure: () => game?.skill('phap-bao'), // nút Pháp Bảo: dùng pháp bảo đang đeo
     onCards: () => openBag('than-phu'), // nút Thần Phù: gắn phù (Thần Phù là bị động, đổi cách đạn bay)
     onShop: () => game?.openShop(),
-    onTrack: (id) => navi?.start(id), // chạm dòng nhiệm vụ → dẫn đường
+    onTrack: (id) => (id === 'dt' && !game.daotam.place() ? game.daotam.doHere() : navi?.start(id)), // chạm dòng nhiệm vụ → dẫn đường (Đạo Tâm làm tại chỗ: làm luôn)
     ...hudActions({ game: () => game, S, attack, usePhapTuong, flight: () => flight, toast }), // nút đánh, ô kỹ năng, Tự động, 2 ô đan
   });
   hud.setOnline(onlineN, maxPlayers);
@@ -244,6 +244,7 @@ async function boot() {
     onToaHoa: (sum) => showToaHoa({ name: me.name, ...sum, onRebirth: rebirth }) }); // thọ nguyên tận → chết hẳn
   me.onAutoSwing = swing;
   navi = createNavi({ map, me, game, flight, toast }); // dẫn đường tới nơi làm nhiệm vụ
+  const qauto = createQuestAuto({ game, navi, map, me, toast }); game.toggleQuestAuto = qauto.toggle; // Tự làm nhiệm vụ
   game.setGo((id) => navi.start(id)); // nút "Đi tới" trong bảng Nhiệm vụ đầy đủ
   pills = createQuickPill({ game: () => game, hud, pick: showSlotPicker, iconUrl, toast }); // 2 ô đan dùng nhanh
   stations = createStations({ map, me, net, game, toast, onMoved: (x, y) => { me.flying = false; hud.setToggle('bay', 0); zone.sendMove(x, y, false, false); } }); // trận nhãn + truyền tống
@@ -276,6 +277,7 @@ async function boot() {
   function update(dt) {
     // Cần điều khiển luôn ưu tiên; thả tay mà đang bật Tự động thì đi theo hướng autoplay (quái / nguyên liệu gần nhất)
     const stick = game.stunned() ? { x: 0, y: 0 } : input.getMove(), ad = game.stunned() ? null : game.autoDir(); // bị boss trói: đứng yên
+    if ((stick.x || stick.y) && qauto.on()) qauto.stop(); qauto.tick(dt); // kéo cần = tắt Tự làm nhiệm vụ
     const nd = navi?.update(dt, !!(stick.x || stick.y)); // đang tự đi theo dẫn đường
     const dir = stick.x || stick.y ? stick : nd || (ad || stick);
     if (dir === ad && ad.fly !== undefined && ad.fly !== !!me.flying && !game.dead) flight.set(ad.fly, true); else if (stick.x || stick.y) game.autoMoved(); // Tự động: bay qua chướng ngại rồi hạ; tự kéo cần thì neo vùng farm đi theo

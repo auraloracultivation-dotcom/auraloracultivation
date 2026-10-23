@@ -36,3 +36,15 @@ Không dùng hệ cảnh giới của truyện cho người chơi nữa.
 ## Bản lưu cũ
 `progress.js` VERSION 2: bản 1 (25 bậc) tự đổi khi tải — bậc cũ → cấp cuối khoảng tương ứng (Hóa Thần Hậu kỳ → Phá Nhật tầng 10),
 tu vi về 0, đồ / tiền giữ nguyên, thú cưng đổi công theo tỷ lệ bảng quái mới (`gameplay.json → migrate_v2`). Chủ dự án: chỉ tặng, không trừ.
+
+## Con đường Đạo Tâm (chuỗi nhiệm vụ chính, 24/10/2026)
+
+- Dữ liệu: `data/quests/dao-tam.json` — 6 chương, ~63 bước, 6 NPC đặt cạnh công trình trong thành. Code: `src/game/daotam.js`.
+- Người chơi chọn 1 hệ (một lần, không đổi). Phần thưởng dọc đường tặng đủ 12 món Đạo Vận cùng hệ:
+  8 trang bị + 2 kỹ năng (sịn, cùi) + 1 thần phù + 1 pháp bảo → chạm Thiên Cơ Hợp Nhất. Mỗi nhân vật chỉ nhận 1 bộ.
+- Kiểu mục tiêu: talk, choose_he, level, kill, gather, obtain, use, wear, awaken, skill, card, pb, station, hopnhat.
+- Bước "thức tỉnh N dòng": nếu món chạm giới hạn ẩn trước N dòng thì cũng tính xong (không bao giờ kẹt).
+- Tự làm nhiệm vụ (`src/game/questauto.js`, nút "Tự nhiệm vụ") tách hẳn khỏi Tự farm (`autoplay.js`):
+  tự đi tới NPC / trận nhãn, tự chạy hội thoại, tự farm đúng vùng, tự mặc / thức tỉnh / mua / uống đan / đột phá.
+  Chọn hệ thì chờ người chơi. Kéo cần điều khiển hoặc bật Tự farm = tắt.
+- Nhiệm vụ cũ kiểu main / explore / craft / combat / long được cho nghỉ (`quests.json → retired_types`).

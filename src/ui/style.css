@@ -670,3 +670,20 @@ img { image-rendering: pixelated; }
 .sheet .gd-hop.on { border-color: #ffd76a; box-shadow: 0 0 12px #ffd76a55; }
 .sheet .gd-cond { font-size: 12px; color: #ff8a7a; padding: 2px 0; }
 .sheet .gd-cond.ok { color: #7dff8a; }
+/* Hội thoại NPC + chọn hệ Đạo Tâm (src/ui/dialog.js) */
+.npc-talk { position: absolute; left: 12px; right: 12px; bottom: 27%; z-index: 45; padding: 12px 14px 10px; border-radius: 14px;
+  background: linear-gradient(180deg, #2a1f3d, #150f26); border: 2px solid #c9a24a; box-shadow: 0 6px 20px #000a; color: var(--text); }
+.npc-talk b { color: var(--gold); font-size: 14px; }
+.npc-talk p { margin: 6px 0 4px; font-size: 15px; line-height: 1.4; min-height: 42px; }
+.npc-talk em { display: block; text-align: right; font-size: 11px; color: var(--muted); font-style: normal; }
+.he-wrap { z-index: 46; }
+.he-pick { width: min(400px, 94vw); background: #150f26; border: 2px solid #c9a24a; border-radius: 16px; padding: 14px; color: var(--text); text-align: center; }
+.he-title { color: var(--gold); font-size: 18px; }
+.he-note { font-size: 12px; color: var(--muted); margin: 4px 0 10px; }
+.he-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.he-opt { display: flex; flex-direction: column; gap: 3px; align-items: center; padding: 10px 6px; border-radius: 12px; border: 2px solid #3a2c52;
+  background: radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--c) 35%, #1b1430), #120c20); color: var(--text); cursor: pointer; }
+.he-opt i { font-style: normal; font-weight: 900; font-size: 22px; color: var(--c); text-shadow: 0 0 8px var(--c); }
+.he-opt b { font-size: 12px; color: #fff; }
+.he-opt small { font-size: 10px; color: var(--muted); }
+.he-opt.on { border-color: var(--c); box-shadow: 0 0 12px var(--c); }

@@ -41,10 +41,11 @@ import { createBiCanh } from './bicanh.js';
 import { createConsumables } from './consumables.js';
 import { createGuide } from './guide.js';
 import { createHurt } from './hurt.js';
+import { createDaoTam, questNpcDefs } from './daotam.js';
 import { createHopNhat } from './hopnhat.js';
 import { createSkillLearn } from './skill-learn.js';
 import { simulateDuel } from './spar.js';
-import { placeholderIcon, showRevive } from '../ui/index.js';
+import { placeholderIcon, showRevive, showDialog, showHeChooser } from '../ui/index.js';
 import { artInfo, iconUrl, fxIconUrl, cardArt } from '../entity/index.js';
 
 const HEAL_PILL = 'item.dan.tieu-hoi-huyet.001', MP_PILL = 'item.dan.hoi-linh.001';
@@ -74,7 +75,9 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   craft.migrateLines(); // dòng cũ (số phẳng) → % chỉ số gốc
   const gather = createGather({ gp, mats, map });
   const info = createItemInfo({ monsters: monDef.monsters, shop, pills, blanks, realms, gp, cpText: (id) => cpFx.text(id) }); // tác dụng + nơi có của vật phẩm
-  const npcs = createNpcs({ def: await loadJSON('data/npcs.json'), map, mobs, stats, stages: gp.player.stages });
+  const [npcDef, dtDef, zoneDef, itemsList] = await Promise.all(['data/npcs.json', 'data/quests/dao-tam.json', 'data/zones/zone.start.json', 'data/items/items.json'].map((p) => loadJSON(p)));
+  npcDef.npcs.push(...questNpcDefs(dtDef, zoneDef.town.props)); // NPC nhiệm vụ Đạo Tâm đứng cạnh công trình trong thành
+  const npcs = createNpcs({ def: npcDef, map, mobs, stats, stages: gp.player.stages }), itemsJson = { items: itemsList.items };
   const PV = gp.pvp, rollLoot = createLoot({ gp, mats, qItems, recipes, progress });
   const autoPlay = createAutoPlay({ me, mobs, gather, map, cfg: gp.auto, reach: gp.player.attack_range_px, canFly: () => !!me.look?.weapon && pt.mp >= 15, zone: () => biCanh?.zone(), hpFrac: () => (ps.hp ? hp / ps.hp : 1) });
   gather.seed(me);
@@ -219,7 +222,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const biCanh = createBiCanh({ def: bcDef, mdef: monDef, mobs, map, me, progress, life, wallet, cards, cardDef: dvDef.cards, dv, pbItem: pbDef.items[0].id,
     toast, play, say, dead: () => dead, stageId: () => progress.stageDef.tier, stageName: progress.stageName, itemName: (id) => itemDefs.get(id)?.name || bag.nameOf?.(id) || id, S, pbList: pbDef.list, learn: () => learn, treasure: () => treasure });
   const hopNhat = createHopNhat({ def: dvDef.hop_nhat, forged: (he, sl) => progress.equipped().some((g) => g.tier && g.he === he && g.slot === sl), bag, treasure, cards, loadout, S, cardName: (id) => dvDef.cards.list.find((x) => x.id === id)?.name || id, learned: (id) => learn.learned(id), target, pt, ps: () => ps, dead: () => dead, toast, src: { pb: pbDef, cards: dvDef.cards.drop, set: dvDef.set_drop, skill: gp.skill_drop, realms: realms.realms } }); // Thiên Cơ Hợp Nhất (src: nguồn để chỉ cách lấy)
-  const guide = createGuide({ hopNhat, learn, dvDef, ccDef, pbDef, items: (await loadJSON('data/items/items.json')).items, S, dv, cards, bag, progress, loadout, stageName: progress.stageName,
+  const guide = createGuide({ hopNhat, learn, dvDef, ccDef, pbDef, items: itemsJson.items, S, dv, cards, bag, progress, loadout, stageName: progress.stageName,
     art: (a) => artInfo(a)?.file || artFile(a), equip: (id) => itemAction(`bag:${id}`, 'equip'), toast }); // nút + bảng Cẩm nang Đạo Vận
   const usable = createConsumables({ itemDefs, progress, wallet, cards, cardDef: dvDef.cards, treasure, biCanh, heOrder: dvDef.he_order, play, me, recompute });
   const skills = createSkills({ hopOn: () => !!hopNhat.active(), useTreasure: (q) => treasure.use(q), camChe: (s) => camChe.cast(s), S, me, mobs, map, pt, cds, toast, say, play, fx, bolts, strike, target, buffs, recompute, mods: dv.mods, fire: barrage.fire, maybeEcho: barrage.maybeEcho, mover: barrage.mover, schedule: barrage.schedule, healPets: (f) => tame.healAll(f),
@@ -229,6 +232,9 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
       pet = { until: now + S['linh-thu'].last_s, next: now, x: me.x - 14, y: me.y, t: 0, face: 1, moving: false, img: f ? Object.assign(new Image(), { src: f }) : null }; play('vong-lua', me.x - 14, me.y - 6, 34); toast('Linh thú hiện thân', 1000); } });
   const { usePill, breakthrough } = createPillUse({ majors: realms.realms.map((r) => r.short.toLowerCase()), realmName: (k) => realms.realms.find((r) => r.short.toLowerCase() === k)?.name, gp, realms, progress, itemDefs, life, quests, pt, buffs, cds, me, HEAD, toast, say, play, addExp, recompute,
     now: () => now, dead: () => dead, hp: () => hp, setHp: (v) => { hp = v; }, ps: () => ps });
+  const daotam = createDaoTam({ def: dtDef, hop: dvDef.hop_nhat.he, items: itemsJson.items, itemDefs, shop, progress, bag, learn, loadout, cards, treasure, hopNhat, npcs, map, me, wallet, S, pbList: pbDef.list, // Con đường Đạo Tâm
+    addExp, itemAction, breakthrough, usePill, toast, play, dialog: showDialog, chooseHe: showHeChooser, heColor: (he) => dvDef.he[he]?.color || '#ffd23a' });
+  quests.onEmit((type, e) => daotam.emit(type, e));
 
   // ---------- Mỗi khung hình ----------
   // Thọ nguyên (lifespan.js): qua 0h giờ VN cập nhật nhãn; hết thọ → tọa hóa (chết hẳn), main.js hiện bảng chuyển thế
@@ -253,7 +259,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
       if (gp.auto.use_skills && target(260)) skills.autoCast(loadout.ids(), hp / ps.hp); // tự dùng kỹ năng trong ô
       if (target(PL.attack_range_px) && attackCd <= 0) { attack(); me.onAutoSwing?.(); }
     }
-    guide.tick(); learn.tick(); hopNhat.update(dt); barrage.update(dt); camChe.update(dt); biCanh.update(dt); const md = dv.mods(); if (md.mp_regen && !dead) pt.gain(ps.mp * md.mp_regen * dt); if (!dead && hp < ps.hp && now - hurtAt > PL.regen_after_s) hp = Math.min(ps.hp, hp + ps.hp * PL.regen_hp_per_s * (map.safeAt(me.x, me.y) ? map.town?.regenMul || 1 : 1) * dt); // hồi khí huyết khi thôi giao chiến (data/gameplay.json → player.regen_*) // đạn + bị động Đạo Vận, linh lực hồi liên tục
+    guide.tick(); learn.tick(); daotam.tick(dt); hopNhat.update(dt); barrage.update(dt); camChe.update(dt); biCanh.update(dt); const md = dv.mods(); if (md.mp_regen && !dead) pt.gain(ps.mp * md.mp_regen * dt); if (!dead && hp < ps.hp && now - hurtAt > PL.regen_after_s) hp = Math.min(ps.hp, hp + ps.hp * PL.regen_hp_per_s * (map.safeAt(me.x, me.y) ? map.town?.regenMul || 1 : 1) * dt); // hồi khí huyết khi thôi giao chiến (data/gameplay.json → player.regen_*) // đạn + bị động Đạo Vận, linh lực hồi liên tục
     if (pet) {
       if (now > pet.until || dead) pet = null;
       else {
@@ -296,7 +302,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   function renderAbove(ctx, t) {
     for (const m of mobs.list) { const p = at(m); if (Math.abs(p.x - me.x) < 800 && Math.abs(p.y - me.y) < 1000) drawMonsterLabel(ctx, m, p.x, p.y, m.uid === targetUid, t); }
     for (const n of npcs.list) { const p = at(n); if (Math.abs(p.x - me.x) < 700 && Math.abs(p.y - me.y) < 700) drawNpcLabel(ctx, n, p.x, p.y, npcs.height, performance.now(), npcs.guarded(n)); }
-    barrage.render(ctx, at, t); // vệt sáng, sét, đất cháy, phi kiếm (Đạo Vận)
+    daotam.render(ctx, at, t); barrage.render(ctx, at, t); // dấu ! nhiệm vụ · vệt sáng, sét, đất cháy, phi kiếm (Đạo Vận)
     juice.frame(ctx, t, me.x, me.y); drawFx(ctx, [...bolts, ...fx].map((f) => ({ ...f, ...at(f) })), 0, 0); // juice: tối màn hình khi gồng chiêu lớn (hiệu ứng vẽ đè lên vẫn sáng)
   }
 
@@ -327,7 +333,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     return true;
   }
 
-  const views = createViews({ ru, biCanh, gapR, info, shop, owns, teacher, bag, onLook, monsters: monDef.monsters, realmMajor: () => (progress.stageDef.major ?? 0), progress, quests, craft, itemDefs, mats, pills, blanks, awaken, cp, realms, gp, toast,
+  const views = createViews({ daotam, ru, biCanh, gapR, info, shop, owns, teacher, bag, onLook, monsters: monDef.monsters, realmMajor: () => (progress.stageDef.major ?? 0), progress, quests, craft, itemDefs, mats, pills, blanks, awaken, cp, realms, gp, toast,
     wallet, life, getStats: () => ps, getHp: () => hp, onReward: (r) => { if (r.exp) addExp(late.questExp(r.exp)); if (r.spiritStone) progress.addStone(r.spiritStone); if (r.gold) wallet.add('vang', r.gold);
       for (const i of r.items || []) progress.add(i.id, i.count); }, recompute, usePill, emit: quests.emit });
 
@@ -364,7 +370,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     speed: () => buffs.speed?.mul || null,
     // Tự farm (nút Tự farm) và farm theo nhiệm vụ (questauto.js / navi.js) là hai chế độ riêng của autoplay.js
     toggleAuto() { if (dead) return; const on = !(auto && autoPlay.mode() === 'farm'); setAuto(on ? 'farm' : null); toast(on ? 'Tự farm: bật — đánh quái quanh đây, kéo cần để dời chỗ' : 'Tự farm: tắt', 1600); },
-    setAuto, autoMode: () => (auto ? autoPlay.mode() : null),
+    setAuto, autoMode: () => (auto ? autoPlay.mode() : null), daotam, setAutoQ: (v) => hud.setActive('autoq', v), // Tự làm nhiệm vụ (questauto.js)
     healPill: () => usePill(HEAL_PILL), usePill, pillCount: (id) => progress.count(id), isAuto: () => auto, autoDir: () => (auto ? autoDir : null), autoMoved: () => auto && autoPlay.moved(), // kéo cần khi Tự động: dời neo
     openCodex: () => openCodex({ loadJSON, gp, mats, pills, recipes, cp, monsters: monDef.monsters, mobSkills: monDef.skills, blanks, qItems, artDef, info, cpText: cpFx.text, fxDuration }), // Đồ giám (nút sách)
     statValue: views.statValue, openQuests: views.openQuests, questBrief: views.questBrief, naviGoal: views.naviGoal, track: views.track, setGo: views.setGo, pillChoices: views.pillChoices, zoneRing: (z) => mobs.ringOf(z), openCultivate: views.openCultivate, // dẫn đường + đan dùng nhanh
