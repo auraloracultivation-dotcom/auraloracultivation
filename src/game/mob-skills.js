@@ -9,7 +9,7 @@ export function createMobSkills({ lib, map }) {
   // Đang đuổi người chơi: có chiêu sẵn sàng + trong tầm thì bắt đầu vận. Trả về true nếu đã bắt đầu.
   function tryCast(m, me, d) {
     const ids = m.def.skills;
-    if (!ids?.length || m.gcd > 0) return false;
+    if (!ids?.length || m.gcd > 0 || m.sealed > 0) return false; // bị Cấm Chế Phong Ấn: không vận chiêu
     m.scd ||= {};
     for (const id of ids) {
       const s = lib[id];
@@ -61,6 +61,7 @@ export function createMobSkills({ lib, map }) {
   }
   function cool(m, dt) {
     if (m.gcd > 0) m.gcd -= dt;
+    if (m.sealed > 0) m.sealed -= dt;
     if (m.scd) for (const k in m.scd) if (m.scd[k] > 0) m.scd[k] -= dt;
   }
 
