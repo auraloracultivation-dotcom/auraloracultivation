@@ -12,8 +12,8 @@ export function createConsumables(c) {
     if (d.opens === 'phap-bao') return c.treasure.openBlank(id);
     if (!progress.take(id, 1)) return `Hết ${d.name}`;
     let msg = '';
-    if (d.opens === 'gold' || d.opens === 'stone' || d.opens === 'jade') {
-      const n = rint(...d.amount), k = { gold: 'vang', stone: 'linh-thach', jade: 'tien-ngoc' }[d.opens];
+    if (d.opens === 'gold' || d.opens === 'stone') { // Tiên ngọc KHÔNG bao giờ mở ra từ vật phẩm (chỉ có khi nạp)
+      const n = rint(...d.amount), k = { gold: 'vang', stone: 'linh-thach' }[d.opens];
       wallet.add(k, n); msg = `Mở ${d.name}: +${n.toLocaleString('vi-VN')} ${wallet.name(k)}`;
     } else if (d.opens === 'card') {
       const C = c.cardDef, w = C.tier_weights, sum = w.reduce((a, b) => a + b, 0);

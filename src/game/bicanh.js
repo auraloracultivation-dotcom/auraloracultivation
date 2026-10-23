@@ -68,7 +68,7 @@ export function createBiCanh(c) {
       if (cleared >= R.treasure_blank_at) { progress.add(c.pbItem, 1); got.push('Phôi Pháp Bảo'); }
       const give = ([id, n]) => { progress.add(id, n); got.push(`${c.itemName(id)}${n > 1 ? ` ×${n}` : ''}`); };
       for (let k = 3; k <= cleared; k += 3) give(R.items_per_3[(k / 3 - 1) % R.items_per_3.length]); // mỗi 3 đợt 1 món
-      if (win) { R.full_clear.forEach(give); if (Math.random() < R.jade_chest_chance) give(['item.ruong.tien-ngoc.001', 1]); }
+      if (win) R.full_clear.forEach(give);
       if (cleared >= R.set_item_at) c.dv.onKill({ void: true, def: {} }, () => got.push('đồ ngũ hành'));
       progress.changed();
     }
