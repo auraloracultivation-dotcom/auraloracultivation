@@ -67,14 +67,33 @@ export function createSkills(c) {
         return true;
       default: break;
     }
+    if (s.kind === 'volley') { // Vạn Kiếm Triều Tông: kiếm mọc từ đất rồi xoè quạt bay về phía trước
+      const { dx, dy } = dirTo(c.target(s.range_px)), a0 = Math.atan2(dy, dx);
+      play(s.cast_fx, me.x, me.y + 4, 46, { ground: true });
+      for (let j = 0; j < s.n; j++) {
+        const a = a0 + (j / (s.n - 1) - 0.5) * s.spread;
+        c.fire({ id, x: me.x, y: me.y - 12, dx: Math.cos(a), dy: Math.sin(a), speed: s.speed_px_per_s, range: s.range_px, fx: s.fx, size: s.fx_size, mul: s.mul, base: s, child: true });
+      }
+      return true;
+    }
+    if (s.kind === 'pull') { // U Minh Quỷ Trảo: kéo quái quanh mình về trước mặt, đánh + choáng
+      const near = mobs.within(me, s.radius_px); if (!near.length) { if (!quiet) toast('Không có quái quanh đây', 900); }
+      const fx0 = { x: me.x + me.facing * 34, y: me.y };
+      for (const m of near) { m.x += (fx0.x - m.x) * 0.7; m.y += (fx0.y - m.y) * 0.7; }
+      play(s.fx, fx0.x, fx0.y - 10, s.fx_h, { rot: me.facing < 0 ? Math.PI : 0 });
+      hitAround(fx0.x, fx0.y, { ...s, radius_px: 50 });
+      return true;
+    }
     if (s.kind === 'bolt') {
       const { dx, dy } = dirTo(c.target(s.range_px));
+      if (s.cast_fx) play(s.cast_fx, me.x + dx * 26, me.y - 12 + dy * 26, 44, { rot: Math.atan2(dy, dx) });
       c.fire({ id, x: me.x, y: me.y - 12, dx, dy, speed: s.speed_px_per_s, range: s.range_px, fx: s.fx, size: s.fx_size, mul: s.mul, base: s });
     } else if (s.kind === 'strike') {
       const m = c.target(s.range_px);
       if (!m) { cds[id] = 0; pt.gain((s.mp || 0) * (c.mods().mp_mul ?? 1)); if (!quiet) toast('Không có mục tiêu trong tầm', 900); return false; }
       dirTo(m);
       play(s.fx, m.x, m.y, s.fx_h, { ground: true });
+      if (s.drain) c.heal(c.maxHp() * s.drain * mobs.within(m, s.radius_px).length); // Phệ Hồn Ma Diễm: hút máu
       hitAround(m.x, m.y, s);
     } else if (s.kind === 'area_self') {
       play(s.fx, me.x, me.y + 4, s.fx_h, { ground: true });

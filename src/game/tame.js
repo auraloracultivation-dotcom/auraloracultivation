@@ -169,7 +169,7 @@ export function createTame({ cfg, progress, monsters, mdef, mobs, map, me, stats
       const q = kin(p)[0]; // ưu tiên nuốt con cùng loài; không có thì dùng Hồn Tinh
       if (q) progress.state.pets = pets().filter((x) => x !== q);
       else if (!progress.take(HON, cfg.merge.hon_tinh)) return `Cần 1 ${name} cùng loài đang nghỉ, hoặc ${cfg.merge.hon_tinh} Hồn Tinh`; p.star = (p.star || 0) + 1; live.delete(p.uid); progress.changed();
-      play('vong-lua', me.x, me.y - 8, 40); return `${name} luyện hồn thành công: ${'★'.repeat(p.star)}`;
+      play(cfg.merge.fx || 'vong-lua', me.x, me.y + 4, 56, { ground: true }); return `${name} luyện hồn thành công: ${'★'.repeat(p.star)}`;
     }
     if (action === 'pet-rest') { p.follow = false; progress.changed(); return `${name} vào Kho nghỉ`; }
     if (action === 'pet-free' || action === 'discard') { // thả đi: để lại Hồn Tinh (thêm theo sao)

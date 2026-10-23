@@ -50,7 +50,8 @@
     "v.dan-kim",
     0
    ],
-   "desc": "Tung {n} phi kiếm toả tròn quanh mình rồi tự đuổi quái"
+   "desc": "Tung {n} phi kiếm toả tròn quanh mình rồi tự đuổi quái",
+   "cast_fx": "k.phi-kiem-hoan"
   },
   {
    "id": "pb.hon-phien",
@@ -67,7 +68,8 @@
     "v.dan-am",
     0
    ],
-   "desc": "Gọi {n} u hồn xoay quanh người {s} giây, chạm quái là cắn"
+   "desc": "Gọi {n} u hồn xoay quanh người {s} giây, chạm quái là cắn",
+   "cast_fx": "k.u-hon"
   },
   {
    "id": "pb.thuong-hai-chau",
@@ -79,8 +81,8 @@
    "mul": 0.9,
    "n": 20,
    "s": 1.2,
-   "fx": "v.dan-thuy",
-   "size": 20,
+   "fx": "k.thuy-tien-bay",
+   "size": 30,
    "icon": [
     "v.dan-thuy",
     0
@@ -103,7 +105,8 @@
     "v.dan-hoa",
     0
    ],
-   "desc": "Hồ lô phun liên tục {n} hỏa đạn trong {s} giây"
+   "desc": "Hồ lô phun liên tục {n} hỏa đạn trong {s} giây",
+   "cast_fx": "k.ho-lo-phun"
   },
   {
    "id": "pb.thanh-moc-dinh",
@@ -120,7 +123,8 @@
     "v.moc-lien",
     1
    ],
-   "desc": "Đỉnh xanh {s} giây: mỗi giây hồi {heal%} khí huyết, tự bắn {n} lá mỗi 0,3 giây"
+   "desc": "Đỉnh xanh {s} giây: mỗi giây hồi {heal%} khí huyết, tự bắn {n} lá mỗi 0,3 giây",
+   "cast_fx": "k.pb-moc-dinh"
   },
   {
    "id": "pb.tran-son-an",
@@ -132,13 +136,14 @@
    "mul": 4,
    "r": 70,
    "stun": 2,
-   "fx": "v.dia-thu",
+   "fx": "k.pb-tran-son",
    "h": 90,
    "icon": [
     "v.dia-thu",
     2
    ],
-   "desc": "Ấn núi giáng xuống mục tiêu: sát thương lớn bán kính {r}, choáng {stun} giây"
+   "desc": "Ấn núi giáng xuống mục tiêu: sát thương lớn bán kính {r}, choáng {stun} giây",
+   "cast_fx": "k.pb-tran-son"
   },
   {
    "id": "pb.loi-linh-chau",
@@ -151,13 +156,14 @@
    "n": 16,
    "s": 4,
    "r": 200,
-   "fx": "v.loi-tru",
-   "h": 70,
+   "fx": "k.pb-loi-chau",
+   "h": 60,
    "icon": [
     "v.loi-tru",
     2
    ],
-   "desc": "Lôi bạo {s} giây: {n} tia sét đánh quái quanh mình"
+   "desc": "Lôi bạo {s} giây: {n} tia sét đánh quái quanh mình",
+   "cast_fx": "k.pb-loi-chau"
   },
   {
    "id": "pb.ho-than-chung",
@@ -170,13 +176,14 @@
    "s": 6,
    "r": 60,
    "stun": 1,
-   "fx": "v.ho-the",
+   "fx": "k.pb-ho-than",
    "h": 60,
    "icon": [
     "v.ho-the",
     1
    ],
-   "desc": "Chuông hộ thân: phòng thủ ×{def_mul} trong {s} giây, chấn choáng quái quanh mình"
+   "desc": "Chuông hộ thân: phòng thủ ×{def_mul} trong {s} giây, chấn choáng quái quanh mình",
+   "cast_fx": "k.pb-ho-than"
   },
   {
    "id": "pb.huyen-bang-kinh",
@@ -279,5 +286,6 @@
   4,
   5,
   6
- ]
+ ],
+ "bind_fx": "k.nhan-chu"
 }

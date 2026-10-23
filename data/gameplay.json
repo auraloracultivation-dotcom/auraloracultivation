@@ -755,6 +755,10 @@
    "luot",
    "dia-thu",
    "thuy-long",
+   "canh-kim-tram",
+   "u-minh-trao",
+   "phe-hon-diem",
+   "van-kiem-trieu",
    "nguyen-anh",
    "ho-the",
    "van-kiem",
@@ -793,6 +797,70 @@
    "range_px": 200,
    "desc": "Đặt trận cấm chế theo hệ chủ đạo (tối đa 3 trận) — Kim kiếm, Ám hút hồn, Thủy giam, Hỏa thiêu, Mộc trói, Thổ chấn",
    "icon_url": "assets/ui/skills/bo-cam-che.png"
+  },
+  "canh-kim-tram": {
+   "name": "Canh Kim Liệt Không Trảm",
+   "kind": "bolt",
+   "unlock": "tc_trung",
+   "mp": 20,
+   "cd_s": 6,
+   "mul": 2.2,
+   "pierce": true,
+   "range_px": 260,
+   "speed_px_per_s": 360,
+   "fx": "k.canh-kim-bay",
+   "fx_size": 44,
+   "hit_fx": "k.bao-kim",
+   "hit_h": 40,
+   "cast_fx": "k.canh-kim-tram",
+   "icon_url": "assets/ui/skills/canh-kim-tram.png",
+   "desc": "Chém ra vầng trăng kiếm khí khổng lồ xuyên qua mọi quái (Kim)"
+  },
+  "van-kiem-trieu": {
+   "name": "Vạn Kiếm Triều Tông",
+   "kind": "volley",
+   "unlock": "kd_hau",
+   "mp": 40,
+   "cd_s": 12,
+   "mul": 1.1,
+   "n": 14,
+   "spread": 0.9,
+   "range_px": 300,
+   "speed_px_per_s": 460,
+   "fx": "v.dan-kim",
+   "fx_size": 22,
+   "cast_fx": "k.van-kiem-trieu",
+   "icon_url": "assets/ui/skills/van-kiem-trieu.png",
+   "desc": "Triệu {n} thanh kiếm từ đất bay xoè quạt về phía trước (Kim)"
+  },
+  "u-minh-trao": {
+   "name": "U Minh Quỷ Trảo",
+   "kind": "pull",
+   "unlock": "kd_so",
+   "mp": 24,
+   "cd_s": 9,
+   "mul": 1.6,
+   "radius_px": 150,
+   "stun_s": 0.8,
+   "fx": "k.u-minh-trao",
+   "fx_h": 60,
+   "icon_url": "assets/ui/skills/u-minh-trao.png",
+   "desc": "Móng vuốt u minh kéo mọi quái trong {radius_px} về trước mặt, choáng {stun_s} giây (Ám)"
+  },
+  "phe-hon-diem": {
+   "name": "Phệ Hồn Ma Diễm",
+   "kind": "strike",
+   "unlock": "kd_trung",
+   "mp": 26,
+   "cd_s": 8,
+   "mul": 2.0,
+   "radius_px": 55,
+   "range_px": 240,
+   "drain": 0.02,
+   "fx": "k.phe-hon-diem",
+   "fx_h": 70,
+   "icon_url": "assets/ui/skills/phe-hon-diem.png",
+   "desc": "Lửa tím thiêu quái quanh mục tiêu, mỗi con trúng hồi 2% khí huyết (Ám)"
   }
  },
  "awaken": {
@@ -912,7 +980,8 @@
    "max_star": 5,
    "per_star": 0.35,
    "hon_tinh": 3,
-   "free_hon_tinh": 1
+   "free_hon_tinh": 1,
+   "fx": "k.hon-tinh"
   },
   "_ghi_chu_luyen_hon": "Luyện hồn (23/10): thú cưng nuốt hồn một con CÙNG LOÀI đang nghỉ trong Kho → +1 sao (tối đa max_star), công và khí huyết ×(1 + per_star × sao)."
  }

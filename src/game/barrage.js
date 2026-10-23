@@ -2,12 +2,15 @@
 // phi kiếm xoay quanh người, mưa kiếm / thiên hỏa / địa thứ, liên thanh tự bắn. Vẽ thêm vệt sáng, sét, vùng cháy.
 // Mọi sát thương đi qua c.strike (áp chế cảnh giới, tu vi, rơi đồ như đánh thường). Giới hạn số đạn: dao-van.json → limits.
 import { wrapDelta } from '../map/index.js';
-import { drawEffect } from '../entity/index.js';
+import { drawEffect, loadFx } from '../entity/index.js';
 
 // c: { dv, S, me, mobs, map, bolts, strike(m, mul, label), heal(n), maxHp(), play, say, dead() }
 export function createBarrage(c) {
   const { dv, me, mobs, map, bolts, play } = c;
   const L = dv.limits;
+  const FX = dv.fx || {};
+  loadFx([...['Kim', 'Ám', 'Thủy', 'Hỏa', 'Mộc', 'Thổ'].flatMap((h) => [dv.heOf(h).hit, dv.heOf(h).bolt]), FX.chain, FX.dai_thanh, FX.burn].filter(Boolean)); // nạp trước ảnh hiệu ứng
+  let hitFxBudget = 0; // số hiệu ứng nổ mỗi nhịp (hồi 6 mỗi 0,1 giây)
   const zones = [], zaps = [], echoes = [], timers = {}, tasks = [], extraOrbits = [], totems = []; // totems: vật đứng tại chỗ (lôi tháp) // tasks: chiêu kéo dài (pháp bảo)
   const orbitHit = new Map(); // uid quái → lúc phi kiếm được chém tiếp
   let T = 0, orbitA = 0;
@@ -28,7 +31,7 @@ export function createBarrage(c) {
     const a0 = Math.atan2(spec.dy, spec.dx), step = n > 1 ? Math.min(0.26, 1.3 / n) : 0;
     for (let k = 0; k < n && bolts.length < L.max_bolts; k++) {
       const a = a0 + (k - (n - 1) / 2) * step;
-      bolts.push({ kind: 'bolt', id: spec.id, fx: spec.fx, size: spec.size || 22, x: spec.x, y: spec.y, vx: Math.cos(a) * spec.speed, vy: Math.sin(a) * spec.speed,
+      bolts.push({ kind: 'bolt', id: spec.id, he: spec.he || md.he, fx: spec.fx, size: spec.size || 22, x: spec.x, y: spec.y, vx: Math.cos(a) * spec.speed, vy: Math.sin(a) * spec.speed,
         left: spec.range, mul: spec.mul, base: spec.base || {}, label: spec.label || 'skill', child: !!spec.child, hit: new Set(),
         pierce: spec.child ? 0 : (md.pierce || 0) + (spec.base?.pierce ? 99 : 0) + (spec.pierce || 0), bounce: spec.child ? 0 : (md.bounce || 0) + (spec.bounce || 0),
         homing: md.homing || spec.homing || 0, color: spec.color || md.color, trail: [] });
@@ -63,13 +66,14 @@ export function createBarrage(c) {
     if (boom) { hitAround(m.x, m.y, boom, b.mul, b.label, base.stun_s); if (md.explode && !base.hit_fx) play('v.no-hoa', m.x, m.y, Math.min(60, boom * 1.3), { ground: true }); }
     else { c.strike(m, b.mul, b.label); if (base.stun_s && alive(m)) m.stun = Math.max(m.stun || 0, base.stun_s); }
     if (base.hit_fx) play(base.hit_fx, m.x, m.y, base.hit_h, { ground: true });
+    else if (!b.child && hitFxBudget > 0) { hitFxBudget--; play(dv.heOf(b.he).hit, m.x, m.y + 2, 30, { ground: true }); } // nổ theo hệ (giới hạn để đỡ lag)
     if (md.heal_on_hit) c.heal(c.maxHp() * md.heal_on_hit);
     if (md.burn && !b.child && zones.length < 24) zones.push({ x: m.x, y: m.y, r: md.burn.r || 24, mul: md.burn.mul, t: md.burn.s || 3, tick: 0 });
     if (md.chain) { // sét lan
       const done = new Set([m.uid]); let from = m;
       for (let k = 0; k < md.chain; k++) {
         const n = nearestTo(from, 120, done); if (!n) break;
-        done.add(n.uid); zaps.push({ kind: 'zap', x: from.x, y: from.y - from.r, x2: n.x, y2: n.y - n.r, t: 0.22, color: '#bfe8ff' });
+        done.add(n.uid); if (hitFxBudget-- > 0) play(FX.chain, n.x, n.y - n.r, 26); zaps.push({ kind: 'zap', x: from.x, y: from.y - from.r, x2: n.x, y2: n.y - n.r, t: 0.22, color: '#bfe8ff' });
         c.strike(n, b.mul * L.chain_mul, 'skill'); from = n;
       }
     }
@@ -174,8 +178,10 @@ export function createBarrage(c) {
   const addOrbit = (o) => { extraOrbits.push({ key: `x${T}`, sp: -1.3, ...o, until: T + o.s }); };
   // Chiêu kéo dài: gọi fn(lần thứ k) mỗi `every` giây trong `dur` giây
   const schedule = (dur, every, fn) => tasks.push({ left: dur, every, acc: every, k: 0, fn });
+  let budgetT = 0;
   function update(dt) {
     T += dt; announce();
+    if ((budgetT -= dt) <= 0) { budgetT = 0.1; hitFxBudget = 6; }
     for (let i = tasks.length - 1; i >= 0; i--) {
       const q = tasks[i]; q.left -= dt; q.acc += dt;
       while (q.acc >= q.every && q.left > -1e-6) { q.acc -= q.every; q.fn(q.k++); }
@@ -200,7 +206,9 @@ export function createBarrage(c) {
     renderTotems(ctx, at, now);
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
-    for (const z of zones) { // đất cháy
+    for (const z of zones) { // đất cháy: ảnh lửa (lặp khung giữa) + quầng sáng
+      if (FX.burn) { const p = at(z); ctx.save(); ctx.globalCompositeOperation = 'source-over'; ctx.globalAlpha = Math.min(1, z.t);
+        drawEffect(ctx, FX.burn, 0.3 + ((now / 1000 + z.x * 0.01) % 1) * 0.5, p.x, p.y - z.r * 0.25, z.r * 0.9); ctx.restore(); }
       const p = at(z), a = Math.min(1, z.t) * (0.35 + 0.15 * Math.sin(now / 90 + z.x));
       const g = ctx.createRadialGradient(p.x, p.y, 1, p.x, p.y, z.r);
       g.addColorStop(0, `rgba(255,170,60,${a})`); g.addColorStop(1, 'rgba(255,60,0,0)');
@@ -250,6 +258,7 @@ export function createBarrage(c) {
       ctx.beginPath(); ctx.ellipse(p.x, p.y, r, r * 0.42, 0, 0, Math.PI * 2); ctx.stroke();
     }
     ctx.setLineDash([]);
+    if (t === 8 && FX.dai_thanh) { ctx.globalAlpha = 0.85; ctx.globalCompositeOperation = 'source-over'; drawEffect(ctx, FX.dai_thanh, 0.35 + ((k * 0.5) % 1) * 0.4, p.x, p.y - 14, 34); ctx.globalCompositeOperation = 'lighter'; }
     if (t === 8) for (let i = 0; i < 10; i++) { // đốm linh khí bay lên
       const ph = (k * 0.6 + i / 10) % 1, a = i * 2.4 + k * 0.3;
       ctx.globalAlpha = (1 - ph) * 0.9; ctx.fillStyle = col;
