@@ -17,6 +17,15 @@ export function createGuide(c) {
   const stageOk = (id) => !id || progress.stageIndex(id) <= progress.state.stage;
   const skOk = (id, s) => c.learn.learned(id) && stageOk(s.unlock);
 
+  // Thiên Cơ Hợp Nhất của hệ: danh sách điều kiện ✓/✗ (hopnhat.js)
+  function hopRow(he) {
+    const H = c.hopNhat, r = H?.def.he[he];
+    if (!r) return '';
+    const list = H.check(he), on = list.every((x) => x.ok);
+    return `<div class="row gd-hop ${on ? 'on' : ''}"><b class="gd-h">✦ ${E(H.def.name)}: ${E(r.name)}${on ? ' — ĐANG KÍCH' : ''}</b>
+      <p>Đủ cả 5 điều kiện → pháp bảo hệ ${E(he)} tự bắn liên thanh không nghỉ, không tốn linh lực, linh lực hồi liên tục. Kỹ năng khác không được buff.</p>
+      ${list.map((x) => `<div class="gd-cond ${x.ok ? 'ok' : ''}">${x.ok ? '✓' : '✗'} ${E(x.text)}</div>`).join('')}</div>`;
+  }
   function heTab(he) {
     const h = dvDef.he[he], n = dv.counts()[he] || 0, mine = new Set(bag.entries().map((e) => e.item?.id));
     const rows = SLOT_ORDER.map(([sl, nm]) => {
@@ -35,6 +44,7 @@ export function createGuide(c) {
     return `<div class="row"><div class="row-h"><b style="color:${h.color}">${E(h.name)}</b><em>Hệ ${E(he)} · đang mặc ${n}/8</em></div>
       <p>Mặc càng nhiều món cùng hệ, chiêu càng biến đổi. Đủ 8 = Đại Thành.</p>${tiers}
       ${c.equip ? `<button type="button" class="bag-act sm" data-act="wear" data-arg="${E(he)}" ${canWear ? '' : 'disabled'}>Mặc cả bộ ${E(he)} (đồ có trong Kho)</button>` : ''}</div>
+      ${hopRow(he)}
       <div class="row"><b class="gd-h">Trang bị cần mặc</b>${rows}<p class="gd-note">Phôi tự luyện mang hệ ${E(he)} (thức tỉnh rồi) cũng tính vào bộ.</p></div>
       <div class="row"><b class="gd-h">Kỹ năng hệ ${E(he)}</b><div class="gd-grid">${skills || '<span>—</span>'}</div>
       <p class="gd-note">Kỹ năng bắn đạn được bộ + Thần Phù nhân lên (bắn quạt, nảy, tách…).</p></div>

@@ -129,3 +129,11 @@ Chủ dự án muốn chất My Heroes: chọn đúng bộ + hệ + thẻ thì c
 - Bảng xếp hạng → chạm người chơi → **⚔ Luận bàn (đấu thử)**: đấu với "bóng" chỉ số họ gửi lên, tính ngay trên máy mình bằng đúng công thức đòn đánh (`stats.hit`).
 - Không thưởng, không mất gì, không ghi máy chủ, người kia không bị ảnh hưởng. Số liệu `gameplay.json → spar`. Code: `src/game/spar.js`, `src/ui/spar.js`.
 - Sau này (Mốc 4, khi chỉ số do máy chủ giữ) mới có đấu xếp hạng thật có thưởng.
+
+## Thiên Cơ Hợp Nhất (23/10/2026 10:18)
+- Bắn liên thanh không nghỉ / hồi chiêu tối đa / linh lực hồi liên tục KHÔNG còn ở mốc 8/8. Chỉ có khi đủ cùng lúc (theo 1 hệ):
+  8 món trang bị có tên của hệ (phôi luyện không tính) + pháp bảo cùng hệ đang đeo + Thần Phù chỉ định + 1 kỹ năng "sịn" + 1 kỹ năng "cùi" chỉ định trong ô.
+- Khi kích: chỉ **pháp bảo** được buff — tự phóng mỗi `every_s` giây (sát thương ×`mul`), bấm tay không tốn linh lực, hồi chiêu ×0,1; linh lực hồi `mp_regen`/giây. Kỹ năng khác không được gì.
+- Công thức 6 hệ: `dao-van.json → hop_nhat.he` (Kim: Phân Quang Phù + Vạn Kiếm Quy Tông + Phong Nhận Trảm…). Code `src/game/hopnhat.js`; Cẩm nang hiện ✓/✗ từng điều kiện.
+- Độ hiếm: đồ ngũ hành rơi boss 1%, tinh anh 0,1%, Âm Hư 20% (ngẫu nhiên trong 48 món còn thiếu); dòng Đen khi thức tỉnh vẫn ~0,7%/món.
+- Liên thanh tự bắn (bộ Mộc, Phong Bạo Phù) chậm nhất 0,6 giây/loạt (`limits.turret_min_s`).

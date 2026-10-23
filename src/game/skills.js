@@ -13,9 +13,9 @@ export function createSkills(c) {
     const off = c.bar.blocked(id);
     if (off) { if (!quiet) toast(off, 1200); return false; }
     if ((cds[id] || 0) > now) { if (!quiet) toast('Đang hồi chiêu', 900); return false; }
-    const md = c.mods(), cost = (s.mp || 0) * (md.mp_mul ?? 1);
+    const md = c.mods(), hop = id === 'phap-bao' && c.hopOn?.(), cost = hop ? 0 : (s.mp || 0) * (md.mp_mul ?? 1); // Hợp Nhất: pháp bảo không tốn linh lực, hồi chiêu tối đa
     if (pt.mp < cost) { if (!quiet) toast('Linh lực không đủ', 1000); return false; }
-    pt.spend(cost); cds[id] = now + (s.cd_s || 0) * (md.cd_mul ?? 1); // Đạo Vận đại thành: hồi chiêu ×0,15, tốn linh lực ×0,5
+    pt.spend(cost); cds[id] = now + (s.cd_s || 0) * (hop ? 0.1 : md.cd_mul ?? 1); // Đạo Vận đại thành: hồi chiêu ×0,15, tốn linh lực ×0,5
     return true;
   }
   const dirTo = (m) => {

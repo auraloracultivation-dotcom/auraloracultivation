@@ -32,14 +32,15 @@ export function createTreasure(c) {
   }
 
   // ---- Dùng chiêu: trả về true nếu đã kích hoạt ----
-  function use(quiet) {
+  // o: { mul (nhân sát thương), quietName (không hô tên) } — Thiên Cơ Hợp Nhất tự phóng liên tục (hopnhat.js)
+  function use(quiet, o = {}) {
     const t = on(), d = t && byId.get(t.id);
     if (!d) { if (!quiet) toast('Chưa đeo pháp bảo (Kho → Pháp Bảo)', 1400); return false; }
-    const mul = d.mul * scale(t), n = (d.n || 0) + more(t), tgt = c.target(260);
+    const mul = d.mul * scale(t) * (o.mul || 1), n = (d.n || 0) + more(t), tgt = c.target(260);
     const he = c.heOf(d.he);
     const aim = (m) => { if (!m) return { dx: me.facing, dy: 0 }; const r = mobs.rel(m, me), L = Math.hypot(r.dx, r.dy - 10) || 1; return { dx: r.dx / L, dy: (r.dy - 10) / L }; };
     const shot = (dx, dy, extra = {}) => barrage.fire({ id: 'pb', x: me.x, y: me.y - 14, dx, dy, speed: 420, range: 260, fx: d.fx || he.bolt, size: d.size || 18, mul, color: he.color, ...extra });
-    c.say(me.x, me.y - 44, d.name, he.color, true);
+    if (!o.quietName) c.say(me.x, me.y - 44, d.name, he.color, true);
     if (d.cast_fx && !['stream', 'seal', 'shield', 'storm'].includes(d.kind)) play(d.cast_fx, me.x, me.y + 4, 52, { ground: true }); // ảnh hoạt ảnh pháp bảo
     switch (d.kind) {
       case 'ring_burst': for (let k = 0; k < n; k++) { const a = (k / n) * Math.PI * 2; shot(Math.cos(a), Math.sin(a), { homing: 0.9 }); } break;
@@ -177,5 +178,5 @@ export function createTreasure(c) {
   const worn = () => { const t = on(); return t?.aw?.tier ? [t.aw] : []; };
   const view = () => { const t = on(), d = t && byId.get(t.id); return d ? { thumb: pic(d), cd: d.cd_s, name: d.name } : null; };
   syncSkill(); loadFx([...def.list.map((d) => d.icon[0]), 'v.cong-hu', ...def.list.map((d) => d.cast_fx).filter(Boolean), def.bind_fx].filter(Boolean)); // icon pháp bảo trong Kho / ô kỹ năng
-  return { use, openBlank, onKill, entries, act, worn, view, isTreasure: (key) => key.startsWith('pb:'), grant: (id, lv = 0) => { list().push({ uid: progress.state.uid++, id, lv, known: true, aw: { tier: null, lines: [], spent: 0 } }); progress.changed(); } };
+  return { current: () => { const x = on(); return x ? byId.get(x.id) : null; }, use, openBlank, onKill, entries, act, worn, view, isTreasure: (key) => key.startsWith('pb:'), grant: (id, lv = 0) => { list().push({ uid: progress.state.uid++, id, lv, known: true, aw: { tier: null, lines: [], spent: 0 } }); progress.changed(); } };
 }

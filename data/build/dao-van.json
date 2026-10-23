@@ -49,12 +49,9 @@
      "_mo_ta": "Mưa kiếm: 2,5 giây giáng 4 thanh kiếm xuống quái gần"
     },
     "8": {
-     "cd_mul": 0.15,
-     "mp_regen": 0.2,
-     "mp_mul": 0.5,
      "multishot": 10,
      "pierce": 2,
-     "_mo_ta": "ĐẠI THÀNH: mọi chiêu bắn quạt 15 kiếm khí xuyên giáp, hồi chiêu ×0,15, linh lực hồi liên tục"
+     "_mo_ta": "ĐẠI THÀNH: mọi chiêu bắn quạt 15 kiếm khí xuyên giáp"
     }
    },
    "hit": "k.bao-kim"
@@ -87,14 +84,11 @@
      "_mo_ta": "Thêm 3 phi kiếm, đạn tự đuổi mục tiêu"
     },
     "8": {
-     "cd_mul": 0.15,
-     "mp_regen": 0.2,
-     "mp_mul": 0.5,
      "split": 4,
      "orbit": {
       "n": 4
      },
-     "_mo_ta": "ĐẠI THÀNH: 10 phi kiếm u minh, đạn tách 4 hồn đạn, hồi chiêu ×0,15, linh lực hồi liên tục"
+     "_mo_ta": "ĐẠI THÀNH: 10 phi kiếm u minh, đạn tách 4 hồn đạn"
     }
    },
    "hit": "k.bao-am"
@@ -118,9 +112,6 @@
      "_mo_ta": "Đạn trúng tách 3 giọt thủy"
     },
     "8": {
-     "cd_mul": 0.15,
-     "mp_regen": 0.2,
-     "mp_mul": 0.5,
      "multishot": 4,
      "bounce": 3,
      "rain": {
@@ -131,7 +122,7 @@
       "h": 56,
       "radius": 44
      },
-     "_mo_ta": "ĐẠI THÀNH: đạn ×5 nảy 7 lần, thủy triều 2 giây một lần, hồi chiêu ×0,15"
+     "_mo_ta": "ĐẠI THÀNH: đạn ×5 nảy 7 lần, thủy triều 2 giây một lần"
     }
    },
    "hit": "k.bao-thuy"
@@ -165,9 +156,6 @@
      "_mo_ta": "Thiên hỏa: 3 giây rơi 3 quả cầu lửa"
     },
     "8": {
-     "cd_mul": 0.15,
-     "mp_regen": 0.2,
-     "mp_mul": 0.5,
      "multishot": 6,
      "explode": 14,
      "rain": {
@@ -178,7 +166,7 @@
       "h": 44,
       "radius": 34
      },
-     "_mo_ta": "ĐẠI THÀNH: quạt 7 hỏa cầu nổ lớn, thiên hỏa dày đặc, hồi chiêu ×0,15"
+     "_mo_ta": "ĐẠI THÀNH: quạt 7 hỏa cầu nổ lớn, thiên hỏa dày đặc"
     }
    },
    "hit": "v.no-hoa"
@@ -208,15 +196,12 @@
      "_mo_ta": "Bắn 2 lá mỗi loạt, đạn tự đuổi"
     },
     "8": {
-     "cd_mul": 0.15,
-     "mp_regen": 0.2,
-     "mp_mul": 0.5,
      "turret": {
-      "every_s": -0.65,
+      "every_s": 0,
       "n": 3
      },
      "multishot": 2,
-     "_mo_ta": "ĐẠI THÀNH: liên thanh 4 lá mỗi 0,25 giây, mỗi đạn ×3, hồi chiêu ×0,15"
+     "_mo_ta": "ĐẠI THÀNH: mỗi loạt liên thanh 4 lá, mỗi đạn ×3"
     }
    },
    "hit": "k.bao-moc"
@@ -252,9 +237,6 @@
      "_mo_ta": "Địa thứ: 3 giây trồi 5 cột đá, choáng"
     },
     "8": {
-     "cd_mul": 0.15,
-     "mp_regen": 0.2,
-     "mp_mul": 0.5,
      "shock": {
       "r": 22,
       "stun": 0.4
@@ -268,7 +250,7 @@
       "radius": 28,
       "stun": 0.5
      },
-     "_mo_ta": "ĐẠI THÀNH: sóng chấn choáng, địa thứ trồi liên tục, hồi chiêu ×0,15"
+     "_mo_ta": "ĐẠI THÀNH: sóng chấn choáng, địa thứ trồi liên tục"
     }
    },
    "hit": "k.bao-tho"
@@ -422,9 +404,11 @@
   "turret_range_px": 220,
   "rain_range_px": 240,
   "extra_mul": 0.4,
-  "_extra_mul": "Viên đạn thêm (bắn quạt) mạnh 40% viên chính — màn hình vẫn đầy đạn nhưng sức mạnh không nhân thẳng theo số viên (23/10)."
+  "_extra_mul": "Viên đạn thêm (bắn quạt) mạnh 40% viên chính — màn hình vẫn đầy đạn nhưng sức mạnh không nhân thẳng theo số viên (23/10).",
+  "turret_min_s": 0.6,
+  "_turret_min_s": "Liên thanh tự bắn (bộ Mộc / Phong Bạo Phù) nhanh nhất 0,6 giây/loạt — bắn không nghỉ chỉ có ở Thiên Cơ Hợp Nhất (23/10)."
  },
- "_ghi_chu_dai_thanh": "Chủ dự án 23/10 05:38: đủ bộ là 'thành' — bắn hàng trăm đạn hình quạt liên tục, linh lực hồi liên tục; sai 1 món là tụt về bộ 6 (bắn từng viên, chờ hồi chiêu). Vì vậy mốc 8/8 (mọi ô cùng hệ) là ĐẠI THÀNH: hồi chiêu ×cd_mul, hồi linh lực mp_regen (phần linh lực tối đa mỗi giây), tốn linh lực ×mp_mul, kèm hiệu ứng riêng của hệ.",
+ "_ghi_chu_dai_thanh": "Chủ dự án 23/10 10:18: mốc 8/8 chỉ còn hiệu ứng đạn của hệ. Bắn liên thanh không nghỉ / hồi chiêu tối đa / linh lực hồi liên tục CHUYỂN sang Thiên Cơ Hợp Nhất (hop_nhat) — cần 8 món + pháp bảo cùng hệ + Thần Phù + kỹ năng sịn + kỹ năng cùi, và chỉ buff pháp bảo.",
  "he_order": [
   "Kim",
   "Ám",
@@ -435,15 +419,62 @@
  ],
  "set_drop": {
   "_ghi_chu": "Đồ Kho 6 hệ rơi khi hạ quái (chưa có thì vào Kho, có rồi thì đổi Linh thạch). Phôi luyện ra cũng mang hệ ngẫu nhiên (lộ khi thức tỉnh) và tính vào bộ ngũ hành.",
-  "elite": 0.003,
-  "boss": 0.025,
-  "void": 0.5,
-  "dup_stone": 500
+  "elite": 0.001,
+  "boss": 0.01,
+  "void": 0.2,
+  "dup_stone": 500,
+  "_do_hiem": "Chủ dự án 23/10 10:18: đủ 8 món cùng hệ phải rất hiếm để người chơi chăm cày — boss 1%/lần ra 1 món ngũ hành (ngẫu nhiên trong 48 món còn thiếu), tinh anh 0,1%, Âm Hư 20%. Dòng Đen khi thức tỉnh vẫn ~0,7%/món (awaken.json)."
  },
  "fx": {
   "chain": "k.loi-lien",
   "dai_thanh": "k.dai-thanh",
   "burn": "k.dat-chay",
   "_ghi_chu": "Ảnh chủ dự án 23/10 (tools/skill_sheets.py): nổ khi trúng theo hệ (he.*.hit), sét lan, hào quang đại thành, đất cháy."
+ },
+ "hop_nhat": {
+  "_ghi_chu": "Chủ dự án 23/10: bắn liên thanh / hồi chiêu tối đa / linh lực hồi liên tục chỉ có khi đủ 8 món chỉ định + pháp bảo cùng hệ + Thần Phù + 1 kỹ năng sịn + 1 kỹ năng cùi. Chỉ pháp bảo được buff (src/game/hopnhat.js). every_s: giây giữa 2 lần pháp bảo tự phóng; mul: hệ số sát thương mỗi lần (phóng liên tục nên nhỏ hơn 1); mp_regen: phần linh lực tối đa hồi mỗi giây.",
+  "name": "Thiên Cơ Hợp Nhất",
+  "every_s": 0.45,
+  "mul": 0.55,
+  "mp_regen": 0.2,
+  "range_px": 260,
+  "he": {
+   "Kim": {
+    "name": "Vạn Kiếm Quy Tông",
+    "card": "phu.phan-quang",
+    "skill_sin": "van-kiem",
+    "skill_cui": "phong-nhan"
+   },
+   "Ám": {
+    "name": "U Minh Bách Quỷ",
+    "card": "phu.truy-hon",
+    "skill_sin": "hac-dong",
+    "skill_cui": "u-minh-trao"
+   },
+   "Thủy": {
+    "name": "Thương Hải Vô Lượng",
+    "card": "phu.phan-liet",
+    "skill_sin": "bang-phong",
+    "skill_cui": "bang-tien"
+   },
+   "Hỏa": {
+    "name": "Phần Thiên Liệt Diễm",
+    "card": "phu.liet-diem",
+    "skill_sin": "phuong-hoang",
+    "skill_cui": "hoa-cau"
+   },
+   "Mộc": {
+    "name": "Vạn Mộc Trường Xuân",
+    "card": "phu.phong-bao",
+    "skill_sin": "van-moc",
+    "skill_cui": "moc-lien"
+   },
+   "Thổ": {
+    "name": "Hậu Thổ Băng Sơn",
+    "card": "phu.kiem-luan",
+    "skill_sin": "dia-liet",
+    "skill_cui": "dia-thu"
+   }
+  }
  }
 }
