@@ -11,6 +11,10 @@ export function createCards({ def, tiers, progress, stageOk, toast, play }) {
   const open = (i) => stageOk(C.slots[i].unlock);
   const tierName = (t) => tiers[t]?.name || '';
   const tierId = (t) => tiers[t]?.id || 'luc';
+  // Phù thuộc hệ nào = hệ có Thiên Cơ Hợp Nhất cần đúng tấm này (dao-van.json → hop_nhat.he[h].card); còn lại là phù chung
+  const heOf = new Map();
+  for (const [h, r] of Object.entries(def.hop_nhat?.he || {})) if (r.card) heOf.set(r.card, [...(heOf.get(r.card) || []), h]);
+  const heLabel = (id) => (heOf.has(id) ? `hệ ${heOf.get(id).join(' · ')}` : 'phù chung');
 
   // Giá trị hiệu ứng của một tấm theo phẩm
   function value(card) {
@@ -44,7 +48,8 @@ export function createCards({ def, tiers, progress, stageOk, toast, play }) {
       : [{ id: 'card-on', label: free >= 0 ? `Gắn vào ô phù ${free + 1}` : 'Ô phù đã đầy — gỡ bớt trước', disabled: free < 0 }];
     actions.push({ id: 'card-break', label: `Phân rã (+${C.dismantle_stone[c.tier]} LT)`, confirm: `Phân rã ${d.name}?` });
     return { id: `card:${c.uid}`, key: `card:${c.uid}`, name: d.name, cat: 'than-phu', thumb: iconUrl(`card.${c.id}`) || cardArt(c.id, tierId(c.tier)), // ảnh chủ dự án; viền màu phẩm do ô Kho (tier-*) tier: tierId(c.tier),
-      equipped: at >= 0, sub: `Thần Phù · phẩm ${tierName(c.tier)}${at >= 0 ? ` · ô ${at + 1}` : ''}`, detail: text(card), actions };
+      equipped: at >= 0, sub: `Thần Phù ${heLabel(c.id)} · phẩm ${tierName(c.tier)}${at >= 0 ? ` · ô ${at + 1}` : ''}`,
+      detail: `${text(card)}\n${heOf.has(c.id) ? `Thuộc ${heLabel(c.id)}: là phù chỉ định của Thiên Cơ Hợp Nhất hệ đó.` : 'Phù chung: không thuộc hệ nào, gắn hệ nào cũng được (không tính Hợp Nhất).'}`, actions };
   }
   function summary(mods) {
     const lines = mods.sets.flatMap((s) => s.tiers.map((t) => `${s.name} (${s.he} ${t.t}/8): ${t.text}`));
