@@ -60,7 +60,7 @@ export function createInventory({ ru, recipes, info, progress, bag, craft, itemD
     if (d.opens) actions.push({ id: 'open', label: 'Luyện hóa' }); // phôi pháp bảo (treasure.js)
     if (btPills.has(id)) actions.push({ id: 'breakthrough', label: 'Dùng để đột phá' }); // đan đột phá: dùng ngay trong kho
     const rc = d.teaches && recipeOf(d.teaches);
-    if (rc) actions.push({ id: 'craft', label: rc.label + (rc.rate ? ` (${Math.round(rc.rate * 100)}%)` : ''),
+    if (rc) actions.push({ id: 'craft', label: rc.label,
       disabled: rc.none || rc.max || rc.locked || !progress.has(rc.inputs) });
     actions.push({ id: 'discard', label: count > 1 ? `Vứt (${count})` : 'Vứt', danger: true, confirm: `Vứt bỏ ${d.name}${count > 1 ? ` ×${count}` : ''}?` });
     const src = info.source(d);

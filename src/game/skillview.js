@@ -11,7 +11,7 @@ export function openSkillPanel({ S, loadout, bar, progress, stageName, slot = -1
 
   function row(id) {
     const s = S[id], ok = unlocked(s, id), at = loadout.slotOf(id), img = bar.art(id);
-    const meta = ok ? [s.mp ? `${s.mp} linh lực` : null, s.cd_s ? `hồi ${s.cd_s}s` : null].filter(Boolean).join(' · ') : !learn.learned(id) ? '🔒 Chưa lĩnh ngộ — chỉ rơi khi hạ boss (0,5%)' : `${learn.gift(id) ? '🎁 Quà đại cảnh giới — ' : ''}mở ở ${E(stageName(s.unlock))}`;
+    const meta = ok ? [s.mp ? `${s.mp} linh lực` : null, s.cd_s ? `hồi ${s.cd_s}s` : null].filter(Boolean).join(' · ') : !learn.learned(id) ? '🔒 Chưa lĩnh ngộ — chỉ ngộ ra khi hạ thủ lĩnh / Âm Hư' : `${learn.gift(id) ? '🎁 Quà đại cảnh giới — ' : ''}mở ở ${E(stageName(s.unlock))}`;
     const slots = sel === id ? `<div class="sk-slots">${Array.from({ length: loadout.size }, (_, i) =>
       `<button type="button" class="bag-act sm ${at === i ? 'on' : ''}" data-act="put" data-arg="${E(`${id}|${i}`)}">Ô ${i + 1}${loadout.get(i) && loadout.get(i) !== id ? ` · ${E(S[loadout.get(i)]?.name || '')}` : ''}</button>`).join('')}
       ${at >= 0 ? `<button type="button" class="bag-act sm" data-act="off" data-arg="${E(id)}">Bỏ khỏi ô</button>` : ''}</div>` : '';

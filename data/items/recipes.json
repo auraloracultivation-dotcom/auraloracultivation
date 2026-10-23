@@ -219,7 +219,7 @@
    "id": "item.phu.bao-ho.001",
    "name": "Bảo hộ phù",
    "cat": "khac",
-   "use": "Tự dùng khi đột phá: +15 điểm % tỷ lệ thành công"
+   "use": "Tự dùng khi đột phá: tăng vận khí, dễ thành hơn"
   },
   {
    "id": "item.danphuong.tang-tho.001",

@@ -233,9 +233,10 @@
   },
   {
    "id": "item.khoang.ngu-hanh.001",
-   "price": 25,
+   "price": 60,
    "currency": "tien-ngoc",
-   "daily_limit": 3
+   "daily_limit": 1,
+   "_ghi_chu": "Chủ dự án 23/10 17h: đá đổi hệ là thứ 'hack' — chỉ bán bằng Tiên ngọc, đắt, 1 viên/ngày, đổi NGẪU NHIÊN sang 1 trong 5 hệ khác (không chọn được). Không rơi, không thưởng nhiệm vụ."
   }
  ],
  "_ghi_chu_tien": "currency: tiền bán món (mặc định linh-thach). Mọi món bán bằng Vàng / Linh thạch cũng mua được bằng Tiên ngọc theo tỷ giá data/currency.json. Tab: Phàm phẩm = món bán bằng Vàng; Tiên Bảo = món chỉ bán bằng Tiên ngọc."

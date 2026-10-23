@@ -13,7 +13,7 @@ export function createItemInfo({ monsters, shop, pills, blanks, realms, gp, cpTe
   // Công dụng của một viên đan (từ data/gameplay.json → pills, realms.json → đột phá)
   function pillUse(p) {
     const r = btOf.get(p.id);
-    if (r) return `Đột phá lên ${r.name} (tỷ lệ ${Math.round(r.breakthrough.rate * 100)}%) khi tu vi đã đến đỉnh`;
+    if (r) return `Đột phá lên ${r.name} khi tu vi đã đến đỉnh — thành bại tùy vận khí`;
     const e = gp.pills[p.id] || {};
     if (e.life_add) return `Thọ nguyên tối đa +${e.life_add} năm — mỗi ngày chỉ dùng 1 viên`;
     if (e.heal_hp) return `Hồi ${Math.round(e.heal_hp * 100)}% khí huyết`;
