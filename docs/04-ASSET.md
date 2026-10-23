@@ -52,3 +52,8 @@ Ghi tác giả và giấy phép của asset tải ngoài vào `assets/CREDITS.md
 (xoá chữ / số vẽ sẵn ở chỗ game tự ghi) → `assets/ui/frames/hud-*.png` (khung) và `assets/ui/icons/hud-*.png` (nút).
 Bố cục: `src/ui/hud.js` + `src/ui/hud.css`, khung chat `src/ui/hud-chat.js`, khung nhiệm vụ `src/ui/hud-quest.js`,
 vị trí nút kỹ năng `src/game/hud-actions.js`.
+
+## Xoá kho hình tạm (23/10/2026, chủ dự án yêu cầu)
+Đã xoá 164 hình trang bị tạm cũ (`art.outfit/weapon/wing/avatar.NNN`, trông giống đồ NPC). Chỉ còn hình **6 bộ ngũ hành**
+(8 món mỗi hệ) và 6 bộ đồ tân thủ. Đồ luyện từ phôi giờ lấy hình bộ đúng hệ của phôi (`src/game/forged-art.js`);
+đồ phôi cũ mang hình đã xoá tự bốc lại hình bộ ngũ hành khi vào game.

@@ -94,9 +94,9 @@ export async function openCodex(o) {
   const emptySlots = ['mat-na', 'nhan', 'day-chuyen', 'linh-thu'].map((sl) => ({ id: `slot.${sl}`, name: `${SLOT[sl]} (đồ 6 hệ)`, status: 'none',
     note: LOOK_SLOTS.has(sl) ? '' : 'Ô này chưa hiện trên người — cần ảnh icon + (nếu muốn) ảnh mặc lên người', info: ['Chưa có món nào trong Kho cho ô này'] }));
   const phoi = blanks.blanks.map((b) => {
-    const pool = (artIdx[b.slot] || []).filter((a) => !/\.he\./.test(a.id)).length;
+    const pool = ['trang-phuc', 'vu-khi', 'canh', 'phap-tuong'].includes(b.slot) ? 6 : (artIdx[b.slot] || []).filter((a) => /\.he\./.test(a.id)).length; // chỉ hình 6 bộ ngũ hành
     return { id: b.id, name: `Phôi ${SLOT[b.slot]}`, status: LOOK_SLOTS.has(b.slot) && pool ? 'tam' : 'none',
-      note: LOOK_SLOTS.has(b.slot) && pool ? `Đang mượn ngẫu nhiên 1 trong ${pool} hình kho chung` : 'Chưa có hình',
+      note: LOOK_SLOTS.has(b.slot) && pool ? `Luyện ra ngẫu nhiên 1 trong ${pool} hình bộ ngũ hành (theo hệ của phôi)` : 'Chưa có hình',
       info: [`Tên mẫu: ${(b.sample_names || []).join(', ')}`, `Mở ở ${b.unlock} · tỷ lệ ${Math.round(b.rate * 100)}%`] };
   });
   const npcs = npcDef.npcs.map((n) => ({ id: n.id, name: n.name, status: 'ok', anim: npcAnim(n), info: [`Trang phục #${n.outfit + 1} · vũ khí #${n.weapon + 1} · ${n.home.area === 'town' ? 'trong thành' : 'dọc đường'}`] }));
