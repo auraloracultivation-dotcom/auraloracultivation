@@ -493,7 +493,8 @@
    ],
    "desc": "Phóng kiếm khí bay thẳng tới mục tiêu",
    "he": "Kim",
-   "medal": "assets/ui/skills/m/kiem-khi.png"
+   "medal": "assets/ui/skills/m/kiem-khi.png",
+   "icon_url": "assets/ui/skills/kiem-khi.png"
   },
   "khong-che": {
    "unlock": "tc_so",
@@ -508,7 +509,8 @@
    ],
    "desc": "Rễ cây trói mục tiêu, choáng {stun_s} giây",
    "he": "Mộc",
-   "medal": "assets/ui/skills/m/khong-che.png"
+   "medal": "assets/ui/skills/m/khong-che.png",
+   "icon_url": "assets/ui/skills/khong-che.png"
   },
   "linh-thu": {
    "unlock": "kd_so",
@@ -544,7 +546,8 @@
     4
    ],
    "desc": "Đánh mọi quái quanh mình (bán kính {radius_px})",
-   "medal": "assets/ui/skills/m/nguyen-anh.png"
+   "medal": "assets/ui/skills/m/nguyen-anh.png",
+   "icon_url": "assets/ui/skills/nguyen-anh.png"
   },
   "phap-tuong": {
    "atk_mul": 1.6,
@@ -628,7 +631,8 @@
    ],
    "desc": "Cầu lửa bay tới mục tiêu, nổ lan {splash_px} quanh chỗ trúng",
    "he": "Hỏa",
-   "medal": "assets/ui/skills/m/hoa-cau.png"
+   "medal": "assets/ui/skills/m/hoa-cau.png",
+   "icon_url": "assets/ui/skills/hoa-cau.png"
   },
   "bang-tien": {
    "name": "Băng Phách Tiễn",
@@ -650,7 +654,8 @@
    ],
    "desc": "Mũi tên băng, đóng băng mục tiêu {stun_s} giây",
    "he": "Thủy",
-   "medal": "assets/ui/skills/m/bang-tien.png"
+   "medal": "assets/ui/skills/m/bang-tien.png",
+   "icon_url": "assets/ui/skills/bang-tien.png"
   },
   "moc-lien": {
    "name": "Mộc Liên Hồi Xuân",
@@ -667,7 +672,8 @@
    ],
    "desc": "Sen xanh nở dưới chân, hồi {heal%} khí huyết",
    "he": "Mộc",
-   "medal": "assets/ui/skills/m/moc-lien.png"
+   "medal": "assets/ui/skills/m/moc-lien.png",
+   "icon_url": "assets/ui/skills/moc-lien.png"
   },
   "phong-nhan": {
    "name": "Phong Nhận Trảm",
@@ -689,7 +695,8 @@
    ],
    "desc": "Lưỡi gió xuyên qua mọi quái trên đường bay",
    "he": "Kim",
-   "medal": "assets/ui/skills/m/phong-nhan.png"
+   "medal": "assets/ui/skills/m/phong-nhan.png",
+   "icon_url": "assets/ui/skills/phong-nhan.png"
   },
   "loi-kich": {
    "name": "Cửu Thiên Lôi Kích",
@@ -707,7 +714,8 @@
     2
    ],
    "desc": "Sét trời đánh xuống mục tiêu và quái quanh nó",
-   "medal": "assets/ui/skills/m/loi-kich.png"
+   "medal": "assets/ui/skills/m/loi-kich.png",
+   "icon_url": "assets/ui/skills/loi-kich.png"
   },
   "dia-thu": {
    "name": "Địa Mạch Thứ",
@@ -727,7 +735,8 @@
    ],
    "desc": "Gai đá trồi lên quanh mục tiêu, choáng {stun_s} giây",
    "he": "Thổ",
-   "medal": "assets/ui/skills/m/dia-thu.png"
+   "medal": "assets/ui/skills/m/dia-thu.png",
+   "icon_url": "assets/ui/skills/dia-thu.png"
   },
   "thuy-long": {
    "name": "Thủy Long Ba",
@@ -745,7 +754,8 @@
    ],
    "desc": "Rồng nước cuộn quanh mình, đánh mọi quái trong {radius_px}",
    "he": "Thủy",
-   "medal": "assets/ui/skills/m/thuy-long.png"
+   "medal": "assets/ui/skills/m/thuy-long.png",
+   "icon_url": "assets/ui/skills/thuy-long.png"
   },
   "ho-the": {
    "name": "Kim Cang Hộ Thể",
@@ -764,7 +774,8 @@
    ],
    "desc": "Khiên thần hộ thể: phòng thủ ×{buff_mul} trong {last_s} giây",
    "he": "Thổ",
-   "medal": "assets/ui/skills/m/ho-the.png"
+   "medal": "assets/ui/skills/m/ho-the.png",
+   "icon_url": "assets/ui/skills/ho-the.png"
   },
   "van-kiem": {
    "name": "Vạn Kiếm Quy Tông",
@@ -782,7 +793,8 @@
    ],
    "desc": "Kiếm vàng mưa xuống quanh mình (bán kính {radius_px})",
    "he": "Kim",
-   "medal": "assets/ui/skills/m/van-kiem.png"
+   "medal": "assets/ui/skills/m/van-kiem.png",
+   "icon_url": "assets/ui/skills/van-kiem.png"
   },
   "hac-dong": {
    "name": "Hư Không Hắc Động",
@@ -802,7 +814,8 @@
    ],
    "desc": "Hố đen nuốt quái quanh mục tiêu, choáng {stun_s} giây",
    "he": "Ám",
-   "medal": "assets/ui/skills/m/hac-dong.png"
+   "medal": "assets/ui/skills/m/hac-dong.png",
+   "icon_url": "assets/ui/skills/hac-dong.png"
   },
   "phuong-hoang": {
    "name": "Phượng Hoàng Niết Bàn",
@@ -825,7 +838,8 @@
    ],
    "desc": "Phượng lửa lao qua hàng quái, nổ lan {splash_px}",
    "he": "Hỏa",
-   "medal": "assets/ui/skills/m/phuong-hoang.png"
+   "medal": "assets/ui/skills/m/phuong-hoang.png",
+   "icon_url": "assets/ui/skills/phuong-hoang.png"
   },
   "_order": [
    "hoa-cau",
@@ -1197,7 +1211,8 @@
    "desc": "Gồng thánh kiếm rồi giáng cột sáng xuống mục tiêu (bán kính {radius_px})",
    "he": "Quang",
    "thien": true,
-   "thien_role": "chinh"
+   "thien_role": "chinh",
+   "medal": "assets/ui/skills/m/thanh-quang-phan-quyet.png"
   },
   "trieu-duong-ho-the": {
    "name": "Triều Dương Hộ Thể",
@@ -1217,7 +1232,8 @@
    "desc": "Vầng mặt trời hộ thể: phòng thủ ×{buff_mul} trong {last_s} giây",
    "he": "Quang",
    "thien": true,
-   "thien_role": "phu"
+   "thien_role": "phu",
+   "medal": "assets/ui/skills/m/trieu-duong-ho-the.png"
   },
   "loi-long-pha-khong": {
    "name": "Lôi Long Phá Không",
@@ -1245,7 +1261,8 @@
    "desc": "Mở cổng sấm, rồng sét lao xuyên hàng quái, nổ lan",
    "he": "Lôi",
    "thien": true,
-   "thien_role": "chinh"
+   "thien_role": "chinh",
+   "medal": "assets/ui/skills/m/loi-long-pha-khong.png"
   },
   "tu-dien-bo": {
    "name": "Tử Điện Bộ",
@@ -1265,7 +1282,8 @@
    "desc": "Hoá tia chớp lướt ra sau lưng mục tiêu và chém",
    "he": "Lôi",
    "thien": true,
-   "thien_role": "phu"
+   "thien_role": "phu",
+   "medal": "assets/ui/skills/m/tu-dien-bo.png"
   },
   "bang-phach-thien-nguc": {
    "name": "Băng Phách Thiên Ngục",
@@ -1291,7 +1309,8 @@
    "desc": "Ngục băng đóng kín quanh mục tiêu, choáng {stun_s} giây rồi vỡ tung",
    "he": "Băng",
    "thien": true,
-   "thien_role": "chinh"
+   "thien_role": "chinh",
+   "medal": "assets/ui/skills/m/bang-phach-thien-nguc.png"
   },
   "huyen-bang-lien-hoa": {
    "name": "Huyền Băng Liên Hoa",
@@ -1311,7 +1330,8 @@
    "desc": "Sen băng nở dưới chân, đánh và làm đứng quái quanh mình {stun_s} giây",
    "he": "Băng",
    "thien": true,
-   "thien_role": "phu"
+   "thien_role": "phu",
+   "medal": "assets/ui/skills/m/huyen-bang-lien-hoa.png"
   },
   "cuu-u-phong-bao": {
    "name": "Cửu U Phong Bạo",
@@ -1337,7 +1357,8 @@
    "desc": "Lốc xoáy khổng lồ cuốn đi phía trước {last_s} giây, xay mọi quái nó đi qua",
    "he": "Phong",
    "thien": true,
-   "thien_role": "chinh"
+   "thien_role": "chinh",
+   "medal": "assets/ui/skills/m/cuu-u-phong-bao.png"
   },
   "thanh-phong-toai-anh": {
    "name": "Thanh Phong Toái Ảnh",
@@ -1358,7 +1379,8 @@
    "desc": "Tách thành bóng gió chém thẳng phía trước, đẩy lùi quái",
    "he": "Phong",
    "thien": true,
-   "thien_role": "phu"
+   "thien_role": "phu",
+   "medal": "assets/ui/skills/m/thanh-phong-toai-anh.png"
   },
   "hu-khong-thon-phe": {
    "name": "Hư Không Thôn Phệ",
@@ -1383,7 +1405,8 @@
    "desc": "Hố đen hút mọi quái trong bán kính {radius_px} về một điểm rồi nghiền nát",
    "he": "Hư",
    "thien": true,
-   "thien_role": "chinh"
+   "thien_role": "chinh",
+   "medal": "assets/ui/skills/m/hu-khong-thon-phe.png"
   },
   "tich-diet-tram": {
    "name": "Tịch Diệt Trảm",
@@ -1404,7 +1427,8 @@
    "desc": "Một nhát chém tím xé khe nứt không gian phía trước",
    "he": "Hư",
    "thien": true,
-   "thien_role": "phu"
+   "thien_role": "phu",
+   "medal": "assets/ui/skills/m/tich-diet-tram.png"
   },
   "thien-thu-nhat-thuan": {
    "name": "Thiên Thu Nhất Thuấn",
@@ -1429,7 +1453,8 @@
    "desc": "Nghìn năm dồn trong một khoảnh khắc: vòng thời gian giáng xuống, quái vỡ vụn",
    "he": "Thời",
    "thien": true,
-   "thien_role": "chinh"
+   "thien_role": "chinh",
+   "medal": "assets/ui/skills/m/thien-thu-nhat-thuan.png"
   },
   "tue-nguyet-dinh-chi": {
    "name": "Tuế Nguyệt Đình Chỉ",
@@ -1449,7 +1474,8 @@
    "desc": "Tiếng chuông ngưng đọng thời gian: quái quanh mình đứng im {stun_s} giây",
    "he": "Thời",
    "thien": true,
-   "thien_role": "phu"
+   "thien_role": "phu",
+   "medal": "assets/ui/skills/m/tue-nguyet-dinh-chi.png"
   },
   "_ghi_chu_thien": "Chủ dự án 24/10: 12 kỹ năng Thiên hệ (thien: true) — không rơi từ boss, chỉ từ phó bản Thiên Cơ Truyền Thừa. charge_s/dim/shake: gồng, tối màn hình, rung (juice.js). Sinh bằng tools/thien_skills.py."
  },
