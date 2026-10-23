@@ -211,7 +211,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     if (hp <= 0) { die(); toast(`Bị ${n.name} hạ gục`, 2500); }
   }
   function die() {
-    hp = 0; dead = true; mobs.calmAll(); auto = false; hud.setActive('auto', false); autoDir = null; autoPlay.reset();
+    hp = 0; dead = true; mobs.calmAll(); auto = false; hud.setActive('auto', false); autoDir = null; autoPlay.reset(); const lost = Math.floor(progress.state.exp * (gp.death_exp_loss || 0)); if (lost > 0) { progress.state.exp -= lost; toast(`Thân tử đạo tổn: mất ${lost.toLocaleString('vi')} tu vi`, 2500); progress.changed(); }
     if (pt.active) pt.cancel();
     soul.start();
   }
@@ -347,7 +347,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   }
 
   const views = createViews({ ru, biCanh, gapR, info, shop, owns, teacher, bag, onLook, monsters: monDef.monsters, realmMajor: () => MAJOR_OF(progress.stageDef.id), progress, quests, craft, itemDefs, mats, pills, blanks, awaken, cp, realms, gp, toast,
-    wallet, life, getStats: () => ps, getHp: () => hp, onReward: (r) => { if (r.exp) addExp(r.exp); if (r.spiritStone) progress.addStone(r.spiritStone);
+    wallet, life, getStats: () => ps, getHp: () => hp, onReward: (r) => { if (r.exp) addExp(r.exp); if (r.spiritStone) progress.addStone(r.spiritStone); if (r.gold) wallet.add('vang', r.gold);
       for (const i of r.items || []) progress.add(i.id, i.count); }, recompute, usePill, emit: quests.emit });
 
   const inv = createInventory({ ru, recipes: { pills: pills.pills, blanks: blanks.blanks, skills: cp.skills }, info, progress, bag, craft, itemDefs, awaken, gp, art: (a) => artInfo(a)?.file || artFile(a), icon: iconUrl, fallbackIcon: placeholderIcon,

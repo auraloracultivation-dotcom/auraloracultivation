@@ -328,10 +328,11 @@
   },
   "exp_cap": {
    "_ghi_chu": "Tu vi tối đa mỗi lần hạ quái, tính theo phần vạch tu vi tầng hiện tại của người chơi (23/10: Âm Hư từng cho đầy cả tầng).",
-   "thuong": 0.005,
-   "elite": 0.02,
-   "boss": 0.05,
-   "void": 0.08
+   "thuong": 0.004,
+   "elite": 0.008,
+   "boss": 0.02,
+   "void": 0.03,
+   "_ghi_chu_17h": "23/10 17h: hạ thêm — một con Âm Hư / thủ lĩnh không cho quá 3% / 2% vạch tầng hiện tại."
   }
  },
  "loot": {
@@ -1248,7 +1249,33 @@
    "na": 0.6,
    "ht": 0.35
   },
-  "over_mul": 0.1
+  "over_mul": 0.1,
+  "cap": {
+   "lk1": 110,
+   "lk2": 170,
+   "lk3": 290,
+   "lk4": 450,
+   "lk5": 720,
+   "lk6": 1100,
+   "lk7": 1900,
+   "lk8": 3000,
+   "lk9": 4700,
+   "lk10": 7600,
+   "tc_so": 7900,
+   "tc_trung": 13000,
+   "tc_hau": 22000,
+   "kd_so": 57000,
+   "kd_trung": 95000,
+   "kd_hau": 160000,
+   "na_so": 430000,
+   "na_trung": 710000,
+   "na_hau": 1200000,
+   "ht_so": 2300000,
+   "ht_trung": 7200000,
+   "ht_hau": 23000000
+  },
+  "floor": 0.01,
+  "_ghi_chu_23_10_17h": "Chủ dự án 23/10 17h: bỏ trần cứng theo vạch. Mỗi ngày (giờ VN) tu vi từ quái GIẢM DẦN: con sau nhận ít hơn con trước (đường e^(−đã_đánh/cap)), cap = số cố định theo tầng (bảng doc 'Bảng số cố định theo tầng'). Đánh mãi cũng chỉ tiến sát cap, không vượt; cạn rồi chỉ còn floor = 1% tu vi gốc mỗi con. Tầng cao cap nhỏ so với vạch → càng về sau farm càng ít."
  },
  "skill_drop": {
   "_ghi_chu": "Chủ dự án 23/10: kỹ năng chiến đấu chỉ có khi hạ boss (kể cả Âm Hư), tỷ lệ 0,5% mỗi lần lĩnh ngộ 1 kỹ năng chưa có. free = kỹ năng hệ thống mở theo cảnh giới (src/game/skill-learn.js). realm_gift = mỗi đại cảnh giới tặng sẵn 1 kỹ năng (mở khi đạt cảnh giới của kỹ năng đó, không cần rơi).",
@@ -1276,5 +1303,8 @@
   "skill_mul": 2.2,
   "max_s": 90,
   "target_s": 12
- }
+ },
+ "death_exp_loss": 0.1,
+ "breakthrough_fail_exp_loss": 0.5,
+ "_ghi_chu_mat_tu_vi": "Chủ dự án 23/10 17h: chết mất 10% tu vi đang có; đột phá đại cảnh giới thất bại mất 50% tu vi (và viên đan). Không hiện tỷ lệ thành công."
 }

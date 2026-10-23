@@ -1116,6 +1116,383 @@
    ],
    "desc": "Con đường chính từ Luyện Khí tầng 1 (không reset). Mỗi bậc gắn với một tầng tu: tới tầng đó, hạ yêu thú vùng tương ứng để nhận tài nguyên luyện trang bị."
   },
-  "_ghi_chu_tien_do": "Tiến độ kiểu mới (chủ dự án 23/10): bậc n gắn với một tầng tu cố định (Luyện Khí 1 bậc/tầng, Trúc Cơ→Hóa Thần 3 bậc/tầng, tổng 46 bậc, sau đó bậc hậu kỳ). Vùng + thưởng theo tầng của bậc. Chưa tới tầng thì có mục tiêu 'Tu luyện tới <tầng>'. Người đã ở cảnh giới cao bắt đầu từ bậc đầu của đại cảnh giới hiện tại. Các nhiệm vụ Daily cũ của Lab bị bỏ khỏi game (vẫn giữ trong file) vì Ngày / Tuần mới thay thế. Số liệu trong src/game/routine.js → makeLadder."
+  "_ghi_chu_tien_do": "Tiến độ kiểu mới (chủ dự án 23/10): bậc n gắn với một tầng tu cố định (Luyện Khí 1 bậc/tầng, Trúc Cơ→Hóa Thần 3 bậc/tầng, tổng 46 bậc, sau đó bậc hậu kỳ). Vùng + thưởng theo tầng của bậc. Chưa tới tầng thì có mục tiêu 'Tu luyện tới <tầng>'. Người đã ở cảnh giới cao bắt đầu từ bậc đầu của đại cảnh giới hiện tại. Các nhiệm vụ Daily cũ của Lab bị bỏ khỏi game (vẫn giữ trong file) vì Ngày / Tuần mới thay thế. Số liệu trong src/game/routine.js → makeLadder.",
+  "table": {
+   "lk1": {
+    "daily": [
+     18,
+     34,
+     540
+    ],
+    "weekly": [
+     51,
+     450,
+     7200
+    ],
+    "chapter": [
+     20,
+     28,
+     450
+    ]
+   },
+   "lk2": {
+    "daily": [
+     29,
+     45,
+     720
+    ],
+    "weekly": [
+     80,
+     600,
+     9600
+    ],
+    "chapter": [
+     31,
+     38,
+     610
+    ]
+   },
+   "lk3": {
+    "daily": [
+     48,
+     45,
+     720
+    ],
+    "weekly": [
+     130,
+     600,
+     9600
+    ],
+    "chapter": [
+     52,
+     38,
+     610
+    ]
+   },
+   "lk4": {
+    "daily": [
+     75,
+     56,
+     900
+    ],
+    "weekly": [
+     210,
+     750,
+     12000
+    ],
+    "chapter": [
+     81,
+     47,
+     750
+    ]
+   },
+   "lk5": {
+    "daily": [
+     120,
+     68,
+     1100
+    ],
+    "weekly": [
+     330,
+     900,
+     14000
+    ],
+    "chapter": [
+     130,
+     56,
+     900
+    ]
+   },
+   "lk6": {
+    "daily": [
+     190,
+     79,
+     1300
+    ],
+    "weekly": [
+     540,
+     1000,
+     16000
+    ],
+    "chapter": [
+     210,
+     66,
+     1100
+    ]
+   },
+   "lk7": {
+    "daily": [
+     310,
+     100,
+     1600
+    ],
+    "weekly": [
+     870,
+     1400,
+     22000
+    ],
+    "chapter": [
+     330,
+     84,
+     1300
+    ]
+   },
+   "lk8": {
+    "daily": [
+     500,
+     120,
+     1900
+    ],
+    "weekly": [
+     1400,
+     1600,
+     26000
+    ],
+    "chapter": [
+     540,
+     100,
+     1600
+    ]
+   },
+   "lk9": {
+    "daily": [
+     780,
+     150,
+     2400
+    ],
+    "weekly": [
+     2200,
+     2000,
+     32000
+    ],
+    "chapter": [
+     850,
+     120,
+     1900
+    ]
+   },
+   "lk10": {
+    "daily": [
+     1300,
+     170,
+     2700
+    ],
+    "weekly": [
+     3500,
+     2200,
+     35000
+    ],
+    "chapter": [
+     1400,
+     140,
+     2200
+    ]
+   },
+   "tc_so": {
+    "daily": [
+     1300,
+     210,
+     3400
+    ],
+    "weekly": [
+     3700,
+     2800,
+     45000
+    ],
+    "chapter": [
+     3100,
+     360,
+     5800
+    ]
+   },
+   "tc_trung": {
+    "daily": [
+     2200,
+     250,
+     4000
+    ],
+    "weekly": [
+     6100,
+     3300,
+     53000
+    ],
+    "chapter": [
+     5200,
+     410,
+     6600
+    ]
+   },
+   "tc_hau": {
+    "daily": [
+     3600,
+     300,
+     4800
+    ],
+    "weekly": [
+     10000,
+     4000,
+     64000
+    ],
+    "chapter": [
+     8700,
+     510,
+     8200
+    ]
+   },
+   "kd_so": {
+    "daily": [
+     9500,
+     360,
+     5800
+    ],
+    "weekly": [
+     27000,
+     4800,
+     77000
+    ],
+    "chapter": [
+     40000,
+     960,
+     15000
+    ]
+   },
+   "kd_trung": {
+    "daily": [
+     16000,
+     440,
+     7000
+    ],
+    "weekly": [
+     44000,
+     5800,
+     93000
+    ],
+    "chapter": [
+     67000,
+     1200,
+     19000
+    ]
+   },
+   "kd_hau": {
+    "daily": [
+     26000,
+     520,
+     8300
+    ],
+    "weekly": [
+     74000,
+     6900,
+     110000
+    ],
+    "chapter": [
+     110000,
+     1400,
+     22000
+    ]
+   },
+   "na_so": {
+    "daily": [
+     71000,
+     620,
+     9900
+    ],
+    "weekly": [
+     200000,
+     8200,
+     130000
+    ],
+    "chapter": [
+     510000,
+     2500,
+     40000
+    ]
+   },
+   "na_trung": {
+    "daily": [
+     120000,
+     750,
+     12000
+    ],
+    "weekly": [
+     330000,
+     10000,
+     160000
+    ],
+    "chapter": [
+     850000,
+     3000,
+     48000
+    ]
+   },
+   "na_hau": {
+    "daily": [
+     200000,
+     900,
+     14000
+    ],
+    "weekly": [
+     550000,
+     12000,
+     190000
+    ],
+    "chapter": [
+     1400000,
+     3600,
+     58000
+    ]
+   },
+   "ht_so": {
+    "daily": [
+     380000,
+     1100,
+     18000
+    ],
+    "weekly": [
+     1100000,
+     14000,
+     220000
+    ],
+    "chapter": [
+     4500000,
+     5800,
+     93000
+    ]
+   },
+   "ht_trung": {
+    "daily": [
+     1200000,
+     1300,
+     21000
+    ],
+    "weekly": [
+     3400000,
+     17000,
+     270000
+    ],
+    "chapter": [
+     14000000,
+     6900,
+     110000
+    ]
+   },
+   "ht_hau": {
+    "daily": [
+     3900000,
+     1600,
+     26000
+    ],
+    "weekly": [
+     11000000,
+     21000,
+     340000
+    ],
+    "chapter": [
+     46000000,
+     8300,
+     130000
+    ]
+   }
+  },
+  "_ghi_chu_table": "Chủ dự án 23/10: thưởng là SỐ CỐ ĐỊNH theo tầng, không tính %. Mỗi tầng: daily/weekly/chapter = [tu vi, Linh thạch, Vàng] cho MỖI việc. Ngày/Tuần theo tầng người chơi đang ở lúc sinh; Tiến độ dùng cột chapter của tầng gắn với bậc. Bảng đầy đủ trong doc 'Cốt truyện & thiết kế lại nhiệm vụ'."
  }
 }
