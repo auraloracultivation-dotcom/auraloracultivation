@@ -77,6 +77,8 @@ export function createViews(o) {
     return quests.active().sort((x, y) => rank(x) - rank(y));
   };
   function naviGoal() {
+    const dt = o.daotam?.place(); // Con đường Đạo Tâm: chuỗi chính, ưu tiên khi đang theo dõi hoặc không theo dõi gì khác
+    if (dt && (tracked === 'dt' || !tracked)) return { ...dt, id: 'dt', title: o.daotam.cur()?.title };
     const list = order().filter((x) => !quests.complete(x.q.id));
     const cur = list.find((x) => x.q.id === tracked && goalPlace(x.q, x.a)) || list.find((x) => goalPlace(x.q, x.a));
     if (!cur) return null;
@@ -88,12 +90,13 @@ export function createViews(o) {
     for (const q of quests.available()) if (q.auto) quests.accept(q.id); // chuỗi Tầm Bảo: đủ cảnh giới là tự nhận
     const tag = (q) => ({ main: 'Chính', daily: 'Ngày', weekly: 'Tuần', ladder: `Tiến độ ${quests.ladderStep()}` }[q.type] || 'Phụ');
     const nav = naviGoal()?.id;
-    return order().slice(0, 3).map(({ q, a }) => {
+    const dt = o.daotam?.brief(); if (dt) dt.tracked = nav === 'dt';
+    return [...(dt ? [dt] : []), ...order().slice(0, dt ? 2 : 3).map(({ q, a }) => {
       const i = Math.max(0, q.goals.findIndex((g, k) => a.p[k] < g.count)), g = q.goals[i];
       const what = g.label ? ` ${g.label}` : g.target === 'any' || g.type.endsWith('unique') ? '' : ` ${name(g.target)}`;
       return { id: q.id, tag: tag(q), title: q.title, color: QCOL[q.tier] || (q.type === 'main' ? '#f7cf6b' : q.type === 'daily' ? '#7fe08a' : '#7fb4ff'),
         goal: `${GOAL[g.type] || g.type}${what} (${a.p[i]}/${g.count})`, ready: quests.complete(q.id), tracked: q.id === nav, nav: !!goalPlace(q, a) };
-    });
+    })];
   }
   // Đan dùng nhanh: đan đang có trong kho dùng được (data/gameplay.json → pills)
   const pillChoices = () => Object.keys(gp.pills).filter((id) => typeof gp.pills[id] === 'object' && progress.count(id) > 0)
