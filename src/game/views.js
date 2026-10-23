@@ -111,7 +111,7 @@ export function createViews(o) {
         return rows.join('') || '<p class="bag-empty">Trống</p>';
       },
       onAction(act, arg, close) {
-        if (act === 'bc-start') { const e = o.biCanh.start(); if (e) toast(e, 1800); else close(); return; }
+        if (act === 'bc-start') { const e = o.biCanh.start(arg); if (e) toast(e, 1800); else close(); return; }
         if (act === 'bc-quit') { o.biCanh.quit(); return; }
         if (act === 'accept') quests.accept(arg);
         if (act === 'fake') { const [id, i] = arg.split('|'); quests.fakeGoal(id, +i); }
@@ -123,13 +123,15 @@ export function createViews(o) {
 
   // ---------- Bí cảnh (bicanh.js) ----------
   function biCanhTab() {
-    const b = o.biCanh.panel(), d = b.def, R = d.reward;
-    const s = b.status;
-    return `<div class="row"><div class="row-h"><b>${E(b.name)}</b><em>Hôm nay còn ${b.tries}/${b.max} lượt</em></div>
-      <p>Đứng ngoài thành rồi bấm Bắt đầu: vòng cấm chế đỏ hiện quanh chỗ đứng, ${d.waves} đợt quái cảnh giới của bạn ùa vào (đợt ${d.elite_wave} có tinh anh, đợt ${d.boss_wave} có boss). Mỗi đợt ${d.wave_time_s} giây. Thua khi ngã xuống, ra khỏi vòng hoặc hết giờ.</p>
+    return o.biCanh.panel().map((b) => {
+      const d = b.def, R = d.reward, s = b.status;
+      const info = d.desc ? `<p>${E(d.desc)}</p>` : `<p>Đứng ngoài thành rồi bấm Bắt đầu: vòng cấm chế đỏ hiện quanh chỗ đứng, ${d.waves} đợt quái cảnh giới của bạn ùa vào (đợt ${d.elite_wave} có tinh anh, đợt ${d.boss_wave} có boss). Mỗi đợt ${d.wave_time_s} giây. Thua khi ngã xuống, ra khỏi vòng hoặc hết giờ đợt.</p>
       <p>Thưởng mỗi đợt qua: ${R.stone_per_wave} Linh thạch + ${R.gold_per_wave} Vàng. Qua đợt ${R.card_at.join(' / ')}: Thần Phù (càng sâu phẩm càng cao). Qua hết: Phôi Pháp Bảo + cơ hội đồ ngũ hành.</p>
-      <p>Đây là nơi khoe Đạo Vận: bộ ngũ hành + Thần Phù + pháp bảo càng hợp, quét quái càng nhanh.</p>
-      ${s ? `<p><b>Đang ở đợt ${s.wave}/${s.waves}</b> · còn ${s.left} giây · ${s.mobs} quái</p>${btn('bc-quit', '', 'Bỏ cuộc')}` : btn('bc-start', '', 'Bắt đầu', b.tries > 0)}</div>`;
+      <p>Đây là nơi khoe Đạo Vận: bộ ngũ hành + Thần Phù + pháp bảo càng hợp, quét quái càng nhanh.</p>`;
+      const act = s ? `<p><b>Đang ở đợt ${s.wave}/${s.waves}</b> · còn ${s.left} giây · ${s.mobs} quái</p>${btn('bc-quit', '', 'Bỏ cuộc')}`
+        : b.locked ? `<p><em>Cần cảnh giới ${E(stageName(b.locked))}</em></p>` : btn('bc-start', b.id, 'Bắt đầu', b.tries > 0);
+      return `<div class="row"><div class="row-h"><b>${E(b.name)}</b><em>Hôm nay còn ${b.tries}/${b.max} lượt</em></div>${info}${act}</div>`;
+    }).join('');
   }
 
   // ---------- Tu luyện ----------
@@ -139,12 +141,12 @@ export function createViews(o) {
     if (next) {
       const rid = gp.major_realm_first_stage[next.id];
       const r = rid && realms.realms.find((x) => x.id === rid);
-      bt = r ? `Lên <b>${E(next.name)}</b>: đủ tu vi + ${E(name(r.breakthrough.pill))} (có ${progress.count(r.breakthrough.pill)}). Thành hay bại tùy vận khí — thất bại mất đan và một nửa tu vi. Bấm nút Đột phá (trên khung nhân vật).`
+      bt = r ? `Lên <b>${E(next.name)}</b>: đủ tu vi + ${E(name(r.breakthrough.pill))} (có ${progress.count(r.breakthrough.pill)}). Thành hay bại tùy vận khí — ${r.breakthrough.fail_to ? `<b>thiên kiếp cực hung</b>: thất bại mất đan và rơi thẳng về ${E(stageName(r.breakthrough.fail_to))}` : 'thất bại mất đan và một nửa tu vi'}. Bấm nút Đột phá (trên khung nhân vật).`
         : `Lên <b>${E(next.name)}</b>: đủ tu vi sẽ tự lên tầng.`;
     }
     const rows = Object.keys(STAT).map((k) => `<span>${STAT[k]}</span><b>${k === 'hp' ? `${Math.round(o.getHp())}/${ps.hp}` : ps[k]}</b>`).join('');
     return `<div class="row"><div class="row-h"><b>${E(s.name)}</b><em>${N(st().exp)}/${N(s.exp_need)} tu vi</em></div>
-      <p>${bt}</p>${lifeLine()}</div>${o.wallet.html()}<div class="row grid2">${rows}</div>
+      <p>${bt}</p>${gp.late_realm?.prefixes?.some((x) => s.id.startsWith(x)) ? `<p>Cảnh giới cao: linh khí mỗi ngày rất ít (quái + nhiệm vụ chung một mức). Bị quái giết mất nhiều tu vi${st().injured ? ' — <b>ĐANG TRỌNG THƯƠNG: chết lần nữa sẽ thụt cảnh giới</b>' : '; không đủ để mất thì trọng thương, chết tiếp sẽ thụt cảnh giới'}.</p>` : ''}${lifeLine()}</div>${o.wallet.html()}<div class="row grid2">${rows}</div>
       <div class="row"><p>Kỹ năng mở theo cảnh giới: Kiếm khí + Khống chế (Trúc Cơ), Linh thú + Lướt (Kết Đan), Diện rộng (Nguyên Anh).</p></div>`;
   }
   // Chỉ hiện công thức ĐANG CÓ trong kho (đan phương / công thức phôi / bí kíp). Muốn thêm → về Vạn Bảo Lâu trong thành mua.

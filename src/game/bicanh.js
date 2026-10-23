@@ -5,13 +5,18 @@
 import { wrapDelta } from '../map/index.js';
 
 // c: { def, mdef, mobs, map, me, progress, life, wallet, cards, cardDef, dv, pbItem, toast, play, say, dead(), stageId() }
+// Nhiều bí cảnh (chủ dự án 23/10 23h28): bi-canh.json là Huyết Sát; extra[] thêm bí cảnh khác, thiếu trường nào lấy theo Huyết Sát.
 export function createBiCanh(c) {
-  const { def, mdef, mobs, map, me, progress } = c;
+  const { mdef, mobs, map, me, progress } = c;
+  const base = { ...c.def, id: 'huyet', state_key: 'biCanh' };
+  const defs = [base, ...(c.def.extra || []).map((x) => ({ ...base, ...x, reward: { ...base.reward, ...x.reward } }))];
+  const byId = (id) => defs.find((d) => d.id === id) || base;
+  let def = base; // bí cảnh đang mở (hoặc mặc định)
   const order = Object.keys(mdef.stage_stats);
   let run = null; // { x, y, wave, left (giây còn của đợt), mobs: Set uid, pause }
 
   const today = () => String(c.life.today());
-  const triesLeft = () => { const t = progress.state.biCanh; return def.tries_per_day - (t?.day === today() ? t.n : 0); };
+  const triesLeft = (d = def) => { const t = progress.state[d.state_key]; return d.tries_per_day - (t?.day === today() ? t.n : 0); };
   // Quái thường đúng tầng của người chơi (không có thì lấy tầng gần nhất có quái)
   function pool(rank) {
     const si = order.indexOf(c.stageId());
@@ -23,13 +28,16 @@ export function createBiCanh(c) {
     return { arr: mdef.monsters.filter((d) => !d.void && d.rank === rank), stage: c.stageId() };
   }
 
-  function start() {
+  function start(id) {
     if (run) return 'Đang trong bí cảnh';
+    const d = byId(id);
+    if (d.min_stage && progress.state.stage < progress.stageIndex(d.min_stage)) return `${d.name} cần cảnh giới ${c.stageName?.(d.min_stage) || d.min_stage}`;
+    def = d;
     if (c.dead()) return 'Đang là linh hồn';
     if (map.safeAt(me.x, me.y)) return 'Ra khỏi thành rồi mới mở bí cảnh';
     if (triesLeft() <= 0) return 'Hôm nay hết lượt (qua 0h giờ Việt Nam có lượt mới)';
-    const t = progress.state.biCanh?.day === today() ? progress.state.biCanh : { day: today(), n: 0 };
-    t.n++; progress.state.biCanh = t; progress.changed();
+    const K = def.state_key, t = progress.state[K]?.day === today() ? progress.state[K] : { day: today(), n: 0 };
+    t.n++; progress.state[K] = t; progress.changed();
     run = { x: me.x, y: me.y, wave: 0, left: 0, mobs: new Set(), pause: 1.2 };
     c.play('v.tran-phap', me.x, me.y + 8, def.radius_px * 0.9, { ground: true });
     c.toast(`${def.name}: giữ vững trong vòng cấm chế, vượt ${def.waves} đợt!`, 2600);
@@ -67,9 +75,10 @@ export function createBiCanh(c) {
       });
       if (cleared >= R.treasure_blank_at) { progress.add(c.pbItem, 1); got.push('Phôi Pháp Bảo'); }
       const give = ([id, n]) => { progress.add(id, n); got.push(`${c.itemName(id)}${n > 1 ? ` ×${n}` : ''}`); };
-      for (let k = 3; k <= cleared; k += 3) give(R.items_per_3[(k / 3 - 1) % R.items_per_3.length]); // mỗi 3 đợt 1 món
+      for (let k = 3; R.items_per_3.length && k <= cleared; k += 3) give(R.items_per_3[(k / 3 - 1) % R.items_per_3.length]); // mỗi 3 đợt 1 món
       if (win) R.full_clear.forEach(give);
-      if (cleared >= R.set_item_at) c.dv.onKill({ void: true, def: {}, src: 'bicanh' }, (t) => got.push(/Thiên/.test(t) ? 'đồ Thiên hệ' : /Linh thạch/.test(t) ? 'Linh thạch (đã đủ bộ)' : 'đồ ngũ hành'));
+      if (win && R.thien_item) { const id = c.dv.grantSet(true, () => {}); got.push(id ? `${c.itemName(id)} (Thiên hệ)` : "Linh thạch (đã đủ đồ Thiên hệ)"); } // Cửu Thiên: qua hết = 1 món Thiên hệ
+      if (cleared >= R.set_item_at && !R.thien_item) c.dv.onKill({ void: true, def: {}, src: 'bicanh' }, (t) => got.push(/Thiên/.test(t) ? 'đồ Thiên hệ' : /Linh thạch/.test(t) ? 'Linh thạch (đã đủ bộ)' : 'đồ ngũ hành'));
       progress.changed();
     }
     c.toast(`${win ? 'Vượt' : why} ${def.name} — qua ${cleared}/${def.waves} đợt${got.length ? `. Thưởng: ${got.join(', ')}` : ''}`, 5000);
@@ -106,8 +115,9 @@ export function createBiCanh(c) {
   }
   const status = () => (run ? { wave: run.wave, waves: def.waves, left: Math.max(0, Math.ceil(run.left)), mobs: run.mobs.size } : null);
   // Bảng trong Nhiệm vụ → Bí Cảnh
-  const panel = () => ({ name: def.name, tries: triesLeft(), max: def.tries_per_day, running: !!run, status: status(), def });
+  const panel = () => defs.map((d) => ({ id: d.id, name: d.name, tries: triesLeft(d), max: d.tries_per_day, running: !!run && def === d, status: def === d ? status() : null, def: d,
+    locked: d.min_stage && progress.state.stage < progress.stageIndex(d.min_stage) ? d.min_stage : null }));
   // Huyết Sát Lệnh: thêm 1 lượt hôm nay
-  function addTry() { const t = progress.state.biCanh?.day === today() ? progress.state.biCanh : { day: today(), n: 0 }; t.n--; progress.state.biCanh = t; progress.changed(); }
+  function addTry() { const t = progress.state.biCanh?.day === today() ? progress.state.biCanh : { day: today(), n: 0 }; t.n--; progress.state.biCanh = t; progress.changed(); } // chỉ Huyết Sát
   return { addTry, start, update, render, status, panel, active: () => !!run, zone: () => (run ? { x: run.x, y: run.y, r: def.radius_px - 20 } : null), quit: () => run && end(false, 'Bỏ') };
 }

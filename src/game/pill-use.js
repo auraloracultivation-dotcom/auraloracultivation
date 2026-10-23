@@ -8,6 +8,9 @@ export function createPillUse(c) {
     if (!p || c.dead()) return false;
     if ((cds.pill || 0) > now) { toast('Đan dược đang hồi', 900); return false; }
     if (p.life_add) { const r = life.canEat(); if (!r.ok) { toast(r.msg, 2200); return false; } }
+    const sid = progress.stageDef.id, major = sid.startsWith('lk') ? 'lk' : sid.slice(0, 2), ORD = c.majors || [];
+    if (p.realm && p.realm !== major) { toast(`Chỉ dùng ở ${c.realmName?.(p.realm) || p.realm} — đang ở ${progress.stageDef.name}`, 2200); return false; } // Viên Mãn Đan theo đại cảnh giới
+    if (p.realm_max && ORD.indexOf(major) > ORD.indexOf(p.realm_max)) { toast(`${itemDefs.get(id)?.name || 'Đan'} không còn tác dụng ở ${progress.stageDef.name}`, 2200); return false; }
     const full = (p.exp_pct || p.exp_fill) && (progress.atPeak() || progress.state.exp >= progress.stageDef.exp_need);
     if (full) { toast(progress.nextStageDef() ? 'Tu vi đã đầy — hãy bấm Đột phá' : 'Đã ở cảnh giới cao nhất', 1800); return false; }
     if (!progress.take(id, 1)) { toast(`Hết ${itemDefs.get(id)?.name || 'đan'}`, 1200); return false; }
@@ -36,11 +39,14 @@ export function createPillUse(c) {
     play('may-kiep', me.x, me.y - 70, 60); // thiên kiếp: mây tụ trên đầu rồi sét đánh xuống
     play('set-danh', me.x, me.y, 70, { ground: true, delay: 0.7 });
     const charm = progress.take('item.phu.bao-ho.001', 1); // bảo hộ phù: +15 điểm %, tự dùng nếu có
-    const rate = Math.min(1, realm.breakthrough.rate + (charm ? realms.breakthrough_rules.protect_charm.add_rate_points : 0));
+    const rate = Math.min(1, realm.breakthrough.rate + (charm ? realm.breakthrough.charm_add ?? realms.breakthrough_rules.protect_charm.add_rate_points : 0)); // Anh Biến: phù chỉ cộng rất ít
     if (charm) toast('Bảo hộ phù sáng lên — vận khí tăng', 1500);
     if (Math.random() < rate) {
       progress.advanceStage(); c.setHp(Infinity); c.recompute(); c.setHp(c.ps().hp);
       toast(`Đột phá thành công: ${progress.stageDef.name}! Thọ nguyên tối đa ${life.max()} năm`, 3000);
+    } else if (realm.breakthrough.fail_to) { // Anh Biến: thất bại rơi thẳng về tầng chỉ định (Hóa Thần Trung kỳ), tu vi về 0
+      const i = progress.stageIndex(realm.breakthrough.fail_to); progress.setStage(i, 0); c.recompute(); c.setHp(Math.min(c.hp(), c.ps().hp));
+      toast(`Đột phá thất bại — thiên kiếp đánh nát đạo cơ: rơi về ${progress.stageDef.name}`, 4000);
     } else { const lost = Math.floor(progress.state.exp * (gp.breakthrough_fail_exp_loss ?? 0.5)); progress.state.exp -= lost; progress.changed?.();
       toast(`Đột phá thất bại — thiên kiếp phản phệ: mất ${pill.name} và ${lost.toLocaleString('vi')} tu vi`, 3500); }
     progress.changed();

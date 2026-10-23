@@ -127,15 +127,19 @@
     "inputs": [
      {
       "id": "item.thao.hac-linh.001",
-      "count": 160
+      "count": 220
+     },
+     {
+      "id": "item.thao.tan-the.001",
+      "count": 130
      },
      {
       "id": "item.khoang.hac-thiet.001",
-      "count": 70
+      "count": 150
      },
      {
       "id": "item.dacbiet.tinh-hon-co.001",
-      "count": 2
+      "count": 28
      }
     ],
     "rate": 0.2

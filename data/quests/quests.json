@@ -1491,6 +1491,57 @@
      8300,
      130000
     ]
+   },
+   "ab_so": {
+    "daily": [
+     12348581,
+     2400,
+     39000
+    ],
+    "weekly": [
+     24697163,
+     31500,
+     510000
+    ],
+    "chapter": [
+     24697163,
+     12450,
+     195000
+    ]
+   },
+   "ab_trung": {
+    "daily": [
+     49394326,
+     2400,
+     39000
+    ],
+    "weekly": [
+     98788652,
+     31500,
+     510000
+    ],
+    "chapter": [
+     98788652,
+     12450,
+     195000
+    ]
+   },
+   "ab_hau": {
+    "daily": [
+     197577304,
+     2400,
+     39000
+    ],
+    "weekly": [
+     395154607,
+     31500,
+     510000
+    ],
+    "chapter": [
+     395154607,
+     12450,
+     195000
+    ]
    }
   },
   "_ghi_chu_table": "Chủ dự án 23/10: thưởng là SỐ CỐ ĐỊNH theo tầng, không tính %. Mỗi tầng: daily/weekly/chapter = [tu vi, Linh thạch, Vàng] cho MỖI việc. Ngày/Tuần theo tầng người chơi đang ở lúc sinh; Tiến độ dùng cột chapter của tầng gắn với bậc. Bảng đầy đủ trong doc 'Cốt truyện & thiết kế lại nhiệm vụ'."
