@@ -112,7 +112,8 @@ export function createNpcs({ def, map, mobs, stats, stages }) {
   function at(wx, wy, toNear) {
     return list.find((n) => { const p = toNear(n); return !n.dead && Math.abs(p.x - wx) < 7 && wy < p.y + 2 && wy > p.y - def.height_px - 2; });
   }
-  function greet(n, wx) { n.facing = wx > n.x ? 1 : -1; say(n, def.greet[Math.floor(Math.random() * def.greet.length)], 3.5); }
+  const stLines = new Map((T?.stations || []).map((s) => [s.id, s.lines || []])); // canh giữ trận nhãn chào bằng lời riêng của trạm
+  function greet(n, wx) { n.facing = wx > n.x ? 1 : -1; const L = (n.guard && stLines.get(n.guard)?.length) ? stLines.get(n.guard) : def.greet; say(n, L[Math.floor(Math.random() * L.length)], 3.5); }
   const nearestFoe = (me, range) => list.filter((n) => canFight(n) && dist(n, me) <= range).sort((a, b) => dist(a, me) - dist(b, me))[0] || null;
   const guarded = (n) => n.shield || clock < n.guardUntil;
   return { list, update, damage, at, greet, canFight, guarded, nearestFoe, dist, height: def.height_px };

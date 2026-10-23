@@ -300,12 +300,16 @@
    "outfit": 22,
    "weapon": 2,
    "home": {
-    "area": "road",
-    "dx": -1649,
-    "dy": 1
+    "area": "station",
+    "station": "trang",
+    "dx": 2913,
+    "dy": 8258
    },
-   "wander_px": 220,
-   "brave": true
+   "wander_px": 50,
+   "brave": true,
+   "shield": true,
+   "guard": "trang",
+   "stage": 18
   },
   {
    "id": "npc.024",
@@ -313,12 +317,16 @@
    "outfit": 23,
    "weapon": 26,
    "home": {
-    "area": "road",
-    "dx": -2185,
-    "dy": 34
+    "area": "station",
+    "station": "than",
+    "dx": -1019,
+    "dy": 10680
    },
-   "wander_px": 220,
-   "brave": true
+   "wander_px": 50,
+   "brave": true,
+   "shield": true,
+   "guard": "than",
+   "stage": 21
   },
   {
    "id": "npc.025",
@@ -326,12 +334,16 @@
    "outfit": 24,
    "weapon": 16,
    "home": {
-    "area": "road",
-    "dx": -34,
-    "dy": 1707
+    "area": "station",
+    "station": "xanh",
+    "dx": 130,
+    "dy": 1247
    },
-   "wander_px": 220,
-   "brave": true
+   "wander_px": 50,
+   "brave": true,
+   "shield": true,
+   "guard": "xanh",
+   "stage": 9
   },
   {
    "id": "npc.026",
@@ -352,12 +364,16 @@
    "outfit": 26,
    "weapon": 5,
    "home": {
-    "area": "road",
-    "dx": -2075,
-    "dy": 6
+    "area": "station",
+    "station": "den",
+    "dx": -2311,
+    "dy": 12638
    },
-   "wander_px": 220,
-   "brave": true
+   "wander_px": 50,
+   "brave": true,
+   "shield": true,
+   "guard": "den",
+   "stage": 21
   },
   {
    "id": "npc.028",
@@ -378,12 +394,16 @@
    "outfit": 28,
    "weapon": 25,
    "home": {
-    "area": "road",
-    "dx": 1049,
-    "dy": 44
+    "area": "station",
+    "station": "cam",
+    "dx": -452,
+    "dy": 4204
    },
-   "wander_px": 220,
-   "brave": true
+   "wander_px": 50,
+   "brave": true,
+   "shield": true,
+   "guard": "cam",
+   "stage": 12
   },
   {
    "id": "npc.030",
@@ -404,12 +424,16 @@
    "outfit": 30,
    "weapon": 11,
    "home": {
-    "area": "road",
-    "dx": -36,
-    "dy": -1617
+    "area": "station",
+    "station": "trang",
+    "dx": 3053,
+    "dy": 8258
    },
-   "wander_px": 220,
-   "brave": true
+   "wander_px": 50,
+   "brave": true,
+   "shield": true,
+   "guard": "trang",
+   "stage": 18
   },
   {
    "id": "npc.032",
@@ -417,12 +441,16 @@
    "outfit": 31,
    "weapon": 3,
    "home": {
-    "area": "road",
-    "dx": -2130,
-    "dy": -14
+    "area": "station",
+    "station": "tim",
+    "dx": 2525,
+    "dy": 14829
    },
-   "wander_px": 220,
-   "brave": true
+   "wander_px": 50,
+   "brave": true,
+   "shield": true,
+   "guard": "tim",
+   "stage": 21
   },
   {
    "id": "npc.033",
@@ -430,12 +458,16 @@
    "outfit": 32,
    "weapon": 28,
    "home": {
-    "area": "road",
-    "dx": -1052,
-    "dy": -34
+    "area": "station",
+    "station": "than",
+    "dx": -879,
+    "dy": 10680
    },
-   "wander_px": 220,
-   "brave": true
+   "wander_px": 50,
+   "brave": true,
+   "shield": true,
+   "guard": "than",
+   "stage": 21
   },
   {
    "id": "npc.034",
@@ -469,12 +501,16 @@
    "outfit": 35,
    "weapon": 10,
    "home": {
-    "area": "road",
-    "dx": -5,
-    "dy": 1629
+    "area": "station",
+    "station": "xanh",
+    "dx": 270,
+    "dy": 1247
    },
-   "wander_px": 220,
-   "brave": true
+   "wander_px": 50,
+   "brave": true,
+   "shield": true,
+   "guard": "xanh",
+   "stage": 9
   },
   {
    "id": "npc.037",
@@ -495,12 +531,16 @@
    "outfit": 37,
    "weapon": 28,
    "home": {
-    "area": "road",
-    "dx": 998,
-    "dy": -57
+    "area": "station",
+    "station": "cam",
+    "dx": -312,
+    "dy": 4204
    },
-   "wander_px": 220,
-   "brave": true
+   "wander_px": 50,
+   "brave": true,
+   "shield": true,
+   "guard": "cam",
+   "stage": 12
   },
   {
    "id": "npc.039",
@@ -547,12 +587,16 @@
    "outfit": 41,
    "weapon": 9,
    "home": {
-    "area": "road",
-    "dx": 1048,
-    "dy": -57
+    "area": "station",
+    "station": "xam",
+    "dx": 2735,
+    "dy": 6070
    },
-   "wander_px": 220,
-   "brave": true
+   "wander_px": 50,
+   "brave": true,
+   "shield": true,
+   "guard": "xam",
+   "stage": 15
   },
   {
    "id": "npc.043",
@@ -560,12 +604,16 @@
    "outfit": 42,
    "weapon": 26,
    "home": {
-    "area": "road",
-    "dx": -27,
-    "dy": -1851
+    "area": "station",
+    "station": "den",
+    "dx": -2171,
+    "dy": 12638
    },
-   "wander_px": 220,
-   "brave": true
+   "wander_px": 50,
+   "brave": true,
+   "shield": true,
+   "guard": "den",
+   "stage": 21
   },
   {
    "id": "npc.044",
@@ -586,12 +634,16 @@
    "outfit": 44,
    "weapon": 16,
    "home": {
-    "area": "road",
-    "dx": 45,
-    "dy": -1708
+    "area": "station",
+    "station": "tim",
+    "dx": 2665,
+    "dy": 14829
    },
-   "wander_px": 220,
-   "brave": true
+   "wander_px": 50,
+   "brave": true,
+   "shield": true,
+   "guard": "tim",
+   "stage": 21
   },
   {
    "id": "npc.046",
@@ -612,12 +664,16 @@
    "outfit": 46,
    "weapon": 23,
    "home": {
-    "area": "road",
-    "dx": 956,
-    "dy": -42
+    "area": "station",
+    "station": "xam",
+    "dx": 2875,
+    "dy": 6070
    },
-   "wander_px": 220,
-   "brave": true
+   "wander_px": 50,
+   "brave": true,
+   "shield": true,
+   "guard": "xam",
+   "stage": 15
   },
   {
    "id": "npc.048",
@@ -733,5 +789,6 @@
  ],
  "respawn_s": 20,
  "revive_guard_s": 10,
- "_ghi_chu_pvp": "Cảnh giới NPC: stage (chỉ số theo data/gameplay.json → player.stages). shield = bật khiên (không đánh nhau). NPC tắt khiên ngoài thành tự đánh người chơi / NPC tắt khiên gần; gục thì hồi sinh ở nhà sau respawn_s, được bảo vệ revive_guard_s."
+ "_ghi_chu_pvp": "Cảnh giới NPC: stage (chỉ số theo data/gameplay.json → player.stages). shield = bật khiên (không đánh nhau). NPC tắt khiên ngoài thành tự đánh người chơi / NPC tắt khiên gần; gục thì hồi sinh ở nhà sau respawn_s, được bảo vệ revive_guard_s.",
+ "_ghi_chu_canh_giu": "Chủ dự án 23/10 17h: 14 NPC đường lớn chuyển làm canh giữ trận nhãn (home.area = station, guard = id trạm): đứng gần trận pháp, có khiên, cảnh giới theo vành, chào bằng lời riêng của trạm (zone.start.json → town.stations[].lines)."
 }

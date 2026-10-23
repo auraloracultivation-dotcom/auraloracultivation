@@ -17,6 +17,7 @@ export async function getMyCharacter() {
 export const createCharacter = getMyCharacter;
 export const savePosition = async () => null;
 export const respawnAtTown = async () => null;
+export const teleportToStation = async () => null; // chơi thử: máy khách tự dời vị trí
 export const syncServerTime = async () => {};
 export const serverNow = () => Date.now();
 export const timeSynced = () => true;

@@ -19,6 +19,10 @@ export async function createTown(town, props, tileSize) {
   const T = tileSize;
   const cx = (town.center_tile[0] + 0.5) * T, cy = (town.center_tile[1] + 0.5) * T;
   const imgs = new Map();
+  // Trận nhãn các vùng (town.stations, chủ dự án 23/10): trận pháp + 1 nhà, toạ độ cũng tính từ tâm thành
+  const stProps = (town.stations || []).flatMap((s) => [{ id: s.tp, dx: s.dx, dy: s.dy, station: s.id, block: [[-30, -14, 30, 0]] },
+    ...(s.house ? [{ id: s.house, dx: s.dx - 150, dy: s.dy - 40 }] : [])]);
+  town = { ...town, props: [...town.props, ...stProps] };
   await Promise.all([...new Set(town.props.map((p) => p.id))].map((id) => new Promise((res) => {
     const def = props[id];
     if (!def) return res();
@@ -44,6 +48,7 @@ export async function createTown(town, props, tileSize) {
 
   return {
     name: town.name, cx, cy, regenMul: town.safe.regen_mul || 1,
+    stations: (town.stations || []).map((s) => ({ ...s, x: cx + s.dx, y: cy + s.dy })), // trận nhãn: toạ độ thế giới
     // điểm (x, y) trên thế giới nằm trong vùng an toàn? (thành ở giữa bản đồ nên không cần xét quấn mép)
     safeAt: (x, y) => Math.abs(x - cx) <= half && Math.abs(y - cy) <= half,
     // điểm có vướng chân công trình không (r = bán kính người/quái)
@@ -52,7 +57,7 @@ export async function createTown(town, props, tileSize) {
     propAt(x, y) {
       for (let i = standing.length - 1; i >= 0; i--) {
         const it = standing[i];
-        if (x > it.x - it.w * 0.4 && x < it.x + it.w * 0.4 && y > it.y - it.h * 0.85 && y < it.y) return it.id;
+        if (x > it.x - it.w * 0.4 && x < it.x + it.w * 0.4 && y > it.y - it.h * 0.85 && y < it.y) return it.station ? `tram:${it.station}` : it.id;
       }
       return null;
     },

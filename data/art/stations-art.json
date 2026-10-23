@@ -1,0 +1,155 @@
+{
+ "_ghi_chu": "Sinh bằng tools/station_slice.py — KHÔNG sửa tay. Trận pháp + điện các trạm (chủ dự án 23/10).",
+ "props": {
+  "tp-thai-cuc": {
+   "src": "assets/town/tp-thai-cuc.png",
+   "w": 117,
+   "h": 104
+  },
+  "tp-phu-thach": {
+   "src": "assets/town/tp-phu-thach.png",
+   "w": 107,
+   "h": 104
+  },
+  "tp-thien-mon": {
+   "src": "assets/town/tp-thien-mon.png",
+   "w": 119,
+   "h": 108
+  },
+  "tp-tinh-tru": {
+   "src": "assets/town/tp-tinh-tru.png",
+   "w": 100,
+   "h": 100
+  },
+  "tp-dinh-xoay": {
+   "src": "assets/town/tp-dinh-xoay.png",
+   "w": 106,
+   "h": 104
+  },
+  "tp-thac-mon": {
+   "src": "assets/town/tp-thac-mon.png",
+   "w": 122,
+   "h": 112
+  },
+  "tp-co-tich": {
+   "src": "assets/town/tp-co-tich.png",
+   "w": 126,
+   "h": 96
+  },
+  "tp-mon-xoay": {
+   "src": "assets/town/tp-mon-xoay.png",
+   "w": 98,
+   "h": 108
+  },
+  "tp-loi-di": {
+   "src": "assets/town/tp-loi-di.png",
+   "w": 95,
+   "h": 64
+  },
+  "tp-lien-hoa": {
+   "src": "assets/town/tp-lien-hoa.png",
+   "w": 118,
+   "h": 84
+  },
+  "tp-bat-quai": {
+   "src": "assets/town/tp-bat-quai.png",
+   "w": 130,
+   "h": 88
+  },
+  "tp-hoa-mon": {
+   "src": "assets/town/tp-hoa-mon.png",
+   "w": 119,
+   "h": 96
+  },
+  "nha-dai-dien": {
+   "src": "assets/town/nha-dai-dien.png",
+   "w": 198,
+   "h": 150
+  },
+  "nha-dien-co": {
+   "src": "assets/town/nha-dien-co.png",
+   "w": 134,
+   "h": 120
+  },
+  "nha-dien-nho": {
+   "src": "assets/town/nha-dien-nho.png",
+   "w": 127,
+   "h": 120
+  },
+  "nha-thap-bao": {
+   "src": "assets/town/nha-thap-bao.png",
+   "w": 71,
+   "h": 150
+  },
+  "nha-dien-dai": {
+   "src": "assets/town/nha-dien-dai.png",
+   "w": 152,
+   "h": 110
+  },
+  "nha-dinh-co": {
+   "src": "assets/town/nha-dinh-co.png",
+   "w": 116,
+   "h": 104
+  },
+  "nha-quan-tro": {
+   "src": "assets/town/nha-quan-tro.png",
+   "w": 111,
+   "h": 96
+  },
+  "nha-lau-canh": {
+   "src": "assets/town/nha-lau-canh.png",
+   "w": 60,
+   "h": 104
+  },
+  "nha-tiem-1": {
+   "src": "assets/town/nha-tiem-1.png",
+   "w": 102,
+   "h": 90
+  },
+  "nha-tiem-2": {
+   "src": "assets/town/nha-tiem-2.png",
+   "w": 100,
+   "h": 90
+  },
+  "nha-kho-go": {
+   "src": "assets/town/nha-kho-go.png",
+   "w": 100,
+   "h": 90
+  },
+  "nha-nho-1": {
+   "src": "assets/town/nha-nho-1.png",
+   "w": 74,
+   "h": 70
+  },
+  "nha-cho-1": {
+   "src": "assets/town/nha-cho-1.png",
+   "w": 76,
+   "h": 70
+  },
+  "nha-cho-2": {
+   "src": "assets/town/nha-cho-2.png",
+   "w": 76,
+   "h": 72
+  },
+  "nha-nho-2": {
+   "src": "assets/town/nha-nho-2.png",
+   "w": 64,
+   "h": 70
+  },
+  "nha-nho-3": {
+   "src": "assets/town/nha-nho-3.png",
+   "w": 60,
+   "h": 70
+  },
+  "nha-cho-3": {
+   "src": "assets/town/nha-cho-3.png",
+   "w": 70,
+   "h": 70
+  },
+  "nha-nho-4": {
+   "src": "assets/town/nha-nho-4.png",
+   "w": 82,
+   "h": 70
+  }
+ }
+}

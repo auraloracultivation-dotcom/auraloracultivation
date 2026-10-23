@@ -57,3 +57,10 @@ vị trí nút kỹ năng `src/game/hud-actions.js`.
 Đã xoá 164 hình trang bị tạm cũ (`art.outfit/weapon/wing/avatar.NNN`, trông giống đồ NPC). Chỉ còn hình **6 bộ ngũ hành**
 (8 món mỗi hệ) (đồ tân thủ cũng là 1 món của 6 bộ — hình tân thủ riêng đã xoá). Đồ luyện từ phôi giờ lấy hình bộ đúng hệ của phôi (`src/game/forged-art.js`);
 đồ phôi cũ mang hình đã xoá tự bốc lại hình bộ ngũ hành khi vào game.
+
+## Trận nhãn các vùng (23/10/2026 17h)
+Hai tấm GPT chủ dự án gửi: `assets/town/_source/tran-phap-gpt.png` (12 trận pháp) và `assets/town/_source/kien-truc-2-gpt.png`
+(18 điện / nhà / tháp). Cắt bằng `python3 -I tools/station_slice.py` → `assets/town/tp-*.png`, `assets/town/nha-*.png`,
+kích thước ghi ở `data/art/stations-art.json` (gộp vào props khi dựng bản đồ). Mỗi vùng 1 trận nhãn ở
+`data/zones/zone.start.json → town.stations` (trận pháp + 1 nhà + 2 NPC canh giữ trong `data/npcs.json`, `guard`).
+Các hình chưa dùng (điện lớn, tháp, chợ…) để dành cho tông môn / thị trấn sau này.

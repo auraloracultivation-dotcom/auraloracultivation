@@ -272,6 +272,115 @@
     "dx": 310,
     "dy": 420
    }
+  ],
+  "_ghi_chu_tram": "Chủ dự án 23/10 17h: mỗi vùng một TRẬN NHÃN (trận pháp truyền tống + nhà + 2 NPC canh giữ). dx/dy tính từ tâm thành như props. Tới gần lần đầu = thắp sáng; chạm trận pháp đã sáng = truyền tống tới trận nhãn đã sáng khác (tốn cost Linh thạch của nơi đến). Hình: data/art/stations-art.json (tools/station_slice.py). Toạ độ phải trùng supabase/migrations/0007_station_teleport.sql.",
+  "stations": [
+   {
+    "id": "xanh",
+    "zone": "xanh",
+    "name": "Trận nhãn Thanh Mộc",
+    "tp": "tp-thac-mon",
+    "dx": 200,
+    "dy": 1211,
+    "cost": 20,
+    "house": "nha-nho-2",
+    "lore": "Thanh Mộc tổ sư cắm trận nhãn đầu tiên giữa Đồng cỏ, lấy sinh khí cỏ cây giữ vành trong của Thiên Cơ Đại Trận.",
+    "lines": [
+     "Trận nhãn Thanh Mộc đã yên ngủ ngàn năm.",
+     "Đạo hữu chạm vào trận pháp để thắp sáng nó.",
+     "Thắp đủ trận nhãn, đi lại giữa các vành chỉ trong chớp mắt."
+    ]
+   },
+   {
+    "id": "cam",
+    "zone": "cam",
+    "name": "Trận nhãn Kim Quang",
+    "tp": "tp-thien-mon",
+    "dx": -382,
+    "dy": 4168,
+    "cost": 50,
+    "house": "nha-cho-2",
+    "lore": "Kim Quang tổ sư rèn cổng trời bằng kim khí cát vàng; ánh kim chặn Âm Hư tràn vào Đồng cỏ.",
+    "lines": [
+     "Cát vàng nóng rát, cẩn thận bọ cạp tinh anh.",
+     "Cổng Kim Quang còn sáng — còn che chở được Đồng cỏ."
+    ]
+   },
+   {
+    "id": "xam",
+    "zone": "xam",
+    "name": "Trận nhãn Hậu Thổ",
+    "tp": "tp-co-tich",
+    "dx": 2805,
+    "dy": 6034,
+    "cost": 120,
+    "house": "nha-lau-canh",
+    "lore": "Hậu Thổ tổ sư dựng vòng cổ thạch nặng như núi; đất sỏi xám là bức tường thứ ba của đại trận.",
+    "lines": [
+     "Đá ở đây đã nứt — Âm Hư đang gặm dần trận nhãn.",
+     "Ta canh ở đây từ lúc còn Luyện Khí."
+    ]
+   },
+   {
+    "id": "trang",
+    "zone": "trang",
+    "name": "Trận nhãn Thương Hải",
+    "tp": "tp-tinh-tru",
+    "dx": 2983,
+    "dy": 8222,
+    "cost": 250,
+    "house": "nha-nho-3",
+    "lore": "Thương Hải tổ sư đóng băng cả biển cạn thành cột tinh thể, giữ linh mạch không cho Âm Hư hút cạn.",
+    "lines": [
+     "Lạnh thấu xương… nhưng linh khí ở đây thuần lắm.",
+     "Băng tuyết giấu nhiều khoáng quý, đào cho kỹ."
+    ]
+   },
+   {
+    "id": "than",
+    "zone": "than",
+    "name": "Trận nhãn Xích Diệm",
+    "tp": "tp-hoa-mon",
+    "dx": -949,
+    "dy": 10644,
+    "cost": 500,
+    "house": "nha-kho-go",
+    "lore": "Xích Diệm tổ sư lấy địa hỏa Hắc thổ luyện cổng lửa; lửa còn cháy là đại trận còn sống.",
+    "lines": [
+     "Lửa cổng này đốt được cả hồn Âm Hư.",
+     "Đạo hữu tới được đây là không tầm thường."
+    ]
+   },
+   {
+    "id": "den",
+    "zone": "den",
+    "name": "Trận nhãn U Minh",
+    "tp": "tp-phu-thach",
+    "dx": -2241,
+    "dy": 12602,
+    "cost": 1000,
+    "house": "nha-thap-bao",
+    "lore": "U Minh tổ sư — người thứ sáu — treo trận nhãn giữa hư không bằng đá bay. Truyền rằng chính ông đã mở khe Âm Hư đầu tiên.",
+    "lines": [
+     "Đá bay không bao giờ chạm đất… như U Minh tổ sư năm xưa.",
+     "Đừng tin hết những gì sách chép về vị tổ sư thứ sáu."
+    ]
+   },
+   {
+    "id": "tim",
+    "zone": "tim",
+    "name": "Trung khu Thiên Cơ",
+    "tp": "tp-bat-quai",
+    "dx": 2595,
+    "dy": 14793,
+    "cost": 2000,
+    "house": "nha-dien-nho",
+    "lore": "Trung khu của Thiên Cơ Đại Trận nằm sâu trong Tử vực. Thắp được nơi này là đứng trước cửa trận cuối cùng.",
+    "lines": [
+     "Phía sau là Tử vực thật sự. Quay đầu vẫn còn kịp.",
+     "Sáu trận nhãn đã sáng? Vậy đạo hữu là người được chờ đợi."
+    ]
+   }
   ]
  },
  "roads": {
