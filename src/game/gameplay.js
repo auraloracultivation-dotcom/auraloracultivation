@@ -210,7 +210,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     if (hp <= 0) { die(); toast(`Bị ${n.name} hạ gục`, 2500); }
   }
   function die() {
-    hp = 0; dead = true; mobs.calmAll(); auto = false; hud.setActive('auto', false); autoDir = null;
+    hp = 0; dead = true; mobs.calmAll(); auto = false; hud.setActive('auto', false); autoDir = null; autoPlay.reset();
     if (pt.active) pt.cancel();
     soul.start();
   }
@@ -250,7 +250,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   // ---------- Mỗi khung hình ----------
   // Thọ nguyên (lifespan.js): qua 0h giờ VN cập nhật nhãn; hết thọ → tọa hóa (chết hẳn), main.js hiện bảng chuyển thế
   const lifeHooks = { synced: timeSynced, onWarn: (w) => toast(w, 4000), onTick: () => { if (me.realm !== life.label(progress.stageDef.name)) recompute(); },
-    onDead(sum) { dead = true; auto = false; hud.setActive('auto', false); autoDir = null; mobs.calmAll(); if (pt.active) pt.cancel(); onToaHoa({ ...sum, realm: progress.stageDef.name }); } };
+    onDead(sum) { dead = true; auto = false; hud.setActive('auto', false); autoDir = null; autoPlay.reset(); mobs.calmAll(); if (pt.active) pt.cancel(); onToaHoa({ ...sum, realm: progress.stageDef.name }); } };
   function update(dt) {
     now += dt;
     life.watch(dt, lifeHooks);
@@ -300,7 +300,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const at = (o) => ({ x: me.x + wrapDelta(o.x - me.x, map.width), y: me.y + wrapDelta(o.y - me.y, map.height) });
   function renderBelow(ctx, t) {
     for (const n of gather.list) { const p = at(n); drawNode(ctx, n, p.x, p.y, t); }
-    barrage.renderGround(ctx, at, t); camChe.render(ctx, at, t); biCanh.render(ctx, at, t); // hào quang Đạo Vận, trận cấm chế, vòng bí cảnh
+    barrage.renderGround(ctx, at, t); camChe.render(ctx, at, t); biCanh.render(ctx, at, t); autoPlay.render(ctx, at, t); // hào quang Đạo Vận, trận cấm chế, vòng bí cảnh, vòng neo Tự động
     for (const n of npcs.list) { const p = at(n); if (Math.abs(p.x - me.x) < 700 && Math.abs(p.y - me.y) < 700) drawNpc(ctx, n, p.x, p.y, npcs.height); }
     const list = mobs.list.map((m) => ({ m, ...at(m) })).filter((o) => Math.abs(o.x - me.x) < 800 && Math.abs(o.y - me.y) < 1000).sort((a, b) => a.y - b.y); // chỉ vẽ quái gần màn hình
     for (const { m, x, y } of list) {
@@ -379,8 +379,8 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     stunned: () => now < stunUntil,
     _debug: { me, map, progress, mobs, voids, mdef: monDef, bag, gather, npcs, die, revive, tame, dv, cards, bolts, get treasure() { return treasure; }, cds, biCanh, learn, pt, get hopNhat() { return hopNhat; }, get bar() { return bar; }, get hp() { return hp; }, set hp(v) { hp = v; }, get ps() { return ps; } }, // chỉ cho kiểm thử (?debug)
     speed: () => buffs.speed?.mul || null,
-    toggleAuto() { if (dead) return; auto = !auto; autoDir = null; autoPlay.reset(); hud.setActive('auto', auto); toast(auto ? 'Tự động đánh: bật' : 'Tự động đánh: tắt', 1000); },
-    healPill: () => usePill(HEAL_PILL), autoDir: () => (auto ? autoDir : null),
+    toggleAuto() { if (dead) return; auto = !auto; autoDir = null; auto ? autoPlay.start() : autoPlay.reset(); hud.setActive('auto', auto); toast(auto ? 'Tự động đánh: bật — farm quanh neo, kéo cần để dời neo' : 'Tự động đánh: tắt', 1600); },
+    healPill: () => usePill(HEAL_PILL), autoDir: () => (auto ? autoDir : null), autoMoved: () => auto && autoPlay.moved(), // kéo cần khi Tự động: dời neo
     openCodex: () => openCodex({ loadJSON, gp, mats, pills, recipes, cp, monsters: monDef.monsters, mobSkills: monDef.skills, blanks, qItems, artDef, info, cpText: cpFx.text, fxDuration }), // Đồ giám (nút sách)
     statValue: views.statValue, openQuests: views.openQuests, openCultivate: views.openCultivate,
     forgedLook,

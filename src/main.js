@@ -291,7 +291,7 @@ async function boot() {
     // Cần điều khiển luôn ưu tiên; thả tay mà đang bật Tự động thì đi theo hướng autoplay (quái / nguyên liệu gần nhất)
     const stick = game.stunned() ? { x: 0, y: 0 } : input.getMove(), ad = game.stunned() ? null : game.autoDir(); // bị boss trói: đứng yên
     const dir = stick.x || stick.y || !ad ? stick : ad;
-    if (dir === ad && ad.fly !== undefined && ad.fly !== !!me.flying && !game.dead) flight.set(ad.fly, true); // Tự động: bay qua chướng ngại rồi hạ
+    if (dir === ad && ad.fly !== undefined && ad.fly !== !!me.flying && !game.dead) flight.set(ad.fly, true); else if (stick.x || stick.y) game.autoMoved(); // Tự động: bay qua chướng ngại rồi hạ; tự kéo cần thì neo vùng farm đi theo
     const wasMoving = me.moving;
     me.moving = dir.x !== 0 || dir.y !== 0;
     if (me.moving) {
