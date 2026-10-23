@@ -69,7 +69,7 @@ export function createBiCanh(c) {
       const give = ([id, n]) => { progress.add(id, n); got.push(`${c.itemName(id)}${n > 1 ? ` ×${n}` : ''}`); };
       for (let k = 3; k <= cleared; k += 3) give(R.items_per_3[(k / 3 - 1) % R.items_per_3.length]); // mỗi 3 đợt 1 món
       if (win) R.full_clear.forEach(give);
-      if (cleared >= R.set_item_at) c.dv.onKill({ void: true, def: {} }, () => got.push('đồ ngũ hành'));
+      if (cleared >= R.set_item_at) c.dv.onKill({ void: true, def: {}, src: 'bicanh' }, (t) => got.push(/Thiên/.test(t) ? 'đồ Thiên hệ' : /Linh thạch/.test(t) ? 'Linh thạch (đã đủ bộ)' : 'đồ ngũ hành'));
       progress.changed();
     }
     c.toast(`${win ? 'Vượt' : why} ${def.name} — qua ${cleared}/${def.waves} đợt${got.length ? `. Thưởng: ${got.join(', ')}` : ''}`, 5000);

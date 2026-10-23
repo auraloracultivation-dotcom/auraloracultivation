@@ -3,10 +3,12 @@
 // Nhiệm vụ Ngày / Tuần / Tiến độ sinh tự động (src/game/routine.js) được đăng ký thêm vào danh sách và tự nhận.
 import { createRoutine } from './routine.js';
 const MAJOR = { lk: 0, tc: 1, kd: 2, na: 3, ht: 4, ab: 5, vd: 6 };
-const today = () => new Date(Date.now() + 7 * 3600e3).toISOString().slice(0, 10); // YYYY-MM-DD giờ VN
+let NOW = Date.now; // giờ máy chủ (extra.now) — đổi giờ máy không làm mới nhiệm vụ
+const today = () => new Date(NOW() + 7 * 3600e3).toISOString().slice(0, 10); // YYYY-MM-DD giờ VN
 
 // extra: { realms, gp, mats } — có thì bật nhiệm vụ Ngày / Tuần / Tiến độ
 export function createQuests(def, progress, realmMajor, extra = null) {
+  if (extra?.now) NOW = extra.now;
   // Có nhiệm vụ Ngày / Tuần / Tiến độ tự sinh thì bỏ các nhiệm vụ "Daily" cũ của Lab (thưởng cố định rất nhỏ, lệch xa thưởng mới)
   const retired = new Set(extra && def.routine ? def.quests.filter((q) => q.type === 'daily').map((q) => q.id) : []);
   const all = def.quests.filter((q) => !retired.has(q.id));
@@ -27,7 +29,7 @@ export function createQuests(def, progress, realmMajor, extra = null) {
     if (!routine) return;
     const r = routine.ensure((id) => !!Q().done[id]);
     for (const id of r.drop) { // hết ngày / hết tuần: bỏ nhiệm vụ cũ
-      delete Q().active[id]; delete Q().done[id]; byId.delete(id);
+      delete Q().active[id]; byId.delete(id); // GIỮ done[id]: chỉnh lùi giờ máy sinh lại đúng id cũ cũng không nhận thưởng lại được
       const i = all.findIndex((q) => q.id === id); if (i >= 0) all.splice(i, 1);
     }
     for (const q of r.add) { register(q); accept(q.id); }

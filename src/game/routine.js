@@ -5,8 +5,8 @@
 // THỬ NGHIỆM phía máy khách như phần nhiệm vụ còn lại.
 const MAJOR = ['lk', 'tc', 'kd', 'na', 'ht', 'ab', 'vd'];
 
-export function createRoutine({ R, progress, realmMajor, realms, gp, mats }) {
-  const vn = () => new Date(Date.now() + R.tz_offset_h * 3600e3); // giờ VN, đọc bằng getUTC*
+export function createRoutine({ R, progress, realmMajor, realms, gp, mats, now = Date.now }) {
+  const vn = () => new Date(now() + R.tz_offset_h * 3600e3); // giờ máy chủ // giờ VN, đọc bằng getUTC*
   const dayKey = () => vn().toISOString().slice(0, 10);
   const weekKey = () => { const d = vn(), back = (d.getUTCDay() + 6) % 7; return new Date(d.getTime() - back * 864e5).toISOString().slice(0, 10); }; // ngày thứ Hai
   const seed = (s) => [...s].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);

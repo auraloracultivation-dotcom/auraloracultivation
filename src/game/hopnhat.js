@@ -55,7 +55,7 @@ export function createHopNhat(c) {
     const r = def.he[he];
     if (!r) return 0;
     let n = 0;
-    if (c.treasure.wearHe(he)) n++;
+    if (c.treasure.wearHe(he) || (r.twin && c.treasure.wearHe(r.twin))) n++; // Thiên hệ: pháp bảo hệ ngũ hành song sinh
     if (c.cards.wear(r.card)) n++;
     const L = c.loadout, keep = new Set([r.skill_sin, r.skill_cui, 'phap-bao']);
     for (const id of [r.skill_sin, r.skill_cui]) {

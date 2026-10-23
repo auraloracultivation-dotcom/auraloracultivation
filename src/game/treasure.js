@@ -104,7 +104,8 @@ export function createTreasure(c) {
         break;
       }
       case 'shield': {
-        c.buffs.def = { mul: d.def_mul * (1 + 0.05 * (t.lv || 0)), until: c.now() + d.s }; c.recompute();
+        { const o = c.buffs.def, nw = { mul: d.def_mul * (1 + 0.05 * (t.lv || 0)), until: c.now() + d.s }; // đang có Cường Thể Đan: giữ mức mạnh hơn, thời gian dài hơn
+          c.buffs.def = o && o.until > c.now() ? { mul: Math.max(o.mul, nw.mul), until: Math.max(o.until, nw.until) } : nw; } c.recompute();
         play(d.fx, me.x, me.y - 12, d.h); barrage.zap({ kind: 'ring', x: me.x, y: me.y, r: d.r, t: 0.6, color: he.color });
         barrage.hitAround(me.x, me.y, d.r, 0.8 * scale(t), 'skill', d.stun);
         break;

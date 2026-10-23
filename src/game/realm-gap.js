@@ -18,10 +18,11 @@ export function createRealmGap({ gp, mdef, progress, today = () => 0, toast = ()
     if (!D || !progress) return exp;
     const st = day(), cap = capOf(stageId, need), was = Math.exp(-st.w); st.w += exp / cap;
     // nhận đúng phần diện tích dưới đường e^(−w): cả ngày cộng lại không bao giờ quá cap; cạn rồi chỉ còn chút `floor`
-    const got = cap * (was - Math.exp(-st.w)) + exp * (D.floor ?? 0.01) * (1 - was);
+    let got = cap * (was - Math.exp(-st.w)) + exp * (D.floor ?? 0.01) * (1 - was);
     if (was > 0.5 && Math.exp(-st.w) <= 0.5) toast('Linh khí quanh đây loãng dần — hạ quái nhận ít tu vi hơn. Qua 0h (giờ Việt Nam) hồi lại.', 3500);
     if (was > 0.1 && Math.exp(-st.w) <= 0.1) toast('Linh khí hôm nay gần cạn — nên làm nhiệm vụ hoặc nghỉ tới mai.', 3500);
-    return Math.round(got);
+    st.g = (st.g || 0) + got; if (st.g > cap) { got = Math.max(0, got - (st.g - cap)); st.g = cap; } // cả ngày không quá cap
+    return Math.floor(got) + (Math.random() < got % 1 ? 1 : 0); // phần lẻ thành xác suất: tầng thấp (1–3 tu vi/con) không bị tụt về 0
   }
   const dailyLeft = () => (progress?.state.lk?.day === today() && progress.state.lk.w !== undefined ? Math.max(0, Math.exp(-progress.state.lk.w)) : 1); // 1 = linh khí đầy
   return { gap, mul, capExp, daily, dailyLeft, overMul: D?.over_mul };

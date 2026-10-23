@@ -9,7 +9,7 @@ export function createRecipeUses({ progress, recipes, toast }) {
   const teacher = new Map([...byId.values()].map((r) => [r.teaches, r.id])); // món dạy → cuốn công thức
   const U = () => (progress.state.recipeUses ||= {});
   const max = (rid) => byId.get(rid)?.uses ?? DEF[byId.get(rid)?.cat] ?? 5;
-  const left = (rid) => (progress.count(rid) > 0 ? (U()[rid] ?? max(rid)) : 0); // lượt của cuốn đang dùng
+  const left = (rid) => { if (progress.count(rid) > 0) return U()[rid] ?? max(rid); delete U()[rid]; return 0; }; // lượt của cuốn đang dùng (vứt hết cuốn thì cuốn mới bắt đầu đủ lượt)
   const total = (rid) => (progress.count(rid) > 0 ? left(rid) + (progress.count(rid) - 1) * max(rid) : 0);
   // Gọi sau mỗi lần luyện / tu luyện THÀNH CÔNG bằng công thức dạy món `teachId`
   function spend(teachId) {
