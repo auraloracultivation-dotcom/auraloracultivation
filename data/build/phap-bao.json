@@ -87,7 +87,8 @@
     "v.dan-thuy",
     0
    ],
-   "desc": "Quét {n} dòng thủy tiễn hình quạt trong {s} giây"
+   "desc": "Quét {n} dòng thủy tiễn hình quạt trong {s} giây",
+   "cast_fx": "k.pb-thuong-hai"
   },
   {
    "id": "pb.xich-ho-lo",
@@ -201,7 +202,8 @@
     "v.no-bang",
     1
    ],
-   "desc": "Gương băng chiếu sáng: quái trong bán kính {r} bị đóng băng {stun} giây"
+   "desc": "Gương băng chiếu sáng: quái trong bán kính {r} bị đóng băng {stun} giây",
+   "cast_fx": "k.pb-huyen-bang"
   },
   {
    "id": "pb.phe-hon-co-dang",
@@ -218,7 +220,8 @@
     "v.dan-am",
     0
    ],
-   "desc": "Đèn cổ thắp {s} giây: liên tục rút hồn quái quanh mình, mỗi con trúng hồi máu"
+   "desc": "Đèn cổ thắp {s} giây: liên tục rút hồn quái quanh mình, mỗi con trúng hồi máu",
+   "cast_fx": "k.pb-co-dang"
   },
   {
    "id": "pb.thien-la-vong",
@@ -235,7 +238,8 @@
     "moc-troi",
     2
    ],
-   "desc": "Tung lưới trời: kéo mọi quái trong {r} về một chỗ, trói {stun} giây"
+   "desc": "Tung lưới trời: kéo mọi quái trong {r} về một chỗ, trói {stun} giây",
+   "cast_fx": "k.pb-thien-la"
   },
   {
    "id": "pb.cuu-tieu-loi-thap",
@@ -254,7 +258,8 @@
     "v.loi-tru",
     1
    ],
-   "desc": "Dựng lôi tháp {s} giây: cứ 0,4 giây giáng sét xuống quái trong {r}"
+   "desc": "Dựng lôi tháp {s} giây: cứ 0,4 giây giáng sét xuống quái trong {r}",
+   "cast_fx": "k.pb-loi-thap"
   },
   {
    "id": "pb.pha-khong-thoa",
@@ -271,7 +276,8 @@
     "v.dan-am",
     0
    ],
-   "desc": "Phóng {n} thoa xé không: xuyên mọi quái, nảy qua lại 8 lần"
+   "desc": "Phóng {n} thoa xé không: xuyên mọi quái, nảy qua lại 8 lần",
+   "cast_fx": "k.pb-pha-khong"
   }
  ],
  "lv_dich": [
