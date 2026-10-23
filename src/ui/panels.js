@@ -5,7 +5,6 @@ import { el, crispWidth } from './stage.js';
 import { escapeHtml, toast } from './screens.js';
 import { setupRoundCanvas, drawRoundMap } from './compass.js';
 
-const SETTINGS_KEY = 'tc.settings';
 const ICON = (n) => `assets/ui/icons/${n}.png`;
 
 // maxW(): chiều rộng CSS tối đa cho khung trên màn hiện tại
@@ -122,92 +121,7 @@ function drawCharacter(cv, { full, body }, frameImg) {
   for (const s of SLOTS) g.drawImage(frameImg, s.x, s.y, SLOT[0], SLOT[1], s.x * u, s.y * u, SLOT[0] * u, SLOT[1] * u);
 }
 
-// ---------- Cài đặt: khung + nút vẽ sẵn của chủ dự án (frames/bang-cai-dat-v2.png, tách bằng tools/panel_from_mockup.py) ----------
-// Toạ độ trên ảnh khung 920×894. Nút "Bật" vẽ sẵn; khi tắt thì phủ một nút "Tắt" lên đúng chỗ đó.
-const SET_FRAME = { src: 'assets/ui/frames/bang-cai-dat-v2.png', w: 920, h: 894, close: [825, 34, 88, 88] };
-const SET_SPOTS = {
-  sound: [621, 244, 148, 82],
-  music: [621, 398, 148, 81],
-  lang: [619, 553, 156, 81],
-  logout: [275, 704, 513, 97],
-};
-
-export function loadSettings() {
-  try { return { sound: true, music: true, lang: 'vi', ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') }; } catch {
-    return { sound: true, music: true, lang: 'vi' };
-  }
-}
-function saveSettings(s) {
-  try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); } catch { /* trình duyệt chặn lưu: bỏ qua */ }
-}
-
-export function showSettings({ onLogout, onRedeem, onChange, onRecall }) {
-  const s = loadSettings();
-  const maxW = () => Math.min(vw() * 0.94, 460, (vh() * 0.8 * SET_FRAME.w) / SET_FRAME.h);
-  openModal('modal-settings', SET_FRAME, maxW, ({ at, close, col }) => {
-    const toggle = (key, label) => {
-      const btn = at(`<button type="button" class="set-hot" aria-label="${label}"><span>Tắt</span></button>`, ...SET_SPOTS[key]);
-      const paint = () => {
-        btn.classList.toggle('off', !s[key]);
-        btn.setAttribute('aria-pressed', String(s[key]));
-      };
-      btn.addEventListener('click', () => { s[key] = !s[key]; saveSettings(s); paint(); onChange?.(s); });
-      paint();
-    };
-    toggle('sound', 'Âm thanh');
-    toggle('music', 'Nhạc nền');
-    at('<button type="button" class="set-hot" aria-label="Ngôn ngữ"></button>', ...SET_SPOTS.lang)
-      .addEventListener('click', () => toast('Hiện chỉ có Tiếng Việt'));
-    at('<button type="button" class="set-hot" aria-label="Đăng xuất"></button>', ...SET_SPOTS.logout)
-      .addEventListener('click', () => { close(); onLogout(); }); // đóng Cài đặt trước để hộp xác nhận hiện trên cùng
-    if (onRedeem) codeDrawer(col, onRedeem, onRecall && (() => { close(); onRecall(); })); // khung vẽ sẵn không có chỗ → ngăn kéo vuốt lên bên dưới
-  });
-}
-
-// Ngăn "Nhập mã" dưới bảng Cài đặt: vuốt lên trên bảng (hoặc chạm dòng gợi ý) để mở, vuốt xuống để đóng.
-function codeDrawer(col, onRedeem, onRecall) {
-  const d = el(`<div class="set-drawer">
-    <button type="button" class="set-pull" aria-expanded="false"><i></i><span>Vuốt lên để nhập mã</span></button>
-    <form class="set-code-form" autocomplete="off">
-      <input class="code-in" type="text" maxlength="40" placeholder="Nhập mã quà tặng" autocapitalize="none" autocorrect="off" spellcheck="false">
-      <button type="submit" class="bag-act">Xác nhận</button>
-      <p class="code-msg" role="status"></p>
-    </form>${onRecall ? '<button type="button" class="bag-act set-recall">Bị kẹt? Về Thanh Vân Thành</button>' : ''}</div>`);
-  col.appendChild(d);
-  d.querySelector('.set-recall')?.addEventListener('click', onRecall); // thoát kẹt: máy chủ đưa về trận pháp giữa thành
-  const pull = d.querySelector('.set-pull'), form = d.querySelector('form'), input = d.querySelector('input'), msg = d.querySelector('.code-msg');
-  const setOpen = (open) => {
-    d.classList.toggle('open', open);
-    pull.setAttribute('aria-expanded', String(open));
-    pull.querySelector('span').textContent = open ? 'Vuốt xuống để đóng' : 'Vuốt lên để nhập mã';
-    if (!open) input.blur();
-  };
-  pull.addEventListener('click', () => setOpen(!d.classList.contains('open')));
-  // vuốt: theo dõi trên cả cột (bảng + ngăn). Vừa vuốt xong thì chặn cú "click" để không bật/tắt nhầm nút
-  let y0 = null, swiped = false;
-  col.addEventListener('pointerdown', (e) => { if (e.target !== input) { y0 = e.clientY; swiped = false; } });
-  col.addEventListener('pointermove', (e) => {
-    if (y0 === null) return;
-    const dy = e.clientY - y0;
-    if (Math.abs(dy) > 36) { setOpen(dy < 0); swiped = true; y0 = null; }
-  });
-  for (const ev of ['pointerup', 'pointercancel']) col.addEventListener(ev, () => { y0 = null; });
-  col.addEventListener('click', (e) => { if (swiped) { e.stopPropagation(); e.preventDefault(); swiped = false; } }, true);
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const code = input.value.trim();
-    msg.classList.remove('ok');
-    if (!code) { msg.textContent = 'Hãy nhập mã.'; return; }
-    try {
-      const text = await onRedeem(code);
-      msg.textContent = text; msg.classList.add('ok');
-      input.value = ''; input.blur();
-      toast(text, 2200);
-    } catch (err) {
-      msg.textContent = err.message || 'Mã không đúng.';
-    }
-  });
-}
+// Cài đặt: src/ui/settings.js (giao diện mới 23/10/2026)
 
 // ---------- Bản đồ thế giới (tròn, lấy mình làm tâm vì thế giới vòng lặp) ----------
 const ZOOMS = [500, 200, 70]; // bán kính hiển thị (ô): 500 = thấy trọn thế giới 1000×1000

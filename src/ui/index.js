@@ -3,7 +3,8 @@ export {
   showConfirm, showFatal, toast,
 } from './screens.js';
 export { createHud } from './hud.js';
-export { showCharacterPanel, showSettings, showWorldMap, loadSettings } from './panels.js';
+export { showCharacterPanel, showWorldMap } from './panels.js';
+export { showSettings, loadSettings } from './settings.js';
 export { drawRoundMap } from './compass.js';
 export { createStatsDock, STATS } from './stats.js';
 export { enableFastTap } from './fasttap.js';

@@ -204,3 +204,43 @@
 .bag-v2 .bag-detail { position: absolute; left: 10px; right: 10px; bottom: 10px; max-height: 58%; z-index: 3;
   background: rgba(18, 14, 36, .96); border: 1px solid rgba(201, 163, 90, .7); box-shadow: 0 -6px 24px rgba(0, 0, 0, .55); }
 .bag-v2 .bag-note { color: #d9d3ea; text-shadow: 0 1px 2px #000; }
+
+/* ---- Cài đặt (src/ui/settings.js, chủ dự án 23/10/2026) ---- */
+.overlay.set2-wrap { background: rgba(7, 11, 22, .18); z-index: 30; }
+.set2 { position: relative; width: min(92vw, 430px); margin-top: 26px; padding: 34px 16px 16px;
+  background: linear-gradient(rgba(22, 28, 58, .95), rgba(14, 18, 40, .95)); border: 2px solid #c9a35a; border-radius: 12px;
+  box-shadow: 0 0 0 2px #2a1d44, 0 0 0 4px rgba(170, 120, 230, .55), 0 10px 30px rgba(0, 0, 0, .5); animation: pop-in2 .2s ease-out; }
+.set2-title { position: absolute; left: 50%; top: -24px; transform: translateX(-50%); padding: 8px 44px; border: 2px solid #c9a35a; border-radius: 10px;
+  background: linear-gradient(#1d2448, #10142c); box-shadow: 0 0 0 2px #2a1d44, 0 4px 12px rgba(0, 0, 0, .5); white-space: nowrap; }
+.set2-title b { font: 800 22px/1 "Noto Serif", Georgia, serif; color: #fff1cf; letter-spacing: .06em; text-shadow: 0 2px 3px #000; }
+.set2-x { position: absolute; right: -6px; top: -36px; width: 44px; height: 44px; border-radius: 8px; border: 2px solid #c9a35a;
+  background: #1a1630; color: #ff4a4a; font: 900 24px/1 system-ui, sans-serif; cursor: pointer; box-shadow: 0 2px 6px rgba(0, 0, 0, .5); }
+.set2-rows { display: flex; flex-direction: column; gap: 8px; }
+.set2-row { position: relative; display: flex; align-items: center; gap: 10px; min-height: 54px; padding: 4px 8px 4px 0; margin: 0;
+  border: 1px solid rgba(201, 163, 90, .45); border-radius: 8px; background: rgba(10, 14, 32, .7); }
+.set2-ic { flex: none; width: 50px; height: 50px; margin-left: -1px; object-fit: contain; image-rendering: pixelated; }
+.set2-ic.glyph { display: grid; place-items: center; font-style: normal; font-size: 30px; border: 2px solid #c9a35a; border-radius: 8px; background: #121a33; width: 46px; height: 46px; margin-left: 3px; font-size: 24px; }
+.set2-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.set2-body span { color: #f2ecff; font-size: 15px; }
+.set2-tog, .set2-btn { flex: none; min-width: 74px; height: 36px; padding: 0 10px; border-radius: 11px; border: 2px solid #c9a35a; cursor: pointer;
+  background: linear-gradient(#ffe2ad, #e9b56a); color: #2a1a08; font-size: 15px; font-weight: 700; }
+.set2-tog.off { background: linear-gradient(#26304f, #171d38); color: #f2ecff; }
+.set2-sel { flex: none; min-width: 104px; height: 38px; border-radius: 8px; border: 2px solid #c9a35a; background: #1a2142; color: #f2ecff; font-size: 15px; cursor: pointer; }
+.set2-sel i { font-style: normal; margin-left: 16px; color: #e9c27a; }
+.set2 input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 12px; border-radius: 6px; margin: 4px 0;
+  background: linear-gradient(90deg, #f7d29a var(--p, 50%), #232a4a var(--p, 50%)); border: 1px solid #5a4632; }
+.set2 input[type="range"]:disabled { filter: grayscale(.8) brightness(.7); }
+.set2 input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; transform: rotate(45deg); border-radius: 3px;
+  background: linear-gradient(135deg, #fff1c8, #d9a35d); border: 2px solid #7a5520; cursor: pointer; }
+.set2 input[type="range"]::-moz-range-thumb { width: 20px; height: 20px; transform: rotate(45deg); border-radius: 3px; background: #e9c27a; border: 2px solid #7a5520; }
+.set2-in { height: 34px; padding: 0 10px; border-radius: 8px; border: 1px solid #4b4870; background: #0e1430; color: #fff; font-size: 16px; outline: none; -webkit-user-select: text; user-select: text; }
+.set2-in:focus { border-color: #e9c27a; }
+.set2-code { flex-wrap: wrap; }
+.set2-code .set2-body { align-self: stretch; justify-content: center; }
+.set2-code .set2-btn { align-self: flex-end; margin-bottom: 2px; }
+.set2-msg { flex-basis: 100%; margin: -2px 0 0 56px; min-height: 0; font-size: 13px; color: #ffb38a; }
+.set2-msg:empty { display: none; }
+.set2-msg.ok { color: #9ff0a8; }
+.set2-logout { flex: 1; height: 44px; border-radius: 10px; border: 2px solid #e9a0a0; cursor: pointer;
+  background: linear-gradient(#e2525a, #a82835); color: #fff; font-size: 18px; font-weight: 700; text-shadow: 0 1px 2px #000; }
+.set2 button { touch-action: manipulation !important; }
