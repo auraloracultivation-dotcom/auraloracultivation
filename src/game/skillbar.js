@@ -37,6 +37,7 @@ export function createSkillBar({ learn, hud, S, gp, progress, pt, cds, slotItem,
   function art(id) {
     const s = S[id];
     if (!s) return null;
+    if (s.medal) return s.medal; // huy hiệu tròn khít ô (tools/skill_medals.py)
     if (s.icon_url) return s.icon_url;
     if (s.icon) return fxIcon(...s.icon);
     if (id === 'dan-duoc') return icon(HEAL_PILL);

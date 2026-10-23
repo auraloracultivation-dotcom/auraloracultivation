@@ -374,7 +374,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     wallet, life, // tiền tệ (Kho / Vạn Bảo Lâu) + thọ nguyên
     reincarnate() { progress.reset(); life.reborn(); progress.flush(); }, // tọa hóa → chuyển thế: xoá tiến trình (main.js xoá thêm Kho rồi tải lại)
     stunned: () => now < stunUntil,
-    _debug: { me, map, progress, mobs, voids, mdef: monDef, bag, gather, npcs, die, tame, dv, cards, bolts, get treasure() { return treasure; }, cds, biCanh, learn, get hp() { return hp; }, get ps() { return ps; } }, // chỉ cho kiểm thử (?debug)
+    _debug: { me, map, progress, mobs, voids, mdef: monDef, bag, gather, npcs, die, revive, tame, dv, cards, bolts, get treasure() { return treasure; }, cds, biCanh, learn, pt, get bar() { return bar; }, get hp() { return hp; }, set hp(v) { hp = v; }, get ps() { return ps; } }, // chỉ cho kiểm thử (?debug)
     speed: () => buffs.speed?.mul || null,
     toggleAuto() { if (dead) return; auto = !auto; autoDir = null; autoPlay.reset(); hud.setActive('auto', auto); toast(auto ? 'Tự động đánh: bật' : 'Tự động đánh: tắt', 1000); },
     healPill: () => usePill(HEAL_PILL), autoDir: () => (auto ? autoDir : null),

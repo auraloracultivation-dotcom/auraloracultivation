@@ -642,3 +642,6 @@ img { image-rendering: pixelated; }
 .spar-msg .win { color: #ffd76a; } .spar-msg .lose { color: #ff6a5a; }
 .spar-acts { display: flex; gap: 8px; } .spar-acts .bag-act { flex: 1; }
 .sheet .rank-spar { margin-top: 10px; width: 100%; }
+/* Huy hiệu kỹ năng tròn (tools/skill_medals.py) khít đúng lỗ tròn khung ô: lỗ tâm 50%, đường kính 68,75% */
+.act .act-art[src*="/skills/m/"] { inset: 15.6%; width: 68.8%; height: 68.8%; border-radius: 50%; image-rendering: auto; filter: none; }
+.act.locked .act-art[src*="/skills/m/"] { filter: grayscale(1) brightness(.35); }
