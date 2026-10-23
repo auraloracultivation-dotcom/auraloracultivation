@@ -1176,7 +1176,8 @@
   "_ghi_chu": "Chết (yêu cầu chủ dự án 21/10): hoá linh hồn trắng — chỉ di chuyển (tốc độ bằng bay, đi qua nước), không tên, không HP, không kỹ năng. Chọn: về thành hồi sinh (miễn phí) hoặc hồi sinh tại chỗ trả Linh thạch = base + per_stage × số tầng. Số TẠM.",
   "fade_s": 1.2,
   "here_stone_base": 10,
-  "here_stone_per_stage": 5
+  "here_stone_per_stage": 5,
+  "auto_town_s": 10
  },
  "kill_rewards": {
   "_ghi_chu": "Chủ dự án 23/10/2026: game tu tiên + idle — hạ quái nhận ÍT (tu vi, Linh thạch, Vàng, rơi đồ: Thần Phù, Phôi Pháp Bảo, đồ ngũ hành). Thảo dược / khoáng từ quái giữ nguyên để làm nhiệm vụ. Phần thưởng chính: nhiệm vụ Ngày / Tuần / Tiến độ (data/quests/quests.json → routine).",
