@@ -90,11 +90,14 @@ export function createHud(opts) {
   const quest = createQuestBox(root, { onOpen: () => opts.onMenu?.('quests'), onTrack: (id) => opts.onTrack?.(id) }); // khung riêng: dọc nằm cột trái
 
   // ---- Dưới phải: nút đánh + ô kỹ năng (dx, dy tính từ tâm nút đánh) ----
-  const pad = add(`<div class="action-pad">${actions.map((a) => `
-    <button type="button" class="act ${a.locked ? 'locked' : ''} ${a.cls || ''}" data-act="${a.id}" aria-label="${escapeHtml(a.name)}"
-      style="width:${a.size}px;height:${a.size}px;left:${a.dx - a.size / 2}px;top:${a.dy - a.size / 2}px">
+  // group 'left': hàng nút góc dưới trái (.action-left, xếp lưới) — còn lại toạ độ dx, dy từ tâm nút đánh
+  const actBtn = (a) => `<button type="button" class="act ${a.locked ? 'locked' : ''} ${a.cls || ''}" data-act="${a.id}" aria-label="${escapeHtml(a.name)}"
+      style="width:${a.size}px;height:${a.size}px${a.group ? '' : `;left:${a.dx - a.size / 2}px;top:${a.dy - a.size / 2}px`}">
       <img class="act-base" src="${a.locked && blankIcon ? blankIcon : a.icon || a.icons[0]}" alt=""><img class="act-art" alt="" hidden><b class="act-badge"></b><i class="act-cd" hidden><em></em></i><span>${escapeHtml(a.name)}</span>
-    </button>`).join('')}</div>`);
+    </button>`;
+  const padMain = add(`<div class="action-pad">${actions.filter((a) => !a.group).map(actBtn).join('')}</div>`);
+  const padLeft = add(`<div class="action-left">${actions.filter((a) => a.group === 'left').map(actBtn).join('')}</div>`);
+  const pad = { querySelector: (q) => padMain.querySelector(q) || padLeft.querySelector(q) };
   for (const a of actions) {
     const btn = pad.querySelector(`[data-act="${a.id}"]`);
     let state = 0; // nút bật/tắt (vd. Bay ↔ Chạy): đổi ảnh + tên theo trạng thái

@@ -1,5 +1,6 @@
 // Bộ nút góc dưới phải (HUD v3, chủ dự án 23/10/2026): dx/dy tính từ TÂM nút Đánh, size = đường kính (px).
-//   vòng trong 4 ô kỹ năng, vòng ngoài 3 ô + Bay + Tự động, mép trái nút xếp kỹ năng (✦) và 2 ô đan dùng nhanh.
+//   vòng trong 4 ô kỹ năng, vòng ngoài 3 ô + Bay + Tự farm. group 'left' = hàng nút góc dưới TRÁI (Tự nhiệm vụ, 2 ô đan, xếp kỹ năng)
+//   — bố cục 25/50/25 (chủ dự án 24/10/2026): cụm nút không lấn lên nửa giữa màn hình.
 // Ô kỹ năng tự xếp: kỹ năng nằm ở ô i (bảng Kỹ năng). Pháp tướng / đan dược xử lý ở đây, còn lại là chiêu.
 const ICON = (n) => `assets/ui/icons/hud-${n}.png`;
 const SLOT = 'assets/ui/frames/hud-o-ky-nang.png'; // ô trống: khung tròn, hình kỹ năng hiện trong lòng
@@ -33,11 +34,11 @@ export function hudActions({ game, S, attack, usePhapTuong, flight, toast }) {
       },
       { id: 'auto', name: 'Tự farm', icon: ICON('nut-tu-dong'), ...fan(90, 172), size: 50, onUse: () => game().toggleAuto() },
       // Tự làm nhiệm vụ (chủ dự án 24/10: tách hẳn khỏi Tự farm) — src/game/questauto.js
-      { id: 'autoq', name: 'Tự nhiệm vụ', icon: ICON('nut-nhiem-vu'), dx: -164, dy: -246, size: 46, onUse: () => game().toggleQuestAuto?.() },
+      { id: 'autoq', name: 'Tự nhiệm vụ', icon: ICON('nut-nhiem-vu'), group: 'left', size: 42, onUse: () => game().toggleQuestAuto?.() },
       // 2 ô đan dùng nhanh: chạm ô trống = chọn đan ghim, chạm ô đã ghim = uống, giữ = đổi (src/game/quick-pill.js xử lý)
-      { id: 'dan1', name: 'Đan dùng nhanh 1', icon: 'assets/ui/frames/hud-o-nho.png', cls: 'pill', dx: -112, dy: -246, size: 46, onUse: () => {} },
-      { id: 'dan2', name: 'Đan dùng nhanh 2', icon: 'assets/ui/frames/hud-o-nho.png', cls: 'pill', dx: -60, dy: -246, size: 46, onUse: () => {} },
-      { id: 'ky-nang', name: 'Kỹ năng: xếp ô', icon: ICON('nut-xep-ky-nang'), dx: -8, dy: -246, size: 40, onUse: () => game().openSkills() },
+      { id: 'dan1', name: 'Đan dùng nhanh 1', icon: 'assets/ui/frames/hud-o-nho.png', cls: 'pill', group: 'left', size: 42, onUse: () => {} },
+      { id: 'dan2', name: 'Đan dùng nhanh 2', icon: 'assets/ui/frames/hud-o-nho.png', cls: 'pill', group: 'left', size: 42, onUse: () => {} },
+      { id: 'ky-nang', name: 'Kỹ năng: xếp ô', icon: ICON('nut-xep-ky-nang'), group: 'left', size: 42, onUse: () => game().openSkills() },
     ],
   };
 }
