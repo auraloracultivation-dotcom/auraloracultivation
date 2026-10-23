@@ -2,7 +2,8 @@
 // tới quái thì đứng đánh, tới nguyên liệu thì gather.js tự hái. Kẹt (vướng cây, nước) đi đánh quái thì tự ngự kiếm bay qua
 // (chủ dự án 23/10), tới nơi / qua chướng ngại thì hạ xuống farm tiếp; không bay được thì tạm bỏ mục tiêu đó.
 // Neo vùng farm (chủ dự án 23/10, người chơi chê "auto mà cứ chạy lung tung"): bật Tự động = cắm neo tại chỗ đứng,
-// chỉ đánh / hái trong vòng anchor_radius_px (~2 màn hình iPhone); hết quái thì về gần neo đứng chờ quái hồi sinh.
+// chỉ đánh / hái trong vòng anchor_radius_px (~4 màn hình iPhone); hết quái thì về gần neo đứng chờ quái hồi sinh.
+// Không vẽ vòng hay cọc neo (chủ dự án 23/10 13:20): game tự biết vùng, người chơi không cần thấy.
 // Kéo cần điều khiển khi đang Tự động = dời neo theo người chơi (moved()).
 // Chỉ trả về hướng đi; cần điều khiển của người chơi luôn được ưu tiên (main.js). Số ở data/gameplay.json → auto.
 import { wrapDelta } from '../map/index.js';
@@ -56,22 +57,8 @@ export function createAutoPlay({ me, mobs, gather, map, cfg, reach, canFly = () 
     return { x: dx / d, y: dy / d, fly };
   }
 
-  // Vòng neo dưới chân (chỉ khi Tự động bật và không ở bí cảnh — bí cảnh có vòng riêng)
-  function render(ctx, at, t) {
-    if (!anchor || zone()) return;
-    const p = at(anchor), k = t / 1000, r = anchor.r;
-    ctx.save();
-    ctx.strokeStyle = '#ffd76a'; ctx.lineWidth = 1.5; ctx.globalAlpha = 0.28;
-    ctx.setLineDash([10, 10]); ctx.lineDashOffset = -k * 12;
-    ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, Math.PI * 2); ctx.stroke();
-    ctx.setLineDash([]); ctx.globalAlpha = 0.55 + 0.2 * Math.sin(k * 3); ctx.lineWidth = 1.5; // cọc neo giữa vòng
-    ctx.beginPath(); ctx.ellipse(p.x, p.y, 7, 3.5, 0, 0, Math.PI * 2); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x, p.y - 12); ctx.stroke();
-    ctx.restore();
-  }
-
   return {
-    step, render,
+    step,
     start() { anchor = { x: me.x, y: me.y, r: cfg.anchor_radius_px }; goal = null; stuckT = 0; fly = false; skip.clear(); },
     reset() { anchor = null; goal = null; stuckT = 0; fly = false; },
     moved() { if (anchor) { anchor.x = me.x; anchor.y = me.y; goal = null; } }, // người chơi tự kéo cần: neo đi theo

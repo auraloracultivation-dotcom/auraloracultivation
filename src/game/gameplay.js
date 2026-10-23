@@ -300,7 +300,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const at = (o) => ({ x: me.x + wrapDelta(o.x - me.x, map.width), y: me.y + wrapDelta(o.y - me.y, map.height) });
   function renderBelow(ctx, t) {
     for (const n of gather.list) { const p = at(n); drawNode(ctx, n, p.x, p.y, t); }
-    barrage.renderGround(ctx, at, t); camChe.render(ctx, at, t); biCanh.render(ctx, at, t); autoPlay.render(ctx, at, t); // hào quang Đạo Vận, trận cấm chế, vòng bí cảnh, vòng neo Tự động
+    barrage.renderGround(ctx, at, t); camChe.render(ctx, at, t); biCanh.render(ctx, at, t); // hào quang Đạo Vận, trận cấm chế, vòng bí cảnh
     for (const n of npcs.list) { const p = at(n); if (Math.abs(p.x - me.x) < 700 && Math.abs(p.y - me.y) < 700) drawNpc(ctx, n, p.x, p.y, npcs.height); }
     const list = mobs.list.map((m) => ({ m, ...at(m) })).filter((o) => Math.abs(o.x - me.x) < 800 && Math.abs(o.y - me.y) < 1000).sort((a, b) => a.y - b.y); // chỉ vẽ quái gần màn hình
     for (const { m, x, y } of list) {
