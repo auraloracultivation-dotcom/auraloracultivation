@@ -24,11 +24,11 @@ export function createHopNhat(c) {
   function check(he) {
     const r = def.he[he];
     if (!r) return [];
-    const nSet = SLOTS.filter((sl) => bag.equippedItem(sl)?.he === he).length;
+    const nSet = SLOTS.filter((sl) => bag.equippedItem(sl)?.he === he).length; const nF = c.forged?.(he) || 0;
     const pb = c.treasure.current?.(), cardsOn = c.cards.equippedDefs().map((x) => x.id), sk = c.loadout.ids();
     const skill = (id) => ({ ok: sk.includes(id) && c.learned(id), text: `Trang bị kỹ năng: ${c.S[id]?.name}${c.learned(id) ? '' : ' (chưa lĩnh ngộ)'}`, how: howSkill(id) });
     return [
-      { ok: nSet === 8, text: `8 món trang bị hệ ${he} (đang mặc ${nSet}/8)`, how: howSet(he) },
+      { ok: nSet === 8, text: `8 món đồ rơi hệ ${he} (đang mặc ${nSet}/8${nF ? ` · ${nF} món phôi luyện chỉ tính Đạo Vận` : ''})`, how: howSet(he) }, // phôi luyện tính bộ Đạo Vận nhưng KHÔNG tính Hợp Nhất
       { ok: pb?.he === he || (!!r.twin && pb?.he === r.twin), text: `Pháp bảo hệ ${r.twin ? `${he} / ${r.twin}` : he} đang đeo${pb ? ` (đang: ${pb.name})` : ''}`, how: howPb(r.twin || he) }, // Thiên hệ: pháp bảo hệ ngũ hành song sinh
       { ok: cardsOn.includes(r.card), text: `Thần Phù: ${c.cardName(r.card)}`, how: howCard(r.card) },
       skill(r.skill_sin), skill(r.skill_cui),
