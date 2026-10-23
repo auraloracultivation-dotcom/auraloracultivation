@@ -33,7 +33,7 @@
    "id": "item.khoang.ngu-hanh.001",
    "name": "Ngũ Hành Linh Thạch",
    "cat": "khac",
-   "use": "Đổi hệ ngũ hành của một phôi luyện đã thức tỉnh (Kho → chọn phôi → Đổi hệ)"
+   "use": "Đổi hệ ngũ hành của một phôi luyện đã thức tỉnh sang một hệ khác NGẪU NHIÊN — không chọn được hệ (Kho → chọn phôi → Đổi hệ). Chỉ có ở Vạn Bảo Lâu → Tiên Bảo, mỗi ngày 1 viên."
   },
   {
    "id": "item.tui.vang.001",

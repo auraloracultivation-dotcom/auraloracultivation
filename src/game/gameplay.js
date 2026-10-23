@@ -226,7 +226,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
 
   // ---------- Kỹ năng (src/game/skills.js) + ô tự xếp (loadout.js) ----------
   const loadout = createLoadout(progress, S);
-  const learn = createSkillLearn({ S, cfg: gp.skill_drop, progress, toast, play: (...a) => play(...a) }); // kỹ năng rơi từ boss 0,5%
+  const learn = createSkillLearn({ S, cfg: gp.skill_drop, progress, toast, play: (...a) => play(...a) }); // kỹ năng rơi từ boss (tỷ lệ trong data, không hiện)
   // ---------- Đạo Vận: bộ ngũ hành + Thần Phù → đạn xoè quạt, nảy, tách, phi kiếm, mưa kiếm, liên thanh (daovan / cards / barrage) ----------
   const cards = createCards({ def: dvDef, tiers: awaken.tiers, progress, stageOk: (id) => craft.stageOk(id), toast, play });
   const dv = createDaoVan({ def: dvDef, bag, cards, progress });

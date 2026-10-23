@@ -11,14 +11,15 @@ export function createHopNhat(c) {
   let fireT = 0, wasOn = null;
 
   // Cách lấy từng thứ (chạm dấu ! ở Cẩm nang). Số rơi lấy thẳng từ dữ liệu (c.src) nên đổi tỷ lệ là chữ tự đổi theo.
-  const pc = (x) => `${+(x * 100).toFixed(2)}%`.replace('.', ',');
-  const howSet = (he) => { const d = c.src?.set || {}; return `Đồ ngũ hành hệ ${he} rơi khi hạ quái (mỗi lần ra 1 món còn thiếu): thủ lĩnh ${pc(d.boss || 0)}, tinh anh ${pc(d.elite || 0)}, Âm Hư ${pc(d.void || 0)}. Mặc ở Kho → Trang bị; xem món còn thiếu ở mục "Trang bị cần mặc" bên dưới. Đồ luyện từ phôi không tính.`; };
+  // Không ghi tỷ lệ rơi (chủ dự án 23/10 17h: ẩn mọi tỷ lệ để người chơi tự khám phá) — chỉ nói nguồn nào có thể rơi.
+  const src = (d, k = ['boss', 'elite', 'void']) => k.filter((x) => d[x]).map((x) => ({ thuong: 'quái thường', elite: 'tinh anh', boss: 'thủ lĩnh', void: 'Âm Hư' })[x]).join(', ') || 'quái';
+  const howSet = (he) => { const d = c.src?.set || {}; return `Đồ ngũ hành hệ ${he} có thể rơi khi hạ ${src(d)} (mỗi lần ra 1 món còn thiếu). Mặc ở Kho → Trang bị; xem món còn thiếu ở mục "Trang bị cần mặc" bên dưới. Đồ luyện từ phôi không tính.`; };
   const howPb = (he) => { const P = c.src?.pb, names = (P?.list || []).filter((t) => t.he === he).map((t) => t.name).join(', '), d = P?.drop || {};
-    return `Pháp bảo hệ ${he}: ${names || '—'}. Có từ Phôi Pháp Bảo (mua ở Vạn Bảo Lâu, hoặc rơi: thủ lĩnh ${pc(d.boss || 0)}, tinh anh ${pc(d.elite || 0)}, Âm Hư ${pc(d.void || 0)}, nhiệm vụ Tuần / Tiến độ) → Kho → Luyện hóa → Nhận chủ (ra ngẫu nhiên, cần đúng hệ). Đeo ở Kho → Pháp Bảo.`; };
-  const howCard = (id) => { const d = c.src?.cards || {}; return `${c.cardName(id)} rơi khi hạ quái (loại phù ngẫu nhiên): thường ${pc(d.thuong || 0)}, tinh anh ${pc(d.elite || 0)}, thủ lĩnh ${pc(d.boss || 0)}, Âm Hư ${pc(d.void || 0)}. Gắn ở Kho → Thần Phù (ô phù mở theo cảnh giới).`; };
+    return `Pháp bảo hệ ${he}: ${names || '—'}. Có từ Phôi Pháp Bảo (mua ở Vạn Bảo Lâu, hoặc có thể rơi từ ${src(d)}, nhiệm vụ Tuần / Tiến độ) → Kho → Luyện hóa → Nhận chủ (ra ngẫu nhiên, cần đúng hệ). Đeo ở Kho → Pháp Bảo.`; };
+  const howCard = (id) => { const d = c.src?.cards || {}; return `${c.cardName(id)} có thể rơi khi hạ ${src(d, ['thuong', 'elite', 'boss', 'void'])} (loại phù ngẫu nhiên). Gắn ở Kho → Thần Phù (ô phù mở theo cảnh giới).`; };
   const howSkill = (id) => { const K = c.src?.skill || {}, rg = Object.entries(K.realm_gift || {}).find(([, s]) => s === id)?.[0];
     const rn = rg && (c.src.realms || []).find((x) => x.id === rg)?.name;
-    return `${c.S[id]?.name || id}: ${rn ? `tặng sẵn khi đạt cảnh giới ${rn}.` : `lĩnh ngộ khi hạ thủ lĩnh hoặc Âm Hư (${pc(K.chance || 0)} mỗi lần, ra 1 kỹ năng chưa có).`} Xếp vào ô kỹ năng ở nút ✦ cạnh cụm kỹ năng.`; };
+    return `${c.S[id]?.name || id}: ${rn ? `tặng sẵn khi đạt cảnh giới ${rn}.` : `lĩnh ngộ khi hạ thủ lĩnh hoặc Âm Hư (hiếm khi ngộ ra, mỗi lần 1 kỹ năng chưa có).`} Xếp vào ô kỹ năng ở nút ✦ cạnh cụm kỹ năng.`; };
   // Từng điều kiện của một hệ: [{ ok, text, how }]
   function check(he) {
     const r = def.he[he];

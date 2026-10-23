@@ -97,7 +97,7 @@ export async function openCodex(o) {
     const pool = ['trang-phuc', 'vu-khi', 'canh', 'phap-tuong'].includes(b.slot) ? 6 : (artIdx[b.slot] || []).filter((a) => /\.he\./.test(a.id)).length; // chỉ hình 6 bộ ngũ hành
     return { id: b.id, name: `Phôi ${SLOT[b.slot]}`, status: LOOK_SLOTS.has(b.slot) && pool ? 'tam' : 'none',
       note: LOOK_SLOTS.has(b.slot) && pool ? `Luyện ra ngẫu nhiên 1 trong ${pool} hình bộ ngũ hành (theo hệ của phôi)` : 'Chưa có hình',
-      info: [`Tên mẫu: ${(b.sample_names || []).join(', ')}`, `Mở ở ${b.unlock} · tỷ lệ ${Math.round(b.rate * 100)}%`] };
+      info: [`Tên mẫu: ${(b.sample_names || []).join(', ')}`, `Mở ở ${b.unlock}`] };
   });
   const npcs = npcDef.npcs.map((n) => ({ id: n.id, name: n.name, status: 'ok', anim: npcAnim(n), info: [`Trang phục #${n.outfit + 1} · vũ khí #${n.weapon + 1} · ${n.home.area === 'town' ? 'trong thành' : 'dọc đường'}`] }));
   const misc = [

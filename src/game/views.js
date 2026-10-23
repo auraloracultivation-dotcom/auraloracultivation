@@ -139,7 +139,7 @@ export function createViews(o) {
     if (next) {
       const rid = gp.major_realm_first_stage[next.id];
       const r = rid && realms.realms.find((x) => x.id === rid);
-      bt = r ? `Lên <b>${E(next.name)}</b>: đủ tu vi + ${E(name(r.breakthrough.pill))} (có ${progress.count(r.breakthrough.pill)}), tỷ lệ ${Math.round(r.breakthrough.rate * 100)}%. Bấm nút Đột phá (trên khung nhân vật).`
+      bt = r ? `Lên <b>${E(next.name)}</b>: đủ tu vi + ${E(name(r.breakthrough.pill))} (có ${progress.count(r.breakthrough.pill)}). Thành hay bại tùy vận khí — thất bại mất đan và một nửa tu vi. Bấm nút Đột phá (trên khung nhân vật).`
         : `Lên <b>${E(next.name)}</b>: đủ tu vi sẽ tự lên tầng.`;
     }
     const rows = Object.keys(STAT).map((k) => `<span>${STAT[k]}</span><b>${k === 'hp' ? `${Math.round(o.getHp())}/${ps.hp}` : ps[k]}</b>`).join('');
@@ -153,7 +153,7 @@ export function createViews(o) {
   function danTab() {
     return ownedOnly(pills.pills, (p) => {
       const inp = craft.pickInputs(p) || p.recipe.inputs, have = progress.count(p.id), usable = gp.pills[p.id], own = o.owns(p.id);
-      return `<div class="row ${own ? '' : 'locked'}"><div class="row-h"><b>${ico(p.id)}${E(p.name)}</b><em>có ${have} · ${Math.round(p.recipe.rate * 100)}%</em></div>
+      return `<div class="row ${own ? '' : 'locked'}"><div class="row-h"><b>${ico(p.id)}${E(p.name)}</b><em>có ${have}</em></div>
         ${own ? '' : `<p class="lock">🔒 Cần ${E(name(o.teacher.get(p.id)))} trong kho (mua ở Vạn Bảo Lâu hoặc rơi từ boss)</p>`}
         <p class="need">${need(inp)}</p>${btn('brew', p.id, 'Luyện', own && progress.has(inp))} ${usable ? btn('use', p.id, 'Dùng', have > 0) : ''}</div>`;
     }, 'đan phương');
@@ -161,7 +161,7 @@ export function createViews(o) {
   function phoiTab() {
     return ownedOnly(blanks.blanks, (b) => {
       const ok = craft.stageOk(b.unlock), own = o.owns(b.id);
-      return `<div class="row ${own ? '' : 'locked'}"><div class="row-h"><b>${ico(`slot.${b.slot}`)}Phôi ${SLOT[b.slot]}</b><em>${ok ? `${Math.round(b.rate * 100)}%` : `mở ở ${E(stageName(b.unlock))}`}</em></div>
+      return `<div class="row ${own ? '' : 'locked'}"><div class="row-h"><b>${ico(`slot.${b.slot}`)}Phôi ${SLOT[b.slot]}</b><em>${ok ? '' : `mở ở ${E(stageName(b.unlock))}`}</em></div>
         ${own ? '' : `<p class="lock">🔒 Cần ${E(name(o.teacher.get(b.id)))} trong kho</p>`}
         <p class="need">${need(b.inputs)}</p>${btn('forge', b.id, 'Luyện phôi', own && ok && progress.has(b.inputs))}</div>`;
     }, 'công thức phôi');
