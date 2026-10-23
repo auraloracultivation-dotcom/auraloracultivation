@@ -116,6 +116,17 @@ export function drawMonsterLabel(ctx, m, x, y, selected, now) {
 }
 
 // Số sát thương bay lên, kiếm khí, vòng diện rộng
+// Quầng sáng (gradient vẽ sẵn mỗi màu một lần — không dùng shadowBlur cho đỡ lag điện thoại)
+const dots = new Map();
+function glowDot(color) {
+  if (!dots.has(color)) {
+    const c = document.createElement('canvas'); c.width = c.height = 64;
+    const g = c.getContext('2d'), r = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    r.addColorStop(0, 'rgba(255,255,255,0.9)'); r.addColorStop(0.2, color); r.addColorStop(1, color + '00');
+    g.fillStyle = r; g.fillRect(0, 0, 64, 64); dots.set(color, c);
+  }
+  return dots.get(color);
+}
 export function drawFx(ctx, fx, ox, oy) {
   ctx.save();
   for (const f of fx) {
@@ -131,6 +142,8 @@ export function drawFx(ctx, fx, ox, oy) {
       ctx.strokeText(f.text, 0, 0); ctx.fillText(f.text, 0, 0);
       ctx.restore();
     } else if (f.kind === 'sprite') { // hiệu ứng hình: f.fx, tiến độ theo thời gian còn lại
+      if (f.glow) { const k = Math.min(1, f.t / f.life * 2.2); ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = 0.5 * k; // quầng sáng dưới chân hiệu ứng
+        ctx.drawImage(glowDot(f.glow), x - f.h * 0.6, y - f.h * 0.22, f.h * 1.2, f.h * 0.44); ctx.restore(); }
       drawEffect(ctx, f.fx, 1 - f.t / f.life, x, y - (f.lift || 0), f.h, f.rot || 0);
     } else if (f.kind === 'bolt' && fxGlow(f.fx)) { // đạn Thiên hệ: chạy khung + 3 bóng mờ kéo đuôi (bay nhanh kiểu My Heroes)
       const r = Math.atan2(f.vy, f.vx), sp = Math.hypot(f.vx, f.vy) || 1, p = (performance.now() / 1000 / fxDuration(f.fx)) % 1, sz = f.size || 22;

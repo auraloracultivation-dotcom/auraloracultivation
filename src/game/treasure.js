@@ -7,6 +7,7 @@
 // Lưu progress.state.treasures = [{ uid, id, lv, known, aw }], progress.state.treasureOn = uid.
 import { juice } from './juice.js';
 import { fxIconUrl, loadFx, iconUrl } from '../entity/index.js';
+import { createThien } from './treasure-thien.js'; // chiêu mới 6 pháp bảo Thiên hệ (24/10/2026)
 
 const STAT = { hp: 'Khí huyết', linh: 'Tấn công', def: 'Phòng thủ', xuyen: 'Xuyên giáp', crit: 'Bạo kích %', hut: 'Hút máu %', phan: 'Phản đòn %' };
 
@@ -14,6 +15,7 @@ const STAT = { hp: 'Khí huyết', linh: 'Tấn công', def: 'Phòng thủ', xuy
 export function createTreasure(c) {
   const { def, S, progress, craft, barrage, mobs, me, play, toast } = c;
   const byId = new Map(def.list.map((t) => [t.id, t]));
+  const thien = createThien({ barrage, mobs, me, map: c.map, play, heal: c.heal, maxHp: c.maxHp, target: c.target, rewind: c.rewind });
   const pic = (d) => d.icon_url || iconUrl(d.id) || fxIconUrl(...d.icon); // ảnh chủ dự án (icons atlas) — thiếu thì mượn icon hiệu ứng
   const DICH = 'item.dich.on-duong.001'; // Ôn Dưỡng Linh Dịch
   const dichNeed = (t) => def.lv_dich?.[(t.lv || 0) + 1] || 0;
@@ -30,6 +32,7 @@ export function createTreasure(c) {
     if (!s) return;
     s.cd_s = d ? d.cd_s : 10; s.mp = d ? d.mp : 20;
     s.icon = d ? d.icon : ['v.cong-hu', 0];
+    if (d && thien.has(d.kind)) loadFx(thien.fxIds(d)); // tải sẵn hoạt ảnh của pháp bảo Thiên hệ đang đeo (không tải cả 6 lúc vào game)
   }
 
   // ---- Dùng chiêu: trả về true nếu đã kích hoạt ----
@@ -44,6 +47,7 @@ export function createTreasure(c) {
     if (!o.quietName) c.say(me.x, me.y - 44, d.name, he.color, true);
     if (d.cast_fx && !['stream', 'seal', 'shield', 'storm'].includes(d.kind)) play(d.cast_fx, me.x, me.y + 4, 52, { ground: true }); // ảnh hoạt ảnh pháp bảo
     if (d.shake) juice.later(0.15, () => juice.shake(d.shake, 0.25)); if (d.dim) juice.dim(0.6, d.dim); // cảm giác đòn kiểu My Heroes
+    if (thien.has(d.kind)) return thien.cast(d, { mul, n, tgt, color: he.color, auto: !!o.quietName });
     switch (d.kind) {
       case 'ring_burst': for (let k = 0; k < n; k++) { const a = (k / n) * Math.PI * 2; shot(Math.cos(a), Math.sin(a), { homing: 0.9 }); } break;
       case 'stream': { // phun liên tục về phía mục tiêu (đổi mục tiêu khi con cũ chết) + luồng lửa hồ lô

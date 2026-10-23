@@ -71,3 +71,11 @@ Quang · Lôi · Băng · Phong · Hư · Thời, mỗi hệ 8 món. Nguồn + k
 → hình `art.<loại>.he.7–12` (linh thú `art.pet.he.13–18`), bộ he.7–12 trong `data/equipment/he6.json`, 48 món trong
 `data/items/items.json` (`thien: true`), Đạo Vận / Hợp Nhất trong `data/build/dao-van.json` (soi số theo hệ ngũ hành song sinh).
 Đồ Thiên hệ chỉ rơi từ Âm Hư; phôi luyện vẫn chỉ ra hình ngũ hành.
+
+## Hình mới 6 pháp bảo Thiên hệ (24/10/2026 01h)
+5 tấm hoạt ảnh pháp bảo chủ dự án gửi (nền hồng): Kim Luân (Quang), Lôi Kỳ (Lôi), Lưu Ly Trản (Băng), Phong Ấn Phiến (Phong),
+Sa Lậu (Thời) — gốc ở `assets/effects/_source/phap-bao-thien/`. Hư Không Bàn chưa có tấm: tạm dùng chén băng đổi màu tím (`hu-tam.webp`);
+có tấm thật thì thay file này rồi chạy lại tool. Cắt bằng `python3 -I tools/thien_phap_bao.py` → `assets/effects/thien/tp.<hệ>.*.webp`
+(chỉ mục `data/art/sprites.json → fx`, có `glow` để tự cộng sáng) + icon `assets/ui/skills/pb-tp-<hệ>.png`.
+Chiêu mới (kind `t_*`): `src/game/treasure-thien.js`; quầng sáng dùng chung `src/game/glow.js` (gradient vẽ sẵn, không `shadowBlur`).
+Vẫn chỉ nhận từ Thiên Cơ Truyền Thừa (1 lượt/ngày), không ra từ phôi.
