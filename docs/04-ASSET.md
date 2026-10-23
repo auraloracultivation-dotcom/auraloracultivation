@@ -55,5 +55,5 @@ vị trí nút kỹ năng `src/game/hud-actions.js`.
 
 ## Xoá kho hình tạm (23/10/2026, chủ dự án yêu cầu)
 Đã xoá 164 hình trang bị tạm cũ (`art.outfit/weapon/wing/avatar.NNN`, trông giống đồ NPC). Chỉ còn hình **6 bộ ngũ hành**
-(8 món mỗi hệ) và 6 bộ đồ tân thủ. Đồ luyện từ phôi giờ lấy hình bộ đúng hệ của phôi (`src/game/forged-art.js`);
+(8 món mỗi hệ) (đồ tân thủ cũng là 1 món của 6 bộ — hình tân thủ riêng đã xoá). Đồ luyện từ phôi giờ lấy hình bộ đúng hệ của phôi (`src/game/forged-art.js`);
 đồ phôi cũ mang hình đã xoá tự bốc lại hình bộ ngũ hành khi vào game.
