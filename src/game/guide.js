@@ -15,6 +15,7 @@ export function createGuide(c) {
   const owned = new Set(bag.entries().map((e) => e.item?.id));
   const skillIcon = (s) => s.icon_url || (s.icon && fxIconUrl(...s.icon)) || null;
   const stageOk = (id) => !id || progress.stageIndex(id) <= progress.state.stage;
+  const skOk = (id, s) => c.learn.learned(id) && stageOk(s.unlock);
 
   function heTab(he) {
     const h = dvDef.he[he], n = dv.counts()[he] || 0, mine = new Set(bag.entries().map((e) => e.item?.id));
@@ -28,7 +29,7 @@ export function createGuide(c) {
     }).join('');
     const tiers = Object.entries(h.tiers).map(([t, v]) => `<div class="gd-tier ${n >= +t ? 'lit' : ''}" style="--c:${h.color}"><b>${t}/8</b><span>${E(v._mo_ta)}</span></div>`).join('');
     const skills = Object.entries(S).filter(([, s]) => s && s.he === he).map(([id, s]) =>
-      `<div class="gd-skill ${stageOk(s.unlock) ? '' : 'lock'}">${pic(skillIcon(s))}<span><b>${E(s.name)}</b>${stageOk(s.unlock) ? 'Đã mở' : `Mở ở ${E(c.stageName(s.unlock))}`}</span></div>`).join('');
+      `<div class="gd-skill ${skOk(id, s) ? '' : 'lock'}">${pic(skillIcon(s))}<span><b>${E(s.name)}</b>${!c.learn.learned(id) ? 'Chưa lĩnh ngộ (boss 0,5%)' : stageOk(s.unlock) ? 'Đã có' : `Mở ở ${E(c.stageName(s.unlock))}`}</span></div>`).join('');
     const cc = c.ccDef.he[he], pbs = c.pbDef.list.filter((d) => d.he === he);
     const canWear = c.items.some((d) => d.he === he && d.slot && (mine.has(d.id)) && bag.equippedItem(d.slot)?.id !== d.id);
     return `<div class="row"><div class="row-h"><b style="color:${h.color}">${E(h.name)}</b><em>Hệ ${E(he)} · đang mặc ${n}/8</em></div>
