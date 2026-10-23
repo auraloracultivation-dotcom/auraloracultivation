@@ -166,7 +166,7 @@ export function createTreasure(c) {
     }
     if (action === 'pb-wear') {
       if (progress.state.treasureOn === t.uid) progress.state.treasureOn = null;
-      else { if (!c.stageOk(def.unlock)) return 'Cảnh giới chưa đủ'; progress.state.treasureOn = t.uid; }
+      else { if (!c.stageOk(def.unlock)) return `Pháp bảo mở ở ${c.stageName?.(def.unlock) || 'cảnh giới cao hơn'}`; progress.state.treasureOn = t.uid; }
       syncSkill(); c.recompute(); progress.changed();
       return progress.state.treasureOn ? `Đeo ${d.name} — xếp kỹ năng "Pháp Bảo" vào ô để dùng` : `Tháo ${d.name}`;
     }
