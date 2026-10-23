@@ -19,22 +19,23 @@ export function hudActions({ game, S, attack, usePhapTuong, flight, toast }) {
   return {
     blankIcon: SLOT,
     actions: [
-      { id: 'attack', name: 'Đánh thường', icon: ICON('nut-danh'), dx: 0, dy: 0, size: 100, onUse: () => attack() },
-      // vòng trong r=118: 4 ô; vòng ngoài r=200: 3 ô + Bay + Tự động; mép trái: ✦ xếp kỹ năng, Đan
-      slot(0, fan(180, 118), 58), slot(1, fan(150, 118), 58), slot(2, fan(120, 118), 58), slot(3, fan(90, 118), 58),
-      slot(4, fan(184, 200), 54), slot(5, fan(160, 200), 54), slot(6, fan(136, 200), 54),
-      { id: 'ky-nang', name: 'Kỹ năng: xếp ô', icon: ICON('nut-xep-ky-nang'), dx: -250, dy: -130, size: 42, onUse: () => game().openSkills() },
+      { id: 'attack', name: 'Đánh thường', icon: ICON('nut-danh'), dx: 0, dy: 0, size: 96, onUse: () => attack() },
+      // gọn về góc phải (chủ dự án 23/10): vòng trong r=104 4 ô, vòng ngoài r=172 3 ô + Bay + Tự động,
+      // hàng trên cùng: 2 ô đan dùng nhanh + nút xếp kỹ năng (✦) — không lấn sang nửa trái màn dọc
+      slot(0, fan(180, 104), 54), slot(1, fan(150, 104), 54), slot(2, fan(120, 104), 54), slot(3, fan(90, 104), 54),
+      slot(4, fan(180, 172), 50), slot(5, fan(157, 172), 50), slot(6, fan(134, 172), 50),
       {
-        id: 'bay', name: 'Bay', icons: [S('bay'), S('chay')], names: ['Bay', 'Chạy bộ'], ...fan(112, 200), size: 50,
+        id: 'bay', name: 'Bay', icons: [S('bay'), S('chay')], names: ['Bay', 'Chạy bộ'], ...fan(112, 172), size: 46,
         onUse: (state) => { // ngự kiếm (src/game/flight.js): phải cầm kiếm; bay tốn linh lực theo thời gian
           if (game().dead) { toast('Linh hồn không dùng được kỹ năng', 1200); return 'keep'; }
           if (!flight().set(state === 1)) return 'keep';
         },
       },
-      { id: 'auto', name: 'Tự động đánh', icon: ICON('nut-tu-dong'), ...fan(90, 200), size: 54, onUse: () => game().toggleAuto() },
+      { id: 'auto', name: 'Tự động đánh', icon: ICON('nut-tu-dong'), ...fan(90, 172), size: 50, onUse: () => game().toggleAuto() },
       // 2 ô đan dùng nhanh: chạm ô trống = chọn đan ghim, chạm ô đã ghim = uống, giữ = đổi (src/game/quick-pill.js xử lý)
-      { id: 'dan1', name: 'Đan dùng nhanh 1', icon: 'assets/ui/frames/hud-o-nho.png', cls: 'pill', dx: -262, dy: -40, size: 50, onUse: () => {} },
-      { id: 'dan2', name: 'Đan dùng nhanh 2', icon: 'assets/ui/frames/hud-o-nho.png', cls: 'pill', dx: -262, dy: 30, size: 50, onUse: () => {} },
+      { id: 'dan1', name: 'Đan dùng nhanh 1', icon: 'assets/ui/frames/hud-o-nho.png', cls: 'pill', dx: -112, dy: -246, size: 46, onUse: () => {} },
+      { id: 'dan2', name: 'Đan dùng nhanh 2', icon: 'assets/ui/frames/hud-o-nho.png', cls: 'pill', dx: -60, dy: -246, size: 46, onUse: () => {} },
+      { id: 'ky-nang', name: 'Kỹ năng: xếp ô', icon: ICON('nut-xep-ky-nang'), dx: -8, dy: -246, size: 40, onUse: () => game().openSkills() },
     ],
   };
 }
