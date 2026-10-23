@@ -263,3 +263,42 @@
   border: 1.5px solid #f2c77f; background: rgba(242, 199, 127, .15); color: #ffd98a; font: 900 13px/1 system-ui, sans-serif; cursor: pointer; }
 .gd-how-t { margin: 2px 0 6px 18px; padding: 7px 10px; border-left: 2px solid #f2c77f; border-radius: 4px; background: rgba(242, 199, 127, .08);
   color: #efe6cf; font-size: 13px; line-height: 1.45; }
+
+/* ==== Bố cục 25 / 50 / 25 (chủ dự án 24/10/2026, kiểu My Heroes) ====
+   Trên 25%: nhân vật, tiền, nhiệm vụ đang theo (1 dòng), bản đồ nhỏ + 6 nút menu.
+   Giữa 50%: để trống cho cảnh chơi / chụp ảnh. Dưới 25%: nút tròn, Kho, Chat, đan, nút đánh + kỹ năng. */
+.action-left { position: absolute; z-index: 5; display: grid; grid-template-columns: repeat(4, var(--bb, 42px)); gap: 4px; pointer-events: none;
+  left: max(6px, env(safe-area-inset-left)); bottom: calc(max(8px, env(safe-area-inset-bottom)) + var(--bb, 42px) + 10px); }
+.action-left .act { position: relative; left: auto; top: auto; width: var(--bb, 42px) !important; height: var(--bb, 42px) !important; }
+.act.pill.empty::after { font-size: 10px; }
+@media (orientation: portrait) {
+  :root { --h3-L: min(232px, 60vw); --h3-R: 100px; --bb: clamp(34px, calc((100vw - 236px) / 4), 42px); }
+  .h3-right { gap: 2px; }
+  .h3-mini { width: 86px; }
+  .h3-menu button { aspect-ratio: 1; }
+  /* nhiệm vụ: dải 1 dòng ngay dưới ô tiền, vẫn trong 25% trên */
+  .h3-quest, .h3-quest.min { top: calc(var(--h3-top) + 138px); width: var(--h3-L); aspect-ratio: auto; height: 52px; background: rgba(14, 14, 34, .72);
+    border: 1px solid rgba(201, 163, 90, .7); border-radius: 8px; box-shadow: 0 0 0 1px #2a1d44; }
+  .h3-quest .h3-q-head { left: 0 !important; top: 0 !important; width: 100% !important; height: 15px !important; text-align: left; padding-left: 6px !important;
+    font: 800 10px/15px system-ui, sans-serif; color: #f2c77f; text-shadow: 0 1px 1px #000; }
+  .h3-quest .h3-q-head::before { content: "Nhiệm vụ ▸"; }
+  .h3-quest .h3-q-tog { display: none; }
+  .h3-quest .h3-q-list, .h3-quest.min .h3-q-list { display: flex; left: 4px !important; right: 4px; top: 15px !important; width: auto !important; height: 34px !important; }
+  .h3-quest .h3-q-row { border: 0; padding-bottom: 0; }
+  .h3-quest .h3-q-row:nth-child(n+2) { display: none; }
+  .h3-auto { position: fixed; right: max(6px, env(safe-area-inset-right)); top: calc(var(--h3-top) + 162px); width: 150px; margin: 0; font-size: 9px; }
+  /* dưới: hàng nút tròn → Tự NV / đan / xếp kỹ năng → Kho, Chat (góc trái); nút đánh + 7 ô kỹ năng (góc phải) */
+  .action-pad { transform: scale(.78); right: calc(max(6px, env(safe-area-inset-right)) + 48px); bottom: calc(max(8px, env(safe-area-inset-bottom)) + 48px); }
+  .h3-round { position: fixed; z-index: 5; left: max(6px, env(safe-area-inset-left)); width: calc(var(--bb) * 4 + 12px); grid-template-columns: repeat(4, 1fr); gap: 4px;
+    bottom: calc(max(8px, env(safe-area-inset-bottom)) + var(--bb) * 2 + 18px); }
+  .h3-round span { font-size: 7px; }
+  .h3-side { width: calc(var(--bb) + 4px); }
+  .h3-kho { bottom: max(6px, env(safe-area-inset-bottom)); }
+  .h3-chat { bottom: max(6px, env(safe-area-inset-bottom)); left: calc(max(6px, env(safe-area-inset-left)) + var(--bb) + 12px); }
+  .chat-log { left: max(6px, env(safe-area-inset-left)); bottom: calc(25dvh + 6px); }
+  .h3-chatbox { bottom: calc(25dvh + 6px); }
+  .toast { top: auto; bottom: calc(25dvh + 6px); }
+}
+@media (orientation: landscape) {
+  .action-left { left: calc(max(6px, env(safe-area-inset-left)) + 100px); bottom: max(6px, env(safe-area-inset-bottom)); }
+}
