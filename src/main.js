@@ -241,7 +241,6 @@ async function boot() {
   navi = createNavi({ map, me, game, flight, toast }); // dẫn đường tới nơi làm nhiệm vụ
   game.setGo((id) => navi.start(id)); // nút "Đi tới" trong bảng Nhiệm vụ đầy đủ
   pills = createQuickPill({ game: () => game, hud, pick: showSlotPicker, iconUrl, toast }); // 2 ô đan dùng nhanh
-  hud.setRoundIcon('pb', iconUrl('item.phapbao.phoi.001')); hud.setRoundIcon('phu', iconUrl('card.phu.lien-thanh'));
   const rank = createRankReporter({ gp: game.gp, info: game.rankInfo, me, submit: net.submitLeaderboard }); // ảnh chụp tiến trình → bảng xếp hạng
   dock = createStatsDock({ getValue: (id) => game.statValue(id), compact: false }); // HUD v3: bảng chỉ số mở bằng nút Nhân Vật
   game.setDock(dock);
@@ -317,6 +316,7 @@ async function boot() {
       miniTimer = 0.25;
       drawRoundMap(hud.miniCanvas, (off) => map.drawMinimap(off, me.x, me.y, 40, markers()));
       dock.refresh(); hud.setWallet(game.wallet.list()); hud.setQuests(game.questBrief()); pills.refresh(); // ô tiền, khung nhiệm vụ, ô đan
+      for (const [k, u] of Object.entries(game.hudArt())) hud.setRoundIcon(k, u); // nút tròn: ảnh vật phẩm đang dùng
     }
     followCamera(cam, me, screen, map.width, map.height, zoneDef.wrap);
   }

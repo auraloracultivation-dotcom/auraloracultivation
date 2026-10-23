@@ -107,7 +107,7 @@ export function createGuide(c) {
   let last = '';
   function tick() {
     const md = dv.mods(), top = md.sets.reduce((a, s) => (!a || s.n > a.n ? s : a), null);
-    const text = top ? `${top.he} ${top.n}/8${top.n >= 8 ? ' ✦' : ''}` : 'Đạo Vận';
+    const text = 'Đạo Vận'; // chỉ ghi tên (chủ dự án 23/10): số món không phản ánh đúng điểm cần, chạm vào xem chi tiết
     if (text !== last) { last = text; chip.set(text, top?.color || '#c9b98a'); }
   }
   return { open, tick };
