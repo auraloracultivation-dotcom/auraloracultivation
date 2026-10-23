@@ -2,7 +2,7 @@
 // để linh hồn vẫn đi lại được. Hai nút: về thành hồi sinh (miễn phí) / hồi sinh tại chỗ (trả Linh thạch).
 import { escapeHtml } from './screens.js';
 
-export function showRevive({ cost, stone, townName, onTown, onHere }) {
+export function showRevive({ cost, stone, townName, onTown, onHere, countdown = 0 }) {
   const box = document.createElement('div');
   box.className = 'revive-box';
   const enough = stone >= cost;
@@ -12,9 +12,11 @@ export function showRevive({ cost, stone, townName, onTown, onHere }) {
       <button type="button" class="bag-act" data-r="town">Về ${escapeHtml(townName)} hồi sinh</button>
       <button type="button" class="bag-act" data-r="here" ${enough ? '' : 'disabled'}>Hồi sinh tại đây · ${cost} LT</button>
     </div>
-    ${enough ? '' : `<p class="revive-note">Không đủ Linh thạch (có ${stone})</p>`}`;
+    ${enough ? '' : `<p class="revive-note">Không đủ Linh thạch (có ${stone})</p>`}
+    ${countdown ? `<p class="revive-auto">Đang Tự động — tự về thành sau <b data-cd>${countdown}</b> giây</p>` : ''}`;
   document.body.appendChild(box);
   const close = () => box.remove();
+  close.count = (n) => { const el = box.querySelector('[data-cd]'); if (el) el.textContent = Math.max(0, n); }; // đếm ngược tự về thành
   box.addEventListener('pointerdown', (e) => {
     const b = e.target.closest('[data-r]');
     if (!b || b.disabled) return;

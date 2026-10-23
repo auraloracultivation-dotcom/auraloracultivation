@@ -222,7 +222,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     play('vong-lua', me.x, me.y - 8, 40); toast(`Hồi sinh${here ? ' tại chỗ' : ` tại trận pháp ${map.town?.name || ''}`} — được bảo vệ ${PV.revive_guard_s} giây`, 2000); if (resumeAuto) { const r = resumeAuto; resumeAuto = null; auto = true; autoPlay.start(r.focus, here ? null : r.at); hud.setActive('auto', true); toast('Tự động bật lại — quay về chỗ farm cũ', 1800); } // về thành thì tự đi lại vùng neo cũ
   }
   const tame = createTame({ cfg: gp.tame, progress, monsters: monDef.monsters, mdef: monDef, mobs, map, me, stats, gp, toast, say: (...a) => say(...a), play: (...a) => play(...a), onKill: (m) => onKill(m), placeholder: placeholderIcon, suppress: (m, p) => gapR.mul(m.stage, p.stage) });
-  const soul = createSoul({ me, hud, progress, cfg: gp.soul, townName: map.town?.name || 'thành', toast, showRevive, onRevive: revive });
+  const soul = createSoul({ me, hud, progress, cfg: gp.soul, townName: map.town?.name || 'thành', toast, showRevive, onRevive: revive, autoBack: () => !!resumeAuto }); // đang Tự động mà chết: 10 giây không chọn thì tự về thành
 
   // ---------- Kỹ năng (src/game/skills.js) + ô tự xếp (loadout.js) ----------
   const loadout = createLoadout(progress, S);
