@@ -45,7 +45,7 @@ export function createInventory({ ru, recipes, info, progress, bag, craft, itemD
   function bagGear(it) {
     const a = st().itemAw[it.id] || { tier: null, lines: [], spent: 0 }, eq = bag.isEquipped(it);
     return { ...it, key: `bag:${it.id}`, thumb: art(it.art) || '', equipped: eq, tier: a.tier,
-      sub: `${SLOT[it.slot] || ''}${it.he ? ` · hệ ${it.he}` : ''}${a.tier ? ` · ${tierName(a.tier)}` : ' · chưa thức tỉnh'}`,
+      sub: `${it.thien ? '✦ Tiên khí · ' : ''}${SLOT[it.slot] || ''}${it.he ? ` · hệ ${it.he}` : ''}${a.tier ? ` · ${tierName(a.tier)}` : ' · chưa thức tỉnh'}`,
       detail: a.tier ? '' : 'Chưa có chỉ số — thức tỉnh để có', lines: lines(a), actions: gearActions(a, eq) };
   }
   function forgedGear(g) {

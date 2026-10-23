@@ -276,9 +276,11 @@ export function createViews(o) {
   const isLT = (s) => CUR(s) === 'linh-thach';
   const SHOP_TABS = { dp: (s, d) => isLT(s) && d.cat === 'dan-phuong', ct: (s, d) => isLT(s) && d.cat === 'phap-khi', cp: (s, d) => isLT(s) && d.cat === 'cong-phap',
     nl: (s, d) => isLT(s) && !d.teaches, pp: (s) => CUR(s) === 'vang', tb: (s) => CUR(s) === 'tien-ngoc' };
-  // Tiên khí (trang bị tiên giới): cần Vấn Đỉnh trở lên — người chơi hiện dừng ở Hóa Thần nên chỉ báo trước
-  const celestialRow = () => `<div class="row"><div class="row-h"><b>${ico('cur.tien-ngoc')}Tiên khí — trang bị tiên giới</b><em class="own">Chưa mở</em></div>
-    <p class="src">Chỉ bán bằng Tiên ngọc. Từ Vấn Đỉnh đến Âm Hư mới chạm được một phần tiên khí.</p>${btn('none', '', 'Cần cảnh giới Vấn Đỉnh', false)}</div>`;
+  // Tiên khí = 6 bộ Thiên hệ (chủ dự án 24/10 02h): 8 trang bị + 2 kỹ năng + 1 pháp bảo mỗi hệ. Không bán — chỉ báo nguồn, xem ở Cẩm nang Đạo Vận
+  const celestialRow = () => `<div class="row"><div class="row-h"><b>${ico('cur.tien-ngoc')}✦ Tiên khí — 6 bộ Thiên hệ</b><em class="own">Đã mở</em></div>
+    <p class="src">Quang · Lôi · Băng · Phong · Hư · Thời — mỗi bộ 8 trang bị + 2 kỹ năng + 1 pháp bảo. Đủ bộ kích Thiên Cơ Hợp Nhất.</p>
+    <p class="src">Trang bị: rơi từ Âm Hư, qua hết Cửu Thiên Bí Cảnh. Kỹ năng + pháp bảo: Thiên Cơ Truyền Thừa (Nhiệm vụ → Bí Cảnh, 1 lượt/ngày). Kỹ năng dùng từ Nguyên Anh Hậu kỳ / Hóa Thần Sơ kỳ.</p>
+    <p class="src">Xem và mặc cả bộ: nút Đạo Vận → tab Quang … Thời.</p></div>`;
   function openShop() {
     const { shop } = o;
     showSheet({
