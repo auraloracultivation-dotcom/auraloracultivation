@@ -19,7 +19,7 @@ export function createProgress(userId, gp) {
   let listener = () => {};
 
   function fresh() {
-    return { v: VERSION, stage: 0, exp: 0, hp: null, stone: 0, inv: {}, gear: [], eq: {}, cp: {}, uid: 1,
+    return { v: VERSION, stage: 0, exp: 0, hp: null, stone: 0, inv: { ...(gp.player.starter_inv || {}) }, gear: [], eq: {}, cp: {}, uid: 1, // starter_inv: quà tân thủ (đan hồi huyết)
       quests: { active: {}, done: {} }, herbs: [], bosses: [], dailyDone: {}, flags: [], itemAw: {} };
   }
 
