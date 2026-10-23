@@ -27,15 +27,18 @@ export function createStations({ map, me, net, game, toast, onMoved }) {
     return true;
   }
 
+  let busy = false; // đang chờ máy chủ: chạm thêm không gửi lần 2, không trừ phí 2 lần
   async function go(dest, close) {
+    if (busy) return;
     const from = near();
     if (!from) return toast('Phải đứng cạnh trận pháp mới truyền tống được', 1600);
     if (from.id === dest.id) return toast('Đạo hữu đang ở đây rồi', 1200);
     const w = game.wallet;
     if (dest.cost && w.get('linh-thach') < dest.cost) return toast(`Cần ${dest.cost} Linh thạch để khởi động trận pháp`, 1800);
-    let row = null;
+    let row = null; busy = true;
     try { row = await net.teleportToStation(dest.id); }
     catch (e) { console.warn('Truyền tống lỗi', e); return toast('Trận pháp chưa khai thông với máy chủ — tạm thời hãy bay tới', 2600); }
+    finally { busy = false; }
     if (dest.cost) { w.add('linh-thach', -dest.cost); game.progress.changed(); }
     if (row) { me.x = row.x; me.y = row.y; } else ({ x: me.x, y: me.y } = map.nearestStand(dest.x, dest.y + 30, 6, 20));
     close?.(); onMoved(me.x, me.y);

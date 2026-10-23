@@ -67,7 +67,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const stats = createStats(statsDef, gp);
   const mobs = createMonsters({ gp, mdef: monDef, map }), gapR = createRealmGap({ gp, mdef: monDef, progress, today: () => life.today(), toast: (...a) => toast(...a) }); // áp chế cảnh giới
   const voids = createVoid({ mdef: monDef, mobs, map, progress, toast, me, serverNow });
-  const quests = createQuests(questDef, progress, () => MAJOR_OF(progress.stageDef.id), { realms, gp, mats }); // + Ngày / Tuần / Tiến độ (routine.js)
+  const quests = createQuests(questDef, progress, () => MAJOR_OF(progress.stageDef.id), { realms, gp, mats, now: serverNow || Date.now }); // + Ngày / Tuần / Tiến độ (routine.js)
   // Đan phương / công thức / bí kíp: món id được dạy bởi vật phẩm nào; có trong kho mới luyện được
   const ru = createRecipeUses({ progress, recipes: recipes.items, toast: (...a) => toast(...a) }), { teacher, owns } = ru; // công thức có số lần dùng
   const craft = createCraft({ progress, pills, blanks, awaken, skills: cp, gp, owns, spend: ru.spend });
@@ -188,7 +188,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const env = {
     me, alive: true,
     hitPlayer(m, mul, skillName) {
-      const r = stats.hit(stats.monster(m), ps, { atkMul: mul, defMul: pt.active ? S['phap-tuong'].def_mul : 1 });
+      if (dead) return; const r = stats.hit(stats.monster(m), ps, { atkMul: mul, defMul: pt.active ? S['phap-tuong'].def_mul : 1 });
       hurtAt = now;
       if (r.miss) { say(me.x, me.y - HEAD, 'Né', '#9fe8ff'); return; }
       hp -= r.dmg;
@@ -203,7 +203,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     stunPlayer(s) { stunUntil = Math.max(stunUntil, now + s); say(me.x, me.y - HEAD - 10, 'Bị trói!', '#ffe36a', true); },
   };
   function hitByNpc(n) {
-    const r = stats.hit(n.st, ps, { defMul: pt.active ? S['phap-tuong'].def_mul : 1 });
+    if (dead) return; const r = stats.hit(n.st, ps, { defMul: pt.active ? S['phap-tuong'].def_mul : 1 });
     hurtAt = now;
     if (r.miss) { say(me.x, me.y - HEAD, 'Né', '#9fe8ff'); return; }
     hp -= r.dmg; say(me.x, me.y - HEAD, `${r.crit ? 'Bạo kích ' : ''}-${r.dmg}`, '#ff9a8a', r.crit); play('cham-mau', me.x, me.y - 12, 16);
@@ -211,7 +211,8 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     if (hp <= 0) { die(); toast(`Bị ${n.name} hạ gục`, 2500); }
   }
   function die() {
-    hp = 0; dead = true; mobs.calmAll(); resumeAuto = auto ? autoPlay.snapshot() : null; auto = false; hud.setActive('auto', false); // đang Tự động thì hồi sinh xong bật lại autoDir = null; autoPlay.reset(); const lost = Math.floor(progress.state.exp * (gp.death_exp_loss || 0)); if (lost > 0) { progress.state.exp -= lost; toast(`Thân tử đạo tổn: mất ${lost.toLocaleString('vi')} tu vi`, 2500); progress.changed(); }
+    if (dead) return; // nhiều đòn cùng khung: chỉ chết một lần (không trừ tu vi 2 lần, không mất Tự động bật lại)
+    hp = 0; dead = true; mobs.calmAll(); resumeAuto = auto ? autoPlay.snapshot() : null; auto = false; hud.setActive('auto', false); autoDir = null; autoPlay.reset(); const lost = Math.floor(progress.state.exp * (gp.death_exp_loss || 0)); if (lost > 0) { progress.state.exp -= lost; toast(`Thân tử đạo tổn: mất ${lost.toLocaleString('vi')} tu vi`, 2500); progress.changed(); }
     if (pt.active) pt.cancel();
     soul.start();
   }
@@ -261,7 +262,6 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     me.guarded = now < guardUntil;
     const inTown = map.safeAt(me.x, me.y);
     if (inTown !== wasInTown) { wasInTown = inTown; toast(inTown ? `Vào ${map.town.name} — vùng an toàn, quái không vào được` : `Rời ${map.town.name}`, 1800); }
-    // Không tự hồi khí huyết (yêu cầu chủ dự án 21/10): chỉ hồi bằng đan dược và hút máu khi đánh
     env.alive = !dead;
     mobs.update(dt, env); voids.update(dt); tame.update(dt, !dead); // Âm Hư theo lịch chung (src/game/void.js)
     npcs.update(dt, { me, playerCanFight: canFight, hitPlayer: hitByNpc });

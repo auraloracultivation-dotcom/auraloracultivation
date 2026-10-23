@@ -63,7 +63,7 @@ export function createInventory({ ru, recipes, info, progress, bag, craft, itemD
     const rc = d.teaches && recipeOf(d.teaches);
     if (rc) actions.push({ id: 'craft', label: rc.label,
       disabled: rc.none || rc.max || rc.locked || !progress.has(rc.inputs) });
-    actions.push({ id: 'discard', label: count > 1 ? `Vứt (${count})` : 'Vứt', danger: true, confirm: `Vứt bỏ ${d.name}${count > 1 ? ` ×${count}` : ''}?` });
+    if (d.cat !== 'cong-phap') actions.push({ id: 'discard', label: count > 1 ? `Vứt (${count})` : 'Vứt', danger: true, confirm: `Vứt bỏ ${d.name}${count > 1 ? ` ×${count}` : ''}?` }); // bí kíp học vĩnh viễn: không vứt (vứt là mất nút nâng cấp)
     const src = info.source(d);
     if (rc) { // cuốn công thức: hiện thứ luyện ra + nguyên liệu cần, luyện ngay trong kho
       const what = rc.kind === 'skill' ? `${rc.def.name} — cấp ${rc.lv || 0}/${rc.def.max_level}` : rc.kind === 'pill' ? `Luyện ra: ${rc.def.name} (có ${progress.count(rc.def.id)})` : 'Luyện ra: phôi (thức tỉnh để có chỉ số)';

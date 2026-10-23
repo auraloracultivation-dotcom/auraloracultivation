@@ -291,6 +291,8 @@ export function createViews(o) {
         const [k, id] = arg.split('|');
         const s = shop.stock.find((x) => x.id === id), d = itemDefs.get(id);
         if (!s || W.price(s, k) === null) return;
+        if (s.min_stage && !craft.stageOk(s.min_stage)) return toast(`Cần cảnh giới ${stageName(s.min_stage)}`, 1500);
+        if (d.cat === 'cong-phap' && progress.count(id) > 0) return toast('Đã học bí kíp này', 1200); // bí kíp học vĩnh viễn
         let times = bulkOk(s, d) ? qty : 1, got = 0;
         if (st().shopDay?.date !== today()) st().shopDay = { date: today(), n: {} };
         if (s.daily_limit) times = Math.min(times, s.daily_limit - (st().shopDay.n[id] || 0));
