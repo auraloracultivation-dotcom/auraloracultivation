@@ -367,6 +367,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   }
   hp = progress.state.hp ?? Infinity;
   recompute(); if (!Number.isFinite(hp) || hp <= 0) hp = ps.hp;
+  for (const g of progress.state.gear) ensureArt(g); // đồ phôi cũ mang hình tạm đã xoá → bốc lại hình bộ 6 hệ
   progress.onChange(() => { for (const g of progress.state.gear) if (!g.art) ensureArt(g); views.refreshDock?.(); });
   addEventListener('pagehide', () => progress.flush());
 
