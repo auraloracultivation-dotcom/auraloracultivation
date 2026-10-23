@@ -48,15 +48,35 @@ export function createRoutine({ R, progress, realmMajor, realms, gp, mats }) {
           items: items([{ it: pick(c.ores, `${key}.o${i}`), n: W.ore[i] }, { it: pick(c.special, `${key}.s${i}`), n: W.special[i] }, { it: { id: 'item.phapbao.phoi.001' }, n: W.phoi_pb[i] }]) } };
     });
   }
-  function makeLadder(c, n) {
-    const L = R.ladder, key = `L${n}`;
-    const goals = [{ type: 'kill_zone', target: c.zone, count: Math.min(L.kill_max, L.kill_base + L.kill_step * (n - 1)), label: `yêu thú vùng ${c.zname}` }];
-    if (n % L.ore_every === 0 && c.ores.length) goals.push({ type: 'collect', target: pick(c.ores, key).id, count: Math.min(L.ore_max, L.ore_base + L.ore_step * n) });
-    return { id: `q.r.l.${n}`, type: 'ladder', routine: 'l', tier: L.tiers.find(([k]) => n < k)?.[1] || 'den', realm: c.code,
-      title: fill(L.title, c, { n }), desc: fill(L.desc, c, { n }), goals, next: [],
-      rewards: { exp: Math.round(c.need * L.exp_bar), spiritStone: c.stone * (L.stone_kills_base + L.stone_kills_step * (n - 1)),
-        items: items([{ it: pick(c.ores, `${key}.r`), n: L.reward_ore_base + L.reward_ore_step * n },
-          { it: pick(c.special, `${key}.s`), n: n % L.special_every === 0 ? 1 + Math.floor(n / 10) : 0 },
+  // TIẾN ĐỘ = con đường chính từ Luyện Khí tầng 1 tới khi đủ mạnh (chủ dự án 23/10): bậc n gắn với MỘT tầng tu cố định
+  // (Luyện Khí: 1 bậc / tầng, Trúc Cơ → Hóa Thần: 3 bậc / tầng), vùng + thưởng theo tầng đó, không theo cảnh giới người chơi.
+  // Chưa tới tầng của bậc thì mục tiêu đầu là "Đạt <tầng>". Hết 46 bậc: bậc hậu kỳ (Hóa Thần Hậu kỳ) thưởng tăng dần.
+  const STAGES = gp.player.stages, SI = new Map(STAGES.map((x, i) => [x.id, i]));
+  const STEPS = STAGES.flatMap((x) => (x.id.startsWith('lk') ? [{ st: x, k: 0, per: 1 }] : [0, 1, 2].map((k) => ({ st: x, k, per: 3 }))));
+  const stepOf = (n) => (n <= STEPS.length ? STEPS[n - 1] : { st: STAGES.at(-1), k: 3 + n - STEPS.length, per: 0, extra: n - STEPS.length });
+  const majorOf = (id) => Math.max(0, MAJOR.indexOf(id.slice(0, 2)));
+  const firstStepOfMajor = (m) => 1 + STEPS.findIndex((x) => majorOf(x.st.id) === m);
+  const stageReached = (id) => (SI.get(progress.stageDef.id) ?? 0) >= (SI.get(id) ?? 0);
+
+  function makeLadder(_c, n) {
+    const L = R.ladder, { st, k, per, extra = 0 } = stepOf(n), mj = majorOf(st.id), zone = realms.realms[mj]?.zone || 'xanh';
+    const zname = R.zone_names[zone] || zone, key = `L${n}`, lk = mj === 0, stone = gp.monster.stone_by_stage[st.id] || 1;
+    const of = (g) => mats.materials.filter((m) => m.zone === zone && m.group === g);
+    const ores = of('khoang').length ? of('khoang') : mats.materials.filter((m) => m.group === 'khoang');
+    const sp = of('dacbiet').length ? of('dacbiet') : mats.materials.filter((m) => m.zone === (realms.realms[mj + 1]?.zone || zone) && m.group === 'dacbiet');
+    const kills = extra ? Math.min(L.kill_max, 80 + 20 * extra) : lk ? 20 + 4 * (SI.get(st.id) || 0) : 30 + 15 * k;
+    const goals = [];
+    if (!stageReached(st.id)) goals.push({ type: 'stage', target: st.id, count: 1, label: st.name });
+    goals.push({ type: 'kill_zone', target: zone, count: kills, label: `yêu thú vùng ${zname}` });
+    if (n % 2 === 0 && ores.length) goals.push({ type: 'collect', target: ores[0].id, count: Math.max(3, Math.round(kills / 6)) }); // khoáng thường của vùng
+    const exp = Math.round(st.exp_need * (extra ? 0.1 : lk ? 0.5 : 0.25));
+    const tier = extra ? (extra > 20 ? 'den' : 'do') : ['luc', 'lam', 'tim', 'cam', 'vang'][mj] || 'vang';
+    return { id: `q.r.l.${n}`, type: 'ladder', routine: 'l', tier, realm: MAJOR[mj], step: n,
+      title: `Tiến độ ${n}: ${st.name} · ${zname}`, desc: fill(L.desc, { zname }, { n }), goals, next: [],
+      rewards: { exp, spiritStone: stone * (lk ? 40 : 80) + stone * 10 * extra,
+        items: items([{ it: ores[0], n: extra ? Math.min(150, 30 + 5 * extra) : lk ? 5 + (SI.get(st.id) || 0) : 10 + 5 * k + 5 * mj }, // khoáng thường: nhiều
+          { it: ores[1], n: extra ? 1 + Math.floor(extra / 5) : lk ? 0 : k + (mj >= 3 ? 0 : 1) }, // khoáng quý (Hư Ngọc, U Ngọc…): ít
+          { it: sp.length ? pick(sp, `${key}.s`) : null, n: n % 3 === 0 ? 1 + Math.floor(n / 15) : 0 },
           { it: { id: 'item.phapbao.phoi.001' }, n: n % L.phoi_pb_every === 0 ? 1 : 0 }]) } };
   }
 
@@ -67,11 +87,14 @@ export function createRoutine({ R, progress, realmMajor, realms, gp, mats }) {
     let c = null; const C = () => (c ||= ctx());
     if (s.day !== d) { out.drop.push(...s.daily.map((q) => q.id)); s.day = d; s.daily = makeDaily(C(), d); out.add.push(...s.daily); }
     if (s.week !== w) { out.drop.push(...s.weekly.map((q) => q.id)); s.week = w; s.weekly = makeWeekly(C(), w); out.add.push(...s.weekly); }
-    if (!s.lq || isDone(s.lq.id)) { if (s.lq) s.ladder = (s.ladder || 1) + 1; s.lq = makeLadder(C(), s.ladder || 1); out.add.push(s.lq); }
-    else if (s.lq.realm !== (MAJOR[realmMajor()] || 'lk')) { out.drop.push(s.lq.id); s.lq = makeLadder(C(), s.ladder || 1); out.add.push(s.lq); } // lên đại cảnh giới: bậc đang làm chuyển sang vùng mới
+    if (s.lv !== 2) { // Tiến độ kiểu mới (bậc theo tầng tu): người đang ở cảnh giới cao bắt đầu từ bậc đầu của đại cảnh giới hiện tại
+      if (s.lq) out.drop.push(s.lq.id);
+      s.lv = 2; s.lq = null; s.ladder = Math.max(1, firstStepOfMajor(realmMajor()));
+    }
+    if (!s.lq || isDone(s.lq.id)) { if (s.lq) s.ladder = (s.ladder || 1) + 1; s.lq = makeLadder(null, s.ladder || 1); out.add.push(s.lq); }
     if (out.add.length || out.drop.length) progress.changed();
     return out;
   }
   const all = () => { const s = st(); return [...s.daily, ...s.weekly, ...(s.lq ? [s.lq] : [])]; };
-  return { ensure, all, ladderStep: () => st().ladder || 1 };
+  return { ensure, all, ladderStep: () => st().ladder || 1, stageReached };
 }

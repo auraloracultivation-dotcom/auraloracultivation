@@ -5,7 +5,7 @@ import { compactNum as N } from '../core/index.js';
 
 const GOAL = { talk: 'Nói chuyện', reach: 'Đến', collect: 'Thu thập', craft: 'Luyện', kill: 'Hạ', boss: 'Hạ boss', dodge_heavy: 'Né đòn nặng',
   discover: 'Khám phá', complete_daily: 'Hoàn thành nhiệm vụ ngày', awaken: 'Thức tỉnh trang bị', use: 'Dùng',
-  discover_unique: 'Nhặt các loại linh thảo khác nhau', boss_unique: 'Hạ các boss khác nhau', kill_zone: 'Hạ' };
+  discover_unique: 'Nhặt các loại linh thảo khác nhau', boss_unique: 'Hạ các boss khác nhau', kill_zone: 'Hạ', stage: 'Tu luyện tới' };
 const TYPE = { main: 'Chính tuyến', daily: 'Hằng ngày', weekly: 'Hằng tuần · reset thứ Hai', ladder: 'Tiến độ · không reset', explore: 'Khám phá', craft: 'Chế tạo', combat: 'Chiến đấu', long: 'Dài hạn' };
 const SLOT = { 'mat-na': 'Mặt nạ', 'trang-phuc': 'Trang phục', 'vu-khi': 'Vũ khí', nhan: 'Nhẫn', canh: 'Cánh', 'linh-thu': 'Linh thú',
   'day-chuyen': 'Dây chuyền', 'phap-tuong': 'Pháp tướng' };

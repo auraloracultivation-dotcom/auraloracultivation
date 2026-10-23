@@ -7,7 +7,9 @@ const today = () => new Date(Date.now() + 7 * 3600e3).toISOString().slice(0, 10)
 
 // extra: { realms, gp, mats } — có thì bật nhiệm vụ Ngày / Tuần / Tiến độ
 export function createQuests(def, progress, realmMajor, extra = null) {
-  const all = [...def.quests];
+  // Có nhiệm vụ Ngày / Tuần / Tiến độ tự sinh thì bỏ các nhiệm vụ "Daily" cũ của Lab (thưởng cố định rất nhỏ, lệch xa thưởng mới)
+  const retired = new Set(extra && def.routine ? def.quests.filter((q) => q.type === 'daily').map((q) => q.id) : []);
+  const all = def.quests.filter((q) => !retired.has(q.id));
   const byId = new Map(all.map((q) => [q.id, q]));
   const placeholders = new Set(def.placeholders);
   const Q = () => progress.state.quests;
@@ -20,6 +22,7 @@ export function createQuests(def, progress, realmMajor, extra = null) {
   const routine = extra && def.routine ? createRoutine({ R: def.routine, progress, realmMajor, ...extra }) : null;
   const register = (q) => { if (!byId.has(q.id)) { all.push(q); byId.set(q.id, q); } };
   routine?.all().forEach(register);
+  for (const id of retired) delete Q().active[id];
   function sync() {
     if (!routine) return;
     const r = routine.ensure((id) => !!Q().done[id]);
@@ -28,6 +31,9 @@ export function createQuests(def, progress, realmMajor, extra = null) {
       const i = all.findIndex((q) => q.id === id); if (i >= 0) all.splice(i, 1);
     }
     for (const q of r.add) { register(q); accept(q.id); }
+    for (const [id, a] of Object.entries(Q().active)) { // mục tiêu "Đạt cảnh giới" của bậc Tiến độ: tự tích khi đủ tầng
+      const q = byId.get(id); q?.goals.forEach((g, i) => { if (g.type === 'stage') a.p[i] = routine.stageReached(g.target) ? 1 : 0; });
+    }
   }
 
   function available() {

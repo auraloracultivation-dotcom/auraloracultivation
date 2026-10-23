@@ -1114,7 +1114,8 @@
      "den"
     ]
    ],
-   "desc": "Bậc {n} của chuỗi Tiến độ (không reset). Mỗi bậc khó hơn, thưởng nhiều tài nguyên quý hơn."
-  }
+   "desc": "Con đường chính từ Luyện Khí tầng 1 (không reset). Mỗi bậc gắn với một tầng tu: tới tầng đó, hạ yêu thú vùng tương ứng để nhận tài nguyên luyện trang bị."
+  },
+  "_ghi_chu_tien_do": "Tiến độ kiểu mới (chủ dự án 23/10): bậc n gắn với một tầng tu cố định (Luyện Khí 1 bậc/tầng, Trúc Cơ→Hóa Thần 3 bậc/tầng, tổng 46 bậc, sau đó bậc hậu kỳ). Vùng + thưởng theo tầng của bậc. Chưa tới tầng thì có mục tiêu 'Tu luyện tới <tầng>'. Người đã ở cảnh giới cao bắt đầu từ bậc đầu của đại cảnh giới hiện tại. Các nhiệm vụ Daily cũ của Lab bị bỏ khỏi game (vẫn giữ trong file) vì Ngày / Tuần mới thay thế. Số liệu trong src/game/routine.js → makeLadder."
  }
 }
