@@ -1,11 +1,4 @@
 {
- "_ghi_chu": "Mã quà tặng. Chỉ lưu dấu SHA-256 của mã (không lưu mã gốc). Chủ dự án xoá hết mã thử (qqqqq, lkjhg, lkjhb) ngày 23/10/2026; xoá mã hopnhat 23/10 10:56. Sau này mã thật nên chuyển lên máy chủ (bảng mã + RPC kiểm lượt), không để trong máy khách. grant hỗ trợ: 'all' (mọi vật phẩm items.json), 'full' (+ nguyên liệu, đan, tiền — testgift.grantFull), 'god' (+ đồ 10 dòng Đen, thú Âm Hư — testgift.grantGod), 'hopnhat' (+ Thần Phù chỉ định, mọi pháp bảo, kỹ năng Hợp Nhất — testgift.grantHopNhat). Thêm grant 'thien' (chỉ 48 món Thiên hệ) 23/10 22h.",
- "codes": [
-  {
-   "sha256": "8751f51d2cf29d84301026a5c48ea28f5aff93c3a1329e3abe547691cc9fcaff",
-   "grant": "thien",
-   "message": "Mã thử 6 Thiên hệ",
-   "_ghi_chu": "Chủ dự án 23/10 22h03: mã thử — tặng đủ 48 món của 6 Thiên hệ (Quang, Lôi, Băng, Phong, Hư, Thời). Xoá khi thử xong."
-  }
- ]
+ "_ghi_chu": "Mã quà tặng. Chỉ lưu dấu SHA-256 của mã (không lưu mã gốc). Chủ dự án xoá hết mã thử (qqqqq, lkjhg, lkjhb) ngày 23/10/2026; xoá mã hopnhat 23/10 10:56. Sau này mã thật nên chuyển lên máy chủ (bảng mã + RPC kiểm lượt), không để trong máy khách. grant hỗ trợ: 'all' (mọi vật phẩm items.json), 'full' (+ nguyên liệu, đan, tiền — testgift.grantFull), 'god' (+ đồ 10 dòng Đen, thú Âm Hư — testgift.grantGod), 'hopnhat' (+ Thần Phù chỉ định, mọi pháp bảo, kỹ năng Hợp Nhất — testgift.grantHopNhat). Thêm grant 'thien' (chỉ 48 món Thiên hệ) 23/10 22h. Xoá mã ppppo 23/10 22h09 (giữ grant 'thien' trong code để dùng lại).",
+ "codes": []
 }

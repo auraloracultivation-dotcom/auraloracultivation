@@ -617,6 +617,8 @@ img { image-rendering: pixelated; }
 .gd-slot, .gd-skill { display: flex; align-items: center; gap: 8px; padding: 3px 0; font-size: 12px; }
 .gd-slot span, .gd-skill span { display: flex; flex-direction: column; flex: 1; min-width: 0; color: var(--muted); }
 .gd-slot span b, .gd-skill span b { color: var(--text); font-size: 12px; }
+.gd-slot-btn { width: 100%; background: rgba(255, 210, 120, .07); border: 1px solid rgba(255, 210, 120, .35); border-radius: 8px; padding: 4px 6px; margin: 2px 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+.gd-slot-btn:active { background: rgba(255, 210, 120, .18); } .gd-wear { color: #ffd56a; font-style: normal; font-weight: 600; }
 .gd-slot em { font-style: normal; font-size: 11px; color: var(--muted); } .gd-slot em.ok { color: #7dff8a; } .gd-slot em.no { color: #ff9a8a; }
 .gd-slot.on { background: rgba(125,255,138,.08); border-radius: 6px; }
 .gd-ico { width: 34px; height: 34px; object-fit: contain; flex-shrink: 0; background: rgba(0,0,0,.25); border-radius: 6px; }
