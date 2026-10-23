@@ -239,6 +239,7 @@ async function boot() {
     onToaHoa: (sum) => showToaHoa({ name: me.name, ...sum, onRebirth: rebirth }) }); // thọ nguyên tận → chết hẳn
   me.onAutoSwing = swing;
   navi = createNavi({ map, me, game, flight, toast }); // dẫn đường tới nơi làm nhiệm vụ
+  game.setGo((id) => navi.start(id)); // nút "Đi tới" trong bảng Nhiệm vụ đầy đủ
   pills = createQuickPill({ game: () => game, hud, pick: showSlotPicker, iconUrl, toast }); // 2 ô đan dùng nhanh
   hud.setRoundIcon('pb', iconUrl('item.phapbao.phoi.001')); hud.setRoundIcon('phu', iconUrl('card.phu.lien-thanh'));
   const rank = createRankReporter({ gp: game.gp, info: game.rankInfo, me, submit: net.submitLeaderboard }); // ảnh chụp tiến trình → bảng xếp hạng
