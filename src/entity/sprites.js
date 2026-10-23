@@ -5,13 +5,18 @@ const imgs = new Map(); // src → Image
 const tints = new Map(); // src|hue → canvas đã đổi màu
 const iconUrls = new Map();
 
-const load = (src) => new Promise((res) => {
-  if (imgs.has(src)) return res(imgs.get(src));
-  const im = new Image();
-  im.onload = () => { imgs.set(src, im); res(im); };
-  im.onerror = () => res(null); // thiếu hình → vẽ hình khối tạm, không làm hỏng game
-  im.src = src;
-});
+const inflight = new Map(); // src → Promise: gọi 2 lần (tải sẵn + lúc vào game) không tải 2 lần
+const LOAD_WAIT_MS = 12000; // mạng chậm: quá 12 giây thì vào game trước (vẽ hình khối tạm), hình tới sau tự hiện
+const load = (src) => {
+  if (imgs.has(src)) return Promise.resolve(imgs.get(src));
+  if (!inflight.has(src)) inflight.set(src, new Promise((res) => {
+    const im = new Image(), t = setTimeout(() => res(null), LOAD_WAIT_MS);
+    im.onload = () => { clearTimeout(t); imgs.set(src, im); res(im); };
+    im.onerror = () => { clearTimeout(t); res(null); }; // thiếu hình → vẽ hình khối tạm, không làm hỏng game
+    im.src = src;
+  }));
+  return inflight.get(src);
+};
 
 export async function loadSprites(def) {
   DEF = def;
@@ -20,8 +25,7 @@ export async function loadSprites(def) {
   srcs.add(def.icons.src);
   await Promise.all([...srcs].map(load));
 }
-const ensure = (s) => { if (s && !imgs.has(s.src) && !pending.has(s.src)) { pending.add(s.src); load(s.src); } return s && imgs.get(s.src); };
-const pending = new Set();
+const ensure = (s) => { if (s && !imgs.has(s.src)) load(s.src); return s && imgs.get(s.src); }; // load chỉ tải 1 lần mỗi hình
 export const hasSheet = (id) => !!ensure(DEF?.sheets[id]);
 
 // Đổi sắc độ (hue, độ) một lần rồi giữ lại — dùng cho quái dùng chung hình nhưng khác vùng

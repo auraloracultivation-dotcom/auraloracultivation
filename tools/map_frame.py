@@ -43,7 +43,7 @@ def main():
     x0, y0, x1, y1 = BUTTONS['ban-do-dong']
     a[y0 - 4:y1 + 4, x0 - 4:x1 + 4] = 0  # nút ✕ nằm trong vùng cắt khung → bỏ
     out = Image.fromarray(np.dstack([rgb, a]), 'RGBA').crop(FRAME_BOX)
-    out.save('assets/ui/frames/khung-ban-do.png', optimize=True)
+    out.save('assets/ui/frames/khung-ban-do.png', optimize=True); out.save('assets/ui/frames/khung-ban-do.webp', 'WEBP', quality=88, method=6)  # game dùng webp
     for name, box in BUTTONS.items():
         Image.fromarray(np.dstack([rgb, alpha]), 'RGBA').crop(box).save(f'assets/ui/icons/{name}.png', optimize=True)
     x0, y0 = FRAME_BOX[:2]

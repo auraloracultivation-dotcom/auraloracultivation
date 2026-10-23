@@ -40,5 +40,39 @@
   "camera": {
     "zoom": 0.75,
     "_note": "Thu nhỏ camera (1 = như cũ; 0.75 theo yêu cầu chủ dự án 21/10 — từ 0.5 phóng thêm 50%). Chữ trên đầu tự phóng để vẫn đọc được."
-  }
+  },
+  "preload_json": [
+    "data/terrain.json",
+    "data/tiles.json",
+    "data/art/sprites.json",
+    "data/art/stations-art.json",
+    "data/items/items.json",
+    "data/codes.json",
+    "data/audio.json",
+    "data/skills/phap-tuong.json",
+    "data/equipment/art.json",
+    "data/stats.json",
+    "data/gameplay.json",
+    "data/monsters/monsters.json",
+    "data/items/materials.json",
+    "data/items/pills.json",
+    "data/equipment/blanks.json",
+    "data/equipment/awaken.json",
+    "data/skills/cong-phap.json",
+    "data/quests/quests.json",
+    "data/items/quest-items.json",
+    "data/realms.json",
+    "data/items/recipes.json",
+    "data/shop.json",
+    "data/currency.json",
+    "data/lifespan.json",
+    "data/items/premium.json",
+    "data/build/dao-van.json",
+    "data/items/misc.json",
+    "data/build/phap-bao.json",
+    "data/build/cam-che.json",
+    "data/build/bi-canh.json",
+    "data/npcs.json"
+  ],
+  "_ghi_chu_preload": "Tải sẵn song song ngay khi mở game (trong lúc đăng nhập / tìm nhân vật) để bước \"Thả yêu thú vào rừng\" không phải chờ. Thêm file data mới dùng lúc vào game thì thêm vào đây."
 }

@@ -46,7 +46,7 @@ def main():
     img = Image.fromarray(rgba, 'RGBA')
     box = Image.fromarray(np.where(alpha > .15, 255, 0).astype(np.uint8)).getbbox()
     img = img.crop(box)
-    img.save(OUT, optimize=True)
+    img.save(OUT, optimize=True); img.save(OUT.replace('.png', '.webp'), 'WEBP', quality=88, method=6)  # game dùng webp
     ox, oy = CROP[0] + box[0], CROP[1] + box[1]
     print('khung', img.size)
     print('slots', [(x - ox, y - oy) for x, y in SLOTS], 'cỡ', SLOT)

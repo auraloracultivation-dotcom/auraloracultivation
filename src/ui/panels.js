@@ -61,7 +61,7 @@ const vw = () => window.innerWidth, vh = () => window.innerHeight;
 
 // ---------- Nhân vật: trang bị đang đeo (khung v3 của chủ dự án, sinh bằng tools/char_panel.py) ----------
 // Ô trống hiện biểu tượng mờ vẽ sẵn (chưa đeo). Thứ tự ô: trái mũ, áo, vũ khí, nhẫn; phải cánh, pháp tướng, linh thú, dây chuyền.
-const CHAR_FRAME = { src: 'assets/ui/frames/bang-nhan-vat-v3.png', w: 996, h: 1103, close: [886, 101, 86, 78] };
+const CHAR_FRAME = { src: 'assets/ui/frames/bang-nhan-vat-v3.webp', w: 996, h: 1103, close: [886, 101, 86, 78] };
 const SLOT = [178, 162];
 const SLOTS = [
   { x: 122, y: 258, name: 'Mũ' }, { x: 122, y: 429, name: 'Áo giáp' }, { x: 122, y: 604, name: 'Vũ khí' },
