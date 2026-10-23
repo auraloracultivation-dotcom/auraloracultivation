@@ -257,3 +257,9 @@
 .act.pill .act-art { inset: 5%; width: 90%; height: 90%; image-rendering: auto; filter: none; }
 .act.pill .act-badge { right: 4px; bottom: 2px; font-size: 13px; }
 .act.pill.empty { border-style: dashed; background: rgba(12, 12, 26, .55); }
+
+/* Cẩm nang Đạo Vận: dấu ! cạnh điều kiện → cách lấy (src/game/guide.js) */
+.gd-how { display: inline-grid; place-items: center; width: 20px; height: 20px; margin-left: 6px; padding: 0; vertical-align: 1px; border-radius: 50%;
+  border: 1.5px solid #f2c77f; background: rgba(242, 199, 127, .15); color: #ffd98a; font: 900 13px/1 system-ui, sans-serif; cursor: pointer; }
+.gd-how-t { margin: 2px 0 6px 18px; padding: 7px 10px; border-left: 2px solid #f2c77f; border-radius: 4px; background: rgba(242, 199, 127, .08);
+  color: #efe6cf; font-size: 13px; line-height: 1.45; }
