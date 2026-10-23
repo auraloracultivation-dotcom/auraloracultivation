@@ -2,7 +2,7 @@
 // Mỗi cuốn dùng được `uses` lần thành công (data/items/recipes.json → uses, không ghi thì theo loại: DEF).
 // Hết lượt thì cuốn đó mất khỏi Kho — còn cuốn khác thì dùng tiếp, không thì phải mua / nhặt lại.
 // Lượt còn lại của cuốn đang dùng: progress.state.recipeUses[recipeId].
-const DEF = { 'dan-phuong': 10, 'phap-khi': 3, 'cong-phap': 2, khac: 1 };
+const DEF = { 'dan-phuong': 10, 'phap-khi': 3, khac: 1 }; // bí kíp (cong-phap): học vĩnh viễn, không tính lượt (chủ dự án 23/10 21h)
 
 export function createRecipeUses({ progress, recipes, toast }) {
   const byId = new Map(recipes.filter((r) => r.teaches).map((r) => [r.id, r]));
@@ -14,7 +14,7 @@ export function createRecipeUses({ progress, recipes, toast }) {
   // Gọi sau mỗi lần luyện / tu luyện THÀNH CÔNG bằng công thức dạy món `teachId`
   function spend(teachId) {
     const rid = teacher.get(teachId);
-    if (!rid || progress.count(rid) <= 0) return;
+    if (!rid || progress.count(rid) <= 0 || byId.get(rid).cat === 'cong-phap') return;
     const n = left(rid) - 1;
     if (n > 0) U()[rid] = n;
     else {

@@ -23,7 +23,74 @@
      }
     ],
     "how": "Shop / nhiệm vụ đầu"
-   }
+   },
+   "levels": [
+    {
+     "unlock": "lk1",
+     "inputs": [
+      {
+       "id": "item.thao.linh-chi-non.001",
+       "count": 8
+      },
+      {
+       "id": "item.khoang.huyen-thiet-vun.001",
+       "count": 4
+      }
+     ]
+    },
+    {
+     "unlock": "tc_so",
+     "inputs": [
+      {
+       "id": "item.thao.xich-qua.001",
+       "count": 37
+      },
+      {
+       "id": "item.khoang.xich-thiet.001",
+       "count": 15
+      }
+     ]
+    },
+    {
+     "unlock": "kd_so",
+     "inputs": [
+      {
+       "id": "item.thao.huyen-linh.001",
+       "count": 85
+      },
+      {
+       "id": "item.khoang.huyen-thiet.001",
+       "count": 35
+      }
+     ]
+    },
+    {
+     "unlock": "na_so",
+     "inputs": [
+      {
+       "id": "item.thao.bang-chi.001",
+       "count": 81
+      },
+      {
+       "id": "item.khoang.han-thiet.001",
+       "count": 34
+      }
+     ]
+    },
+    {
+     "unlock": "ht_so",
+     "inputs": [
+      {
+       "id": "item.thao.hu-khong.001",
+       "count": 61
+      },
+      {
+       "id": "item.khoang.hac-thiet.001",
+       "count": 25
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "skill.chieu.kiem-khi.001",
@@ -44,7 +111,74 @@
      }
     ],
     "how": "Shop + Boss Vùng Cam"
-   }
+   },
+   "levels": [
+    {
+     "unlock": "tc_so",
+     "inputs": [
+      {
+       "id": "item.thao.diem-chi.001",
+       "count": 18
+      },
+      {
+       "id": "item.khoang.xich-thiet.001",
+       "count": 8
+      }
+     ]
+    },
+    {
+     "unlock": "kd_so",
+     "inputs": [
+      {
+       "id": "item.thao.co-lien.001",
+       "count": 57
+      },
+      {
+       "id": "item.khoang.huyen-thiet.001",
+       "count": 24
+      }
+     ]
+    },
+    {
+     "unlock": "na_so",
+     "inputs": [
+      {
+       "id": "item.thao.han-linh.001",
+       "count": 61
+      },
+      {
+       "id": "item.khoang.han-thiet.001",
+       "count": 25
+      }
+     ]
+    },
+    {
+     "unlock": "ht_so",
+     "inputs": [
+      {
+       "id": "item.thao.tan-the.001",
+       "count": 49
+      },
+      {
+       "id": "item.khoang.hac-thiet.001",
+       "count": 20
+      }
+     ]
+    },
+    {
+     "unlock": "ht_so",
+     "inputs": [
+      {
+       "id": "item.thao.hu-khong.001",
+       "count": 61
+      },
+      {
+       "id": "item.khoang.hac-thiet.001",
+       "count": 25
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "skill.khe.linh-thu.001",
@@ -65,7 +199,74 @@
      }
     ],
     "how": "Boss Vùng Trắng"
-   }
+   },
+   "levels": [
+    {
+     "unlock": "kd_so",
+     "inputs": [
+      {
+       "id": "item.thao.co-lien.001",
+       "count": 28
+      },
+      {
+       "id": "item.khoang.huyen-thiet.001",
+       "count": 12
+      }
+     ]
+    },
+    {
+     "unlock": "na_so",
+     "inputs": [
+      {
+       "id": "item.thao.han-linh.001",
+       "count": 41
+      },
+      {
+       "id": "item.khoang.han-thiet.001",
+       "count": 17
+      }
+     ]
+    },
+    {
+     "unlock": "ht_so",
+     "inputs": [
+      {
+       "id": "item.thao.tan-the.001",
+       "count": 37
+      },
+      {
+       "id": "item.khoang.hac-thiet.001",
+       "count": 15
+      }
+     ]
+    },
+    {
+     "unlock": "ht_so",
+     "inputs": [
+      {
+       "id": "item.thao.hu-khong.001",
+       "count": 49
+      },
+      {
+       "id": "item.khoang.hac-thiet.001",
+       "count": 20
+      }
+     ]
+    },
+    {
+     "unlock": "ht_so",
+     "inputs": [
+      {
+       "id": "item.thao.hac-linh.001",
+       "count": 61
+      },
+      {
+       "id": "item.khoang.hac-thiet.001",
+       "count": 25
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "skill.than.canh-phong.001",
@@ -86,7 +287,74 @@
      }
     ],
     "how": "Boss Vùng Xám"
-   }
+   },
+   "levels": [
+    {
+     "unlock": "na_so",
+     "inputs": [
+      {
+       "id": "item.thao.tuyet-lien.001",
+       "count": 20
+      },
+      {
+       "id": "item.khoang.han-thiet.001",
+       "count": 8
+      }
+     ]
+    },
+    {
+     "unlock": "ht_so",
+     "inputs": [
+      {
+       "id": "item.thao.hac-linh.001",
+       "count": 24
+      },
+      {
+       "id": "item.khoang.hac-thiet.001",
+       "count": 10
+      }
+     ]
+    },
+    {
+     "unlock": "ht_so",
+     "inputs": [
+      {
+       "id": "item.thao.tan-the.001",
+       "count": 37
+      },
+      {
+       "id": "item.khoang.hac-thiet.001",
+       "count": 15
+      }
+     ]
+    },
+    {
+     "unlock": "ht_so",
+     "inputs": [
+      {
+       "id": "item.thao.hu-khong.001",
+       "count": 49
+      },
+      {
+       "id": "item.khoang.hac-thiet.001",
+       "count": 20
+      }
+     ]
+    },
+    {
+     "unlock": "ht_so",
+     "inputs": [
+      {
+       "id": "item.thao.hac-linh.001",
+       "count": 61
+      },
+      {
+       "id": "item.khoang.hac-thiet.001",
+       "count": 25
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "skill.phap-tuong.thien-thu.001",
@@ -107,7 +375,74 @@
      }
     ],
     "how": "Boss Hắc Vực / ẩn"
-   }
+   },
+   "levels": [
+    {
+     "unlock": "ht_so",
+     "inputs": [
+      {
+       "id": "item.thao.tan-the.001",
+       "count": 12
+      },
+      {
+       "id": "item.khoang.hac-thiet.001",
+       "count": 5
+      }
+     ]
+    },
+    {
+     "unlock": "ht_so",
+     "inputs": [
+      {
+       "id": "item.thao.hu-khong.001",
+       "count": 24
+      },
+      {
+       "id": "item.khoang.hac-thiet.001",
+       "count": 10
+      }
+     ]
+    },
+    {
+     "unlock": "ht_so",
+     "inputs": [
+      {
+       "id": "item.thao.hac-linh.001",
+       "count": 37
+      },
+      {
+       "id": "item.khoang.hac-thiet.001",
+       "count": 15
+      }
+     ]
+    },
+    {
+     "unlock": "ht_so",
+     "inputs": [
+      {
+       "id": "item.thao.tan-the.001",
+       "count": 49
+      },
+      {
+       "id": "item.khoang.hac-thiet.001",
+       "count": 20
+      }
+     ]
+    },
+    {
+     "unlock": "ht_so",
+     "inputs": [
+      {
+       "id": "item.thao.hu-khong.001",
+       "count": 61
+      },
+      {
+       "id": "item.khoang.hac-thiet.001",
+       "count": 25
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "skill.tamphap.thanh-tam.001",
@@ -129,7 +464,74 @@
     ],
     "how": "Shop",
     "_tam": "Nguyên liệu TẠM do Claude đặt — Lab chưa ghi"
-   }
+   },
+   "levels": [
+    {
+     "unlock": "lk1",
+     "inputs": [
+      {
+       "id": "item.thao.linh-chi-non.001",
+       "count": 8
+      },
+      {
+       "id": "item.khoang.huyen-thiet-vun.001",
+       "count": 4
+      }
+     ]
+    },
+    {
+     "unlock": "tc_so",
+     "inputs": [
+      {
+       "id": "item.thao.xich-qua.001",
+       "count": 37
+      },
+      {
+       "id": "item.khoang.xich-thiet.001",
+       "count": 15
+      }
+     ]
+    },
+    {
+     "unlock": "kd_so",
+     "inputs": [
+      {
+       "id": "item.thao.huyen-linh.001",
+       "count": 85
+      },
+      {
+       "id": "item.khoang.huyen-thiet.001",
+       "count": 35
+      }
+     ]
+    },
+    {
+     "unlock": "na_so",
+     "inputs": [
+      {
+       "id": "item.thao.bang-chi.001",
+       "count": 81
+      },
+      {
+       "id": "item.khoang.han-thiet.001",
+       "count": 34
+      }
+     ]
+    },
+    {
+     "unlock": "ht_so",
+     "inputs": [
+      {
+       "id": "item.thao.hu-khong.001",
+       "count": 61
+      },
+      {
+       "id": "item.khoang.hac-thiet.001",
+       "count": 25
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "skill.chieu.hoi-linh.001",
@@ -151,7 +553,74 @@
     ],
     "how": "Shop",
     "_tam": "Nguyên liệu TẠM do Claude đặt — Lab chưa ghi"
-   }
+   },
+   "levels": [
+    {
+     "unlock": "tc_so",
+     "inputs": [
+      {
+       "id": "item.thao.diem-chi.001",
+       "count": 18
+      },
+      {
+       "id": "item.khoang.xich-thiet.001",
+       "count": 8
+      }
+     ]
+    },
+    {
+     "unlock": "kd_so",
+     "inputs": [
+      {
+       "id": "item.thao.co-lien.001",
+       "count": 57
+      },
+      {
+       "id": "item.khoang.huyen-thiet.001",
+       "count": 24
+      }
+     ]
+    },
+    {
+     "unlock": "na_so",
+     "inputs": [
+      {
+       "id": "item.thao.han-linh.001",
+       "count": 61
+      },
+      {
+       "id": "item.khoang.han-thiet.001",
+       "count": 25
+      }
+     ]
+    },
+    {
+     "unlock": "ht_so",
+     "inputs": [
+      {
+       "id": "item.thao.tan-the.001",
+       "count": 49
+      },
+      {
+       "id": "item.khoang.hac-thiet.001",
+       "count": 20
+      }
+     ]
+    },
+    {
+     "unlock": "ht_so",
+     "inputs": [
+      {
+       "id": "item.thao.hu-khong.001",
+       "count": 61
+      },
+      {
+       "id": "item.khoang.hac-thiet.001",
+       "count": 25
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "skill.than.lang-ba.001",
@@ -173,7 +642,75 @@
     ],
     "how": "Shop",
     "_tam": "Nguyên liệu TẠM do Claude đặt — Lab chưa ghi"
-   }
+   },
+   "levels": [
+    {
+     "unlock": "kd_so",
+     "inputs": [
+      {
+       "id": "item.thao.co-lien.001",
+       "count": 28
+      },
+      {
+       "id": "item.khoang.huyen-thiet.001",
+       "count": 12
+      }
+     ]
+    },
+    {
+     "unlock": "na_so",
+     "inputs": [
+      {
+       "id": "item.thao.han-linh.001",
+       "count": 41
+      },
+      {
+       "id": "item.khoang.han-thiet.001",
+       "count": 17
+      }
+     ]
+    },
+    {
+     "unlock": "ht_so",
+     "inputs": [
+      {
+       "id": "item.thao.tan-the.001",
+       "count": 37
+      },
+      {
+       "id": "item.khoang.hac-thiet.001",
+       "count": 15
+      }
+     ]
+    },
+    {
+     "unlock": "ht_so",
+     "inputs": [
+      {
+       "id": "item.thao.hu-khong.001",
+       "count": 49
+      },
+      {
+       "id": "item.khoang.hac-thiet.001",
+       "count": 20
+      }
+     ]
+    },
+    {
+     "unlock": "ht_so",
+     "inputs": [
+      {
+       "id": "item.thao.hac-linh.001",
+       "count": 61
+      },
+      {
+       "id": "item.khoang.hac-thiet.001",
+       "count": 25
+      }
+     ]
+    }
+   ]
   }
- ]
+ ],
+ "_ghi_chu_cap": "Chủ dự án 23/10 21h: bí kíp học VĨNH VIỄN (không tính lượt). levels[n-1] = cấp n: mở ở cảnh giới unlock, nguyên liệu vùng của cảnh giới đó (tools/shop_balance.py). 5 cấp đi cùng 5 đại cảnh giới."
 }

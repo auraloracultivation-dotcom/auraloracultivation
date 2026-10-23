@@ -12,11 +12,11 @@
    "inputs": [
     {
      "id": "item.khoang.huyen-thiet-vun.001",
-     "count": 12
+     "count": 11
     },
     {
      "id": "item.thao.thanh-tam.001",
-     "count": 6
+     "count": 11
     }
    ],
    "rate": 0.95,
@@ -33,11 +33,11 @@
    "inputs": [
     {
      "id": "item.khoang.huyen-thiet-vun.001",
-     "count": 15
+     "count": 11
     },
     {
-     "id": "item.thao.thanh-tam.001",
-     "count": 8
+     "id": "item.thao.linh-chi-non.001",
+     "count": 11
     }
    ],
    "rate": 0.95,
@@ -54,11 +54,11 @@
    "inputs": [
     {
      "id": "item.khoang.tinh-sa.001",
-     "count": 10
+     "count": 11
     },
     {
-     "id": "item.thao.linh-chi-non.001",
-     "count": 5
+     "id": "item.thao.bat-nha.001",
+     "count": 11
     }
    ],
    "rate": 0.92,
@@ -73,16 +73,12 @@
    "unlock": "lk3",
    "inputs": [
     {
-     "id": "item.khoang.huyen-thiet-vun.001",
-     "count": 18
-    },
-    {
      "id": "item.khoang.tinh-sa.001",
-     "count": 8
+     "count": 11
     },
     {
-     "id": "item.thao.linh-chi-non.001",
-     "count": 10
+     "id": "item.thao.thanh-tam.001",
+     "count": 11
     }
    ],
    "rate": 0.9,
@@ -97,12 +93,12 @@
    "unlock": "lk5",
    "inputs": [
     {
-     "id": "item.khoang.xich-thiet.001",
-     "count": 20
+     "id": "item.khoang.tinh-sa.001",
+     "count": 11
     },
     {
-     "id": "item.thao.huyet-linh.001",
-     "count": 12
+     "id": "item.thao.linh-chi-non.001",
+     "count": 11
     }
    ],
    "rate": 0.88,
@@ -118,19 +114,19 @@
    "unlock": "kd_so",
    "inputs": [
     {
-     "id": "item.khoang.han-thiet.001",
-     "count": 40
+     "id": "item.khoang.huyen-thiet.001",
+     "count": 29
     },
     {
-     "id": "item.khoang.bang-ngoc.001",
-     "count": 12
+     "id": "item.khoang.u-ngoc.001",
+     "count": 15
     },
     {
-     "id": "item.thao.han-linh.001",
-     "count": 25
+     "id": "item.thao.huyen-linh.001",
+     "count": 43
     },
     {
-     "id": "item.dacbiet.hon-thu-tinh.001",
+     "id": "item.dacbiet.tinh-hon.001",
      "count": 1
     }
    ],
@@ -147,19 +143,19 @@
    "unlock": "na_so",
    "inputs": [
     {
-     "id": "item.khoang.huyen-thiet.001",
-     "count": 55
+     "id": "item.khoang.han-thiet.001",
+     "count": 21
     },
     {
-     "id": "item.khoang.u-ngoc.001",
-     "count": 15
+     "id": "item.khoang.bang-ngoc.001",
+     "count": 11
     },
     {
-     "id": "item.thao.huyen-linh.001",
-     "count": 35
+     "id": "item.thao.han-linh.001",
+     "count": 30
     },
     {
-     "id": "item.dacbiet.tinh-hon.001",
+     "id": "item.dacbiet.hon-thu-tinh.001",
      "count": 1
     }
    ],
@@ -177,15 +173,15 @@
    "inputs": [
     {
      "id": "item.khoang.hac-thiet.001",
-     "count": 80
+     "count": 13
     },
     {
      "id": "item.khoang.hu-ngoc.001",
-     "count": 20
+     "count": 6
     },
     {
      "id": "item.thao.hac-linh.001",
-     "count": 50
+     "count": 18
     },
     {
      "id": "item.dacbiet.tinh-hon-co.001",
@@ -198,5 +194,6 @@
     "Hắc Vực Pháp Tướng"
    ]
   }
- ]
+ ],
+ "_ghi_chu_can_bang": "Nguyên liệu phôi: tools/shop_balance.py (≈15 phút farm vùng của cảnh giới mở ô; đồ đặc biệt bắt buộc lấy đúng vùng đó). Không sửa tay."
 }

@@ -192,12 +192,12 @@ export function createViews(o) {
   }
   function cpTab() {
     return ownedOnly(cp.skills, (s) => {
-      const lv = st().cp[s.id] || 0, ok = craft.stageOk(s.unlock), own = o.owns(s.id);
+      const lv = st().cp[s.id] || 0, own = o.owns(s.id), L = lv < s.max_level ? craft.skillLevel(s, lv) : null, ok = !L || craft.stageOk(L.unlock);
       const lock = own ? '' : `<p class="lock">🔒 Cần ${E(name(o.teacher.get(s.id)))} trong kho</p>`;
-      const inp = s.learn && s.learn.inputs.map((i) => ({ id: i.id, count: i.count * (lv + 1) }));
-      return `<div class="row"><div class="row-h"><b>${ico(s.id)}${E(s.name)}</b><em>cấp ${lv}/${s.max_level}${ok ? '' : ` · mở ở ${E(stageName(s.unlock))}`}</em></div>
+      const inp = L?.inputs;
+      return `<div class="row"><div class="row-h"><b>${ico(s.id)}${E(s.name)}</b><em>cấp ${lv}/${s.max_level}${ok ? '' : ` · cấp ${lv + 1} mở ở ${E(stageName(L.unlock))}`}</em></div>
         <p>${E(s.desc)}<br>${E(o.info.cpText(s.id))}</p>${lock}
-        ${inp ? `<p class="need">${need(inp)}</p>${btn('train', s.id, lv ? 'Nâng cấp' : 'Luyện', own && ok && lv < s.max_level && progress.has(inp))}` : '<p><i>Lab chưa ghi nguyên liệu</i></p>'}</div>`;
+        ${lv >= s.max_level ? '<p><i>Đã tối đa</i></p>' : inp ? `<p class="need">${need(inp)}</p>${btn('train', s.id, lv ? 'Nâng cấp' : 'Luyện', own && ok && progress.has(inp))}` : '<p><i>Lab chưa ghi nguyên liệu</i></p>'}</div>`;
     }, 'bí kíp công pháp');
   }
   function matsTab() {
@@ -250,20 +250,20 @@ export function createViews(o) {
   // Vạn Bảo Lâu: chỉ nói công dụng + giá. Công thức / bí kíp: "Đã có" (xanh) / "Chưa có" (xám). Nguyên liệu: số đang có.
   const W = o.wallet, CUR = (s) => s.currency || 'linh-thach';
   function shopRow(s) {
-    const d = itemDefs.get(s.id), n = s.stack || 1, isRecipe = !!d.teaches, owned = false, uses = isRecipe && o.ru ? o.ru.total(s.id) : 0; // công thức mua thêm được (có số lần dùng)
+    const d = itemDefs.get(s.id), n = s.stack || 1, isBook = d.cat === 'cong-phap', isRecipe = !!d.teaches && !isBook, owned = isBook && progress.count(s.id) > 0, uses = isRecipe && o.ru ? o.ru.total(s.id) : 0; // công thức có số lần dùng; bí kíp học vĩnh viễn (mua 1 lần)
     const bought = st().shopDay?.date === today() ? (st().shopDay.n[s.id] || 0) : 0;
     const left = s.daily_limit ? s.daily_limit - bought : Infinity;
     const stageOk = !s.min_stage || craft.stageOk(s.min_stage), itemsOk = !s.cost_items || progress.has(s.cost_items);
     const ok = !owned && left > 0 && stageOk && itemsOk;
     const need = [s.min_stage && `<span class="${stageOk ? 'ok' : ''}">Cần ${E(stageName(s.min_stage))}</span>`,
       ...(s.cost_items || []).map((i) => `<span class="${progress.count(i.id) >= i.count ? 'ok' : ''}">${E(itemDefs.get(i.id)?.name || i.id)} ${progress.count(i.id)}/${i.count}</span>`)].filter(Boolean).join(' · ');
-    const note = isRecipe ? (uses ? `<em class="own yes">Còn ${uses} lần</em>` : '<em class="own">Chưa có</em>')
+    const note = isBook ? (owned ? '<em class="own yes">Đã học</em>' : '<em class="own">Chưa có</em>') : isRecipe ? (uses ? `<em class="own yes">Còn ${uses} lần</em>` : '<em class="own">Chưa có</em>')
       : `<em>${s.daily_limit ? `Hôm nay còn ${left}/${s.daily_limit}` : `có ${progress.count(s.id)}`}</em>`;
     // Nút mua: tiền gốc của món + Tiên ngọc (mua được mọi món)
     const pays = [...new Set([CUR(s), 'tien-ngoc'])];
     const btns = pays.map((k) => btn('buy', `${k}|${s.id}`, `${k === CUR(s) ? 'Mua · ' : ''}${W.label(k, W.price(s, k))}`, ok && W.can(s, k))).join(' ');
     return `<div class="row"><div class="row-h"><b>${ico(s.id)}${E(d.name)}${n > 1 ? ` ×${n}` : ''}</b>${note}</div>
-      <p class="src">${E(o.info.effect(d))}${isRecipe && o.ru ? ` · mỗi cuốn dùng ${o.ru.max(s.id)} lần` : ''}</p>${need && !owned ? `<p class="need">${need}</p>` : ''}
+      <p class="src">${E(o.info.effect(d))}${isRecipe && o.ru ? ` · mỗi cuốn dùng ${o.ru.max(s.id)} lần` : isBook ? ' · học một lần dùng mãi, 5 cấp mở theo 5 đại cảnh giới' : ''}</p>${need && !owned ? `<p class="need">${need}</p>` : ''}
       ${owned ? '' : btns}</div>`;
   }
   const isLT = (s) => CUR(s) === 'linh-thach';
