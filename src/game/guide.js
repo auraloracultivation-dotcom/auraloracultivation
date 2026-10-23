@@ -18,13 +18,14 @@ export function createGuide(c) {
   const skOk = (id, s) => c.learn.learned(id) && stageOk(s.unlock);
 
   // Thiên Cơ Hợp Nhất của hệ: danh sách điều kiện ✓/✗ (hopnhat.js)
+  let openHow = null; // điều kiện đang mở giải thích (chạm dấu !)
   function hopRow(he) {
     const H = c.hopNhat, r = H?.def.he[he];
     if (!r) return '';
     const list = H.check(he), on = list.every((x) => x.ok);
     return `<div class="row gd-hop ${on ? 'on' : ''}"><b class="gd-h">✦ ${E(H.def.name)}: ${E(r.name)}${on ? ' — ĐANG KÍCH' : ''}</b>
       <p>Đủ cả 5 điều kiện → pháp bảo hệ ${E(he)} tự bắn liên thanh không nghỉ, không tốn linh lực, linh lực hồi liên tục. Kỹ năng khác không được buff.</p>
-      ${list.map((x) => `<div class="gd-cond ${x.ok ? 'ok' : ''}">${x.ok ? '✓' : '✗'} ${E(x.text)}</div>`).join('')}</div>`;
+      ${list.map((x, i) => `<div class="gd-cond ${x.ok ? 'ok' : ''}">${x.ok ? '✓' : '✗'} ${E(x.text)}${x.how ? ` <button type="button" class="gd-how" data-act="how" data-arg="${E(he)}|${i}" aria-label="Cách lấy">!</button>` : ''}</div>${x.how && openHow === `${he}|${i}` ? `<div class="gd-how-t">${E(x.how)}</div>` : ''}`).join('')}</div>`;
   }
   function heTab(he) {
     const h = dvDef.he[he], n = dv.counts()[he] || 0, mine = new Set(bag.entries().map((e) => e.item?.id));
@@ -90,6 +91,7 @@ export function createGuide(c) {
       tabs: [{ id: 'on', name: 'Đang kích' }, ...HE.map((h) => ({ id: h, name: h })), { id: 'all', name: 'Tổng quan' }],
       render: (tab) => (tab === 'on' ? activeTab() : tab === 'all' ? overviewTab() : heTab(tab)),
       onAction(act, he) {
+        if (act === 'how') { openHow = openHow === he ? null : he; return; } // bảng tự vẽ lại sau onAction
         if (act !== 'wear') return;
         let n = 0;
         for (const [sl] of SLOT_ORDER) {
