@@ -19,7 +19,7 @@ export function createNavi({ map, me, game, flight, toast }) {
     let dx = wrapDelta(me.x - cx, map.width), dy = wrapDelta(me.y - cy, map.height), d = Math.hypot(dx, dy);
     if (d < 1) { dx = 0; dy = 1; d = 1; }
     const r = R.min + (R.max - R.min) * (BAND[g.rank] ?? 0.35);
-    return { x: map.wrapX(cx + (dx / d) * r), y: map.wrapY(cy + (dy / d) * r), zone: g.zone, rank: g.rank, label: ZN[g.zone] || g.zone };
+    return { x: map.wrapX(cx + (dx / d) * r), y: map.wrapY(cy + (dy / d) * r), zone: g.zone, rank: g.rank, gather: g.gather, label: ZN[g.zone] || g.zone };
   }
   function arrived(t) {
     if (!t) return true;
@@ -27,13 +27,19 @@ export function createNavi({ map, me, game, flight, toast }) {
     const z = map.typeAt(me.x, me.y).zone; if (z !== t.zone) return false;
     const R = game.zoneRing(t.zone), cx = map.width / 2, cy = map.height / 2;
     const dep = (Math.hypot(wrapDelta(me.x - cx, map.width), wrapDelta(me.y - cy, map.height)) - R.min) / (R.max - R.min || 1);
-    return dep >= (BAND[t.rank] ?? 0.35) - 0.2; // tinh anh / boss chỉ ở phần ngoài vành
+    const near = Math.hypot(wrapDelta(t.x - me.x, map.width), wrapDelta(t.y - me.y, map.height)) < 140;
+    return near || dep >= (BAND[t.rank] ?? 0.35) - 0.05; // đi vào đúng độ sâu (tinh anh / boss chỉ ở phần ngoài vành), không dừng ở mép vùng
   }
 
+  // Tới nơi: bật Tự động NHẮM nhiệm vụ — chỉ đánh quái vùng đó (đúng loại trước), nhiệm vụ hái thì mới đi hái
+  function startQuestAuto() {
+    if (game.isAuto()) game.toggleAuto();
+    game.toggleAuto({ zone: target.zone, rank: target.rank, gather: !!target.gather });
+  }
   function start(id) {
     goal = id ? game.track(id) : game.naviGoal(); target = aim(goal);
     if (!target) { toast('Nhiệm vụ này không cần đi đâu — mở bảng Nhiệm vụ để xem', 1800); return; }
-    if (arrived(target)) { travel = false; if (!target.town && !game.isAuto()) game.toggleAuto(); toast(target.town ? 'Đang ở trong thành' : `Đã ở ${target.label} — tự động farm tại đây`, 1800); return; }
+    if (arrived(target)) { travel = false; if (!target.town) startQuestAuto(); toast(target.town ? 'Đang ở trong thành' : `Đã ở ${target.label} — tự động farm tại đây`, 1800); return; }
     travel = true; stuckT = 0; lx = me.x; ly = me.y;
     toast(`Dẫn đường: tới ${target.label}${goal.title ? ` (${goal.title})` : ''} — kéo cần để huỷ`, 2200);
     if (game.isAuto()) game.toggleAuto(); // tắt farm để đi, tới nơi bật lại
@@ -47,7 +53,7 @@ export function createNavi({ map, me, game, flight, toast }) {
     if (stick || game.dead) { travel = false; toast('Đã huỷ dẫn đường', 900); return null; }
     if (arrived(target)) {
       travel = false; flight.set(false, true);
-      if (!target.town && !game.isAuto()) game.toggleAuto();
+      if (!target.town) startQuestAuto();
       toast(target.town ? 'Đã về Thanh Vân Thành' : `Tới ${target.label} — tự động farm tại đây`, 1800);
       return null;
     }

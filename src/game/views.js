@@ -66,8 +66,8 @@ export function createViews(o) {
     if (g.type === 'kill_zone') return { zone: g.target, rank: g.rank || 'thuong' };
     if ((g.type === 'kill' || g.type === 'boss') && monById.has(g.target)) { const m = monById.get(g.target); return { zone: m.zone, rank: m.rank }; }
     if (g.type === 'boss_unique') return { zone: MZ[o.realmMajor()] || 'xanh', rank: 'boss' };
-    if (g.type === 'collect' && matZone(g.target)) return { zone: matZone(g.target), rank: 'thuong' };
-    if (g.type === 'collect' || g.type === 'discover_unique') return { zone: MZ[o.realmMajor()] || 'xanh', rank: 'thuong' };
+    if (g.type === 'collect' && matZone(g.target)) return { zone: matZone(g.target), rank: 'thuong', gather: true };
+    if (g.type === 'collect' || g.type === 'discover_unique') return { zone: MZ[o.realmMajor()] || 'xanh', rank: 'thuong', gather: true };
     if (g.type === 'craft' || g.type === 'use' || g.type === 'awaken') return { town: true };
     return null;
   }
