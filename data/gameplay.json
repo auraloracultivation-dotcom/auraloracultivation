@@ -917,6 +917,65 @@
    "boss": 0.25,
    "void": 0.3,
    "_ghi_chu_17h": "23/10 17h: hạ thêm — một con Âm Hư / thủ lĩnh không cho quá 3% / 2% vạch tầng hiện tại."
+  },
+  "orb": {
+   "_note": "Đạn quái chậm có ánh sáng (chủ dự án 24/10/2026). speed ≈ 65% walk_speed_px_per_s (110) để né được. src/game/mob-orbs.js",
+   "name": "Linh cầu",
+   "speed_px_per_s": 72,
+   "range_px": 250,
+   "min_px": 60,
+   "hit_px": 13,
+   "r_px": 5,
+   "mul": 0.8,
+   "ranks": {
+    "elite": {
+     "n": 1,
+     "every_s": 3.4,
+     "spread_deg": 0
+    },
+    "boss": {
+     "n": 3,
+     "every_s": 2.8,
+     "spread_deg": 20
+    }
+   },
+   "colors": {
+    "xanh": [
+     "#3fbf4f",
+     "#8cf08a",
+     "#f2ffe8"
+    ],
+    "cam": [
+     "#e0702a",
+     "#ffb35a",
+     "#fff2d8"
+    ],
+    "xam": [
+     "#6b7cc0",
+     "#a9b8ff",
+     "#f2f4ff"
+    ],
+    "trang": [
+     "#4fb8e8",
+     "#a8e6ff",
+     "#ffffff"
+    ],
+    "than": [
+     "#b03a3a",
+     "#ff7a5a",
+     "#ffe8d8"
+    ],
+    "den": [
+     "#7a3fd0",
+     "#c48cff",
+     "#f6ecff"
+    ],
+    "default": [
+     "#c9a35a",
+     "#ffd98a",
+     "#fffbe8"
+    ]
+   }
   }
  },
  "loot": {

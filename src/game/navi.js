@@ -89,12 +89,12 @@ export function createNavi({ map, me, game, flight, toast }) {
     ctx.globalAlpha = travel ? 1 : 0.85;
     ctx.fillStyle = '#ffd56a'; ctx.strokeStyle = '#3a2207'; ctx.lineWidth = 1.2;
     ctx.beginPath(); ctx.moveTo(8, 0); ctx.lineTo(-5, -6); ctx.lineTo(-2, 0); ctx.lineTo(-5, 6); ctx.closePath(); ctx.fill(); ctx.stroke();
-    ctx.rotate(-a);
+    ctx.restore();
+    ctx.save(); // chữ khoảng cách luôn nằm DƯỚI chân nhân vật — không đè lên tên / cảnh giới phía trên đầu
     const km = Math.hypot(dx, dy) / 32 / 10; // 10 ô = 1 dặm
     const txt = `${target.label} ${km >= 1 ? km.toFixed(0) : km.toFixed(1)} dặm`;
     ctx.font = 'bold 6px sans-serif'; ctx.textAlign = 'center'; ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(0,0,0,.85)'; ctx.fillStyle = '#ffe9a8';
-    const ty = Math.sin(a) > 0 ? 12 : -9;
-    ctx.strokeText(txt, 0, ty); ctx.fillText(txt, 0, ty);
+    ctx.strokeText(txt, me.x, me.y + 14); ctx.fillText(txt, me.x, me.y + 14);
     ctx.restore();
   }
   // Tự làm nhiệm vụ (questauto.js): đi tới một nơi cho sẵn ({ zone, rank, gather } hoặc { point, label }), không cần id nhiệm vụ
