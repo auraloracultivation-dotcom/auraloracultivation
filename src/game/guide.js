@@ -40,9 +40,9 @@ export function createGuide(c) {
     })).sort((a, b) => a.k - b.k).map((r) => r.html).join('');
     const tiers = Object.entries(h.tiers).map(([t, v]) => `<div class="gd-tier ${n >= +t ? 'lit' : ''}" style="--c:${h.color}"><b>${t}/8</b><span>${E(v._mo_ta)}</span></div>`).join('');
     const skills = Object.entries(S).filter(([, s]) => s && s.he === he).map(([id, s]) =>
-      `<div class="gd-skill ${skOk(id, s) ? '' : 'lock'}">${pic(skillIcon(s))}<span><b>${E(s.name)}</b>${!c.learn.learned(id) ? 'Chưa lĩnh ngộ (hạ thủ lĩnh / Âm Hư)' : stageOk(s.unlock) ? 'Đã có' : `Mở ở ${E(c.stageName(s.unlock))}`}</span></div>`).join('');
+      `<div class="gd-skill ${skOk(id, s) ? '' : 'lock'}">${pic(skillIcon(s))}<span><b>${E(s.name)}</b>${s.thien ? '✦ Tiên khí · ' : ''}${!c.learn.learned(id) ? (s.thien ? 'Chưa có (Thiên Cơ Truyền Thừa)' : 'Chưa lĩnh ngộ (hạ thủ lĩnh / Âm Hư)') : stageOk(s.unlock) ? 'Đã có' : `Mở ở ${E(c.stageName(s.unlock))}`}</span></div>`).join('');
     const cc = c.ccDef.he[he] || c.ccDef.he[dvDef.he[he]?.twin] || c.ccDef.he.Kim, pbs = c.pbDef.list.filter((d) => d.he === he);
-    return `<div class="row"><div class="row-h"><b style="color:${h.color}">${E(h.name)}</b><em>Hệ ${E(he)} · đang mặc ${n}/8</em></div>
+    return `<div class="row"><div class="row-h"><b style="color:${h.color}">${E(h.name)}</b><em>${h.twin ? '✦ Tiên khí · ' : ''}Hệ ${E(he)} · đang mặc ${n}/8</em></div>
       <p>Mặc càng nhiều món cùng hệ, chiêu càng biến đổi. Đủ 8 = Đại Thành.</p>${tiers}
       ${c.equip ? `<button type="button" class="bag-act sm" data-act="wear" data-arg="${E(he)}">Mặc cả bộ ${E(he)} (đồ + pháp bảo + phù + kỹ năng có sẵn)</button>` : ''}</div>
       ${hopRow(he)}
@@ -50,7 +50,7 @@ export function createGuide(c) {
       <div class="row"><b class="gd-h">Kỹ năng hệ ${E(he)}</b><div class="gd-grid">${skills || '<span>—</span>'}</div>
       <p class="gd-note">Kỹ năng bắn đạn được bộ + Thần Phù nhân lên (bắn quạt, nảy, tách…).</p></div>
       <div class="row"><b class="gd-h">Cùng hệ</b><p>Bố Cấm Chế khi mặc nhiều đồ ${E(he)} nhất${c.ccDef.he[he] ? '' : ` (dùng trận hệ ${E(dvDef.he[he]?.twin || 'Kim')})`}: <b>${E(cc.name)}</b> — ${E(cc.desc)}.</p>
-      ${pbs.length ? `<div class="gd-grid">${pbs.map((d) => `<div class="gd-skill">${pic(d.icon_url || iconUrl(d.id))}<span><b>${E(d.name)}</b>Pháp bảo</span></div>`).join('')}</div>` : ''}</div>`;
+      ${pbs.length ? `<div class="gd-grid">${pbs.map((d) => `<div class="gd-skill">${pic(d.icon_url || iconUrl(d.id))}<span><b>${E(d.name)}</b>${d.thien ? '✦ Pháp bảo Tiên khí' : 'Pháp bảo'}</span></div>`).join('')}</div>` : ''}</div>`;
   }
 
   function activeTab() {
