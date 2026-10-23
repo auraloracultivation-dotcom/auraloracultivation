@@ -25,6 +25,14 @@ export async function respawnAtTown() {
   return data;
 }
 
+// Truyền tống giữa các trận nhãn (chủ dự án 23/10): máy chủ chỉ chấp nhận khi đang đứng cạnh một trận pháp,
+// và chỉ đưa tới toạ độ cố định của trận nhãn đích (migration 0007). Chưa có hàm trên máy chủ → lỗi, nơi gọi báo "chưa khai thông".
+export async function teleportToStation(stationId) {
+  const { data, error } = await supabase.rpc('teleport_to_station', { p_station: stationId });
+  if (error) throw error;
+  return data;
+}
+
 // Máy chủ trả lại vị trí đã chấp nhận (có thể khác nếu bị từ chối).
 export async function savePosition(x, y) {
   const { data, error } = await supabase.rpc('save_position', { p_x: x, p_y: y });

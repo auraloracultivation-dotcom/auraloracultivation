@@ -4,7 +4,7 @@ import { createMap, wrapDelta } from './map/index.js';
 import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, setTextScale, loadRig, rigAttack, artInfo, renderPortrait, avatarFx, iconUrl } from './entity/index.js';
 import { createAudio } from './audio/index.js';
 import { createPhapTuong } from './combat/index.js';
-import { createGameplay, createRankReporter, createFlight, hudActions, createNavi, createQuickPill } from './game/index.js';
+import { createGameplay, createRankReporter, createFlight, hudActions, createNavi, createQuickPill, createStations } from './game/index.js';
 
 // Luôn lấy code mới nhất (xem sw.js) — tránh lẫn code cũ với dữ liệu mới sau mỗi lần cập nhật
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
@@ -52,7 +52,8 @@ async function boot() {
 
   const zoneDef = await loadJSON(`data/zones/${character.zone_id}.json`);
   const [terrainDef, tilesDef] = await Promise.all([loadJSON('data/terrain.json'), loadJSON('data/tiles.json')]);
-  const map = await createMap(zoneDef, terrainDef, tilesDef, await loadJSON('data/art/sprites.json'));
+  const [art, stArt] = await Promise.all([loadJSON('data/art/sprites.json'), loadJSON('data/art/stations-art.json')]); // + hình trận nhãn (tools/station_slice.py)
+  const map = await createMap(zoneDef, terrainDef, tilesDef, { ...art, props: { ...art.props, ...stArt.props } });
   loading.set(72, 'Nạp trang bị…');
   const [itemsDef, codesDef, , audioDef, ptDef] = await Promise.all([loadJSON('data/items/items.json'), loadJSON('data/codes.json'),
     loadRig(loadJSON), loadJSON('data/audio.json'), loadJSON('data/skills/phap-tuong.json')]);
@@ -63,7 +64,7 @@ async function boot() {
   const me = createLocalPlayer(character);
   me.rig = {};
   const bag = createTestBag(character.user_id, itemsDef.items);
-  let game = null, dock = null, navi = null, pills = null; // luật chơi thử nghiệm: quái, chiến đấu, tu vi, nhiệm vụ (src/game)
+  let game = null, dock = null, navi = null, pills = null, stations = null; // luật chơi thử nghiệm: quái, chiến đấu, tu vi, nhiệm vụ (src/game)
   const hasAvatar = () => !!(bag.equippedItem('phap-tuong') || game?.forgedLook().avatar);
   const lookNow = () => { // đồ đang mặc + pháp tướng (chỉ khi kỹ năng đang bật)
     const forged = game?.forgedLook() || {}; // đồ luyện từ phôi đang mặc
@@ -241,6 +242,7 @@ async function boot() {
   navi = createNavi({ map, me, game, flight, toast }); // dẫn đường tới nơi làm nhiệm vụ
   game.setGo((id) => navi.start(id)); // nút "Đi tới" trong bảng Nhiệm vụ đầy đủ
   pills = createQuickPill({ game: () => game, hud, pick: showSlotPicker, iconUrl, toast }); // 2 ô đan dùng nhanh
+  stations = createStations({ map, me, net, game, toast, onMoved: (x, y) => { me.flying = false; hud.setToggle('bay', 0); zone.sendMove(x, y, false, false); } }); // trận nhãn + truyền tống
   const rank = createRankReporter({ gp: game.gp, info: game.rankInfo, me, submit: net.submitLeaderboard }); // ảnh chụp tiến trình → bảng xếp hạng
   dock = createStatsDock({ getValue: (id) => game.statValue(id), compact: false }); // HUD v3: bảng chỉ số mở bằng nút Nhân Vật
   game.setDock(dock);
@@ -292,14 +294,14 @@ async function boot() {
     flight.tick(dt);
     const mpNow = Math.round(pt.mp);
     if (mpNow !== shownMp) { shownMp = mpNow; hud.setBar('mp', mpNow, pt.max); }
-    game.update(dt);
+    game.update(dt); stations.tick(dt);
     rank.tick(dt);
     others.update(dt);
     for (const tap of input.takeTaps()) { // chạm vào nhân vật khác → chọn / bỏ chọn
       const wx = cam.x + tap.x / screen.scale, wy = cam.y + tap.y / screen.scale;
       if (game.tap(wx, wy)) continue; // chạm trúng quái → chọn quái
       const prop = map.town?.propAt(wx, wy);
-      if (prop && game.onProp(prop)) continue; // chạm công trình trong thành (kho hàng = cửa hàng…)
+      if (prop && (stations.tap(prop) || game.onProp(prop))) continue; // chạm công trình trong thành (kho hàng = cửa hàng…)
       let best = null, bestD = 22;
       for (const p of others.list.values()) {
         const px = me.x + wrapDelta(p.x - me.x, map.width), py = me.y + wrapDelta(p.y - me.y, map.height) - 12 * sprite;
