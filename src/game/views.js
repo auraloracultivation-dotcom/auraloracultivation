@@ -49,7 +49,8 @@ export function createViews(o) {
       const fake = a && !ok && quests.isPlaceholder(g.target) ? btn('fake', `${q.id}|${i}`, 'Hoàn thành tạm') : '';
       return `<li class="${ok ? 'ok' : ''}">${GOAL[g.type] || g.type}${what} <b>${cur}/${g.count}</b> ${fake}</li>`;
     }).join('');
-    const action = !a ? btn('accept', q.id, 'Nhận') : quests.complete(q.id) ? btn('claim', q.id, 'Nhận thưởng') : '';
+    const action = !a ? btn('accept', q.id, 'Nhận') : quests.complete(q.id) ? btn('claim', q.id, 'Nhận thưởng')
+      : goalPlace(q, a) ? btn('go', q.id, '➤ Đi tới — tự động làm') : ''; // dẫn đường từ bảng đầy đủ (giống chạm dòng ở khung nhỏ)
     return `<div class="row"><div class="row-h"><b style="color:${QCOL[q.tier] || ''}">${E(q.title)}</b><em>${TYPE[q.type] || q.type}</em></div>
       <p>${E(q.desc)}</p><ul>${goals}</ul><p class="rw">Thưởng: ${rewardText(q.rewards)}</p>${action}</div>`;
   }
@@ -59,7 +60,7 @@ export function createViews(o) {
   const monById = new Map(o.monsters.map((m) => [m.id, m]));
   const matZone = (id) => o.mats.materials.find((m) => m.id === id)?.zone;
   const MZ = ['xanh', 'cam', 'xam', 'trang', 'than', 'den', 'tim'];
-  let tracked = null;
+  let tracked = null, goTo = null; // goTo(id): main.js gắn dẫn đường (navi.start)
   function goalPlace(q, a) {
     const i = Math.max(0, q.goals.findIndex((g, k) => a.p[k] < g.count)), g = q.goals[i];
     if (g.type === 'kill_zone') return { zone: g.target, rank: g.rank || 'thuong' };
@@ -113,6 +114,7 @@ export function createViews(o) {
         if (act === 'bc-quit') { o.biCanh.quit(); return; }
         if (act === 'accept') quests.accept(arg);
         if (act === 'fake') { const [id, i] = arg.split('|'); quests.fakeGoal(id, +i); }
+        if (act === 'go') { close(); goTo?.(arg); return; }
         if (act === 'claim') { const r = quests.claim(arg); if (r) { o.onReward(r); toast('Đã nhận thưởng nhiệm vụ', 1500); } }
       },
     });
@@ -297,5 +299,5 @@ export function createViews(o) {
     });
   }
 
-  return { openQuests, questBrief, naviGoal, track, pillChoices, openCultivate, openShop, statValue, refreshDock: null };
+  return { setGo: (fn) => { goTo = fn; }, openQuests, questBrief, naviGoal, track, pillChoices, openCultivate, openShop, statValue, refreshDock: null };
 }
