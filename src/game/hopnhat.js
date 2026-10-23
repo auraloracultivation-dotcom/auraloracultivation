@@ -29,7 +29,7 @@ export function createHopNhat(c) {
     const skill = (id) => ({ ok: sk.includes(id) && c.learned(id), text: `Trang bị kỹ năng: ${c.S[id]?.name}${c.learned(id) ? '' : ' (chưa lĩnh ngộ)'}`, how: howSkill(id) });
     return [
       { ok: nSet === 8, text: `8 món trang bị hệ ${he} (đang mặc ${nSet}/8, phôi luyện không tính)`, how: howSet(he) },
-      { ok: pb?.he === he, text: `Pháp bảo hệ ${he} đang đeo${pb ? ` (đang: ${pb.name})` : ''}`, how: howPb(he) },
+      { ok: pb?.he === he || (!!r.twin && pb?.he === r.twin), text: `Pháp bảo hệ ${r.twin ? `${he} / ${r.twin}` : he} đang đeo${pb ? ` (đang: ${pb.name})` : ''}`, how: howPb(r.twin || he) }, // Thiên hệ: pháp bảo hệ ngũ hành song sinh
       { ok: cardsOn.includes(r.card), text: `Thần Phù: ${c.cardName(r.card)}`, how: howCard(r.card) },
       skill(r.skill_sin), skill(r.skill_cui),
     ];

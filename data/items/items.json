@@ -532,6 +532,486 @@
    "art": "art.pet.he.12",
    "set": "he.6",
    "he": "Thổ"
+  },
+  {
+   "id": "item.outfit.he.7",
+   "name": "Thánh Quang Đạo bào",
+   "cat": "trang-bi",
+   "slot": "trang-phuc",
+   "art": "art.outfit.he.7",
+   "set": "he.7",
+   "he": "Quang",
+   "thien": true
+  },
+  {
+   "id": "item.outfit.he.8",
+   "name": "Lôi Đình Đạo bào",
+   "cat": "trang-bi",
+   "slot": "trang-phuc",
+   "art": "art.outfit.he.8",
+   "set": "he.8",
+   "he": "Lôi",
+   "thien": true
+  },
+  {
+   "id": "item.outfit.he.9",
+   "name": "Hàn Băng Đạo bào",
+   "cat": "trang-bi",
+   "slot": "trang-phuc",
+   "art": "art.outfit.he.9",
+   "set": "he.9",
+   "he": "Băng",
+   "thien": true
+  },
+  {
+   "id": "item.outfit.he.10",
+   "name": "Phong Linh Đạo bào",
+   "cat": "trang-bi",
+   "slot": "trang-phuc",
+   "art": "art.outfit.he.10",
+   "set": "he.10",
+   "he": "Phong",
+   "thien": true
+  },
+  {
+   "id": "item.outfit.he.11",
+   "name": "Hư Không Đạo bào",
+   "cat": "trang-bi",
+   "slot": "trang-phuc",
+   "art": "art.outfit.he.11",
+   "set": "he.11",
+   "he": "Hư",
+   "thien": true
+  },
+  {
+   "id": "item.outfit.he.12",
+   "name": "Thời Không Đạo bào",
+   "cat": "trang-bi",
+   "slot": "trang-phuc",
+   "art": "art.outfit.he.12",
+   "set": "he.12",
+   "he": "Thời",
+   "thien": true
+  },
+  {
+   "id": "item.weapon.he.7",
+   "name": "Thánh Quang Pháp trượng",
+   "cat": "trang-bi",
+   "slot": "vu-khi",
+   "art": "art.weapon.he.7",
+   "set": "he.7",
+   "he": "Quang",
+   "thien": true
+  },
+  {
+   "id": "item.weapon.he.8",
+   "name": "Lôi Đình Pháp trượng",
+   "cat": "trang-bi",
+   "slot": "vu-khi",
+   "art": "art.weapon.he.8",
+   "set": "he.8",
+   "he": "Lôi",
+   "thien": true
+  },
+  {
+   "id": "item.weapon.he.9",
+   "name": "Hàn Băng Pháp trượng",
+   "cat": "trang-bi",
+   "slot": "vu-khi",
+   "art": "art.weapon.he.9",
+   "set": "he.9",
+   "he": "Băng",
+   "thien": true
+  },
+  {
+   "id": "item.weapon.he.10",
+   "name": "Phong Linh Pháp trượng",
+   "cat": "trang-bi",
+   "slot": "vu-khi",
+   "art": "art.weapon.he.10",
+   "set": "he.10",
+   "he": "Phong",
+   "thien": true
+  },
+  {
+   "id": "item.weapon.he.11",
+   "name": "Hư Không Pháp trượng",
+   "cat": "trang-bi",
+   "slot": "vu-khi",
+   "art": "art.weapon.he.11",
+   "set": "he.11",
+   "he": "Hư",
+   "thien": true
+  },
+  {
+   "id": "item.weapon.he.12",
+   "name": "Thời Không Pháp trượng",
+   "cat": "trang-bi",
+   "slot": "vu-khi",
+   "art": "art.weapon.he.12",
+   "set": "he.12",
+   "he": "Thời",
+   "thien": true
+  },
+  {
+   "id": "item.wing.he.7",
+   "name": "Thánh Quang Linh dực",
+   "cat": "trang-bi",
+   "slot": "canh",
+   "art": "art.wing.he.7",
+   "set": "he.7",
+   "he": "Quang",
+   "thien": true
+  },
+  {
+   "id": "item.wing.he.8",
+   "name": "Lôi Đình Linh dực",
+   "cat": "trang-bi",
+   "slot": "canh",
+   "art": "art.wing.he.8",
+   "set": "he.8",
+   "he": "Lôi",
+   "thien": true
+  },
+  {
+   "id": "item.wing.he.9",
+   "name": "Hàn Băng Linh dực",
+   "cat": "trang-bi",
+   "slot": "canh",
+   "art": "art.wing.he.9",
+   "set": "he.9",
+   "he": "Băng",
+   "thien": true
+  },
+  {
+   "id": "item.wing.he.10",
+   "name": "Phong Linh Linh dực",
+   "cat": "trang-bi",
+   "slot": "canh",
+   "art": "art.wing.he.10",
+   "set": "he.10",
+   "he": "Phong",
+   "thien": true
+  },
+  {
+   "id": "item.wing.he.11",
+   "name": "Hư Không Linh dực",
+   "cat": "trang-bi",
+   "slot": "canh",
+   "art": "art.wing.he.11",
+   "set": "he.11",
+   "he": "Hư",
+   "thien": true
+  },
+  {
+   "id": "item.wing.he.12",
+   "name": "Thời Không Linh dực",
+   "cat": "trang-bi",
+   "slot": "canh",
+   "art": "art.wing.he.12",
+   "set": "he.12",
+   "he": "Thời",
+   "thien": true
+  },
+  {
+   "id": "item.avatar.he.7",
+   "name": "Thánh Quang Pháp tướng",
+   "cat": "trang-bi",
+   "slot": "phap-tuong",
+   "art": "art.avatar.he.7",
+   "set": "he.7",
+   "he": "Quang",
+   "thien": true
+  },
+  {
+   "id": "item.avatar.he.8",
+   "name": "Lôi Đình Pháp tướng",
+   "cat": "trang-bi",
+   "slot": "phap-tuong",
+   "art": "art.avatar.he.8",
+   "set": "he.8",
+   "he": "Lôi",
+   "thien": true
+  },
+  {
+   "id": "item.avatar.he.9",
+   "name": "Hàn Băng Pháp tướng",
+   "cat": "trang-bi",
+   "slot": "phap-tuong",
+   "art": "art.avatar.he.9",
+   "set": "he.9",
+   "he": "Băng",
+   "thien": true
+  },
+  {
+   "id": "item.avatar.he.10",
+   "name": "Phong Linh Pháp tướng",
+   "cat": "trang-bi",
+   "slot": "phap-tuong",
+   "art": "art.avatar.he.10",
+   "set": "he.10",
+   "he": "Phong",
+   "thien": true
+  },
+  {
+   "id": "item.avatar.he.11",
+   "name": "Hư Không Pháp tướng",
+   "cat": "trang-bi",
+   "slot": "phap-tuong",
+   "art": "art.avatar.he.11",
+   "set": "he.11",
+   "he": "Hư",
+   "thien": true
+  },
+  {
+   "id": "item.avatar.he.12",
+   "name": "Thời Không Pháp tướng",
+   "cat": "trang-bi",
+   "slot": "phap-tuong",
+   "art": "art.avatar.he.12",
+   "set": "he.12",
+   "he": "Thời",
+   "thien": true
+  },
+  {
+   "id": "item.mask.he.7",
+   "name": "Thánh Quang Diện cụ",
+   "cat": "trang-bi",
+   "slot": "mat-na",
+   "art": "art.mask.he.7",
+   "set": "he.7",
+   "he": "Quang",
+   "thien": true
+  },
+  {
+   "id": "item.mask.he.8",
+   "name": "Lôi Đình Diện cụ",
+   "cat": "trang-bi",
+   "slot": "mat-na",
+   "art": "art.mask.he.8",
+   "set": "he.8",
+   "he": "Lôi",
+   "thien": true
+  },
+  {
+   "id": "item.mask.he.9",
+   "name": "Hàn Băng Diện cụ",
+   "cat": "trang-bi",
+   "slot": "mat-na",
+   "art": "art.mask.he.9",
+   "set": "he.9",
+   "he": "Băng",
+   "thien": true
+  },
+  {
+   "id": "item.mask.he.10",
+   "name": "Phong Linh Diện cụ",
+   "cat": "trang-bi",
+   "slot": "mat-na",
+   "art": "art.mask.he.10",
+   "set": "he.10",
+   "he": "Phong",
+   "thien": true
+  },
+  {
+   "id": "item.mask.he.11",
+   "name": "Hư Không Diện cụ",
+   "cat": "trang-bi",
+   "slot": "mat-na",
+   "art": "art.mask.he.11",
+   "set": "he.11",
+   "he": "Hư",
+   "thien": true
+  },
+  {
+   "id": "item.mask.he.12",
+   "name": "Thời Không Diện cụ",
+   "cat": "trang-bi",
+   "slot": "mat-na",
+   "art": "art.mask.he.12",
+   "set": "he.12",
+   "he": "Thời",
+   "thien": true
+  },
+  {
+   "id": "item.ring.he.7",
+   "name": "Thánh Quang Giới chỉ",
+   "cat": "trang-bi",
+   "slot": "nhan",
+   "art": "art.ring.he.7",
+   "set": "he.7",
+   "he": "Quang",
+   "thien": true
+  },
+  {
+   "id": "item.ring.he.8",
+   "name": "Lôi Đình Giới chỉ",
+   "cat": "trang-bi",
+   "slot": "nhan",
+   "art": "art.ring.he.8",
+   "set": "he.8",
+   "he": "Lôi",
+   "thien": true
+  },
+  {
+   "id": "item.ring.he.9",
+   "name": "Hàn Băng Giới chỉ",
+   "cat": "trang-bi",
+   "slot": "nhan",
+   "art": "art.ring.he.9",
+   "set": "he.9",
+   "he": "Băng",
+   "thien": true
+  },
+  {
+   "id": "item.ring.he.10",
+   "name": "Phong Linh Giới chỉ",
+   "cat": "trang-bi",
+   "slot": "nhan",
+   "art": "art.ring.he.10",
+   "set": "he.10",
+   "he": "Phong",
+   "thien": true
+  },
+  {
+   "id": "item.ring.he.11",
+   "name": "Hư Không Giới chỉ",
+   "cat": "trang-bi",
+   "slot": "nhan",
+   "art": "art.ring.he.11",
+   "set": "he.11",
+   "he": "Hư",
+   "thien": true
+  },
+  {
+   "id": "item.ring.he.12",
+   "name": "Thời Không Giới chỉ",
+   "cat": "trang-bi",
+   "slot": "nhan",
+   "art": "art.ring.he.12",
+   "set": "he.12",
+   "he": "Thời",
+   "thien": true
+  },
+  {
+   "id": "item.necklace.he.7",
+   "name": "Thánh Quang Hạng liên",
+   "cat": "trang-bi",
+   "slot": "day-chuyen",
+   "art": "art.necklace.he.7",
+   "set": "he.7",
+   "he": "Quang",
+   "thien": true
+  },
+  {
+   "id": "item.necklace.he.8",
+   "name": "Lôi Đình Hạng liên",
+   "cat": "trang-bi",
+   "slot": "day-chuyen",
+   "art": "art.necklace.he.8",
+   "set": "he.8",
+   "he": "Lôi",
+   "thien": true
+  },
+  {
+   "id": "item.necklace.he.9",
+   "name": "Hàn Băng Hạng liên",
+   "cat": "trang-bi",
+   "slot": "day-chuyen",
+   "art": "art.necklace.he.9",
+   "set": "he.9",
+   "he": "Băng",
+   "thien": true
+  },
+  {
+   "id": "item.necklace.he.10",
+   "name": "Phong Linh Hạng liên",
+   "cat": "trang-bi",
+   "slot": "day-chuyen",
+   "art": "art.necklace.he.10",
+   "set": "he.10",
+   "he": "Phong",
+   "thien": true
+  },
+  {
+   "id": "item.necklace.he.11",
+   "name": "Hư Không Hạng liên",
+   "cat": "trang-bi",
+   "slot": "day-chuyen",
+   "art": "art.necklace.he.11",
+   "set": "he.11",
+   "he": "Hư",
+   "thien": true
+  },
+  {
+   "id": "item.necklace.he.12",
+   "name": "Thời Không Hạng liên",
+   "cat": "trang-bi",
+   "slot": "day-chuyen",
+   "art": "art.necklace.he.12",
+   "set": "he.12",
+   "he": "Thời",
+   "thien": true
+  },
+  {
+   "id": "item.pet.he.13",
+   "name": "Thánh Quang Kỳ Lân",
+   "cat": "trang-bi",
+   "slot": "linh-thu",
+   "art": "art.pet.he.13",
+   "set": "he.7",
+   "he": "Quang",
+   "thien": true
+  },
+  {
+   "id": "item.pet.he.14",
+   "name": "Lôi Đình Bạch Lang",
+   "cat": "trang-bi",
+   "slot": "linh-thu",
+   "art": "art.pet.he.14",
+   "set": "he.8",
+   "he": "Lôi",
+   "thien": true
+  },
+  {
+   "id": "item.pet.he.15",
+   "name": "Hàn Băng Long",
+   "cat": "trang-bi",
+   "slot": "linh-thu",
+   "art": "art.pet.he.15",
+   "set": "he.9",
+   "he": "Băng",
+   "thien": true
+  },
+  {
+   "id": "item.pet.he.16",
+   "name": "Phong Linh Hồ",
+   "cat": "trang-bi",
+   "slot": "linh-thu",
+   "art": "art.pet.he.16",
+   "set": "he.10",
+   "he": "Phong",
+   "thien": true
+  },
+  {
+   "id": "item.pet.he.17",
+   "name": "Hư Không Ma Long",
+   "cat": "trang-bi",
+   "slot": "linh-thu",
+   "art": "art.pet.he.17",
+   "set": "he.11",
+   "he": "Hư",
+   "thien": true
+  },
+  {
+   "id": "item.pet.he.18",
+   "name": "Thời Không Kỳ Thú",
+   "cat": "trang-bi",
+   "slot": "linh-thu",
+   "art": "art.pet.he.18",
+   "set": "he.12",
+   "he": "Thời",
+   "thien": true
   }
  ]
 }

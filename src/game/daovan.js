@@ -55,8 +55,11 @@ export function createDaoVan({ def, bag, cards, progress }) {
   function onKill(m, toast) {
     const D = def.set_drop, ch = m.void ? D.void : D[m.def.rank] || 0;
     if (Math.random() >= ch) return;
-    const miss = bag.missing((d) => d.he && d.slot);
-    if (!miss.length) { progress.addStone(D.dup_stone); toast(`Đồ ngũ hành rơi ra nhưng đã đủ bộ: +${D.dup_stone} Linh thạch`, 2000); return; }
+    // Thiên hệ (6 hệ mới, chủ dự án 23/10 21h) chỉ rơi từ nguồn trong thien_from (Âm Hư); còn lại chỉ rơi đồ ngũ hành
+    const thien = (D.thien_from || []).includes(m.void ? 'void' : m.def.rank);
+    let miss = bag.missing((d) => d.he && d.slot && !!d.thien === thien);
+    if (!miss.length && thien) miss = bag.missing((d) => d.he && d.slot);
+    if (!miss.length) { progress.addStone(D.dup_stone); toast(`Đồ ${thien ? 'Thiên hệ' : 'ngũ hành'} rơi ra nhưng đã đủ bộ: +${D.dup_stone} Linh thạch`, 2000); return; }
     const id = miss[Math.floor(Math.random() * miss.length)]; bag.give(id);
     toast('Nhặt được đồ ngũ hành! Xem Kho → Trang bị', 2600);
   }

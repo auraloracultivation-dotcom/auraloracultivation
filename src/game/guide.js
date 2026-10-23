@@ -75,7 +75,7 @@ export function createGuide(c) {
     // cách chia 8 ô thành các bộ đạt mốc (2/4/6/8) — mỗi cách là một kiểu build khác nhau
     const parts = []; (function go(left, max, cur) { if (!left) { parts.push(cur); return; } for (const p of [8, 6, 4, 2]) if (p <= Math.min(left, max)) go(left - p, p, [...cur, p]); })(8, 8, []);
     return `<div class="row"><b class="gd-h">Đang có trong game</b>
-      <div class="gd-count"><b>${HE.length}</b><span>bộ ngũ hành</span><b>${tiers}</b><span>mốc hiệu ứng bộ (2/4/6/8)</span>
+      <div class="gd-count"><b>${HE.length}</b><span>bộ (6 ngũ hành + 6 Thiên hệ)</span><b>${tiers}</b><span>mốc hiệu ứng bộ (2/4/6/8)</span>
       <b>${nCards}</b><span>loại Thần Phù × 7 phẩm</span><b>${nPb}</b><span>pháp bảo</span><b>${nCc}</b><span>trận cấm chế</span>
       <b>${allSkills}</b><span>kỹ năng (${heSkills} theo hệ)</span></div></div>
       <div class="row"><b class="gd-h">Cách ghép 8 ô</b><p>${parts.map((p) => p.join(' + ')).join(' · ')} — ${parts.length} kiểu chia, mỗi phần chọn 1 trong ${HE.length} hệ.
