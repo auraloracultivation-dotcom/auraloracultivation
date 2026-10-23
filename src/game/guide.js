@@ -29,14 +29,15 @@ export function createGuide(c) {
   }
   function heTab(he) {
     const h = dvDef.he[he], n = dv.counts()[he] || 0, mine = new Set(bag.entries().map((e) => e.item?.id));
-    const rows = SLOT_ORDER.map(([sl, nm]) => {
-      const list = c.items.filter((d) => d.he === he && d.slot === sl);
-      return list.map((d) => {
-        const on = bag.equippedItem(sl)?.id === d.id, have = mine.has(d.id) || owned.has(d.id);
-        const st = on ? '<em class="ok">✓ Đang mặc</em>' : have ? '<em>Có trong Kho</em>' : '<em class="no">Chưa có</em>';
-        return `<div class="gd-slot ${on ? 'on' : ''}">${pic(c.art(d.art))}<span><b>${E(nm)}</b>${E(d.name)}</span>${st}</div>`;
-      }).join('');
-    }).join('');
+    // Chạm món có trong Kho = mặc ngay (chủ dự án 23/10 22h09); món đang mặc / có sẵn xếp lên trước, chưa có xuống dưới
+    const rows = SLOT_ORDER.flatMap(([sl, nm]) => c.items.filter((d) => d.he === he && d.slot === sl).map((d) => {
+      const on = bag.equippedItem(sl)?.id === d.id, have = mine.has(d.id) || owned.has(d.id);
+      const st = on ? '<em class="ok">✓ Đang mặc</em>' : have ? '<em class="gd-wear">Chạm để mặc</em>' : '<em class="no">Chưa có</em>';
+      const html = have && !on && c.equip
+        ? `<button type="button" class="gd-slot gd-slot-btn" data-act="wear1" data-arg="${E(d.id)}">${pic(c.art(d.art))}<span><b>${E(nm)}</b>${E(d.name)}</span>${st}</button>`
+        : `<div class="gd-slot ${on ? 'on' : ''}">${pic(c.art(d.art))}<span><b>${E(nm)}</b>${E(d.name)}</span>${st}</div>`;
+      return { html, k: on ? 0 : have ? 1 : 2 };
+    })).sort((a, b) => a.k - b.k).map((r) => r.html).join('');
     const tiers = Object.entries(h.tiers).map(([t, v]) => `<div class="gd-tier ${n >= +t ? 'lit' : ''}" style="--c:${h.color}"><b>${t}/8</b><span>${E(v._mo_ta)}</span></div>`).join('');
     const skills = Object.entries(S).filter(([, s]) => s && s.he === he).map(([id, s]) =>
       `<div class="gd-skill ${skOk(id, s) ? '' : 'lock'}">${pic(skillIcon(s))}<span><b>${E(s.name)}</b>${!c.learn.learned(id) ? 'Chưa lĩnh ngộ (hạ thủ lĩnh / Âm Hư)' : stageOk(s.unlock) ? 'Đã có' : `Mở ở ${E(c.stageName(s.unlock))}`}</span></div>`).join('');
@@ -92,6 +93,7 @@ export function createGuide(c) {
       render: (tab) => (tab === 'on' ? activeTab() : tab === 'all' ? overviewTab() : heTab(tab)),
       onAction(act, he) {
         if (act === 'how') { openHow = openHow === he ? null : he; return; } // bảng tự vẽ lại sau onAction
+        if (act === 'wear1') { const d = c.items.find((x) => x.id === he); if (d) { c.equip(d.id); c.toast(`Đã mặc ${d.name}`, 1400); } return; } // arg = mã món
         if (act !== 'wear') return;
         let n = 0;
         for (const [sl] of SLOT_ORDER) {
