@@ -14,7 +14,7 @@
    "phan": 0
   },
   "regen_after_s": 5,
-  "regen_hp_per_s": 0.03,
+  "regen_hp_per_s": 0.04,
   "revive_s": 5,
   "attack_range_px": 34,
   "stages": [
@@ -217,7 +217,11 @@
     "exp_need": 617429074
    }
   ],
-  "max_stage": "ht_hau"
+  "max_stage": "ht_hau",
+  "starter_inv": {
+   "item.dan.tieu-hoi-huyet.001": 10
+  },
+  "_ghi_chu_tan_thu": "Chủ dự án 23/10 tối: acc mới nhận sẵn 10 Tiểu Hồi Huyết Đan (starter_inv) — thử thật: tân thủ không đan bật Tự động chết 5 lần / 5 phút."
  },
  "major_realm_first_stage": {
   "tc_so": "realm.truc-co",
@@ -1193,7 +1197,10 @@
   "anchor_radius_px": 640,
   "anchor_idle_frac": 0.35,
   "anchor_leash_px": 60,
-  "_ghi_chu_neo": "Neo vùng farm (chủ dự án 23/10): bật Tự động cắm neo tại chỗ; chỉ đánh / hái trong bán kính anchor_radius_px (640, gấp đôi bản đầu theo chủ dự án 23/10 13:20; không vẽ vòng neo). Quái chạy ra quá anchor_leash_px ngoài vòng thì bỏ. Hết mục tiêu mà xa neo hơn anchor_idle_frac × bán kính thì đi về neo, gần thì đứng chờ quái hồi sinh. Kéo cần = dời neo."
+  "_ghi_chu_neo": "Neo vùng farm (chủ dự án 23/10): bật Tự động cắm neo tại chỗ; chỉ đánh / hái trong bán kính anchor_radius_px (640, gấp đôi bản đầu theo chủ dự án 23/10 13:20; không vẽ vòng neo). Quái chạy ra quá anchor_leash_px ngoài vòng thì bỏ. Hết mục tiêu mà xa neo hơn anchor_idle_frac × bán kính thì đi về neo, gần thì đứng chờ quái hồi sinh. Kéo cần = dời neo.",
+  "rest_below": 0.4,
+  "rest_until": 0.9,
+  "_ghi_chu_nghi": "Chủ dự án 23/10 tối (cứu tân thủ): Tự động thấy khí huyết dưới rest_below thì đứng nghỉ, chỉ đánh trả con đang đánh mình, hồi tới rest_until mới tìm quái tiếp. Khí huyết tự hồi player.regen_hp_per_s mỗi giây sau player.regen_after_s giây thôi giao chiến (trước đây có số nhưng code chưa dùng)."
  },
  "luc_chien": {
   "_ghi_chu": "Lực chiến (bảng xếp hạng) = tổng chỉ số × trọng số. Số TẠM, chỉnh thoải mái. src/game/rank.js",

@@ -76,7 +76,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const info = createItemInfo({ monsters: monDef.monsters, shop, pills, blanks, realms, gp, cpText: (id) => cpFx.text(id) }); // tác dụng + nơi có của vật phẩm
   const npcs = createNpcs({ def: await loadJSON('data/npcs.json'), map, mobs, stats, stages: gp.player.stages });
   const PV = gp.pvp, rollLoot = createLoot({ gp, mats, qItems, recipes, progress });
-  const autoPlay = createAutoPlay({ me, mobs, gather, map, cfg: gp.auto, reach: gp.player.attack_range_px, canFly: () => !!me.look?.weapon && pt.mp >= 15, zone: () => biCanh?.zone() });
+  const autoPlay = createAutoPlay({ me, mobs, gather, map, cfg: gp.auto, reach: gp.player.attack_range_px, canFly: () => !!me.look?.weapon && pt.mp >= 15, zone: () => biCanh?.zone(), hpFrac: () => (ps.hp ? hp / ps.hp : 1) });
   gather.seed(me);
   const SLOTS = ['mat-na', 'trang-phuc', 'vu-khi', 'nhan', 'canh', 'phap-tuong', 'linh-thu', 'day-chuyen'];
   // Trang bị đang tính chỉ số: đồ luyện ra đang mặc + đồ Kho đang mặc đã thức tỉnh
@@ -272,7 +272,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
       if (gp.auto.use_skills && target(260)) skills.autoCast(loadout.ids(), hp / ps.hp); // tự dùng kỹ năng trong ô
       if (target(PL.attack_range_px) && attackCd <= 0) { attack(); me.onAutoSwing?.(); }
     }
-    guide.tick(); learn.tick(); hopNhat.update(dt); barrage.update(dt); camChe.update(dt); biCanh.update(dt); const md = dv.mods(); if (md.mp_regen && !dead) pt.gain(ps.mp * md.mp_regen * dt); // đạn + bị động Đạo Vận, linh lực hồi liên tục
+    guide.tick(); learn.tick(); hopNhat.update(dt); barrage.update(dt); camChe.update(dt); biCanh.update(dt); const md = dv.mods(); if (md.mp_regen && !dead) pt.gain(ps.mp * md.mp_regen * dt); if (!dead && hp < ps.hp && now - hurtAt > PL.regen_after_s) hp = Math.min(ps.hp, hp + ps.hp * PL.regen_hp_per_s * (map.safeAt(me.x, me.y) ? map.town?.regenMul || 1 : 1) * dt); // hồi khí huyết khi thôi giao chiến (data/gameplay.json → player.regen_*) // đạn + bị động Đạo Vận, linh lực hồi liên tục
     if (pet) {
       if (now > pet.until || dead) pet = null;
       else {

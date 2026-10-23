@@ -9,8 +9,11 @@
 import { wrapDelta } from '../map/index.js';
 
 // zone(): { x, y, r } khi đang ở bí cảnh — chỉ đánh quái trong vòng, không đi hái, không có gì thì về giữa vòng (thay cho neo)
-export function createAutoPlay({ me, mobs, gather, map, cfg, reach, canFly = () => false, zone = () => null }) {
+// hpFrac(): khí huyết hiện tại / tối đa. Dưới rest_below thì NGHỈ (không tìm quái mới, chỉ đánh trả con đang đánh mình)
+// tới khi hồi lên rest_until — chủ dự án 23/10 tối: tân thủ bật Tự động chết liên tục vì lao vào con này tới con khác.
+export function createAutoPlay({ me, mobs, gather, map, cfg, reach, canFly = () => false, zone = () => null, hpFrac = () => 1 }) {
   let goal = null, repick = 0, stuckT = 0, lx = me.x, ly = me.y, fly = false, flyT = 0, anchor = null;
+  let resting = false;
   let focus = null; // { zone, rank, gather } khi bật từ dẫn đường nhiệm vụ: chỉ đánh quái đúng vùng (ưu tiên đúng loại), không đánh quái vùng khác
   const skip = new Map(); // mục tiêu đang tạm bỏ → hết hạn lúc
   const rel = (o) => ({ dx: wrapDelta(o.x - me.x, map.width), dy: wrapDelta(o.y - me.y, map.height) });
@@ -41,6 +44,8 @@ export function createAutoPlay({ me, mobs, gather, map, cfg, reach, canFly = () 
   // Mỗi khung hình khi đang bật Tự động. Trả về { x, y } hướng đi (0,0 = đứng yên) hoặc null nếu không có gì quanh đây.
   function step(dt, now) {
     repick -= dt;
+    const f = hpFrac(); if (f < (cfg.rest_below ?? 0)) resting = true; else if (f >= (cfg.rest_until ?? 1)) resting = false;
+    if (resting && !(goal?.kind === 'mob' && alive(goal) && goal.o.state !== 'idle' && goal.o.state !== 'return')) { goal = null; return { x: 0, y: 0, fly, rest: true }; }
     const a = area(), out = goal?.kind === 'mob' && a && far(goal.o, a) > a.r + cfg.anchor_leash_px; // quái chạy ra khỏi vùng: bỏ, không đuổi theo
     if (!alive(goal) || out || repick <= 0) { const g = pick(now); if (g?.o !== goal?.o) stuckT = 0; goal = g; repick = cfg.repick_s; }
     // đang bay vượt chướng ngại: bay ≥ 1 giây rồi hạ ngay khi dưới chân đứng được và (gần mục tiêu hoặc đã bay lâu)
