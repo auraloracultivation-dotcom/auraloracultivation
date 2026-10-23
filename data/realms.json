@@ -99,11 +99,11 @@
    "unlock_skill": "chua-co",
    "zone": "den",
    "breakthrough": {
-    "rate": 0.2,
-    "pill": "item.dan.anh-bien.001"
-   },
-   "player_locked": true,
-   "_ghi_chu": "Người chơi tạm tối đa Hóa Thần Hậu kỳ (23/10) — chỉ có quái"
+    "rate": 0.02,
+    "pill": "item.dan.anh-bien.001",
+    "fail_to": "ht_trung",
+    "charm_add": 0.005
+   }
   },
   {
    "id": "realm.van-dinh",
@@ -121,7 +121,7 @@
     "pill": "item.dan.van-dinh.001"
    },
    "player_locked": true,
-   "_ghi_chu": "Người chơi tạm tối đa Hóa Thần Hậu kỳ (23/10) — chỉ có quái"
+   "_ghi_chu": "Người chơi tạm tối đa Anh Biến Hậu kỳ (23/10 23h28) — chỉ có quái"
   },
   {
    "id": "realm.am-hu",
@@ -156,7 +156,10 @@
   "na_hau": 2639.71,
   "ht_so": 3695.6,
   "ht_trung": 5173.83,
-  "ht_hau": 7243.37
+  "ht_hau": 7243.37,
+  "ab_so": 10140.71,
+  "ab_trung": 14197.0,
+  "ab_hau": 19875.8
  },
  "breakthrough_rules": {
   "require": "đỉnh cảnh giới hiện tại + đủ đan đột phá",

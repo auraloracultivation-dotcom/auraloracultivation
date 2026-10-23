@@ -56,12 +56,17 @@ export function createDaoVan({ def, bag, cards, progress }) {
     const D = def.set_drop, ch = m.void ? D.void : D[m.def.rank] || 0;
     if (Math.random() >= ch) return;
     // Thiên hệ (6 hệ mới, chủ dự án 23/10 21h) chỉ rơi từ nguồn trong thien_from (Âm Hư); còn lại chỉ rơi đồ ngũ hành
-    const thien = !m.src && (D.thien_from || []).includes(m.void ? 'void' : m.def.rank); // bí cảnh (src) luôn rơi ngũ hành
+    grantSet(!m.src && (D.thien_from || []).includes(m.void ? 'void' : m.def.rank), toast); // bí cảnh thường (src) luôn rơi ngũ hành
+  }
+  // Tặng 1 món bộ còn thiếu (thien: đồ 6 Thiên hệ). Đủ hết thì đổi Linh thạch. Cửu Thiên Bí Cảnh gọi thẳng hàm này.
+  function grantSet(thien, toast) {
+    const D = def.set_drop;
     let miss = bag.missing((d) => d.he && d.slot && !!d.thien === thien);
     if (!miss.length && thien) miss = bag.missing((d) => d.he && d.slot);
-    if (!miss.length) { progress.addStone(D.dup_stone); toast(`Đồ ${thien ? 'Thiên hệ' : 'ngũ hành'} rơi ra nhưng đã đủ bộ: +${D.dup_stone} Linh thạch`, 2000); return; }
+    if (!miss.length) { progress.addStone(D.dup_stone); toast(`Đồ ${thien ? 'Thiên hệ' : 'ngũ hành'} rơi ra nhưng đã đủ bộ: +${D.dup_stone} Linh thạch`, 2000); return null; }
     const id = miss[Math.floor(Math.random() * miss.length)]; bag.give(id);
     toast(`Nhặt được đồ ${thien ? 'Thiên hệ' : 'ngũ hành'}! Xem Kho → Trang bị`, 2600);
+    return id;
   }
-  return { mods, heOf, counts, onKill, limits: def.limits, fx: def.fx };
+  return { mods, heOf, counts, onKill, grantSet, limits: def.limits, fx: def.fx };
 }

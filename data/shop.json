@@ -70,6 +70,21 @@
    "_ghi_chu": "Chủ dự án 23/10: bán nhưng khó — 60.000 Linh thạch + Nguyên Anh Hậu kỳ + 5 Hồn Thú Tinh (Vùng Trắng) + 2 Tinh Hồn (Xám Khói). Vẫn rơi từ boss Xám Than."
   },
   {
+   "id": "item.danphuong.anh-bien.001",
+   "price": 4400,
+   "min_stage": "ht_hau",
+   "cost_items": [
+    {
+     "id": "item.dacbiet.tinh-hon-co.001",
+     "count": 5
+    },
+    {
+     "id": "item.dacbiet.hon-thu-tinh.001",
+     "count": 10
+    }
+   ]
+  },
+  {
    "id": "item.congthuc.vu-khi.001",
    "price": 54
   },
@@ -238,10 +253,34 @@
    "daily_limit": 20
   },
   {
-   "id": "item.dan.vien-man.001",
-   "price": 120,
+   "id": "item.dan.vien-man.lk",
+   "price": 5,
+   "currency": "tien-ngoc",
+   "daily_limit": 5
+  },
+  {
+   "id": "item.dan.vien-man.tc",
+   "price": 20,
+   "currency": "tien-ngoc",
+   "daily_limit": 4
+  },
+  {
+   "id": "item.dan.vien-man.kd",
+   "price": 45,
    "currency": "tien-ngoc",
    "daily_limit": 3
+  },
+  {
+   "id": "item.dan.vien-man.na",
+   "price": 90,
+   "currency": "tien-ngoc",
+   "daily_limit": 3
+  },
+  {
+   "id": "item.dan.vien-man.ht",
+   "price": 180,
+   "currency": "tien-ngoc",
+   "daily_limit": 2
   },
   {
    "id": "item.khoang.ngu-hanh.001",

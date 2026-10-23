@@ -40,6 +40,7 @@ export function createTestBag(userId, defs) {
     unequip(slot) { if (st.equipped[slot]) { delete st.equipped[slot]; save(); } },
     // Nhận 1 món (rơi từ quái): false nếu đã có
     give(id) { if (!byId.has(id) || st.items.includes(id)) return false; st.items.push(id); save(); return true; },
+    nameOf: (id) => byId.get(id)?.name, // tên món trong Kho (bí cảnh báo thưởng)
     missing: (filter) => defs.filter((d) => !st.items.includes(d.id) && filter(d)).map((d) => d.id),
     grantAll(pick = () => true) { // pick(d): chỉ tặng món thoả điều kiện (mã 'thien': 48 món Thiên hệ)
       const before = st.items.length;

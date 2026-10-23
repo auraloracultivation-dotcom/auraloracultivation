@@ -110,7 +110,7 @@ export const fxDuration = (id) => (DEF?.fx[id] ? DEF.fx[id].anims.play.n / DEF.f
 export function iconUrl(id) {
   if (!DEF) return null;
   if (iconUrls.has(id)) return iconUrls.get(id);
-  const n = DEF.icons.map[id], atlas = imgs.get(DEF.icons.src);
+  const n = DEF.icons.map[id] ?? DEF.icons.map[id.replace(/\.[a-z]+$/, '.001')], atlas = imgs.get(DEF.icons.src); // biến thể (vd. item.dan.vien-man.ht) dùng hình bản .001
   if (n === undefined || !atlas) return null;
   const S = DEF.icons.size, c = document.createElement('canvas'); c.width = c.height = S;
   c.getContext('2d').drawImage(atlas, (n % DEF.icons.cols) * S, Math.floor(n / DEF.icons.cols) * S, S, S, 0, 0, S, S);

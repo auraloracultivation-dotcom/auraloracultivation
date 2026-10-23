@@ -63,6 +63,7 @@ export function createProgress(userId, gp) {
       return !!next && !!gp.major_realm_first_stage[next.id] && st.exp >= cur.exp_need;
     },
     advanceStage() { st.stage++; st.exp = 0; touch(); },
+    setStage(i, exp = 0) { st.stage = Math.max(0, Math.min(stages.length - 1, i)); st.exp = Math.max(0, Math.floor(exp)); touch(); }, // thụt cảnh giới / đột phá Anh Biến thất bại
 
     newGear(slot, name) {
       const g = { uid: st.uid++, slot, name, tier: null, lines: [], spent: 0 };

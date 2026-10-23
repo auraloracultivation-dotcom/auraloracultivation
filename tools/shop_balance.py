@@ -37,17 +37,18 @@ nice = lambda x: int(round(x, -int(math.floor(math.log10(max(x, 1)))) + 1)) if x
 report = []
 
 # ---- R2: đan đột phá (luyện ở tầng cuối cảnh giới trước, vùng của cảnh giới đó) ----
-BT = {'item.dan.truc-co.001': 'lk10', 'item.dan.ket-dan.001': 'tc_hau', 'item.dan.nguyen-anh.001': 'kd_hau', 'item.dan.hoa-than.001': 'na_hau'}
+BT = {'item.dan.truc-co.001': 'lk10', 'item.dan.ket-dan.001': 'tc_hau', 'item.dan.nguyen-anh.001': 'kd_hau', 'item.dan.hoa-than.001': 'na_hau', 'item.dan.anh-bien.001': 'ht_hau'}
+PILL_X = {'item.dan.anh-bien.001': 4}  # Anh Biến Đan (chủ dự án 23/10 23h28): nguyên liệu khó + lâu — gấp 4 lần thời gian farm
 PL = pills['pills']
 for p in PL:
     if p['id'] not in BT: continue
-    st = BT[p['id']]; z = ZONE[major(st)]
+    st = BT[p['id']]; z = ZONE[major(st)]; X = PILL_X.get(p['id'], 1)
     herbs, ores, sp = pool(z, 'thao'), pool(z, 'khoang'), pool(z, 'dacbiet')
     herbs = [h for h in herbs if not h.get('spawn_share')]
-    inp = [{'id': herbs[0]['id'], 'count': nice(per_min(herbs[0]['id'], st) * PILL_MIN)},
-           {'id': herbs[1]['id'], 'count': nice(per_min(herbs[1]['id'], st) * PILL_MIN * .6)},
-           {'id': ores[0]['id'], 'count': nice(per_min(ores[0]['id'], st) * PILL_MIN)}]
-    if sp: inp.append({'id': sp[0]['id'], 'count': nice(per_min(sp[0]['id'], st) * PILL_MIN)})
+    inp = [{'id': herbs[0]['id'], 'count': nice(per_min(herbs[0]['id'], st) * PILL_MIN * X)},
+           {'id': herbs[1]['id'], 'count': nice(per_min(herbs[1]['id'], st) * PILL_MIN * .6 * X)},
+           {'id': ores[0]['id'], 'count': nice(per_min(ores[0]['id'], st) * PILL_MIN * X)}]
+    if sp: inp.append({'id': sp[0]['id'], 'count': nice(per_min(sp[0]['id'], st) * PILL_MIN * X)})
     old = p['recipe']['inputs']; p['recipe']['inputs'] = inp; p['recipe'].pop('alt_inputs', None)
     report.append(('Đan đột phá', p['name'], st, ' + '.join(f"{M[i['id']]['name']} {i['count']}" for i in inp), ' + '.join(f"{M.get(i['id'], {'name': i['id']})['name']} {i['count']}" for i in old)))
 pills['_ghi_chu_can_bang'] = 'Nguyên liệu đan đột phá: tools/shop_balance.py (≈45 phút farm vùng hiện tại). Không sửa tay.'
@@ -143,6 +144,12 @@ for s in shop['stock']:
     s['price'] = new
 # công thức phôi Cánh / Pháp tướng: trước chỉ rơi từ thủ lĩnh — nay bán thêm (cần đúng cảnh giới)
 have = {s['id'] for s in shop['stock']}
+# đan phương Anh Biến: bán từ Hóa Thần Hậu kỳ, kèm vật phẩm đổi hiếm (như Hóa Thần)
+if 'item.danphuong.anh-bien.001' not in have:
+    i = next(k for k, s in enumerate(shop['stock']) if s['id'] == 'item.danphuong.hoa-than.001') + 1
+    shop['stock'].insert(i, {'id': 'item.danphuong.anh-bien.001', 'price': nice(lt_min('ht_hau') * RECIPE_PILL_MIN), 'min_stage': 'ht_hau',
+                             'cost_items': [{'id': 'item.dacbiet.tinh-hon-co.001', 'count': 5}, {'id': 'item.dacbiet.hon-thu-tinh.001', 'count': 10}]})
+    report.append(('Thêm', 'item.danphuong.anh-bien.001', 'ht_hau', '', 'đan phương Anh Biến + 5 Tinh Hồn Cổ + 10 Hồn Thú Tinh'))
 for rid, st in [('item.congthuc.canh.001', 'na_so'), ('item.congthuc.phap-tuong.001', 'ht_so')]:
     if rid not in have:
         p = nice(lt_min(st) * RECIPE_BLANK_MIN); shop['stock'].insert(max(k for k, s in enumerate(shop['stock']) if s['id'].startswith('item.congthuc.')) + 1, {'id': rid, 'price': p, 'min_stage': st})

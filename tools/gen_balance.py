@@ -34,8 +34,9 @@ KY = [('so', 'Sơ kỳ'), ('trung', 'Trung kỳ'), ('hau', 'Hậu kỳ')]
 BREAK = {  # đan đột phá + tỷ lệ cơ bản (Lab cho tới HT; AB, VĐ Claude đề xuất)
     'truc-co': (0.85, 'item.dan.truc-co.001'), 'ket-dan': (0.7, 'item.dan.ket-dan.001'),
     'nguyen-anh': (0.5, 'item.dan.nguyen-anh.001'), 'hoa-than': (0.3, 'item.dan.hoa-than.001'),
-    'anh-bien': (0.2, 'item.dan.anh-bien.001'), 'van-dinh': (0.12, 'item.dan.van-dinh.001'),
+    'anh-bien': (0.02, 'item.dan.anh-bien.001'), 'van-dinh': (0.12, 'item.dan.van-dinh.001'),  # AB: chủ dự án 23/10 23h28 — 2%, thất bại rơi về HT Trung kỳ (BREAK_EXTRA)
 }
+BREAK_EXTRA = {'anh-bien': {'fail_to': 'ht_trung', 'charm_add': 0.005}}  # bảo hộ phù chỉ +0,5 điểm % (không phá tỷ lệ 2%)
 UNLOCK = {'luyen-khi': 'danh-thuong', 'truc-co': 'skill.chieu.kiem-khi.001', 'ket-dan': 'skill.khe.linh-thu.001',
           'nguyen-anh': 'skill.than.canh-phong.001', 'hoa-than': 'skill.phap-tuong.thien-thu.001',
           'anh-bien': 'chua-co', 'van-dinh': 'chua-co'}
@@ -86,7 +87,8 @@ DEF_K, MIN_RATIO = 150, 0.05
 def red(d, pen=0.025): return d / (d + DEF_K) * (1 - pen)
 HITS_TO_KILL, HITS_TO_DIE = 4, 18
 # Người chơi tối đa Hóa Thần Hậu kỳ (chủ dự án 23/10). Anh Biến, Vấn Đỉnh: chỉ có quái (vùng Đen / Tím = tường cuối game).
-PLAYER_MAX = 'ht_hau'
+PLAYER_MAX = 'ab_hau'  # chủ dự án 23/10 23h28: mở Anh Biến (Vấn Đỉnh vẫn chỉ có quái)
+AB_MUL = 4  # bình cảnh mỗi tầng từ Anh Biến: tu vi cần gấp 4 tầng trước
 # Sau Nguyên Anh Hậu kỳ người chơi chỉ mạnh thêm ×1.4 mỗi tầng (quái ×2) → càng lên càng khó, cần trang bị + đan
 PLAYER_LATE = {'linh': 1.4, 'hp': 1.4, 'def': 1.15}
 # Tu vi: số quái thường cần hạ mỗi tầng tăng ×1.28 (≈ 1 tháng chơi tới Hóa Thần Hậu kỳ, không phải vài giờ)
@@ -102,6 +104,7 @@ for i, (sid, sname, rid, first) in enumerate(stages):
         p = {'id': sid, 'name': sname, 'hp': round(HITS_TO_DIE * m['atk'] * 0.8 * (1 - red(m['def'] * 0.85, 0))),
              'linh': round(m['hp'] / (HITS_TO_KILL * 0.825 * (1 - red(m['def'])))), 'def': round(m['def'] * 0.85)}
     p.update({'mp': 100 + 15 * i, 'exp_need': round(m['hp'] / 10 * kills_at(i))})
+    if sid.startswith('ab_'): p['exp_need'] = player[-1]['exp_need'] * AB_MUL
     player.append(p)
     if sid == PLAYER_MAX: break
 for p in player: p.pop('_late', None)
@@ -114,8 +117,8 @@ for rid, name, short, zone, code in REALMS:
     r = {'id': f'realm.{rid}', 'name': name, 'short': short,
          'stages': [f'lk{i}' for i in range(1, 11)] if code == 'lk' else [k for k, _ in KY],
          'unlock_skill': UNLOCK[rid], 'zone': zone}
-    if rid in BREAK: r['breakthrough'] = {'rate': BREAK[rid][0], 'pill': BREAK[rid][1]}
-    if rid in ('anh-bien', 'van-dinh'): r['player_locked'] = True; r['_ghi_chu'] = 'Người chơi tạm tối đa Hóa Thần Hậu kỳ (23/10) — chỉ có quái'
+    if rid in BREAK: r['breakthrough'] = {'rate': BREAK[rid][0], 'pill': BREAK[rid][1], **BREAK_EXTRA.get(rid, {})}
+    if rid == 'van-dinh': r['player_locked'] = True; r['_ghi_chu'] = 'Người chơi tạm tối đa Anh Biến Hậu kỳ (23/10 23h28) — chỉ có quái'
     rj['realms'].append(r)
 rj['realms'].append({'id': 'realm.am-hu', 'name': 'Âm Hư', 'short': 'AH', 'stages': [], 'unlock_skill': 'chua-co',
                      'zone': 'huvo', 'monster_only': True,
@@ -134,10 +137,11 @@ pids = {p['id'] for p in player}
 gp['major_realm_first_stage'] = {sid: f'realm.{rid}' for sid, _, rid, first in stages if first and sid in pids}
 gp['player']['max_stage'] = PLAYER_MAX
 gq = {}
+stage_ix = {s[0]: i for i, s in enumerate(stages)}
 n = len(stages)
 for i, (sid, *_r) in enumerate(stages):
     if sid in pids and (sid in ('lk1', 'lk5', 'lk10') or sid.endswith('_so') or sid.endswith('_hau')):
-        gq[sid] = round(0.15 + 0.85 * i / (len(player) - 1), 2)
+        gq[sid] = round(min(1, 0.15 + 0.85 * i / (stage_ix['ht_hau'])), 2)  # giữ thang cũ: Hóa Thần Hậu kỳ = 1
 gp['gearQ_by_stage'] = gq
 mon = gp['monster']
 mon.pop('stone_per_hp', None)

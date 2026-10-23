@@ -7,13 +7,41 @@
   "base_max": 100,
   "_ghi_chu_gain": "Thọ nguyên tối đa = base_max + tổng gain của mọi tầng đã đạt (tầng lk1 là mốc gốc). Đại cảnh giới gấp đôi mỗi bậc 10 → 20 → 40 → 80; Trung kỳ và Hậu kỳ mỗi tầng một nửa.",
   "gain": {
-    "lk2": 1, "lk3": 1, "lk4": 1, "lk5": 1, "lk6": 1, "lk7": 1, "lk8": 1, "lk9": 1, "lk10": 1,
-    "tc_so": 10, "tc_trung": 5, "tc_hau": 5,
-    "kd_so": 20, "kd_trung": 10, "kd_hau": 10,
-    "na_so": 40, "na_trung": 20, "na_hau": 20,
-    "ht_so": 80, "ht_trung": 40, "ht_hau": 40
+    "lk2": 1,
+    "lk3": 1,
+    "lk4": 1,
+    "lk5": 1,
+    "lk6": 1,
+    "lk7": 1,
+    "lk8": 1,
+    "lk9": 1,
+    "lk10": 1,
+    "tc_so": 10,
+    "tc_trung": 5,
+    "tc_hau": 5,
+    "kd_so": 20,
+    "kd_trung": 10,
+    "kd_hau": 10,
+    "na_so": 40,
+    "na_trung": 20,
+    "na_hau": 20,
+    "ht_so": 80,
+    "ht_trung": 40,
+    "ht_hau": 40,
+    "ab_so": 160,
+    "ab_trung": 80,
+    "ab_hau": 80
   },
-  "pill": { "id": "item.dan.tang-tho.001", "add_max": 2, "per_day": 1 },
-  "warn_left": [30, 10, 3, 1],
+  "pill": {
+    "id": "item.dan.tang-tho.001",
+    "add_max": 2,
+    "per_day": 1
+  },
+  "warn_left": [
+    30,
+    10,
+    3,
+    1
+  ],
   "check_every_s": 20
 }

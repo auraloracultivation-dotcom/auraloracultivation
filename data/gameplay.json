@@ -215,9 +215,36 @@
     "def": 132,
     "mp": 415,
     "exp_need": 617429074
+   },
+   {
+    "id": "ab_so",
+    "name": "Anh Biến Sơ kỳ",
+    "hp": 23206,
+    "linh": 354925,
+    "def": 152,
+    "mp": 430,
+    "exp_need": 2469716296
+   },
+   {
+    "id": "ab_trung",
+    "name": "Anh Biến Trung kỳ",
+    "hp": 32488,
+    "linh": 496895,
+    "def": 175,
+    "mp": 445,
+    "exp_need": 9878865184
+   },
+   {
+    "id": "ab_hau",
+    "name": "Anh Biến Hậu kỳ",
+    "hp": 45483,
+    "linh": 695653,
+    "def": 201,
+    "mp": 460,
+    "exp_need": 39515460736
    }
   ],
-  "max_stage": "ht_hau",
+  "max_stage": "ab_hau",
   "starter_inv": {
    "item.dan.tieu-hoi-huyet.001": 10
   },
@@ -227,7 +254,8 @@
   "tc_so": "realm.truc-co",
   "kd_so": "realm.ket-dan",
   "na_so": "realm.nguyen-anh",
-  "ht_so": "realm.hoa-than"
+  "ht_so": "realm.hoa-than",
+  "ab_so": "realm.anh-bien"
  },
  "gearQ_by_stage": {
   "lk1": 0.15,
@@ -240,7 +268,9 @@
   "na_so": 0.8,
   "na_hau": 0.88,
   "ht_so": 0.92,
-  "ht_hau": 1.0
+  "ht_hau": 1.0,
+  "ab_so": 1,
+  "ab_hau": 1
  },
  "monster": {
   "max_alive": 18,
@@ -419,12 +449,34 @@
    "life_add": 2
   },
   "item.dan.tu-vi.001": {
-   "exp_pct": 0.1
+   "exp_pct": 0.1,
+   "realm_max": "ht"
   },
   "item.dan.vien-man.001": {
-   "exp_fill": true
+   "exp_fill": true,
+   "realm_max": "ht"
   },
-  "use_cooldown_s": 2
+  "use_cooldown_s": 2,
+  "item.dan.vien-man.lk": {
+   "exp_fill": true,
+   "realm": "lk"
+  },
+  "item.dan.vien-man.tc": {
+   "exp_fill": true,
+   "realm": "tc"
+  },
+  "item.dan.vien-man.kd": {
+   "exp_fill": true,
+   "realm": "kd"
+  },
+  "item.dan.vien-man.na": {
+   "exp_fill": true,
+   "realm": "na"
+  },
+  "item.dan.vien-man.ht": {
+   "exp_fill": true,
+   "realm": "ht"
+  }
  },
  "skills": {
   "kiem-khi": {
@@ -1283,7 +1335,10 @@
    "na_hau": 1200000,
    "ht_so": 2300000,
    "ht_trung": 7200000,
-   "ht_hau": 23000000
+   "ht_hau": 23000000,
+   "ab_so": 49394326,
+   "ab_trung": 197577304,
+   "ab_hau": 790309215
   },
   "floor": 0.01,
   "_ghi_chu_23_10_17h": "Chủ dự án 23/10 17h: bỏ trần cứng theo vạch. Mỗi ngày (giờ VN) tu vi từ quái GIẢM DẦN: con sau nhận ít hơn con trước (đường e^(−đã_đánh/cap)), cap = số cố định theo tầng (bảng doc 'Bảng số cố định theo tầng'). Đánh mãi cũng chỉ tiến sát cap, không vượt; cạn rồi chỉ còn floor = 1% tu vi gốc mỗi con. Tầng cao cap nhỏ so với vạch → càng về sau farm càng ít."
@@ -1317,5 +1372,14 @@
  },
  "death_exp_loss": 0.1,
  "breakthrough_fail_exp_loss": 0.5,
- "_ghi_chu_mat_tu_vi": "Chủ dự án 23/10 17h: chết mất 10% tu vi đang có; đột phá đại cảnh giới thất bại mất 50% tu vi (và viên đan). Không hiện tỷ lệ thành công."
+ "_ghi_chu_mat_tu_vi": "Chủ dự án 23/10 17h: chết mất 10% tu vi đang có; đột phá đại cảnh giới thất bại mất 50% tu vi (và viên đan). Không hiện tỷ lệ thành công.",
+ "late_realm": {
+  "prefixes": [
+   "ab"
+  ],
+  "quest_exp_max": 0.01,
+  "death_loss": 0.03,
+  "drop_keep": 0.5,
+  "_ghi_chu": "Chủ dự án 23/10 23h28 (giữ chân ở Anh Biến): tu vi/ngày (quái + nhiệm vụ) tiến sát daily_linh_khi.cap = 2% vạch, giảm dần; 1 lượt nhiệm vụ ≤ 1% vạch; chết mất 3% vạch, không đủ → về 0 + trọng thương, chết khi đang trọng thương → thụt 1 tầng (giữ 50% vạch tầng dưới). Code: src/game/late-realm.js. Sinh bằng tools/anh_bien.py."
+ }
 }
