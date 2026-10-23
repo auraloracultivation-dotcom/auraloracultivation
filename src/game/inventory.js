@@ -6,7 +6,7 @@ const SLOT = { 'mat-na': 'Mặt nạ', 'trang-phuc': 'Trang phục', 'vu-khi': '
   'day-chuyen': 'Dây chuyền', 'phap-tuong': 'Pháp tướng' };
 const STAT = { hp: 'Khí huyết', linh: 'Tấn công', def: 'Phòng thủ', xuyen: 'Xuyên giáp', crit: 'Bạo kích %', hut: 'Hút máu %', phan: 'Phản đòn %' };
 
-export function createInventory({ recipes, info, progress, bag, craft, itemDefs, awaken, gp, art, icon, fallbackIcon, onLook, recompute, usePill, breakthrough, btPills, openCultivate }) {
+export function createInventory({ ru, recipes, info, progress, bag, craft, itemDefs, awaken, gp, art, icon, fallbackIcon, onLook, recompute, usePill, breakthrough, btPills, openCultivate }) {
   const st = () => progress.state;
   const tierName = (id) => awaken.tiers.find((t) => t.id === id)?.name || '';
   // Dòng chỉ số kèm màu phẩm của từng dòng (bag.js tô màu)
@@ -66,7 +66,8 @@ export function createInventory({ recipes, info, progress, bag, craft, itemDefs,
     const src = info.source(d);
     if (rc) { // cuốn công thức: hiện thứ luyện ra + nguyên liệu cần, luyện ngay trong kho
       const what = rc.kind === 'skill' ? `${rc.def.name} — cấp ${rc.lv || 0}/${rc.def.max_level}` : rc.kind === 'pill' ? `Luyện ra: ${rc.def.name} (có ${progress.count(rc.def.id)})` : 'Luyện ra: phôi (thức tỉnh để có chỉ số)';
-      return { ...d, key: `item:${id}`, thumb: icon(id) || fallbackIcon(d.name, 'nhiemvu'), count, sub: what,
+      const uses = ru ? ` · Còn ${ru.total(id)} lần dùng (cuốn này ${ru.left(id)}/${ru.max(id)})` : ''; // công thức có số lần dùng
+      return { ...d, key: `item:${id}`, thumb: icon(id) || fallbackIcon(d.name, 'nhiemvu'), count, sub: what + uses,
         detail: [`Công dụng: ${info.effect(d)}`, rc.inputs.length && `Cần: ${needText(rc.inputs)}`, rc.locked && 'Cảnh giới chưa đủ', src && `Nơi có: ${src}`].filter(Boolean).join('\n'), actions };
     }
     return { ...d, key: `item:${id}`, thumb: icon(id) || fallbackIcon(d.name, d.group || 'nhiemvu'), count, sub: `Tác dụng: ${info.effect(d) || '—'}`,

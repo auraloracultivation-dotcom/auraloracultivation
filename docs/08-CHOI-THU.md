@@ -212,3 +212,5 @@ Lý do: người chơi Hóa Thần Hậu kỳ chém chết Âm Hư sau khoảng 
   hoặc về thành nếu phải luyện đồ). Chạm một dòng ở khung Nhiệm vụ → tự đi (ngự kiếm nếu được) tới đúng vành vùng, tới nơi bật Tự động.
   Kéo cần điều khiển là huỷ.
 - **2 ô đan dùng nhanh** (`src/game/quick-pill.js`): ô trống chạm để ghim đan, ô đã ghim chạm để uống, giữ để đổi.
+- **Công thức có số lần dùng** (23/10, `src/game/recipe-uses.js`): đan phương 10 lần, công thức phôi 3 lần, bí kíp công pháp 2 lần tu luyện
+  mỗi cuốn (chỉ tính lần thành công; chỉnh riêng từng cuốn bằng `uses` trong `data/items/recipes.json`). Hết lượt cuốn mất, mua lại ở Vạn Bảo Lâu.
