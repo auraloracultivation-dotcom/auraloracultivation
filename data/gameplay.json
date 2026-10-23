@@ -913,7 +913,9 @@
   "revive_s": 5,
   "merge": {
    "max_star": 5,
-   "per_star": 0.35
+   "per_star": 0.35,
+   "hon_tinh": 3,
+   "free_hon_tinh": 1
   },
   "_ghi_chu_luyen_hon": "Luyện hồn (23/10): thú cưng nuốt hồn một con CÙNG LOÀI đang nghỉ trong Kho → +1 sao (tối đa max_star), công và khí huyết ×(1 + per_star × sao)."
  }

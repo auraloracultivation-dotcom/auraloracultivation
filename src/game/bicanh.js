@@ -66,6 +66,9 @@ export function createBiCanh(c) {
         c.cards.grant(cd.id, tier); got.push(`Thần Phù ${cd.name}`);
       });
       if (cleared >= R.treasure_blank_at) { progress.add(c.pbItem, 1); got.push('Phôi Pháp Bảo'); }
+      const give = ([id, n]) => { progress.add(id, n); got.push(`${c.itemName(id)}${n > 1 ? ` ×${n}` : ''}`); };
+      for (let k = 3; k <= cleared; k += 3) give(R.items_per_3[(k / 3 - 1) % R.items_per_3.length]); // mỗi 3 đợt 1 món
+      if (win) { R.full_clear.forEach(give); if (Math.random() < R.jade_chest_chance) give(['item.ruong.tien-ngoc.001', 1]); }
       if (cleared >= R.set_item_at) c.dv.onKill({ void: true, def: {} }, () => got.push('đồ ngũ hành'));
       progress.changed();
     }
@@ -104,5 +107,7 @@ export function createBiCanh(c) {
   const status = () => (run ? { wave: run.wave, waves: def.waves, left: Math.max(0, Math.ceil(run.left)), mobs: run.mobs.size } : null);
   // Bảng trong Nhiệm vụ → Bí Cảnh
   const panel = () => ({ name: def.name, tries: triesLeft(), max: def.tries_per_day, running: !!run, status: status(), def });
-  return { start, update, render, status, panel, active: () => !!run, zone: () => (run ? { x: run.x, y: run.y, r: def.radius_px - 20 } : null), quit: () => run && end(false, 'Bỏ') };
+  // Huyết Sát Lệnh: thêm 1 lượt hôm nay
+  function addTry() { const t = progress.state.biCanh?.day === today() ? progress.state.biCanh : { day: today(), n: 0 }; t.n--; progress.state.biCanh = t; progress.changed(); }
+  return { addTry, start, update, render, status, panel, active: () => !!run, zone: () => (run ? { x: run.x, y: run.y, r: def.radius_px - 20 } : null), quit: () => run && end(false, 'Bỏ') };
 }

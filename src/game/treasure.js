@@ -5,7 +5,7 @@
 // - Ôn dưỡng lên cấp (Linh thạch): sát thương +mul_per_lv mỗi cấp, số đạn / hồn / tia +1 mỗi 2 cấp.
 // - Thức tỉnh dòng chỉ số random như trang bị (craft.awakenObj) — cộng vào chỉ số khi đang đeo.
 // Lưu progress.state.treasures = [{ uid, id, lv, known, aw }], progress.state.treasureOn = uid.
-import { fxIconUrl, loadFx } from '../entity/index.js';
+import { fxIconUrl, loadFx, iconUrl } from '../entity/index.js';
 
 const STAT = { hp: 'Khí huyết', linh: 'Tấn công', def: 'Phòng thủ', xuyen: 'Xuyên giáp', crit: 'Bạo kích %', hut: 'Hút máu %', phan: 'Phản đòn %' };
 
@@ -13,6 +13,9 @@ const STAT = { hp: 'Khí huyết', linh: 'Tấn công', def: 'Phòng thủ', xuy
 export function createTreasure(c) {
   const { def, S, progress, craft, barrage, mobs, me, play, toast } = c;
   const byId = new Map(def.list.map((t) => [t.id, t]));
+  const pic = (d) => iconUrl(d.id) || fxIconUrl(...d.icon); // ảnh chủ dự án (icons atlas) — thiếu thì mượn icon hiệu ứng
+  const DICH = 'item.dich.on-duong.001'; // Ôn Dưỡng Linh Dịch
+  const dichNeed = (t) => def.lv_dich?.[(t.lv || 0) + 1] || 0;
   const list = () => (progress.state.treasures ||= []);
   const on = () => list().find((t) => t.uid === progress.state.treasureOn && t.known) || null;
   const tierName = (id) => c.awaken.tiers.find((x) => x.id === id)?.name || '';
@@ -67,6 +70,36 @@ export function createTreasure(c) {
         barrage.hitAround(m.x, m.y, d.r, mul, 'skill', d.stun);
         break;
       }
+      case 'nova': { // gương băng: đóng băng quanh mình
+        play(d.fx, me.x, me.y + 2, d.h, { ground: true }); barrage.zap({ kind: 'ring', x: me.x, y: me.y, r: d.r, t: 0.8, color: he.color });
+        barrage.hitAround(me.x, me.y, d.r, mul, 'skill', d.stun); break;
+      }
+      case 'aura': { // cổ đăng rút hồn: liên tục đánh quanh mình, mỗi con trúng hồi máu
+        barrage.addOrbit({ n: 4, r: d.r * 0.5, mul: 0, s: d.s, bolt: 'v.dan-am' });
+        barrage.schedule(d.s, 0.5, () => { const near = mobs.within(me, d.r).filter((m) => m.state !== 'dead'); if (!near.length) return;
+          barrage.hitAround(me.x, me.y, d.r, mul, 'skill'); c.heal(c.maxHp() * d.heal * near.length);
+          for (const m of near.slice(0, 4)) barrage.zap({ kind: 'zap', x: m.x, y: m.y - m.r, x2: me.x, y2: me.y - 14, t: 0.25, color: he.color }); });
+        break;
+      }
+      case 'net': { // lưới trời: kéo quái về một chỗ rồi trói
+        const at = tgt || { x: me.x + me.facing * 50, y: me.y };
+        for (const m of mobs.within(at, d.r)) { if (m.state === 'dead') continue; m.x = c.map.wrapX(at.x + (m.x - at.x) * 0.25); m.y = c.map.wrapY(at.y + (m.y - at.y) * 0.25); }
+        play(d.fx, at.x, at.y, 40, { ground: true }); barrage.zap({ kind: 'ring', x: at.x, y: at.y, r: d.r * 0.5, t: 0.7, color: he.color });
+        barrage.hitAround(at.x, at.y, d.r * 0.5, mul, 'skill', d.stun); break;
+      }
+      case 'tower': { // lôi tháp: đứng tại chỗ, cứ `every` giây giáng sét quái gần tháp
+        const at = { x: me.x, y: me.y }, img = pic(d);
+        barrage.totem({ x: at.x, y: at.y, img, s: d.s, h: 34 });
+        barrage.schedule(d.s, d.every, () => { const m = barrage.nearestTo(at, d.r); if (!m) return;
+          play(d.fx, m.x, m.y + 2, d.h, { ground: true }); barrage.zap({ kind: 'zap', x: at.x, y: at.y - 30, x2: m.x, y2: m.y - m.r, t: 0.2, color: '#e6f0ff' });
+          barrage.hitAround(m.x, m.y, 22, mul, 'skill'); });
+        break;
+      }
+      case 'shuttle': { // thoa xé không: xuyên mọi quái, nảy qua lại
+        const { dx, dy } = aim(tgt);
+        for (let k = 0; k < n; k++) { const a = (k - (n - 1) / 2) * 0.25; shot(dx * Math.cos(a) - dy * Math.sin(a), dx * Math.sin(a) + dy * Math.cos(a), { speed: 600, range: 420, pierce: 99, bounce: 8, homing: 0.5 }); }
+        break;
+      }
       case 'shield': {
         c.buffs.def = { mul: d.def_mul * (1 + 0.05 * (t.lv || 0)), until: c.now() + d.s }; c.recompute();
         play(d.fx, me.x, me.y - 12, d.h); barrage.zap({ kind: 'ring', x: me.x, y: me.y, r: d.r, t: 0.6, color: he.color });
@@ -93,18 +126,18 @@ export function createTreasure(c) {
   // ---- Kho: thẻ Pháp Bảo ----
   function entry(t) {
     const d = byId.get(t.id);
-    if (!t.known) return { id: `pb:${t.uid}`, key: `pb:${t.uid}`, name: 'Pháp bảo chưa nhận chủ', cat: 'phap-bao', thumb: fxIconUrl('v.cong-hu', 0),
+    if (!t.known) return { id: `pb:${t.uid}`, key: `pb:${t.uid}`, name: 'Pháp bảo chưa nhận chủ', cat: 'phap-bao', thumb: iconUrl('item.phapbao.phoi.001') || fxIconUrl('v.cong-hu', 0),
       sub: 'Linh quang mờ ảo — chưa biết là pháp bảo gì', detail: 'Nhận chủ để lộ hình và dùng được.',
       actions: [{ id: 'pb-bind', label: `Nhận chủ (${def.bind_cost} LT)`, disabled: progress.state.stone < def.bind_cost },
         { id: 'pb-break', label: 'Phân rã', danger: true, confirm: 'Phân rã pháp bảo chưa nhận chủ?' }] };
     const worn = progress.state.treasureOn === t.uid, cost = def.lv_cost[(t.lv || 0) + 1], aw = craft.awakenCost(t.aw);
     const lines = (craft.norm(t.aw)?.lines || []).map((l) => ({ text: `${STAT[l.k] || l.k} +${l.v}`, tier: l.t }));
-    return { id: `pb:${t.uid}`, key: `pb:${t.uid}`, name: `${d.name}${t.lv ? ` +${t.lv}` : ''}`, cat: 'phap-bao', thumb: fxIconUrl(...d.icon), equipped: worn, tier: t.aw.tier,
+    return { id: `pb:${t.uid}`, key: `pb:${t.uid}`, name: `${d.name}${t.lv ? ` +${t.lv}` : ''}`, cat: 'phap-bao', thumb: pic(d), equipped: worn, tier: t.aw.tier,
       sub: `Pháp bảo · hệ ${d.he} · cấp ${t.lv || 0}/${def.max_lv}${t.aw.tier ? ` · ${tierName(t.aw.tier)}` : ''}`, lines,
       detail: `${fill(d, t)}\nHồi ${d.cd_s} giây · ${d.mp} linh lực · sát thương ×${scale(t).toFixed(2)}. Xếp kỹ năng "Pháp Bảo" vào ô kỹ năng để dùng.`,
       actions: [
         { id: 'pb-wear', label: worn ? 'Tháo' : 'Đeo', disabled: !worn && !c.stageOk(def.unlock) },
-        cost ? { id: 'pb-up', label: `Ôn dưỡng lên cấp ${(t.lv || 0) + 1} (${cost} LT)`, disabled: progress.state.stone < cost } : { id: 'pb-up', label: 'Đã ôn dưỡng tối đa', disabled: true },
+        cost ? { id: 'pb-up', label: `Ôn dưỡng lên cấp ${(t.lv || 0) + 1} (${cost} LT${dichNeed(t) ? ` + ${dichNeed(t)} Linh Dịch, có ${progress.count(DICH)}` : ''})`, disabled: progress.state.stone < cost || progress.count(DICH) < dichNeed(t) } : { id: 'pb-up', label: 'Đã ôn dưỡng tối đa', disabled: true },
         aw === null ? { id: 'pb-aw', label: 'Thức tỉnh: đã đạt giới hạn', disabled: true } : { id: 'pb-aw', label: `Thức tỉnh dòng ${t.aw.lines.length + 1} (${aw} LT)`, disabled: progress.state.stone < aw },
         { id: 'pb-break', label: 'Phân rã', danger: true, confirm: `Phân rã ${d.name}?` }] };
   }
@@ -126,6 +159,7 @@ export function createTreasure(c) {
     if (action === 'pb-up') {
       const cost = def.lv_cost[(t.lv || 0) + 1]; if (!cost) return 'Đã tối đa';
       if (progress.state.stone < cost) return 'Không đủ Linh thạch';
+      if (dichNeed(t) && !progress.take(DICH, dichNeed(t))) return `Cần ${dichNeed(t)} Ôn Dưỡng Linh Dịch`;
       progress.addStone(-cost); t.lv = (t.lv || 0) + 1; progress.changed(); return `${d.name} ôn dưỡng lên cấp ${t.lv}`;
     }
     if (action === 'pb-aw') { const r = craft.awakenObj(t.aw); c.recompute(); return r.msg; }
@@ -139,7 +173,7 @@ export function createTreasure(c) {
   }
   // Dòng thức tỉnh của pháp bảo đang đeo (gộp vào chỉ số như trang bị)
   const worn = () => { const t = on(); return t?.aw?.tier ? [t.aw] : []; };
-  const view = () => { const t = on(), d = t && byId.get(t.id); return d ? { thumb: fxIconUrl(...d.icon), cd: d.cd_s, name: d.name } : null; };
+  const view = () => { const t = on(), d = t && byId.get(t.id); return d ? { thumb: pic(d), cd: d.cd_s, name: d.name } : null; };
   syncSkill(); loadFx([...def.list.map((d) => d.icon[0]), 'v.cong-hu']); // icon pháp bảo trong Kho / ô kỹ năng
   return { use, openBlank, onKill, entries, act, worn, view, isTreasure: (key) => key.startsWith('pb:'), grant: (id, lv = 0) => { list().push({ uid: progress.state.uid++, id, lv, known: true, aw: { tier: null, lines: [], spent: 0 } }); progress.changed(); } };
 }

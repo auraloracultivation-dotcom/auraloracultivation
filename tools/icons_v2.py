@@ -95,6 +95,49 @@ def cells(name, cols, rows, yr, ids):
     return out
 
 
+def _cut_at(profile, guess, span):
+    r = range(max(1, guess - span), min(len(profile) - 1, guess + span))
+    return min(r, key=lambda i: profile[i])
+
+
+def grid_cut(path, cols, rows, span=45):
+    """Tấm lưới đều không nhãn (các hình có thể chạm nhau): cắt theo hàng / cột điểm ảnh thưa nhất gần mốc chia đều,
+    trong mỗi ô giữ các mảnh ≥ 3% mảnh lớn nhất. Trả về danh sách ảnh RGBA theo hàng → cột."""
+    rgb, alpha = key(np.asarray(Image.open(path).convert('RGB')))
+    solid = alpha > 60
+    H, W = solid.shape
+    ys = [0] + [_cut_at(solid.sum(1), round(H * r / rows), span) for r in range(1, rows)] + [H]
+    out = []
+    for r in range(rows):
+        band = solid[ys[r]:ys[r + 1]]
+        xs = [0] + [_cut_at(band.sum(0), round(W * c / cols), span) for c in range(1, cols)] + [W]
+        for c in range(cols):
+            X0, X1, Y0, Y1 = xs[c], xs[c + 1], ys[r], ys[r + 1]
+            m = solid[Y0:Y1, X0:X1]
+            lab, n = ndimage.label(ndimage.binary_dilation(m, iterations=2))
+            sizes = ndimage.sum(m, lab, range(1, n + 1))
+            mk = np.isin(lab, [i + 1 for i, v in enumerate(sizes) if v >= 0.03 * sizes.max()]) & m
+            yy, xx = np.nonzero(mk)
+            a = np.where(mk, alpha[Y0:Y1, X0:X1], 0)[yy.min():yy.max() + 1, xx.min():xx.max() + 1].astype(np.uint8)
+            out.append(Image.fromarray(np.dstack([rgb[Y0:Y1, X0:X1][yy.min():yy.max() + 1, xx.min():xx.max() + 1], a]), 'RGBA'))
+    return out
+
+
+# Bộ 48 món (chủ dự án 23/10, 3 tấm 4×4 không nhãn) — theo đúng thứ tự danh sách đã gửi
+ICON48 = ['item.thao.hac-diem.001', 'item.thao.u-hon-hoa.001', 'item.khoang.hac-dieu.001', 'item.dacbiet.anh-bien-tinh.001',
+          'item.thao.tu-van.001', 'item.thao.hu-khong-lien.001', 'item.khoang.tu-tinh.001', 'item.dacbiet.van-dinh-hon.001',
+          'item.dacbiet.am-hu-hach.001', 'item.dan.anh-bien.001', 'item.dan.van-dinh.001', 'item.dan.tang-tho.001',
+          'item.dan.tu-vi.001', 'item.dan.vien-man.001', 'item.thao.tho-nguyen.001', 'item.phu.bao-ho.001',
+          'item.phapbao.phoi.001', 'card.phu.phan-quang', 'card.phu.xuyen-van', 'card.phu.truy-hon',
+          'card.phu.lien-hoan', 'card.phu.phan-liet', 'card.phu.loi-lien', 'card.phu.lien-thanh',
+          'card.phu.liet-diem', 'card.phu.kiem-luan', 'card.phu.phong-bao', 'pb.phi-kiem',
+          'pb.hon-phien', 'pb.thuong-hai-chau', 'pb.xich-ho-lo', 'pb.thanh-moc-dinh',
+          'pb.tran-son-an', 'pb.loi-linh-chau', 'pb.ho-than-chung', 'item.lenh.huyet-sat.001',
+          'item.dacbiet.hon-tinh.001', 'item.phu.chi-trong.001', 'item.dich.on-duong.001', 'item.khoang.ngu-hanh.001',
+          'pb.huyen-bang-kinh', 'pb.phe-hon-co-dang', 'pb.thien-la-vong', 'pb.cuu-tieu-loi-thap',
+          'pb.pha-khong-thoa', 'item.tui.vang.001', 'item.ruong.linh-thach.001', 'item.ruong.tien-ngoc.001']
+
+
 def fit(im):
     im = im.copy(); im.thumbnail((S - 6, S - 6), Image.LANCZOS)
     tile = Image.new('RGBA', (S, S)); tile.alpha_composite(im, ((S - im.width) // 2, (S - im.height) // 2))
@@ -150,6 +193,10 @@ def main():
         new[k] = fit(im)
     # Thọ nguyên / tiên đan: chưa có ảnh riêng → đổi màu icon có sẵn
     for k, (src, hue, sat) in DERIVED.items(): new[k] = recolor(new[src], hue, sat)
+    # 48 món bản 2 (thay luôn hình đổi màu tạm của Trường Sinh / Tu Vi / Viên Mãn Đan, Thọ Nguyên Thảo)
+    ims = [im for i in (1, 2, 3) for im in grid_cut(SRC / f'icon-48-{i}.webp', 4, 4)]
+    for k, im in zip(ICON48, ims): new[k] = fit(im)
+    for d in ('anh-bien', 'van-dinh'): new[f'item.danphuong.{d}.001'] = with_scroll(new[f'item.dan.{d}.001'])
     new['item.danphuong.tang-tho.001'] = with_scroll(new['item.dan.tang-tho.001'])  # Đan phương Trường Sinh Đan
     tiles.update(new)
     cols = 16
