@@ -1,5 +1,5 @@
 // Mã thử nghiệm "đầy đủ" (data/codes.json → grant: 'full'): nguyên liệu, đan, đan phương / công thức / bí kíp, đồ cửa hàng,
-// Linh thạch, Vàng, Tiên ngọc và 1 phôi mỗi ô trang bị (để thử Thức tỉnh). Chỉ vào kho trên máy (localStorage) — bản chơi thử, chưa lưu máy chủ.
+// Linh thạch, Vàng, Tiên ngọc và 1 phôi mỗi ô pháp khí (để thử Thức tỉnh). Chỉ vào kho trên máy (localStorage) — bản chơi thử, chưa lưu máy chủ.
 export function grantFull({ progress, wallet, gift, mats, pills, recipes, shop, blanks }) {
   let n = 0;
   const add = (id, k) => { progress.add(id, k); n++; };
@@ -14,8 +14,8 @@ export function grantFull({ progress, wallet, gift, mats, pills, recipes, shop, 
   return n;
 }
 
-// Mã thử "thần" (data/codes.json → grant: 'god', chủ dự án 23/10): mọi trang bị trong Kho thức tỉnh đủ `gift.lines` dòng phẩm Đen
-// (giá trị cao nhất của phẩm Đen), + `gift.void_pets` thú cưng Âm Hư đi theo (các thú khác vào nghỉ). Chỉ trên máy (localStorage).
+// Mã thử "thần" (data/codes.json → grant: 'god', chủ dự án 23/10): mọi pháp khí trong Kho thức tỉnh đủ `gift.lines` dòng phẩm Đen
+// (giá trị cao nhất của phẩm Đen), + `gift.void_pets` linh thú Âm Hư đi theo (các thú khác vào nghỉ). Chỉ trên máy (localStorage).
 export function grantGod({ progress, bag, awaken, gp, mdef, gift }) {
   const keys = gp.awaken.line_keys, ti = awaken.tiers.findIndex((t) => t.id === 'den');
   const line = (k) => { const v = awaken.line_ranges[k][ti][1]; return { k, v: Math.round(v * 10) / 10, t: 'den', ...(['hp', 'def', 'linh'].includes(k) ? { p: 1 } : {}) }; };

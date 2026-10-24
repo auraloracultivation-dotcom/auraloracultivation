@@ -5,10 +5,10 @@ import { compactNum as N } from '../core/index.js';
 import { openQuestSheet } from './questsheet.js';
 
 const GOAL = { talk: 'Nói chuyện', reach: 'Đến', collect: 'Thu thập', craft: 'Luyện', kill: 'Hạ', boss: 'Hạ boss', dodge_heavy: 'Né đòn nặng',
-  discover: 'Khám phá', complete_daily: 'Hoàn thành nhiệm vụ ngày', awaken: 'Thức tỉnh trang bị', use: 'Dùng',
+  discover: 'Khám phá', complete_daily: 'Hoàn thành nhiệm vụ ngày', awaken: 'Thức tỉnh pháp khí', use: 'Dùng',
   discover_unique: 'Nhặt các loại linh thảo khác nhau', boss_unique: 'Hạ các boss khác nhau', kill_zone: 'Hạ', stage: 'Tu luyện tới' };
 const TYPE = { main: 'Chính tuyến', daily: 'Hằng ngày', weekly: 'Hằng tuần · reset thứ Hai', ladder: 'Tiến độ · không reset', explore: 'Khám phá', craft: 'Chế tạo', combat: 'Chiến đấu', long: 'Dài hạn' };
-const SLOT = { 'mat-na': 'Mặt nạ', 'trang-phuc': 'Trang phục', 'vu-khi': 'Vũ khí', nhan: 'Nhẫn', canh: 'Cánh', 'linh-thu': 'Linh thú',
+const SLOT = { 'mat-na': 'Mặt nạ', 'trang-phuc': 'Trang phục', 'vu-khi': 'Vũ khí', nhan: 'Nhẫn', canh: 'Cánh', 'linh-thu': 'Thú hồn',
   'day-chuyen': 'Dây chuyền', 'phap-tuong': 'Pháp tướng' };
 const STAT = { hp: 'Khí huyết', mp: 'Linh lực (MP)', linh: 'Tấn công (Linh Lực)', def: 'Phòng thủ', xuyen: 'Xuyên giáp', chinh: 'Chính xác',
   ne: 'Né tránh', crit: 'Bạo kích %', hut: 'Hút máu %', tocdanh: 'Tốc đánh', tocchay: 'Tốc chạy', phan: 'Phản đòn %' };
@@ -21,7 +21,7 @@ export function createViews(o) {
   const { progress, quests, craft, itemDefs, pills, blanks, awaken, cp, realms, gp, toast } = o;
   const st = () => progress.state;
   const monNames = new Map(o.monsters.map((m) => [m.id, m.name]));
-  const name = (id) => (id === 'equipment.blank_item' ? 'phôi trang bị bất kỳ' : itemDefs.get(id)?.name || monNames.get(id) || `${id} (chưa có trong game)`);
+  const name = (id) => (id === 'equipment.blank_item' ? 'phôi pháp khí bất kỳ' : itemDefs.get(id)?.name || monNames.get(id) || `${id} (chưa có trong game)`);
   const need = (inputs) => inputs.map((i) => {
     const have = progress.count(i.id);
     return `<span class="${have >= i.count ? 'ok' : 'no'}">${E(name(i.id))} ${have}/${i.count}</span>`;
@@ -133,9 +133,9 @@ export function createViews(o) {
     const rows = Object.keys(STAT).map((k) => `<span>${STAT[k]}</span><b>${k === 'hp' ? `${Math.round(o.getHp())}/${ps.hp}` : ps[k]}</b>`).join('');
     return `<div class="row"><div class="row-h"><b>${E(s.name)}</b><em>${N(st().exp)}/${N(s.exp_need)} tu vi</em></div>
       <p>${bt}</p>${gp.late_realm?.prefixes?.some((x) => s.tier.startsWith(x)) ? `<p>Cảnh giới cao: linh khí mỗi ngày rất ít (quái + nhiệm vụ chung một mức). Bị quái giết mất nhiều tu vi${st().injured ? ' — <b>ĐANG TRỌNG THƯƠNG: chết lần nữa sẽ thụt cảnh giới</b>' : '; không đủ để mất thì trọng thương, chết tiếp sẽ thụt cảnh giới'}.</p>` : ''}${lifeLine()}</div>${o.wallet.html()}<div class="row grid2">${rows}</div>
-      <div class="row"><p>Kỹ năng mở theo cảnh giới: Kiếm khí + Khống chế (Ngưng Mạch), Linh thú + Lướt (Tụ Tinh), Diện rộng (Hóa Nguyệt).</p></div>`;
+      <div class="row"><p>Kỹ năng mở theo cảnh giới: Kiếm khí + Khống chế (Ngưng Mạch), Thú hồn + Lướt (Tụ Tinh), Diện rộng (Hóa Nguyệt).</p></div>`;
   }
-  // Chỉ hiện công thức ĐANG CÓ trong kho (đan phương / công thức phôi / bí kíp). Muốn thêm → về Vạn Bảo Lâu trong thành mua.
+  // Chỉ hiện công thức ĐANG CÓ trong kho (đan phương / pháp khí phương / bí kíp). Muốn thêm → về Vạn Bảo Lâu trong thành mua.
   const none = (what) => `<p class="bag-empty">Kho chưa có ${what} nào.<br>Về Vạn Bảo Lâu trong Thanh Vân Thành để mua (nút Tông môn khi ở trong thành), hoặc săn boss.</p>`;
   const ownedOnly = (list, html, what) => { const own = list.filter((x) => o.owns(x.id)); return own.length ? own.map(html).join('') : none(what); };
   function danTab() {
@@ -152,7 +152,7 @@ export function createViews(o) {
       return `<div class="row ${own ? '' : 'locked'}"><div class="row-h"><b>${ico(`slot.${b.slot}`)}Phôi ${SLOT[b.slot]}</b><em>${ok ? '' : `mở ở ${E(stageName(b.unlock))}`}</em></div>
         ${own ? '' : `<p class="lock">🔒 Cần ${E(name(o.teacher.get(b.id)))} trong kho</p>`}
         <p class="need">${need(b.inputs)}</p>${btn('forge', b.id, 'Luyện phôi', own && ok && progress.has(b.inputs))}</div>`;
-    }, 'công thức phôi');
+    }, 'pháp khí phương');
   }
   // Dòng thức tỉnh, mỗi dòng tô màu phẩm riêng
   const linesText = (a) => `<span class="ic-lines">${craft.norm(a).lines.map((l, n) => `<i class="ln tier-${l.t}">${n + 1}. ${STAT[l.k]} +${l.v}${l.p ? '%' : ''}</i>`).join('')}</span>`;
@@ -169,13 +169,13 @@ export function createViews(o) {
   function gearTab() {
     const list = st().gear, kho = bagGearRows();
     const head = `<div class="row"><p>Mỗi lần thức tỉnh thêm 1 dòng, màu dòng ngẫu nhiên. Mỗi món có giới hạn 1–10 dòng không báo trước — chạm giới hạn thì nút tắt. Mỗi ô chỉ mặc một món.</p>${o.wallet.html()}</div>`;
-    if (!list.length && !kho) return `${head}<p class="bag-empty">Chưa có trang bị. Nhập mã quà trong Cài đặt để nhận đồ 6 hệ, hoặc luyện phôi.</p>`;
+    if (!list.length && !kho) return `${head}<p class="bag-empty">Chưa có pháp khí. Nhập mã quà trong Cài đặt để nhận đồ 6 hệ, hoặc luyện phôi.</p>`;
     return head + kho + list.map((g) => {
       const eq = st().eq[g.slot] === g.uid;
       const lines = g.lines.length ? linesText(g) : 'Phôi trắng — chưa có chỉ số';
       return `<div class="row ${g.tier ? `tier-${g.tier}` : ''}"><div class="row-h"><b>${ico(`slot.${g.slot}`)}${E(g.name)}</b><em>${SLOT[g.slot]}${g.tier ? ` · ${tierName(g.tier)}` : ''}${eq ? ' · đang mặc' : ''}</em></div>
         <p>${lines}</p>${awakenBtn('awaken', g.uid, g)}
-        ${g.tier ? btn('equip', g.uid, eq ? 'Tháo' : 'Trang bị') : ''} ${btn('dismantle', g.uid, 'Rã')}</div>`;
+        ${g.tier ? btn('equip', g.uid, eq ? 'Tháo' : 'Mặc') : ''} ${btn('dismantle', g.uid, 'Rã')}</div>`;
     }).join('');
   }
   function cpTab() {
@@ -262,10 +262,10 @@ export function createViews(o) {
   const isLT = (s) => CUR(s) === 'linh-thach';
   const SHOP_TABS = { dp: (s, d) => isLT(s) && d.cat === 'dan-phuong', ct: (s, d) => isLT(s) && d.cat === 'phap-khi', cp: (s, d) => isLT(s) && d.cat === 'cong-phap',
     nl: (s, d) => isLT(s) && !d.teaches, pp: (s) => CUR(s) === 'vang', tb: (s) => CUR(s) === 'tien-ngoc' };
-  // Tiên khí = 6 bộ Thiên hệ (chủ dự án 24/10 02h): 8 trang bị + 2 kỹ năng + 1 pháp bảo mỗi hệ. Không bán — chỉ báo nguồn, xem ở Cẩm nang Đạo Vận
+  // Tiên khí = 6 bộ Thiên hệ (chủ dự án 24/10 02h): 8 pháp khí + 2 kỹ năng + 1 pháp bảo mỗi hệ. Không bán — chỉ báo nguồn, xem ở Cẩm nang Đạo Vận
   const celestialRow = () => `<div class="row"><div class="row-h"><b>${ico('cur.tien-ngoc')}✦ Tiên khí — 6 bộ Thiên hệ</b><em class="own">Đã mở</em></div>
-    <p class="src">Quang · Lôi · Băng · Phong · Hư · Thời — mỗi bộ 8 trang bị + 2 kỹ năng + 1 pháp bảo. Đủ bộ kích Thiên Cơ Hợp Nhất.</p>
-    <p class="src">Trang bị: rơi từ Âm Hư, qua hết Cửu Thiên Bí Cảnh. Kỹ năng + pháp bảo: Thiên Cơ Truyền Thừa (Nhiệm vụ → Bí Cảnh, 1 lượt/ngày). Kỹ năng dùng từ Nguyên Anh Hậu kỳ / Hóa Thần Sơ kỳ.</p>
+    <p class="src">Quang · Lôi · Băng · Phong · Hư · Thời — mỗi bộ 8 pháp khí + 2 kỹ năng + 1 pháp bảo. Đủ bộ kích Thiên Cơ Hợp Nhất.</p>
+    <p class="src">Pháp khí: rơi từ Âm Hư, qua hết Cửu Thiên Bí Cảnh. Kỹ năng + pháp bảo: Thiên Cơ Truyền Thừa (Nhiệm vụ → Bí Cảnh, 1 lượt/ngày). Kỹ năng dùng từ Nguyên Anh Hậu kỳ / Hóa Thần Sơ kỳ.</p>
     <p class="src">Xem và mặc cả bộ: nút Đạo Vận → tab Quang … Thời.</p></div>`;
   function openShop() {
     const { shop } = o;

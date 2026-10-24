@@ -1,5 +1,5 @@
 // Gửi ảnh chụp tiến trình lên bảng xếp hạng (THỬ NGHIỆM: tiến trình còn ở máy khách — docs/08).
-// Gửi khi lên tầng / đổi trang bị, và tối đa mỗi luc_chien.submit_every_s giây nếu có thay đổi. Máy chủ còn chặn 20 giây/lần.
+// Gửi khi lên tầng / đổi pháp khí, và tối đa mỗi luc_chien.submit_every_s giây nếu có thay đổi. Máy chủ còn chặn 20 giây/lần.
 const KEYS = ['hp', 'mp', 'linh', 'def', 'xuyen', 'chinh', 'ne', 'crit', 'hut', 'tocdanh', 'tocchay', 'phan'];
 
 export function powerOf(stats, weights) {

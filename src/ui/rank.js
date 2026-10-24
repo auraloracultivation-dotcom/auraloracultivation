@@ -1,4 +1,4 @@
-// Bảng xếp hạng: 3 bảng (Cảnh giới, Lực chiến, Trảm Âm Hư) + xem chỉ số + hình trang bị của từng người.
+// Bảng xếp hạng: 3 bảng (Cảnh giới, Lực chiến, Trảm Âm Hư) + xem chỉ số + hình pháp khí của từng người.
 // Dữ liệu do main.js đưa vào (lấy qua src/net) — module này chỉ vẽ.
 import { showSheet } from './sheet.js';
 import { escapeHtml as E } from './screens.js';

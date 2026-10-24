@@ -32,7 +32,7 @@ export function createCraft({ progress, pills, blanks, awaken, skills, gp, owns 
   function forgeBlank(id) {
     const b = blanks.blanks.find((x) => x.id === id);
     if (!b) return { ok: false, msg: 'Không có công thức' };
-    if (!owns(b.id)) return { ok: false, msg: 'Cần Công thức phôi trong kho' };
+    if (!owns(b.id)) return { ok: false, msg: 'Cần Pháp khí phương trong kho' };
     if (!stageOk(b.unlock)) return { ok: false, msg: 'Cảnh giới chưa đủ' };
     if (!progress.has(b.inputs)) return { ok: false, msg: 'Thiếu nguyên liệu' };
     if (Math.random() < b.rate) {
@@ -87,7 +87,7 @@ export function createCraft({ progress, pills, blanks, awaken, skills, gp, owns 
   const awakenGear = (uid) => awakenTarget(progress.gear(uid));
   const dismantleRefund = (g) => Math.floor((g?.spent || 0) * A.dismantle_refund);
   function awakenTarget(g) {
-    if (!g) return { ok: false, msg: 'Không thấy trang bị' };
+    if (!g) return { ok: false, msg: 'Không thấy pháp khí' };
     const cost = awakenCost(g);
     if (cost === null) return { ok: false, msg: 'Đã đạt giới hạn thức tỉnh' };
     if (progress.state.stone < cost) return { ok: false, msg: `Cần ${cost} Linh thạch` };
@@ -108,7 +108,7 @@ export function createCraft({ progress, pills, blanks, awaken, skills, gp, owns 
 
   function dismantle(uid) {
     const g = progress.gear(uid);
-    if (!g) return { ok: false, msg: 'Không thấy trang bị' };
+    if (!g) return { ok: false, msg: 'Không thấy pháp khí' };
     const back = Math.floor(g.spent * A.dismantle_refund);
     progress.removeGear(uid); progress.addStone(back);
     return { ok: true, msg: `Đã rã ${g.name}: hoàn ${back} Linh thạch` };

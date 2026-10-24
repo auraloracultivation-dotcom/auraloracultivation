@@ -3,7 +3,7 @@
 // - 1 ô pháp bảo (mở ở `unlock`). Đeo vào → kỹ năng "Pháp Bảo" (xếp vào ô kỹ năng) dùng chiêu riêng của pháp bảo.
 // - Chiêu bắn đạn đi qua barrage.fire → ăn Đạo Vận (bộ ngũ hành + Thần Phù): bắn quạt, nảy, tách, sét lan…
 // - Ôn dưỡng lên cấp (Linh thạch): sát thương +mul_per_lv mỗi cấp, số đạn / hồn / tia +1 mỗi 2 cấp.
-// - Thức tỉnh dòng chỉ số random như trang bị (craft.awakenObj) — cộng vào chỉ số khi đang đeo.
+// - Thức tỉnh dòng chỉ số random như pháp khí (craft.awakenObj) — cộng vào chỉ số khi đang đeo.
 // Lưu progress.state.treasures = [{ uid, id, lv, known, aw }], progress.state.treasureOn = uid.
 import { juice } from './juice.js';
 import { fxIconUrl, loadFx, iconUrl } from '../entity/index.js';
@@ -185,7 +185,7 @@ export function createTreasure(c) {
     }
     return null;
   }
-  // Dòng thức tỉnh của pháp bảo đang đeo (gộp vào chỉ số như trang bị)
+  // Dòng thức tỉnh của pháp bảo đang đeo (gộp vào chỉ số như pháp khí)
   const worn = () => { const t = on(); return t?.aw?.tier ? [t.aw] : []; };
   const view = () => { const t = on(), d = t && byId.get(t.id); return d ? { thumb: pic(d), cd: d.cd_s, name: d.name } : null; };
   syncSkill(); loadFx([...def.list.map((d) => d.icon[0]), 'v.cong-hu', ...def.list.map((d) => d.cast_fx).filter(Boolean), def.bind_fx].filter(Boolean)); // icon pháp bảo trong Kho / ô kỹ năng

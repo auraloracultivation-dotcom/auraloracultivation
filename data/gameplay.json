@@ -2,7 +2,7 @@
  "_status": "test",
  "_ghi_chu": "THÔNG SỐ CHƠI THỬ do Claude đề xuất để Lab chạy được trong game (Lab chưa có). Luật chạy PHÍA MÁY KHÁCH, lưu trên máy (localStorage) — người chơi sửa được, CHƯA an toàn. Mốc 3–4 chuyển lên máy chủ. Mọi số ở đây chỉnh thoải mái.",
  "player": {
-  "_cach_tinh": "Ngũ Thiên Đạo Cảnh (tools/gen_thien_dao.py): 60 cấp, chỉ số gốc tăng đều ×40; trang bị (dòng % chỉ số gốc) quyết định sức mạnh.",
+  "_cach_tinh": "Ngũ Thiên Đạo Cảnh (tools/gen_thien_dao.py): 60 cấp, chỉ số gốc tăng đều ×40; pháp khí (dòng % chỉ số gốc) quyết định sức mạnh.",
   "base_other": {
    "xuyen": 5,
    "chinh": 30,
@@ -904,11 +904,11 @@
   },
   "_stone": "Linh thạch rơi = stone_by_stage[tầng quái] × exp_mul[cấp quái] (không theo HP nữa, để giá cửa hàng không mất giá ở cảnh giới cao)",
   "suppress": {
-   "_ghi_chu": "Áp chế cảnh giới (23/10): quái cao hơn người chơi quá grace tầng → sát thương người chơi (và thú cưng) × per_stage cho mỗi tầng vượt, thấp nhất min.",
+   "_ghi_chu": "Áp chế cảnh giới (23/10): quái cao hơn người chơi quá grace tầng → sát thương người chơi (và linh thú) × per_stage cho mỗi tầng vượt, thấp nhất min.",
    "grace": 3,
    "per_stage": 0.7,
    "min": 0.02,
-   "_ghi_chu_24_10": "Nới áp chế (24/10): trang bị tốt được đánh vượt cấp; quá 3 bậc mới giảm sát thương ×0,7/bậc."
+   "_ghi_chu_24_10": "Nới áp chế (24/10): pháp khí tốt được đánh vượt cấp; quá 3 bậc mới giảm sát thương ×0,7/bậc."
   },
   "exp_cap": {
    "_ghi_chu": "Tu vi tối đa mỗi lần hạ quái, tính theo phần vạch tu vi tầng hiện tại của người chơi (23/10: Âm Hư từng cho đầy cả tầng).",
@@ -1128,8 +1128,8 @@
    "last_s": 30,
    "mul": 0.35,
    "every_s": 1,
-   "name": "Linh Thú",
-   "desc": "Gọi linh thú đang đeo ra đánh cùng trong {last_s} giây"
+   "name": "Thú Hồn",
+   "desc": "Gọi thú hồn đang đeo ra đánh cùng trong {last_s} giây"
   },
   "luot": {
    "unlock": "kd_so",
@@ -1185,7 +1185,7 @@
     "kind": "skill",
     "skill": "linh-thu",
     "per": 0.1,
-    "text": "Linh thú đánh mạnh hơn {v}%"
+    "text": "Thú hồn đánh mạnh hơn {v}%"
    },
    "skill.than.canh-phong.001": {
     "kind": "skill",
@@ -1681,7 +1681,7 @@
    "pets": true,
    "fx": "k.van-moc",
    "fx_h": 56,
-   "desc": "Hồi {heal%} khí huyết cho mình và thú cưng (Mộc)",
+   "desc": "Hồi {heal%} khí huyết cho mình và linh thú (Mộc)",
    "icon_url": "assets/ui/skills/van-moc.png",
    "he": "Mộc",
    "medal": "assets/ui/skills/m/van-moc.png"
@@ -2229,7 +2229,7 @@
    "free_hon_tinh": 1,
    "fx": "k.hon-tinh"
   },
-  "_ghi_chu_luyen_hon": "Luyện hồn (23/10): thú cưng nuốt hồn một con CÙNG LOÀI đang nghỉ trong Kho → +1 sao (tối đa max_star), công và khí huyết ×(1 + per_star × sao)."
+  "_ghi_chu_luyen_hon": "Luyện hồn (23/10): linh thú nuốt hồn một con CÙNG LOÀI đang nghỉ trong Kho → +1 sao (tối đa max_star), công và khí huyết ×(1 + per_star × sao)."
  },
  "daily_linh_khi": {
   "_ghi_chu": "Ngũ Thiên Đạo Cảnh (24/10): mỗi ngày hạ quái nhận trọn tu vi tới cap (≈ số cấp/ngày: Khai Linh 14, Ngưng Mạch 9, Tụ Tinh 7, Hóa Nguyệt 6, Phá Nhật 5, Hợp Đạo 4), giảm dần sau đó. ~7 ngày lên cấp 60.",
@@ -2339,7 +2339,7 @@
   "_ghi_chu_24_10": "Tắt (24/10): Hợp Đạo là trần, lên trong ~1 tuần như mọi cảnh giới khác."
  },
  "migrate_v2": {
-  "_ghi_chu": "Đổi bản lưu cũ sang Ngũ Thiên Đạo Cảnh (src/game/progress.js): old_order = 25 bậc cũ theo thứ tự lưu; pet_atk = công quái cũ theo bậc để quy đổi thú cưng giữ đúng sức mạnh tương đối.",
+  "_ghi_chu": "Đổi bản lưu cũ sang Ngũ Thiên Đạo Cảnh (src/game/progress.js): old_order = 25 bậc cũ theo thứ tự lưu; pet_atk = công quái cũ theo bậc để quy đổi linh thú giữ đúng sức mạnh tương đối.",
   "old_order": [
    "lk1",
    "lk2",
@@ -2400,7 +2400,7 @@
   }
  },
  "gear_base": {
-  "_note": "Mỗi món ngũ hành đang mặc (8 ô) cho sẵn % chỉ số gốc theo cảnh giới, kể cả chưa thức tỉnh: pct = pct_lv1 + per_lv × (cấp − 1) — cấp 1: 6%/món, cấp 33: ~9,8%, cấp 42: ~10,9%, cấp 60: ~13%. Đủ bộ ≈ 83% mức 'trang bị chuẩn' quái được tính theo (tools/gen_thien_dao.py gear_e); thức tỉnh bù phần còn lại và vượt lên. Chơi thử 24/10/2026: thiếu phần này thì đồ Đạo Tâm mới nhận gần như không cộng gì, chết liên tục ở Băng tuyết / Hắc thổ.",
+  "_note": "Mỗi món ngũ hành đang mặc (8 ô) cho sẵn % chỉ số gốc theo cảnh giới, kể cả chưa thức tỉnh: pct = pct_lv1 + per_lv × (cấp − 1) — cấp 1: 6%/món, cấp 33: ~9,8%, cấp 42: ~10,9%, cấp 60: ~13%. Đủ bộ ≈ 83% mức 'pháp khí chuẩn' quái được tính theo (tools/gen_thien_dao.py gear_e); thức tỉnh bù phần còn lại và vượt lên. Chơi thử 24/10/2026: thiếu phần này thì đồ Đạo Tâm mới nhận gần như không cộng gì, chết liên tục ở Băng tuyết / Hắc thổ.",
   "pct_lv1": 6,
   "per_lv": 0.12,
   "keys": [
@@ -2410,7 +2410,7 @@
   ]
  },
  "quick_sell": {
-  "_note": "Kho → Bán nhanh (chủ dự án 24/10/2026): bán mọi trang bị KHÔNG đang mặc theo vòng thức tỉnh đã chọn. Nhận Vàng theo vòng + hoàn Linh thạch như Phân rã (đã tiêu × awaken.dismantle_refund). Không bán: đồ đang mặc, Tiên khí, vòng Đỏ / Đen (quá hiếm — muốn bỏ thì Phân rã từng món).",
+  "_note": "Kho → Bán nhanh (chủ dự án 24/10/2026): bán mọi pháp khí KHÔNG đang mặc theo vòng thức tỉnh đã chọn. Nhận Vàng theo vòng + hoàn Linh thạch như Phân rã (đã tiêu × awaken.dismantle_refund). Không bán: đồ đang mặc, Tiên khí, vòng Đỏ / Đen (quá hiếm — muốn bỏ thì Phân rã từng món).",
   "tiers": [
    "none",
    "luc",

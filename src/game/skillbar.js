@@ -1,5 +1,5 @@
 // Ô kỹ năng trên HUD — ô tự xếp (chủ dự án 23/10): ô s1..sN hiện kỹ năng người chơi đã chọn (loadout.js).
-// - Ô hiện đúng hình kỹ năng: hiệu ứng của chiêu; Đan dược = viên đan (kèm số còn); Linh thú / Pháp tướng = món đang đeo.
+// - Ô hiện đúng hình kỹ năng: hiệu ứng của chiêu; Đan dược = viên đan (kèm số còn); Thú hồn / Pháp tướng = món đang đeo.
 // - Ô trống, chưa mở theo cảnh giới, hoặc chưa có thứ để dùng → ô xám (chạm vào: ô trống mở bảng Kỹ năng, còn lại báo lý do).
 // - Đang hồi chiêu → bóng tối quét quanh nút + số giây đếm ngược.
 // Chỉ đọc trạng thái rồi gọi hud; mỗi khung hình chỉ cập nhật khi có thay đổi.
@@ -17,11 +17,11 @@ export function createSkillBar({ learn, hud, S, gp, progress, pt, cds, slotItem,
     const lockMsg = !learn.learned(id) ? 'chưa lĩnh ngộ — chỉ rơi khi hạ boss' : locked ? `mở ở ${stageName(s.unlock)}` : null;
     if (id === 'linh-thu') {
       const pet = slotItem('linh-thu');
-      return { off: lockMsg || (pet ? null : 'chưa đeo linh thú (Kho → Trang bị)'), art: !locked && pet ? pet.thumb : null, cd: [(cds[id] || 0) - now, s.cd_s] };
+      return { off: lockMsg || (pet ? null : 'chưa đeo thú hồn (Kho → Pháp khí)'), art: !locked && pet ? pet.thumb : null, cd: [(cds[id] || 0) - now, s.cd_s] };
     }
     if (id === 'phap-tuong') {
       const av = slotItem('phap-tuong');
-      return { off: av ? null : 'chưa đeo pháp tướng (Kho → Trang bị)', art: av?.thumb || null, cd: [pt.cdLeft, pt.cdTotal], active: pt.active };
+      return { off: av ? null : 'chưa đeo pháp tướng (Kho → Pháp khí)', art: av?.thumb || null, cd: [pt.cdLeft, pt.cdTotal], active: pt.active };
     }
     if (id === 'phap-bao') { // pháp bảo đang đeo (treasure.js)
       const t = treasure();

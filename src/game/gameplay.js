@@ -83,7 +83,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   gather.seed(me);
   const GB = gp.gear_base, gearBase = () => { const v = GB.pct_lv1 + GB.per_lv * progress.state.stage; return { lines: GB.keys.map((k) => ({ k, v, p: 1 })) }; };
   const SLOTS = ['mat-na', 'trang-phuc', 'vu-khi', 'nhan', 'canh', 'phap-tuong', 'linh-thu', 'day-chuyen'];
-  // Trang bị đang tính chỉ số: đồ luyện ra đang mặc + đồ Kho đang mặc đã thức tỉnh
+  // Pháp khí đang tính chỉ số: đồ luyện ra đang mặc + đồ Kho đang mặc đã thức tỉnh
   let treasure = null; // pháp bảo (treasure.js) — tạo sau barrage
   const wornGear = () => [...progress.equipped(), ...(treasure ? treasure.worn() : []),
     ...SLOTS.map((sl) => bag.equippedItem(sl)).filter(Boolean).map((it) => progress.state.itemAw[it.id]).filter((a) => a?.tier),
@@ -180,7 +180,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     const got = rollLoot(m);
     for (const g of got) gain(g.id, g.n);
     if (rank === 'boss' && !progress.state.bosses.includes(m.def.id)) progress.state.bosses.push(m.def.id);
-    tame.tryTame(m); if (Math.random() < KR.gear_drop_mul) { cards.onKill(m); treasure.onKill(m); dv.onKill(m, toast); } learn.onKill(m); // thú cưng · Thần Phù / phôi pháp bảo / đồ ngũ hành (giảm theo gear_drop_mul)
+    tame.tryTame(m); if (Math.random() < KR.gear_drop_mul) { cards.onKill(m); treasure.onKill(m); dv.onKill(m, toast); } learn.onKill(m); // linh thú · Thần Phù / phôi pháp bảo / đồ ngũ hành (giảm theo gear_drop_mul)
     quests.emit('kill', { id: m.def.id, rank, zone: m.def.zone });
     say(m.x, m.y - m.r * 3, `+${exp} tu vi${stone ? ` · +${stone} Linh thạch` : ''}${gold ? ` · +${gold} Vàng` : ''}`, '#9fe8ff');
     if (got.length) toast(`Nhặt: ${got.map((g) => g.label).join(', ')}`, 1800);
@@ -230,8 +230,8 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const skills = createSkills({ hopOn: () => !!hopNhat.active(), useTreasure: (q) => treasure.use(q), camChe: (s) => camChe.cast(s), S, me, mobs, map, pt, cds, toast, say, play, fx, bolts, strike, target, buffs, recompute, mods: dv.mods, fire: barrage.fire, maybeEcho: barrage.maybeEcho, mover: barrage.mover, schedule: barrage.schedule, healPets: (f) => tame.healAll(f),
     get bar() { return bar; }, heal: (n) => { if (dead) return; hp = Math.min(ps.hp, hp + n); say(me.x, me.y - HEAD, `+${Math.round(n)} khí huyết`, '#5dff7a', true); },
     maxHp: () => ps.hp, now: () => now, dead: () => dead,
-    summonPet() { const a = bag.equippedItem('linh-thu')?.art || progress.equipped().find((x) => x.slot === 'linh-thu')?.art, f = a && artFile(a); // hình linh thú đang mặc
-      pet = { until: now + S['linh-thu'].last_s, next: now, x: me.x - 14, y: me.y, t: 0, face: 1, moving: false, img: f ? Object.assign(new Image(), { src: f }) : null }; play('vong-lua', me.x - 14, me.y - 6, 34); toast('Linh thú hiện thân', 1000); } });
+    summonPet() { const a = bag.equippedItem('linh-thu')?.art || progress.equipped().find((x) => x.slot === 'linh-thu')?.art, f = a && artFile(a); // hình thú hồn đang mặc
+      pet = { until: now + S['linh-thu'].last_s, next: now, x: me.x - 14, y: me.y, t: 0, face: 1, moving: false, img: f ? Object.assign(new Image(), { src: f }) : null }; play('vong-lua', me.x - 14, me.y - 6, 34); toast('Thú hồn hiện thân', 1000); } });
   const { usePill, breakthrough, breakthroughPill } = createPillUse({ majors: realms.realms.map((r) => r.short.toLowerCase()), realmName: (k) => realms.realms.find((r) => r.short.toLowerCase() === k)?.name, gp, realms, progress, itemDefs, life, quests, pt, buffs, cds, me, HEAD, toast, say, play, addExp, recompute,
     now: () => now, dead: () => dead, hp: () => hp, setHp: (v) => { hp = v; }, ps: () => ps });
   const daotam = createDaoTam({ def: dtDef, hop: dvDef.hop_nhat.he, items: itemsJson.items, itemDefs, shop, progress, bag, learn, loadout, cards, treasure, hopNhat, npcs, map, me, wallet, S, pbList: pbDef.list, // Con đường Đạo Tâm
@@ -345,7 +345,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const bar = createSkillBar({ learn, hud, S, gp, progress, pt, cds, slotItem: (s) => inv.slotItem(s), icon: iconUrl, fxIcon: fxIconUrl, loadout, stageName, treasure: () => treasure.view() });
   function itemAction(key, action) {
     const r = tame.isPet(key) ? tame.act(key, action) : cards.isCard(key) ? cards.act(key, action) : treasure.isTreasure(key) ? treasure.act(key, action)
-      : action === 'open' ? usable.open(key.slice(5)) : action === 'doi-he' ? usable.rerollHe(+key.slice(5)) : inv.act(key, action); // thú cưng / Thần Phù / pháp bảo / mở phôi / đồ khác
+      : action === 'open' ? usable.open(key.slice(5)) : action === 'doi-he' ? usable.rerollHe(+key.slice(5)) : inv.act(key, action); // linh thú / Thần Phù / pháp bảo / mở phôi / đồ khác
     if (r && cards.isCard(key)) recompute();
     if (r && typeof r === 'object') { toast(r.msg, 1600); if (r.event) quests.emit(...r.event); } else if (r) toast(r, 1500);
     progress.changed();

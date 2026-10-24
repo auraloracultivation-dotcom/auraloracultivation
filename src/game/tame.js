@@ -1,7 +1,7 @@
 // Thu phục quái (chủ dự án 23/10/2026) — THỬ NGHIỆM phía máy khách, thông số data/gameplay.json → tame.
-// Hạ quái (trừ Âm Hư) có `chance` quái quy phục: vào Kho (thẻ Thú cưng, hình chính con quái), tối đa `max_follow` con đi theo
+// Hạ quái (trừ Âm Hư) có `chance` quái quy phục: vào Kho (thẻ Linh thú, hình chính con quái), tối đa `max_follow` con đi theo
 // cùng lúc. Thú đi lang thang quanh chủ, gặp quái thì chủ động xông vào cắn; quái đánh trả, thú ngã xuống thì revive_s giây sau
-// hồi sinh cạnh chủ (chủ dự án 23/10). Quái chết do thú cưng vẫn tính cho người chơi (onKill).
+// hồi sinh cạnh chủ (chủ dự án 23/10). Quái chết do linh thú vẫn tính cho người chơi (onKill).
 // Lưu progress.state.pets = [{ uid, mid, stage, atk, follow }] — Mốc 4 lên máy chủ.
 import { wrapDelta } from '../map/index.js';
 import { drawMonster, sheetThumb } from '../entity/index.js';
@@ -13,14 +13,14 @@ export function createTame({ cfg, progress, monsters, mdef, mobs, map, me, stats
   const pets = () => (progress.state.pets ||= []);
   const following = () => pets().filter((p) => p.follow);
   const live = new Map(); // uid → vị trí / trạng thái vẽ (không lưu)
-  const stageName = (s) => mdef.stage_names?.[s] || s; // thú cưng mang bậc quái (Luyện Khí … Âm Hư), không phải cảnh giới người chơi
-  // Bản lưu cũ (progress.migrateV1): công thú cưng theo bảng chỉ số quái cũ → đổi theo tỷ lệ bảng mới, giữ sức mạnh tương đối
+  const stageName = (s) => mdef.stage_names?.[s] || s; // linh thú mang bậc quái (Luyện Khí … Âm Hư), không phải cảnh giới người chơi
+  // Bản lưu cũ (progress.migrateV1): công linh thú theo bảng chỉ số quái cũ → đổi theo tỷ lệ bảng mới, giữ sức mạnh tương đối
   for (const p of pets()) if (p.rescale) { const o = gp.migrate_v2?.pet_atk?.[p.stage], n = mdef.stage_stats[p.stage]?.atk; if (o && n) p.atk = Math.max(1, Math.round(p.atk * n / o)); delete p.rescale; }
 
   // Gọi khi hạ quái: có quy phục không
   function tryTame(m) {
     if (m.void || m.def.void || Math.random() >= cfg.chance) return;
-    if (pets().length >= cfg.max_owned) return toast(`${m.def.name} muốn quy phục nhưng Kho thú cưng đã đầy (${cfg.max_owned})`, 2200);
+    if (pets().length >= cfg.max_owned) return toast(`${m.def.name} muốn quy phục nhưng Kho linh thú đã đầy (${cfg.max_owned})`, 2200);
     const p = { uid: progress.state.uid++, mid: m.def.id, stage: m.stage, atk: m.atk, follow: following().length < cfg.max_follow };
     pets().push(p); progress.changed();
     play('vong-lua', m.x, m.y - 6, 34);
@@ -136,12 +136,12 @@ export function createTame({ cfg, progress, monsters, mdef, mobs, map, me, stats
       drawMonster(ctx, { ...s, def: d, r: 5 }, q.x, q.y, now);
       ctx.fillStyle = 'rgba(0,0,0,.6)'; ctx.fillRect(q.x - 9, top - 1, 18, 3); // thanh máu thú
       ctx.fillStyle = '#5dff7a'; ctx.fillRect(q.x - 8.5, top - 0.5, 17 * Math.max(0, s.hp / s.maxHp), 2);
-      ctx.fillStyle = '#7dff8a'; ctx.font = 'bold 6px sans-serif'; ctx.textAlign = 'center'; // dấu thú cưng
+      ctx.fillStyle = '#7dff8a'; ctx.font = 'bold 6px sans-serif'; ctx.textAlign = 'center'; // dấu linh thú
       ctx.fillText('♥', q.x, top - 2);
     }
   }
 
-  // ---- Kho: thẻ Thú cưng ----
+  // ---- Kho: thẻ Linh thú ----
   const kin = (p) => pets().filter((q) => q !== p && q.mid === p.mid && !q.follow); // cùng loài đang nghỉ trong Kho
   function entry(p) {
     const d = defOf.get(p.mid) || { name: p.mid }, n = following().length, star = p.star || 0, mates = kin(p).length;
@@ -155,15 +155,15 @@ export function createTame({ cfg, progress, monsters, mdef, mobs, map, me, stats
       { id: 'pet-free', label: 'Thả về rừng', danger: true, confirm: `Thả ${d.name} đi? Không lấy lại được.` },
     ];
     return { id: `pet:${p.uid}`, key: `pet:${p.uid}`, name: `${d.name}${star ? ` ${'★'.repeat(star)}` : ''}`, cat: 'thu-cung', thumb, equipped: p.follow,
-      sub: `Thú cưng · ${stageName(p.stage)}${p.follow ? ' · đang đi theo' : ''}`,
+      sub: `Linh thú · ${stageName(p.stage)}${p.follow ? ' · đang đi theo' : ''}`,
       detail: `Đi lang thang quanh bạn, gặp quái là xông vào cắn: công ${Math.round(p.atk * cfg.atk_mul * starMul(p))} mỗi ${cfg.every_s} giây · khí huyết ${battle(p).hp}. Ngã xuống thì ${cfg.revive_s} giây sau hồi sinh. Luyện hồn: nuốt 1 con cùng loài đang nghỉ → +1★ (+${Math.round(cfg.merge.per_star * 100)}% công, máu).`, actions };
   }
   const entries = () => pets().map((p) => ({ item: entry(p), count: 1 }));
   function act(key, action) {
     const p = pets().find((x) => `pet:${x.uid}` === key); if (!p) return null;
-    const name = defOf.get(p.mid)?.name || 'Thú cưng';
+    const name = defOf.get(p.mid)?.name || 'Linh thú';
     if (action === 'pet-follow') {
-      if (following().length >= cfg.max_follow) return `Chỉ được ${cfg.max_follow} thú cưng đi theo`;
+      if (following().length >= cfg.max_follow) return `Chỉ được ${cfg.max_follow} linh thú đi theo`;
       p.follow = true; const s = st(p); s.x = me.x; s.y = me.y; progress.changed(); return `${name} đi theo bạn`;
     }
     if (action === 'pet-merge') {

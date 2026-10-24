@@ -90,7 +90,7 @@ export function showBag({ categories, getEntries, onAction, note, wallet, tab, t
   return close;
 }
 
-// Thẻ chi tiết + hàng nút thao tác (dùng chung cho Kho và ô trang bị bảng Nhân vật)
+// Thẻ chi tiết + hàng nút thao tác (dùng chung cho Kho và ô pháp khí bảng Nhân vật)
 function itemCard(it, run) {
   const card = el(`<div class="item-card"><div class="ic-info"><b>${escapeHtml(it.name)}</b>
     <span>${escapeHtml(it.sub || '')}</span>${it.detail ? `<small>${escapeHtml(it.detail)}</small>` : ''}
@@ -106,7 +106,7 @@ function itemCard(it, run) {
   return card;
 }
 
-// Hộp thao tác một món (chạm ô trang bị ở bảng Nhân vật). getItem() lấy lại món sau mỗi thao tác; trả null thì đóng.
+// Hộp thao tác một món (chạm ô pháp khí ở bảng Nhân vật). getItem() lấy lại món sau mỗi thao tác; trả null thì đóng.
 export function showItemActions({ getItem, onAction }) {
   const { wrap, close } = overlay('code-wrap');
   const box = el('<div class="bag code-box item-pop" role="dialog"></div>');
@@ -114,7 +114,7 @@ export function showItemActions({ getItem, onAction }) {
   const paint = () => {
     const it = getItem();
     if (!it) { close(); return; }
-    box.replaceChildren(el('<div class="bag-head"><b>Trang bị</b><button type="button" class="bag-x" aria-label="Đóng">✕</button></div>'),
+    box.replaceChildren(el('<div class="bag-head"><b>Pháp khí</b><button type="button" class="bag-x" aria-label="Đóng">✕</button></div>'),
       itemCard(it, async (a) => { await onAction(it, a); paint(); }));
     box.querySelector('.bag-x').addEventListener('click', close);
   };

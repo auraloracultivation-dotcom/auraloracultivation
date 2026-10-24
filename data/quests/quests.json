@@ -426,7 +426,7 @@
    "realm": "tc",
    "time": 10,
    "level": 10,
-   "desc": "Luyện 1 phôi trang bị bất kỳ.",
+   "desc": "Luyện 1 phôi pháp khí bất kỳ.",
    "goals": [
     {
      "type": "craft",
@@ -473,7 +473,7 @@
    "realm": "tc",
    "time": 15,
    "level": 10,
-   "desc": "Luyện một phôi trang bị, gom thêm Xích Thiết ở vùng Cát vàng (Trúc Cơ).",
+   "desc": "Luyện một phôi pháp khí, gom thêm Xích Thiết ở vùng Cát vàng (Trúc Cơ).",
    "goals": [
     {
      "type": "craft",
@@ -735,7 +735,7 @@
    "realm": "lk",
    "time": 15,
    "level": 1,
-   "desc": "Mang khoáng về Lò luyện trong thành, tự tay luyện một phôi trang bị.",
+   "desc": "Mang khoáng về Lò luyện trong thành, tự tay luyện một phôi pháp khí.",
    "goals": [
     {
      "type": "craft",
@@ -802,7 +802,7 @@
    "realm": "kd",
    "time": 15,
    "level": 1,
-   "desc": "Huyền Thiết và U Ngọc nằm sâu trong vùng Sỏi đá xám (Kết Đan) — khoáng của phôi Linh thú, đồ Đỏ.",
+   "desc": "Huyền Thiết và U Ngọc nằm sâu trong vùng Sỏi đá xám (Kết Đan) — khoáng của phôi Thú hồn, đồ Đỏ.",
    "goals": [
     {
      "type": "collect",
@@ -942,7 +942,7 @@
   "equipment.blank_item": "bất kỳ phôi pháp bảo",
   "herb": "mỗi loại linh thảo khác nhau từng nhặt được"
  },
- "_ghi_chu_tam_bao": "Chuỗi Tầm Bảo (chủ dự án 23/10/2026): nhiệm vụ chính dẫn người chơi đi tìm khoáng quý luyện trang bị, từ vùng xanh tới vùng than. tier = màu độ hiếm / độ khó trên HUD (luc, lam, tim, cam, vang, do, den — giống phẩm trang bị). auto = tự nhận khi đủ cảnh giới.",
+ "_ghi_chu_tam_bao": "Chuỗi Tầm Bảo (chủ dự án 23/10/2026): nhiệm vụ chính dẫn người chơi đi tìm khoáng quý luyện pháp khí, từ vùng xanh tới vùng than. tier = màu độ hiếm / độ khó trên HUD (luc, lam, tim, cam, vang, do, den — giống phẩm pháp khí). auto = tự nhận khi đủ cảnh giới.",
  "routine": {
   "_ghi_chu": "Nhiệm vụ Ngày / Tuần / Tiến độ (chủ dự án 23/10/2026: game tu tiên + idle — giết quái nhận ít, phần thưởng chính đến từ nhiệm vụ). Sinh tự động theo VÙNG của đại cảnh giới hiện tại (src/game/routine.js). Ngày reset 0h giờ VN, Tuần reset 0h thứ Hai giờ VN, Tiến độ là bậc thang 1→n không reset. exp_bar = phần vạch tu vi của tầng đang tu; stone_kills = số Linh thạch bằng ngần ấy con quái thường tầng hiện tại.",
   "tz_offset_h": 7,
@@ -1114,7 +1114,7 @@
      "den"
     ]
    ],
-   "desc": "Con đường chính từ Luyện Khí tầng 1 (không reset). Mỗi bậc gắn với một tầng tu: tới tầng đó, hạ yêu thú vùng tương ứng để nhận tài nguyên luyện trang bị.",
+   "desc": "Con đường chính từ Luyện Khí tầng 1 (không reset). Mỗi bậc gắn với một tầng tu: tới tầng đó, hạ yêu thú vùng tương ứng để nhận tài nguyên luyện pháp khí.",
    "enabled": false
   },
   "_ghi_chu_tien_do": "Tiến độ kiểu mới (chủ dự án 23/10): bậc n gắn với một tầng tu cố định (Luyện Khí 1 bậc/tầng, Trúc Cơ→Hóa Thần 3 bậc/tầng, tổng 46 bậc, sau đó bậc hậu kỳ). Vùng + thưởng theo tầng của bậc. Chưa tới tầng thì có mục tiêu 'Tu luyện tới <tầng>'. Người đã ở cảnh giới cao bắt đầu từ bậc đầu của đại cảnh giới hiện tại. Các nhiệm vụ Daily cũ của Lab bị bỏ khỏi game (vẫn giữ trong file) vì Ngày / Tuần mới thay thế. Số liệu trong src/game/routine.js → makeLadder.",

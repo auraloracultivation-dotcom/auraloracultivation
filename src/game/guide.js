@@ -5,7 +5,7 @@ import { showSheet, escapeHtml as E, createBuildChip } from '../ui/index.js';
 import { iconUrl, fxIconUrl } from '../entity/index.js';
 
 const SLOT_ORDER = [['mat-na', 'Mặt nạ'], ['trang-phuc', 'Áo'], ['vu-khi', 'Vũ khí'], ['canh', 'Cánh'], ['phap-tuong', 'Pháp tướng'],
-  ['nhan', 'Nhẫn'], ['day-chuyen', 'Dây chuyền'], ['linh-thu', 'Linh thú']];
+  ['nhan', 'Nhẫn'], ['day-chuyen', 'Dây chuyền'], ['linh-thu', 'Thú hồn']];
 
 // c: { dvDef, ccDef, pbDef, items (items.json), S (gp.skills), dv, cards, bag, progress, loadout, stageName, art(id), equip(id), toast }
 export function createGuide(c) {
@@ -46,7 +46,7 @@ export function createGuide(c) {
       <p>Mặc càng nhiều món cùng hệ, chiêu càng biến đổi. Đủ 8 = Đại Thành.</p>${tiers}
       ${c.equip ? `<button type="button" class="bag-act sm" data-act="wear" data-arg="${E(he)}">Mặc cả bộ ${E(he)} (đồ + pháp bảo + phù + kỹ năng có sẵn)</button>` : ''}</div>
       ${hopRow(he)}
-      <div class="row"><b class="gd-h">Trang bị cần mặc</b>${rows}<p class="gd-note">Phôi tự luyện mang hệ ${E(he)} (thức tỉnh rồi) cũng tính vào bộ.</p></div>
+      <div class="row"><b class="gd-h">Pháp khí cần mặc</b>${rows}<p class="gd-note">Phôi tự luyện mang hệ ${E(he)} (thức tỉnh rồi) cũng tính vào bộ.</p></div>
       <div class="row"><b class="gd-h">Kỹ năng hệ ${E(he)}</b><div class="gd-grid">${skills || '<span>—</span>'}</div>
       <p class="gd-note">Kỹ năng bắn đạn được bộ + Thần Phù nhân lên (bắn quạt, nảy, tách…).</p></div>
       <div class="row"><b class="gd-h">Cùng hệ</b><p>Bố Cấm Chế khi mặc nhiều đồ ${E(he)} nhất${c.ccDef.he[he] ? '' : ` (dùng trận hệ ${E(dvDef.he[he]?.twin || 'Kim')})`}: <b>${E(cc.name)}</b> — ${E(cc.desc)}.</p>
@@ -88,7 +88,7 @@ export function createGuide(c) {
 
   function open() {
     showSheet({
-      title: 'Cẩm nang Đạo Vận', note: 'Mặc trang bị cùng hệ để kích hiệu ứng. Bảng tự cập nhật.',
+      title: 'Cẩm nang Đạo Vận', note: 'Mặc pháp khí cùng hệ để kích hiệu ứng. Bảng tự cập nhật.',
       tabs: [{ id: 'on', name: 'Đang kích' }, ...HE.map((h) => ({ id: h, name: h })), { id: 'all', name: 'Tổng quan' }],
       render: (tab) => (tab === 'on' ? activeTab() : tab === 'all' ? overviewTab() : heTab(tab)),
       onAction(act, he) {

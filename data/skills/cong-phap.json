@@ -182,10 +182,10 @@
   },
   {
    "id": "skill.khe.linh-thu.001",
-   "name": "Linh Thú Khế Ước",
+   "name": "Thú Hồn Khế Ước",
    "type": "chieu-thuc",
    "unlock": "kd_so",
-   "desc": "Gọi linh thú đồng hành",
+   "desc": "Gọi thú hồn đồng hành",
    "max_level": 5,
    "learn": {
     "inputs": [

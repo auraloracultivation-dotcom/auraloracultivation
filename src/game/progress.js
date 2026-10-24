@@ -1,4 +1,4 @@
-// Tiến trình người chơi THỬ NGHIỆM: cảnh giới, tu vi, Linh thạch, túi nguyên liệu/đan, trang bị luyện ra, công pháp, nhiệm vụ.
+// Tiến trình người chơi THỬ NGHIỆM: cảnh giới, tu vi, Linh thạch, túi nguyên liệu/đan, pháp khí luyện ra, công pháp, nhiệm vụ.
 // Lưu localStorage theo tài khoản — CHƯA lưu máy chủ, người chơi sửa được. Mốc 4 chuyển lên máy chủ (RPC).
 const VERSION = 2; // 2 = Ngũ Thiên Đạo Cảnh 60 cấp (24/10/2026). Bản 1 (25 bậc Luyện Khí … Anh Biến) tự đổi khi tải — migrateV1.
 
@@ -93,7 +93,7 @@ export function createProgress(userId, gp) {
 }
 
 // Bản lưu cũ (25 bậc) → Ngũ Thiên Đạo Cảnh: bậc cũ → cấp CUỐI khoảng tương ứng (Hóa Thần Hậu kỳ → Phá Nhật tầng 10), tu vi về 0.
-// Chủ dự án 24/10: chỉ tặng, không trừ. Thú cưng giữ sức mạnh tương đối (công × công quái mới / cũ cùng bậc).
+// Chủ dự án 24/10: chỉ tặng, không trừ. Linh thú giữ sức mạnh tương đối (công × công quái mới / cũ cùng bậc).
 function migrateV1(old, gp) {
   const M = gp.migrate_v2 || {}, oldId = M.old_order?.[old.stage | 0];
   const lv = gp.player.old_to_level?.[oldId] ?? 0;

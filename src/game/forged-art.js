@@ -2,7 +2,7 @@
 // mới lộ hình (inventory.js). "Nhân phẩm": mở ra hệ nào thì mang hình của bộ hệ đó.
 // Chủ dự án 23/10/2026: chỉ dùng hình 6 bộ ngũ hành tự thiết kế (8 món mỗi hệ) — kho hình tạm cũ (giống đồ NPC) đã xoá.
 //   Đạo bào / kiếm / cánh / pháp tướng: art.<loại>.he.1–6 (data/equipment/he6.json, vẽ bằng rig)
-//   Mặt nạ / nhẫn / dây chuyền / linh thú: data/equipment/art.json (linh thú 12 hình: he.N và he.N+6 cùng hệ)
+//   Mặt nạ / nhẫn / dây chuyền / thú hồn: data/equipment/art.json (thú hồn 12 hình: he.N và he.N+6 cùng hệ)
 const LOOK_KEY = { 'trang-phuc': 'outfit', 'vu-khi': 'weapon', canh: 'wing', 'phap-tuong': 'avatar', 'mat-na': 'mask' };
 const RIG = { 'trang-phuc': 'outfit', 'vu-khi': 'weapon', canh: 'wing', 'phap-tuong': 'avatar' };
 

@@ -105,7 +105,7 @@ function createZoneLink({ lobby, line, zoneId, me, handlers, world, cellPx, pres
     lastTrack = Date.now();
     c.ch.track(myMeta());
   }
-  // Presence có hạn mức mỗi máy: gom nhiều thay đổi (trang bị, cảnh giới) thành 1 lần mỗi presenceGapMs
+  // Presence có hạn mức mỗi máy: gom nhiều thay đổi (pháp khí, cảnh giới) thành 1 lần mỗi presenceGapMs
   function trackSoon() {
     if (trackTimer) return;
     const wait = Math.max(0, presenceGapMs - (Date.now() - lastTrack));
@@ -144,7 +144,7 @@ function createZoneLink({ lobby, line, zoneId, me, handlers, world, cellPx, pres
       const ch = cells.get(home)?.ch;
       if (joined(ch)) ch.send({ type: 'broadcast', event: 'move', payload: { id: me.id, x: Math.round(x), y: Math.round(y), moving, flying, t: Date.now() } });
     },
-    // Đổi trang bị đang mặc: người gần thấy qua Presence (chỉ là hình ảnh, mã hình art.*)
+    // Đổi pháp khí đang mặc: người gần thấy qua Presence (chỉ là hình ảnh, mã hình art.*)
     setLook(look) { me.look = look; trackSoon(); },
     // Đổi cảnh giới: chữ trên đầu (chỉ hiển thị, máy nhận tự lọc)
     setRealm(realm) { if (me.realm === realm) return; me.realm = realm; trackSoon(); },

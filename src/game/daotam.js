@@ -1,5 +1,5 @@
 // CON ĐƯỜNG ĐẠO TÂM (chủ dự án 24/10/2026 03:55): chuỗi nhiệm vụ chính cầm tay chỉ việc từ con số 0 tới đủ bộ Đạo Tâm
-// 12 món cùng hệ (8 trang bị + kỹ năng sịn + kỹ năng cùi + Thần Phù + pháp bảo) — đủ thì kích Thiên Cơ Hợp Nhất.
+// 12 món cùng hệ (8 pháp khí + kỹ năng sịn + kỹ năng cùi + Thần Phù + pháp bảo) — đủ thì kích Thiên Cơ Hợp Nhất.
 // Người chơi tự chọn 1 hệ ở bước 2, chỉ nhận 1 bộ. Có NPC trong thành trò chuyện giải thích game, đi thắp sáng trận nhãn các vùng.
 // Dữ liệu: data/quests/dao-tam.json. Lưu progress.state.dt = { he, i (bước), p (đếm), talked }. THỬ NGHIỆM phía máy khách.
 // Mục tiêu "sự kiện" (kill, gather, obtain, use) đếm qua emit(); mục tiêu "trạng thái" (level, wear, awaken, skill, card, pb,

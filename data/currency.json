@@ -1,7 +1,7 @@
 {
   "_status": "test",
   "_nguon": "Chủ dự án, 23/10/2026",
-  "_ghi_chu": "Ba loại tiền. Vàng: tiền phàm nhân, rẻ, mua đồ thường. Linh thạch: tiền tu sĩ (như cũ). Tiên ngọc: tiền tiên giới — sau này chỉ có khi nạp; mua được MỌI món trong Vạn Bảo Lâu, kể cả tiên đan tăng tu vi. Từ Vấn Đỉnh đến Âm Hư chạm được một phần trang bị tiên giới (chưa mở: người chơi hiện dừng ở Hóa Thần). Bản chơi thử: số dư nằm trong localStorage (src/game/progress.js), Mốc 4 chuyển lên máy chủ — nạp tiền thật BẮT BUỘC qua máy chủ.",
+  "_ghi_chu": "Ba loại tiền. Vàng: tiền phàm nhân, rẻ, mua đồ thường. Linh thạch: tiền tu sĩ (như cũ). Tiên ngọc: tiền tiên giới — sau này chỉ có khi nạp; mua được MỌI món trong Vạn Bảo Lâu, kể cả tiên đan tăng tu vi. Từ Vấn Đỉnh đến Âm Hư chạm được một phần pháp khí tiên giới (chưa mở: người chơi hiện dừng ở Hóa Thần). Bản chơi thử: số dư nằm trong localStorage (src/game/progress.js), Mốc 4 chuyển lên máy chủ — nạp tiền thật BẮT BUỘC qua máy chủ.",
   "order": ["vang", "linh-thach", "tien-ngoc"],
   "kinds": {
     "vang": { "name": "Vàng", "short": "Vàng", "icon": "cur.vang", "state": "gold", "info": "Tiền phàm nhân: rơi từ quái, mua đồ thường dân ở quầy Phàm phẩm." },
@@ -13,7 +13,7 @@
   "jade_per_stone": 0.01,
   "gold_per_kill_stone": 8,
   "celestial_gear": {
-    "_ghi_chu": "Tiên khí = 6 bộ Thiên hệ Quang/Lôi/Băng/Phong/Hư/Thời (chủ dự án 24/10 02h): trang bị items.json thien, kỹ năng gameplay.json skills thien, pháp bảo phap-bao.json thien. Không bán bằng Tiên ngọc; nguồn: Âm Hư, Cửu Thiên Bí Cảnh, Thiên Cơ Truyền Thừa.",
+    "_ghi_chu": "Tiên khí = 6 bộ Thiên hệ Quang/Lôi/Băng/Phong/Hư/Thời (chủ dự án 24/10 02h): pháp khí items.json thien, kỹ năng gameplay.json skills thien, pháp bảo phap-bao.json thien. Không bán bằng Tiên ngọc; nguồn: Âm Hư, Cửu Thiên Bí Cảnh, Thiên Cơ Truyền Thừa.",
     "open": true
   }
 }

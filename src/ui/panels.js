@@ -59,14 +59,14 @@ function openModal(className, frame, maxW, build) {
 
 const vw = () => window.innerWidth, vh = () => window.innerHeight;
 
-// ---------- Nhân vật: trang bị đang đeo (khung v3 của chủ dự án, sinh bằng tools/char_panel.py) ----------
-// Ô trống hiện biểu tượng mờ vẽ sẵn (chưa đeo). Thứ tự ô: trái mũ, áo, vũ khí, nhẫn; phải cánh, pháp tướng, linh thú, dây chuyền.
+// ---------- Nhân vật: pháp khí đang đeo (khung v3 của chủ dự án, sinh bằng tools/char_panel.py) ----------
+// Ô trống hiện biểu tượng mờ vẽ sẵn (chưa đeo). Thứ tự ô: trái mũ, áo, vũ khí, nhẫn; phải cánh, pháp tướng, thú hồn, dây chuyền.
 const CHAR_FRAME = { src: 'assets/ui/frames/bang-nhan-vat-v3.webp', w: 996, h: 1103, close: [886, 101, 86, 78] };
 const SLOT = [178, 162];
 const SLOTS = [
   { x: 122, y: 258, name: 'Mũ' }, { x: 122, y: 429, name: 'Áo giáp' }, { x: 122, y: 604, name: 'Vũ khí' },
   { x: 122, y: 776, name: 'Nhẫn' }, { x: 696, y: 258, name: 'Cánh' }, { x: 696, y: 429, name: 'Pháp tướng' },
-  { x: 696, y: 604, name: 'Linh thú' }, { x: 696, y: 776, name: 'Dây chuyền' },
+  { x: 696, y: 604, name: 'Thú hồn' }, { x: 696, y: 776, name: 'Dây chuyền' },
 ];
 const CHAR_AREA = [322, 205, 352, 535]; // cỡ thân nhân vật (chỉ đạo bào) vừa khít vùng này — to như bản đầu
 const CHAR_FOOT = [497, 740]; // chân đặt giữa vòng pháp trận
@@ -78,7 +78,7 @@ const NAME_BARS = [[392, 819, 270, 57], [392, 886, 270, 58]]; // phần chữ c�
 export function showCharacterPanel({ name, realmName, equipment, portrait, onSlot, onEmpty }) {
   const maxW = () => Math.min(vw() * 0.96, 460, (vh() * 0.84 * CHAR_FRAME.w) / CHAR_FRAME.h);
   return openModal('modal-char', CHAR_FRAME, maxW, ({ at }) => {
-    // Lớp: nền khung → nhân vật (to theo thân; vũ khí, cánh tràn ra nhưng nằm SAU các ô trang bị) → ô trang bị
+    // Lớp: nền khung → nhân vật (to theo thân; vũ khí, cánh tràn ra nhưng nằm SAU các ô pháp khí) → ô pháp khí
     const av = at('<canvas class="char-avatar"></canvas>', 0, 0, CHAR_FRAME.w, CHAR_FRAME.h);
     const frameImg = new Image();
     frameImg.onload = () => requestAnimationFrame(() => drawCharacter(av, portrait(), frameImg));
@@ -88,7 +88,7 @@ export function showCharacterPanel({ name, realmName, equipment, portrait, onSlo
       const item = equipment[i];
       const slot = at(`<button type="button" class="eq-slot ${item ? 'filled' : ''}" aria-label="${s.name}">${item?.icon ? `<img src="${item.icon}" alt="">` : ''}</button>`, s.x, s.y, ...SLOT);
       if (item?.icon) Object.assign(slot.style, { display: 'flex', alignItems: 'center', justifyContent: 'center' });
-      slot.addEventListener('click', () => (item ? onSlot?.(i) : onEmpty ? onEmpty(i, s.name) : toast(`${s.name}: chưa trang bị`)));
+      slot.addEventListener('click', () => (item ? onSlot?.(i) : onEmpty ? onEmpty(i, s.name) : toast(`${s.name}: chưa mặc gì`)));
     });
     at(`<div class="char-line gold">${escapeHtml(name)}</div>`, ...NAME_BARS[0]);
     at(`<div class="char-line">${escapeHtml(realmName)}</div>`, ...NAME_BARS[1]);
@@ -96,7 +96,7 @@ export function showCharacterPanel({ name, realmName, equipment, portrait, onSlo
 }
 
 // Vẽ nhân vật trên canvas phủ cả khung. Tỉ lệ lấy theo THÂN (body) cho vừa CHAR_AREA, rồi vẽ ảnh đầy đủ (full: có vũ khí, cánh)
-// cùng tỉ lệ, chân ở CHAR_FOOT. Sau đó vẽ lại các ô trang bị từ ảnh khung đè lên → đồ tràn ra nằm sau ô.
+// cùng tỉ lệ, chân ở CHAR_FOOT. Sau đó vẽ lại các ô pháp khí từ ảnh khung đè lên → đồ tràn ra nằm sau ô.
 function drawCharacter(cv, { full, body }, frameImg) {
   const r = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
   cv.width = Math.max(1, Math.round(r.width * dpr)); cv.height = Math.max(1, Math.round(r.height * dpr));
