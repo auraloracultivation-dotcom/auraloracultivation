@@ -81,11 +81,13 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const PV = gp.pvp, rollLoot = createLoot({ gp, mats, qItems, recipes, progress });
   const autoPlay = createAutoPlay({ me, mobs, gather, map, cfg: gp.auto, reach: gp.player.attack_range_px, canFly: () => !!me.look?.weapon && pt.mp >= 15, zone: () => biCanh?.zone(), hpFrac: () => (ps.hp ? hp / ps.hp : 1) });
   gather.seed(me);
+  const GEAR_BASE = { lines: Object.entries(gp.gear_base?.pct || {}).map(([k, v]) => ({ k, v, p: 1 })) };
   const SLOTS = ['mat-na', 'trang-phuc', 'vu-khi', 'nhan', 'canh', 'phap-tuong', 'linh-thu', 'day-chuyen'];
   // Trang bị đang tính chỉ số: đồ luyện ra đang mặc + đồ Kho đang mặc đã thức tỉnh
   let treasure = null; // pháp bảo (treasure.js) — tạo sau barrage
   const wornGear = () => [...progress.equipped(), ...(treasure ? treasure.worn() : []),
-    ...SLOTS.map((sl) => bag.equippedItem(sl)).filter(Boolean).map((it) => progress.state.itemAw[it.id]).filter((a) => a?.tier)];
+    ...SLOTS.map((sl) => bag.equippedItem(sl)).filter(Boolean).map((it) => progress.state.itemAw[it.id]).filter((a) => a?.tier),
+    ...SLOTS.map((sl) => bag.equippedItem(sl)).filter((it) => it?.he).map(() => GEAR_BASE)]; // chỉ số gốc của đồ ngũ hành (gameplay.json → gear_base)
   const itemDefs = new Map([...mats.materials, ...pills.pills, ...qItems.items, ...recipes.items, ...premium.items, ...pbDef.items, ...misc.items].map((d) => [d.id, d]));
   const S = gp.skills, PL = gp.player;
 
@@ -98,7 +100,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   let stunUntil = 0; // bị boss trói: không đi được
   function setAuto(mode, focus = null) { // mode: 'farm' | 'quest' | null
     if (dead && mode) return; auto = !!mode; autoDir = null; mode ? autoPlay.start(mode, focus) : autoPlay.reset();
-    hud.setActive('auto', mode === 'farm'); hud.setActive('autoq', mode === 'quest');
+    hud.setActive('auto', mode === 'farm'); // nút Tự nhiệm vụ do questauto.js bật / tắt (không nháy khi đổi chế độ farm)
   }
   let hp = 0, dead = false, autoDir = null, hurtAt = -99, attackCd = 0, auto = false, resumeAuto = null, targetUid = null, pet = null, now = 0;
   const fx = [], bolts = [];
@@ -196,7 +198,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     get: () => ({ hp, dead, ps }), setHp: (v) => { hp = v; }, hurt: () => { hurtAt = now; }, stun: (s) => { stunUntil = Math.max(stunUntil, now + s); } });
   function die() {
     if (dead) return; // nhiều đòn cùng khung: chỉ chết một lần (không trừ tu vi 2 lần, không mất Tự động bật lại)
-    hp = 0; dead = true; mobs.calmAll(); resumeAuto = auto ? autoPlay.snapshot() : null; auto = false; hud.setActive('auto', false); hud.setActive('autoq', false); autoDir = null; autoPlay.reset(); const dmsg = late.death(); if (dmsg) toast(dmsg, 3000); // mất tu vi khi chết: late-realm.js (Anh Biến: trọng thương / thụt cảnh giới)
+    hp = 0; dead = true; mobs.calmAll(); resumeAuto = auto ? autoPlay.snapshot() : null; auto = false; hud.setActive('auto', false); autoDir = null; autoPlay.reset(); const dmsg = late.death(); if (dmsg) toast(dmsg, 3000); // mất tu vi khi chết: late-realm.js (Anh Biến: trọng thương / thụt cảnh giới)
     if (pt.active) pt.cancel();
     soul.start();
   }
@@ -204,7 +206,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     soul.end(); dead = false; hp = ps.hp; guardUntil = now + PV.revive_guard_s;
     if (!here && map.town) { me.x = map.town.cx; me.y = map.town.cy + 30; onRespawn(me.x, me.y); }
     else if (!map.canStand(me.x, me.y, 4)) ({ x: me.x, y: me.y } = map.nearestStand(me.x, me.y, 4, 30));
-    play('vong-lua', me.x, me.y - 8, 40); toast(`Hồi sinh${here ? ' tại chỗ' : ` tại trận pháp ${map.town?.name || ''}`} — được bảo vệ ${PV.revive_guard_s} giây`, 2000); if (resumeAuto) { const r = resumeAuto; resumeAuto = null; auto = true; autoPlay.start(r.mode, r.focus, here ? null : r.at); hud.setActive(r.mode === 'quest' ? 'autoq' : 'auto', true); toast('Tự động bật lại — quay về chỗ farm cũ', 1800); } // về thành thì tự đi lại vùng neo cũ
+    play('vong-lua', me.x, me.y - 8, 40); toast(`Hồi sinh${here ? ' tại chỗ' : ` tại trận pháp ${map.town?.name || ''}`} — được bảo vệ ${PV.revive_guard_s} giây`, 2000); if (resumeAuto) { const r = resumeAuto; resumeAuto = null; auto = true; autoPlay.start(r.mode, r.focus, here ? null : r.at); if (r.mode === 'farm') hud.setActive('auto', true); toast('Tự động bật lại — quay về chỗ farm cũ', 1800); } // về thành thì tự đi lại vùng neo cũ
   }
   const tame = createTame({ cfg: gp.tame, progress, monsters: monDef.monsters, mdef: monDef, mobs, map, me, stats, gp, toast, say: (...a) => say(...a), play: (...a) => play(...a), onKill: (m) => onKill(m), placeholder: placeholderIcon, suppress: (m, p) => gapR.mul(m.stage, p.stage) });
   const soul = createSoul({ me, hud, progress, cfg: gp.soul, townName: map.town?.name || 'thành', toast, showRevive, onRevive: revive, autoBack: () => !!resumeAuto }); // đang Tự động mà chết: 10 giây không chọn thì tự về thành
@@ -230,16 +232,16 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     maxHp: () => ps.hp, now: () => now, dead: () => dead,
     summonPet() { const a = bag.equippedItem('linh-thu')?.art || progress.equipped().find((x) => x.slot === 'linh-thu')?.art, f = a && artFile(a); // hình linh thú đang mặc
       pet = { until: now + S['linh-thu'].last_s, next: now, x: me.x - 14, y: me.y, t: 0, face: 1, moving: false, img: f ? Object.assign(new Image(), { src: f }) : null }; play('vong-lua', me.x - 14, me.y - 6, 34); toast('Linh thú hiện thân', 1000); } });
-  const { usePill, breakthrough } = createPillUse({ majors: realms.realms.map((r) => r.short.toLowerCase()), realmName: (k) => realms.realms.find((r) => r.short.toLowerCase() === k)?.name, gp, realms, progress, itemDefs, life, quests, pt, buffs, cds, me, HEAD, toast, say, play, addExp, recompute,
+  const { usePill, breakthrough, breakthroughPill } = createPillUse({ majors: realms.realms.map((r) => r.short.toLowerCase()), realmName: (k) => realms.realms.find((r) => r.short.toLowerCase() === k)?.name, gp, realms, progress, itemDefs, life, quests, pt, buffs, cds, me, HEAD, toast, say, play, addExp, recompute,
     now: () => now, dead: () => dead, hp: () => hp, setHp: (v) => { hp = v; }, ps: () => ps });
   const daotam = createDaoTam({ def: dtDef, hop: dvDef.hop_nhat.he, items: itemsJson.items, itemDefs, shop, progress, bag, learn, loadout, cards, treasure, hopNhat, npcs, map, me, wallet, S, pbList: pbDef.list, // Con đường Đạo Tâm
-    addExp, itemAction, breakthrough, usePill, toast, play, dialog: showDialog, chooseHe: showHeChooser, heColor: (he) => dvDef.he[he]?.color || '#ffd23a' });
+    addExp, itemAction, breakthrough, breakthroughPill, usePill, toast, play, dialog: showDialog, chooseHe: showHeChooser, heColor: (he) => dvDef.he[he]?.color || '#ffd23a' });
   quests.onEmit((type, e) => daotam.emit(type, e));
 
   // ---------- Mỗi khung hình ----------
   // Thọ nguyên (lifespan.js): qua 0h giờ VN cập nhật nhãn; hết thọ → tọa hóa (chết hẳn), main.js hiện bảng chuyển thế
   const lifeHooks = { synced: timeSynced, onWarn: (w) => toast(w, 4000), onTick: () => { if (me.realm !== life.label(progress.stageDef.name)) recompute(); },
-    onDead(sum) { dead = true; auto = false; hud.setActive('auto', false); hud.setActive('autoq', false); autoDir = null; autoPlay.reset(); mobs.calmAll(); if (pt.active) pt.cancel(); onToaHoa({ ...sum, realm: progress.stageDef.name }); } };
+    onDead(sum) { dead = true; auto = false; hud.setActive('auto', false); autoDir = null; autoPlay.reset(); mobs.calmAll(); if (pt.active) pt.cancel(); onToaHoa({ ...sum, realm: progress.stageDef.name }); } };
   function update(dt) {
     now += dt;
     life.watch(dt, lifeHooks);
@@ -370,10 +372,10 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     speed: () => buffs.speed?.mul || null,
     // Tự farm (nút Tự farm) và farm theo nhiệm vụ (questauto.js / navi.js) là hai chế độ riêng của autoplay.js
     toggleAuto() { if (dead) return; const on = !(auto && autoPlay.mode() === 'farm'); setAuto(on ? 'farm' : null); toast(on ? 'Tự farm: bật — đánh quái quanh đây, kéo cần để dời chỗ' : 'Tự farm: tắt', 1600); },
-    setAuto, autoMode: () => (auto ? autoPlay.mode() : null), daotam, setAutoQ: (v) => hud.setActive('autoq', v), // Tự làm nhiệm vụ (questauto.js)
+    setAuto, autoMode: () => (auto ? autoPlay.mode() : null), autoHungry: () => (auto ? autoPlay.hungry() : 0), daotam, setAutoQ: (v) => hud.setActive('autoq', v), // Tự làm nhiệm vụ (questauto.js)
     healPill: () => usePill(HEAL_PILL), usePill, pillCount: (id) => progress.count(id), isAuto: () => auto, autoDir: () => (auto ? autoDir : null), autoMoved: () => auto && autoPlay.moved(), // kéo cần khi Tự động: dời neo
     openCodex: () => openCodex({ loadJSON, gp, mats, pills, recipes, cp, monsters: monDef.monsters, mobSkills: monDef.skills, blanks, qItems, artDef, info, cpText: cpFx.text, fxDuration }), // Đồ giám (nút sách)
-    statValue: views.statValue, openQuests: views.openQuests, questBrief: views.questBrief, naviGoal: views.naviGoal, track: views.track, setGo: views.setGo, pillChoices: views.pillChoices, zoneRing: (z) => mobs.ringOf(z), openCultivate: views.openCultivate, // dẫn đường + đan dùng nhanh
+    statValue: views.statValue, openQuests: views.openQuests, questBrief: views.questBrief, naviGoal: views.naviGoal, track: views.track, setGo: views.setGo, setQuestAuto: views.setQuestAuto, pillChoices: views.pillChoices, zoneRing: (z) => mobs.ringOf(z), openCultivate: views.openCultivate, // dẫn đường + đan dùng nhanh
     forgedLook, progress, // progress: trận nhãn đã thắp (src/game/stations.js)
     setDock(d) { views.refreshDock = d.refresh; },
     bagEntries: () => [...inv.entries().map(({ item, count }) => { const a = item.key.startsWith('gear:') && usable.gearAction(progress.gear(+item.key.slice(5)));

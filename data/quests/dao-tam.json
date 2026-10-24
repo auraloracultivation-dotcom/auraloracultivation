@@ -27,7 +27,7 @@
     { "id": "c1.05", "title": "Gặp Luyện khí sư", "goal": { "type": "talk", "npc": "luyen-khi-su" },
       "say": ["Thức tỉnh xong rồi à? Dòng màu càng hiếm càng mạnh: Lục → Lam → Tím → Cam → Vàng → Đỏ → Đen.", "Dòng Đen cực hiếm, mỗi dòng cộng 25–40% chỉ số gốc.", "Đồ tốt mới là gốc rễ. Chăm thức tỉnh nhé!"],
       "reward": { "stone": 400 } },
-    { "id": "c1.06", "title": "Ra khỏi thành", "goal": { "type": "kill", "zone": "realm", "count": 10 }, "tip": "Ra Đồng cỏ hạ 10 yêu thú. Bấm Tự farm nếu muốn đánh tự động.",
+    { "id": "c1.06", "title": "Ra khỏi thành", "goal": { "type": "kill", "zone": "xanh", "count": 10 }, "tip": "Ra Đồng cỏ hạ 10 yêu thú. Bấm Tự farm nếu muốn đánh tự động.",
       "reward": { "exp_lv": 1, "gold": 300 } },
     { "id": "c1.07", "title": "Ghé tiệm", "goal": { "type": "talk", "npc": "chu-tiem" },
       "say": ["Khách quý! Tiệm ta bán đan, nguyên liệu, bí kíp.", "Vàng mua đồ thường, Linh thạch mua đồ quý, Tiên ngọc mua được mọi thứ.", "Mua thử một viên Tiểu Hồi Huyết Đan đi."],
@@ -61,7 +61,7 @@
     { "id": "c2.02", "title": "Hỏi Tế tư", "goal": { "type": "talk", "npc": "te-tu" },
       "say": ["Kỹ năng chiến đấu rất hiếm: chỉ lĩnh ngộ khi hạ boss.", "Mỗi đại cảnh giới, Thiên Đạo tặng 1 kỹ năng.", "Kỹ năng cùng hệ với đồ sẽ được bộ ngũ hành tăng sức mạnh."],
       "reward": { "stone": 500 } },
-    { "id": "c2.03", "title": "Vùng Cát vàng", "goal": { "type": "kill", "zone": "realm", "count": 30 }, "reward": { "exp_lv": 1, "gold": 600 } },
+    { "id": "c2.03", "title": "Vùng Cát vàng", "goal": { "type": "kill", "zone": "cam", "count": 30 }, "reward": { "exp_lv": 1, "gold": 600 } },
     { "id": "c2.04", "title": "Trận nhãn Kim Quang", "goal": { "type": "station", "id": "cam" },
       "say": ["Trận nhãn Kim Quang sáng lên!", "Quái ở vùng xa tâm thành mạnh hơn. Đồ yếu thì đừng đi quá sâu."], "reward": { "gift": "gear:nhan", "stone": 600 } },
     { "id": "c2.05", "title": "Đeo nhẫn", "goal": { "type": "wear", "slot": "nhan" }, "reward": { "exp_lv": 0.5 } },
@@ -70,7 +70,7 @@
     { "id": "c2.07", "title": "Lên Ngưng Mạch tầng 5", "goal": { "type": "level", "lv": 15 }, "reward": { "gift": "gear:day-chuyen", "stone": 700 } },
     { "id": "c2.08", "title": "Đeo dây chuyền", "goal": { "type": "wear", "slot": "day-chuyen" }, "reward": { "exp_lv": 0.5 } },
     { "id": "c2.09", "title": "Nâng vũ khí", "goal": { "type": "awaken", "slot": "vu-khi", "lines": 2 }, "tip": "Thức tỉnh thêm dòng thứ 2 cho vũ khí.", "reward": { "exp_lv": 0.6, "stone": 800 } },
-    { "id": "c2.10", "title": "Hạ tinh anh", "goal": { "type": "kill", "zone": "realm", "rank": "elite", "count": 3 }, "tip": "Tinh anh ở phần ngoài của vùng.", "reward": { "exp_lv": 1, "gold": 800 } },
+    { "id": "c2.10", "title": "Hạ tinh anh Cát vàng", "goal": { "type": "kill", "zone": "cam", "rank": "elite", "count": 3 }, "tip": "Tinh anh ở phần ngoài của vùng.", "reward": { "exp_lv": 1, "gold": 800 } },
     { "id": "c2.11", "title": "Lên Ngưng Mạch tầng 10", "goal": { "type": "level", "lv": 20 }, "reward": { "items": [["item.dan.ket-dan.001", 1]], "stone": 800 } },
     { "id": "c2.12", "title": "Đột phá Tụ Tinh", "goal": { "type": "level", "lv": 21 }, "reward": { "gift": "card", "exp_lv": 0.5 } }
    ]
@@ -81,7 +81,7 @@
     { "id": "c3.01", "title": "Gắn Thần Phù", "goal": { "type": "card" }, "tip": "Kho → Thần Phù → Gắn vào ô phù.", "reward": { "exp_lv": 0.5 } },
     { "id": "c3.02", "title": "Ý nghĩa Thần Phù", "goal": { "type": "talk", "npc": "chuong-giao" },
       "say": ["Thần Phù làm đạn biến hoá: bắn thêm, xuyên, nảy, nổ…", "Mặc 2/4/6/8 món cùng hệ sẽ kích hiệu ứng bộ ngũ hành.", "Xem Cẩm nang Đạo Vận (nút cạnh màn hình) để biết thiếu gì."], "reward": { "stone": 800 } },
-    { "id": "c3.03", "title": "Vùng Sỏi đá xám", "goal": { "type": "kill", "zone": "realm", "count": 40 }, "reward": { "exp_lv": 1, "gold": 1000 } },
+    { "id": "c3.03", "title": "Vùng Sỏi đá xám", "goal": { "type": "kill", "zone": "xam", "count": 40 }, "reward": { "exp_lv": 1, "gold": 1000 } },
     { "id": "c3.04", "title": "Trận nhãn Hậu Thổ", "goal": { "type": "station", "id": "xam" }, "say": ["Trận nhãn Hậu Thổ sáng lên!", "Đi tiếp đi, Thiên Cơ Đại Trận cần ngươi."], "reward": { "stone": 900 } },
     { "id": "c3.05", "title": "Lên Tụ Tinh tầng 5", "goal": { "type": "level", "lv": 25 }, "reward": { "gift": "gear:canh", "stone": 900 } },
     { "id": "c3.06", "title": "Mặc cánh", "goal": { "type": "wear", "slot": "canh" }, "reward": { "exp_lv": 0.5 } },
@@ -95,11 +95,11 @@
    "name": "Chương 4 · Hóa Nguyệt",
    "steps": [
     { "id": "c4.01", "title": "Kỹ năng tuyệt chiêu", "goal": { "type": "skill", "which": "sin" }, "tip": "Xếp kỹ năng vừa nhận vào ô.", "reward": { "exp_lv": 0.5 } },
-    { "id": "c4.02", "title": "Vùng Băng tuyết", "goal": { "type": "kill", "zone": "realm", "count": 50 }, "reward": { "exp_lv": 1, "gold": 1200 } },
+    { "id": "c4.02", "title": "Vùng Băng tuyết", "goal": { "type": "kill", "zone": "trang", "count": 50 }, "reward": { "exp_lv": 1, "gold": 1200 } },
     { "id": "c4.03", "title": "Trận nhãn Thương Hải", "goal": { "type": "station", "id": "trang" }, "say": ["Trận nhãn Thương Hải sáng lên!", "Từ đây có boss. Hạ boss có cơ hội lĩnh ngộ kỹ năng."], "reward": { "stone": 1100 } },
     { "id": "c4.04", "title": "Lên Hóa Nguyệt tầng 5", "goal": { "type": "level", "lv": 35 }, "reward": { "gift": "gear:linh-thu", "stone": 1100 } },
     { "id": "c4.05", "title": "Linh thú hộ thân", "goal": { "type": "wear", "slot": "linh-thu" }, "reward": { "exp_lv": 0.5 } },
-    { "id": "c4.06", "title": "Hạ boss", "goal": { "type": "kill", "zone": "realm", "rank": "boss", "count": 1 }, "tip": "Boss ở rìa ngoài vùng. Mang đủ đan!", "reward": { "exp_lv": 1.2, "stone": 1500 } },
+    { "id": "c4.06", "title": "Hạ boss Băng tuyết", "goal": { "type": "kill", "zone": "trang", "rank": "boss", "count": 1 }, "tip": "Boss ở rìa ngoài vùng. Mang đủ đan!", "reward": { "exp_lv": 1.2, "stone": 1500 } },
     { "id": "c4.07", "title": "Lên Hóa Nguyệt tầng 10", "goal": { "type": "level", "lv": 40 }, "reward": { "items": [["item.dan.hoa-than.001", 1]], "stone": 1200 } },
     { "id": "c4.08", "title": "Đột phá Phá Nhật", "goal": { "type": "level", "lv": 41 }, "reward": { "gift": "pb", "exp_lv": 0.5 } }
    ]
@@ -110,11 +110,11 @@
     { "id": "c5.01", "title": "Pháp bảo nhận chủ", "goal": { "type": "pb" }, "tip": "Kho → Pháp Bảo → Đeo, rồi xếp kỹ năng Pháp Bảo vào ô.", "reward": { "exp_lv": 0.5 } },
     { "id": "c5.02", "title": "Hỏi Luyện khí sư", "goal": { "type": "talk", "npc": "luyen-khi-su" },
       "say": ["Pháp bảo cũng thức tỉnh dòng được như trang bị.", "Ôn dưỡng pháp bảo lên cấp thì bắn mạnh hơn.", "Sắp tới còn khảm ngọc — đồ càng tốt càng có giá."], "reward": { "stone": 1500 } },
-    { "id": "c5.03", "title": "Vùng Hắc thổ", "goal": { "type": "kill", "zone": "realm", "count": 60 }, "reward": { "exp_lv": 1, "gold": 1500 } },
+    { "id": "c5.03", "title": "Vùng Hắc thổ", "goal": { "type": "kill", "zone": "than", "count": 60 }, "reward": { "exp_lv": 1, "gold": 1500 } },
     { "id": "c5.04", "title": "Trận nhãn Xích Diệm", "goal": { "type": "station", "id": "than" }, "say": ["Trận nhãn Xích Diệm sáng lên!", "Âm Hư xuất thế theo giờ. Đủ mạnh hẵng tới gần."], "reward": { "stone": 1500 } },
     { "id": "c5.05", "title": "Lên Phá Nhật tầng 5", "goal": { "type": "level", "lv": 45 }, "reward": { "gift": "gear:phap-tuong", "stone": 1500 } },
     { "id": "c5.06", "title": "Pháp tướng", "goal": { "type": "wear", "slot": "phap-tuong" }, "reward": { "exp_lv": 0.5 } },
-    { "id": "c5.07", "title": "Hạ tinh anh vùng than", "goal": { "type": "kill", "zone": "realm", "rank": "elite", "count": 5 }, "reward": { "exp_lv": 1, "stone": 1500 } },
+    { "id": "c5.07", "title": "Hạ tinh anh Hắc thổ", "goal": { "type": "kill", "zone": "than", "rank": "elite", "count": 5 }, "reward": { "exp_lv": 1, "stone": 1500 } },
     { "id": "c5.08", "title": "Lên Phá Nhật tầng 10", "goal": { "type": "level", "lv": 50 }, "reward": { "items": [["item.dan.anh-bien.001", 1]], "stone": 1500 } },
     { "id": "c5.09", "title": "Đột phá Hợp Đạo", "goal": { "type": "level", "lv": 51 }, "reward": { "exp_lv": 0.5, "stone": 2000 } }
    ]
@@ -126,9 +126,9 @@
       "reward": { "exp_lv": 1, "stone": 3000, "gold": 3000 } },
     { "id": "c6.02", "title": "Báo Chưởng giáo", "goal": { "type": "talk", "npc": "chuong-giao" },
       "say": ["Đạo Tâm của ngươi đã viên mãn! Pháp bảo bắn liên thanh không nghỉ rồi đó.", "Bộ này là quà Thiên Đạo tặng. Muốn mạnh hơn: thức tỉnh dòng Đen, ôn dưỡng pháp bảo.", "Đi tiếp tới Hợp Đạo tầng 10 nhé."], "reward": { "stone": 2000 } },
-    { "id": "c6.03", "title": "Vùng Hắc thạch", "goal": { "type": "kill", "zone": "realm", "count": 80 }, "reward": { "exp_lv": 1, "gold": 2000 } },
+    { "id": "c6.03", "title": "Vùng Hắc thạch", "goal": { "type": "kill", "zone": "den", "count": 80 }, "reward": { "exp_lv": 1, "gold": 2000 } },
     { "id": "c6.04", "title": "Trận nhãn U Minh", "goal": { "type": "station", "id": "den" }, "say": ["Trận nhãn U Minh sáng lên!", "Ngoài kia là Tử vực và Hư Vô — đất của kẻ mạnh nhất."], "reward": { "stone": 2500 } },
-    { "id": "c6.05", "title": "Hạ boss Hắc thạch", "goal": { "type": "kill", "zone": "realm", "rank": "boss", "count": 1 }, "reward": { "exp_lv": 1.5, "stone": 3000 } },
+    { "id": "c6.05", "title": "Hạ boss Hắc thạch", "goal": { "type": "kill", "zone": "den", "rank": "boss", "count": 1 }, "reward": { "exp_lv": 1.5, "stone": 3000 } },
     { "id": "c6.06", "title": "Hợp Đạo tầng 10", "goal": { "type": "level", "lv": 60 }, "reward": { "stone": 5000, "gold": 5000 } },
     { "id": "c6.07", "title": "Đỉnh Thiên Đạo", "goal": { "type": "talk", "npc": "chuong-giao" },
       "say": ["Ngươi đã chạm đỉnh Thiên Đạo — không còn cảnh giới nào cao hơn.", "Từ nay sức mạnh nằm ở trang bị: dòng Đen, pháp bảo, ngọc khảm.", "Bí Cảnh, boss, Âm Hư đang chờ. Chúc đạo hữu tiên lộ thuận lợi!"], "reward": { "stone": 5000 } }

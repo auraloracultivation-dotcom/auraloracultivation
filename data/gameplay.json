@@ -2398,5 +2398,13 @@
    "vd_hau": 338766,
    "am_hu": 677532
   }
+ },
+ "gear_base": {
+  "_note": "Mỗi món ngũ hành đang mặc (8 ô) cho sẵn % chỉ số gốc theo cảnh giới — kể cả chưa thức tỉnh. Quái tính theo 'trang bị chuẩn' (tools/gen_thien_dao.py gear_e ≈ +87% ở cấp 33); thiếu phần này thì người chơi đồ Đạo Tâm mới nhận chỉ chịu ~5 đòn (chơi thử 24/10/2026). Đủ 8 món = +64%, thức tỉnh cộng thêm.",
+  "pct": {
+   "hp": 8,
+   "def": 8,
+   "linh": 8
+  }
  }
 }

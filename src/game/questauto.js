@@ -6,8 +6,8 @@
 // Kéo cần điều khiển hoặc bấm Tự farm = tắt Tự làm nhiệm vụ.
 import { wrapDelta } from '../map/index.js';
 
-export function createQuestAuto({ game, navi, map, me, toast }) {
-  let on = false, t = 0, hereT = 0;
+export function createQuestAuto({ game, navi, map, me, toast, progress }) {
+  let on = false, t = 0, hereT = 0, still = 0, sx = 0, sy = 0, sk = ''; // still: giây đứng yên không tiến triển (lưới an toàn)
   const dt = () => game.daotam;
   const far = (p) => Math.hypot(wrapDelta(p.x - me.x, map.width), wrapDelta(p.y - me.y, map.height));
 
@@ -25,6 +25,10 @@ export function createQuestAuto({ game, navi, map, me, toast }) {
     if (game.dead || D.talking()) return;
     if (D.done()) { toast('Đã hoàn thành Con đường Đạo Tâm!', 3000); return set(false, true); }
     const pl = D.place();
+    // Lưới an toàn: 20 giây không đi được 30 px và nhiệm vụ không nhích → bỏ hết, dò đường mới (mọi kiểu kẹt chưa lường trước)
+    const k = JSON.stringify([D.progress(), progress?.state?.exp]);
+    if (pl && Math.hypot(me.x - sx, me.y - sy) < 30 && k === sk) still += 0.5; else { still = 0; sx = me.x; sy = me.y; sk = k; }
+    if (still >= 20) { still = 0; game.setAuto(null); navi.cancel(); navi.go(pl, true); return; }
     if (!pl) { // làm tại chỗ
       if (game.autoMode() === 'quest') game.setAuto(null);
       if (hereT <= 0) { hereT = 1.6; D.doHere(); }
@@ -32,8 +36,9 @@ export function createQuestAuto({ game, navi, map, me, toast }) {
     }
     if (navi.traveling()) return;
     if (pl.point) { if (far(pl.point) > 60) navi.go(pl); return; } // tới nơi: hội thoại tự mở (daotam.tick)
-    const inZone = map.typeAt(me.x, me.y).zone === pl.zone;
-    if (inZone && game.autoMode() === 'quest') return; // đang farm đúng vùng
+    const z = map.typeAt(me.x, me.y).zone; // đường đất / bờ sông giữa vùng: zone rỗng — vẫn tính là đang ở vùng, không đi lại
+    if (game.autoMode() === 'quest' && game.autoHungry() > 8) { navi.go(pl, true); return; } // đứng 8 giây không có quái: sang chỗ khác trong vùng
+    if (game.autoMode() === 'quest' && (z === pl.zone || !z) && !map.safeAt(me.x, me.y)) return; // đang farm đúng vùng
     navi.go(pl); // tới nơi navi tự bật farm theo nhiệm vụ
   }
   return { tick, toggle: () => set(!on), stop: () => set(false), on: () => on };

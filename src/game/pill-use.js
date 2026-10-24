@@ -51,5 +51,11 @@ export function createPillUse(c) {
       toast(`Đột phá thất bại — thiên kiếp phản phệ: mất ${pill.name} và ${lost.toLocaleString('vi')} tu vi`, 3500); }
     progress.changed();
   }
-  return { usePill, breakthrough };
+  // Đan cần cho lần đột phá đại cảnh giới kế tiếp (null = không cần / chưa tới đỉnh) — Đạo Tâm dùng để bù đan khi đột phá thất bại
+  function breakthroughPill() {
+    const next = progress.nextStageDef(), rid = next && gp.major_realm_first_stage[next.id];
+    if (!rid || !progress.atPeak()) return null;
+    return realms.realms.find((r) => r.id === rid)?.breakthrough?.pill || null;
+  }
+  return { usePill, breakthrough, breakthroughPill };
 }

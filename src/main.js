@@ -229,7 +229,7 @@ async function boot() {
     onTreasure: () => game?.skill('phap-bao'), // nút Pháp Bảo: dùng pháp bảo đang đeo
     onCards: () => openBag('than-phu'), // nút Thần Phù: gắn phù (Thần Phù là bị động, đổi cách đạn bay)
     onShop: () => game?.openShop(),
-    onTrack: (id) => (id === 'dt' && !game.daotam.place() ? game.daotam.doHere() : navi?.start(id)), // chạm dòng nhiệm vụ → dẫn đường (Đạo Tâm làm tại chỗ: làm luôn)
+    onTrack: (id) => (id === 'dt' ? (qauto?.on() || qauto?.toggle()) : navi?.start(id)), // chạm dòng Đạo Tâm → bật Tự làm nhiệm vụ (đi thật, làm thật); dòng khác → dẫn đường
     ...hudActions({ game: () => game, S, attack, usePhapTuong, flight: () => flight, toast }), // nút đánh, ô kỹ năng, Tự động, 2 ô đan
   });
   hud.setOnline(onlineN, maxPlayers);
@@ -244,7 +244,7 @@ async function boot() {
     onToaHoa: (sum) => showToaHoa({ name: me.name, ...sum, onRebirth: rebirth }) }); // thọ nguyên tận → chết hẳn
   me.onAutoSwing = swing;
   navi = createNavi({ map, me, game, flight, toast }); // dẫn đường tới nơi làm nhiệm vụ
-  const qauto = createQuestAuto({ game, navi, map, me, toast }); game.toggleQuestAuto = qauto.toggle; // Tự làm nhiệm vụ
+  const qauto = createQuestAuto({ game, navi, map, me, toast, progress: game.progress }); game.toggleQuestAuto = qauto.toggle; game.setQuestAuto(qauto); // Tự làm nhiệm vụ
   game.setGo((id) => navi.start(id)); // nút "Đi tới" trong bảng Nhiệm vụ đầy đủ
   pills = createQuickPill({ game: () => game, hud, pick: showSlotPicker, iconUrl, toast }); // 2 ô đan dùng nhanh
   stations = createStations({ map, me, net, game, toast, onMoved: (x, y) => { me.flying = false; hud.setToggle('bay', 0); zone.sendMove(x, y, false, false); } }); // trận nhãn + truyền tống
@@ -377,6 +377,7 @@ async function boot() {
     window.__tp = (x, y) => { me.x = map.wrapX(x); me.y = map.wrapY(y); };
     window.__me = () => ({ x: me.x, y: me.y });
     window.__game = game; // kiểm thử tự động
+    window.__step = (n, dt = 1 / 30) => { for (let i = 0; i < n; i++) update(dt); }; // chạy nhanh logic (chơi thử tự động)
   }
 
   addEventListener('pagehide', () => saver.flush());
