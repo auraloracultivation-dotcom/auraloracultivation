@@ -235,7 +235,7 @@ async function boot() {
     onCards: () => openBag('than-phu'), // nút Thần Phù: gắn phù (Thần Phù là bị động, đổi cách đạn bay)
     onShop: () => game?.openShop(),
     onTrack: (id) => (id === 'dt' ? (qauto?.on() || qauto?.toggle()) : navi?.start(id)), // chạm dòng Đạo Tâm → bật Tự làm nhiệm vụ (đi thật, làm thật); dòng khác → dẫn đường
-    ...hudActions({ game: () => game, S, attack, usePhapTuong, flight: () => flight, toast }), // nút đánh, ô kỹ năng, Tự động, 2 ô đan
+    ...hudActions({ game: () => game, S, attack, usePhapTuong, flight: () => flight, toast, dashDir: () => (input.stick?.x || input.stick?.y ? { x: input.stick.x, y: input.stick.y } : null) }), // nút đánh, ô kỹ năng, Tự động, 2 ô đan
   });
   hud.setOnline(onlineN, maxPlayers);
   const flight = createFlight({ me, map, hud, pt, toast, radius: config.player.radius_px, cfg: config.player, sendMove: (fl) => zone.sendMove(me.x, me.y, me.moving, fl) });

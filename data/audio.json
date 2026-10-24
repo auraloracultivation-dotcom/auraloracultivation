@@ -335,16 +335,7 @@
       "Thời": "sfx.he.thien"
     },
     "by_id": {
-      "luot": "sfx.luot",
-      "loi-kich": "sfx.he.thien",
-      "thien-kiep": "sfx.he.thien",
-      "cam-che": "sfx.he.am",
-      "linh-thu": "sfx.he.moc",
-      "dan-duoc": "sfx.thuc-tinh",
-      "nguyen-anh": "sfx.phap-bao",
-      "nguyen-than": "sfx.phap-bao",
-      "thuan-di": "sfx.luot",
-      "phong-an": "sfx.he.am"
+      "dan-duoc": "sfx.thuc-tinh"
     },
     "default": "sfx.phap-bao"
   },

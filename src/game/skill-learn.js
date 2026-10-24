@@ -8,6 +8,15 @@ export function createSkillLearn({ S, cfg, progress, toast, play }) {
   const isDrop = (id) => !!S[id] && !id.startsWith('_') && S[id].name && !free.has(id);
   const list = () => (progress.state.learned ||= []);
   const learned = (id) => !isDrop(id) || list().includes(id);
+  { // Chủ dự án 25/10/2026: chỉ còn 24 kỹ năng — kỹ năng đã lĩnh ngộ mà bị bỏ đổi thành kỹ năng còn lại chưa có (không phạt người chơi)
+    const gone = list().filter((id) => !S[id]);
+    if (gone.length) {
+      progress.state.learned = list().filter((id) => S[id]);
+      const pool = S._order.filter((id) => isDrop(id) && !S[id].thien && !list().includes(id));
+      for (let i = 0; i < gone.length && pool.length; i++) list().push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
+      progress.changed();
+    }
+  }
   // Bản cũ: giữ kỹ năng đã mở theo cảnh giới và kỹ năng đang xếp trong ô (không phạt người chơi cũ)
   if (!progress.state.learnInit && !(progress.state.stage > 0 || progress.state.exp > 0)) progress.state.learnInit = true; // nhân vật mới: không có gì để giữ
   if (!progress.state.learnInit) {

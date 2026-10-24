@@ -15,10 +15,6 @@ export function createSkillBar({ learn, hud, S, gp, progress, pt, cds, slotItem,
     if (!s) return { off: 'ô trống — chạm để chọn kỹ năng', art: null, cd: [0, 1] };
     const locked = s.unlock && progress.stageIndex(s.unlock) > progress.state.stage;
     const lockMsg = !learn.learned(id) ? 'chưa lĩnh ngộ — chỉ rơi khi hạ boss' : locked ? `mở ở ${stageName(s.unlock)}` : null;
-    if (id === 'linh-thu') {
-      const pet = slotItem('linh-thu');
-      return { off: lockMsg || (pet ? null : 'chưa đeo thú hồn (Kho → Pháp khí)'), art: !locked && pet ? pet.thumb : null, cd: [(cds[id] || 0) - now, s.cd_s] };
-    }
     if (id === 'phap-tuong') {
       const av = slotItem('phap-tuong');
       return { off: av ? null : 'chưa đeo pháp tướng (Kho → Pháp khí)', art: av?.thumb || null, cd: [pt.cdLeft, pt.cdTotal], active: pt.active };
@@ -41,7 +37,7 @@ export function createSkillBar({ learn, hud, S, gp, progress, pt, cds, slotItem,
     if (s.icon_url) return s.icon_url;
     if (s.icon) return fxIcon(...s.icon);
     if (id === 'dan-duoc') return icon(HEAL_PILL);
-    if (id === 'linh-thu' || id === 'phap-tuong') return slotItem(id)?.thumb || null;
+    if (id === 'phap-tuong') return slotItem(id)?.thumb || null;
     return null;
   }
 

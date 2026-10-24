@@ -165,139 +165,6 @@
    "_ghi_chu": "Chủ dự án 23/10 11:50 vẽ lại (tools/tran_son_sheet.py): ấn núi mọc lên → giáng nổ đá → đất nứt, khói tan (17 khung)."
   },
   {
-   "id": "pb.loi-linh-chau",
-   "name": "Lôi Linh Châu",
-   "he": "Kim",
-   "kind": "storm",
-   "mp": 28,
-   "cd_s": 16,
-   "mul": 1.4,
-   "n": 16,
-   "s": 4,
-   "r": 200,
-   "fx": "k.pb-loi-chau",
-   "h": 60,
-   "icon": [
-    "v.loi-tru",
-    2
-   ],
-   "desc": "Lôi bạo {s} giây: {n} tia sét đánh quái quanh mình",
-   "cast_fx": "k.pb-loi-chau"
-  },
-  {
-   "id": "pb.ho-than-chung",
-   "name": "Hộ Thân Chung",
-   "he": "Thổ",
-   "kind": "shield",
-   "mp": 20,
-   "cd_s": 24,
-   "def_mul": 2.5,
-   "s": 6,
-   "r": 60,
-   "stun": 1,
-   "fx": "k.pb-ho-than",
-   "h": 60,
-   "icon": [
-    "v.ho-the",
-    1
-   ],
-   "desc": "Chuông hộ thân: phòng thủ ×{def_mul} trong {s} giây, chấn choáng quái quanh mình",
-   "cast_fx": "k.pb-ho-than"
-  },
-  {
-   "id": "pb.huyen-bang-kinh",
-   "name": "Huyền Băng Kính",
-   "he": "Thủy",
-   "kind": "nova",
-   "mp": 26,
-   "cd_s": 16,
-   "mul": 1.1,
-   "r": 110,
-   "stun": 2.5,
-   "fx": "v.no-bang",
-   "h": 70,
-   "icon": [
-    "v.no-bang",
-    1
-   ],
-   "desc": "Gương băng chiếu sáng: quái trong bán kính {r} bị đóng băng {stun} giây",
-   "cast_fx": "k.pb-huyen-bang"
-  },
-  {
-   "id": "pb.phe-hon-co-dang",
-   "name": "Phệ Hồn Cổ Đăng",
-   "he": "Ám",
-   "kind": "aura",
-   "mp": 24,
-   "cd_s": 18,
-   "mul": 0.35,
-   "r": 70,
-   "s": 8,
-   "heal": 0.002,
-   "icon": [
-    "v.dan-am",
-    0
-   ],
-   "desc": "Đèn cổ thắp {s} giây: liên tục rút hồn quái quanh mình, mỗi con trúng hồi máu",
-   "cast_fx": "k.pb-co-dang"
-  },
-  {
-   "id": "pb.thien-la-vong",
-   "name": "Thiên La Võng",
-   "he": "Mộc",
-   "kind": "net",
-   "mp": 22,
-   "cd_s": 14,
-   "mul": 0.8,
-   "r": 120,
-   "stun": 2,
-   "fx": "moc-troi",
-   "icon": [
-    "moc-troi",
-    2
-   ],
-   "desc": "Tung lưới trời: kéo mọi quái trong {r} về một chỗ, trói {stun} giây",
-   "cast_fx": "k.pb-thien-la"
-  },
-  {
-   "id": "pb.cuu-tieu-loi-thap",
-   "name": "Cửu Tiêu Lôi Tháp",
-   "he": "Kim",
-   "kind": "tower",
-   "mp": 30,
-   "cd_s": 22,
-   "mul": 0.6,
-   "r": 190,
-   "s": 10,
-   "every": 0.4,
-   "fx": "v.loi-tru",
-   "h": 56,
-   "icon": [
-    "v.loi-tru",
-    1
-   ],
-   "desc": "Dựng lôi tháp {s} giây: cứ 0,4 giây giáng sét xuống quái trong {r}",
-   "cast_fx": "k.pb-loi-thap"
-  },
-  {
-   "id": "pb.pha-khong-thoa",
-   "name": "Phá Không Thoa",
-   "he": "Ám",
-   "kind": "shuttle",
-   "mp": 20,
-   "cd_s": 9,
-   "mul": 1.0,
-   "n": 3,
-   "fx": "v.dan-am",
-   "size": 22,
-   "icon": [
-    "v.dan-am",
-    0
-   ],
-   "desc": "Phóng {n} thoa xé không: xuyên mọi quái, nảy qua lại 8 lần",
-   "cast_fx": "k.pb-pha-khong"
-  },
-  {
    "id": "pb.dai-nhat-kim-luan",
    "name": "Đại Nhật Kim Luân",
    "he": "Quang",
@@ -495,5 +362,15 @@
  ],
  "bind_fx": "k.nhan-chu",
  "_ghi_chu_phan_ra": "Chủ dự án 23/10 20:36: phân rã chỉ giữ lại 1/4 số LT đã đầu tư (thức tỉnh + ôn dưỡng). Cũ 0.4.",
- "_ghi_chu_thien": "Chủ dự án 24/10: 6 pháp bảo Thiên hệ (thien: true) — không ra từ Phôi Pháp Bảo, chỉ từ phó bản Thiên Cơ Bí Cảnh. kind rewind: hồi máu + làm mới hồi chiêu. Chủ dự án 24/10 01h: hình mới (5 tấm pháp bảo, Hư tạm) + chiêu mới mạnh hơn bộ cũ — kind t_* ở src/game/treasure-thien.js, hình tools/thien_phap_bao.py."
+ "_ghi_chu_thien": "Chủ dự án 24/10: 6 pháp bảo Thiên hệ (thien: true) — không ra từ Phôi Pháp Bảo, chỉ từ phó bản Thiên Cơ Bí Cảnh. kind rewind: hồi máu + làm mới hồi chiêu. Chủ dự án 24/10 01h: hình mới (5 tấm pháp bảo, Hư tạm) + chiêu mới mạnh hơn bộ cũ — kind t_* ở src/game/treasure-thien.js, hình tools/thien_phap_bao.py.",
+ "migrate_25_10": {
+  "_ghi_chu": "Chủ dự án 25/10/2026: chỉ giữ 12 pháp bảo (1 mỗi hệ). Pháp bảo đã bỏ đổi sang pháp bảo cùng hệ, giữ nguyên cấp ôn dưỡng + thức tỉnh (src/game/treasure.js).",
+  "pb.loi-linh-chau": "pb.phi-kiem",
+  "pb.cuu-tieu-loi-thap": "pb.phi-kiem",
+  "pb.ho-than-chung": "pb.tran-son-an",
+  "pb.huyen-bang-kinh": "pb.thuong-hai-chau",
+  "pb.phe-hon-co-dang": "pb.hon-phien",
+  "pb.pha-khong-thoa": "pb.hon-phien",
+  "pb.thien-la-vong": "pb.thanh-moc-dinh"
+ }
 }

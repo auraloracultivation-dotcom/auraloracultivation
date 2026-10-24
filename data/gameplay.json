@@ -1088,49 +1088,6 @@
   }
  },
  "skills": {
-  "kiem-khi": {
-   "unlock": "tc_so",
-   "mp": 12,
-   "cd_s": 3,
-   "mul": 1.8,
-   "range_px": 170,
-   "speed_px_per_s": 420,
-   "name": "Kiếm Khí",
-   "icon": [
-    "kiem-bang-bay",
-    0
-   ],
-   "desc": "Phóng kiếm khí bay thẳng tới mục tiêu",
-   "he": "Kim",
-   "medal": "assets/ui/skills/m/kiem-khi.png",
-   "icon_url": "assets/ui/skills/kiem-khi.png"
-  },
-  "khong-che": {
-   "unlock": "tc_so",
-   "mp": 10,
-   "cd_s": 10,
-   "stun_s": 2,
-   "range_px": 120,
-   "name": "Khống Chế",
-   "icon": [
-    "moc-troi",
-    2
-   ],
-   "desc": "Rễ cây trói mục tiêu, choáng {stun_s} giây",
-   "he": "Mộc",
-   "medal": "assets/ui/skills/m/khong-che.png",
-   "icon_url": "assets/ui/skills/khong-che.png"
-  },
-  "linh-thu": {
-   "unlock": "kd_so",
-   "mp": 25,
-   "cd_s": 40,
-   "last_s": 30,
-   "mul": 0.35,
-   "every_s": 1,
-   "name": "Thú Hồn",
-   "desc": "Gọi thú hồn đang đeo ra đánh cùng trong {last_s} giây"
-  },
   "luot": {
    "unlock": "kd_so",
    "mp": 8,
@@ -1141,22 +1098,10 @@
    "name": "Lăng Ba Vi Bộ",
    "icon_url": "assets/ui/skills/luot.png",
    "desc": "Lướt nhanh, né tránh ×{ne_mul} trong {last_s} giây",
-   "medal": "assets/ui/skills/m/luot.png"
-  },
-  "nguyen-anh": {
-   "unlock": "na_so",
-   "mp": 30,
-   "cd_s": 8,
-   "mul": 1.4,
-   "radius_px": 85,
-   "name": "Hóa Nguyệt Chấn",
-   "icon": [
-    "k.bao-tho",
-    4
-   ],
-   "desc": "Đánh mọi quái quanh mình (bán kính {radius_px})",
-   "medal": "assets/ui/skills/m/nguyen-anh.png",
-   "icon_url": "assets/ui/skills/nguyen-anh.png"
+   "medal": "assets/ui/skills/m/luot.png",
+   "_ghi_chu": "Nút Lướt cạnh nút Bay (chủ dự án 25/10/2026): lướt nhanh về phía trước + né cao trong last_s giây. Không xếp vào ô kỹ năng.",
+   "dash_px": 70,
+   "dash_s": 0.16
   },
   "phap-tuong": {
    "atk_mul": 1.6,
@@ -1177,21 +1122,21 @@
    },
    "skill.chieu.kiem-khi.001": {
     "kind": "skill",
-    "skill": "kiem-khi",
+    "skill": "skill",
     "per": 0.1,
-    "text": "Kiếm khí mạnh hơn {v}%"
+    "text": "Mọi kỹ năng mạnh hơn {v}%"
    },
    "skill.khe.linh-thu.001": {
     "kind": "skill",
-    "skill": "linh-thu",
+    "skill": "skill",
     "per": 0.1,
-    "text": "Thú hồn đánh mạnh hơn {v}%"
+    "text": "Mọi kỹ năng mạnh hơn {v}%"
    },
    "skill.than.canh-phong.001": {
     "kind": "skill",
-    "skill": "nguyen-anh",
+    "skill": "skill",
     "per": 0.1,
-    "text": "Tấn công diện rộng mạnh hơn {v}%"
+    "text": "Mọi kỹ năng mạnh hơn {v}%"
    },
    "skill.phap-tuong.thien-thu.001": {
     "kind": "skill",
@@ -1307,25 +1252,6 @@
    "medal": "assets/ui/skills/m/phong-nhan.png",
    "icon_url": "assets/ui/skills/phong-nhan.png"
   },
-  "loi-kich": {
-   "name": "Cửu Thiên Lôi Kích",
-   "kind": "strike",
-   "unlock": "tc_hau",
-   "mp": 18,
-   "cd_s": 7,
-   "mul": 2.2,
-   "radius_px": 45,
-   "range_px": 260,
-   "fx": "v.loi-tru",
-   "fx_h": 70,
-   "icon": [
-    "v.loi-tru",
-    2
-   ],
-   "desc": "Sét trời đánh xuống mục tiêu và quái quanh nó",
-   "medal": "assets/ui/skills/m/loi-kich.png",
-   "icon_url": "assets/ui/skills/loi-kich.png"
-  },
   "dia-thu": {
    "name": "Địa Mạch Thứ",
    "kind": "strike",
@@ -1346,45 +1272,6 @@
    "he": "Thổ",
    "medal": "assets/ui/skills/m/dia-thu.png",
    "icon_url": "assets/ui/skills/dia-thu.png"
-  },
-  "thuy-long": {
-   "name": "Thủy Long Ba",
-   "kind": "area_self",
-   "unlock": "kd_hau",
-   "mp": 26,
-   "cd_s": 10,
-   "mul": 1.7,
-   "radius_px": 100,
-   "fx": "v.long-thuy",
-   "fx_h": 70,
-   "icon": [
-    "v.long-thuy",
-    0
-   ],
-   "desc": "Rồng nước cuộn quanh mình, đánh mọi quái trong {radius_px}",
-   "he": "Thủy",
-   "medal": "assets/ui/skills/m/thuy-long.png",
-   "icon_url": "assets/ui/skills/thuy-long.png"
-  },
-  "ho-the": {
-   "name": "Kim Cang Hộ Thể",
-   "kind": "buff",
-   "unlock": "na_trung",
-   "mp": 30,
-   "cd_s": 30,
-   "buff": "def",
-   "buff_mul": 1.6,
-   "last_s": 8,
-   "fx": "v.ho-the",
-   "fx_h": 40,
-   "icon": [
-    "v.ho-the",
-    1
-   ],
-   "desc": "Khiên thần hộ thể: phòng thủ ×{buff_mul} trong {last_s} giây",
-   "he": "Thổ",
-   "medal": "assets/ui/skills/m/ho-the.png",
-   "icon_url": "assets/ui/skills/ho-the.png"
   },
   "van-kiem": {
    "name": "Vạn Kiếm Quy Tông",
@@ -1454,37 +1341,16 @@
    "hoa-cau",
    "bang-tien",
    "moc-lien",
-   "kiem-khi",
-   "khong-che",
    "phong-nhan",
-   "loi-kich",
-   "linh-thu",
-   "luot",
    "dia-thu",
-   "thuy-long",
-   "canh-kim-tram",
    "u-minh-trao",
-   "phe-hon-diem",
-   "van-kiem-trieu",
-   "nguyen-anh",
-   "ho-the",
    "van-kiem",
    "hac-dong",
    "phuong-hoang",
-   "cam-che",
    "phap-bao",
-   "thien-ha",
    "bang-phong",
-   "phan-thien",
-   "hoa-long",
    "van-moc",
-   "kinh-cuc",
-   "thai-son",
    "dia-liet",
-   "thien-kiep",
-   "thuan-di",
-   "nguyen-than",
-   "phong-an",
    "phap-tuong",
    "dan-duoc",
    "thanh-quang-phan-quyet",
@@ -1505,10 +1371,10 @@
    "hoa-cau",
    "bang-tien",
    "phap-tuong",
-   "kiem-khi",
+   "phap-bao",
    "moc-lien",
    "dan-duoc",
-   "luot"
+   null
   ],
   "_ghi_chu_23_10": "Kỹ năng người chơi (chủ dự án 23/10): ô kỹ năng tự xếp — người chơi chọn kỹ năng nào vào ô 1.._slots. kind: bolt (đạn bay, pierce = xuyên, splash_px = nổ lan), strike (đánh tại mục tiêu, radius_px), area_self (quanh mình), heal, buff, toggle (pháp tướng), pill (đan). icon = [mã hiệu ứng, khung]. Hiệu ứng v.* cắt từ tấm chủ dự án (tools/fx_sheets.py). Số TẠM.",
   "phap-bao": {
@@ -1518,56 +1384,6 @@
    "mp": 20,
    "cd_s": 10,
    "desc": "Kích hoạt pháp bảo đang đeo (Kho → Pháp Bảo). Chiêu bắn đạn ăn theo Đạo Vận."
-  },
-  "cam-che": {
-   "name": "Bố Cấm Chế",
-   "kind": "trap",
-   "unlock": "lk5",
-   "mp": 18,
-   "cd_s": 6,
-   "range_px": 200,
-   "desc": "Đặt trận cấm chế theo hệ chủ đạo (tối đa 3 trận) — Kim kiếm, Ám hút hồn, Thủy giam, Hỏa thiêu, Mộc trói, Thổ chấn",
-   "icon_url": "assets/ui/skills/bo-cam-che.png",
-   "medal": "assets/ui/skills/m/cam-che.png"
-  },
-  "canh-kim-tram": {
-   "name": "Canh Kim Liệt Không Trảm",
-   "kind": "bolt",
-   "unlock": "tc_trung",
-   "mp": 20,
-   "cd_s": 6,
-   "mul": 2.2,
-   "pierce": true,
-   "range_px": 260,
-   "speed_px_per_s": 360,
-   "fx": "k.canh-kim-bay",
-   "fx_size": 44,
-   "hit_fx": "k.bao-kim",
-   "hit_h": 40,
-   "cast_fx": "k.canh-kim-tram",
-   "icon_url": "assets/ui/skills/canh-kim-tram.png",
-   "desc": "Chém ra vầng trăng kiếm khí khổng lồ xuyên qua mọi quái (Kim)",
-   "he": "Kim",
-   "medal": "assets/ui/skills/m/canh-kim-tram.png"
-  },
-  "van-kiem-trieu": {
-   "name": "Vạn Kiếm Triều Tông",
-   "kind": "volley",
-   "unlock": "kd_hau",
-   "mp": 40,
-   "cd_s": 12,
-   "mul": 1.1,
-   "n": 14,
-   "spread": 0.9,
-   "range_px": 300,
-   "speed_px_per_s": 460,
-   "fx": "v.dan-kim",
-   "fx_size": 22,
-   "cast_fx": "k.van-kiem-trieu",
-   "icon_url": "assets/ui/skills/van-kiem-trieu.png",
-   "desc": "Triệu {n} thanh kiếm từ đất bay xoè quạt về phía trước (Kim)",
-   "he": "Kim",
-   "medal": "assets/ui/skills/m/van-kiem-trieu.png"
   },
   "u-minh-trao": {
    "name": "U Minh Quỷ Trảo",
@@ -1585,40 +1401,6 @@
    "he": "Ám",
    "medal": "assets/ui/skills/m/u-minh-trao.png"
   },
-  "phe-hon-diem": {
-   "name": "Phệ Hồn Ma Diễm",
-   "kind": "strike",
-   "unlock": "kd_trung",
-   "mp": 26,
-   "cd_s": 8,
-   "mul": 2.0,
-   "radius_px": 55,
-   "range_px": 240,
-   "drain": 0.02,
-   "fx": "k.phe-hon-diem",
-   "fx_h": 70,
-   "icon_url": "assets/ui/skills/phe-hon-diem.png",
-   "desc": "Lửa tím thiêu quái quanh mục tiêu, mỗi con trúng hồi 2% khí huyết (Ám)",
-   "he": "Ám",
-   "medal": "assets/ui/skills/m/phe-hon-diem.png"
-  },
-  "thien-ha": {
-   "name": "Thiên Hà Đảo Quyển",
-   "kind": "wave",
-   "unlock": "kd_so",
-   "mp": 28,
-   "cd_s": 9,
-   "mul": 2.0,
-   "len": 200,
-   "w": 70,
-   "push": 30,
-   "fx": "k.thien-ha",
-   "fx_h": 60,
-   "desc": "Sóng lớn quét thẳng phía trước, đẩy lùi quái (Thủy)",
-   "icon_url": "assets/ui/skills/thien-ha.png",
-   "he": "Thủy",
-   "medal": "assets/ui/skills/m/thien-ha.png"
-  },
   "bang-phong": {
    "name": "Băng Phong Vạn Lý",
    "kind": "area_self",
@@ -1635,42 +1417,6 @@
    "he": "Thủy",
    "medal": "assets/ui/skills/m/bang-phong.png"
   },
-  "phan-thien": {
-   "name": "Phần Thiên Liệt Diễm",
-   "kind": "tornado",
-   "unlock": "tc_hau",
-   "mp": 24,
-   "cd_s": 10,
-   "mul": 0.7,
-   "radius_px": 34,
-   "speed": 70,
-   "last_s": 3,
-   "fx": "k.phan-thien",
-   "fx_h": 64,
-   "desc": "Lốc lửa đi về phía trước {last_s} giây, thiêu mọi quái nó đi qua (Hỏa)",
-   "icon_url": "assets/ui/skills/phan-thien.png",
-   "he": "Hỏa",
-   "medal": "assets/ui/skills/m/phan-thien.png"
-  },
-  "hoa-long": {
-   "name": "Hỏa Long Phệ Thiên",
-   "kind": "bolt",
-   "unlock": "kd_trung",
-   "mp": 30,
-   "cd_s": 9,
-   "mul": 2.6,
-   "pierce": true,
-   "range_px": 320,
-   "speed_px_per_s": 340,
-   "fx": "k.hoa-long-bay",
-   "fx_size": 34,
-   "hit_fx": "v.no-hoa",
-   "hit_h": 40,
-   "desc": "Rồng lửa lao thẳng, xuyên qua mọi quái (Hỏa)",
-   "icon_url": "assets/ui/skills/hoa-long.png",
-   "he": "Hỏa",
-   "medal": "assets/ui/skills/m/hoa-long.png"
-  },
   "van-moc": {
    "name": "Vạn Mộc Hồi Xuân",
    "kind": "heal",
@@ -1685,39 +1431,6 @@
    "icon_url": "assets/ui/skills/van-moc.png",
    "he": "Mộc",
    "medal": "assets/ui/skills/m/van-moc.png"
-  },
-  "kinh-cuc": {
-   "name": "Vạn Đằng Khốn Yêu",
-   "kind": "area_self",
-   "unlock": "kd_so",
-   "mp": 26,
-   "cd_s": 12,
-   "mul": 1.4,
-   "radius_px": 95,
-   "stun_s": 1.4,
-   "fx": "k.kinh-cuc",
-   "fx_h": 66,
-   "desc": "Gai mọc khắp quanh mình, trói quái {stun_s} giây (Mộc)",
-   "icon_url": "assets/ui/skills/kinh-cuc.png",
-   "he": "Mộc",
-   "medal": "assets/ui/skills/m/kinh-cuc.png"
-  },
-  "thai-son": {
-   "name": "Thái Sơn Áp Đỉnh",
-   "kind": "strike",
-   "unlock": "tc_hau",
-   "mp": 24,
-   "cd_s": 8,
-   "mul": 3.0,
-   "radius_px": 60,
-   "range_px": 240,
-   "stun_s": 1,
-   "fx": "k.thai-son",
-   "fx_h": 80,
-   "desc": "Núi đá giáng xuống mục tiêu, choáng {stun_s} giây (Thổ)",
-   "icon_url": "assets/ui/skills/thai-son.png",
-   "he": "Thổ",
-   "medal": "assets/ui/skills/m/thai-son.png"
   },
   "dia-liet": {
    "name": "Địa Liệt Thiên Băng",
@@ -1735,67 +1448,6 @@
    "icon_url": "assets/ui/skills/dia-liet.png",
    "he": "Thổ",
    "medal": "assets/ui/skills/m/dia-liet.png"
-  },
-  "thien-kiep": {
-   "name": "Thiên Kiếp Lôi Phạt",
-   "kind": "storm",
-   "unlock": "na_trung",
-   "mp": 40,
-   "cd_s": 18,
-   "mul": 1.8,
-   "radius_px": 190,
-   "last_s": 4,
-   "every": 0.25,
-   "fx": "k.thien-kiep",
-   "fx_h": 70,
-   "desc": "Sét trời đánh liên tục quanh mình {last_s} giây",
-   "icon_url": "assets/ui/skills/thien-kiep.png",
-   "medal": "assets/ui/skills/m/thien-kiep.png"
-  },
-  "thuan-di": {
-   "name": "Hư Không Thuấn Di",
-   "kind": "blink",
-   "unlock": "tc_so",
-   "mp": 14,
-   "cd_s": 7,
-   "mul": 1.8,
-   "range_px": 260,
-   "fx": "k.thuan-di",
-   "fx_h": 50,
-   "desc": "Dịch chuyển tức thời ra sau lưng mục tiêu và chém",
-   "icon_url": "assets/ui/skills/thuan-di.png",
-   "medal": "assets/ui/skills/m/thuan-di.png"
-  },
-  "nguyen-than": {
-   "name": "Nguyên Thần Xuất Khiếu",
-   "kind": "clone",
-   "unlock": "na_hau",
-   "mp": 45,
-   "cd_s": 30,
-   "mul": 0.9,
-   "last_s": 10,
-   "every": 0.45,
-   "fx": "k.nguyen-than",
-   "fx_h": 46,
-   "desc": "Phân thân nguyên thần đứng cạnh {last_s} giây, tự bắn đạn đạo pháp theo hệ",
-   "icon_url": "assets/ui/skills/nguyen-than.png",
-   "medal": "assets/ui/skills/m/nguyen-than.png"
-  },
-  "phong-an": {
-   "name": "Cấm Chế Phong Ấn",
-   "kind": "seal",
-   "unlock": "kd_hau",
-   "mp": 30,
-   "cd_s": 20,
-   "mul": 1.2,
-   "range_px": 220,
-   "stun_s": 3,
-   "seal_s": 8,
-   "fx": "k.phong-an",
-   "fx_h": 70,
-   "desc": "Khoá mục tiêu (cả tinh anh, boss): choáng {stun_s} giây, {seal_s} giây không vận chiêu",
-   "icon_url": "assets/ui/skills/phong-an.png",
-   "medal": "assets/ui/skills/m/phong-an.png"
   },
   "thanh-quang-phan-quyet": {
    "name": "Thánh Quang Phán Quyết",
@@ -2086,7 +1738,8 @@
    "thien_role": "phu",
    "medal": "assets/ui/skills/m/tue-nguyet-dinh-chi.png"
   },
-  "_ghi_chu_thien": "Chủ dự án 24/10: 12 kỹ năng Thiên hệ (thien: true) — không rơi từ boss, chỉ từ phó bản Thiên Cơ Bí Cảnh. charge_s/dim/shake: gồng, tối màn hình, rung (juice.js). Sinh bằng tools/thien_skills.py."
+  "_ghi_chu_thien": "Chủ dự án 24/10: 12 kỹ năng Thiên hệ (thien: true) — không rơi từ boss, chỉ từ phó bản Thiên Cơ Bí Cảnh. charge_s/dim/shake: gồng, tối màn hình, rung (juice.js). Sinh bằng tools/thien_skills.py.",
+  "_ghi_chu_25_10": "Chủ dự án 25/10/2026: chỉ giữ 24 kỹ năng (2 mỗi hệ × 12 hệ = hop_nhat.skill_sin + skill_cui) + kỹ năng Pháp Bảo (12 pháp bảo, 1 mỗi hệ). Pháp tướng, đan dược là ô tính năng; Lướt thành nút cạnh nút Bay (không còn là kỹ năng)."
  },
  "awaken": {
   "_ghi_chu": "Lab v3.2 — thức tỉnh TỪNG DÒNG: mỗi lần bấm thêm 1 dòng, màu (phẩm) của dòng bốc ngẫu nhiên theo tỷ lệ phẩm Lab (data/equipment/awaken.json → gearQ). Mỗi món có giới hạn dòng ẩn 1–10 (bốc lúc thức tỉnh lần đầu, KHÔNG báo trước); đủ giới hạn thì nút thức tỉnh tắt. Giá (Linh thạch) tăng theo số thứ tự dòng — số tạm.",
@@ -2304,17 +1957,15 @@
   "_ghi_chu": "Chủ dự án 23/10: kỹ năng chiến đấu chỉ có khi hạ boss (kể cả Âm Hư), tỷ lệ 0,5% mỗi lần lĩnh ngộ 1 kỹ năng chưa có. free = kỹ năng hệ thống mở theo cảnh giới (src/game/skill-learn.js). realm_gift = mỗi đại cảnh giới tặng sẵn 1 kỹ năng (mở khi đạt cảnh giới của kỹ năng đó, không cần rơi).",
   "chance": 0.005,
   "free": [
-   "linh-thu",
-   "luot",
    "phap-tuong",
    "dan-duoc",
    "phap-bao"
   ],
   "realm_gift": {
    "realm.luyen-khi": "hoa-cau",
-   "realm.truc-co": "kiem-khi",
-   "realm.ket-dan": "thien-ha",
-   "realm.nguyen-anh": "nguyen-anh",
+   "realm.truc-co": "phong-nhan",
+   "realm.ket-dan": "dia-thu",
+   "realm.nguyen-anh": "u-minh-trao",
    "realm.hoa-than": "hac-dong"
   }
  },
@@ -2457,23 +2108,14 @@
   "_ghi_chu": "Chủ dự án 25/10/2026: mỗi lần tung chiêu kèm một đòn đánh thường, cùng hướng chiêu bay. Kiểu đòn theo kind (hoặc id riêng); kind không có ở đây (heal, buff, blink…) thì không vung.",
   "by_kind": {
    "bolt": "choc",
-   "volley": "choc",
    "pull": "choc",
    "treasure": "choc",
    "strike": "chem",
    "wave": "chem",
-   "trap": "chem",
-   "seal": "chem",
    "area_self": "xoay",
-   "tornado": "xoay",
-   "storm": "xoay",
-   "clone": "xoay"
+   "tornado": "xoay"
   },
-  "by_id": {
-   "kiem-khi": "choc",
-   "khong-che": "choc",
-   "nguyen-anh": "xoay"
-  }
+  "by_id": {}
  },
  "fx_families": {
   "_ghi_chu": "Hệ thống hiệu ứng thống nhất (chủ dự án 25/10/2026). families: họ hiệu ứng = một tấm GPT nền đen (tools/fx_slash.py: thả assets/effects/_source/slash/<họ>-phong.png rồi chạy tool → s.<họ>.<hệ>), field: trường của chiêu được thay, h_field / h_mul: chỉnh cỡ. skills: chiêu → các họ. Họ chưa có tấm → chiêu giữ hình cũ, có tấm là tự thay. Đã có tấm: gai, no (+ chem, choc, xoay cho đánh thường). Chờ tấm: dan, cot, loc, song, nova, hoi, khien, tran, hodem, dichchuyen (lệnh GPT: Project → Kế hoạch đêm 25/10).",
@@ -2545,12 +2187,6 @@
    "dia-thu": [
     "gai"
    ],
-   "thai-son": [
-    "gai"
-   ],
-   "kinh-cuc": [
-    "gai"
-   ],
    "bang-phach-thien-nguc": [
     "gai"
    ],
@@ -2570,44 +2206,18 @@
     "dan",
     "no"
    ],
-   "hoa-long": [
-    "dan",
-    "no"
-   ],
-   "canh-kim-tram": [
-    "dan",
-    "no"
-   ],
    "loi-long-pha-khong": [
     "dan",
     "no"
    ],
-   "van-kiem-trieu": [
-    "dan"
-   ],
-   "loi-kich": [
-    "cot"
-   ],
    "thanh-quang-phan-quyet": [
-    "cot"
-   ],
-   "phe-hon-diem": [
     "cot"
    ],
    "thien-thu-nhat-thuan": [
     "cot"
    ],
-   "thien-kiep": [
-    "cot"
-   ],
-   "phan-thien": [
-    "loc"
-   ],
    "cuu-u-phong-bao": [
     "loc"
-   ],
-   "thien-ha": [
-    "song"
    ],
    "dia-liet": [
     "song"
@@ -2617,9 +2227,6 @@
    ],
    "tich-diet-tram": [
     "song"
-   ],
-   "thuy-long": [
-    "nova"
    ],
    "van-kiem": [
     "nova"
@@ -2639,14 +2246,8 @@
    "van-moc": [
     "hoi"
    ],
-   "ho-the": [
-    "khien"
-   ],
    "trieu-duong-ho-the": [
     "khien"
-   ],
-   "phong-an": [
-    "tran"
    ],
    "u-minh-trao": [
     "hodem"
@@ -2656,9 +2257,6 @@
    ],
    "hac-dong": [
     "hodem"
-   ],
-   "thuan-di": [
-    "dichchuyen"
    ],
    "tu-dien-bo": [
     "dichchuyen"

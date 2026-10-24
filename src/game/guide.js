@@ -1,13 +1,13 @@
 // CẨM NANG ĐẠO VẬN (chủ dự án 23/10/2026): nút nhỏ cạnh màn hình hiện bộ đang kích ("☯ Kim 4/8"), chạm mở bảng xem:
 // mỗi hệ cần mặc món nào ở ô nào (đang mặc / có trong Kho / chưa có), mốc 2/4/6/8 sáng khi đạt, kỹ năng cùng hệ,
-// trận cấm chế, nút "Mặc cả bộ"; thẻ Đang kích hoạt + Tổng quan (đếm số hiệu ứng kết hợp). Chỉ đọc data/, không đổi luật chơi.
+// nút "Mặc cả bộ"; thẻ Đang kích hoạt + Tổng quan (đếm số hiệu ứng kết hợp). Chỉ đọc data/, không đổi luật chơi.
 import { showSheet, escapeHtml as E, createBuildChip } from '../ui/index.js';
 import { iconUrl, fxIconUrl } from '../entity/index.js';
 
 const SLOT_ORDER = [['mat-na', 'Mặt nạ'], ['trang-phuc', 'Áo'], ['vu-khi', 'Vũ khí'], ['canh', 'Cánh'], ['phap-tuong', 'Pháp tướng'],
   ['nhan', 'Nhẫn'], ['day-chuyen', 'Dây chuyền'], ['linh-thu', 'Thú hồn']];
 
-// c: { dvDef, ccDef, pbDef, items (items.json), S (gp.skills), dv, cards, bag, progress, loadout, stageName, art(id), equip(id), toast }
+// c: { dvDef, pbDef, items (items.json), S (gp.skills), dv, cards, bag, progress, loadout, stageName, art(id), equip(id), toast }
 export function createGuide(c) {
   const { dvDef, S, dv, bag, progress } = c;
   const HE = dvDef.he_order;
@@ -41,7 +41,7 @@ export function createGuide(c) {
     const tiers = Object.entries(h.tiers).map(([t, v]) => `<div class="gd-tier ${n >= +t ? 'lit' : ''}" style="--c:${h.color}"><b>${t}/8</b><span>${E(v._mo_ta)}</span></div>`).join('');
     const skills = Object.entries(S).filter(([, s]) => s && s.he === he).map(([id, s]) =>
       `<div class="gd-skill ${skOk(id, s) ? '' : 'lock'}">${pic(skillIcon(s))}<span><b>${E(s.name)}</b>${s.thien ? '✦ Tiên khí · ' : ''}${!c.learn.learned(id) ? (s.thien ? 'Chưa có (Thiên Cơ Bí Cảnh)' : 'Chưa lĩnh ngộ (hạ thủ lĩnh / Âm Hư)') : stageOk(s.unlock) ? 'Đã có' : `Mở ở ${E(c.stageName(s.unlock))}`}</span></div>`).join('');
-    const cc = c.ccDef.he[he] || c.ccDef.he[dvDef.he[he]?.twin] || c.ccDef.he.Kim, pbs = c.pbDef.list.filter((d) => d.he === he);
+    const pbs = c.pbDef.list.filter((d) => d.he === he);
     return `<div class="row"><div class="row-h"><b style="color:${h.color}">${E(h.name)}</b><em>${h.twin ? '✦ Tiên khí · ' : ''}Hệ ${E(he)} · đang mặc ${n}/8</em></div>
       <p>Mặc càng nhiều món cùng hệ, chiêu càng biến đổi. Đủ 8 = Đại Thành.</p>${tiers}
       ${c.equip ? `<button type="button" class="bag-act sm" data-act="wear" data-arg="${E(he)}">Mặc cả bộ ${E(he)} (đồ + pháp bảo + phù + kỹ năng có sẵn)</button>` : ''}</div>
@@ -49,8 +49,7 @@ export function createGuide(c) {
       <div class="row"><b class="gd-h">Pháp khí cần mặc</b>${rows}<p class="gd-note">Phôi tự luyện mang hệ ${E(he)} (thức tỉnh rồi) cũng tính vào bộ.</p></div>
       <div class="row"><b class="gd-h">Kỹ năng hệ ${E(he)}</b><div class="gd-grid">${skills || '<span>—</span>'}</div>
       <p class="gd-note">Kỹ năng bắn đạn được bộ + Thần Phù nhân lên (bắn quạt, nảy, tách…).</p></div>
-      <div class="row"><b class="gd-h">Cùng hệ</b><p>Bố Cấm Chế khi mặc nhiều đồ ${E(he)} nhất${c.ccDef.he[he] ? '' : ` (dùng trận hệ ${E(dvDef.he[he]?.twin || 'Kim')})`}: <b>${E(cc.name)}</b> — ${E(cc.desc)}.</p>
-      ${pbs.length ? `<div class="gd-grid">${pbs.map((d) => `<div class="gd-skill">${pic(d.icon_url || iconUrl(d.id))}<span><b>${E(d.name)}</b>${d.thien ? '✦ Pháp bảo Tiên khí' : 'Pháp bảo'}</span></div>`).join('')}</div>` : ''}</div>`;
+      <div class="row"><b class="gd-h">Cùng hệ</b>      ${pbs.length ? `<div class="gd-grid">${pbs.map((d) => `<div class="gd-skill">${pic(d.icon_url || iconUrl(d.id))}<span><b>${E(d.name)}</b>${d.thien ? '✦ Pháp bảo Tiên khí' : 'Pháp bảo'}</span></div>`).join('')}</div>` : ''}</div>`;
   }
 
   function activeTab() {
@@ -72,17 +71,17 @@ export function createGuide(c) {
   function overviewTab() {
     const tiers = HE.reduce((a, h) => a + Object.keys(dvDef.he[h].tiers).length, 0);
     const heSkills = Object.values(S).filter((s) => s?.he).length, allSkills = S._order.filter((id) => S[id]).length;
-    const nCards = dvDef.cards.list.length, nPb = c.pbDef.list.length, nCc = Object.keys(c.ccDef.he).length;
+    const nCards = dvDef.cards.list.length, nPb = c.pbDef.list.length;
     // cách chia 8 ô thành các bộ đạt mốc (2/4/6/8) — mỗi cách là một kiểu build khác nhau
     const parts = []; (function go(left, max, cur) { if (!left) { parts.push(cur); return; } for (const p of [8, 6, 4, 2]) if (p <= Math.min(left, max)) go(left - p, p, [...cur, p]); })(8, 8, []);
     return `<div class="row"><b class="gd-h">Đang có trong game</b>
       <div class="gd-count"><b>${HE.length}</b><span>bộ (6 ngũ hành + 6 Thiên hệ)</span><b>${tiers}</b><span>mốc hiệu ứng bộ (2/4/6/8)</span>
-      <b>${nCards}</b><span>loại Thần Phù × 7 phẩm</span><b>${nPb}</b><span>pháp bảo</span><b>${nCc}</b><span>trận cấm chế</span>
+      <b>${nCards}</b><span>loại Thần Phù × 7 phẩm</span><b>${nPb}</b><span>pháp bảo</span>
       <b>${allSkills}</b><span>kỹ năng (${heSkills} theo hệ)</span></div></div>
       <div class="row"><b class="gd-h">Cách ghép 8 ô</b><p>${parts.map((p) => p.join(' + ')).join(' · ')} — ${parts.length} kiểu chia, mỗi phần chọn 1 trong ${HE.length} hệ.
       Ví dụ 4 Kim + 4 Hỏa: kiếm khí xoè quạt + đạn nổ + đất cháy cùng lúc.</p>
       <p>Cộng thêm ${C3(nCards)} cách chọn 3 Thần Phù, ${nPb} pháp bảo và 7 ô kỹ năng → hàng chục nghìn build khác nhau.</p></div>
-      <div class="row"><b class="gd-h">Mẹo</b><p>Hệ có nhiều món nhất quyết định màu đạn, trận cấm chế và kỹ năng "hợp bộ". Đồ 6 hệ rơi từ tinh anh, boss, Âm Hư và Huyết Sát Bí Cảnh.</p></div>`;
+      <div class="row"><b class="gd-h">Mẹo</b><p>Hệ có nhiều món nhất quyết định màu đạn và kỹ năng "hợp bộ". Đồ 6 hệ rơi từ tinh anh, boss, Âm Hư và Huyết Sát Bí Cảnh.</p></div>`;
   }
   const C3 = (n) => (n * (n - 1) * (n - 2)) / 6;
 
