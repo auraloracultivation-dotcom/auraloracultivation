@@ -2476,7 +2476,7 @@
   }
  },
  "fx_families": {
-  "_ghi_chu": "Hệ thống hiệu ứng thống nhất (chủ dự án 25/10/2026). families: họ hiệu ứng = một tấm GPT nền đen (tools/fx_slash.py, s.<họ>.<hệ>), field: trường của chiêu được thay, h_field / h_mul: chỉnh cỡ. skills: chiêu → các họ. Họ chưa có tấm → chiêu giữ hình cũ. Họ dự kiến (chờ tấm GPT, xem Project → Kế hoạch đêm 25/10): dan (đạn bay), no-to, cot (cột trời), loc, song, nova, hoi, khien, tran, hodem, dichchuyen, haoquang.",
+  "_ghi_chu": "Hệ thống hiệu ứng thống nhất (chủ dự án 25/10/2026). families: họ hiệu ứng = một tấm GPT nền đen (tools/fx_slash.py: thả assets/effects/_source/slash/<họ>-phong.png rồi chạy tool → s.<họ>.<hệ>), field: trường của chiêu được thay, h_field / h_mul: chỉnh cỡ. skills: chiêu → các họ. Họ chưa có tấm → chiêu giữ hình cũ, có tấm là tự thay. Đã có tấm: gai, no (+ chem, choc, xoay cho đánh thường). Chờ tấm: dan, cot, loc, song, nova, hoi, khien, tran, hodem, dichchuyen (lệnh GPT: Project → Kế hoạch đêm 25/10).",
   "default_he": "Kim",
   "families": {
    "gai": {
@@ -2489,6 +2489,56 @@
     "h_field": "hit_h",
     "h_mul": 1.35,
     "h": 40
+   },
+   "dan": {
+    "field": "fx",
+    "h_field": "fx_size",
+    "h_mul": 1.3
+   },
+   "cot": {
+    "field": "fx",
+    "h_field": "fx_h",
+    "h_mul": 1.2
+   },
+   "loc": {
+    "field": "fx",
+    "h_field": "fx_h",
+    "h_mul": 1.15
+   },
+   "song": {
+    "field": "fx",
+    "h_field": "fx_h",
+    "h_mul": 1.15
+   },
+   "nova": {
+    "field": "fx",
+    "h_field": "fx_h",
+    "h_mul": 1.2
+   },
+   "hoi": {
+    "field": "fx",
+    "h_field": "fx_h",
+    "h_mul": 1.2
+   },
+   "khien": {
+    "field": "fx",
+    "h_field": "fx_h",
+    "h_mul": 1.2
+   },
+   "tran": {
+    "field": "fx",
+    "h_field": "fx_h",
+    "h_mul": 1.1
+   },
+   "hodem": {
+    "field": "fx",
+    "h_field": "fx_h",
+    "h_mul": 1.1
+   },
+   "dichchuyen": {
+    "field": "fx",
+    "h_field": "fx_h",
+    "h_mul": 1.2
    }
   },
   "skills": {
@@ -2505,25 +2555,113 @@
     "gai"
    ],
    "hoa-cau": [
+    "dan",
     "no"
    ],
    "bang-tien": [
+    "dan",
     "no"
    ],
    "phong-nhan": [
+    "dan",
     "no"
    ],
    "phuong-hoang": [
+    "dan",
     "no"
    ],
    "hoa-long": [
+    "dan",
     "no"
    ],
    "canh-kim-tram": [
+    "dan",
     "no"
    ],
    "loi-long-pha-khong": [
+    "dan",
     "no"
+   ],
+   "van-kiem-trieu": [
+    "dan"
+   ],
+   "loi-kich": [
+    "cot"
+   ],
+   "thanh-quang-phan-quyet": [
+    "cot"
+   ],
+   "phe-hon-diem": [
+    "cot"
+   ],
+   "thien-thu-nhat-thuan": [
+    "cot"
+   ],
+   "thien-kiep": [
+    "cot"
+   ],
+   "phan-thien": [
+    "loc"
+   ],
+   "cuu-u-phong-bao": [
+    "loc"
+   ],
+   "thien-ha": [
+    "song"
+   ],
+   "dia-liet": [
+    "song"
+   ],
+   "thanh-phong-toai-anh": [
+    "song"
+   ],
+   "tich-diet-tram": [
+    "song"
+   ],
+   "thuy-long": [
+    "nova"
+   ],
+   "van-kiem": [
+    "nova"
+   ],
+   "bang-phong": [
+    "nova"
+   ],
+   "huyen-bang-lien-hoa": [
+    "nova"
+   ],
+   "tue-nguyet-dinh-chi": [
+    "nova"
+   ],
+   "moc-lien": [
+    "hoi"
+   ],
+   "van-moc": [
+    "hoi"
+   ],
+   "ho-the": [
+    "khien"
+   ],
+   "trieu-duong-ho-the": [
+    "khien"
+   ],
+   "phong-an": [
+    "tran"
+   ],
+   "u-minh-trao": [
+    "hodem"
+   ],
+   "hu-khong-thon-phe": [
+    "hodem"
+   ],
+   "hac-dong": [
+    "hodem"
+   ],
+   "thuan-di": [
+    "dichchuyen"
+   ],
+   "tu-dien-bo": [
+    "dichchuyen"
    ]
   }
  }
