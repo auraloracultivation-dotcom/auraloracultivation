@@ -124,7 +124,7 @@ async function boot() {
   function attack() { const k = game.attack(); if (k) swing(k); }
   function swing(kind) { // kind: chem | choc | xoay — combo đánh thường (src/game/combo.js, hình src/entity/moves.js)
     const mv = typeof kind === 'string' ? kind : 'chem';
-    if (me.look?.outfit || me.look?.weapon) rigAttack(me, mv); // nhân vật ghép lớp: đưa tay (và chém / chọc / xoay kiếm)
+    if (me.look?.outfit || me.look?.weapon) rigAttack(me, mv, me.atkGap); // nhân vật ghép lớp: đưa tay (và chém / chọc / xoay kiếm)
     audio.play(me.look?.weapon ? `sfx.kiem.${mv}` : 'sfx.danh.tay'); // tiếng đòn theo kiểu; tay không: đấm
     if (!me.look?.weapon) me.slashT = 0.22; // tay không: vẫn có vệt chém nhỏ
   }

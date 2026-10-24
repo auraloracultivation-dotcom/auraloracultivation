@@ -158,7 +158,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   }
   function attack() {
     if (dead || attackCd > 0) return false;
-    attackCd = stats.interval(ps);
+    attackCd = me.atkGap = stats.interval(ps); // nhịp đánh: hình đòn tự co cho kịp (src/entity/moves.js tempo)
     const m = target(PL.attack_range_px);
     if (!m && canFight()) { // không có quái trong tầm: đánh NPC đang nhắm / NPC tắt khiên gần nhất
       const n = (npcTarget && npcs.canFight(npcTarget) && npcs.dist(npcTarget, me) <= PL.attack_range_px) ? npcTarget : npcs.nearestFoe(me, PL.attack_range_px);
