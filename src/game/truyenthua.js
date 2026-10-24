@@ -2,6 +2,7 @@
 // vượt hết 10 đợt nhận 1 Mảnh Truyền Thừa. Đủ mảnh: Kho → chạm mảnh → "Ghép bộ Đạo Vận" → chọn hệ → nhận trọn bộ
 // 8 pháp khí + kỹ năng sịn + kỹ năng cùi + Thần Phù + pháp bảo của hệ đó (chưa thức tỉnh — vẫn phải cày thức tỉnh).
 // Ghép tốn Vàng (chỗ tiêu Vàng cho người chơi cuối game). Số ở items → item.nhiemvu.manh-truyen-thua.001 → combine.
+import { sound } from '../audio/index.js';
 const SET = ['vu-khi', 'trang-phuc', 'mat-na', 'nhan', 'canh', 'linh-thu', 'day-chuyen', 'phap-tuong'].map((s) => `gear:${s}`).concat(['skill:sin', 'skill:cui', 'card', 'pb']);
 
 // c: { itemDefs, progress, wallet, daotam, chooseHe(o), toast, recompute }
@@ -24,7 +25,7 @@ export function createTruyenThua(c) {
       const res = SET.map((g) => c.daotam.giveFor(he, g)), got = res.filter(Boolean), dup = res.length - got.length;
       if (dup) progress.addStone(dup * k.dup_stone); // món đã có sẵn: đổi Linh thạch, không mất công
       progress.changed(); c.recompute();
-      toast(`Truyền Thừa hệ ${he}: nhận ${got.length} món${dup ? ` · ${dup} món đã có đổi ${(dup * k.dup_stone).toLocaleString('vi')} Linh thạch` : ''}`, 4500);
+      sound('sfx.ghep'); toast(`Truyền Thừa hệ ${he}: nhận ${got.length} món${dup ? ` · ${dup} món đã có đổi ${(dup * k.dup_stone).toLocaleString('vi')} Linh thạch` : ''}`, 4500);
     } });
     return '';
   }

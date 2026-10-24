@@ -5,6 +5,7 @@
 // Mục tiêu "sự kiện" (kill, gather, obtain, use) đếm qua emit(); mục tiêu "trạng thái" (level, wear, awaken, skill, card, pb,
 // station, hopnhat, choose_he, talk) tự kiểm mỗi 0,4 giây — không lệ thuộc người chơi bấm đúng lúc.
 import { wrapDelta } from '../map/index.js';
+import { sound } from '../audio/index.js';
 
 const TALK_PX = 70;
 
@@ -84,7 +85,7 @@ export function createDaoTam(c) {
     for (const [id, n] of w.items || []) { progress.add(id, n); got.push(`${c.itemDefs.get(id)?.name || id} ×${n}`); }
     if (w.gift) { const g = give(w.gift); if (g) got.push(`✦ ${g}`); }
     const st = S(); st.i++; st.p = 0; progress.changed();
-    c.play('vong-lua', me.x, me.y - 8, 40);
+    c.play('vong-lua', me.x, me.y - 8, 40); sound('sfx.nv.xong');
     toast(`✔ ${s.title}${got.length ? ` — nhận ${got.join(', ')}` : ''}`, 3200);
     const nx = cur();
     if (nx?.tip) setTimeout(() => toast(`➜ ${nx.title}: ${nx.tip}`, 4200), 3300);
@@ -161,7 +162,7 @@ export function createDaoTam(c) {
     const k = ['vang', 'linh-thach'].find((x) => W.price(s, x) !== null && W.can(s, x));
     if (!k) { if (!quiet) toast('Chưa đủ tiền mua — đánh quái kiếm thêm Vàng', 1800); return false; }
     W.pay(s, k); progress.add(id, s.stack || 1); emit('gain', { id, n: s.stack || 1 }); progress.changed();
-    toast(`Đã mua ${c.itemDefs.get(id)?.name || id}`, 1400);
+    toast(`Đã mua ${c.itemDefs.get(id)?.name || id}`, 1400); if (!quiet) sound('sfx.mua');
     return true;
   }
 

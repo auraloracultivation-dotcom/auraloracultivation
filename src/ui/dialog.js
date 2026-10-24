@@ -1,6 +1,7 @@
 // Hội thoại NPC + bảng chọn hệ Đạo Tâm (chủ dự án 24/10/2026: "có npc để chat với người chơi", chữ ngắn).
 // Hội thoại: khung dưới màn hình, từng câu một, chạm để sang câu tiếp; auto = tự sang câu sau 2,6 giây.
 import { escapeHtml as E } from './screens.js';
+import { sound } from '../audio/index.js';
 
 const el = (h) => { const t = document.createElement('template'); t.innerHTML = h.trim(); return t.content.firstChild; };
 
@@ -11,7 +12,7 @@ export function showDialog({ name, lines, auto = false, onClose }) {
   let i = 0, timer = 0;
   const show = () => {
     if (i >= lines.length) { clearTimeout(timer); box.remove(); onClose?.(); return; }
-    box.querySelector('p').textContent = lines[i];
+    box.querySelector('p').textContent = lines[i]; sound('sfx.npc.noi');
     box.querySelector('em').textContent = i === lines.length - 1 ? 'Chạm để đóng ✓' : 'Chạm để tiếp ▸';
     clearTimeout(timer); if (auto) timer = setTimeout(() => { i++; show(); }, 2600);
   };
@@ -32,6 +33,6 @@ export function showHeChooser({ list, onPick }) {
   box.addEventListener('click', (e) => {
     const b = e.target.closest('[data-he]'); if (!b) return;
     if (picked !== b.dataset.he) { picked = b.dataset.he; box.querySelectorAll('.he-opt').forEach((x) => x.classList.toggle('on', x === b)); b.querySelector('small').textContent = 'Chạm lần nữa để chọn'; return; }
-    wrap.remove(); onPick(picked);
+    wrap.remove(); sound('sfx.chon'); onPick(picked);
   });
 }

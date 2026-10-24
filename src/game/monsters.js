@@ -4,6 +4,7 @@
 import { wrapDelta } from '../map/index.js';
 import { createMobSkills } from './mob-skills.js';
 import { createMobOrbs } from './mob-orbs.js';
+import { sound } from '../audio/index.js';
 
 const rint = (a, b) => Math.round(a + Math.random() * (b - a));
 
@@ -133,7 +134,7 @@ export function createMonsters({ gp, mdef, map }) {
         else if (m.cd <= 0) {
           m.cd = P.attack_every_s; m.n++;
           m.atkT = 0.5;
-          if (m.n % P.heavy.every_n_attacks === 0) { m.state = 'windup'; m.wind = P.heavy.windup_s; m.wx = me.x; m.wy = me.y; }
+          if (m.n % P.heavy.every_n_attacks === 0) { if (d < 360) sound('sfx.don-nang'); m.state = 'windup'; m.wind = P.heavy.windup_s; m.wx = me.x; m.wy = me.y; }
           else env.hitPlayer(m, 1);
         }
       } else if (m.state === 'windup') {

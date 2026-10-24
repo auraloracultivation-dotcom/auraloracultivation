@@ -8,6 +8,7 @@
 // Số liệu + lời thoại: data/zones/zone.start.json → town.stations.
 import { wrapDelta } from '../map/index.js';
 import { showSheet, escapeHtml as E } from '../ui/index.js';
+import { sound } from '../audio/index.js';
 
 const LIGHT_PX = 150, USE_PX = 190;
 
@@ -42,7 +43,7 @@ export function createStations({ map, me, net, game, toast, onMoved }) {
     if (dest.cost) { w.add('linh-thach', -dest.cost); game.progress.changed(); }
     if (row) { me.x = row.x; me.y = row.y; } else ({ x: me.x, y: me.y } = map.nearestStand(dest.x, dest.y + 30, 6, 20));
     close?.(); onMoved(me.x, me.y);
-    toast(`Truyền tống tới ${dest.name}${dest.cost ? ` (−${dest.cost} Linh thạch)` : ''}`, 2200);
+    sound('sfx.truyen-tong'); toast(`Truyền tống tới ${dest.name}${dest.cost ? ` (−${dest.cost} Linh thạch)` : ''}`, 2200);
   }
 
   function open(at) {

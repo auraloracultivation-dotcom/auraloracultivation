@@ -3,6 +3,7 @@ import { showSheet, escapeHtml as E } from '../ui/index.js';
 import { iconUrl } from '../entity/index.js';
 import { compactNum as N } from '../core/index.js';
 import { openQuestSheet } from './questsheet.js';
+import { sound } from '../audio/index.js';
 
 const GOAL = { talk: 'Nói chuyện', reach: 'Đến', collect: 'Thu thập', craft: 'Luyện', kill: 'Hạ', boss: 'Hạ boss', dodge_heavy: 'Né đòn nặng',
   discover: 'Khám phá', complete_daily: 'Hoàn thành nhiệm vụ ngày', awaken: 'Thức tỉnh pháp khí', use: 'Dùng',
@@ -290,7 +291,7 @@ export function createViews(o) {
           if (W.get(k) < W.price(s, k) * times) return toast(`Không đủ ${W.name(k)} cho ${times} món`, 1400);
           for (let t = 0; t < times; t++) { W.pay(s, k); progress.add(id, s.stack || 1); st().shopDay.n[id] = (st().shopDay.n[id] || 0) + 1; got += s.stack || 1; }
           o.emit('gain', { id, n: got }); progress.changed();
-          return toast(`Đã mua ${d.name} ×${got} (−${W.label(k, W.price(s, k) * times)})`, 1600);
+          sound('sfx.mua'); return toast(`Đã mua ${d.name} ×${got} (−${W.label(k, W.price(s, k) * times)})`, 1600);
         }
         // công thức mua thêm được: mỗi cuốn có số lần dùng (recipe-uses.js)
         if (!W.can(s, k)) return toast(`Không đủ ${W.name(k)}`, 1200);
@@ -302,7 +303,7 @@ export function createViews(o) {
         W.pay(s, k); progress.add(id, s.stack || 1);
         st().shopDay.n[id] = (st().shopDay.n[id] || 0) + 1;
         o.emit('gain', { id, n: s.stack || 1 }); progress.changed();
-        toast(`Đã mua ${d.name} (−${W.label(k, W.price(s, k))})`, 1400);
+        toast(`Đã mua ${d.name} (−${W.label(k, W.price(s, k))})`, 1400); sound('sfx.mua');
       },
     });
   }

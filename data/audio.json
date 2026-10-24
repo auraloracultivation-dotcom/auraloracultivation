@@ -1,11 +1,338 @@
 {
-  "_ghi_chu": "Âm thanh do chủ dự án cung cấp (gốc WAV trong assets/audio/_source/). volume 0–1. Code chỉ gọi theo id.",
+  "_ghi_chu": "Âm thanh tự tổng hợp bằng code (tools/sfx/build.py — chủ dự án 24/10/2026: làm lại toàn bộ, phong cách gần gũi, đơn giản kiểu game pixel). Code chỉ gọi id (src/audio/bus.js). volume 0–1; gap_s: khoảng cách tối thiểu giữa 2 lần phát cùng tiếng; vary: lệch cao độ ngẫu nhiên ±.",
   "music": {
-    "bgm.tuchan": { "file": "assets/audio/nhac-nen-tu-chan.mp3", "volume": 0.4, "loop": true }
+    "bgm.tuchan": {
+      "file": "assets/audio/bgm/tuchan.mp3",
+      "volume": 0.35,
+      "loop": true,
+      "_note": "Thám hiểm — 88 BPM, ngũ cung Rê, đàn tranh + sáo, 87 giây lặp liền"
+    },
+    "bgm.chien": {
+      "file": "assets/audio/bgm/chien.mp3",
+      "volume": 0.32,
+      "loop": true,
+      "_note": "Bí cảnh / Truyền Thừa — 132 BPM, trống trận + kèn chiptune, 58 giây lặp liền"
+    }
   },
   "sfx": {
-    "sfx.kiem.chem": { "file": "assets/audio/kiem-chem.wav", "volume": 0.7, "_note": "0,1 giây — kiếm chém ra (Đánh thường khi cầm vũ khí)" },
-    "sfx.phaptuong.hoahinh": { "file": "assets/audio/phap-tuong-hoa-hinh.mp3", "volume": 0.9, "_note": "3,8 giây — bấm kỹ năng Pháp tướng; cao trào ở giây 2,1" }
+    "sfx.kiem.chem": {
+      "file": "assets/audio/sfx/kiem.chem.mp3",
+      "volume": 0.6,
+      "gap_s": 0.08,
+      "vary": 0.06,
+      "_note": "Đánh thường khi cầm kiếm — vụt + keng + chạm"
+    },
+    "sfx.danh.tay": {
+      "file": "assets/audio/sfx/danh.tay.mp3",
+      "volume": 0.6,
+      "gap_s": 0.08,
+      "vary": 0.08,
+      "_note": "Đánh thường tay không"
+    },
+    "sfx.trung": {
+      "file": "assets/audio/sfx/trung.mp3",
+      "volume": 0.35,
+      "gap_s": 0.06,
+      "vary": 0.12,
+      "_note": "Trúng quái (rất hay phát)"
+    },
+    "sfx.bao-kich": {
+      "file": "assets/audio/sfx/bao-kich.mp3",
+      "volume": 0.55,
+      "gap_s": 0.12,
+      "vary": 0.05,
+      "_note": "Bạo kích"
+    },
+    "sfx.quai.chet": {
+      "file": "assets/audio/sfx/quai.chet.mp3",
+      "volume": 0.45,
+      "gap_s": 0.07,
+      "vary": 0.1,
+      "_note": "Quái thường / tinh anh tan"
+    },
+    "sfx.boss.chet": {
+      "file": "assets/audio/sfx/boss.chet.mp3",
+      "volume": 0.8,
+      "_note": "Boss / Âm Hư gục"
+    },
+    "sfx.bi-danh": {
+      "file": "assets/audio/sfx/bi-danh.mp3",
+      "volume": 0.5,
+      "gap_s": 0.18,
+      "vary": 0.08,
+      "_note": "Mình bị đánh"
+    },
+    "sfx.ne": {
+      "file": "assets/audio/sfx/ne.mp3",
+      "volume": 0.5,
+      "gap_s": 0.15,
+      "vary": 0.08,
+      "_note": "Né đòn / quái đánh trượt"
+    },
+    "sfx.don-nang": {
+      "file": "assets/audio/sfx/don-nang.mp3",
+      "volume": 0.45,
+      "gap_s": 0.4,
+      "_note": "Quái gồng đòn nặng / boss vận chiêu (vòng đỏ)"
+    },
+    "sfx.linh-cau": {
+      "file": "assets/audio/sfx/linh-cau.mp3",
+      "volume": 0.3,
+      "gap_s": 0.25,
+      "vary": 0.1,
+      "_note": "Tinh anh / boss bắn linh cầu"
+    },
+    "sfx.chet": {
+      "file": "assets/audio/sfx/chet.mp3",
+      "volume": 0.7,
+      "_note": "Nhân vật ngã xuống"
+    },
+    "sfx.hoi-sinh": {
+      "file": "assets/audio/sfx/hoi-sinh.mp3",
+      "volume": 0.6,
+      "_note": "Hồi sinh"
+    },
+    "sfx.he.kim": {
+      "file": "assets/audio/sfx/he.kim.mp3",
+      "volume": 0.55,
+      "gap_s": 0.1,
+      "vary": 0.04,
+      "_note": "Kỹ năng hệ Kim"
+    },
+    "sfx.he.moc": {
+      "file": "assets/audio/sfx/he.moc.mp3",
+      "volume": 0.6,
+      "gap_s": 0.1,
+      "vary": 0.04,
+      "_note": "Kỹ năng hệ Mộc"
+    },
+    "sfx.he.thuy": {
+      "file": "assets/audio/sfx/he.thuy.mp3",
+      "volume": 0.55,
+      "gap_s": 0.1,
+      "vary": 0.04,
+      "_note": "Kỹ năng hệ Thủy"
+    },
+    "sfx.he.hoa": {
+      "file": "assets/audio/sfx/he.hoa.mp3",
+      "volume": 0.55,
+      "gap_s": 0.1,
+      "vary": 0.04,
+      "_note": "Kỹ năng hệ Hỏa"
+    },
+    "sfx.he.tho": {
+      "file": "assets/audio/sfx/he.tho.mp3",
+      "volume": 0.6,
+      "gap_s": 0.1,
+      "vary": 0.04,
+      "_note": "Kỹ năng hệ Thổ"
+    },
+    "sfx.he.am": {
+      "file": "assets/audio/sfx/he.am.mp3",
+      "volume": 0.55,
+      "gap_s": 0.1,
+      "vary": 0.04,
+      "_note": "Kỹ năng hệ Ám"
+    },
+    "sfx.he.thien": {
+      "file": "assets/audio/sfx/he.thien.mp3",
+      "volume": 0.55,
+      "gap_s": 0.1,
+      "vary": 0.04,
+      "_note": "Kỹ năng Thiên hệ (Quang · Lôi · Băng · Phong · Hư · Thời) + chiêu sấm"
+    },
+    "sfx.phap-bao": {
+      "file": "assets/audio/sfx/phap-bao.mp3",
+      "volume": 0.55,
+      "gap_s": 0.2,
+      "_note": "Bấm pháp bảo"
+    },
+    "sfx.hop-nhat.ban": {
+      "file": "assets/audio/sfx/hop-nhat.ban.mp3",
+      "volume": 0.18,
+      "gap_s": 0.4,
+      "vary": 0.15,
+      "_note": "Thiên Cơ Hợp Nhất tự phóng (0,45 giây/lần) — rất nhỏ"
+    },
+    "sfx.luot": {
+      "file": "assets/audio/sfx/luot.mp3",
+      "volume": 0.5,
+      "gap_s": 0.15,
+      "_note": "Lướt"
+    },
+    "sfx.bay": {
+      "file": "assets/audio/sfx/bay.mp3",
+      "volume": 0.5,
+      "gap_s": 0.5,
+      "_note": "Ngự kiếm cất cánh"
+    },
+    "sfx.ha-canh": {
+      "file": "assets/audio/sfx/ha-canh.mp3",
+      "volume": 0.45,
+      "gap_s": 0.5,
+      "_note": "Hạ cánh"
+    },
+    "sfx.phaptuong.hoahinh": {
+      "file": "assets/audio/sfx/phaptuong.hoahinh.mp3",
+      "volume": 0.85,
+      "_note": "Pháp tướng hoá hình — 3,8 giây, cao trào giây 2,1"
+    },
+    "sfx.len-cap": {
+      "file": "assets/audio/sfx/len-cap.mp3",
+      "volume": 0.6,
+      "gap_s": 0.5,
+      "_note": "Lên tầng tu vi"
+    },
+    "sfx.dot-pha": {
+      "file": "assets/audio/sfx/dot-pha.mp3",
+      "volume": 0.75,
+      "_note": "Đột phá đại cảnh giới thành công"
+    },
+    "sfx.dot-pha.loi": {
+      "file": "assets/audio/sfx/dot-pha.loi.mp3",
+      "volume": 0.6,
+      "_note": "Đột phá thất bại"
+    },
+    "sfx.thuc-tinh": {
+      "file": "assets/audio/sfx/thuc-tinh.mp3",
+      "volume": 0.55,
+      "gap_s": 0.1,
+      "_note": "Thức tỉnh 1 dòng (Lục → Tím)"
+    },
+    "sfx.thuc-tinh.hiem": {
+      "file": "assets/audio/sfx/thuc-tinh.hiem.mp3",
+      "volume": 0.7,
+      "gap_s": 0.1,
+      "_note": "Thức tỉnh ra dòng Cam / Vàng / Đỏ / Đen"
+    },
+    "sfx.nhat": {
+      "file": "assets/audio/sfx/nhat.mp3",
+      "volume": 0.4,
+      "gap_s": 0.08,
+      "vary": 0.1,
+      "_note": "Nhặt đồ rơi / hái"
+    },
+    "sfx.vang": {
+      "file": "assets/audio/sfx/vang.mp3",
+      "volume": 0.5,
+      "gap_s": 0.2,
+      "vary": 0.05,
+      "_note": "Nhận / bán ra Vàng"
+    },
+    "sfx.mua": {
+      "file": "assets/audio/sfx/mua.mp3",
+      "volume": 0.55,
+      "gap_s": 0.15,
+      "_note": "Mua đồ"
+    },
+    "sfx.nv.xong": {
+      "file": "assets/audio/sfx/nv.xong.mp3",
+      "volume": 0.6,
+      "gap_s": 0.4,
+      "_note": "Xong một bước nhiệm vụ / nhận thưởng"
+    },
+    "sfx.npc.noi": {
+      "file": "assets/audio/sfx/npc.noi.mp3",
+      "volume": 0.25,
+      "gap_s": 0.05,
+      "vary": 0.15,
+      "_note": "NPC nói (mỗi câu)"
+    },
+    "sfx.chon": {
+      "file": "assets/audio/sfx/chon.mp3",
+      "volume": 0.6,
+      "_note": "Chọn lựa lớn (chọn hệ Đạo Tâm…)"
+    },
+    "sfx.hop-nhat": {
+      "file": "assets/audio/sfx/hop-nhat.mp3",
+      "volume": 0.75,
+      "_note": "Kích Thiên Cơ Hợp Nhất"
+    },
+    "sfx.ghep": {
+      "file": "assets/audio/sfx/ghep.mp3",
+      "volume": 0.75,
+      "_note": "Ghép bộ Truyền Thừa"
+    },
+    "sfx.truyen-tong": {
+      "file": "assets/audio/sfx/truyen-tong.mp3",
+      "volume": 0.6,
+      "_note": "Truyền tống giữa các trận nhãn"
+    },
+    "sfx.ui.cham": {
+      "file": "assets/audio/sfx/ui.cham.mp3",
+      "volume": 0.35,
+      "gap_s": 0.04,
+      "vary": 0.06,
+      "_note": "Chạm nút giao diện"
+    },
+    "sfx.ui.mo": {
+      "file": "assets/audio/sfx/ui.mo.mp3",
+      "volume": 0.4,
+      "gap_s": 0.08,
+      "_note": "Mở bảng"
+    },
+    "sfx.ui.dong": {
+      "file": "assets/audio/sfx/ui.dong.mp3",
+      "volume": 0.35,
+      "gap_s": 0.08,
+      "_note": "Đóng bảng"
+    },
+    "sfx.ui.loi": {
+      "file": "assets/audio/sfx/ui.loi.mp3",
+      "volume": 0.4,
+      "gap_s": 0.2,
+      "_note": "Bấm nút đang khoá / không được"
+    },
+    "sfx.am-hu": {
+      "file": "assets/audio/sfx/am-hu.mp3",
+      "volume": 0.7,
+      "_note": "Âm Hư xuất thế (cảnh báo)"
+    },
+    "sfx.bc.dot": {
+      "file": "assets/audio/sfx/bc.dot.mp3",
+      "volume": 0.65,
+      "_note": "Bí cảnh / Truyền Thừa vào đợt mới"
+    },
+    "sfx.bc.thang": {
+      "file": "assets/audio/sfx/bc.thang.mp3",
+      "volume": 0.7,
+      "_note": "Vượt bí cảnh"
+    },
+    "sfx.bc.thua": {
+      "file": "assets/audio/sfx/bc.thua.mp3",
+      "volume": 0.6,
+      "_note": "Thua bí cảnh"
+    }
+  },
+  "skill_sfx": {
+    "_note": "Tiếng tung chiêu: by_id trước, rồi theo hệ của kỹ năng, cuối cùng default",
+    "by_he": {
+      "Kim": "sfx.he.kim",
+      "Mộc": "sfx.he.moc",
+      "Thủy": "sfx.he.thuy",
+      "Hỏa": "sfx.he.hoa",
+      "Thổ": "sfx.he.tho",
+      "Ám": "sfx.he.am",
+      "Quang": "sfx.he.thien",
+      "Lôi": "sfx.he.thien",
+      "Băng": "sfx.he.thuy",
+      "Phong": "sfx.he.kim",
+      "Hư": "sfx.he.am",
+      "Thời": "sfx.he.thien"
+    },
+    "by_id": {
+      "luot": "sfx.luot",
+      "loi-kich": "sfx.he.thien",
+      "thien-kiep": "sfx.he.thien",
+      "cam-che": "sfx.he.am",
+      "linh-thu": "sfx.he.moc",
+      "dan-duoc": "sfx.thuc-tinh",
+      "nguyen-anh": "sfx.phap-bao",
+      "nguyen-than": "sfx.phap-bao",
+      "thuan-di": "sfx.luot",
+      "phong-an": "sfx.he.am"
+    },
+    "default": "sfx.phap-bao"
   },
   "remote_sfx_volume": 0.45,
   "remote_sfx_range_px": 420,

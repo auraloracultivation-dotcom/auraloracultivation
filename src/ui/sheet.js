@@ -2,11 +2,12 @@
 // tabs: [{ id, name }], render(tabId) → HTML, onAction(act, arg) → gọi khi bấm nút có data-act; bảng tự vẽ lại sau đó.
 import { el } from './stage.js';
 import { escapeHtml } from './screens.js';
+import { sound } from '../audio/index.js';
 
 export function showSheet({ title, tabs, render, onAction, note }) {
   const wrap = el('<div class="overlay modal-wrap bag-wrap"></div>');
-  document.getElementById('ui').appendChild(wrap);
-  const close = () => { clearInterval(timer); wrap.classList.add('fade-out'); setTimeout(() => wrap.remove(), 180); };
+  document.getElementById('ui').appendChild(wrap); sound('sfx.ui.mo');
+  const close = () => { clearInterval(timer); sound('sfx.ui.dong'); wrap.classList.add('fade-out'); setTimeout(() => wrap.remove(), 180); };
   wrap.addEventListener('pointerdown', (e) => { if (e.target === wrap) close(); });
   const box = el(`<div class="bag sheet" role="dialog" aria-label="${escapeHtml(title)}">
     <div class="bag-head"><b>${escapeHtml(title)}</b><button type="button" class="bag-x" aria-label="Đóng">✕</button></div>

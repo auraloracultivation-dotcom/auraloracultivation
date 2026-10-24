@@ -38,10 +38,12 @@ nên nhiều vật phẩm (cấp khác nhau) dùng chung một hình được.
 - Các frame phải thực sự khác nhau; không cắt một ảnh tĩnh thành frame giả.
 - Icon phải khớp đúng hình trang bị khi mặc lên người.
 
-## Âm thanh (từ 21/10/2026)
-- File gốc chủ dự án gửi (WAV) giữ ở `assets/audio/_source/`; bản dùng trong game ở `assets/audio/`:
-  nhạc nền → MP3 (nhẹ), tiếng dài → MP3, tiếng rất ngắn (≤0,2 giây) → WAV 16-bit (MP3 thêm khoảng lặng đầu, lệch nhịp chém).
-- Đăng ký id + âm lượng trong `data/audio.json`; code chỉ gọi id (`sfx.kiem.chem`, `sfx.phaptuong.hoahinh`, `bgm.tuchan`).
+## Âm thanh (làm lại 24/10/2026)
+- Toàn bộ tiếng tự tổng hợp bằng code: `tools/sfx/` (dsp.py thư viện · combat.py · skills.py · ui.py · music.py). Sinh lại: `python3 -I tools/sfx/build.py [lọc-id]`.
+- Ra `assets/audio/sfx/<id>.mp3` (112 kbps) và `assets/audio/bgm/<id>.mp3` (96 kbps, lặp liền — đuôi vang cuộn về đầu).
+- Phong cách (chủ dự án): gần gũi, dễ thương, đơn giản kiểu game pixel — tròn, sáng, ngắn, ngũ cung Rê (D E F# A B).
+- Đăng ký trong `data/audio.json`: file, volume, `gap_s` (giãn cách tối thiểu), `vary` (lệch cao độ). Kỹ năng: `skill_sfx` (theo mã → theo hệ → mặc định).
+- Code gọi qua bus `src/audio/bus.js`: `sound('sfx.…')`, `music('bgm.…')`, `skillSound(id, he)`. Bộ phát tự bỏ khoảng lặng đầu MP3.
 - Tiếng chỉ phát sau lần chạm đầu tiên (luật trình duyệt điện thoại). Bật/tắt trong Cài đặt → Âm thanh / Nhạc nền.
 
 ## Nguồn
