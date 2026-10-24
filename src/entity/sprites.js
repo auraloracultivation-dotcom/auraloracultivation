@@ -26,6 +26,35 @@ export async function loadSprites(def) {
   await Promise.all([...srcs].map(load));
 }
 const ensure = (s) => { if (s && !imgs.has(s.src)) load(s.src); return s && imgs.get(s.src); }; // load chỉ tải 1 lần mỗi hình
+
+// Hiệu ứng mờ dần ở mép mỗi khung (chủ dự án 25/10/2026: "ánh sáng skill bị đóng khung"): nhiều hình cắt từ tấm gốc sát quá,
+// quầng sáng chạm mép khung bị cụt thành đường thẳng. Làm một lần mỗi hình (canvas), mép 12% mờ dần về trong suốt.
+const feathered = new Map(), masks = new Map();
+function edgeMask(fw, fh) {
+  const key = `${fw}x${fh}`;
+  if (masks.has(key)) return masks.get(key);
+  const c = document.createElement('canvas'); c.width = fw; c.height = fh;
+  const g = c.getContext('2d'), d = g.createImageData(fw, fh), bx = Math.max(1, fw * 0.12), by = Math.max(1, fh * 0.12);
+  for (let y = 0; y < fh; y++) for (let x = 0; x < fw; x++) {
+    const k = Math.min(1, Math.min(x + 0.5, fw - x - 0.5) / bx, Math.min(y + 0.5, fh - y - 0.5) / by);
+    d.data[(y * fw + x) * 4 + 3] = Math.round(255 * k * k * (3 - 2 * k)); // smoothstep
+  }
+  g.putImageData(d, 0, 0); masks.set(key, c);
+  return c;
+}
+function soft(s, im) {
+  if (!im) return im;
+  let c = feathered.get(s);
+  if (c) return c;
+  c = document.createElement('canvas'); c.width = im.width; c.height = im.height;
+  const g = c.getContext('2d'); g.drawImage(im, 0, 0);
+  const m = edgeMask(s.fw, s.fh), all = document.createElement('canvas'); all.width = im.width; all.height = im.height; // ghép mặt nạ cả tấm rồi áp một lần
+  const ga = all.getContext('2d'); // (destination-in xoá cả vùng ngoài hình vừa vẽ → không áp từng ô được)
+  for (let y = 0; y + s.fh <= im.height + 0.5; y += s.fh) for (let x = 0; x + s.fw <= im.width + 0.5; x += s.fw) ga.drawImage(m, x, y);
+  g.globalCompositeOperation = 'destination-in'; g.drawImage(all, 0, 0);
+  feathered.set(s, c);
+  return c;
+}
 export const hasSheet = (id) => !!ensure(DEF?.sheets[id]);
 
 // Đổi sắc độ (hue, độ) một lần rồi giữ lại — dùng cho quái dùng chung hình nhưng khác vùng
@@ -92,7 +121,7 @@ export function sheetThumb(id, hue = 0, size = 96) {
 // Hiệu ứng: p = tiến độ 0..1. anchor theo kiểu cắt (giữa hoặc đáy). rot: góc quay (rad).
 export function drawEffect(ctx, id, p, x, y, h, rot = 0, alpha = 1) {
   const s = DEF?.fx[id];
-  const im = s && ensure(s);
+  const im = s && soft(s, ensure(s));
   if (!im) return false;
   const n = s.anims.play.n, f = Math.min(n - 1, Math.floor(p * n));
   const k = h / s.fh, w = s.fw * k;

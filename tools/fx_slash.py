@@ -22,22 +22,48 @@ SLUG = {'Kim': 'kim', 'Ám': 'am', 'Thủy': 'thuy', 'Hỏa': 'hoa', 'Mộc': 'm
 
 
 def frames(a):
-    """Cắt tại cột tối nhất gần mỗi ranh giới ô (bề ngang / 6) — chịu được khung dính nhau, khung tràn ô."""
-    lit = a.max(axis=2) > 30
-    col = lit.sum(axis=0)
+    """Tách 6 khung, không cắt cụt quầng sáng:
+    - ranh giới = 5 chỗ trũng sâu nhất của lượng điểm SÁNG theo cột (đã làm mượt), cách nhau ≥ 1/2 ô — GPT xếp khung không đều;
+    - mỗi khung lấy rộng ra hai bên (MARGIN) nhưng chỉ giữ phần thuộc khung đó, phần khung bên cạnh mờ dần chứ không cắt thẳng;
+    - ô ra đủ rộng cho khung rộng nhất, canh theo tâm khối sáng mỗi khung theo chiều ngang của ô gốc."""
+    v = a.max(axis=2).astype(np.float32)
+    col = (v > 90).sum(axis=0).astype(np.float32)
+    k = 31; col_s = np.convolve(col, np.ones(k) / k, mode='same')
     slot = a.shape[1] / N
-    cuts = [0] + [int(k * slot - 90 + np.argmin(col[int(k * slot) - 90:int(k * slot) + 90])) for k in range(1, N)] + [a.shape[1]]
+    cand = sorted(range(int(slot * 0.5), int(a.shape[1] - slot * 0.5)), key=lambda x: col_s[x])
+    cuts = []
+    for x in cand:
+        if all(abs(x - c) >= slot * 0.5 for c in cuts): cuts.append(x)
+        if len(cuts) == N - 1: break
+    cuts = [0] + sorted(cuts) + [a.shape[1]]
+    lit = v > 6
     ys = np.where(lit.any(axis=1))[0]
-    y0, y1 = ys[0], ys[-1] + 1
-    half = int(max(max(abs(cuts[k] - (k + 0.5) * slot), abs(cuts[k + 1] - (k + 0.5) * slot)) for k in range(N)))
+    y0, y1 = max(0, ys[0] - 12), min(a.shape[0], ys[-1] + 13)
+    centers = [int((k + 0.5) * slot) for k in range(N)]
+    MARGIN = 40
+    half = int(max(max(c - (cuts[k] - MARGIN), (cuts[k + 1] + MARGIN) - c) for k, c in enumerate(centers)))
     out = []
-    for k in range(N):
-        s0, s1, c = cuts[k], cuts[k + 1], int((k + 0.5) * slot)
-        f = np.zeros((y1 - y0, 2 * half, 3), np.uint8)
-        lo, hi = max(s0, c - half), min(s1, c + half)
-        f[:, lo - (c - half):hi - (c - half)] = a[y0:y1, lo:hi]
-        out.append(f)
+    xs = np.arange(a.shape[1])
+    for k, c in enumerate(centers):
+        # trọng số thuộc khung k: 1 trong [cut_k, cut_k+1], mờ dần ra ngoài trong MARGIN (đè lên khung bên cạnh vẫn nhỏ)
+        d = np.maximum(cuts[k] - xs, xs - cuts[k + 1]).clip(0, None)
+        w = (1 - d / MARGIN).clip(0, 1) ** 2
+        f = np.zeros((y1 - y0, 2 * half, 3), np.float32)
+        lo, hi = max(0, c - half), min(a.shape[1], c + half)
+        f[:, lo - (c - half):hi - (c - half)] = a[y0:y1, lo:hi] * w[lo:hi][None, :, None]
+        out.append(f.clip(0, 255).astype(np.uint8))
     return out
+
+
+def clean(f):
+    """Nền đen thật sự: trừ mức đen (sương mờ GPT để lại → thành khung mờ khi cộng sáng) rồi mờ dần ở mép ô."""
+    x = f.astype(np.float32)
+    x = ((x - 7) / (255 - 7) * 255).clip(0, 255)
+    h, w = x.shape[:2]
+    fy = np.minimum(np.arange(h), np.arange(h)[::-1]) / max(1, h * 0.08)
+    fx = np.minimum(np.arange(w), np.arange(w)[::-1]) / max(1, w * 0.06)
+    x *= (np.minimum(fy[:, None], fx[None, :]).clip(0, 1) ** 1.5)[:, :, None]
+    return x.astype(np.uint8)
 
 
 def tint(f, color):
@@ -65,7 +91,7 @@ def main():
         for he, slug in SLUG.items():
             sheet = Image.new('RGB', (fw * N, fh))
             for k, f in enumerate(fs):
-                sheet.paste(Image.fromarray(tint(f, colors[he])).resize((fw, fh), Image.LANCZOS), (k * fw, 0))
+                sheet.paste(Image.fromarray(clean(tint(f, colors[he]))).resize((fw, fh), Image.LANCZOS), (k * fw, 0))
             path = OUT / f'{name}.{slug}.webp'
             sheet.save(path, quality=86, method=6)
             sp['fx'][f's.{name}.{slug}'] = {'src': str(path), 'fw': fw, 'fh': fh, 'anims': {'play': {'row': 0, 'n': N}}, 'fps': 18,

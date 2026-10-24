@@ -137,7 +137,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     if (r.miss) { say(m.x, top, 'Trượt', '#cfd6e6'); return; }
     sound(r.crit ? 'sfx.bao-kich' : 'sfx.trung');
     say(m.x, top, `${r.crit ? 'Bạo kích ' : ''}-${r.dmg}${sup < 1 ? ' · bị áp chế' : ''}`, sup < 1 ? '#b9a6d6' : r.crit ? '#ffd23a' : '#ffffff', r.crit);
-    const hf = skill === 'attack' && me.look?.weapon ? [fxOf('no', me.look.weapon), 30] : HIT_FX[skill]; // đánh thường có kiếm: nổ vẽ tay theo hệ vũ khí
+    const hf = skill === 'attack' && me.look?.weapon ? [fxOf('no', me.look.weapon), 34] : HIT_FX[skill]; // đánh thường có kiếm: nổ vẽ tay theo hệ vũ khí
     if (hf) play(hf[0], m.x, midY(m), hf[1] * (r.crit ? 1.4 : 1));
     healMe(r.heal);
     if (mobs.damage(m, r.dmg)) onKill(m);
