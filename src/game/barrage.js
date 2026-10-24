@@ -241,7 +241,7 @@ export function createBarrage(c) {
       const p0 = at(me);
       for (let k = 0; k < o.n; k++) {
         const a = orbitA * o.sp + (k / o.n) * Math.PI * 2, x = p0.x + Math.cos(a) * o.r, y = p0.y - 10 + Math.sin(a) * o.r * 0.55;
-        drawEffect(ctx, o.bolt, 0, x, y, 16, a + Math.PI / 2 * Math.sign(o.sp));
+        drawEffect(ctx, o.bolt, (now / 600) % 1, x, y, 14, a + Math.PI / 2 * Math.sign(o.sp), 0.7); // hồn xoay quanh người: nhỏ, mờ bớt — không che nhân vật
       }
     }
   }

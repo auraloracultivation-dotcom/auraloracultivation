@@ -67,9 +67,9 @@ export function createTreasure(c) {
         barrage.schedule(d.s, d.s / n, (k) => { const a = a0 - 1.05 + (2.1 * k) / Math.max(1, n - 1); shot(Math.cos(a), Math.sin(a)); });
         break;
       }
-      case 'wisps': barrage.addOrbit({ n, r: d.r, mul, s: d.s, bolt: 'v.dan-am' }); play('v.hac-dong', me.x, me.y, 50, { ground: true }); break;
+      case 'wisps': barrage.addOrbit({ n, r: d.r, mul, s: d.s, bolt: 'v.dan-am' }); if (!o.hop && !o.soft) play('v.hac-dong', me.x, me.y, 50, { ground: true }); break; // Hợp Nhất phóng liên tục: không phủ hố đen lên người
       case 'field': {
-        play('v.moc-lien', me.x, me.y + 4, 46, { ground: true });
+        if (!o.hop && !o.soft) play('v.moc-lien', me.x, me.y + 4, 46, { ground: true });
         barrage.schedule(d.s, 1, () => c.heal(c.maxHp() * d.heal));
         barrage.schedule(d.s, 0.3, () => { // mỗi nhịp n mũi, chia cho n con gần nhất (chơi thử 24/10: dồn hết vào 1 con → đánh đám quá yếu)
           const near = mobs.within(me, 220).filter((m) => m.state !== 'dead').sort((a, b) => mobs.distTo(a, me) - mobs.distTo(b, me)); if (!near.length) return;
