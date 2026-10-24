@@ -1,7 +1,8 @@
 // Vẽ quái HÌNH TẠM bằng code (chưa có sprite chính thức trong assets/monsters/).
 // Khi có ảnh thật: thêm "art" vào data/monsters/monsters.json và đổi hàm này sang vẽ ảnh — không phải sửa AI.
 import { textScale } from './draw.js';
-import { drawSheet, drawEffect, drawIcon, hasSheet, fxDuration, fxGlow } from './sprites.js';
+import { drawSheet, drawEffect, drawIcon, hasSheet, fxDuration, fxGlow, fxTint, fxLit } from './sprites.js';
+import { LIGHT, groundLight } from './lighting.js';
 import { drawVoid } from './void-draw.js';
 
 const ZONE_COLOR = { xanh: '#5fbf5a', cam: '#e08a3a', xam: '#8d8f99', trang: '#cfe6f2', than: '#4a3b46', den: '#1d1a24', tim: '#7a3fb0', huvo: '#2a0f3d' };
@@ -153,6 +154,7 @@ export function drawFx(ctx, fx, ox, oy) {
     } else if (f.kind === 'sprite') { // hiệu ứng hình: f.fx, tiến độ theo thời gian còn lại
       if (f.glow) { const k = Math.min(1, f.t / f.life * 2.2); ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = 0.5 * k; // quầng sáng dưới chân hiệu ứng
         ctx.drawImage(glowDot(f.glow), x - f.h * 0.6, y - f.h * 0.22, f.h * 1.2, f.h * 0.44); ctx.restore(); }
+      if (LIGHT.on && fxLit(f.fx)) { const q = 1 - f.t / f.life; groundLight(ctx, x, y + (f.lift ? 0 : f.h * 0.3), f.h * LIGHT.r, fxTint(f.fx), LIGHT.a * Math.min(1, q * 5) * (1 - q)); } // sáng loang trên đất
       drawEffect(ctx, f.fx, 1 - f.t / f.life, x, y - (f.lift || 0), f.h, f.rot || 0);
     } else if (f.kind === 'bolt' && fxGlow(f.fx)) { // đạn Thiên hệ: chạy khung + 3 bóng mờ kéo đuôi (bay nhanh kiểu My Heroes)
       const r = Math.atan2(f.vy, f.vx), sp = Math.hypot(f.vx, f.vy) || 1, p = (performance.now() / 1000 / fxDuration(f.fx)) % 1, sz = f.size || 22;

@@ -2,6 +2,7 @@
 import { juice } from './game/juice.js';
 import { loadJSON, prefetchJSON, startLoop, createScreen, createCamera, followCamera, createInput, drawStick, createSaver, sha256 } from './core/index.js';
 import { createMap, wrapDelta } from './map/index.js';
+import { drawVignette, setLighting } from './entity/index.js';
 import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, setTextScale, loadRig, rigAttack, artInfo, renderPortrait, avatarFx, iconUrl, loadSprites } from './entity/index.js';
 import { createAudio, attachAudio } from './audio/index.js';
 import { createPhapTuong } from './combat/index.js';
@@ -53,7 +54,7 @@ async function boot() {
   net.syncServerTime(); // lịch Âm Hư theo giờ máy chủ (không chờ)
 
   const zoneDef = await loadJSON(`data/zones/${character.zone_id}.json`);
-  const [terrainDef, tilesDef] = await Promise.all([loadJSON('data/terrain.json'), loadJSON('data/tiles.json')]);
+  const [terrainDef, tilesDef] = await Promise.all([loadJSON('data/terrain.json'), loadJSON('data/tiles.json')]); setLighting(terrainDef.lighting); // ánh sáng cảnh
   const [art, stArt] = await Promise.all([loadJSON('data/art/sprites.json'), loadJSON('data/art/stations-art.json')]); // + hình trận nhãn (tools/station_slice.py)
   const map = await createMap(zoneDef, terrainDef, tilesDef, { ...art, props: { ...art.props, ...stArt.props } });
   loading.set(72, 'Nạp pháp khí…');
@@ -372,6 +373,7 @@ async function boot() {
     for (const p of people) drawLabel(ctx, p, now, sprite);
     game.renderAbove(ctx, now); // tên/máu quái, số sát thương, kiếm khí
     navi.render(ctx, now); // mũi tên dẫn đường
+    drawVignette(ctx, screen.canvas.width, screen.canvas.height, terrainDef.lighting); // viền màn tối nhẹ kiểu My Heroes
 
     drawStick(ctx, input.stick, dpr);
   }

@@ -135,6 +135,20 @@ export function drawEffect(ctx, id, p, x, y, h, rot = 0, alpha = 1) {
   ctx.restore();
   return true;
 }
+// Màu chủ đạo của hiệu ứng (trung bình các điểm sáng ở khung giữa), "r,g,b" — cho vùng sáng loang trên đất. Tính một lần.
+const tintOf = new Map();
+export function fxTint(id) {
+  if (tintOf.has(id)) return tintOf.get(id);
+  const s = DEF?.fx[id], im = s && imgs.get(s.src);
+  if (!im) return null;
+  const c = document.createElement('canvas'), w = Math.min(64, s.fw), h = Math.round(w * s.fh / s.fw); c.width = w; c.height = h;
+  const g = c.getContext('2d', { willReadFrequently: true }); g.drawImage(im, Math.floor(s.anims.play.n / 2) * s.fw, (s.anims.play.row || 0) * s.fh, s.fw, s.fh, 0, 0, w, h);
+  const d = g.getImageData(0, 0, w, h).data; let r = 0, gg = 0, b = 0, n = 0;
+  for (let i = 0; i < d.length; i += 4) { const a = d[i + 3] / 255, l = Math.max(d[i], d[i + 1], d[i + 2]) * a; if (l > 120) { r += d[i]; gg += d[i + 1]; b += d[i + 2]; n++; } }
+  const v = n > 4 ? `${Math.round(r / n)},${Math.round(gg / n)},${Math.round(b / n)}` : null;
+  tintOf.set(id, v); return v;
+}
+export const fxLit = (id) => !!(DEF?.fx[id] && (DEF.fx[id].blend === 'add' || DEF.fx[id].glow)); // hiệu ứng phát sáng (có vùng sáng loang)
 export const fxGlow = (id) => DEF?.fx[id]?.glow || 0; // hiệu ứng Thiên hệ (t.*): đạn có vệt đuôi
 export const fxRatio = (id) => (DEF?.fx[id] ? DEF.fx[id].fw / DEF.fx[id].fh : 1); // rộng / cao một khung (tia dài pháp bảo)
 export const fxDuration = (id) => (DEF?.fx[id] ? DEF.fx[id].anims.play.n / DEF.fx[id].fps : 0.5);
