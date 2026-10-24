@@ -160,7 +160,7 @@ export function drawFx(ctx, fx, ox, oy) {
       const r = Math.atan2(f.vy, f.vx), sp = Math.hypot(f.vx, f.vy) || 1, p = (performance.now() / 1000 / fxDuration(f.fx)) % 1, sz = f.size || 22;
       for (let k = 3; k >= 1; k--) drawEffect(ctx, f.fx, p, x - (f.vx / sp) * sz * 0.45 * k, y - (f.vy / sp) * sz * 0.45 * k, sz * (1 - k * 0.12), r, 0.5 - k * 0.12);
       drawEffect(ctx, f.fx, p, x, y, sz, r);
-    } else if (f.kind === 'bolt' && drawEffect(ctx, f.fx || 'kiem-bang-bay', 0, x, y, f.size || 22, Math.atan2(f.vy, f.vx))) {
+    } else if (f.kind === 'bolt' && drawEffect(ctx, f.fx || 'kiem-bang-bay', fxLit(f.fx) ? (performance.now() / 1000 / (fxDuration(f.fx) || 0.4)) % 1 : 0, x, y, f.size || 22, Math.atan2(f.vy, f.vx))) { // đạn vẽ tay (họ dan): chạy khung lặp
       // đạn chiêu (kiếm khí, hỏa cầu, băng tiễn…) bay theo hướng
     } else if (f.kind === 'bolt') {
       ctx.globalAlpha = 0.9; ctx.strokeStyle = '#9ff3ff'; ctx.lineWidth = 3; ctx.lineCap = 'round';

@@ -4,6 +4,8 @@ Khung tách theo khoảng trống dọc; khung dính nhau tách ở cột ít đ
 canh theo tâm ô gốc (bề ngang tấm / 6) để vệt không giật vị trí giữa các khung.
 Màu: giữ độ sáng từng điểm, đổi sắc độ sang màu hệ (data/build/dao-van.json → he.<hệ>.color) — lõi trắng vẫn trắng.
 Dùng: python3 -I tools/fx_slash.py   → assets/effects/v3/<tên>.<hệ>.webp + data/art/sprites.json → fx "s.<tên>.<hệ>"
+Thêm tấm GPT mới: lưu thành assets/effects/_source/slash/<họ>-phong.png (vd. dan-phong.png), chạy lệnh trên, rồi ghi chiêu nào dùng họ đó ở
+data/gameplay.json → fx_families (families.<họ> + skills.<id>). Tên họ dự kiến: dan, no-to, cot, loc, song, nova, hoi, khien, tran, hodem, dichchuyen, haoquang.
 """
 import colorsys
 import json
@@ -13,7 +15,7 @@ import numpy as np
 from PIL import Image
 
 SRC = Path('assets/effects/_source/slash')  # <tên>-phong.png: chem (lưỡi liềm), choc (đâm), no (nổ trúng đòn), xoay (vòng), gai (gai đất)
-NAMES = ['chem', 'choc', 'no', 'xoay', 'gai']
+NAMES = sorted(p.name[:-len('-phong.png')] for p in SRC.glob('*-phong.png'))  # tự nhận mọi tấm mới: thả <họ>-phong.png vào thư mục là đủ
 OUT = Path('assets/effects/v3')
 N = 6
 SCALE = 0.5  # khung gốc ~360 px → 180 px (đủ nét khi phóng to trên điện thoại)
