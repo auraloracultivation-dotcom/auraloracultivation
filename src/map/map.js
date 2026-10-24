@@ -7,7 +7,8 @@ import { stampRoads, createDecor } from './decor.js';
 // art: data/art/sprites.json (props = công trình thành, decor = cây đá)
 export async function createMap(def, terrainDef, tilesDef, art = {}) {
   const props = art.props || {};
-  const [mapImg, atlas] = await Promise.all([loadImage(def.map_image), loadImage(tilesDef.atlas)]);
+  const [mapImg, atlas0] = await Promise.all([loadImage(def.map_image), loadImage(tilesDef.atlas)]);
+  const atlas = gradeAtlas(atlas0, tilesDef, terrainDef); // nền dịu kiểu My Heroes: hiệu ứng cộng sáng mới nổi
   const W = def.width_tiles, H = def.height_tiles, T = def.tile_size;
   const width = W * T, height = H * T;
 
@@ -176,4 +177,22 @@ function loadImage(src) {
     img.onerror = () => reject(new Error(`Không tải được ${src}`));
     img.src = src;
   });
+}
+
+// Nền dịu (chủ dự án 25/10/2026: "cái thiếu đẹp là nền"): nhân màu (multiply) từng ô theo loại địa hình một lần lúc nạp —
+// ô sáng nhạt (cỏ, cát, tuyết) tối và trầm xuống để vệt chém / nổ cộng sáng nổi lên. data/terrain.json → grade (mặc định) / types[].grade
+function gradeAtlas(img, tilesDef, terrainDef) {
+  const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
+  const g = c.getContext('2d'); g.drawImage(img, 0, 0);
+  const S = tilesDef.size, base = terrainDef.grade;
+  if (!base) return img;
+  g.globalCompositeOperation = 'multiply';
+  for (const t of terrainDef.types) {
+    const col = t.grade ?? base;
+    if (!col || col === 'none') continue;
+    g.fillStyle = col;
+    for (const [name] of t.tiles) { const p = tilesDef.tiles[name]; if (p) g.fillRect(p[0], p[1], S, S); }
+  }
+  g.globalCompositeOperation = 'destination-in'; g.drawImage(img, 0, 0); // giữ nguyên chỗ trong suốt
+  return c;
 }
