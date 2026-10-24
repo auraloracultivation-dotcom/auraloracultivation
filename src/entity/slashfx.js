@@ -8,6 +8,8 @@ const BY_NUM = ['kim', 'am', 'thuy', 'hoa', 'moc', 'tho', 'quang', 'loi', 'bang'
 const HE_NUM = ['Kim', 'Ám', 'Thủy', 'Hỏa', 'Mộc', 'Thổ', 'Quang', 'Lôi', 'Băng', 'Phong', 'Hư', 'Thời'];
 export const weaponHe = (id) => HE_NUM[Number(/\.he\.(\d+)$/.exec(id || '')?.[1]) - 1] || null; // hệ của hình vũ khí art.weapon.he.<n>
 
+export const fxForHe = (name, he) => `s.${name}.${SLUG[he] || 'kim'}`; // họ hiệu ứng theo hệ của chiêu (src/game/fxfamily.js)
+
 // name: chem | choc | no | xoay | gai (tools/fx_slash.py); id: mã hình vũ khí; art: thông số hình (có thể có he)
 export function fxOf(name, id, art) {
   if (art?.he && SLUG[art.he]) return `s.${name}.${SLUG[art.he]}`;
