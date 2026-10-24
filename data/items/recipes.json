@@ -1,7 +1,7 @@
 {
  "_status": "test",
  "_nguon": "Lab v3.1 (bảng Đan phương, Pháp bảo phương, Công pháp, Shop)",
- "_ghi_chu": "Đan phương / công thức phôi / bí kíp công pháp: phải CÓ TRONG KHO mới luyện được (không mất khi dùng). Có được: mua ở Vạn Bảo Lâu (data/shop.json), thưởng nhiệm vụ, hoặc rơi từ boss (drop: vùng + cấp quái + tỷ lệ — tỷ lệ là số tạm).",
+ "_ghi_chu": "Đan phương / pháp khí phương / bí kíp công pháp: phải CÓ TRONG KHO mới luyện được (không mất khi dùng). Có được: mua ở Vạn Bảo Lâu (data/shop.json), thưởng nhiệm vụ, hoặc rơi từ boss (drop: vùng + cấp quái + tỷ lệ — tỷ lệ là số tạm).",
  "items": [
   {
    "id": "item.danphuong.truc-co.001",
@@ -91,43 +91,43 @@
   },
   {
    "id": "item.congthuc.vu-khi.001",
-   "name": "Công thức phôi Vũ khí",
+   "name": "Pháp khí phương Vũ khí",
    "cat": "phap-khi",
    "teaches": "recipe.phoi.vu-khi.001"
   },
   {
    "id": "item.congthuc.trang-phuc.001",
-   "name": "Công thức phôi Trang phục",
+   "name": "Pháp khí phương Trang phục",
    "cat": "phap-khi",
    "teaches": "recipe.phoi.trang-phuc.001"
   },
   {
    "id": "item.congthuc.nhan.001",
-   "name": "Công thức phôi Nhẫn",
+   "name": "Pháp khí phương Nhẫn",
    "cat": "phap-khi",
    "teaches": "recipe.phoi.nhan.001"
   },
   {
    "id": "item.congthuc.day-chuyen.001",
-   "name": "Công thức phôi Dây chuyền",
+   "name": "Pháp khí phương Dây chuyền",
    "cat": "phap-khi",
    "teaches": "recipe.phoi.day-chuyen.001"
   },
   {
    "id": "item.congthuc.mat-na.001",
-   "name": "Công thức phôi Mặt nạ",
+   "name": "Pháp khí phương Mặt nạ",
    "cat": "phap-khi",
    "teaches": "recipe.phoi.mat-na.001"
   },
   {
    "id": "item.congthuc.linh-thu.001",
-   "name": "Công thức phôi Linh thú",
+   "name": "Pháp khí phương Thú hồn",
    "cat": "phap-khi",
    "teaches": "recipe.phoi.linh-thu.001"
   },
   {
    "id": "item.congthuc.canh.001",
-   "name": "Công thức phôi Cánh",
+   "name": "Pháp khí phương Cánh",
    "cat": "phap-khi",
    "teaches": "recipe.phoi.canh.001",
    "drop": {
@@ -138,7 +138,7 @@
   },
   {
    "id": "item.congthuc.phap-tuong.001",
-   "name": "Công thức phôi Pháp tướng",
+   "name": "Pháp khí phương Pháp tướng",
    "cat": "phap-khi",
    "teaches": "recipe.phoi.phap-tuong.001",
    "drop": {
@@ -166,7 +166,7 @@
   },
   {
    "id": "item.congphap.khe.linh-thu.001",
-   "name": "Bí kíp Linh Thú Khế Ước",
+   "name": "Bí kíp Thú Hồn Khế Ước",
    "cat": "cong-phap",
    "teaches": "skill.khe.linh-thu.001",
    "drop": {

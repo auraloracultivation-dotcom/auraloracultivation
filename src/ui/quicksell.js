@@ -8,7 +8,7 @@ const N = (v) => Number(v).toLocaleString('vi');
 
 export function quickSellPanel(qs, onDone) {
   const pick = new Set(qs.tiers.filter((t) => t.on).map((t) => t.id));
-  const box = el(`<div class="qs-sell"><b>Bán nhanh trang bị</b>
+  const box = el(`<div class="qs-sell"><b>Bán nhanh pháp khí</b>
     <p class="qs-sell-note">Chọn vòng muốn bán. Đồ đang mặc, Tiên khí, vòng Đỏ / Đen giữ lại.</p>
     <div class="qs-chips">${qs.tiers.map((t) => `<button type="button" class="qs-chip tier-${t.id}" data-t="${E(t.id)}">${E(t.name)}</button>`).join('')}</div>
     <p class="qs-sum"></p><button type="button" class="bag-act qs-go">Bán</button></div>`);
@@ -23,7 +23,7 @@ export function quickSellPanel(qs, onDone) {
     if (c) { if (pick.has(c.dataset.t)) pick.delete(c.dataset.t); else pick.add(c.dataset.t); paint(); return; }
     if (!e.target.closest('.qs-go')) return;
     const pre = qs.run([...pick], true); if (!pre.n) return;
-    if (!(await showConfirm('Bán nhanh', `Bán ${pre.n} món trang bị? Không lấy lại được.`, { yes: 'Bán', no: 'Thôi' }))) return;
+    if (!(await showConfirm('Bán nhanh', `Bán ${pre.n} món pháp khí? Không lấy lại được.`, { yes: 'Bán', no: 'Thôi' }))) return;
     toast(qs.run([...pick]).msg, 2200); paint(); onDone();
   });
   paint();

@@ -4,7 +4,7 @@ export function createFlight({ me, map, hud, pt, toast, sendMove, radius, cfg })
   // on = true: cất cánh; false: hạ xuống. quiet: không báo (Tự động). Trả về false nếu không làm được.
   function set(on, quiet = false) {
     if (on === !!me.flying) return true;
-    if (on && !me.look?.weapon) { if (!quiet) toast('Cần trang bị kiếm mới ngự kiếm phi hành được', 1600); return false; }
+    if (on && !me.look?.weapon) { if (!quiet) toast('Cần cầm kiếm mới ngự kiếm phi hành được', 1600); return false; }
     if (on && pt.mp < 5) { if (!quiet) toast('Linh lực không đủ để ngự kiếm', 1400); return false; }
     if (!on && !map.canStand(me.x, me.y, radius)) { if (!quiet) toast('Không thể hạ xuống ở đây', 1400); return false; }
     me.flying = on;

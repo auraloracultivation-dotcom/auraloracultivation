@@ -1,7 +1,7 @@
 {
  "_status": "test",
  "_nguon": "Chủ dự án 23/10/2026 (danh sách 48 món, ảnh tấm icon-48-*)",
- "_ghi_chu": "Vật phẩm Đạo Vận / quà. opens: cách dùng (src/game/consumables.js): card = luyện ra Thần Phù ngẫu nhiên; gold/stone/jade = mở ra tiền [min,max]; bicanh = +1 lượt Bí Cảnh hôm nay. Không có opens: nguyên liệu dùng ở nơi khác (Hồn Tinh: luyện hồn thú cưng — tame.js; Ôn Dưỡng Linh Dịch: ôn dưỡng pháp bảo — treasure.js; Ngũ Hành Linh Thạch: đổi hệ phôi luyện — consumables.js). Chủ dự án 23/10: Tiên ngọc CHỈ có khi nạp tiền — không món nào trong game được cho Tiên ngọc miễn phí (đã bỏ Rương Tiên Ngọc).",
+ "_ghi_chu": "Vật phẩm Đạo Vận / quà. opens: cách dùng (src/game/consumables.js): card = luyện ra Thần Phù ngẫu nhiên; gold/stone/jade = mở ra tiền [min,max]; bicanh = +1 lượt Bí Cảnh hôm nay. Không có opens: nguyên liệu dùng ở nơi khác (Hồn Tinh: luyện hồn linh thú — tame.js; Ôn Dưỡng Linh Dịch: ôn dưỡng pháp bảo — treasure.js; Ngũ Hành Linh Thạch: đổi hệ phôi luyện — consumables.js). Chủ dự án 23/10: Tiên ngọc CHỈ có khi nạp tiền — không món nào trong game được cho Tiên ngọc miễn phí (đã bỏ Rương Tiên Ngọc).",
  "items": [
   {
    "id": "item.lenh.huyet-sat.001",
@@ -14,7 +14,7 @@
    "id": "item.dacbiet.hon-tinh.001",
    "name": "Hồn Tinh",
    "cat": "khac",
-   "use": "Luyện hồn thú cưng: thay cho 1 con cùng loài (cần 3 Hồn Tinh mỗi sao)"
+   "use": "Luyện hồn linh thú: thay cho 1 con cùng loài (cần 3 Hồn Tinh mỗi sao)"
   },
   {
    "id": "item.phu.chi-trong.001",

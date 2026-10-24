@@ -1,6 +1,6 @@
 {
  "_status": "test",
- "_nguon": "Chủ dự án 24/10/2026 03:55: nhiệm vụ cầm tay chỉ việc từ con số 0 tới đủ bộ Đạo Tâm 12 món (8 trang bị + 2 kỹ năng + 1 Thần Phù + 1 pháp bảo cùng hệ). Người chơi tự chọn 1 hệ, chỉ nhận 1 bộ. ~7 ngày, có NPC trò chuyện giải thích game, đi thám hiểm các trận nhãn.",
+ "_nguon": "Chủ dự án 24/10/2026 03:55: nhiệm vụ cầm tay chỉ việc từ con số 0 tới đủ bộ Đạo Tâm 12 món (8 pháp khí + 2 kỹ năng + 1 Thần Phù + 1 pháp bảo cùng hệ). Người chơi tự chọn 1 hệ, chỉ nhận 1 bộ. ~7 ngày, có NPC trò chuyện giải thích game, đi thám hiểm các trận nhãn.",
  "_ghi_chu": "Code: src/game/daotam.js. goal.type: talk (npc) · choose_he · level (lv) · kill (zone: mã vùng | 'realm' = vùng cảnh giới hiện tại, rank, count) · gather (group thao|khoang, count) · obtain (item, count) · use (item) · wear (slot: món cùng hệ đã chọn) · awaken (slot, lines) · skill (which sin|cui: đã có + nằm trong ô) · card (Thần Phù hệ đang gắn) · pb (pháp bảo hệ đang đeo + ô Pháp Bảo) · station (id: trận nhãn đã thắp) · hopnhat. reward: exp_lv (× vạch tu vi cấp hiện tại), stone, gold, items [[mã, số]], gift (gear:<ô> | skill:sin | skill:cui | card | pb). Chữ ngắn — chủ dự án: 'mở ra toàn chữ là chữ, gamer chưa chơi đã mệt'.",
  "npcs": {
   "chuong-giao": { "name": "Chưởng giáo Vân Hạc", "prop": "dien-chinh", "dx": 0, "dy": 60, "outfit": 3, "weapon": 0 },
@@ -21,7 +21,7 @@
       "reward": { "gold": 200, "items": [["item.dan.tieu-hoi-huyet.001", 5]] } },
     { "id": "c1.02", "title": "Chọn Đạo Tâm", "goal": { "type": "choose_he" }, "tip": "Chọn 1 hệ — cả bộ Đạo Tâm 12 món sẽ theo hệ này.",
       "reward": { "gift": "gear:vu-khi", "stone": 300 } },
-    { "id": "c1.03", "title": "Cầm vũ khí", "goal": { "type": "wear", "slot": "vu-khi" }, "tip": "Kho → Trang bị → chạm vũ khí → Sử dụng.",
+    { "id": "c1.03", "title": "Cầm vũ khí", "goal": { "type": "wear", "slot": "vu-khi" }, "tip": "Kho → Pháp khí → chạm vũ khí → Sử dụng.",
       "reward": { "exp_lv": 0.5 } },
     { "id": "c1.04", "title": "Thức tỉnh vũ khí", "goal": { "type": "awaken", "slot": "vu-khi", "lines": 1 }, "tip": "Kho → vũ khí → Thức tỉnh. Mỗi lần thêm 1 dòng chỉ số.",
       "reward": { "exp_lv": 0.5, "stone": 300 } },
@@ -99,7 +99,7 @@
     { "id": "c4.02", "title": "Vùng Băng tuyết", "goal": { "type": "kill", "zone": "trang", "count": 50 }, "reward": { "exp_lv": 1, "gold": 1200 } },
     { "id": "c4.03", "title": "Trận nhãn Thương Hải", "goal": { "type": "station", "id": "trang" }, "say": ["Trận nhãn Thương Hải sáng lên!", "Từ đây có boss. Hạ boss có cơ hội lĩnh ngộ kỹ năng."], "reward": { "stone": 1100 } },
     { "id": "c4.04", "title": "Lên Hóa Nguyệt tầng 5", "goal": { "type": "level", "lv": 35 }, "reward": { "gift": "gear:linh-thu", "stone": 1100 } },
-    { "id": "c4.05", "title": "Linh thú hộ thân", "goal": { "type": "wear", "slot": "linh-thu" }, "reward": { "exp_lv": 0.5 } },
+    { "id": "c4.05", "title": "Thú hồn hộ thân", "goal": { "type": "wear", "slot": "linh-thu" }, "reward": { "exp_lv": 0.5 } },
     { "id": "c4.06", "title": "Hạ boss Băng tuyết", "goal": { "type": "kill", "zone": "trang", "rank": "boss", "count": 1 }, "tip": "Boss ở rìa ngoài vùng. Mang đủ đan!", "reward": { "exp_lv": 1.2, "stone": 1500 } },
     { "id": "c4.07", "title": "Lên Hóa Nguyệt tầng 10", "goal": { "type": "level", "lv": 40 }, "reward": { "items": [["item.dan.hoa-than.001", 1]], "stone": 1200 } },
     { "id": "c4.08", "title": "Đột phá Phá Nhật", "goal": { "type": "level", "lv": 41 }, "reward": { "gift": "pb", "exp_lv": 0.5 } }
@@ -110,7 +110,7 @@
    "steps": [
     { "id": "c5.01", "title": "Pháp bảo nhận chủ", "goal": { "type": "pb" }, "tip": "Kho → Pháp Bảo → Đeo, rồi xếp kỹ năng Pháp Bảo vào ô.", "reward": { "exp_lv": 0.5 } },
     { "id": "c5.02", "title": "Hỏi Luyện khí sư", "goal": { "type": "talk", "npc": "luyen-khi-su" },
-      "say": ["Pháp bảo cũng thức tỉnh dòng được như trang bị.", "Ôn dưỡng pháp bảo lên cấp thì bắn mạnh hơn.", "Sắp tới còn khảm ngọc — đồ càng tốt càng có giá."], "reward": { "stone": 1500 } },
+      "say": ["Pháp bảo cũng thức tỉnh dòng được như pháp khí.", "Ôn dưỡng pháp bảo lên cấp thì bắn mạnh hơn.", "Sắp tới còn khảm ngọc — đồ càng tốt càng có giá."], "reward": { "stone": 1500 } },
     { "id": "c5.03", "title": "Vùng Hắc thổ", "goal": { "type": "kill", "zone": "than", "count": 60 }, "reward": { "exp_lv": 1, "gold": 1500 } },
     { "id": "c5.04", "title": "Trận nhãn Xích Diệm", "goal": { "type": "station", "id": "than" }, "say": ["Trận nhãn Xích Diệm sáng lên!", "Âm Hư xuất thế theo giờ. Đủ mạnh hẵng tới gần."], "reward": { "stone": 1500 } },
     { "id": "c5.05", "title": "Lên Phá Nhật tầng 5", "goal": { "type": "level", "lv": 45 }, "reward": { "gift": "gear:phap-tuong", "stone": 1500 } },
@@ -132,7 +132,7 @@
     { "id": "c6.05", "title": "Hạ boss Hắc thạch", "goal": { "type": "kill", "zone": "den", "rank": "boss", "count": 1 }, "reward": { "exp_lv": 1.5, "stone": 3000 } },
     { "id": "c6.06", "title": "Hợp Đạo tầng 10", "goal": { "type": "level", "lv": 60 }, "reward": { "stone": 5000, "gold": 5000 } },
     { "id": "c6.07", "title": "Đỉnh Thiên Đạo", "goal": { "type": "talk", "npc": "chuong-giao" },
-      "say": ["Ngươi đã chạm đỉnh Thiên Đạo — không còn cảnh giới nào cao hơn.", "Từ nay sức mạnh nằm ở trang bị: dòng Đen, pháp bảo, ngọc khảm.", "Bí Cảnh, boss, Âm Hư đang chờ. Chúc đạo hữu tiên lộ thuận lợi!"], "reward": { "stone": 5000 } }
+      "say": ["Ngươi đã chạm đỉnh Thiên Đạo — không còn cảnh giới nào cao hơn.", "Từ nay sức mạnh nằm ở pháp khí: dòng Đen, pháp bảo, ngọc khảm.", "Bí Cảnh, boss, Âm Hư đang chờ. Chúc đạo hữu tiên lộ thuận lợi!"], "reward": { "stone": 5000 } }
    ]
   }
  ]

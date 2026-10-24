@@ -30,7 +30,7 @@
     "cell_px": 1280,
     "_note_cell": "Chống lag (23/10): thế giới chia ô cell_px; mỗi máy chỉ nhận vị trí người trong 3×3 ô quanh mình (src/net/zone.js)",
     "presence_gap_ms": 1500,
-    "_note_presence": "Gom thay đổi trang bị/cảnh giới thành tối đa 1 lần cập nhật Presence mỗi khoảng này (Supabase giới hạn Presence mỗi máy)"
+    "_note_presence": "Gom thay đổi pháp khí/cảnh giới thành tối đa 1 lần cập nhật Presence mỗi khoảng này (Supabase giới hạn Presence mỗi máy)"
   },
   "world": {
     "width_px": 32000,

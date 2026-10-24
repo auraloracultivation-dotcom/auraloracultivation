@@ -1,4 +1,4 @@
-// Công thức có SỐ LẦN DÙNG (chủ dự án 23/10/2026): đan phương / công thức phôi / bí kíp không còn "mua 1 lần dùng cả đời".
+// Công thức có SỐ LẦN DÙNG (chủ dự án 23/10/2026): đan phương / pháp khí phương / bí kíp không còn "mua 1 lần dùng cả đời".
 // Mỗi cuốn dùng được `uses` lần thành công (data/items/recipes.json → uses, không ghi thì theo loại: DEF).
 // Hết lượt thì cuốn đó mất khỏi Kho — còn cuốn khác thì dùng tiếp, không thì phải mua / nhặt lại.
 // Lượt còn lại của cuốn đang dùng: progress.state.recipeUses[recipeId].

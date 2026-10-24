@@ -23,7 +23,7 @@ export function drawPlayer(ctx, p, scale = 1) {
   ctx.scale(scale, scale);
   // Chưa mặc trang phục (người khác chưa gửi đồ, hoặc vừa tháo): mặc tạm 1 trong 6 bộ hệ theo mã người chơi — không còn hình khối cũ
   const look = knownLook(p.look?.outfit ? p.look : { ...p.look, outfit: fallbackOutfit(p.id) });
-  if (look) { // đã mặc trang bị: nhân vật ghép lớp (rig.js) tự lo bóng, nhún, bay
+  if (look) { // đã mặc pháp khí: nhân vật ghép lớp (rig.js) tự lo bóng, nhún, bay
     drawRig(ctx, p, look, (c) => drawBody(c, { ...p, x: 0, y: 0, facing: 1, noShadow: true }));
     ctx.restore();
     return;

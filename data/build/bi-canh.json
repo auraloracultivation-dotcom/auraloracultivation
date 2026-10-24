@@ -62,7 +62,7 @@
    "hp_per_wave": 0.25,
    "base_count": 8,
    "per_wave": 3,
-   "desc": "Mỗi ngày 1 lượt. Đứng ngoài thành rồi bấm Bắt đầu: 10 đợt quái cảnh giới của bạn, mạnh hơn Huyết Sát. Vượt hết 10 đợt nhận 1 món trang bị Thiên hệ ngẫu nhiên (Quang · Lôi · Băng · Phong · Hư · Thời) còn thiếu — đủ cả thì đổi Linh thạch.",
+   "desc": "Mỗi ngày 1 lượt. Đứng ngoài thành rồi bấm Bắt đầu: 10 đợt quái cảnh giới của bạn, mạnh hơn Huyết Sát. Vượt hết 10 đợt nhận 1 món pháp khí Thiên hệ ngẫu nhiên (Quang · Lôi · Băng · Phong · Hư · Thời) còn thiếu — đủ cả thì đổi Linh thạch.",
    "reward": {
     "stone_per_wave": 400,
     "gold_per_wave": 1000,

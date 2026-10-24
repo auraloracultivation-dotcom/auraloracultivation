@@ -56,7 +56,7 @@ async function boot() {
   const [terrainDef, tilesDef] = await Promise.all([loadJSON('data/terrain.json'), loadJSON('data/tiles.json')]);
   const [art, stArt] = await Promise.all([loadJSON('data/art/sprites.json'), loadJSON('data/art/stations-art.json')]); // + hình trận nhãn (tools/station_slice.py)
   const map = await createMap(zoneDef, terrainDef, tilesDef, { ...art, props: { ...art.props, ...stArt.props } });
-  loading.set(72, 'Nạp trang bị…');
+  loading.set(72, 'Nạp pháp khí…');
   const [itemsDef, codesDef, , audioDef, ptDef] = await Promise.all([loadJSON('data/items/items.json'), loadJSON('data/codes.json'),
     loadRig(loadJSON), loadJSON('data/audio.json'), loadJSON('data/skills/phap-tuong.json')]);
   const audio = createAudio(audioDef, loadSettings()); // tiếng chỉ phát sau lần chạm đầu (luật trình duyệt)
@@ -138,7 +138,7 @@ async function boot() {
 
   const setLook = () => { me.look = lookNow(); zone.setLook(me.look); refreshAvatar(); };
   let stopPtSound = null;
-  const PT_MSG = { 'no-avatar': 'Chưa đeo pháp tướng (Kho → Trang bị)', cooldown: 'Pháp tướng đang hồi', 'no-mp': 'Linh lực không đủ để hoá hình' };
+  const PT_MSG = { 'no-avatar': 'Chưa đeo pháp tướng (Kho → Pháp khí)', cooldown: 'Pháp tướng đang hồi', 'no-mp': 'Linh lực không đủ để hoá hình' };
   function phapTuongOff(msg) {
     stopPtSound?.(); stopPtSound = null; // thu lại giữa chừng: tắt dần tiếng hoá hình
     setLook();
@@ -360,7 +360,7 @@ async function boot() {
       ctx.beginPath(); ctx.ellipse(tgt.x, tgt.y + 1, 9 * sprite + 2, 4 * sprite + 1, 0, 0, Math.PI * 2); ctx.stroke();
       ctx.restore();
     }
-    game.renderBelow(ctx, now); // quái + linh thú (hình tạm)
+    game.renderBelow(ctx, now); // quái + thú hồn (hình tạm)
     for (const p of people) drawPlayer(ctx, p, sprite);
     if (!me.look?.weapon) drawSlash(ctx, me, sprite);
     map.town?.drawFront(ctx, cam, me.y); // công trình che trước nhân vật

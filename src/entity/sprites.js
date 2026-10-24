@@ -1,4 +1,4 @@
-// Hình động (quái, linh thú), hiệu ứng và icon vật phẩm — chỉ mục ở data/art/sprites.json (sinh bằng tools/asset_build.py).
+// Hình động (quái, thú hồn), hiệu ứng và icon vật phẩm — chỉ mục ở data/art/sprites.json (sinh bằng tools/asset_build.py).
 // Đổi hình: chạy lại tool hoặc đổi "art" trong data/monsters/monsters.json — không cần sửa code này.
 let DEF = null;
 const imgs = new Map(); // src → Image
@@ -75,7 +75,7 @@ export function drawSheet(ctx, id, anim, t, x, y, h, face = 1, { hue = 0, once =
   return true;
 }
 
-// Ảnh nhỏ (data URL) khung đứng đầu tiên của một tấm hình động — icon thú cưng trong Kho. null khi hình chưa tải xong.
+// Ảnh nhỏ (data URL) khung đứng đầu tiên của một tấm hình động — icon linh thú trong Kho. null khi hình chưa tải xong.
 const thumbs = new Map();
 export function sheetThumb(id, hue = 0, size = 96) {
   const key = `${id}|${hue}`;
@@ -109,7 +109,7 @@ export const fxGlow = (id) => DEF?.fx[id]?.glow || 0; // hiệu ứng Thiên h�
 export const fxRatio = (id) => (DEF?.fx[id] ? DEF.fx[id].fw / DEF.fx[id].fh : 1); // rộng / cao một khung (tia dài pháp bảo)
 export const fxDuration = (id) => (DEF?.fx[id] ? DEF.fx[id].anims.play.n / DEF.fx[id].fps : 0.5);
 
-// Icon vật phẩm / công pháp / ô trang bị (64×64 trong atlas). Trả về data URL để dùng trong <img>, hoặc null nếu chưa có.
+// Icon vật phẩm / công pháp / ô pháp khí (64×64 trong atlas). Trả về data URL để dùng trong <img>, hoặc null nếu chưa có.
 export function iconUrl(id) {
   if (!DEF) return null;
   if (iconUrls.has(id)) return iconUrls.get(id);

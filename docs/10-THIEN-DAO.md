@@ -48,3 +48,12 @@ tu vi về 0, đồ / tiền giữ nguyên, thú cưng đổi công theo tỷ l�
   tự đi tới NPC / trận nhãn, tự chạy hội thoại, tự farm đúng vùng, tự mặc / thức tỉnh / mua / uống đan / đột phá.
   Chọn hệ thì chờ người chơi. Kéo cần điều khiển hoặc bật Tự farm = tắt.
 - Nhiệm vụ cũ kiểu main / explore / craft / combat / long được cho nghỉ (`quests.json → retired_types`).
+
+## Tên gọi (chủ dự án 24/10/2026)
+
+Chỉ đổi chữ hiển thị, mã bên trong giữ nguyên (đồ của người chơi không ảnh hưởng):
+- **Pháp khí** = trang bị (mục Kho `trang-bi`). Công thức luyện phôi = **Pháp khí phương** (mục `phap-khi`, giống "Đan phương").
+- **Thú hồn** = ô trang bị `linh-thu` (mặc như trang bị; kỹ năng "Thú Hồn" gọi nó ra đánh cùng; bí kíp Thú Hồn Khế Ước).
+- **Linh thú** = thú bắt được khi giết quái, đi theo hỗ trợ tấn công (mục Kho `thu-cung`, src/game/tame.js).
+- Pháp bảo (tăng hiệu ứng kỹ năng) · Kỹ năng · Đạo Vận (hợp nhất bộ) · Công pháp (nâng tiềm năng) · Pháp tướng — giữ tên.
+- Sắp có: khảm ngọc vào pháp khí (tên đề xuất: Linh Châu / "Khảm Châu").

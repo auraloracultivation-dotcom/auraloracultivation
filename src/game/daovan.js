@@ -65,7 +65,7 @@ export function createDaoVan({ def, bag, cards, progress }) {
     if (!miss.length && thien) miss = bag.missing((d) => d.he && d.slot);
     if (!miss.length) { progress.addStone(D.dup_stone); toast(`Đồ ${thien ? 'Thiên hệ' : 'ngũ hành'} rơi ra nhưng đã đủ bộ: +${D.dup_stone} Linh thạch`, 2000); return null; }
     const id = miss[Math.floor(Math.random() * miss.length)]; bag.give(id);
-    toast(`Nhặt được đồ ${thien ? 'Thiên hệ' : 'ngũ hành'}! Xem Kho → Trang bị`, 2600);
+    toast(`Nhặt được đồ ${thien ? 'Thiên hệ' : 'ngũ hành'}! Xem Kho → Pháp khí`, 2600);
     return id;
   }
   return { mods, heOf, counts, onKill, grantSet, limits: def.limits, fx: def.fx };

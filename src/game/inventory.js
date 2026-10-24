@@ -1,8 +1,8 @@
-// Kho thống nhất cho bảng Kho và ô trang bị ở bảng Nhân vật:
+// Kho thống nhất cho bảng Kho và ô pháp khí ở bảng Nhân vật:
 //   đồ có hình (6 hệ, src/ui/testbag.js) + đồ luyện từ phôi + nguyên liệu, đan, đan phương, công thức, bí kíp.
-// Mỗi món có danh sách thao tác: Sử dụng / Tháo / Thức tỉnh / Phân rã / Vứt (trang bị), Dùng (đan), Luyện (công thức).
+// Mỗi món có danh sách thao tác: Sử dụng / Tháo / Thức tỉnh / Phân rã / Vứt (pháp khí), Dùng (đan), Luyện (công thức).
 // THỬ NGHIỆM phía máy khách (localStorage) — Mốc 4 chuyển lên máy chủ.
-const SLOT = { 'mat-na': 'Mặt nạ', 'trang-phuc': 'Trang phục', 'vu-khi': 'Vũ khí', nhan: 'Nhẫn', canh: 'Cánh', 'linh-thu': 'Linh thú',
+const SLOT = { 'mat-na': 'Mặt nạ', 'trang-phuc': 'Trang phục', 'vu-khi': 'Vũ khí', nhan: 'Nhẫn', canh: 'Cánh', 'linh-thu': 'Thú hồn',
   'day-chuyen': 'Dây chuyền', 'phap-tuong': 'Pháp tướng' };
 const STAT = { hp: 'Khí huyết', linh: 'Tấn công', def: 'Phòng thủ', xuyen: 'Xuyên giáp', crit: 'Bạo kích %', hut: 'Hút máu %', phan: 'Phản đòn %' };
 
@@ -30,7 +30,7 @@ export function createInventory({ ru, recipes, info, progress, bag, craft, itemD
   const needText = (inputs) => inputs.map((i) => `${nm(i.id)} ${progress.count(i.id)}/${i.count}`).join(' · ');
   const lines = (a) => (craft.norm(a)?.lines || []).map((l) => ({ text: `${STAT[l.k] || l.k} +${l.v}${l.p ? '%' : ''}`, tier: l.t }));
 
-  // Thao tác chung cho một món trang bị. a = dữ liệu thức tỉnh (tier, lines, spent)
+  // Thao tác chung cho một món pháp khí. a = dữ liệu thức tỉnh (tier, lines, spent)
   function gearActions(a, equipped) {
     const cost = craft.awakenCost(a), refund = craft.dismantleRefund(a);
     return [

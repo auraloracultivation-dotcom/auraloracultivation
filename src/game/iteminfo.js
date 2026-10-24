@@ -4,7 +4,7 @@ const ZONE = { xanh: 'Vùng Xanh (đồng cỏ quanh thành)', cam: 'Vùng Cam (
   huvo: 'Âm Hư từ hư vô' };
 const RANK = { thuong: 'quái thường', elite: 'tinh anh', boss: 'boss' };
 
-const SLOT = { 'mat-na': 'Mặt nạ', 'trang-phuc': 'Trang phục', 'vu-khi': 'Vũ khí', nhan: 'Nhẫn', canh: 'Cánh', 'linh-thu': 'Linh thú', 'day-chuyen': 'Dây chuyền', 'phap-tuong': 'Pháp tướng' };
+const SLOT = { 'mat-na': 'Mặt nạ', 'trang-phuc': 'Trang phục', 'vu-khi': 'Vũ khí', nhan: 'Nhẫn', canh: 'Cánh', 'linh-thu': 'Thú hồn', 'day-chuyen': 'Dây chuyền', 'phap-tuong': 'Pháp tướng' };
 const BUFF = { linh: 'Tấn công', def: 'Phòng thủ', pt_drain: 'Tiêu hao Pháp tướng' };
 
 export function createItemInfo({ monsters, shop, pills, blanks, realms, gp, cpText }) {

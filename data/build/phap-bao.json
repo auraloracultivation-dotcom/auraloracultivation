@@ -1,7 +1,7 @@
 {
  "_status": "test",
  "_nguon": "Chủ dự án 23/10/2026 (trao toàn quyền): hệ pháp bảo kiểu Tiên Nghịch × My Heroes. Claude thiết kế — tên riêng của Auralora, không lấy tên trong truyện.",
- "_ghi_chu": "Pháp bảo: 1 ô riêng (mở ở unlock). Có được từ Phôi pháp bảo (Vạn Bảo Lâu / rơi từ tinh anh, boss, Âm Hư) — chưa biết là pháp bảo gì, phải NHẬN CHỦ (tốn Linh thạch) mới lộ. Đeo vào thì kỹ năng 'Pháp Bảo' (xếp vào ô kỹ năng) kích hoạt chiêu riêng. Chiêu bắn đạn đi qua Đạo Vận (barrage.js) nên ăn mọi hiệu ứng bộ + Thần Phù (bắn quạt, nảy, tách…). Ôn dưỡng lên cấp 1→10: sát thương +mul_per_lv mỗi cấp, số đạn +1 mỗi 2 cấp. Thức tỉnh dòng chỉ số như trang bị (random Lục→Đen). Code: src/game/treasure.js. Từ cấp 3, ôn dưỡng cần thêm Ôn Dưỡng Linh Dịch theo lv_dich. Icon: data/art/sprites.json → icons[pb.*] (ảnh chủ dự án).",
+ "_ghi_chu": "Pháp bảo: 1 ô riêng (mở ở unlock). Có được từ Phôi pháp bảo (Vạn Bảo Lâu / rơi từ tinh anh, boss, Âm Hư) — chưa biết là pháp bảo gì, phải NHẬN CHỦ (tốn Linh thạch) mới lộ. Đeo vào thì kỹ năng 'Pháp Bảo' (xếp vào ô kỹ năng) kích hoạt chiêu riêng. Chiêu bắn đạn đi qua Đạo Vận (barrage.js) nên ăn mọi hiệu ứng bộ + Thần Phù (bắn quạt, nảy, tách…). Ôn dưỡng lên cấp 1→10: sát thương +mul_per_lv mỗi cấp, số đạn +1 mỗi 2 cấp. Thức tỉnh dòng chỉ số như pháp khí (random Lục→Đen). Code: src/game/treasure.js. Từ cấp 3, ôn dưỡng cần thêm Ôn Dưỡng Linh Dịch theo lv_dich. Icon: data/art/sprites.json → icons[pb.*] (ảnh chủ dự án).",
  "unlock": "tc_so",
  "drop": {
   "elite": 0.004,

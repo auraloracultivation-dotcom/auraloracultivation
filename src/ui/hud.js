@@ -1,5 +1,5 @@
 // Giao diện trong game — bộ HUD v3 (chủ dự án 23/10/2026, ảnh GPT: assets/ui/_source/hud-v3-gpt.png):
-//   trên trái  — khung nhân vật (chạm ảnh = bảng trang bị), 3 ô tiền Vàng / Linh thạch / Tiên ngọc, băng "Tự động"
+//   trên trái  — khung nhân vật (chạm ảnh = bảng pháp khí), 3 ô tiền Vàng / Linh thạch / Tiên ngọc, băng "Tự động"
 //   trên phải  — bản đồ nhỏ, 6 nút (menu, bản đồ, đồ giám, nhiệm vụ, cửa hàng, cài đặt),
 //                4 nút tròn: Đạo Vận · Nhân Vật (bảng chỉ số) · Pháp bảo · Thần phù, khung nhiệm vụ bật/tắt
 //   dưới trái  — Kho, Chat (bấm mới hiện khung chat, chạm chỗ khác thì tắt) — src/ui/hud-chat.js
@@ -40,7 +40,7 @@ export function createHud(opts) {
   // ---- Trên trái: khung nhân vật + ô tiền + băng Tự động ----
   const me = add(`<div class="h3-left">
     <div class="h3-me">
-      <button type="button" class="h3-avatar" style="${NV(37, 37, 152, 152)}" aria-label="Bảng trang bị"><canvas width="128" height="128"></canvas></button>
+      <button type="button" class="h3-avatar" style="${NV(37, 37, 152, 152)}" aria-label="Bảng pháp khí"><canvas width="128" height="128"></canvas></button>
       <div class="h3-name" style="${NV(210, 52, 330, 38)}"><b data-name></b></div>
       ${['hp', 'mp', 'xp'].map((k, i) => `<div class="h3-bar ${k}" style="${NV(252, [99, 133, 170][i], 285, [23, 26, 25][i])}"><i data-${k}></i><b data-${k}-t></b></div>`).join('')}
       <b class="h3-lv" style="${NV(175, 183, 0, 35)}" data-life title="Thọ nguyên (năm)" hidden></b>

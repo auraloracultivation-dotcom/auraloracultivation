@@ -1,6 +1,6 @@
 // Kỹ năng người chơi (THỬ NGHIỆM phía máy khách): dùng chiêu, đạn bay, tự dùng chiêu khi bật Tự động.
 // Thông số ở data/gameplay.json → skills. kind: bolt | strike | area_self | heal | buff; chiêu cũ (kiếm khí, khống chế,
-// linh thú, lướt, nguyên anh) giữ cách riêng. Hiệu ứng v.* cắt từ tấm chủ dự án (tools/fx_sheets.py).
+// thú hồn, lướt, nguyên anh) giữ cách riêng. Hiệu ứng v.* cắt từ tấm chủ dự án (tools/fx_sheets.py).
 
 // c: { S, me, mobs, map, pt, cds, bar, toast, say, play, fx, bolts, strike, target, buffs, recompute, heal, maxHp, now, dead, summonPet,
 //      mods() (Đạo Vận: hồi chiêu, linh lực), fire(spec) + maybeEcho(fn) (barrage.js: đạn xoè quạt, nảy, tách…) }

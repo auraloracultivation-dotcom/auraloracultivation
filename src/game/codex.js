@@ -1,4 +1,4 @@
-// Dựng nội dung Đồ giám (src/ui/codex.js) từ data/: linh thảo, khoáng, đan, đan phương, công pháp, trang bị, phôi,
+// Dựng nội dung Đồ giám (src/ui/codex.js) từ data/: linh thảo, khoáng, đan, đan phương, công pháp, pháp khí, phôi,
 // quái, kỹ năng người + quái, hiệu ứng, NPC, vật phẩm khác. Trạng thái ảnh:
 //   ok   = ảnh riêng của chủ dự án đã dùng trong game
 //   tam  = ảnh thử nghiệm / gói miễn phí / dùng chung / mượn hình khác → nên thay
@@ -8,7 +8,7 @@ import { showCodex } from '../ui/index.js';
 
 const ZONE = { xanh: 'Vùng Xanh', cam: 'Vùng Cam', xam: 'Vùng Xám Khói', trang: 'Vùng Trắng', than: 'Vùng Xám Than', den: 'Vùng Đen', tim: 'Vùng Tím', huvo: 'Hư Vô (khắp nơi)' };
 const RANK = { thuong: 'Quái thường', elite: 'Tinh anh', boss: 'Boss' };
-const SLOT = { 'trang-phuc': 'Trang phục', 'vu-khi': 'Vũ khí', canh: 'Cánh', 'phap-tuong': 'Pháp tướng', 'mat-na': 'Mặt nạ', nhan: 'Nhẫn', 'day-chuyen': 'Dây chuyền', 'linh-thu': 'Linh thú' };
+const SLOT = { 'trang-phuc': 'Trang phục', 'vu-khi': 'Vũ khí', canh: 'Cánh', 'phap-tuong': 'Pháp tướng', 'mat-na': 'Mặt nạ', nhan: 'Nhẫn', 'day-chuyen': 'Dây chuyền', 'linh-thu': 'Thú hồn' };
 const OWNER_SHEETS = new Set(['soi-loi', 'ran-ba-dau', 'xuc-tu', 'ky-lan-loi', 'thu-tim']); // quái chủ dự án vẽ
 const OWNER_FX = new Set([...['v.dan-hoa', 'v.no-hoa', 'v.dan-bang', 'v.no-bang', 'v.moc-lien', 'v.dan-phong', 'v.loc-xoay', 'v.loi-tru', 'v.dia-thu', 'v.long-thuy', 'v.ho-the', 'v.van-kiem', 'v.hac-dong', 'v.phuong-hoang'], 'kiem-bang-bay', 'kiem-bang-no', 'moc-troi', 'tho-vong', 'hoa-cot', 'may-kiep', 'set-danh']);
 const LOOK_SLOTS = new Set(['trang-phuc', 'vu-khi', 'canh', 'phap-tuong']); // ô hiện hình trên người
@@ -68,11 +68,11 @@ export async function openCodex(o) {
     skill('skill.attack', 'Đánh thường', `${U}tan-cong.png`, ['chem-x'], ['Chém vũ khí vào mục tiêu gần nhất']),
     skill('skill.kiem-khi', 'Kiếm khí', `${U}kiem-khi.png`, ['kiem-bang-bay', 'kiem-bang-no'], [`Bắn kiếm khí ×${S['kiem-khi'].mul} sát thương · ${S['kiem-khi'].mp} linh lực · hồi ${S['kiem-khi'].cd_s}s · mở ở Ngưng Mạch`]),
     skill('skill.khong-che', 'Khống chế', `${U}khong-che.png`, ['moc-troi'], [`Trói mục tiêu ${S['khong-che'].stun_s}s · ${S['khong-che'].mp} linh lực · hồi ${S['khong-che'].cd_s}s · mở ở Ngưng Mạch`]),
-    { ...skill('skill.linh-thu', 'Linh thú', `${U}linh-thu.png`, [], [`Gọi linh thú đánh cùng ${S['linh-thu'].last_s}s · hồi ${S['linh-thu'].cd_s}s · mở ở Tụ Tinh, cần đeo linh thú`]),
-      status: 'tam', img: null, anim: sheetAnim('cho-trang', ['idle', 'walk']), note: 'Linh thú đang dùng chó trắng (gói miễn phí) · chưa có hình linh thú riêng' },
+    { ...skill('skill.linh-thu', 'Thú hồn', `${U}linh-thu.png`, [], [`Gọi thú hồn đánh cùng ${S['linh-thu'].last_s}s · hồi ${S['linh-thu'].cd_s}s · mở ở Tụ Tinh, cần đeo thú hồn`]),
+      status: 'tam', img: null, anim: sheetAnim('cho-trang', ['idle', 'walk']), note: 'Thú hồn đang dùng chó trắng (gói miễn phí) · chưa có hình thú hồn riêng' },
     skill('skill.luot', 'Lướt', `${U}luot.png`, [], [`Tăng né ×${S.luot.ne_mul} và tốc độ trong ${S.luot.last_s}s · hồi ${S.luot.cd_s}s · mở ở Tụ Tinh`]),
     skill('skill.nguyen-anh', 'Hóa Nguyệt Chấn (diện rộng)', `${U}nguyen-anh.png`, ['k.bao-tho'], [`Đánh quanh mình ×${S['nguyen-anh'].mul} · ${S['nguyen-anh'].mp} linh lực · mở ở Hóa Nguyệt`]),
-    skill('skill.phap-tuong', 'Pháp tướng hoá hình', `${U}phap-tuong.png`, [], [`+${Math.round((S['phap-tuong'].atk_mul - 1) * 100)}% công, +${Math.round((S['phap-tuong'].def_mul - 1) * 100)}% thủ khi hiện; tốn linh lực liên tục`], 'Hình = pháp tướng đang đeo (xem Trang bị)'),
+    skill('skill.phap-tuong', 'Pháp tướng hoá hình', `${U}phap-tuong.png`, [], [`+${Math.round((S['phap-tuong'].atk_mul - 1) * 100)}% công, +${Math.round((S['phap-tuong'].def_mul - 1) * 100)}% thủ khi hiện; tốn linh lực liên tục`], 'Hình = pháp tướng đang đeo (xem Pháp khí)'),
     ...S._order.filter((id) => S[id]?.kind && S[id].fx).map((id) => skill(`skill.${id}`, S[id].name, `${U}trong.png`, [S[id].fx, S[id].hit_fx].filter(Boolean),
       [`${S[id].desc.replace(/\{(\w+)(%?)\}/g, (_, k, p) => (p ? `${Math.round(S[id][k] * 100)}%` : S[id][k]))} · ${S[id].mp} linh lực · hồi ${S[id].cd_s}s`], 'Hiệu ứng: tấm chủ dự án 23/10')),
     skill('skill.bay', 'Ngự kiếm phi hành', `${U}bay.png`, [], ['Cầm kiếm mới bay được · tốn linh lực mỗi giây']),
@@ -117,16 +117,16 @@ export async function openCodex(o) {
     sections: [
       { id: 'thao', name: 'Linh thảo · khoáng', hint: 'Icon vuông, nền trong suốt (≈256×256). Đặt tên file theo mã (dòng chữ nhỏ dưới tên).', entries: [...mat('thao'), ...mat('khoang'), ...mat('dacbiet')] },
       { id: 'dan', name: 'Đan dược', hint: 'Icon viên đan, nền trong suốt.', entries: pills.pills.map((d) => iconEntry(d)).concat(recipes.items.filter((d) => d.cat === 'khac').map((d) => iconEntry(d))) },
-      { id: 'phuong', name: 'Đan phương · công thức', hint: 'Icon trục cuộn / sách, nền trong suốt.', entries: recipes.items.filter((d) => d.cat === 'dan-phuong' || d.cat === 'phap-khi').map((d) => iconEntry(d)) },
+      { id: 'phuong', name: 'Đan phương · Pháp khí phương', hint: 'Icon trục cuộn / sách, nền trong suốt.', entries: recipes.items.filter((d) => d.cat === 'dan-phuong' || d.cat === 'phap-khi').map((d) => iconEntry(d)) },
       { id: 'congphap', name: 'Công pháp', hint: 'Icon sách bí kíp. Muốn có hình chiêu thức riêng: gửi kèm 1 dải hiệu ứng (nhiều khung xếp ngang).', entries: cpList },
       { id: 'kynang', name: 'Kỹ năng người', hint: 'Mỗi kỹ năng: 1 icon nút tròn + 1 dải hiệu ứng (nhiều khung xếp ngang, nền trong suốt). Bấm ▶ để xem.', entries: skills },
       { id: 'quaiskill', name: 'Kỹ năng quái · hiệu ứng', hint: 'Hiệu ứng khi quái đánh / chết, và các hiệu ứng chưa dùng.', entries: [...mskills, ...otherFx] },
       { id: 'quai', name: 'Quái vật', hint: 'Mỗi quái: dải hình đứng / đi / đánh / chết (cùng cỡ khung, nền trong suốt). Bấm ▶ nhiều lần để xem từng chuyển động.', entries: mon },
-      { id: 'trangbi', name: 'Trang bị', hint: 'Đồ 6 hệ trong Kho (hình mặc lên người) và các ô chưa có đồ.', entries: [...gear, ...emptySlots] },
+      { id: 'trangbi', name: 'Pháp khí', hint: 'Đồ 6 hệ trong Kho (hình mặc lên người) và các ô chưa có đồ.', entries: [...gear, ...emptySlots] },
       { id: 'phoi', name: 'Phôi luyện', hint: 'Đồ luyện từ phôi chưa có hình riêng — mỗi tên mẫu cần 1 ảnh.', entries: phoi },
       { id: 'daovan', name: 'Đạo Vận', hint: 'Bộ ngũ hành, Thần Phù (cần ảnh lá phù ~256×384), pháp bảo (cần ảnh pháp bảo ~256×256), cấm chế. Nền trong suốt.', entries: daoVan },
       { id: 'npc', name: 'NPC', hint: '50 NPC (hình riêng, không phải vật phẩm).', entries: npcs },
-      { id: 'khac', name: 'Khác', hint: 'Tiền tệ, icon ô trang bị, vật phẩm nhiệm vụ.', entries: misc },
+      { id: 'khac', name: 'Khác', hint: 'Tiền tệ, icon ô pháp khí, vật phẩm nhiệm vụ.', entries: misc },
     ],
   });
 }

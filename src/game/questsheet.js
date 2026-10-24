@@ -7,7 +7,7 @@
 import { showSheet, escapeHtml as E } from '../ui/index.js';
 import { compactNum as N } from '../core/index.js';
 
-const SLOT = { 'mat-na': 'Mặt nạ', 'trang-phuc': 'Trang phục', 'vu-khi': 'Vũ khí', nhan: 'Nhẫn', canh: 'Cánh', 'linh-thu': 'Linh thú',
+const SLOT = { 'mat-na': 'Mặt nạ', 'trang-phuc': 'Trang phục', 'vu-khi': 'Vũ khí', nhan: 'Nhẫn', canh: 'Cánh', 'linh-thu': 'Thú hồn',
   'day-chuyen': 'Dây chuyền', 'phap-tuong': 'Pháp tướng' };
 const GIFT = { 'skill:sin': 'Kỹ năng tuyệt chiêu', 'skill:cui': 'Kỹ năng phụ', card: 'Thần Phù', pb: 'Pháp bảo' };
 const btn = (act, arg, text, on = true) => `<button type="button" class="bag-act sm" data-act="${act}" data-arg="${E(arg)}"${on ? '' : ' disabled'}>${text}</button>`;

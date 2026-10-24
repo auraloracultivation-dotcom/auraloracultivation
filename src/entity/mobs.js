@@ -157,11 +157,11 @@ export function drawFx(ctx, fx, ox, oy) {
     } else if (f.kind === 'ring') {
       ctx.globalAlpha = f.t / f.life * 0.7; ctx.strokeStyle = f.color; ctx.lineWidth = 3;
       ctx.beginPath(); ctx.ellipse(x, y, f.r * (1.2 - f.t / f.life * 0.4), f.r * 0.55, 0, 0, Math.PI * 2); ctx.stroke();
-    } else if (f.kind === 'pet' && f.img?.complete && f.img.naturalWidth) { // linh thú đang mặc (ô Linh thú): hình tĩnh nhún theo bước
+    } else if (f.kind === 'pet' && f.img?.complete && f.img.naturalWidth) { // thú hồn đang mặc (ô Thú hồn): hình tĩnh nhún theo bước
       const h = 26, w = h * f.img.naturalWidth / f.img.naturalHeight, b = f.moving ? Math.abs(Math.sin(f.t * 9)) * 2 : Math.sin(f.t * 2.5) * 0.8;
       ctx.save(); ctx.globalAlpha = 1; ctx.translate(x, y - b); if (f.face < 0) ctx.scale(-1, 1); ctx.drawImage(f.img, -w / 2, -h, w, h); ctx.restore();
     } else if (f.kind === 'pet' && drawSheet(ctx, 'cho-trang', f.moving ? 'walk' : 'idle', f.t, x, y, 18, f.face, { fps: 10 })) {
-      // linh thú: chó trắng
+      // thú hồn: chó trắng
     } else if (f.kind === 'pet') {
       ctx.globalAlpha = 1; ctx.fillStyle = '#f5f0e6'; ctx.strokeStyle = '#1b1208'; ctx.lineWidth = 1;
       ctx.beginPath(); ctx.ellipse(x, y - 5, 5, 4, 0, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
