@@ -2,7 +2,7 @@
 // Lưu cùng tiến trình chơi thử (localStorage) — data/gameplay.json → skills._slots / _default_loadout.
 export function createLoadout(progress, S) {
   const N = S._slots;
-  const known = (id) => !!S[id] && !id.startsWith('_') && id !== 'cong_phap_effects';
+  const known = (id) => !!S[id] && !id.startsWith('_') && id !== 'cong_phap_effects' && id !== 'luot'; // Lướt là nút riêng cạnh Bay (25/10/2026)
   const fix = () => {
     let l = progress.state.loadout;
     if (!Array.isArray(l)) l = S._default_loadout.slice();

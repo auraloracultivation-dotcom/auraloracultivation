@@ -7,7 +7,7 @@ const SLOT = 'assets/ui/frames/hud-o-ky-nang.png'; // ô trống: khung tròn, h
 const fan = (deg, r = 122) => ({ dx: Math.round(Math.cos((deg * Math.PI) / 180) * r), dy: -Math.round(Math.sin((deg * Math.PI) / 180) * r) });
 
 // game(): gameplay (tạo sau HUD); S(n): ảnh nút cũ assets/ui/skills/<n>.png
-export function hudActions({ game, S, attack, usePhapTuong, flight, toast }) {
+export function hudActions({ game, S, attack, usePhapTuong, flight, toast, dashDir = () => null }) {
   function useSlot(i) {
     const g = game(), id = g.slotSkill(i);
     if (!id) return g.openSkills(i);
@@ -32,6 +32,7 @@ export function hudActions({ game, S, attack, usePhapTuong, flight, toast }) {
           if (!flight().set(state === 1)) return 'keep';
         },
       },
+      { id: 'luot', name: 'Lướt', icon: S('luot'), ...fan(101, 238), size: 42, onUse: () => { const d = dashDir(); game().dash(d?.x, d?.y); } }, // Lướt: tính năng cạnh nút Bay (chủ dự án 25/10/2026)
       { id: 'auto', name: 'Tự farm', icon: ICON('nut-tu-dong'), ...fan(90, 172), size: 50, onUse: () => game().toggleAuto() },
       // Tự làm nhiệm vụ (chủ dự án 24/10: tách hẳn khỏi Tự farm) — src/game/questauto.js
       { id: 'autoq', name: 'Tự nhiệm vụ', icon: ICON('nut-nhiem-vu'), group: 'left', size: 42, onUse: () => game().toggleQuestAuto?.() },

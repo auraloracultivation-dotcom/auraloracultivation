@@ -37,7 +37,6 @@ import { createDaoVan } from './daovan.js';
 import { createCards } from './cards.js';
 import { createBarrage } from './barrage.js';
 import { createTreasure } from './treasure.js';
-import { createCamChe } from './camche.js';
 import { createBiCanh } from './bicanh.js';
 import { createConsumables } from './consumables.js';
 import { createGuide } from './guide.js';
@@ -62,7 +61,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     'data/items/quest-items.json', 'data/realms.json'].map((p) => loadJSON(p)));
   const [recipes, shop, artIdx] = await Promise.all([loadJSON('data/items/recipes.json'), loadJSON('data/shop.json'), loadJSON('data/equipment/art.json')]);
   const [curDef, lifeDef, premium, dvDef, misc] = await Promise.all(['data/currency.json', 'data/lifespan.json', 'data/items/premium.json', 'data/build/dao-van.json', 'data/items/misc.json'].map((p) => loadJSON(p)));
-  const [pbDef, ccDef, bcDef] = await Promise.all(['data/build/phap-bao.json', 'data/build/cam-che.json', 'data/build/bi-canh.json'].map((p) => loadJSON(p))); // pháp bảo, cấm chế, bí cảnh
+  const [pbDef, bcDef] = await Promise.all(['data/build/phap-bao.json', 'data/build/bi-canh.json'].map((p) => loadJSON(p))); // pháp bảo, cấm chế, bí cảnh
   const artDef = await loadJSON('data/art/sprites.json');
   await Promise.all([loadSprites(artDef), loadNpcArt(artDef.npc)]); // hình quái, hiệu ứng, icon, NPC (thử nghiệm)
   const progress = createProgress(userId, gp);
@@ -107,7 +106,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     if (dead && mode) return; auto = !!mode; autoDir = null; mode ? autoPlay.start(mode, focus) : autoPlay.reset();
     hud.setActive('auto', mode === 'farm'); // nút Tự nhiệm vụ do questauto.js bật / tắt (không nháy khi đổi chế độ farm)
   }
-  let hp = 0, dead = false, autoDir = null, hurtAt = -99, attackCd = 0, auto = false, resumeAuto = null, targetUid = null, pet = null, now = 0;
+  let hp = 0, dead = false, autoDir = null, hurtAt = -99, attackCd = 0, auto = false, resumeAuto = null, targetUid = null, dash = null, now = 0;
   const fx = [], bolts = [];
   const { say, play, spark } = createFxQueue(fx, fxDuration); // số bay trên đầu + hiệu ứng hình
 
@@ -128,7 +127,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const HEAD = 30; // độ cao đầu nhân vật (điểm)
   const healMe = (n) => { if (n > 0 && !dead) { hp = Math.min(ps.hp, hp + n); say(me.x, me.y - HEAD, `+${Math.round(n)}`, '#5dff7a', false, true); } }; // linh hồn không hút máu (chủ dự án 23/10)
   const midY = (m) => m.y - (m.def.art?.h || m.r * 2) / 2;
-  const HIT_FX = { attack: ['chem-x', 18], 'kiem-khi': ['kiem-bang-no', 28], 'linh-thu': ['chem-x', 14] };
+  const HIT_FX = { attack: ['chem-x', 18] };
 
   // ---------- Người chơi đánh quái ----------
   function strike(m, mul, skill) {
@@ -228,19 +227,17 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const barrage = createBarrage({ dv, me, mobs, map, bolts, play, strike, toast, dead: () => dead, maxHp: () => ps.hp, heal: (n) => { if (!dead) hp = Math.min(ps.hp, hp + n); } });
   treasure = createTreasure({ stageName: progress.stageName, def: pbDef, S, progress, craft, awaken, barrage, mobs, me, map, buffs, recompute, target, play, say, toast, heOf: dv.heOf,
     stageOk: (id) => craft.stageOk(id), now: () => now, maxHp: () => ps.hp, rewind: () => { for (const k in cds) if (k !== 'phap-bao') cds[k] = 0; }, heal: (n) => { if (!dead) hp = Math.min(ps.hp, hp + n); } });
-  const camChe = createCamChe({ def: ccDef, dv, barrage, me, mobs, target, play, toast, dead: () => dead, maxHp: () => ps.hp, heal: (n) => { if (!dead) hp = Math.min(ps.hp, hp + n); } });
   const biCanh = createBiCanh({ def: bcDef, mdef: monDef, mobs, map, me, progress, life, wallet, cards, cardDef: dvDef.cards, dv, pbItem: pbDef.items[0].id,
     toast, play, say, dead: () => dead, stageId: () => progress.stageDef.tier, stageName: progress.stageName, itemName: (id) => itemDefs.get(id)?.name || bag.nameOf?.(id) || id, S, pbList: pbDef.list, learn: () => learn, treasure: () => treasure });
   const hopNhat = createHopNhat({ def: dvDef.hop_nhat, forged: (he, sl) => progress.equipped().some((g) => g.tier && g.he === he && g.slot === sl), bag, treasure, cards, loadout, S, cardName: (id) => dvDef.cards.list.find((x) => x.id === id)?.name || id, learned: (id) => learn.learned(id), target: (r) => (me.flying ? null : target(r)), pt, ps: () => ps, dead: () => dead, toast, src: { pb: pbDef, cards: dvDef.cards.drop, set: dvDef.set_drop, skill: gp.skill_drop, realms: realms.realms } }); // Thiên Cơ Hợp Nhất (src: nguồn để chỉ cách lấy)
-  const guide = createGuide({ hopNhat, learn, dvDef, ccDef, pbDef, items: itemsJson.items, S, dv, cards, bag, progress, loadout, stageName: progress.stageName,
+  const guide = createGuide({ hopNhat, learn, dvDef, pbDef, items: itemsJson.items, S, dv, cards, bag, progress, loadout, stageName: progress.stageName,
     art: (a) => artInfo(a)?.file || artFile(a), equip: (id) => itemAction(`bag:${id}`, 'equip'), toast }); // nút + bảng Cẩm nang Đạo Vận
   const usable = createConsumables({ itemDefs, progress, wallet, cards, cardDef: dvDef.cards, treasure, biCanh, heOrder: dvDef.he_order, play, me, recompute });
-  const skills = createSkills({ fam: gp.fx_families, sin: new Set(Object.values(dvDef.hop_nhat.he).map((h) => h.skill_sin)), heColor: (he) => dv.heOf(he)?.color, hopOn: () => !!hopNhat.active(), useTreasure: (q) => treasure.use(q, { soft: !!hopNhat.active() }), camChe: (s) => camChe.cast(s), S, me, mobs, map, pt, cds, toast, say, play, fx, bolts, strike, target, buffs, recompute, mods: dv.mods, fire: barrage.fire, maybeEcho: barrage.maybeEcho, mover: barrage.mover, schedule: barrage.schedule, healPets: (f) => tame.healAll(f),
+  const skills = createSkills({ fam: gp.fx_families, sin: new Set(Object.values(dvDef.hop_nhat.he).map((h) => h.skill_sin)), heColor: (he) => dv.heOf(he)?.color, hopOn: () => !!hopNhat.active(), useTreasure: (q) => treasure.use(q, { soft: !!hopNhat.active() }), S, me, mobs, map, pt, cds, toast, say, play, fx, bolts, strike, target, buffs, recompute, mods: dv.mods, fire: barrage.fire, maybeEcho: barrage.maybeEcho, mover: barrage.mover, schedule: barrage.schedule, healPets: (f) => tame.healAll(f),
     get bar() { return bar; }, heal: (n) => { if (dead) return; hp = Math.min(ps.hp, hp + n); say(me.x, me.y - HEAD, `+${Math.round(n)} khí huyết`, '#5dff7a', true); },
     maxHp: () => ps.hp, now: () => now, dead: () => dead,
     swing(id, s) { const k = gp.skill_swing.by_id[id] || gp.skill_swing.by_kind[s.kind], m = k && target(s.range_px || s.radius_px || 200); if (!k) return; if (m) me.facing = mobs.rel(m, me).dx >= 0 ? 1 : -1; me.onSkillSwing?.(k); }, // xoay mặt về mục tiêu rồi vung kiếm
-    summonPet() { const a = bag.equippedItem('linh-thu')?.art || progress.equipped().find((x) => x.slot === 'linh-thu')?.art, f = a && artFile(a); // hình thú hồn đang mặc
-      pet = { until: now + S['linh-thu'].last_s, next: now, x: me.x - 14, y: me.y, t: 0, face: 1, moving: false, img: f ? Object.assign(new Image(), { src: f }) : null }; play('vong-lua', me.x - 14, me.y - 6, 34); toast('Thú hồn hiện thân', 1000); } });
+  });
   const { usePill, breakthrough, breakthroughPill } = createPillUse({ majors: realms.realms.map((r) => r.short.toLowerCase()), realmName: (k) => realms.realms.find((r) => r.short.toLowerCase() === k)?.name, gp, realms, progress, itemDefs, life, quests, pt, buffs, cds, me, HEAD, toast, say, play, addExp, recompute,
     now: () => now, dead: () => dead, hp: () => hp, setHp: (v) => { hp = v; }, ps: () => ps });
   const daotam = createDaoTam({ def: dtDef, hop: dvDef.hop_nhat.he, items: itemsJson.items, itemDefs, shop, progress, bag, learn, loadout, cards, treasure, hopNhat, npcs, map, me, wallet, S, pbList: pbDef.list, // Con đường Đạo Tâm
@@ -270,17 +267,8 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
       if (gp.auto.use_skills && target(260)) skills.autoCast(loadout.ids(), hp / ps.hp); // tự dùng kỹ năng trong ô
       if (target(PL.attack_range_px) && attackCd <= 0) { const k = attack(); if (k) me.onAutoSwing?.(k); }
     }
-    guide.tick(); learn.tick(); daotam.tick(dt); hopNhat.update(dt); barrage.update(dt); camChe.update(dt); biCanh.update(dt); const md = dv.mods(); if (md.mp_regen && !dead) pt.gain(ps.mp * md.mp_regen * dt); if (!dead && hp < ps.hp && now - hurtAt > PL.regen_after_s) hp = Math.min(ps.hp, hp + ps.hp * PL.regen_hp_per_s * (map.safeAt(me.x, me.y) ? map.town?.regenMul || 1 : 1) * dt); // hồi khí huyết khi thôi giao chiến (data/gameplay.json → player.regen_*) // đạn + bị động Đạo Vận, linh lực hồi liên tục
-    if (pet) {
-      if (now > pet.until || dead) pet = null;
-      else {
-        const px = pet.x, py = pet.y;
-        pet.x += (me.x - 14 * me.facing - pet.x) * Math.min(1, dt * 4); pet.y += (me.y + 4 - pet.y) * Math.min(1, dt * 4);
-        pet.t += dt; pet.moving = Math.hypot(pet.x - px, pet.y - py) > 10 * dt; if (Math.abs(pet.x - px) > 0.05) pet.face = pet.x > px ? 1 : -1;
-        const m = target(120);
-        if (m && now >= pet.next) { pet.next = now + S['linh-thu'].every_s; strike(m, S['linh-thu'].mul, 'linh-thu'); }
-      }
-    }
+    guide.tick(); learn.tick(); daotam.tick(dt); hopNhat.update(dt); barrage.update(dt); biCanh.update(dt); const md = dv.mods(); if (md.mp_regen && !dead) pt.gain(ps.mp * md.mp_regen * dt); if (!dead && hp < ps.hp && now - hurtAt > PL.regen_after_s) hp = Math.min(ps.hp, hp + ps.hp * PL.regen_hp_per_s * (map.safeAt(me.x, me.y) ? map.town?.regenMul || 1 : 1) * dt); // hồi khí huyết khi thôi giao chiến (data/gameplay.json → player.regen_*) // đạn + bị động Đạo Vận, linh lực hồi liên tục
+    if (dash) { const k = Math.min(dt, dash.t); dash.t -= dt; map.move(me, dash.vx * k, dash.vy * k, 6, false); if (dash.t <= 0) dash = null; } // Lướt (nút cạnh Bay)
     for (let i = fx.length - 1; i >= 0; i--) {
       const f = fx[i];
       if (f.delay > 0) { f.delay -= dt; continue; }
@@ -299,7 +287,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const at = (o) => ({ x: me.x + wrapDelta(o.x - me.x, map.width), y: me.y + wrapDelta(o.y - me.y, map.height) });
   function renderBelow(ctx, t) {
     for (const n of gather.list) { const p = at(n); drawNode(ctx, n, p.x, p.y, t); }
-    barrage.renderGround(ctx, at, t); camChe.render(ctx, at, t); biCanh.render(ctx, at, t); // hào quang Đạo Vận, trận cấm chế, vòng bí cảnh
+    barrage.renderGround(ctx, at, t); biCanh.render(ctx, at, t); // hào quang Đạo Vận, trận cấm chế, vòng bí cảnh
     for (const n of npcs.list) { const p = at(n); if (Math.abs(p.x - me.x) < 700 && Math.abs(p.y - me.y) < 700) drawNpc(ctx, n, p.x, p.y, npcs.height); }
     const list = mobs.list.map((m) => ({ m, ...at(m) })).filter((o) => Math.abs(o.x - me.x) < 800 && Math.abs(o.y - me.y) < 1000).sort((a, b) => a.y - b.y); // chỉ vẽ quái gần màn hình
     for (const { m, x, y } of list) {
@@ -308,7 +296,6 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
       drawMonster(ctx, m, x, y, t);
     }
     tame.render(ctx, at, t); mobs.drawOrbs(ctx, at, t); // linh cầu quái bắn
-    if (pet) drawFx(ctx, [{ ...pet, kind: 'pet', ...at(pet) }], 0, 0);
   }
   function renderAbove(ctx, t) {
     for (const m of mobs.list) { const p = at(m); if (Math.abs(p.x - me.x) < 800 && Math.abs(p.y - me.y) < 1000) drawMonsterLabel(ctx, m, p.x, p.y, m.uid === targetUid, t); }
@@ -371,6 +358,12 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
 
   return {
     update, renderBelow, renderAbove, tap, attack, skill: (id) => skills.cast(id), breakthrough, usePill,
+    dash(dx = me.facing, dy = 0) { // Lướt (nút cạnh Bay, chủ dự án 25/10/2026): vọt về phía trước + né cao một lúc
+      const L = S.luot; if (dead || me.flying) return false;
+      if ((cds.luot || 0) > now) { toast(`Lướt hồi ${Math.ceil(cds.luot - now)}s`, 700); return false; }
+      const d = Math.hypot(dx, dy) || 1; cds.luot = now + L.cd_s; dash = { vx: (dx / d) * L.dash_px / L.dash_s, vy: (dy / d) * L.dash_px / L.dash_s, t: L.dash_s };
+      if (dx) me.facing = dx > 0 ? 1 : -1; buffs.ne = { mul: L.ne_mul, until: now + L.last_s }; recompute(); sound('sfx.luot'); spark(me.x, me.y - 8, '#e8fbff', 8, 0.8); return true;
+    },
     slotSkill: (i) => loadout.get(i), slots: loadout.size,
     openSkills: (slot = -1) => openSkillPanel({ S, loadout, bar, progress, stageName, slot, toast, learn }), // bảng Kỹ năng: chạm kỹ năng → chọn ô
     get dead() { return dead; },

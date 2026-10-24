@@ -24,7 +24,7 @@ export async function openCodex(o) {
   const { loadJSON, gp, mats, pills, recipes, cp, monsters, blanks, qItems, artDef, info, cpText, fxDuration, mobSkills = {} } = o;
   const isOwner = (sh) => OWNER_SHEETS.has(sh) || sh?.startsWith('m.'); // m.* = tấm quái chủ dự án gửi 23/10
   const [items, he6, artIdx, npcDef] = await Promise.all(['data/items/items.json', 'data/equipment/he6.json', 'data/equipment/art.json', 'data/npcs.json'].map((p) => loadJSON(p)));
-  const [dvDef, pbDef, ccDef, miscDef] = await Promise.all(['data/build/dao-van.json', 'data/build/phap-bao.json', 'data/build/cam-che.json', 'data/items/misc.json'].map((p) => loadJSON(p)));
+  const [dvDef, pbDef, miscDef] = await Promise.all(['data/build/dao-van.json', 'data/build/phap-bao.json', 'data/items/misc.json'].map((p) => loadJSON(p)));
   await loadFx([...Object.values(dvDef.he).map((h) => h.bolt), ...pbDef.list.map((d) => d.icon[0]), 'v.tran-phap']);
   // Đạo Vận: bộ ngũ hành, Thần Phù, pháp bảo, cấm chế — hình đang vẽ bằng code / mượn hiệu ứng → chủ dự án gửi ảnh riêng thì thay
   const daoVan = [
@@ -34,8 +34,6 @@ export async function openCodex(o) {
       info: [`Thần Phù · ${d.desc.replace('{v}', 'N')}`, 'Rơi khi hạ quái, phẩm Lục → Đen'] })),
     ...pbDef.list.map((d) => ({ id: d.id, name: d.name, img: icon(d.id) || fxIconUrl(...d.icon), status: icon(d.id) ? 'ok' : 'none', note: icon(d.id) ? 'Ảnh chủ dự án 23/10' : 'Mượn icon hiệu ứng — cần ảnh pháp bảo',
       info: [`Pháp bảo hệ ${d.he} · hồi ${d.cd_s} giây · ${d.mp} linh lực`, d.desc.replace(/\{(\w+)%?\}/g, (_, k) => d[k] ?? k)] })),
-    ...Object.entries(ccDef.he).map(([he, d]) => ({ id: `cc.${he}`, name: d.name, img: fxIconUrl('v.tran-phap', 0), status: 'tam', note: 'Vòng phù văn vẽ bằng code',
-      info: [`Cấm chế hệ ${he} (kỹ năng Bố Cấm Chế)`, d.desc] })),
   ];
   const icon = (id) => iconUrl(id);
   const iconEntry = (d, extra = []) => ({ id: d.id, name: d.name, img: icon(d.id), status: icon(d.id) ? 'ok' : 'none', info: [info.effect(d), ...extra, info.source(d) && `Nơi có: ${info.source(d)}`] });
@@ -66,15 +64,10 @@ export async function openCodex(o) {
   const U = 'assets/ui/skills/';
   const skills = [
     skill('skill.attack', 'Đánh thường', `${U}tan-cong.png`, ['chem-x'], ['Chém vũ khí vào mục tiêu gần nhất']),
-    skill('skill.kiem-khi', 'Kiếm khí', `${U}kiem-khi.png`, ['kiem-bang-bay', 'kiem-bang-no'], [`Bắn kiếm khí ×${S['kiem-khi'].mul} sát thương · ${S['kiem-khi'].mp} linh lực · hồi ${S['kiem-khi'].cd_s}s · mở ở Ngưng Mạch`]),
-    skill('skill.khong-che', 'Khống chế', `${U}khong-che.png`, ['moc-troi'], [`Trói mục tiêu ${S['khong-che'].stun_s}s · ${S['khong-che'].mp} linh lực · hồi ${S['khong-che'].cd_s}s · mở ở Ngưng Mạch`]),
-    { ...skill('skill.linh-thu', 'Thú hồn', `${U}linh-thu.png`, [], [`Gọi thú hồn đánh cùng ${S['linh-thu'].last_s}s · hồi ${S['linh-thu'].cd_s}s · mở ở Tụ Tinh, cần đeo thú hồn`]),
-      status: 'tam', img: null, anim: sheetAnim('cho-trang', ['idle', 'walk']), note: 'Thú hồn đang dùng chó trắng (gói miễn phí) · chưa có hình thú hồn riêng' },
-    skill('skill.luot', 'Lướt', `${U}luot.png`, [], [`Tăng né ×${S.luot.ne_mul} và tốc độ trong ${S.luot.last_s}s · hồi ${S.luot.cd_s}s · mở ở Tụ Tinh`]),
-    skill('skill.nguyen-anh', 'Hóa Nguyệt Chấn (diện rộng)', `${U}nguyen-anh.png`, ['k.bao-tho'], [`Đánh quanh mình ×${S['nguyen-anh'].mul} · ${S['nguyen-anh'].mp} linh lực · mở ở Hóa Nguyệt`]),
     skill('skill.phap-tuong', 'Pháp tướng hoá hình', `${U}phap-tuong.png`, [], [`+${Math.round((S['phap-tuong'].atk_mul - 1) * 100)}% công, +${Math.round((S['phap-tuong'].def_mul - 1) * 100)}% thủ khi hiện; tốn linh lực liên tục`], 'Hình = pháp tướng đang đeo (xem Pháp khí)'),
     ...S._order.filter((id) => S[id]?.kind && S[id].fx).map((id) => skill(`skill.${id}`, S[id].name, `${U}trong.png`, [S[id].fx, S[id].hit_fx].filter(Boolean),
       [`${S[id].desc.replace(/\{(\w+)(%?)\}/g, (_, k, p) => (p ? `${Math.round(S[id][k] * 100)}%` : S[id][k]))} · ${S[id].mp} linh lực · hồi ${S[id].cd_s}s`], 'Hiệu ứng: tấm chủ dự án 23/10')),
+    skill('skill.luot', 'Lướt (nút cạnh Bay)', `${U}luot.png`, [], [`Vọt về trước ${S.luot.dash_px} px, né ×${S.luot.ne_mul} trong ${S.luot.last_s}s · hồi ${S.luot.cd_s}s`]),
     skill('skill.bay', 'Ngự kiếm phi hành', `${U}bay.png`, [], ['Cầm kiếm mới bay được · tốn linh lực mỗi giây']),
     skill('skill.dot-pha', 'Đột phá (thiên kiếp)', `${U}dan-duoc.png`, ['may-kiep', 'set-danh'], ['Mây kiếp tụ trên đầu rồi sét đánh khi đột phá đại cảnh giới']),
     skill('skill.len-tang', 'Lên tầng / hồi sinh', `${U}tan-cong.png`, ['vong-lua'], ['Vòng sáng khi lên tầng nhỏ hoặc hồi sinh']),

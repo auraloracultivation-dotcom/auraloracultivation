@@ -21,6 +21,9 @@ export function createTreasure(c) {
   const DICH = 'item.dich.on-duong.001'; // Ôn Dưỡng Linh Dịch
   const dichNeed = (t) => def.lv_dich?.[(t.lv || 0) + 1] || 0;
   const list = () => (progress.state.treasures ||= []);
+  { const M = def.migrate_25_10 || {}; let moved = 0; // chỉ giữ 12 pháp bảo (chủ dự án 25/10/2026): đồ đã bỏ → pháp bảo cùng hệ, giữ cấp + thức tỉnh
+    for (const t of list()) if (M[t.id]) { t.id = M[t.id]; moved++; }
+    if (moved) { progress.changed(); setTimeout(() => toast(`${moved} pháp bảo cũ đã đổi sang pháp bảo cùng hệ (giữ nguyên cấp, thức tỉnh)`, 4000), 2500); } }
   const on = () => list().find((t) => t.uid === progress.state.treasureOn && t.known) || null;
   const tierName = (id) => c.awaken.tiers.find((x) => x.id === id)?.name || '';
   const scale = (t) => 1 + def.mul_per_lv * (t.lv || 0);
@@ -64,11 +67,6 @@ export function createTreasure(c) {
         barrage.schedule(d.s, d.s / n, (k) => { const a = a0 - 1.05 + (2.1 * k) / Math.max(1, n - 1); shot(Math.cos(a), Math.sin(a)); });
         break;
       }
-      case 'storm': barrage.schedule(d.s, d.s / n, () => { // sét đánh ngẫu nhiên quái quanh mình
-        const near = mobs.within(me, d.r).filter((m) => m.state !== 'dead'); if (!near.length) return;
-        const m = near[Math.floor(Math.random() * near.length)];
-        play(d.fx, m.x, m.y + 2, d.h, { ground: true }); barrage.hitAround(m.x, m.y, 30, mul, 'skill');
-      }); break;
       case 'wisps': barrage.addOrbit({ n, r: d.r, mul, s: d.s, bolt: 'v.dan-am' }); play('v.hac-dong', me.x, me.y, 50, { ground: true }); break;
       case 'field': {
         play('v.moc-lien', me.x, me.y + 4, 46, { ground: true });
@@ -84,43 +82,6 @@ export function createTreasure(c) {
         play(d.fx, m.x, m.y + 4, d.h, { ground: true }); // hoạt ảnh Trấn Sơn Ấn mới đã có nổ đá + đất nứt (chủ dự án 23/10)
         barrage.zap({ kind: 'ring', x: m.x, y: m.y, r: d.r, t: 0.6, color: he.color });
         barrage.hitAround(m.x, m.y, d.r, mul, 'skill', d.stun);
-        break;
-      }
-      case 'nova': { // gương băng: đóng băng quanh mình
-        play(d.fx, me.x, me.y + 2, d.h, { ground: true }); barrage.zap({ kind: 'ring', x: me.x, y: me.y, r: d.r, t: 0.8, color: he.color });
-        barrage.hitAround(me.x, me.y, d.r, mul, 'skill', d.stun); break;
-      }
-      case 'aura': { // cổ đăng rút hồn: liên tục đánh quanh mình, mỗi con trúng hồi máu
-        barrage.addOrbit({ n: 4, r: d.r * 0.5, mul: 0, s: d.s, bolt: 'v.dan-am' });
-        barrage.schedule(d.s, 0.5, () => { const near = mobs.within(me, d.r).filter((m) => m.state !== 'dead'); if (!near.length) return;
-          barrage.hitAround(me.x, me.y, d.r, mul, 'skill'); c.heal(c.maxHp() * d.heal * near.length);
-          for (const m of near.slice(0, 4)) barrage.zap({ kind: 'zap', x: m.x, y: m.y - m.r, x2: me.x, y2: me.y - 14, t: 0.25, color: he.color }); });
-        break;
-      }
-      case 'net': { // lưới trời: kéo quái về một chỗ rồi trói
-        const at = tgt || { x: me.x + me.facing * 50, y: me.y };
-        for (const m of mobs.within(at, d.r)) { if (m.state === 'dead') continue; m.x = c.map.wrapX(at.x + (m.x - at.x) * 0.25); m.y = c.map.wrapY(at.y + (m.y - at.y) * 0.25); }
-        play(d.fx, at.x, at.y, 40, { ground: true }); barrage.zap({ kind: 'ring', x: at.x, y: at.y, r: d.r * 0.5, t: 0.7, color: he.color });
-        barrage.hitAround(at.x, at.y, d.r * 0.5, mul, 'skill', d.stun); break;
-      }
-      case 'tower': { // lôi tháp: đứng tại chỗ, cứ `every` giây giáng sét quái gần tháp
-        const at = { x: me.x, y: me.y }, img = pic(d);
-        barrage.totem({ x: at.x, y: at.y, img, s: d.s, h: 34 });
-        barrage.schedule(d.s, d.every, () => { const m = barrage.nearestTo(at, d.r); if (!m) return;
-          play(d.fx, m.x, m.y + 2, d.h, { ground: true }); barrage.zap({ kind: 'zap', x: at.x, y: at.y - 30, x2: m.x, y2: m.y - m.r, t: 0.2, color: '#e6f0ff' });
-          barrage.hitAround(m.x, m.y, 22, mul, 'skill'); });
-        break;
-      }
-      case 'shuttle': { // thoa xé không: xuyên mọi quái, nảy qua lại
-        const { dx, dy } = aim(tgt);
-        for (let k = 0; k < n; k++) { const a = (k - (n - 1) / 2) * 0.25; shot(dx * Math.cos(a) - dy * Math.sin(a), dx * Math.sin(a) + dy * Math.cos(a), { speed: 600, range: 420, pierce: 99, bounce: 8, homing: 0.5 }); }
-        break;
-      }
-      case 'shield': {
-        { const o = c.buffs.def, nw = { mul: d.def_mul * (1 + 0.05 * (t.lv || 0)), until: c.now() + d.s }; // đang có Cường Thể Đan: giữ mức mạnh hơn, thời gian dài hơn
-          c.buffs.def = o && o.until > c.now() ? { mul: Math.max(o.mul, nw.mul), until: Math.max(o.until, nw.until) } : nw; } c.recompute();
-        play(d.fx, me.x, me.y - 12, d.h); barrage.zap({ kind: 'ring', x: me.x, y: me.y, r: d.r, t: 0.6, color: he.color });
-        barrage.hitAround(me.x, me.y, d.r, 0.8 * scale(t), 'skill', d.stun);
         break;
       }
       case 'rewind': { // Tuế Nguyệt Sa Lậu: quay ngược thời gian — hồi máu + làm mới hồi chiêu (trừ pháp bảo)

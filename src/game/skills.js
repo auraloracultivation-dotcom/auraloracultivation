@@ -1,6 +1,6 @@
 // Kỹ năng người chơi (THỬ NGHIỆM phía máy khách): dùng chiêu, đạn bay, tự dùng chiêu khi bật Tự động.
-// Thông số ở data/gameplay.json → skills. kind: bolt | strike | area_self | heal | buff; chiêu cũ (kiếm khí, khống chế,
-// thú hồn, lướt, nguyên anh) giữ cách riêng. Hiệu ứng v.* cắt từ tấm chủ dự án (tools/fx_sheets.py).
+// Thông số ở data/gameplay.json → skills. kind: bolt | strike | area_self | heal | buff | wave | tornado | pull | blink.
+// Chủ dự án 25/10/2026: chỉ còn 24 kỹ năng (2 mỗi hệ) + Pháp Bảo. Hiệu ứng v.* cắt từ tấm chủ dự án (tools/fx_sheets.py).
 
 // c: { S, me, mobs, map, pt, cds, bar, toast, say, play, fx, bolts, strike, target, buffs, recompute, heal, maxHp, now, dead, summonPet,
 //      mods() (Đạo Vận: hồi chiêu, linh lực), fire(spec) + maybeEcho(fn) (barrage.js: đạn xoè quạt, nảy, tách…) }
@@ -38,7 +38,6 @@ export function createSkills(c) {
     }
   };
 
-  const ECHO = new Set(['kiem-khi', 'nguyen-anh']); // chiêu đánh: Liên Hoàn Phù có thể tự phát lại
   // Trả về true nếu đã dùng chiêu
   function cast(id, quiet = false) {
     const s = S[id];
@@ -54,45 +53,12 @@ export function createSkills(c) {
     const ok = perform(id, s, quiet);
     if (ok) c.swing?.(id, s); // tung chiêu kèm một đòn kiếm cùng hướng chiêu bay (data/gameplay.json → skill_swing)
     if (ok && s.shake) juice.later(s.shake_at ?? 0.12, () => juice.shake(s.shake, 0.25));
-    if (ok && (ECHO.has(id) || ['bolt', 'strike', 'area_self'].includes(s.kind))) c.maybeEcho(() => perform(id, s, true));
+    if (ok && ['bolt', 'strike', 'area_self'].includes(s.kind)) c.maybeEcho(() => perform(id, s, true));
     return ok;
   }
   function perform(id, s, quiet) {
     const now = c.now();
-    switch (id) {
-      case 'kiem-khi': {
-        const { dx, dy } = dirTo(c.target(s.range_px));
-        c.fire({ id, x: me.x, y: me.y - 10, dx, dy, speed: s.speed_px_per_s, range: s.range_px, fx: 'kiem-bang-bay', size: 22, mul: s.mul, base: s, label: 'kiem-khi' });
-        return true;
-      }
-      case 'khong-che': {
-        const m = c.target(s.range_px);
-        if (m) { m.stun = s.stun_s; say(m.x, m.y - m.r * 2, 'Choáng', '#ffe36a'); play('moc-troi', m.x, m.y, 30, { ground: true }); }
-        else toast('Không có mục tiêu gần', 900);
-        return true;
-      }
-      case 'linh-thu': c.summonPet(s); return true;
-      case 'phap-bao': return c.useTreasure(quiet); // pháp bảo đang đeo (treasure.js)
-      case 'cam-che': return c.camChe(s); // trận cấm chế theo hệ chủ đạo (camche.js)
-      case 'luot':
-        c.buffs.ne = { mul: s.ne_mul, until: now + s.last_s }; c.buffs.speed = { mul: s.speed_px_per_s, until: now + s.last_s };
-        c.recompute(); toast('Lăng Ba Vi Bộ', 900); return true;
-      case 'nguyen-anh':
-        fx.push({ kind: 'ring', x: me.x, y: me.y, r: s.radius_px, color: '#c9a6ff', t: 0.5, life: 0.5 });
-        play('k.bao-tho', me.x, me.y + 4, s.radius_px * 1.1, { ground: true }); // tho-vong cũ bị lẹm khung (chủ dự án 23/10)
-        for (const m of mobs.within(me, s.radius_px)) c.strike(m, s.mul, 'nguyen-anh');
-        return true;
-      default: break;
-    }
-    if (s.kind === 'volley') { // Vạn Kiếm Triều Tông: kiếm mọc từ đất rồi xoè quạt bay về phía trước
-      const { dx, dy } = dirTo(c.target(s.range_px)), a0 = Math.atan2(dy, dx);
-      play(s.cast_fx, me.x, me.y + 4, 46, { ground: true });
-      for (let j = 0; j < s.n; j++) {
-        const a = a0 + (j / (s.n - 1) - 0.5) * s.spread;
-        c.fire({ id, x: me.x, y: me.y - 12, dx: Math.cos(a), dy: Math.sin(a), speed: s.speed_px_per_s, range: s.range_px, fx: s.fx, size: s.fx_size, mul: s.mul, base: s, child: true });
-      }
-      return true;
-    }
+    if (id === 'phap-bao') return c.useTreasure(quiet); // pháp bảo đang đeo (treasure.js)
     if (s.kind === 'wave') { // sóng / đất nứt quét thẳng phía trước: mọi quái trong dải dài len, rộng w
       const { dx, dy } = dirTo(c.target(s.len)), w = s.w / 2;
       for (let j = 1; j <= 3; j++) play(s.fx, me.x + dx * s.len * j / 3.3, me.y + dy * s.len * j / 3.3 + 4, s.fx_h, { ground: true, delay: j * 0.08 });
@@ -109,14 +75,6 @@ export function createSkills(c) {
       c.mover({ fx: s.fx, h: s.fx_h, x: me.x + dx * 20, y: me.y + dy * 20, vx: dx * s.speed, vy: dy * s.speed, s: s.last_s, r: s.radius_px, mul: s.mul, every: 0.3, loop: 2 });
       return true;
     }
-    if (s.kind === 'storm') { // thiên kiếp: sét đánh liên tục quái ngẫu nhiên quanh mình
-      c.schedule(s.last_s, s.every, () => {
-        const near = mobs.within(me, s.radius_px).filter((m) => m.state !== 'dead'); if (!near.length) return;
-        const m = near[Math.floor(Math.random() * near.length)];
-        play(s.fx, m.x, m.y + 2, s.fx_h, { ground: true }); hitAround(m.x, m.y, { ...s, radius_px: 26 });
-      });
-      return true;
-    }
     if (s.kind === 'blink') { // hư không thuấn di: ra sau lưng mục tiêu, chém
       const m = c.target(s.range_px); if (!m) { cds[id] = 0; if (!quiet) toast('Không có mục tiêu', 900); return false; }
       play(s.fx, me.x, me.y - 12, s.fx_h);
@@ -124,17 +82,6 @@ export function createSkills(c) {
       me.x = m.x + side * (m.r + 14); me.y = m.y; me.facing = -side;
       play(s.fx, me.x, me.y - 12, s.fx_h, { delay: 0.1 });
       c.strike(m, s.mul, 'skill');
-      return true;
-    }
-    if (s.kind === 'clone') { // nguyên thần xuất khiếu: phân thân đứng cạnh, tự bắn đạn đạo pháp
-      c.mover({ fx: s.fx, h: s.fx_h, follow: true, ox: -22, oy: -4, x: me.x, y: me.y, s: s.last_s, mul: s.mul, every: s.every, shoot: c.mods().bolt, loop: 0.8, alpha: 0.9 });
-      return true;
-    }
-    if (s.kind === 'seal') { // cấm chế phong ấn: khoá quái (cả tinh anh / boss) — choáng + không vận chiêu
-      const m = c.target(s.range_px); if (!m) { cds[id] = 0; if (!quiet) toast('Không có mục tiêu', 900); return false; }
-      play(s.fx, m.x, m.y + 4, s.fx_h, { ground: true });
-      m.stun = Math.max(m.stun || 0, s.stun_s); m.sealed = s.seal_s; m.cast = null; if (m.state === 'cast') m.state = 'chase';
-      c.strike(m, s.mul, 'skill'); say(m.x, m.y - (m.def.art?.h || 20) - 6, 'Phong ấn', '#ff6a6a');
       return true;
     }
     if (s.kind === 'pull') { // U Minh Quỷ Trảo: kéo quái quanh mình về trước mặt, đánh + choáng
@@ -172,8 +119,8 @@ export function createSkills(c) {
     return true;
   }
 
-  // Tự động: dùng chiêu đầu tiên trong ô sẵn sàng (đủ tầm). Hồi máu khi khí huyết dưới 55%. Bỏ qua Lướt / Pháp tướng / Đan.
-  const SKIP = new Set(['luot', 'phap-tuong', 'dan-duoc']);
+  // Tự động: dùng chiêu đầu tiên trong ô sẵn sàng (đủ tầm). Hồi máu khi khí huyết dưới 55%. Bỏ qua Pháp tướng / Đan.
+  const SKIP = new Set(['phap-tuong', 'dan-duoc']);
   function autoCast(ids, hpFrac) {
     for (const id of ids) {
       const s = S[id];
