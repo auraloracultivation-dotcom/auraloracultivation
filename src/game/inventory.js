@@ -6,7 +6,7 @@ const SLOT = { 'mat-na': 'Mặt nạ', 'trang-phuc': 'Trang phục', 'vu-khi': '
   'day-chuyen': 'Dây chuyền', 'phap-tuong': 'Pháp tướng' };
 const STAT = { hp: 'Khí huyết', linh: 'Tấn công', def: 'Phòng thủ', xuyen: 'Xuyên giáp', crit: 'Bạo kích %', hut: 'Hút máu %', phan: 'Phản đòn %' };
 
-export function createInventory({ ru, recipes, info, progress, bag, craft, itemDefs, awaken, gp, art, icon, fallbackIcon, onLook, recompute, usePill, breakthrough, btPills, openCultivate }) {
+export function createInventory({ ru, recipes, info, progress, bag, craft, itemDefs, awaken, gp, art, icon, fallbackIcon, onLook, recompute, usePill, breakthrough, btPills, openCultivate, combineAction, combine }) {
   const st = () => progress.state;
   const tierName = (id) => awaken.tiers.find((t) => t.id === id)?.name || '';
   // Dòng chỉ số kèm màu phẩm của từng dòng (bag.js tô màu)
@@ -59,11 +59,12 @@ export function createInventory({ ru, recipes, info, progress, bag, craft, itemD
     const actions = [];
     if (gp.pills[id]) actions.push({ id: 'use', label: 'Dùng' });
     if (d.opens) actions.push({ id: 'open', label: 'Luyện hóa' }); // phôi pháp bảo (treasure.js)
-    if (btPills.has(id)) actions.push({ id: 'breakthrough', label: 'Dùng để đột phá' }); // đan đột phá: dùng ngay trong kho
+    if (btPills.has(id)) actions.push({ id: 'breakthrough', label: 'Dùng để đột phá' });
+    const cb = combineAction?.(id); if (cb) actions.push(cb); // Mảnh Truyền Thừa: ghép bộ Đạo Vận (truyenthua.js) // đan đột phá: dùng ngay trong kho
     const rc = d.teaches && recipeOf(d.teaches);
     if (rc) actions.push({ id: 'craft', label: rc.label,
       disabled: rc.none || rc.max || rc.locked || !progress.has(rc.inputs) });
-    if (d.cat !== 'cong-phap') actions.push({ id: 'discard', label: count > 1 ? `Vứt (${count})` : 'Vứt', danger: true, confirm: `Vứt bỏ ${d.name}${count > 1 ? ` ×${count}` : ''}?` }); // bí kíp học vĩnh viễn: không vứt (vứt là mất nút nâng cấp)
+    if (d.cat !== 'cong-phap' && !d.combine) actions.push({ id: 'discard', label: count > 1 ? `Vứt (${count})` : 'Vứt', danger: true, confirm: `Vứt bỏ ${d.name}${count > 1 ? ` ×${count}` : ''}?` }); // bí kíp học vĩnh viễn: không vứt (vứt là mất nút nâng cấp)
     const src = info.source(d);
     if (rc) { // cuốn công thức: hiện thứ luyện ra + nguyên liệu cần, luyện ngay trong kho
       const what = rc.kind === 'skill' ? `${rc.def.name} — cấp ${rc.lv || 0}/${rc.def.max_level}` : rc.kind === 'pill' ? `Luyện ra: ${rc.def.name} (có ${progress.count(rc.def.id)})` : 'Luyện ra: phôi (thức tỉnh để có chỉ số)';
@@ -98,6 +99,7 @@ export function createInventory({ ru, recipes, info, progress, bag, craft, itemD
       const d = itemDefs.get(ref);
       if (action === 'use') return usePill(ref) ? '' : null;
       if (action === 'breakthrough') { breakthrough(); return ''; }
+      if (action === 'combine') return combine?.(ref) ?? null;
       if (action === 'craft') { // luyện ngay trong kho
         const rc = recipeOf(d.teaches);
         const r = rc.kind === 'pill' ? craft.brewPill(rc.def.id) : rc.kind === 'blank' ? craft.forgeBlank(rc.def.id) : craft.trainSkill(rc.def.id);

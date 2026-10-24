@@ -2086,7 +2086,7 @@
    "thien_role": "phu",
    "medal": "assets/ui/skills/m/tue-nguyet-dinh-chi.png"
   },
-  "_ghi_chu_thien": "Chủ dự án 24/10: 12 kỹ năng Thiên hệ (thien: true) — không rơi từ boss, chỉ từ phó bản Thiên Cơ Truyền Thừa. charge_s/dim/shake: gồng, tối màn hình, rung (juice.js). Sinh bằng tools/thien_skills.py."
+  "_ghi_chu_thien": "Chủ dự án 24/10: 12 kỹ năng Thiên hệ (thien: true) — không rơi từ boss, chỉ từ phó bản Thiên Cơ Bí Cảnh. charge_s/dim/shake: gồng, tối màn hình, rung (juice.js). Sinh bằng tools/thien_skills.py."
  },
  "awaken": {
   "_ghi_chu": "Lab v3.2 — thức tỉnh TỪNG DÒNG: mỗi lần bấm thêm 1 dòng, màu (phẩm) của dòng bốc ngẫu nhiên theo tỷ lệ phẩm Lab (data/equipment/awaken.json → gearQ). Mỗi món có giới hạn dòng ẩn 1–10 (bốc lúc thức tỉnh lần đầu, KHÔNG báo trước); đủ giới hạn thì nút thức tỉnh tắt. Giá (Linh thạch) tăng theo số thứ tự dòng — số tạm.",

@@ -24,7 +24,7 @@ export function createSkillLearn({ S, cfg, progress, toast, play }) {
   }
   function onKill(m) {
     if (m.def.rank !== 'boss' || Math.random() >= cfg.chance) return;
-    const left = S._order.filter((id) => isDrop(id) && !S[id].thien && !list().includes(id)); // kỹ năng Thiên hệ: chỉ từ Thiên Cơ Truyền Thừa (phó bản)
+    const left = S._order.filter((id) => isDrop(id) && !S[id].thien && !list().includes(id)); // kỹ năng Thiên hệ: chỉ từ Thiên Cơ Bí Cảnh (phó bản)
     if (!left.length) return;
     const id = left[Math.floor(Math.random() * left.length)];
     list().push(id); progress.changed();

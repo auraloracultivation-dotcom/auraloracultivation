@@ -57,3 +57,11 @@ Chỉ đổi chữ hiển thị, mã bên trong giữ nguyên (đồ của ngư�
 - **Linh thú** = thú bắt được khi giết quái, đi theo hỗ trợ tấn công (mục Kho `thu-cung`, src/game/tame.js).
 - Pháp bảo (tăng hiệu ứng kỹ năng) · Kỹ năng · Đạo Vận (hợp nhất bộ) · Công pháp (nâng tiềm năng) · Pháp tướng — giữ tên.
 - Sắp có: khảm ngọc vào pháp khí (tên đề xuất: Linh Châu / "Khảm Châu").
+
+## Truyền Thừa (phó bản, 24/10/2026)
+
+- Nhiệm vụ → Bí Cảnh → **Truyền Thừa**: 2 lượt/ngày, 10 đợt quái cảnh giới của mình; vượt hết = 1 **Mảnh Truyền Thừa** (+300 LT/đợt, không cho Vàng).
+- Đủ 100 mảnh + 2.000.000 Vàng: Kho → chạm mảnh → Ghép bộ Đạo Vận → chọn hệ → 8 pháp khí + kỹ năng sịn + cùi + Thần Phù + pháp bảo (chưa thức tỉnh). Món đã có sẵn đổi 20.000 LT/món. Mảnh không vứt được.
+- Mảnh chỉ ra từ phó bản (bỏ rơi boss 30%). Nhịp ≈ 50 ngày / bộ. Số: bi-canh.json → extra "truyen-thua-nh", quest-items.json → combine.
+- Bí cảnh cũ "Thiên Cơ Truyền Thừa" đổi tên **Thiên Cơ Bí Cảnh** (vẫn ra kỹ năng + pháp bảo Thiên hệ).
+- Nhiệm vụ Ngày / Tuần: lên đại cảnh giới mới giữa ngày mà chưa xong món nào thì đổi sang vùng mới.
