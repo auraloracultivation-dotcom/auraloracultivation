@@ -2408,5 +2408,29 @@
    "def",
    "linh"
   ]
+ },
+ "quick_sell": {
+  "_note": "Kho → Bán nhanh (chủ dự án 24/10/2026): bán mọi trang bị KHÔNG đang mặc theo vòng thức tỉnh đã chọn. Nhận Vàng theo vòng + hoàn Linh thạch như Phân rã (đã tiêu × awaken.dismantle_refund). Không bán: đồ đang mặc, Tiên khí, vòng Đỏ / Đen (quá hiếm — muốn bỏ thì Phân rã từng món).",
+  "tiers": [
+   "none",
+   "luc",
+   "lam",
+   "tim",
+   "cam",
+   "vang"
+  ],
+  "default": [
+   "none",
+   "luc",
+   "lam"
+  ],
+  "gold": {
+   "none": 20,
+   "luc": 40,
+   "lam": 80,
+   "tim": 160,
+   "cam": 320,
+   "vang": 640
+  }
  }
 }

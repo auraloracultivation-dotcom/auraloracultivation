@@ -316,3 +316,18 @@
 .qs-steps { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 3px; font-size: 13px; color: #9aa0bf; }
 .qs-steps li { padding: 4px 8px; border-radius: 6px; }
 .qs-steps li.ok { color: #7fd08a; } .qs-steps li.on { color: #fff1cf; background: rgba(255, 210, 58, .1); font-weight: 700; }
+
+/* ---- Kho → Bán nhanh (src/ui/quicksell.js) ---- */
+.bag-v2 .bag-qs { margin-left: auto; margin-right: 10px; height: 34px; padding: 0 12px; border-radius: 9px; border: 2px solid #c9a35a; cursor: pointer;
+  background: linear-gradient(#ffe2ad, #e9b56a); color: #2a1a08; font-size: 14px; font-weight: 800; }
+.qs-sell { display: flex; flex-direction: column; gap: 8px; padding: 4px 2px 2px; }
+.qs-sell > b { color: #fff1cf; font-size: 16px; }
+.qs-sell-note { margin: 0; color: #b9bdd8; font-size: 12px; }
+.bag-detail .qs-chips { display: flex; flex-direction: row; flex-wrap: wrap; gap: 6px; }
+.bag-detail .qs-chip { flex: 0 0 auto; width: auto; min-width: 56px; height: 34px; padding: 0 10px; border-radius: 8px; border: 2px solid #5a5878; background: rgba(12, 12, 26, .85); color: #d9d3ea;
+  font-size: 13px; font-weight: 700; cursor: pointer; }
+.qs-chip.tier-luc { border-color: #4caf50; } .qs-chip.tier-lam { border-color: #3d8bff; } .qs-chip.tier-tim { border-color: #b05cff; }
+.qs-chip.tier-cam { border-color: #ff9a3d; } .qs-chip.tier-vang { border-color: #ffd23a; }
+.qs-chip[aria-pressed="true"] { background: linear-gradient(#f7d7a8, #d9a35d); color: #2a1a08; }
+.qs-sum { margin: 0; color: #9ff0a8; font-weight: 700; font-size: 14px; }
+.bag-detail .qs-go { align-self: flex-start; width: auto; padding: 0 22px; }
