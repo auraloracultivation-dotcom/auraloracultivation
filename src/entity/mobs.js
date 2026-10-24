@@ -130,7 +130,7 @@ function glowDot(color) {
 export function drawFx(ctx, fx, ox, oy) {
   ctx.save();
   for (const f of fx) {
-    ctx.globalAlpha = 1;
+    ctx.globalAlpha = f.kind === 'bolt' && f.r0 ? 0.2 + 0.8 * Math.min(1, (f.r0 - f.left) / 60) : 1; // đạn mới bắn còn mờ, rõ dần sau 60 px: không che đầu nhân vật, đòn chém
     if (f.delay > 0) continue;
     const x = f.x + ox, y = f.y + oy;
     if (f.kind === 'text') {
