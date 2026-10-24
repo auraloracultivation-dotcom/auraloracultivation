@@ -13,6 +13,22 @@ def kiem_chem():  # vụt gió + ngân thép + chạm (bản chủ dự án đã
     return finish(crush(x, 12, 2, 0.35), 1.2, tail=0.06)
 
 
+def kiem_choc():  # chọc / đâm: "xẹt" mỏng nhanh + ngân cao ngắn + chạm gọn
+    wh = sweep_bp(noise(0.1, 13), 2500, 8000, 1.3) * adsr(0.1, 0.06, 0.03, 0, 0.01)
+    ring = partials([3136, 4699, 6272, 9400], 0.18, [0.07, 0.05, 0.04, 0.02], [1, .6, .4, .2], drop=0.02)
+    x = mix((wh, 0, 0.55), (ring, 0.07, 0.3), (thump(0.16, 170, 70, 0.035), 0.08, 0.55), (hp(noise(0.02, 14), 3500) * exp_env(0.02, 0.004, 0.0003), 0.08, 0.3))
+    return finish(crush(x, 12, 2, 0.3), 1.25, tail=0.04)
+
+
+def kiem_xoay():  # xoay vòng: gió xoáy lên xuống 2 nhịp + ngân dài + chạm
+    d = 0.5
+    t = t_(d)
+    whirl = sweep_bp(noise(d, 15), 900, 4200, 1.4) * (0.5 + 0.5 * np.sin(2 * np.pi * 4.2 * t - 1.2)) * adsr(d, 0.04, 0.2, 0.5, 0.15)
+    ring = partials([1975, 2960, 3950, 5920], 0.4, [0.16, 0.11, 0.08, 0.05], [1, .6, .4, .2], drop=0.03)
+    x = mix((whirl, 0, 0.6), (ring, 0.12, 0.25), (thump(0.25, 150, 55, 0.06), 0.3, 0.6))
+    return finish(crush(x, 12, 2, 0.3), 1.2, tail=0.06)
+
+
 def danh_tay():  # đấm tay không: vụt ngắn + bụp
     wh = sweep_bp(noise(0.09, 11), 3000, 900) * adsr(0.09, 0.03, 0.05, 0, 0.01)
     x = mix((wh, 0, 0.5), (thump(0.18, 180, 55, 0.045), 0.05, 0.9), (lp(noise(0.05, 12), 2500) * exp_env(0.05, 0.01), 0.05, 0.4))
@@ -86,7 +102,7 @@ def hoi_sinh():  # hồi sinh: ánh sáng dâng lên + hợp âm trưởng ngũ 
 
 
 SOUNDS = {
-    'sfx.kiem.chem': kiem_chem, 'sfx.danh.tay': danh_tay, 'sfx.trung': trung, 'sfx.bao-kich': bao_kich,
+    'sfx.kiem.chem': kiem_chem, 'sfx.kiem.choc': kiem_choc, 'sfx.kiem.xoay': kiem_xoay, 'sfx.danh.tay': danh_tay, 'sfx.trung': trung, 'sfx.bao-kich': bao_kich,
     'sfx.quai.chet': quai_chet, 'sfx.boss.chet': boss_chet, 'sfx.bi-danh': bi_danh, 'sfx.ne': ne,
     'sfx.don-nang': don_nang, 'sfx.linh-cau': linh_cau, 'sfx.chet': chet, 'sfx.hoi-sinh': hoi_sinh,
 }

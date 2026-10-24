@@ -20,7 +20,21 @@
       "volume": 0.6,
       "gap_s": 0.08,
       "vary": 0.06,
-      "_note": "Đánh thường khi cầm kiếm — vụt + keng + chạm"
+      "_note": "Đòn thứ 1: chém kiếm — vụt + keng + chạm"
+    },
+    "sfx.kiem.choc": {
+      "file": "assets/audio/sfx/kiem.choc.mp3",
+      "volume": 0.6,
+      "gap_s": 0.08,
+      "vary": 0.06,
+      "_note": "Đòn thứ 2: chọc kiếm (đâm thẳng)"
+    },
+    "sfx.kiem.xoay": {
+      "file": "assets/audio/sfx/kiem.xoay.mp3",
+      "volume": 0.6,
+      "gap_s": 0.08,
+      "vary": 0.05,
+      "_note": "Đòn thứ 3: xoay kiếm trọn vòng"
     },
     "sfx.danh.tay": {
       "file": "assets/audio/sfx/danh.tay.mp3",

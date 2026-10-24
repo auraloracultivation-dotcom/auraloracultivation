@@ -121,10 +121,11 @@ async function boot() {
   const S = (n) => `assets/ui/skills/${n}.png`;
   const markers = () => [...(game?.markers() || []), { x: me.x, y: me.y, self: true }, ...[...others.list.values()].map((p) => ({ x: p.x, y: p.y }))];
 
-  function attack() { if (game.attack()) swing(); }
-  function swing() {
-    if (me.look?.outfit || me.look?.weapon) rigAttack(me); // nhân vật ghép lớp: đưa tay (và xoay kiếm nếu có)
-    audio.play(me.look?.weapon ? 'sfx.kiem.chem' : 'sfx.danh.tay'); // tiếng chém kiếm / đấm tay không lúc ra đòn
+  function attack() { const k = game.attack(); if (k) swing(k); }
+  function swing(kind) { // kind: chem | choc | xoay — combo đánh thường (src/game/combo.js, hình src/entity/moves.js)
+    const mv = typeof kind === 'string' ? kind : 'chem';
+    if (me.look?.outfit || me.look?.weapon) rigAttack(me, mv); // nhân vật ghép lớp: đưa tay (và chém / chọc / xoay kiếm)
+    audio.play(me.look?.weapon ? `sfx.kiem.${mv}` : 'sfx.danh.tay'); // tiếng đòn theo kiểu; tay không: đấm
     if (!me.look?.weapon) me.slashT = 0.22; // tay không: vẫn có vệt chém nhỏ
   }
   // Mã quà tặng: so dấu SHA-256 với data/codes.json (mã gốc không nằm trong mã nguồn)

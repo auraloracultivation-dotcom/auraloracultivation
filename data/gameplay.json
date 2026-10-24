@@ -2432,5 +2432,25 @@
    "cam": 320,
    "vang": 640
   }
+ },
+ "attack_combo": {
+  "_note": "Đánh thường 3 đòn nối nhau (chủ dự án 25/10/2026: nhân vật có hồn hơn). Ra đòn tiếp trong reset_s giây kể từ lúc hết hồi đòn trước thì sang đòn sau, quá thì về Chém. Hình: src/entity/moves.js. Xoay quét mọi quái trong aoe_px quanh mình (ngoài mục tiêu) với aoe_mul.",
+  "reset_s": 1.0,
+  "moves": [
+   {
+    "id": "chem",
+    "mul": 1.0
+   },
+   {
+    "id": "choc",
+    "mul": 1.15
+   },
+   {
+    "id": "xoay",
+    "mul": 0.9,
+    "aoe_px": 46,
+    "aoe_mul": 0.6
+   }
+  ]
  }
 }
