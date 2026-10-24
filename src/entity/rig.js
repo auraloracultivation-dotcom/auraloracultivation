@@ -59,6 +59,29 @@ function crop(img, b, ell) {
   }
   return c;
 }
+// Màu da của bộ: trung vị các điểm sáng, ấm (r ≥ g ≥ b) trong vùng tay — tay xoè lúc tung chiêu nhuộm theo màu này
+function skinOf(img, boxes) {
+  const ps = [];
+  for (const b of boxes) {
+    const c = crop(img, b, 1), d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+    for (let i = 0; i < d.length; i += 4) {
+      const r = d[i], g = d[i + 1], bl = d[i + 2];
+      if (d[i + 3] > 200 && r + g + bl > 360 && r >= g && g >= bl - 4 && r - bl <= 130) ps.push([r, g, bl]);
+    }
+  }
+  if (ps.length < 8) return null;
+  return [0, 1, 2].map((k) => ps.map((p) => p[k]).sort((a, b) => a - b)[ps.length >> 1]);
+}
+function tintOpen(skin) { // nhân từng kênh theo tỉ lệ da bộ / da gốc của hình tay xoè: giữ nét viền, bóng đổ
+  const o = R.open, c = document.createElement('canvas'); c.width = o.width; c.height = o.height;
+  const g = c.getContext('2d'); g.drawImage(o, 0, 0);
+  R.openSkin ||= skinOf(o, [[0, 0, o.width, o.height]]);
+  if (!skin || !R.openSkin) return null;
+  const d = g.getImageData(0, 0, c.width, c.height), a = d.data, f = skin.map((v, k) => v / R.openSkin[k]);
+  for (let i = 0; i < a.length; i += 4) for (let k = 0; k < 3; k++) a[i + k] = Math.min(255, a[i + k] * f[k]);
+  g.putImageData(d, 0, 0);
+  return c;
+}
 function mapBox(b, from, to) {
   const sx = to.w / from.w, sy = to.hem / from.hem, dy = to.hem - from.hem * sy;
   return [b[0] * sx, b[1] * sy + dy, b[2] * sx, b[3] * sy + dy];
@@ -99,6 +122,7 @@ function build(set) {
   return (R.built[set.id] = {
     body: c, hL: crop(srcImg, sr.handL, 1), hR: crop(srcImg, sr.handR, 1), fL: crop(srcImg, sr.footL, 0), fR: crop(srcImg, sr.footR, 0),
     boxes: { handL: fb(sr.handL), handR: fb(sr.handR), footL: fb(sr.footL), footR: fb(sr.footR) }, srcK: it.hem / srcArt.hem,
+    open: R.open ? tintOpen(skinOf(srcImg, [sr.handL, sr.handR])) : null, // tay tung chiêu cùng màu da tay gốc
   });
 }
 
@@ -280,8 +304,8 @@ export function drawRig(ctx, p, look, drawFallbackBody) {
     ctx.save(); ctx.translate(cx, cy); ctx.rotate((side < 0 ? 1 : -1) * P.tay.rot * D);
     if (open) {
       ctx.rotate(P.tay.orot * D); if (TG.flipOpen) ctx.scale(-1, 1);
-      const ow = w * P.tay.os, oh = ow * (R.open.height / R.open.width);
-      ctx.drawImage(R.open, -ow / 2, -oh / 2, ow, oh);
+      const O = B.open || R.open, ow = w * P.tay.os, oh = ow * (O.height / O.width);
+      ctx.drawImage(O, -ow / 2, -oh / 2, ow, oh);
     } else { if (TG.flip) ctx.scale(-1, 1); ctx.drawImage(img, -w / 2, -h / 2, w, h); }
     ctx.restore();
   };

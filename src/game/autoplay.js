@@ -92,7 +92,7 @@ export function createAutoPlay({ me, mobs, gather, map, cfg, reach, heavyR = 30,
     if (fly) { flyT += dt; if (flyT > 1 && map.canStand(me.x, me.y, 6) && (flyT > 6 || mobs.distTo(goal.o, me) < reach * 2)) fly = false; }
     const { dx, dy } = rel(goal.o), d = Math.hypot(dx, dy) || 1;
     if (goal.kind === 'spot' && d < 30) { goal = null; return { x: 0, y: 0, fly }; }
-    if (goal.kind === 'mob' && d <= reach * 0.8) { stuckT = 0; lx = me.x; ly = me.y; return { x: 0, y: 0, fly }; } // đủ gần: đứng đánh
+    if (goal.kind === 'mob' && d <= reach * 0.8) { if (fly && map.canStand(me.x, me.y, 6)) fly = false; stuckT = 0; lx = me.x; ly = me.y; return { x: 0, y: 0, fly }; } // đủ gần: hạ xuống (đang bay không đánh được), đứng đánh
     const moved = Math.hypot(me.x - lx, me.y - ly);
     lx = me.x; ly = me.y;
     stuckT = moved < 0.3 ? stuckT + dt : 0;

@@ -13,6 +13,7 @@ export function createSkills(c) {
   function ready(id, quiet = false) {
     const s = S[id], now = c.now();
     if (c.dead()) return false;
+    if (me.flying) { if (!quiet) toast('Đang ngự kiếm — hạ xuống đất mới ra chiêu được', 1200); return false; } // chỉ đi bộ mới đánh (chủ dự án 25/10/2026)
     const off = c.bar.blocked(id);
     if (off) { if (!quiet) toast(off, 1200); return false; }
     if ((cds[id] || 0) > now) { if (!quiet) toast('Đang hồi chiêu', 900); return false; }
@@ -43,10 +44,11 @@ export function createSkills(c) {
     if (s.charge_s && !(['strike', 'blink'].includes(s.kind) && !c.target(s.range_px))) { // gồng kiểu My Heroes: hiệu ứng tụ khí + tối màn hình, rồi mới phóng (nổ thì rung màn hình)
       if (s.charge_fx) play(s.charge_fx, me.x, me.y + 4, s.charge_h || 56, { ground: true });
       if (s.dim) juice.dim(s.charge_s + 0.7, s.dim);
-      juice.later(s.charge_s, () => { if (!c.dead() && perform(id, s, true) && s.shake) juice.later(s.shake_at ?? 0.12, () => juice.shake(s.shake, 0.28)); });
+      juice.later(s.charge_s, () => { if (!c.dead() && perform(id, s, true) && (c.swing?.(id, s), s.shake)) juice.later(s.shake_at ?? 0.12, () => juice.shake(s.shake, 0.28)); });
       return true;
     }
     const ok = perform(id, s, quiet);
+    if (ok) c.swing?.(id, s); // tung chiêu kèm một đòn kiếm cùng hướng chiêu bay (data/gameplay.json → skill_swing)
     if (ok && s.shake) juice.later(s.shake_at ?? 0.12, () => juice.shake(s.shake, 0.25));
     if (ok && (ECHO.has(id) || ['bolt', 'strike', 'area_self'].includes(s.kind))) c.maybeEcho(() => perform(id, s, true));
     return ok;
