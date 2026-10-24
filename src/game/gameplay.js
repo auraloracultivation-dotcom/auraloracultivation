@@ -43,6 +43,7 @@ import { createGuide } from './guide.js';
 import { createHurt } from './hurt.js';
 import { createDaoTam, questNpcDefs } from './daotam.js';
 import { createTruyenThua } from './truyenthua.js';
+import { createCombo } from './combo.js';
 import { createHopNhat } from './hopnhat.js';
 import { createSkillLearn } from './skill-learn.js';
 import { simulateDuel } from './spar.js';
@@ -81,6 +82,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   npcDef.npcs.push(...questNpcDefs(dtDef, zoneDef.town.props)); // NPC nhiệm vụ Đạo Tâm đứng cạnh công trình trong thành
   const npcs = createNpcs({ def: npcDef, map, mobs, stats, stages: gp.player.stages }), itemsJson = { items: itemsList.items };
   const PV = gp.pvp, rollLoot = createLoot({ gp, mats, qItems, recipes, progress });
+  const combo = createCombo(gp.attack_combo);
   const autoPlay = createAutoPlay({ me, mobs, gather, map, cfg: gp.auto, reach: gp.player.attack_range_px, heavyR: gp.monster.heavy.radius_px, canFly: () => !!me.look?.weapon && pt.mp >= 15, zone: () => biCanh?.zone(), hpFrac: () => (ps.hp ? hp / ps.hp : 1) });
   gather.seed(me);
   const GB = gp.gear_base, gearBase = () => { const v = GB.pct_lv1 + GB.per_lv * progress.state.stage; return { lines: GB.keys.map((k) => ({ k, v, p: 1 })) }; };
@@ -162,8 +164,10 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
       const n = (npcTarget && npcs.canFight(npcTarget) && npcs.dist(npcTarget, me) <= PL.attack_range_px) ? npcTarget : npcs.nearestFoe(me, PL.attack_range_px);
       if (n) { me.facing = wrapDelta(n.x - me.x, map.width) >= 0 ? 1 : -1; strikeNpc(n); return true; }
     }
-    if (m) { me.facing = mobs.rel(m, me).dx >= 0 ? 1 : -1; strike(m, 1, 'attack'); barrage.basic(m); } // Đạo Vận: bắn thêm, sóng chấn
-    return true;
+    const mv = combo.next(now, attackCd); // Chém → Chọc → Xoay (src/game/combo.js)
+    if (m) { me.facing = mobs.rel(m, me).dx >= 0 ? 1 : -1; strike(m, mv.mul, 'attack'); barrage.basic(m); } // Đạo Vận: bắn thêm, sóng chấn
+    if (mv.aoe_px) for (const o of mobs.within(me, PL.attack_range_px + mv.aoe_px)) if (o !== m && o.state !== 'dead' && !map.safeAt(o.x, o.y)) strike(o, mv.aoe_mul, 'attack'); // Xoay: quét quanh mình
+    return mv.id;
   }
 
   // ---------- Kết quả hạ quái: tu vi, Linh thạch, nguyên liệu, vật phẩm nhiệm vụ ----------
@@ -262,7 +266,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
       if (hp < ps.hp * gp.auto.hp_pill_below && progress.count(HEAL_PILL) && (cds.pill || 0) <= now) usePill(HEAL_PILL); else if (pt.mp < pt.max * (gp.auto.mp_pill_below ?? 0.3) && progress.count(MP_PILL) && (cds.pill || 0) <= now) usePill(MP_PILL); // linh lực dưới 30%: tự uống Hồi Linh Đan; hết đan vẫn đánh thường
       autoDir = autoPlay.step(dt, now);
       if (gp.auto.use_skills && target(260)) skills.autoCast(loadout.ids(), hp / ps.hp); // tự dùng kỹ năng trong ô
-      if (target(PL.attack_range_px) && attackCd <= 0) { attack(); me.onAutoSwing?.(); }
+      if (target(PL.attack_range_px) && attackCd <= 0) { const k = attack(); if (k) me.onAutoSwing?.(k); }
     }
     guide.tick(); learn.tick(); daotam.tick(dt); hopNhat.update(dt); barrage.update(dt); camChe.update(dt); biCanh.update(dt); const md = dv.mods(); if (md.mp_regen && !dead) pt.gain(ps.mp * md.mp_regen * dt); if (!dead && hp < ps.hp && now - hurtAt > PL.regen_after_s) hp = Math.min(ps.hp, hp + ps.hp * PL.regen_hp_per_s * (map.safeAt(me.x, me.y) ? map.town?.regenMul || 1 : 1) * dt); // hồi khí huyết khi thôi giao chiến (data/gameplay.json → player.regen_*) // đạn + bị động Đạo Vận, linh lực hồi liên tục
     if (pet) {

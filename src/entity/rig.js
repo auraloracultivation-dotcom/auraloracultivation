@@ -1,11 +1,12 @@
 // Nhân vật ghép lớp kiểu My Heroes (docs/06-TRANG-BI.md): pháp tướng · cánh · vũ khí · giày · thân · đầu · tay.
 // Mỗi món là 1 hình tĩnh; nhún, chém, ngự kiếm đều do code. Thông số lấy từ data/equipment/he6.json
 // (chủ dự án chỉnh và lưu trong Tủ Đồ Tu Chân). Đơn vị: CH = chiều cao nhân vật tới gấu áo, cw = bề ngang áo.
+import { MOVES, pose } from './moves.js';
+
 const D = Math.PI / 180;
 const BASE_CH = 40; // chiều cao (điểm ảnh thế giới, trước sprite_scale) khi params.than.scale = 1
 const ART_CH = 125; // chiều cao tương ứng trong Tủ Đồ — đổi các số tuyệt đối (px) của Tủ Đồ sang thế giới
 const ATTACK_S = 0.42;
-const ease = (t) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
 
 let R = null; // { art, sets, setOfArt, img, built, open }
 const FX = { appear: 2.1, vanish: 0.5 }; // thời gian hoá hình / tan của pháp tướng (giây), lấy từ data/skills/phap-tuong.json
@@ -124,8 +125,35 @@ export function knownLook(look) {
 }
 export const hasLook = (look) => !!knownLook(look);
 
+// Vệt chém: đường đi của mũi kiếm 0,12 giây gần nhất, nội suy theo góc kiếm (ra cung tròn, không thành nét thẳng)
+// — dải sáng 2 tông, thon dần về đuôi (đơn giản kiểu game pixel). tip: { gx, gy, ang, r } (chuôi, góc, bán kính tới mũi)
+function drawTrail(ctx, st, tip, now, CH) {
+  const tr = (st.trail ||= []);
+  if (tip) tr.push({ ...tip, t: now });
+  while (tr.length && now - tr[0].t > 0.12) tr.shift();
+  if (tr.length < 2) return;
+  const pts = [];
+  for (let i = 1; i < tr.length; i++) {
+    const a = tr[i - 1], b = tr[i];
+    for (let k = 0; k < 6; k++) {
+      const u = k / 6, ang = a.ang + (b.ang - a.ang) * u, gx = a.gx + (b.gx - a.gx) * u, gy = a.gy + (b.gy - a.gy) * u, r = a.r + (b.r - a.r) * u;
+      pts.push([gx + Math.sin(ang) * r, gy - Math.cos(ang) * r]);
+    }
+  }
+  const last = tr[tr.length - 1]; pts.push([last.gx + Math.sin(last.ang) * last.r, last.gy - Math.cos(last.ang) * last.r]);
+  ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.lineCap = 'round';
+  for (const [col, wMul] of [['rgba(140,210,255,0.3)', 2.6], ['rgba(255,255,255,0.8)', 1]]) {
+    ctx.strokeStyle = col;
+    for (let i = 1; i < pts.length; i++) {
+      ctx.lineWidth = (0.02 + 0.05 * (i / pts.length)) * CH * wMul;
+      ctx.beginPath(); ctx.moveTo(pts[i - 1][0], pts[i - 1][1]); ctx.lineTo(pts[i][0], pts[i][1]); ctx.stroke();
+    }
+  }
+  ctx.restore();
+}
+
 // Bắt đầu cú chém (chỉ hình ảnh)
-export function rigAttack(p) { (p.rig ||= {}).atk = 0; }
+export function rigAttack(p, kind = 'chem') { const st = (p.rig ||= {}); st.atk = 0; st.move = MOVES[kind] ? kind : 'chem'; st.trail = []; } // kind: chem | choc | xoay (src/entity/moves.js)
 
 // Vẽ nhân vật ghép lớp, neo ở chân (0,0) sau khi caller đã translate tới p.x, p.y và scale(sprite).
 // drawFallbackBody(ctx, lift): vẽ thân mặc định khi chưa mặc trang phục.
@@ -154,14 +182,12 @@ export function drawRig(ctx, p, look, drawFallbackBody) {
     hL += fl * (0.19 * CH + Math.sin(st.T * 2.4 - 0.5) * 5.5 * f);
   }
   const PV = pw(look.weapon), rest = PV.vukhi.rest * D;
+  let pz = null; // tư thế đòn đang ra (Chém / Chọc / Xoay)
   if (st.atk >= 0) {
-    st.atk += dt / ATTACK_S;
-    const t = Math.min(1, st.atk), dip = Math.sin(Math.min(1, t * 1.4) * Math.PI);
-    sq = dip * 0.14; hL = -dip * 8 * f;
-    sw = rest + Math.sin(ease(t) * Math.PI) * Math.PI;
-    const hold = P.tay.hold;
-    kk = t < 0.12 ? ease(t / 0.12) : t < 0.12 + hold ? 1 : 1 - ease(Math.min(1, (t - 0.12 - hold) / Math.max(0.05, 0.88 - hold)));
-    if (st.atk >= 1) st.atk = -1;
+    st.atk += dt / (MOVES[st.move]?.dur || ATTACK_S);
+    pz = pose(st.move || 'chem', Math.min(1, st.atk), rest, P.tay.hold);
+    sq = pz.sq; hL = pz.head * 40 * f; sw = pz.ang; kk = pz.kk;
+    if (st.atk >= 1) { st.atk = -1; st.trail = []; }
   }
   const st1 = moving && fl < 0.5 ? Math.sin(st.ph) : 0;
 
@@ -175,6 +201,7 @@ export function drawRig(ctx, p, look, drawFallbackBody) {
     }
   }
   ctx.scale(p.facing < 0 ? -1 : 1, 1);
+  if (pz) ctx.translate(pz.lean * CH, -pz.hop * CH); // lao tới (chọc), nhảy (xoay); quay người chỉ co thân (xem dưới)
   const hem = it ? it.hem : 1, base0 = it ? -(it.h - it.hem) * k : 0, by = base0 - bL;
   // pháp tướng: chỉ hiện khi bật kỹ năng; hoá hình hiện dần + loé sáng, thu lại thì tan dần (xem avatarFx)
   if (look.avatar) {
@@ -211,11 +238,13 @@ export function drawRig(ctx, p, look, drawFallbackBody) {
     const a = R.art[look.weapon], Q = PV.vukhi, L = CH * Q.s, s = L / Math.hypot(a.w, a.h);
     const grip = [Q.x * cw, by + Q.y * CH];
     const ang = fl > 0.02 ? rest + (Math.PI / 2 - rest) * fl : (sw ?? rest);
-    const gx = fl > 0.02 ? grip[0] + (-L * 0.37 - grip[0]) * fl : grip[0];
-    const gy = fl > 0.02 ? grip[1] + (-bL + 2 * f - grip[1]) * fl : grip[1];
+    const gx = fl > 0.02 ? grip[0] + (-L * 0.37 - grip[0]) * fl : (grip[0] + (pz ? pz.gx * CH : 0)) * (pz ? pz.sx : 1); // xoay: chuôi theo tay khi thân quay
+    const gy = fl > 0.02 ? grip[1] + (-bL + 2 * f - grip[1]) * fl : grip[1] + (pz ? pz.gy * CH : 0);
     ctx.save(); ctx.translate(gx, gy); ctx.rotate(ang - a.angle * D);
     ctx.drawImage(R.img[a.id], -a.grip[0] * s, -a.grip[1] * s, a.w * s, a.h * s); ctx.restore();
+    if (pz) drawTrail(ctx, st, pz.trail ? { gx, gy, ang, r: L * 0.82 } : null, now, CH);
   }
+  if (pz && pz.sx !== 1) ctx.scale(pz.sx, 1); // xoay: thân quay một vòng (kiếm, cánh không co)
   if (!it) { // chưa mặc đạo bào: thân mặc định
     ctx.save(); ctx.translate(0, -bL); drawFallbackBody(ctx); ctx.restore(); ctx.restore(); return;
   }
@@ -252,9 +281,10 @@ export function drawRig(ctx, p, look, drawFallbackBody) {
   };
   const swing = (v) => Math.max(0, v) * P.tay.swing * CH;
   const imgL = TG.swap ? B.hR : B.hL, imgR = TG.swap ? B.hL : B.hR, atkR = !TG.swapOpen;
-  ctx.save(); ctx.translate(atkR ? 0 : -kk * P.tay.reach * cw, -swing(-st1) - (atkR ? 0 : kk * CH * P.tay.ry));
+  const hx = pz ? pz.gx * CH : 0, hy = pz ? pz.gy * CH : 0; // tay cầm kiếm theo chuôi khi lao tới (chọc) / nhảy (xoay)
+  ctx.save(); ctx.translate(atkR ? 0 : -kk * P.tay.reach * cw - hx, -swing(-st1) - (atkR ? 0 : kk * CH * P.tay.ry - hy));
   hand(imgL, B.boxes.handL, -1, atkR ? 0 : kk * P.tay.grow, !atkR && kk > 0.3); ctx.restore();
-  ctx.save(); ctx.translate(atkR ? kk * P.tay.reach * cw : 0, -swing(st1) - (atkR ? kk * CH * P.tay.ry : 0));
+  ctx.save(); ctx.translate(atkR ? kk * P.tay.reach * cw + hx : 0, -swing(st1) - (atkR ? kk * CH * P.tay.ry - hy : 0));
   hand(imgR, B.boxes.handR, 1, atkR ? kk * P.tay.grow : 0, atkR && kk > 0.3); ctx.restore();
   ctx.restore();
 }
