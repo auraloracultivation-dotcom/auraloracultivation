@@ -161,6 +161,7 @@ async function boot() {
     'phap-khi': 'assets/ui/icons/tan-cong.png', 'cong-phap': iconUrl('item.congphap.tamphap.luyen-khi.001'), 'trang-bi': 'assets/ui/icons/nguoi.png', 'thu-cung': S('linh-thu'),
     'phap-bao': iconUrl('item.phapbao.phoi.001'), 'than-phu': iconUrl('card.phu.lien-thanh'), khac: iconUrl('item.khoang.huyen-thiet.001') }); // icon mục Kho (atlas nạp xong mới có)
   const openBag = (tab) => showBag({ tab, tabIcons: Object.fromEntries(Object.entries(BAG_IC()).filter(([, v]) => v)), onShop: () => game.openShop(), categories: itemsDef.categories, getEntries: () => game.bagEntries(), wallet: () => game.wallet.list(), note: 'Đồ thử nghiệm: chỉ lưu trên máy này, chưa lưu máy chủ.',
+    quickSell: { tiers: game.quickSellTiers(), run: (t, dry) => game.quickSell(t, dry) }, // Bán nhanh theo vòng thức tỉnh
     onAction: (it, a) => game.itemAction(it.key, a) }); // Sử dụng / Tháo / Thức tỉnh / Phân rã / Vứt / Dùng / Luyện
   function onLookChanged() { // đồ trên người đổi từ bảng Tu luyện
     if (pt.active && !hasAvatar()) { pt.cancel(); phapTuongOff(); } else setLook();

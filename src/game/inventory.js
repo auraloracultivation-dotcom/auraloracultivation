@@ -136,7 +136,24 @@ export function createInventory({ ru, recipes, info, progress, bag, craft, itemD
     }
     return null;
   }
+  // Bán nhanh (Kho, chủ dự án 24/10/2026): đồ không đang mặc, không Tiên khí, vòng thức tỉnh thuộc `tiers` ('none' = chưa thức tỉnh).
+  // dry = chỉ xem trước. Trả về { n, gold, stone, msg }. Số ở data/gameplay.json → quick_sell.
+  function quickSell(tiers, dry = false) {
+    const QS = gp.quick_sell, ok = (t) => tiers.includes(t || 'none') && QS.tiers.includes(t || 'none');
+    const bagList = bag.entries().map((e) => e.item).filter((it) => it?.slot && !it.thien && !bag.isEquipped(it) && ok(st().itemAw[it.id]?.tier));
+    const forged = st().gear.filter((g) => st().eq[g.slot] !== g.uid && ok(g.tier));
+    const val = (a) => ({ gold: QS.gold[a?.tier || 'none'] || 0, stone: craft.dismantleRefund(a) });
+    let gold = 0, stone = 0;
+    for (const it of bagList) { const v = val(st().itemAw[it.id]); gold += v.gold; stone += v.stone; }
+    for (const g of forged) { const v = val(g); gold += v.gold; stone += v.stone; }
+    const n = bagList.length + forged.length;
+    if (dry || !n) return { n, gold, stone, msg: n ? '' : 'Không có món nào thuộc vòng đã chọn' };
+    for (const it of bagList) { bag.remove(it.id); progress.dropItemAw(it.id); }
+    for (const g of forged) progress.removeGear(g.uid);
+    st().gold = (st().gold || 0) + gold; progress.addStone(stone); onLook(); recompute(); progress.changed();
+    return { n, gold, stone, msg: `Đã bán ${n} món: +${gold.toLocaleString('vi')} Vàng${stone ? `, +${stone.toLocaleString('vi')} Linh thạch` : ''}` };
+  }
   // Đồ trong kho mặc được vào ô `slot` (đồ phôi phải thức tỉnh rồi)
   const slotCandidates = (slot) => entries().map((e) => e.item).filter((it) => it.slot === slot && !it.equipped && (it.key.startsWith('bag:') || it.tier));
-  return { entries, find, slotItem, slotCandidates, act };
+  return { entries, find, slotItem, slotCandidates, act, quickSell };
 }

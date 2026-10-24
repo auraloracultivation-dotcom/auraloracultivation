@@ -1,6 +1,7 @@
 // Kho đồ (túi trữ vật) và hộp nhập mã. Chỉ hiển thị — dữ liệu và luật do main.js truyền vào.
 import { el } from './stage.js';
 import { escapeHtml, showConfirm, toast } from './screens.js';
+import { quickSellPanel } from './quicksell.js';
 
 function overlay(cls) {
   const wrap = el(`<div class="overlay modal-wrap ${cls}"></div>`);
@@ -16,10 +17,10 @@ function overlay(cls) {
 // mục có icon (tabIcons[id] = ảnh), ví 3 loại tiền + nút + (onShop), lưới 6 cột × 5 hàng lật trang.
 // Khung CỐ ĐỊNH: luôn vẽ đủ 30 ô (ô trống mờ) nên bảng không co giãn theo số đồ (chủ dự án 23/10).
 const COLS = 6, ROWS = 5, PER_PAGE = COLS * ROWS;
-export function showBag({ categories, getEntries, onAction, note, wallet, tab, tabIcons = {}, onShop }) { // tab: mở sẵn mục (vd. 'linh-dan')
+export function showBag({ categories, getEntries, onAction, note, wallet, tab, tabIcons = {}, onShop, quickSell }) { // tab: mở sẵn mục (vd. 'linh-dan')
   const { wrap, close } = overlay('bag-wrap');
   const box = el(`<div class="bag bag-v2" role="dialog" aria-label="Kho">
-    <div class="bag-head"><b>Kho</b><button type="button" class="bag-x" aria-label="Đóng">✕</button></div>
+    <div class="bag-head"><b>Kho</b>${quickSell ? '<button type="button" class="bag-qs">Bán nhanh</button>' : ''}<button type="button" class="bag-x" aria-label="Đóng">✕</button></div>
     <div class="bag-tabs" role="tablist">${categories.map(([id, n], i) =>
     `<button type="button" data-cat="${id}" aria-pressed="${tab ? id === tab : i === 0}">${tabIcons[id] ? `<img src="${tabIcons[id]}" alt="">` : ''}<span>${escapeHtml(n)}</span></button>`).join('')}</div>
     ${wallet ? '<div class="wallet"></div>' : ''}
@@ -30,6 +31,12 @@ export function showBag({ categories, getEntries, onAction, note, wallet, tab, t
   </div>`);
   wrap.appendChild(box);
   box.querySelector('.bag-x').addEventListener('click', close);
+  box.querySelector('.bag-qs')?.addEventListener('click', () => { // Bán nhanh: thẻ nổi ở chỗ thẻ chi tiết
+    sel = null; render(); detail.hidden = false;
+    const x = el('<button type="button" class="bag-detail-x" aria-label="Đóng">✕</button>');
+    x.addEventListener('click', () => { detail.hidden = true; });
+    detail.replaceChildren(x, quickSellPanel(quickSell, () => { render(); detail.hidden = false; })); // vẽ lại lưới, thẻ Bán nhanh vẫn mở
+  });
   const grid = box.querySelector('.bag-grid'), detail = box.querySelector('.bag-detail');
   let cat = categories.some(([id]) => id === tab) ? tab : categories[0][0], sel = null, page = 0;
   const pager = box.querySelector('.bag-pager');
