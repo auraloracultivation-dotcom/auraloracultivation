@@ -5,6 +5,9 @@ import { drawEffect } from './sprites.js';
 const SLUG = { Kim: 'kim', 'Ám': 'am', 'Thủy': 'thuy', 'Hỏa': 'hoa', 'Mộc': 'moc', 'Thổ': 'tho', Quang: 'quang', 'Lôi': 'loi', 'Băng': 'bang', Phong: 'phong', 'Hư': 'hu', 'Thời': 'thoi' };
 const BY_NUM = ['kim', 'am', 'thuy', 'hoa', 'moc', 'tho', 'quang', 'loi', 'bang', 'phong', 'hu', 'thoi']; // art.weapon.he.<n> (thứ tự bộ he6.json)
 
+const HE_NUM = ['Kim', 'Ám', 'Thủy', 'Hỏa', 'Mộc', 'Thổ', 'Quang', 'Lôi', 'Băng', 'Phong', 'Hư', 'Thời'];
+export const weaponHe = (id) => HE_NUM[Number(/\.he\.(\d+)$/.exec(id || '')?.[1]) - 1] || null; // hệ của hình vũ khí art.weapon.he.<n>
+
 // name: chem | choc | no | xoay | gai (tools/fx_slash.py); id: mã hình vũ khí; art: thông số hình (có thể có he)
 export function fxOf(name, id, art) {
   if (art?.he && SLUG[art.he]) return `s.${name}.${SLUG[art.he]}`;

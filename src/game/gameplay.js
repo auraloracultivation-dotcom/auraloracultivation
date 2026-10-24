@@ -7,7 +7,7 @@ import { createNpcs } from './npcs.js';
 import { createItemInfo } from './iteminfo.js';
 import { createForgedArt } from './forged-art.js';
 import { createFxQueue } from './fxqueue.js';
-import { fxOf } from '../entity/slashfx.js';
+import { fxOf, weaponHe } from '../entity/slashfx.js';
 import { createCpEffects } from './cp-effects.js';
 import { createProgress } from './progress.js';
 import { createStats } from './stats.js';
@@ -109,7 +109,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   }
   let hp = 0, dead = false, autoDir = null, hurtAt = -99, attackCd = 0, auto = false, resumeAuto = null, targetUid = null, pet = null, now = 0;
   const fx = [], bolts = [];
-  const { say, play } = createFxQueue(fx, fxDuration); // số bay trên đầu + hiệu ứng hình
+  const { say, play, spark } = createFxQueue(fx, fxDuration); // số bay trên đầu + hiệu ứng hình
 
   function recompute() {
     const b = {};
@@ -126,7 +126,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const cpBonus = (skill) => cpFx.skillMul(skill);
   const ptMul = () => (pt.active ? S['phap-tuong'].atk_mul * cpFx.skillMul('phap-tuong') : 1);
   const HEAD = 30; // độ cao đầu nhân vật (điểm)
-  const healMe = (n) => { if (n > 0 && !dead) { hp = Math.min(ps.hp, hp + n); say(me.x, me.y - HEAD, `+${Math.round(n)} hút máu`, '#5dff7a'); } }; // linh hồn không hút máu (chủ dự án 23/10)
+  const healMe = (n) => { if (n > 0 && !dead) { hp = Math.min(ps.hp, hp + n); say(me.x, me.y - HEAD, `+${Math.round(n)}`, '#5dff7a', false, true); } }; // linh hồn không hút máu (chủ dự án 23/10)
   const midY = (m) => m.y - (m.def.art?.h || m.r * 2) / 2;
   const HIT_FX = { attack: ['chem-x', 18], 'kiem-khi': ['kiem-bang-no', 28], 'linh-thu': ['chem-x', 14] };
 
@@ -136,9 +136,9 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     const top = m.y - (m.def.art?.h || m.r * 2) - 4;
     if (r.miss) { say(m.x, top, 'Trượt', '#cfd6e6'); return; }
     sound(r.crit ? 'sfx.bao-kich' : 'sfx.trung');
-    say(m.x, top, `${r.crit ? 'Bạo kích ' : ''}-${r.dmg}${sup < 1 ? ' · bị áp chế' : ''}`, sup < 1 ? '#b9a6d6' : r.crit ? '#ffd23a' : '#ffffff', r.crit);
+    say(m.x, top, `${r.dmg}${r.crit ? '!' : ''}${sup < 1 ? '↓' : ''}`, sup < 1 ? '#b9a6d6' : r.crit ? '#ffd23a' : '#ffffff', r.crit); // số gọn kiểu My Heroes: ! = bạo kích, ↓ = bị áp chế
     const hf = skill === 'attack' && me.look?.weapon ? [fxOf('no', me.look.weapon), 34] : HIT_FX[skill]; // đánh thường có kiếm: nổ vẽ tay theo hệ vũ khí
-    if (hf) play(hf[0], m.x, midY(m), hf[1] * (r.crit ? 1.4 : 1));
+    if (hf) play(hf[0], m.x, midY(m), hf[1] * (r.crit ? 1.4 : 1)); spark(m.x, midY(m), dv.heOf(S[skill]?.he || weaponHe(me.look?.weapon) || 'Kim')?.color || '#fff3c0', r.crit ? 14 : 7, r.crit ? 1.5 : 1); m.kb = mobs.rel(m, me).dx >= 0 ? 1 : -1; if (r.crit) juice.stop(0.05); // tia lửa, quái giật lùi, khựng hình khi bạo kích
     healMe(r.heal);
     if (mobs.damage(m, r.dmg)) onKill(m);
   }

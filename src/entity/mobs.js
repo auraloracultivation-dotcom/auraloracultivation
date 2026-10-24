@@ -74,8 +74,9 @@ function drawMonsterSprite(ctx, m, art, x, y, t) {
   if (still && m.moving) { ctx.translate(x, y); ctx.rotate(Math.sin(m.walkT * 8) * 0.08); ctx.translate(-x, -y); }
   if (art.breathe && !m.moving && m.state !== 'dead') { const k = Math.sin(t * 2.4 + m.uid) * 0.025; ctx.translate(x, y); ctx.scale(1 - k * 0.5, 1 + k); ctx.translate(-x, -y); } // thở
   if (m.state === 'cast') { ctx.shadowColor = '#ff3b30'; ctx.shadowBlur = 10 + 6 * Math.sin(t * 12); } // đang vận chiêu: hào quang đỏ
+  if (m.hitT > 0 && m.state !== 'dead') { const h = m.hitT / 0.15; x += (m.kb || 0) * 3.5 * h; ctx.translate(x, y); ctx.scale(1 + 0.12 * h, 1 - 0.12 * h); ctx.translate(-x, -y); } // trúng đòn: giật lùi + bẹp
   drawSheet(ctx, art.sheet, anim, at, x, y - bob, art.h, m.facing, { hue: art.hue || 0, once, fps: art.fps || 8 });
-  if (m.hitT > 0) { ctx.globalAlpha = 0.35; ctx.globalCompositeOperation = 'lighter'; drawSheet(ctx, art.sheet, anim, at, x, y - bob, art.h, m.facing, { hue: art.hue || 0, once }); }
+  if (m.hitT > 0) { ctx.globalAlpha = 0.75 * Math.min(1, m.hitT / 0.08); ctx.globalCompositeOperation = 'lighter'; drawSheet(ctx, art.sheet, anim, at, x, y - bob, art.h, m.facing, { hue: art.hue || 0, once }); } // loé trắng
   ctx.restore();
   if (m.stun > 0) { ctx.fillStyle = '#ffe36a'; ctx.font = 'bold 7px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('✦✦', x, y - art.h - 2); }
 }
@@ -133,13 +134,21 @@ export function drawFx(ctx, fx, ox, oy) {
     ctx.globalAlpha = f.kind === 'bolt' && f.r0 ? 0.2 + 0.8 * Math.min(1, (f.r0 - f.left) / 60) : 1; // đạn mới bắn còn mờ, rõ dần sau 60 px: không che đầu nhân vật, đòn chém
     if (f.delay > 0) continue;
     const x = f.x + ox, y = f.y + oy;
-    if (f.kind === 'text') {
+    if (f.kind === 'text') { // số bay kiểu My Heroes: bật to ra rồi co về, bay lên chậm dần, bạo kích to + viền đỏ sẫm
+      const age = f.life - f.t, pop = 1 + (f.big ? 0.9 : 0.55) * Math.max(0, 1 - age / 0.12), rise = 1 - (1 - Math.min(1, age / 0.6)) ** 3;
       ctx.save();
-      ctx.globalAlpha = Math.min(1, f.t * 2);
-      ctx.translate(x, y - (1 - f.t / f.life) * 18 * textScale()); ctx.scale(textScale(), textScale());
-      ctx.font = `bold ${f.big ? 10 : 8}px sans-serif`; ctx.textAlign = 'center';
-      ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(0,0,0,.85)'; ctx.fillStyle = f.color;
+      ctx.globalAlpha = Math.min(1, f.t * 3);
+      ctx.translate(x, y - rise * 16 * textScale()); ctx.scale(textScale() * pop, textScale() * pop);
+      ctx.font = `900 ${f.big ? 11 : 8}px sans-serif`; ctx.textAlign = 'center'; ctx.lineJoin = 'round';
+      ctx.lineWidth = f.big ? 3 : 2.4; ctx.strokeStyle = f.big ? '#5a0f00' : 'rgba(10,6,20,.9)'; ctx.fillStyle = f.color;
       ctx.strokeText(f.text, 0, 0); ctx.fillText(f.text, 0, 0);
+      ctx.restore();
+    } else if (f.kind === 'spark') { // tia lửa: vệt sáng thon, cộng sáng, rơi nhẹ
+      const age = f.life - f.t, k = f.t / f.life, px = x + f.vx * age, py = y + f.vy * age + 160 * age * age;
+      const tx = px - f.vx * 0.035, ty = py - (f.vy + 320 * age) * 0.035;
+      ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.lineCap = 'round';
+      ctx.globalAlpha = k; ctx.strokeStyle = f.color; ctx.lineWidth = f.w * 2.2; ctx.beginPath(); ctx.moveTo(tx, ty); ctx.lineTo(px, py); ctx.stroke();
+      ctx.strokeStyle = '#ffffff'; ctx.lineWidth = f.w; ctx.beginPath(); ctx.moveTo((tx + px) / 2, (ty + py) / 2); ctx.lineTo(px, py); ctx.stroke();
       ctx.restore();
     } else if (f.kind === 'sprite') { // hiệu ứng hình: f.fx, tiến độ theo thời gian còn lại
       if (f.glow) { const k = Math.min(1, f.t / f.life * 2.2); ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = 0.5 * k; // quầng sáng dưới chân hiệu ứng
