@@ -7,6 +7,7 @@
 import { juice } from './juice.js';
 import { skillSound } from '../audio/index.js';
 import { applyFamilies } from './fxfamily.js';
+import { cutin } from './cutin.js';
 
 export function createSkills(c) {
   const { S, me, mobs, pt, cds, toast, say, play, fx } = c;
@@ -42,7 +43,8 @@ export function createSkills(c) {
   function cast(id, quiet = false) {
     const s = S[id];
     if (!s || !ready(id, quiet)) return false;
-    if (id !== 'phap-bao' && id !== 'phap-tuong') skillSound(id, s.he); // pháp bảo kêu ở treasure.js, pháp tướng ở main.js
+    if (id !== 'phap-bao' && id !== 'phap-tuong') skillSound(id, s.he);
+    if (!quiet && c.sin?.has(id) && cutin.show(s.name || id, c.heColor?.(s.he))) juice.stop(0.12); // tuyệt kỹ tự tay tung: dải mực tên chiêu (cutin.js) // pháp bảo kêu ở treasure.js, pháp tướng ở main.js
     if (s.charge_s && !(['strike', 'blink'].includes(s.kind) && !c.target(s.range_px))) { // gồng kiểu My Heroes: hiệu ứng tụ khí + tối màn hình, rồi mới phóng (nổ thì rung màn hình)
       if (s.charge_fx) play(s.charge_fx, me.x, me.y + 4, s.charge_h || 56, { ground: true });
       if (s.dim) juice.dim(s.charge_s + 0.7, s.dim);
