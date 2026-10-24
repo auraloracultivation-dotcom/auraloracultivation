@@ -81,13 +81,13 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const PV = gp.pvp, rollLoot = createLoot({ gp, mats, qItems, recipes, progress });
   const autoPlay = createAutoPlay({ me, mobs, gather, map, cfg: gp.auto, reach: gp.player.attack_range_px, canFly: () => !!me.look?.weapon && pt.mp >= 15, zone: () => biCanh?.zone(), hpFrac: () => (ps.hp ? hp / ps.hp : 1) });
   gather.seed(me);
-  const GEAR_BASE = { lines: Object.entries(gp.gear_base?.pct || {}).map(([k, v]) => ({ k, v, p: 1 })) };
+  const GB = gp.gear_base, gearBase = () => { const v = GB.pct_lv1 + GB.per_lv * progress.state.stage; return { lines: GB.keys.map((k) => ({ k, v, p: 1 })) }; };
   const SLOTS = ['mat-na', 'trang-phuc', 'vu-khi', 'nhan', 'canh', 'phap-tuong', 'linh-thu', 'day-chuyen'];
   // Trang bị đang tính chỉ số: đồ luyện ra đang mặc + đồ Kho đang mặc đã thức tỉnh
   let treasure = null; // pháp bảo (treasure.js) — tạo sau barrage
   const wornGear = () => [...progress.equipped(), ...(treasure ? treasure.worn() : []),
     ...SLOTS.map((sl) => bag.equippedItem(sl)).filter(Boolean).map((it) => progress.state.itemAw[it.id]).filter((a) => a?.tier),
-    ...SLOTS.map((sl) => bag.equippedItem(sl)).filter((it) => it?.he).map(() => GEAR_BASE)]; // chỉ số gốc của đồ ngũ hành (gameplay.json → gear_base)
+    ...SLOTS.map((sl) => bag.equippedItem(sl)).filter((it) => it?.he).map(gearBase)]; // chỉ số gốc của đồ ngũ hành (gameplay.json → gear_base)
   const itemDefs = new Map([...mats.materials, ...pills.pills, ...qItems.items, ...recipes.items, ...premium.items, ...pbDef.items, ...misc.items].map((d) => [d.id, d]));
   const S = gp.skills, PL = gp.player;
 

@@ -2400,11 +2400,13 @@
   }
  },
  "gear_base": {
-  "_note": "Mỗi món ngũ hành đang mặc (8 ô) cho sẵn % chỉ số gốc theo cảnh giới — kể cả chưa thức tỉnh. Quái tính theo 'trang bị chuẩn' (tools/gen_thien_dao.py gear_e ≈ +87% ở cấp 33); thiếu phần này thì người chơi đồ Đạo Tâm mới nhận chỉ chịu ~5 đòn (chơi thử 24/10/2026). Đủ 8 món = +64%, thức tỉnh cộng thêm.",
-  "pct": {
-   "hp": 8,
-   "def": 8,
-   "linh": 8
-  }
+  "_note": "Mỗi món ngũ hành đang mặc (8 ô) cho sẵn % chỉ số gốc theo cảnh giới, kể cả chưa thức tỉnh: pct = pct_lv1 + per_lv × (cấp − 1) — cấp 1: 6%/món, cấp 33: ~9,8%, cấp 42: ~10,9%, cấp 60: ~13%. Đủ bộ ≈ 83% mức 'trang bị chuẩn' quái được tính theo (tools/gen_thien_dao.py gear_e); thức tỉnh bù phần còn lại và vượt lên. Chơi thử 24/10/2026: thiếu phần này thì đồ Đạo Tâm mới nhận gần như không cộng gì, chết liên tục ở Băng tuyết / Hắc thổ.",
+  "pct_lv1": 6,
+  "per_lv": 0.12,
+  "keys": [
+   "hp",
+   "def",
+   "linh"
+  ]
  }
 }
