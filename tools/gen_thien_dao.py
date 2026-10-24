@@ -80,7 +80,7 @@ def main():
                             'old_order': [x['id'] for x in gp['player']['stages']], 'pet_atk': {t: v['atk'] for t, v in mj['stage_stats'].items()}}
     rmul = mj['rank_mul']
     ss = {t: mon_normal(LREF[t]) for t in order}
-    ss['am_hu'] = {'hp': ss['am_hu']['hp'] * 2.3, 'atk': ss['am_hu']['atk'] * 0.25, 'def': ss['am_hu']['def']}  # Âm Hư: cấp 60 đồ ×7 ≈ 250 đòn, chịu ~8 đòn
+    ss['am_hu'] = {'hp': ss['am_hu']['hp'] * 23, 'atk': ss['am_hu']['atk'] * 0.25, 'def': ss['am_hu']['def']}  # Âm Hư: máu ×10 (chơi thử 24/10: Thiên Cơ Hợp Nhất ×5 sát thương → đồ Đen 10 dòng hạ trong 1,5 giây; nay ~15 giây, đồ Cam 6 dòng không hạ được)
     # Luật cứng (tools/check_refs.mjs): quái mạnh nhất vùng cảnh giới trước ≤ quái thường yếu nhất Sơ kỳ vùng sau, từng chỉ số.
     # Tính đúng như Đồ giám (× hạng × mul riêng × lệch, làm tròn); thiếu thì nâng chỉ số đó cho mọi bậc từ vùng sau trở đi.
     var = mj['variance']
