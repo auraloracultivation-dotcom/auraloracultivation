@@ -121,7 +121,7 @@ async function boot() {
   const S = (n) => `assets/ui/skills/${n}.png`;
   const markers = () => [...(game?.markers() || []), { x: me.x, y: me.y, self: true }, ...[...others.list.values()].map((p) => ({ x: p.x, y: p.y }))];
 
-  function attack() { const k = game.attack(); if (k) swing(k); }
+  function attack() { if (me.flying) return toast('Đang ngự kiếm — hạ xuống đất mới đánh được', 1200); const k = game.attack(); if (k) swing(k); }
   function swing(kind) { // kind: chem | choc | xoay — combo đánh thường (src/game/combo.js, hình src/entity/moves.js)
     const mv = typeof kind === 'string' ? kind : 'chem';
     if (me.look?.outfit || me.look?.weapon) rigAttack(me, mv, me.atkGap); // nhân vật ghép lớp: đưa tay (và chém / chọc / xoay kiếm)
@@ -246,6 +246,7 @@ async function boot() {
   }, loadJSON, map, me, hud, pt, toast, audio, userId: me.id, bag, onLook: () => onLookChanged(), onRealm: (r) => zone.setRealm(r), serverNow: net.serverNow, bornAt: character.created_at, timeSynced: net.timeSynced,
     onToaHoa: (sum) => showToaHoa({ name: me.name, ...sum, onRebirth: rebirth }) }); // thọ nguyên tận → chết hẳn
   me.onAutoSwing = swing;
+  me.onSkillSwing = (k) => { if (me.look?.outfit || me.look?.weapon) rigAttack(me, k); else me.slashT = 0.22; }; // tung chiêu: vung kiếm cùng hướng, không thêm tiếng (chiêu có tiếng riêng)
   navi = createNavi({ map, me, game, flight, toast }); // dẫn đường tới nơi làm nhiệm vụ
   const qauto = createQuestAuto({ game, navi, map, me, toast, progress: game.progress }); game.toggleQuestAuto = qauto.toggle; game.setQuestAuto(qauto); // Tự làm nhiệm vụ
   game.setGo((id) => navi.start(id)); // nút "Đi tới" trong bảng Nhiệm vụ đầy đủ

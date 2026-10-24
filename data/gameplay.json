@@ -2452,5 +2452,27 @@
     "aoe_mul": 0.6
    }
   ]
+ },
+ "skill_swing": {
+  "_ghi_chu": "Chủ dự án 25/10/2026: mỗi lần tung chiêu kèm một đòn đánh thường, cùng hướng chiêu bay. Kiểu đòn theo kind (hoặc id riêng); kind không có ở đây (heal, buff, blink…) thì không vung.",
+  "by_kind": {
+   "bolt": "choc",
+   "volley": "choc",
+   "pull": "choc",
+   "treasure": "choc",
+   "strike": "chem",
+   "wave": "chem",
+   "trap": "chem",
+   "seal": "chem",
+   "area_self": "xoay",
+   "tornado": "xoay",
+   "storm": "xoay",
+   "clone": "xoay"
+  },
+  "by_id": {
+   "kiem-khi": "choc",
+   "khong-che": "choc",
+   "nguyen-anh": "xoay"
+  }
  }
 }
