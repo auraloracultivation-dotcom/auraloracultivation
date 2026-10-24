@@ -40,7 +40,7 @@ export function createGuide(c) {
     })).sort((a, b) => a.k - b.k).map((r) => r.html).join('');
     const tiers = Object.entries(h.tiers).map(([t, v]) => `<div class="gd-tier ${n >= +t ? 'lit' : ''}" style="--c:${h.color}"><b>${t}/8</b><span>${E(v._mo_ta)}</span></div>`).join('');
     const skills = Object.entries(S).filter(([, s]) => s && s.he === he).map(([id, s]) =>
-      `<div class="gd-skill ${skOk(id, s) ? '' : 'lock'}">${pic(skillIcon(s))}<span><b>${E(s.name)}</b>${s.thien ? '✦ Tiên khí · ' : ''}${!c.learn.learned(id) ? (s.thien ? 'Chưa có (Thiên Cơ Truyền Thừa)' : 'Chưa lĩnh ngộ (hạ thủ lĩnh / Âm Hư)') : stageOk(s.unlock) ? 'Đã có' : `Mở ở ${E(c.stageName(s.unlock))}`}</span></div>`).join('');
+      `<div class="gd-skill ${skOk(id, s) ? '' : 'lock'}">${pic(skillIcon(s))}<span><b>${E(s.name)}</b>${s.thien ? '✦ Tiên khí · ' : ''}${!c.learn.learned(id) ? (s.thien ? 'Chưa có (Thiên Cơ Bí Cảnh)' : 'Chưa lĩnh ngộ (hạ thủ lĩnh / Âm Hư)') : stageOk(s.unlock) ? 'Đã có' : `Mở ở ${E(c.stageName(s.unlock))}`}</span></div>`).join('');
     const cc = c.ccDef.he[he] || c.ccDef.he[dvDef.he[he]?.twin] || c.ccDef.he.Kim, pbs = c.pbDef.list.filter((d) => d.he === he);
     return `<div class="row"><div class="row-h"><b style="color:${h.color}">${E(h.name)}</b><em>${h.twin ? '✦ Tiên khí · ' : ''}Hệ ${E(he)} · đang mặc ${n}/8</em></div>
       <p>Mặc càng nhiều món cùng hệ, chiêu càng biến đổi. Đủ 8 = Đại Thành.</p>${tiers}

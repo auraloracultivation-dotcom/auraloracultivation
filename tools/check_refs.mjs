@@ -59,7 +59,7 @@ export function checkRefs() {
     if (!stageIds.has(st)) errors.push(`gameplay.json: tầng "${st}" không có`);
     must(realm, 'gameplay.json major_realm_first_stage');
   }
-  for (const q of load('data/items/quest-items.json').items) if (q.drop.from) must(q.drop.from, q.id);
+  for (const q of load('data/items/quest-items.json').items) if (q.drop?.from) must(q.drop.from, q.id);
   for (const r of load('data/items/recipes.json').items) if (r.teaches) must(r.teaches, r.id);
   for (const s of load('data/shop.json').stock) must(s.id, 'shop.json');
   // Luật cảnh giới (chủ dự án 23/10): boss mạnh nhất một đại cảnh giới ≤ quái thường yếu nhất Sơ kỳ cảnh giới kế tiếp, từng chỉ số

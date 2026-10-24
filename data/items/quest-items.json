@@ -15,12 +15,17 @@
   },
   {
    "id": "item.nhiemvu.manh-truyen-thua.001",
-   "name": "Mảnh truyền thừa",
+   "name": "Mảnh Truyền Thừa",
    "cat": "khac",
-   "drop": {
-    "from_rank": "boss",
-    "chance": 0.3
-   }
+   "use": "Đủ 100 mảnh: ghép thành trọn bộ Đạo Vận một hệ tuỳ chọn (8 pháp khí + 2 kỹ năng + Thần Phù + pháp bảo, chưa thức tỉnh).",
+   "source": "Phó bản Truyền Thừa (Nhiệm vụ → Bí Cảnh, 2 lượt/ngày)",
+   "combine": {
+    "count": 100,
+    "gold": 2000000,
+    "grant": "daovan",
+    "dup_stone": 20000
+   },
+   "_ghi_chu": "Chủ dự án 24/10/2026: chỉ ra từ phó bản Truyền Thừa (bỏ rơi từ boss 30% — với 100 mảnh thì rơi boss làm hỏng nhịp ~50 ngày). Ghép tốn Vàng = chỗ tiêu Vàng cuối game."
   }
  ]
 }

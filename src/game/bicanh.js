@@ -78,7 +78,7 @@ export function createBiCanh(c) {
       for (let k = 3; R.items_per_3.length && k <= cleared; k += 3) give(R.items_per_3[(k / 3 - 1) % R.items_per_3.length]); // mỗi 3 đợt 1 món
       if (win) R.full_clear.forEach(give);
       if (win && R.thien_item) { const id = c.dv.grantSet(true, () => {}); got.push(id ? `${c.itemName(id)} (Thiên hệ)` : "Linh thạch (đã đủ đồ Thiên hệ)"); } // Cửu Thiên: qua hết = 1 món Thiên hệ
-      if (win && R.thien_skill) got.push(thienGift()); // Thiên Cơ Truyền Thừa: 1 kỹ năng hoặc pháp bảo Thiên hệ chưa có
+      if (win && R.thien_skill) got.push(thienGift()); // Thiên Cơ Bí Cảnh: 1 kỹ năng hoặc pháp bảo Thiên hệ chưa có
       if (cleared >= R.set_item_at && !R.thien_item && !R.thien_skill) c.dv.onKill({ void: true, def: {}, src: 'bicanh' }, (t) => got.push(/Thiên/.test(t) ? 'đồ Thiên hệ' : /Linh thạch/.test(t) ? 'Linh thạch (đã đủ bộ)' : 'đồ ngũ hành'));
       progress.changed();
     }

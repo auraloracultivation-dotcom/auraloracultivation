@@ -87,8 +87,12 @@ export function createRoutine({ R, progress, realmMajor, realms, gp, mats, now =
   function ensure(isDone) {
     const s = st(), out = { add: [], drop: [] }, d = dayKey(), w = weekKey();
     let c = null; const C = () => (c ||= ctx());
-    if (s.day !== d) { out.drop.push(...s.daily.map((q) => q.id)); s.day = d; s.daily = makeDaily(C(), d); out.add.push(...s.daily); }
-    if (s.week !== w) { out.drop.push(...s.weekly.map((q) => q.id)); s.week = w; s.weekly = makeWeekly(C(), w); out.add.push(...s.weekly); }
+    // Lên đại cảnh giới mới giữa ngày / tuần: bộ nhiệm vụ chưa làm xong món nào thì đổi sang vùng mới (chủ dự án 24/10: cấp 60 vẫn "Trừ yêu Đồng cỏ")
+    const mj = realmMajor(), fresh = (list) => !list.some((q) => isDone(q.id));
+    if (s.day === d && s.dmaj !== mj && fresh(s.daily)) s.day = '';
+    if (s.week === w && s.wmaj !== mj && fresh(s.weekly)) s.week = '';
+    if (s.day !== d) { out.drop.push(...s.daily.map((q) => q.id)); s.day = d; s.dmaj = mj; s.daily = makeDaily(C(), `${d}.${mj}`); out.add.push(...s.daily); }
+    if (s.week !== w) { out.drop.push(...s.weekly.map((q) => q.id)); s.week = w; s.wmaj = mj; s.weekly = makeWeekly(C(), `${w}.${mj}`); out.add.push(...s.weekly); }
     if (s.lv !== 3) { // Ngũ Thiên Đạo Cảnh (24/10): 1 bậc / cấp — bắt đầu từ bậc đầu của cảnh giới hiện tại
       if (s.lq) out.drop.push(s.lq.id);
       s.lv = 3; s.lq = null; s.ladder = Math.max(1, firstStepOfMajor(realmMajor()));

@@ -265,7 +265,7 @@ export function createViews(o) {
   // Tiên khí = 6 bộ Thiên hệ (chủ dự án 24/10 02h): 8 pháp khí + 2 kỹ năng + 1 pháp bảo mỗi hệ. Không bán — chỉ báo nguồn, xem ở Cẩm nang Đạo Vận
   const celestialRow = () => `<div class="row"><div class="row-h"><b>${ico('cur.tien-ngoc')}✦ Tiên khí — 6 bộ Thiên hệ</b><em class="own">Đã mở</em></div>
     <p class="src">Quang · Lôi · Băng · Phong · Hư · Thời — mỗi bộ 8 pháp khí + 2 kỹ năng + 1 pháp bảo. Đủ bộ kích Thiên Cơ Hợp Nhất.</p>
-    <p class="src">Pháp khí: rơi từ Âm Hư, qua hết Cửu Thiên Bí Cảnh. Kỹ năng + pháp bảo: Thiên Cơ Truyền Thừa (Nhiệm vụ → Bí Cảnh, 1 lượt/ngày). Kỹ năng dùng từ Nguyên Anh Hậu kỳ / Hóa Thần Sơ kỳ.</p>
+    <p class="src">Pháp khí: rơi từ Âm Hư, qua hết Cửu Thiên Bí Cảnh. Kỹ năng + pháp bảo: Thiên Cơ Bí Cảnh (Nhiệm vụ → Bí Cảnh, 1 lượt/ngày). Kỹ năng dùng từ Nguyên Anh Hậu kỳ / Hóa Thần Sơ kỳ.</p>
     <p class="src">Xem và mặc cả bộ: nút Đạo Vận → tab Quang … Thời.</p></div>`;
   function openShop() {
     const { shop } = o;

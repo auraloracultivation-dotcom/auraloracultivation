@@ -77,7 +77,7 @@
   },
   {
    "id": "truyen-thua",
-   "name": "Thiên Cơ Truyền Thừa",
+   "name": "Thiên Cơ Bí Cảnh",
    "state_key": "biCanhTT",
    "tries_per_day": 1,
    "hp_per_wave": 0.3,
@@ -95,6 +95,31 @@
     "set_item_at": 99,
     "thien_skill": 1,
     "dup_stone": 3000
+   }
+  },
+  {
+   "id": "truyen-thua-nh",
+   "name": "Truyền Thừa",
+   "state_key": "biCanhTruyenThua",
+   "tries_per_day": 2,
+   "hp_per_wave": 0.15,
+   "base_count": 6,
+   "per_wave": 2,
+   "desc": "Mỗi ngày 2 lượt. Đứng ngoài thành bấm Bắt đầu: 10 đợt quái cảnh giới của bạn. Vượt hết nhận 1 Mảnh Truyền Thừa. Đủ 100 mảnh: Kho → chạm mảnh → ghép trọn bộ Đạo Vận một hệ tuỳ chọn (8 pháp khí + 2 kỹ năng + Thần Phù + pháp bảo).",
+   "reward": {
+    "stone_per_wave": 300,
+    "gold_per_wave": 0,
+    "card_at": [],
+    "card_min_tier": [],
+    "items_per_3": [],
+    "full_clear": [
+     [
+      "item.nhiemvu.manh-truyen-thua.001",
+      1
+     ]
+    ],
+    "treasure_blank_at": 99,
+    "set_item_at": 99
    }
   }
  ],

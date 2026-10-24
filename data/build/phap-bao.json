@@ -479,5 +479,5 @@
  ],
  "bind_fx": "k.nhan-chu",
  "_ghi_chu_phan_ra": "Chủ dự án 23/10 20:36: phân rã chỉ giữ lại 1/4 số LT đã đầu tư (thức tỉnh + ôn dưỡng). Cũ 0.4.",
- "_ghi_chu_thien": "Chủ dự án 24/10: 6 pháp bảo Thiên hệ (thien: true) — không ra từ Phôi Pháp Bảo, chỉ từ phó bản Thiên Cơ Truyền Thừa. kind rewind: hồi máu + làm mới hồi chiêu. Chủ dự án 24/10 01h: hình mới (5 tấm pháp bảo, Hư tạm) + chiêu mới mạnh hơn bộ cũ — kind t_* ở src/game/treasure-thien.js, hình tools/thien_phap_bao.py."
+ "_ghi_chu_thien": "Chủ dự án 24/10: 6 pháp bảo Thiên hệ (thien: true) — không ra từ Phôi Pháp Bảo, chỉ từ phó bản Thiên Cơ Bí Cảnh. kind rewind: hồi máu + làm mới hồi chiêu. Chủ dự án 24/10 01h: hình mới (5 tấm pháp bảo, Hư tạm) + chiêu mới mạnh hơn bộ cũ — kind t_* ở src/game/treasure-thien.js, hình tools/thien_phap_bao.py."
 }

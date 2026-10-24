@@ -14,7 +14,7 @@ export function createLoot({ gp, mats, qItems, recipes, progress }) {
       out.push({ id: it.id, n, label: `${it.name} ×${n}` });
     }
     for (const q of qItems.items) {
-      const d = q.drop;
+      const d = q.drop; if (!d) continue; // Mảnh Truyền Thừa: chỉ từ phó bản
       const match = d.from ? d.from === m.def.id : d.from_rank === rank;
       if (match && (!d.only_when_quest || progress.state.quests.active[d.only_when_quest]) && Math.random() < d.chance) out.push({ id: q.id, n: 1, label: q.name });
     }

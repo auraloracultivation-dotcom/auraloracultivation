@@ -63,14 +63,19 @@ export function createDaoTam(c) {
   }
 
   // ---------- Thưởng + sang bước sau ----------
-  function give(gift) {
-    const st = S(), r = recipe();
-    if (gift.startsWith('gear:')) { const d = gearOf(gift.slice(5)); if (d) { c.bag.give(d.id); return d.name; } }
-    if (gift.startsWith('skill:')) { const id = r[`skill_${gift.slice(6)}`]; if (id) { c.learn.grant(id); return `kỹ năng ${c.S[id]?.name || id}`; } }
-    if (gift === 'card' && r.card) { c.cards.grant(r.card, 2); return 'Thần Phù hệ ' + st.he; }
-    if (gift === 'pb') { const p = c.pbList.find((x) => x.he === st.he); if (p) { c.treasure.grant(p.id); return p.name; } }
+  // Tặng một món của bộ Đạo Vận hệ `he` (gift: gear:<ô> | skill:sin | skill:cui | card | pb) — dùng chung với Truyền Thừa (truyenthua.js)
+  function giveFor(he, gift) {
+    const r = c.hop[he] || {};
+    // trả null khi không tặng được gì (đã có sẵn món / kỹ năng đó — Kho giữ 1 bản mỗi món)
+    if (gift.startsWith('gear:')) { const d = c.items.find((x) => x.he === he && x.slot === gift.slice(5) && !x.thien); if (d && c.bag.give(d.id)) return d.name; return null; }
+    if (gift.startsWith('skill:')) { const id = r[`skill_${gift.slice(6)}`]; if (id && !c.learn.learned(id)) { c.learn.grant(id); return `kỹ năng ${c.S[id]?.name || id}`; } return null; }
+    if (gift === 'card' && r.card) { c.cards.grant(r.card, 2); return 'Thần Phù hệ ' + he; }
+    if (gift === 'pb') { const p = c.pbList.find((x) => x.he === he && !x.thien); if (p) { c.treasure.grant(p.id); return p.name; } }
     return null;
   }
+  const give = (gift) => giveFor(S().he, gift);
+  const heList = () => Object.keys(c.hop).slice(0, 6).map((he) => ({ he, color: c.heColor(he), name: c.hop[he].name,
+    desc: `${c.S[c.hop[he].skill_sin]?.name || ''} · ${c.S[c.hop[he].skill_cui]?.name || ''}` }));
   function finish(s) {
     const w = s.reward || {}, got = [];
     if (w.exp_lv) { c.addExp(Math.round(progress.stageDef.exp_need * w.exp_lv)); got.push('tu vi'); }
@@ -102,8 +107,7 @@ export function createDaoTam(c) {
   }
   function chooseHe() {
     if (S().he) return;
-    const list = Object.keys(c.hop).slice(0, 6).map((he) => ({ he, color: c.heColor(he), name: c.hop[he].name,
-      desc: `${c.S[c.hop[he].skill_sin]?.name || ''} · ${c.S[c.hop[he].skill_cui]?.name || ''}` }));
+    const list = heList();
     talking = true;
     c.chooseHe({ list, onPick: (he) => { talking = false; if (!he) return; S().he = he; progress.changed(); toast(`Đạo Tâm hệ ${he} — cả bộ 12 món theo hệ này`, 3000); } });
   }
@@ -175,5 +179,5 @@ export function createDaoTam(c) {
     return { id: 'dt', tag: 'Đạo Tâm', title: s.title, goal: `${s.tip || s.title}${cnt}`.slice(0, 80), color: '#ffd23a', ready: false, nav: !!place() };
   }
   return { tick, emit, place, doHere, chooseHe, render, brief, cur, he: () => S().he, done: () => !cur(), setAuto: (v) => { auto = v; },
-    restock, talking: () => talking, progress: () => ({ i: S().i, n: steps.length, chapter: cur()?.chapter, p: S().p }), steps: () => steps };
+    giveFor, heList, restock, talking: () => talking, progress: () => ({ i: S().i, n: steps.length, chapter: cur()?.chapter, p: S().p }), steps: () => steps };
 }

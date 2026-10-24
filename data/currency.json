@@ -13,7 +13,7 @@
   "jade_per_stone": 0.01,
   "gold_per_kill_stone": 8,
   "celestial_gear": {
-    "_ghi_chu": "Tiên khí = 6 bộ Thiên hệ Quang/Lôi/Băng/Phong/Hư/Thời (chủ dự án 24/10 02h): pháp khí items.json thien, kỹ năng gameplay.json skills thien, pháp bảo phap-bao.json thien. Không bán bằng Tiên ngọc; nguồn: Âm Hư, Cửu Thiên Bí Cảnh, Thiên Cơ Truyền Thừa.",
+    "_ghi_chu": "Tiên khí = 6 bộ Thiên hệ Quang/Lôi/Băng/Phong/Hư/Thời (chủ dự án 24/10 02h): pháp khí items.json thien, kỹ năng gameplay.json skills thien, pháp bảo phap-bao.json thien. Không bán bằng Tiên ngọc; nguồn: Âm Hư, Cửu Thiên Bí Cảnh, Thiên Cơ Bí Cảnh.",
     "open": true
   }
 }

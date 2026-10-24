@@ -42,6 +42,7 @@ import { createConsumables } from './consumables.js';
 import { createGuide } from './guide.js';
 import { createHurt } from './hurt.js';
 import { createDaoTam, questNpcDefs } from './daotam.js';
+import { createTruyenThua } from './truyenthua.js';
 import { createHopNhat } from './hopnhat.js';
 import { createSkillLearn } from './skill-learn.js';
 import { simulateDuel } from './spar.js';
@@ -236,7 +237,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     now: () => now, dead: () => dead, hp: () => hp, setHp: (v) => { hp = v; }, ps: () => ps });
   const daotam = createDaoTam({ def: dtDef, hop: dvDef.hop_nhat.he, items: itemsJson.items, itemDefs, shop, progress, bag, learn, loadout, cards, treasure, hopNhat, npcs, map, me, wallet, S, pbList: pbDef.list, // Con đường Đạo Tâm
     addExp, itemAction, breakthrough, breakthroughPill, usePill, toast, play, dialog: showDialog, chooseHe: showHeChooser, heColor: (he) => dvDef.he[he]?.color || '#ffd23a' });
-  quests.onEmit((type, e) => daotam.emit(type, e));
+  quests.onEmit((type, e) => daotam.emit(type, e)); const tt = createTruyenThua({ itemDefs, progress, wallet, daotam, chooseHe: showHeChooser, toast, recompute }); // Truyền Thừa
 
   // ---------- Mỗi khung hình ----------
   // Thọ nguyên (lifespan.js): qua 0h giờ VN cập nhật nhãn; hết thọ → tọa hóa (chết hẳn), main.js hiện bảng chuyển thế
@@ -340,7 +341,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
       for (const i of r.items || []) progress.add(i.id, i.count); }, recompute, usePill, emit: quests.emit });
 
   const inv = createInventory({ ru, recipes: { pills: pills.pills, blanks: blanks.blanks, skills: cp.skills }, info, progress, bag, craft, itemDefs, awaken, gp, art: (a) => artInfo(a)?.file || artFile(a), icon: iconUrl, fallbackIcon: placeholderIcon,
-    onLook, recompute, usePill, breakthrough: () => breakthrough(), btPills: new Set(realms.realms.filter((r) => r.breakthrough).map((r) => r.breakthrough.pill)), openCultivate: (tab) => views.openCultivate(tab) });
+    onLook, recompute, usePill, breakthrough: () => breakthrough(), combineAction: (id) => tt.action(id), combine: (id) => tt.combine(id), btPills: new Set(realms.realms.filter((r) => r.breakthrough).map((r) => r.breakthrough.pill)), openCultivate: (tab) => views.openCultivate(tab) });
   const stageName = progress.stageName;
   const bar = createSkillBar({ learn, hud, S, gp, progress, pt, cds, slotItem: (s) => inv.slotItem(s), icon: iconUrl, fxIcon: fxIconUrl, loadout, stageName, treasure: () => treasure.view() });
   function itemAction(key, action) {
