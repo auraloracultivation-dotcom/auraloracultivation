@@ -2474,5 +2474,57 @@
    "khong-che": "choc",
    "nguyen-anh": "xoay"
   }
+ },
+ "fx_families": {
+  "_ghi_chu": "Hệ thống hiệu ứng thống nhất (chủ dự án 25/10/2026). families: họ hiệu ứng = một tấm GPT nền đen (tools/fx_slash.py, s.<họ>.<hệ>), field: trường của chiêu được thay, h_field / h_mul: chỉnh cỡ. skills: chiêu → các họ. Họ chưa có tấm → chiêu giữ hình cũ. Họ dự kiến (chờ tấm GPT, xem Project → Kế hoạch đêm 25/10): dan (đạn bay), no-to, cot (cột trời), loc, song, nova, hoi, khien, tran, hodem, dichchuyen, haoquang.",
+  "default_he": "Kim",
+  "families": {
+   "gai": {
+    "field": "fx",
+    "h_field": "fx_h",
+    "h_mul": 1.25
+   },
+   "no": {
+    "field": "hit_fx",
+    "h_field": "hit_h",
+    "h_mul": 1.35,
+    "h": 40
+   }
+  },
+  "skills": {
+   "dia-thu": [
+    "gai"
+   ],
+   "thai-son": [
+    "gai"
+   ],
+   "kinh-cuc": [
+    "gai"
+   ],
+   "bang-phach-thien-nguc": [
+    "gai"
+   ],
+   "hoa-cau": [
+    "no"
+   ],
+   "bang-tien": [
+    "no"
+   ],
+   "phong-nhan": [
+    "no"
+   ],
+   "phuong-hoang": [
+    "no"
+   ],
+   "hoa-long": [
+    "no"
+   ],
+   "canh-kim-tram": [
+    "no"
+   ],
+   "loi-long-pha-khong": [
+    "no"
+   ]
+  }
  }
 }

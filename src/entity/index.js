@@ -6,3 +6,4 @@ export { loadSprites, iconUrl, fxIconUrl, fxDuration, fxRatio, fxGlow, drawSheet
 export { drawVoid, drawVoidPreview } from './void-draw.js';
 export { cardArt } from './card-art.js';
 export { loadNpcArt, drawNpc, drawNpcLabel, drawShield } from './npc-draw.js';
+export { fxForHe } from './slashfx.js';
