@@ -813,5 +813,15 @@
   },
   "_note_tiles_v2": "Ô đất 23/10 (bản 4): mỗi khối 2×2 ảnh chủ dự án = 1 ô 32 điểm, nhạt màu, mép hoà liền; mỗi vùng 4 ô trơn (lọc bỏ sỏi/cỏ) trọng số 6 + 4 ô chi tiết trọng số 1 → ~80% ô trơn. Đá lát cổ (quảng trường thành) giữ ô gốc. tools/tiles_v2.py rồi tools/atlas_compact.py.",
   "_note_grade": "Nền dịu kiểu My Heroes (chủ dự án 25/10/2026): mỗi ô nhân màu (multiply) lúc nạp. grade: mặc định; types[].grade: riêng từng loại ('none' = giữ nguyên). Màu càng tối nền càng trầm.",
-  "grade": "#a6a2b4"
+  "grade": "#a6a2b4",
+  "lighting": {
+    "_ghi_chu": "Ánh sáng cảnh (chủ dự án 25/10/2026): vignette = độ tối viền màn (0..1), vignette_inner = phần giữa không tối, vignette_color = 'r,g,b'. ground_light: vùng sáng loang trên đất dưới hiệu ứng phát sáng — a độ mạnh, r bán kính theo chiều cao hiệu ứng.",
+    "vignette": 0.42,
+    "vignette_inner": 0.42,
+    "vignette_color": "10,6,24",
+    "ground_light": {
+      "a": 0.55,
+      "r": 0.8
+    }
+  }
 }
