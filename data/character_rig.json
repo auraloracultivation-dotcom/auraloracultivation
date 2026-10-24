@@ -81,5 +81,29 @@
   "rotate_idle_deg": -36,
   "rotate_attack_deg": 7,
   "size_mul_ui": 0.45
+ },
+ "slash_fx": {
+  "_ghi_chu": "Chủ dự án 25/10/2026: vệt chém vẽ tay kiểu My Heroes (GPT vẽ, tools/fx_slash.py). Tâm vệt đặt ở chuôi kiếm, dời dx/dy theo chiều dài kiếm L; cao 2·r·L. t0..t1: phần của đòn mà vệt chạy đủ 6 khung. follow: vệt quay theo kiếm (Xoay). rot: xoay ảnh (độ). Chọc không dùng (giữ vệt nét thẳng).",
+  "moves": {
+   "chem": {
+    "dx": 0.3,
+    "dy": -0.08,
+    "r": 0.42,
+    "rot": 0,
+    "t0": 0.06,
+    "t1": 0.72,
+    "a": 0.9
+   },
+   "xoay": {
+    "dx": 0.3,
+    "dy": 0,
+    "r": 0.4,
+    "rot": -60,
+    "t0": 0.1,
+    "t1": 0.86,
+    "follow": true,
+    "a": 0.85
+   }
+  }
  }
 }
