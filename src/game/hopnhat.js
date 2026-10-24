@@ -49,7 +49,7 @@ export function createHopNhat(c) {
     fireT -= dt;
     if (fireT > 0 || !c.target(def.range_px)) return;
     fireT = def.every_s;
-    c.treasure.use(true, { free: true, mul: def.mul, quietName: true });
+    c.treasure.use(true, { free: true, mul: def.mul, quietName: true, hop: true });
   }
   // Nút "Mặc cả bộ" (sau khi mặc đồ): đeo pháp bảo cùng hệ, gắn Thần Phù, xếp 2 kỹ năng vào ô. Thiếu thì bỏ qua (bảng vẫn ghi ✗).
   function wear(he) {

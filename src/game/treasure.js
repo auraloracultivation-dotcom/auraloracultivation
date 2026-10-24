@@ -40,7 +40,8 @@ export function createTreasure(c) {
   function use(quiet, o = {}) {
     const t = on(), d = t && byId.get(t.id);
     if (!d) { if (!quiet) toast('Chưa đeo pháp bảo (Kho → Pháp Bảo)', 1400); return false; }
-    const mul = d.mul * scale(t) * (o.mul || 1), n = (d.n || 0) + more(t), tgt = c.target(260);
+    const mul = d.mul * scale(t) * (o.mul || 1) * (o.hop ? d.hop_mul || 1 : 1), n = // hop_mul: bù riêng khi Thiên Cơ Hợp Nhất tự phóng (pháp bảo đánh vùng không ăn thưởng đạn Đạo Vận)
+      (d.n || 0) + more(t), tgt = c.target(260);
     const he = c.heOf(d.he);
     const aim = (m) => { if (!m) return { dx: me.facing, dy: 0 }; const r = mobs.rel(m, me), L = Math.hypot(r.dx, r.dy - 10) || 1; return { dx: r.dx / L, dy: (r.dy - 10) / L }; };
     const shot = (dx, dy, extra = {}) => barrage.fire({ id: 'pb', x: me.x, y: me.y - 14, dx, dy, speed: 420, range: 260, fx: d.fx || he.bolt, size: d.size || 18, mul, color: he.color, ...extra });
@@ -49,7 +50,7 @@ export function createTreasure(c) {
     if (d.shake) juice.later(0.15, () => juice.shake(d.shake, 0.25)); if (d.dim) juice.dim(0.6, d.dim); // cảm giác đòn kiểu My Heroes
     if (thien.has(d.kind)) return thien.cast(d, { mul, n, tgt, color: he.color, auto: !!o.quietName });
     switch (d.kind) {
-      case 'ring_burst': for (let k = 0; k < n; k++) { const a = (k / n) * Math.PI * 2; shot(Math.cos(a), Math.sin(a), { homing: 0.9 }); } break;
+      case 'ring_burst': for (let k = 0; k < n; k++) { const a = (k / n) * Math.PI * 2; shot(Math.cos(a), Math.sin(a), { homing: d.homing ?? 0.9, range: d.range_px ?? 260 }); } break; // vòng kiếm toả ra rồi quặt về mục tiêu
       case 'stream': { // phun liên tục về phía mục tiêu (đổi mục tiêu khi con cũ chết) + luồng lửa hồ lô
         if (d.cast_fx) { const { dx, dy } = aim(tgt); barrage.schedule(d.s, 0.5, () => { const a = Math.atan2(dy, dx); play(d.cast_fx, me.x + dx * 90, me.y - 12 + dy * 90, 26, { rot: a }); }); }
         barrage.schedule(d.s, d.s / n, () => { const m = c.target(260) || tgt, { dx, dy } = aim(m), j = (Math.random() - 0.5) * 0.25; shot(dx * Math.cos(j) - dy * Math.sin(j), dx * Math.sin(j) + dy * Math.cos(j)); });
@@ -69,7 +70,10 @@ export function createTreasure(c) {
       case 'field': {
         play('v.moc-lien', me.x, me.y + 4, 46, { ground: true });
         barrage.schedule(d.s, 1, () => c.heal(c.maxHp() * d.heal));
-        barrage.schedule(d.s, 0.3, () => { const m = barrage.nearestTo(me, 220); if (!m) return; const { dx, dy } = aim(m); for (let j = 0; j < n; j++) { const a = (j - (n - 1) / 2) * 0.2; shot(dx * Math.cos(a) - dy * Math.sin(a), dx * Math.sin(a) + dy * Math.cos(a), { homing: 0.7 }); } });
+        barrage.schedule(d.s, 0.3, () => { // mỗi nhịp n mũi, chia cho n con gần nhất (chơi thử 24/10: dồn hết vào 1 con → đánh đám quá yếu)
+          const near = mobs.within(me, 220).filter((m) => m.state !== 'dead').sort((a, b) => mobs.distTo(a, me) - mobs.distTo(b, me)); if (!near.length) return;
+          for (let j = 0; j < n; j++) { const { dx, dy } = aim(near[j % near.length]); shot(dx, dy, { homing: 1.5, pierce: d.pierce || 0 }); }
+        });
         break;
       }
       case 'seal': {
