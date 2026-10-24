@@ -12,8 +12,13 @@ export function createFxQueue(fx, fxDuration) {
       return;
     }
     if (fx.length > 220 && !big) return; // bắn hàng trăm đạn: bớt số bay cho đỡ lag
-    const near = fx.filter((f) => f.kind === 'text' && Math.abs(f.x - x) < 24 && f.t > 0.5).length;
-    fx.push({ kind: 'text', x: x + (Math.random() - 0.5) * 10, y: y - 16 - near * 9, // -16: bay phía trên tên + thanh máu
+    const near = fx.filter((f) => f.kind === 'text' && !f.heal && Math.abs(f.x - x) < 24 && f.t > 0.5).length;
+    if (near >= (big ? 5 : 3)) { // một chỗ nhiều nhát dồn dập: gộp vào số mới nhất (kiểu My Heroes) thay vì chồng cột số cao ngất
+      const t = String(text), v = /^\d+[!↓]*$/.test(t) ? Number(t.replace(/[!↓]/g, '')) : 0, tag = (t.includes('!') ? '!' : '') + (t.includes('↓') ? '↓' : ''), f = [...fx].reverse().find((q) => q.kind === 'text' && !q.heal && Math.abs(q.x - x) < 24 && q.t > 0.5 && q.sum !== undefined && q.color === color);
+      if (f && v) { f.sum += v; f.text = compactText(`${f.sum}`) + tag; f.t = f.life; f.y = Math.min(f.y, y - 16); return; }
+      if (!big) return;
+    }
+    fx.push({ sum: /^\d+[!↓]*$/.test(String(text)) ? Number(String(text).replace(/[!↓]/g, '')) : undefined, kind: 'text', x: x + (Math.random() - 0.5) * 10, y: y - 16 - near * 9, // -16: bay phía trên tên + thanh máu
       text: compactText(text), color, big, t: 1.1, life: 1.1 });
   };
   // Hiệu ứng hình (data/art/sprites.json → fx). ground: mọc từ mặt đất (đáy ở chân). delay: chờ rồi mới chạy
