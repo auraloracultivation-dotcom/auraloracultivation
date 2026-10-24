@@ -2,7 +2,7 @@
 // Mỗi món là 1 hình tĩnh; nhún, chém, ngự kiếm đều do code. Thông số lấy từ data/equipment/he6.json
 // (chủ dự án chỉnh và lưu trong Tủ Đồ Tu Chân). Đơn vị: CH = chiều cao nhân vật tới gấu áo, cw = bề ngang áo.
 import { MOVES, pose, tempo, calmPose, blendPose, easeBlend } from './moves.js';
-import { slashOf, drawSlash } from './slashfx.js';
+import { drawSlash } from './slashfx.js';
 
 const D = Math.PI / 180;
 const BASE_CH = 40; // chiều cao (điểm ảnh thế giới, trước sprite_scale) khi params.than.scale = 1
@@ -275,7 +275,7 @@ export function drawRig(ctx, p, look, drawFallbackBody) {
     const gy = fl > 0.02 ? grip[1] + (-bL + 2 * f - grip[1]) * fl : grip[1] + (pz ? pz.gy * CH : 0);
     ctx.save(); ctx.translate(gx, gy); ctx.rotate(ang - a.angle * D);
     ctx.drawImage(R.img[a.id], -a.grip[0] * s, -a.grip[1] * s, a.w * s, a.h * s); ctx.restore();
-    if (pz) wpn = { gx, gy, L };
+    if (pz) wpn = { gx, gy, L, CH, ang };
     if (pz && !R.slash?.moves?.[st.move]) drawTrail(ctx, st, pz.trail ? { gx, gy, ang, r: L * 0.82 } : null, now, CH); // đòn có vệt vẽ tay: vẽ ở cuối (trước người)
   }
   if (pz && pz.sx !== 1) ctx.scale(pz.sx, 1); // xoay: thân quay một vòng (kiếm, cánh không co)
@@ -320,7 +320,7 @@ export function drawRig(ctx, p, look, drawFallbackBody) {
   hand(imgL, B.boxes.handL, -1, atkR ? 0 : kk * P.tay.grow, !atkR && kk > 0.3); ctx.restore();
   ctx.save(); ctx.translate(atkR ? kk * P.tay.reach * cw + hx : 0, -swing(st1) - (atkR ? kk * CH * P.tay.ry - hy : 0));
   hand(imgR, B.boxes.handR, 1, atkR ? kk * P.tay.grow : 0, atkR && kk > 0.3); ctx.restore();
-  if (wpn) drawSlash(ctx, R.slash, st.move, Math.min(1, st.atk < 0 ? 1 : st.atk), wpn, slashOf(look.weapon, R.art[look.weapon] || R.extra[look.weapon]), (sw ?? rest) - rest); // vệt chém vẽ tay theo hệ vũ khí
+  if (wpn) drawSlash(ctx, R.slash, st.move, Math.min(1, st.atk < 0 ? 1 : st.atk), wpn, look.weapon, R.art[look.weapon] || R.extra[look.weapon], (sw ?? rest) - rest); // vệt vẽ tay theo hệ vũ khí (src/entity/slashfx.js)
   ctx.restore();
 }
 

@@ -98,6 +98,7 @@ export function drawEffect(ctx, id, p, x, y, h, rot = 0, alpha = 1) {
   const k = h / s.fh, w = s.fw * k;
   ctx.save();
   ctx.globalAlpha *= alpha;
+  if (s.blend === 'add') ctx.globalCompositeOperation = 'lighter'; // hình vẽ trên nền đen (tools/fx_slash.py): cộng sáng, đen = trong suốt
   ctx.imageSmoothingEnabled = true;
   ctx.translate(x, y); if (rot) ctx.rotate(rot);
   ctx.drawImage(im, f * s.fw, 0, s.fw, s.fh, -w / 2, -h / 2, w, h);
