@@ -1,8 +1,8 @@
 // Điểm khởi động: nối các module lại với nhau. Không chứa luật gameplay chi tiết.
-import { juice } from './game/juice.js';
+import { juice } from './game/juice.js'; import { cutin } from './game/cutin.js';
 import { loadJSON, prefetchJSON, startLoop, createScreen, createCamera, followCamera, createInput, drawStick, createSaver, sha256 } from './core/index.js';
 import { createMap, wrapDelta } from './map/index.js';
-import { drawVignette, setLighting } from './entity/index.js';
+import { drawVignette, setLighting, artImage } from './entity/index.js';
 import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, setTextScale, loadRig, rigAttack, artInfo, renderPortrait, avatarFx, iconUrl, loadSprites } from './entity/index.js';
 import { createAudio, attachAudio } from './audio/index.js';
 import { createPhapTuong } from './combat/index.js';
@@ -78,6 +78,7 @@ async function boot() {
     return Object.keys(l).length ? l : null;
   };
   me.look = lookNow();
+  cutin.portrait = () => artImage(bag.equippedItem('phap-tuong')?.art || game?.forgedLook().avatar) || renderPortrait(me.look, { body: false, zoom: 2 }); // tranh tuyệt kỹ: pháp tướng, thiếu thì chân dung
   const gift = bag.starterGift(); // tân thủ: thông báo bộ trang phục vừa nhận
   me.x = map.wrapX(me.x); me.y = map.wrapY(me.y);
   ({ x: me.x, y: me.y } = map.nearestStand(me.x, me.y, config.player.radius_px)); // đứng kẹt trong gốc cây / hào nước → bước ra
@@ -374,6 +375,7 @@ async function boot() {
     game.renderAbove(ctx, now); // tên/máu quái, số sát thương, kiếm khí
     navi.render(ctx, now); // mũi tên dẫn đường
     drawVignette(ctx, screen.canvas.width, screen.canvas.height, terrainDef.lighting); // viền màn tối nhẹ kiểu My Heroes
+    cutin.render(ctx, screen.canvas.width, screen.canvas.height, dpr); // tuyệt kỹ: dải mực tên chiêu
 
     drawStick(ctx, input.stick, dpr);
   }
