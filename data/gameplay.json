@@ -919,14 +919,14 @@
    "_ghi_chu_17h": "23/10 17h: hạ thêm — một con Âm Hư / thủ lĩnh không cho quá 3% / 2% vạch tầng hiện tại."
   },
   "orb": {
-   "_note": "Đạn quái chậm có ánh sáng (chủ dự án 24/10/2026). speed ≈ 65% walk_speed_px_per_s (110) để né được. src/game/mob-orbs.js",
+   "_note": "Đạn quái chậm có ánh sáng (chủ dự án 24/10/2026). speed ≈ 65% walk_speed_px_per_s (110) để né được. src/game/mob-orbs.js mul 0.8 → 0.5 (chơi thử 24/10: tinh anh Hắc thổ + cầu + đòn nặng hạ người full máu trong ~10 giây).",
    "name": "Linh cầu",
    "speed_px_per_s": 72,
    "range_px": 250,
    "min_px": 60,
    "hit_px": 13,
    "r_px": 5,
-   "mul": 0.8,
+   "mul": 0.5,
    "ranks": {
     "elite": {
      "n": 1,

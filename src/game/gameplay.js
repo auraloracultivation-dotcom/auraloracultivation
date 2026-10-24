@@ -79,7 +79,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   npcDef.npcs.push(...questNpcDefs(dtDef, zoneDef.town.props)); // NPC nhiệm vụ Đạo Tâm đứng cạnh công trình trong thành
   const npcs = createNpcs({ def: npcDef, map, mobs, stats, stages: gp.player.stages }), itemsJson = { items: itemsList.items };
   const PV = gp.pvp, rollLoot = createLoot({ gp, mats, qItems, recipes, progress });
-  const autoPlay = createAutoPlay({ me, mobs, gather, map, cfg: gp.auto, reach: gp.player.attack_range_px, canFly: () => !!me.look?.weapon && pt.mp >= 15, zone: () => biCanh?.zone(), hpFrac: () => (ps.hp ? hp / ps.hp : 1) });
+  const autoPlay = createAutoPlay({ me, mobs, gather, map, cfg: gp.auto, reach: gp.player.attack_range_px, heavyR: gp.monster.heavy.radius_px, canFly: () => !!me.look?.weapon && pt.mp >= 15, zone: () => biCanh?.zone(), hpFrac: () => (ps.hp ? hp / ps.hp : 1) });
   gather.seed(me);
   const GB = gp.gear_base, gearBase = () => { const v = GB.pct_lv1 + GB.per_lv * progress.state.stage; return { lines: GB.keys.map((k) => ({ k, v, p: 1 })) }; };
   const SLOTS = ['mat-na', 'trang-phuc', 'vu-khi', 'nhan', 'canh', 'phap-tuong', 'linh-thu', 'day-chuyen'];

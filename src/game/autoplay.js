@@ -9,6 +9,7 @@
 //  - Quái ĐANG ĐÁNH MÌNH trong defend_px luôn được đánh trước, bất kể vùng / neo / nhiệm vụ.
 //  - Đứng đủ gần mục tiêu thì đứng yên để gameplay tự đánh; không đổi mục tiêu khi con hiện tại còn sống và trong tầm.
 //  - Khí huyết dưới rest_below và không ai đánh mình: đứng nghỉ (khí huyết tự hồi sau player.regen_after_s) tới rest_until.
+//  - Vòng đỏ báo trước (đòn nặng tinh anh / boss, chiêu boss): đứng trong vùng thì bước ra trước đã (chơi thử 24/10: chết vì đứng im ăn đòn nặng).
 //  - Kẹt (cây, nước): ngự kiếm bay qua nếu được, không thì lách sang bên; vẫn kẹt thì tạm bỏ mục tiêu skip_s giây.
 // Số ở data/gameplay.json → auto.
 import { wrapDelta } from '../map/index.js';
@@ -16,7 +17,7 @@ import { wrapDelta } from '../map/index.js';
 const FIGHTING = new Set(['chase', 'windup', 'cast']);
 
 // zone(): { x, y, r } khi đang ở bí cảnh — chỉ đánh quái trong vòng (thay neo). hpFrac(): khí huyết hiện / tối đa.
-export function createAutoPlay({ me, mobs, gather, map, cfg, reach, canFly = () => false, zone = () => null, hpFrac = () => 1 }) {
+export function createAutoPlay({ me, mobs, gather, map, cfg, reach, heavyR = 30, canFly = () => false, zone = () => null, hpFrac = () => 1 }) {
   let mode = null, focus = null, anchor = null, goal = null, repick = 0, idleT = 0, resting = false, hungryT = 0; // hungryT: giây liền không có quái / nguyên liệu để làm
   let stuckT = 0, lx = me.x, ly = me.y, fly = false, flyT = 0, side = 1, sideT = 0;
   const skip = new Map(); // mục tiêu tạm bỏ → hết hạn lúc
@@ -54,8 +55,29 @@ export function createAutoPlay({ me, mobs, gather, map, cfg, reach, canFly = () 
     return null;
   }
 
+  // Hướng thoát khỏi vùng đỏ gần nhất đang chứa mình (null = an toàn)
+  function danger() {
+    for (const m of mobs.list) {
+      if (m.state !== 'windup' && m.state !== 'cast') continue;
+      if (Math.abs(wrapDelta(m.x - me.x, map.width)) > 400 || Math.abs(wrapDelta(m.y - me.y, map.height)) > 400) continue;
+      const zones = m.state === 'windup' ? [{ x: m.wx, y: m.wy, r: heavyR + 8 }] : (m.cast?.spots || []).map((p) => ({ x: p.x, y: p.y, r: m.cast.s.r + 8 }));
+      for (const z of zones) {
+        const dx = wrapDelta(me.x - z.x, map.width), dy = wrapDelta(me.y - z.y, map.height) / 0.7, d = Math.hypot(dx, dy);
+        if (d < z.r) return d > 1 ? { x: dx / d, y: dy / d } : { x: 1, y: 0 };
+      }
+      const L = m.state === 'cast' && m.cast?.line;
+      if (L) { // dải: bước ngang ra khỏi dải
+        const dx = wrapDelta(me.x - L.x, map.width), dy = wrapDelta(me.y - L.y, map.height);
+        const along = dx * L.ux + dy * L.uy, across = -dx * L.uy + dy * L.ux;
+        if (along >= 0 && along <= m.cast.s.len && Math.abs(across) <= m.cast.s.w / 2 + 8) { const sg = across >= 0 ? 1 : -1; return { x: -L.uy * sg, y: L.ux * sg }; }
+      }
+    }
+    return null;
+  }
+
   function step(dt, now) {
     if (!mode) return null;
+    const run = danger(); if (run) return { x: run.x, y: run.y, fly: false, dodge: true };
     repick -= dt;
     const f = hpFrac(); if (f < cfg.rest_below) resting = true; else if (f >= cfg.rest_until) resting = false;
     const hold = goal?.kind === 'mob' && alive(goal) && mobs.distTo(goal.o, me) <= reach * 1.2; // đang đứng đánh: giữ mục tiêu
