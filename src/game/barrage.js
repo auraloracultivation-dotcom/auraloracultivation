@@ -74,7 +74,7 @@ export function createBarrage(c) {
       const done = new Set([m.uid]); let from = m;
       for (let k = 0; k < md.chain; k++) {
         const n = nearestTo(from, 120, done); if (!n) break;
-        done.add(n.uid); if (hitFxBudget-- > 0) play(FX.chain, n.x, n.y - n.r, 26); zaps.push({ kind: 'zap', x: from.x, y: from.y - from.r, x2: n.x, y2: n.y - n.r, t: 0.22, color: '#bfe8ff' });
+        done.add(n.uid); if (hitFxBudget-- > 0) play(FX.chain, n.x, n.y - n.r, 26); if (zaps.filter((q) => q.kind === 'zap').length < 10) zaps.push({ kind: 'zap', x: from.x, y: from.y - from.r, x2: n.x, y2: n.y - n.r, t: 0.22, color: '#bfe8ff' });
         c.strike(n, b.mul * L.chain_mul, 'skill'); from = n;
       }
     }
@@ -182,7 +182,7 @@ export function createBarrage(c) {
   let budgetT = 0;
   function update(dt) {
     T += dt; announce();
-    if ((budgetT -= dt) <= 0) { budgetT = 0.1; hitFxBudget = 6; }
+    if ((budgetT -= dt) <= 0) { budgetT = 0.1; hitFxBudget = 2; } // cộng sáng chồng quá nhiều thành mảng trắng (chủ dự án 25/10: hiệu ứng đẹp chứ không loá)
     updateMovers(dt);
     for (let i = tasks.length - 1; i >= 0; i--) {
       const q = tasks[i]; q.left -= dt; q.acc += dt;
@@ -227,7 +227,7 @@ export function createBarrage(c) {
       }
     }
     for (const z of zaps) {
-      ctx.globalAlpha = Math.min(1, z.t * 5); ctx.strokeStyle = z.color; ctx.lineWidth = z.kind === 'zap' ? 2 : 3;
+      ctx.globalAlpha = Math.min(z.kind === 'zap' ? 0.4 : 1, z.t * 5); ctx.strokeStyle = z.color; ctx.lineWidth = z.kind === 'zap' ? 1.4 : 3; // sét lan: mảnh, mờ — nhiều tia chồng không thành vạch trắng
       const p = at(z);
       if (z.kind === 'ring') { ctx.beginPath(); ctx.ellipse(p.x, p.y, z.r * (1.3 - z.t), z.r * 0.5 * (1.3 - z.t), 0, 0, Math.PI * 2); ctx.stroke(); continue; }
       const q = { x: p.x + wrapDelta(z.x2 - z.x, map.width), y: p.y + (z.y2 - z.y) };

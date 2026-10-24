@@ -77,7 +77,7 @@ function drawMonsterSprite(ctx, m, art, x, y, t) {
   if (m.state === 'cast') { ctx.shadowColor = '#ff3b30'; ctx.shadowBlur = 10 + 6 * Math.sin(t * 12); } // đang vận chiêu: hào quang đỏ
   if (m.hitT > 0 && m.state !== 'dead') { const h = m.hitT / 0.15; x += (m.kb || 0) * 3.5 * h; ctx.translate(x, y); ctx.scale(1 + 0.12 * h, 1 - 0.12 * h); ctx.translate(-x, -y); } // trúng đòn: giật lùi + bẹp
   drawSheet(ctx, art.sheet, anim, at, x, y - bob, art.h, m.facing, { hue: art.hue || 0, once, fps: art.fps || 8 });
-  if (m.hitT > 0) { ctx.globalAlpha = 0.75 * Math.min(1, m.hitT / 0.08); ctx.globalCompositeOperation = 'lighter'; drawSheet(ctx, art.sheet, anim, at, x, y - bob, art.h, m.facing, { hue: art.hue || 0, once }); } // loé trắng
+  if (m.hitT > 0) { ctx.globalAlpha = 0.55 * Math.min(1, m.hitT / 0.08); ctx.globalCompositeOperation = 'lighter'; drawSheet(ctx, art.sheet, anim, at, x, y - bob, art.h, m.facing, { hue: art.hue || 0, once }); } // loé trắng
   ctx.restore();
   if (m.stun > 0) { ctx.fillStyle = '#ffe36a'; ctx.font = 'bold 7px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('✦✦', x, y - art.h - 2); }
 }
@@ -131,8 +131,9 @@ function glowDot(color) {
 }
 export function drawFx(ctx, fx, ox, oy) {
   ctx.save();
+  const nb = fx.reduce((n, f) => n + (f.kind === 'bolt'), 0), bk = nb > 16 ? Math.sqrt(16 / nb) : 1; // nhiều đạn cộng sáng: mờ bớt từng viên
   for (const f of fx) {
-    ctx.globalAlpha = f.kind === 'bolt' && f.r0 ? 0.2 + 0.8 * Math.min(1, (f.r0 - f.left) / 60) : 1; // đạn mới bắn còn mờ, rõ dần sau 60 px: không che đầu nhân vật, đòn chém
+    ctx.globalAlpha = f.kind === 'bolt' ? (f.r0 ? 0.2 + 0.8 * Math.min(1, (f.r0 - f.left) / 60) : 1) * bk : 1; // đạn mới bắn còn mờ, rõ dần sau 60 px: không che đầu nhân vật, đòn chém
     if (f.delay > 0) continue;
     const x = f.x + ox, y = f.y + oy;
     if (f.kind === 'text') { // số bay kiểu My Heroes: bật to ra rồi co về, bay lên chậm dần, bạo kích to + viền đỏ sẫm
@@ -152,7 +153,7 @@ export function drawFx(ctx, fx, ox, oy) {
       ctx.strokeStyle = '#ffffff'; ctx.lineWidth = f.w; ctx.beginPath(); ctx.moveTo((tx + px) / 2, (ty + py) / 2); ctx.lineTo(px, py); ctx.stroke();
       ctx.restore();
     } else if (f.kind === 'sprite') { // hiệu ứng hình: f.fx, tiến độ theo thời gian còn lại
-      if (f.glow) { const k = Math.min(1, f.t / f.life * 2.2); ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = 0.5 * k; // quầng sáng dưới chân hiệu ứng
+      if (f.glow && !String(f.fx).startsWith('x.')) { const k = Math.min(1, f.t / f.life * 2.2); ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.globalAlpha = 0.5 * k; // quầng sáng dưới chân hiệu ứng
         ctx.drawImage(glowDot(f.glow), x - f.h * 0.6, y - f.h * 0.22, f.h * 1.2, f.h * 0.44); ctx.restore(); }
       if (LIGHT.on && fxLit(f.fx)) { const q = 1 - f.t / f.life; groundLight(ctx, x, y + (f.lift ? 0 : f.h * 0.3), f.h * LIGHT.r, fxTint(f.fx), LIGHT.a * Math.min(1, q * 5) * (1 - q)); } // sáng loang trên đất
       drawEffect(ctx, f.fx, 1 - f.t / f.life, x, y - (f.lift || 0), f.h, f.rot || 0);

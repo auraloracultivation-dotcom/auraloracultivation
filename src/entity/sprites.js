@@ -1,6 +1,10 @@
 // Hình động (quái, thú hồn), hiệu ứng và icon vật phẩm — chỉ mục ở data/art/sprites.json (sinh bằng tools/asset_build.py).
 // Đổi hình: chạy lại tool hoặc đổi "art" trong data/monsters/monsters.json — không cần sửa code này.
+import { isVfx, drawVfx, vfxDuration, vfxColor } from './vfx.js'; // hiệu ứng ghép từ mảnh sáng (x.*)
 let DEF = null;
+let REMAP = {}; // mã hình cũ → hiệu ứng ghép (data/vfx.json → remap)
+export const setFxRemap = (m) => { REMAP = m || {}; };
+const rm = (id) => REMAP[id] || id;
 const imgs = new Map(); // src → Image
 const tints = new Map(); // src|hue → canvas đã đổi màu
 const iconUrls = new Map();
@@ -120,6 +124,7 @@ export function sheetThumb(id, hue = 0, size = 96) {
 
 // Hiệu ứng: p = tiến độ 0..1. anchor theo kiểu cắt (giữa hoặc đáy). rot: góc quay (rad).
 export function drawEffect(ctx, id, p, x, y, h, rot = 0, alpha = 1) {
+  id = rm(id); if (isVfx(id)) return drawVfx(ctx, id, p, x, y, h, rot, alpha);
   const s = DEF?.fx[id];
   const im = s && soft(s, ensure(s));
   if (!im) return false;
@@ -138,6 +143,7 @@ export function drawEffect(ctx, id, p, x, y, h, rot = 0, alpha = 1) {
 // Màu chủ đạo của hiệu ứng (trung bình các điểm sáng ở khung giữa), "r,g,b" — cho vùng sáng loang trên đất. Tính một lần.
 const tintOf = new Map();
 export function fxTint(id) {
+  id = rm(id); if (isVfx(id)) return vfxColor(id);
   if (tintOf.has(id)) return tintOf.get(id);
   const s = DEF?.fx[id], im = s && imgs.get(s.src);
   if (!im) return null;
@@ -148,10 +154,10 @@ export function fxTint(id) {
   const v = n > 4 ? `${Math.round(r / n)},${Math.round(gg / n)},${Math.round(b / n)}` : null;
   tintOf.set(id, v); return v;
 }
-export const fxLit = (id) => !!(DEF?.fx[id] && (DEF.fx[id].blend === 'add' || DEF.fx[id].glow)); // hiệu ứng phát sáng (có vùng sáng loang)
+export const fxLit = (id) => isVfx(rm(id)) || !!(DEF?.fx[id] && (DEF.fx[id].blend === 'add' || DEF.fx[id].glow)); // hiệu ứng phát sáng (có vùng sáng loang)
 export const fxGlow = (id) => DEF?.fx[id]?.glow || 0; // hiệu ứng Thiên hệ (t.*): đạn có vệt đuôi
-export const fxRatio = (id) => (DEF?.fx[id] ? DEF.fx[id].fw / DEF.fx[id].fh : 1); // rộng / cao một khung (tia dài pháp bảo)
-export const fxDuration = (id) => (DEF?.fx[id] ? DEF.fx[id].anims.play.n / DEF.fx[id].fps : 0.5);
+export const fxRatio = (id) => (isVfx(rm(id)) ? 1 : DEF?.fx[id] ? DEF.fx[id].fw / DEF.fx[id].fh : 1); // rộng / cao một khung (tia dài pháp bảo)
+export const fxDuration = (id) => (isVfx(rm(id)) ? vfxDuration(rm(id)) : DEF?.fx[id] ? DEF.fx[id].anims.play.n / DEF.fx[id].fps : 0.5);
 
 // Icon vật phẩm / công pháp / ô pháp khí (64×64 trong atlas). Trả về data URL để dùng trong <img>, hoặc null nếu chưa có.
 export function iconUrl(id) {
@@ -178,7 +184,7 @@ export function drawIcon(ctx, id, x, y, size) {
 
 // Một khung hiệu ứng làm icon vuông (ô kỹ năng trên HUD), giữ lại sau lần đầu
 // Nạp trước ảnh hiệu ứng (lazy) để fxIconUrl có hình ngay — Đồ giám, icon pháp bảo trong Kho
-export const loadFx = (ids) => Promise.all(ids.map((id) => DEF?.fx[id] && load(DEF.fx[id].src)));
+export const loadFx = (ids) => Promise.all(ids.map((id) => !isVfx(rm(id)) && DEF?.fx[id] && load(DEF.fx[id].src)));
 
 export function fxIconUrl(id, frame = 0) {
   const key = `fx:${id}:${frame}`;

@@ -2,7 +2,7 @@
 import { juice } from './game/juice.js'; import { cutin } from './game/cutin.js';
 import { loadJSON, prefetchJSON, startLoop, createScreen, createCamera, followCamera, createInput, drawStick, createSaver, sha256 } from './core/index.js';
 import { createMap, wrapDelta } from './map/index.js';
-import { drawVignette, setLighting, artImage } from './entity/index.js';
+import { drawVignette, setLighting, artImage, loadVfx, setFxRemap } from './entity/index.js';
 import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, setTextScale, loadRig, rigAttack, artInfo, renderPortrait, avatarFx, iconUrl, loadSprites } from './entity/index.js';
 import { createAudio, attachAudio } from './audio/index.js';
 import { createPhapTuong } from './combat/index.js';
@@ -23,7 +23,7 @@ async function boot() {
   // ?offline: chơi thử một mình không cần mạng (src/net/offline.js) — để thử luật chơi và kiểm thử tự động
   const net = await import(new URLSearchParams(location.search).has('offline') ? './net/offline.js' : './net/index.js');
   const config = await loadJSON('data/config.json');
-  prefetchJSON(config.preload_json || []); loadJSON('data/art/sprites.json').then(loadSprites).catch(() => {}); // tải sẵn dữ liệu + hình trong lúc đăng nhập
+  prefetchJSON(config.preload_json || []); loadJSON('data/art/sprites.json').then(loadSprites).catch(() => {}); loadVfx(loadJSON).then((d) => setFxRemap(d.remap)).catch((e) => console.warn('vfx', e)); // tải sẵn dữ liệu + hình trong lúc đăng nhập
   const screen = createScreen(document.getElementById('game'), config.camera?.zoom || 1);
   loading.set(30, 'Kiểm tra đạo tịch…');
 

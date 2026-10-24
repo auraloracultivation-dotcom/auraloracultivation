@@ -1,0 +1,2851 @@
+{
+ "_ghi_chu": "Hiệu ứng ghép từ mảnh sáng (chủ dự án 25/10/2026, src/entity/vfx.js). recipes: công thức; skills / treasures / thien / daovan: chiêu nào dùng công thức nào (mã x.<công thức>.<hệ> gán lúc nạp, src/game/vfxapply.js); remap: mã hình cũ → hiệu ứng ghép (màu cố định).",
+ "slug": {
+  "Kim": "kim",
+  "Ám": "am",
+  "Thủy": "thuy",
+  "Hỏa": "hoa",
+  "Mộc": "moc",
+  "Thổ": "tho",
+  "Quang": "quang",
+  "Lôi": "loi",
+  "Băng": "bang",
+  "Phong": "phong",
+  "Hư": "hu",
+  "Thời": "thoi"
+ },
+ "colors": {
+  "vang": "#ffe08a",
+  "trang": "#e8f4ff",
+  "do": "#ff4a4a",
+  "tim": "#b06bff"
+ },
+ "recipes": {
+  "no": {
+   "dur": 0.5,
+   "layers": [
+    {
+     "f": "sao",
+     "t": [
+      0,
+      0.25
+     ],
+     "s": [
+      0.2,
+      0.75
+     ],
+     "e": "out",
+     "a": [
+      0.75,
+      0
+     ],
+     "r": [
+      0,
+      0.05
+     ]
+    },
+    {
+     "f": "cau",
+     "t": [
+      0,
+      0.3
+     ],
+     "s": [
+      0.3,
+      0.7
+     ],
+     "a": [
+      0.6,
+      0
+     ]
+    },
+    {
+     "f": "vong",
+     "t": [
+      0,
+      0.6
+     ],
+     "s": [
+      0.2,
+      1.5
+     ],
+     "sy": 0.5,
+     "a": [
+      0.95,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "lap-lanh",
+     "t": [
+      0,
+      0.75
+     ],
+     "s": [
+      0.2,
+      0.07
+     ],
+     "n": 6,
+     "spread": 0.1,
+     "burst": 0.95,
+     "sy": 0.7,
+     "jit": 0.4,
+     "rj": 0.3,
+     "norot": true
+    },
+    {
+     "f": "khoi",
+     "t": [
+      0.05,
+      0.7
+     ],
+     "s": [
+      0.45,
+      0.85
+     ],
+     "a": [
+      0.25,
+      0
+     ],
+     "norot": true
+    }
+   ]
+  },
+  "no-lon": {
+   "dur": 0.5,
+   "layers": [
+    {
+     "f": "sao",
+     "t": [
+      0,
+      0.25
+     ],
+     "s": [
+      0.27999999999999997,
+      1.0499999999999998
+     ],
+     "e": "out",
+     "a": [
+      0.75,
+      0
+     ],
+     "r": [
+      0,
+      0.05
+     ]
+    },
+    {
+     "f": "cau",
+     "t": [
+      0,
+      0.3
+     ],
+     "s": [
+      0.42,
+      0.9799999999999999
+     ],
+     "a": [
+      0.6,
+      0
+     ]
+    },
+    {
+     "f": "vong",
+     "t": [
+      0,
+      0.6
+     ],
+     "s": [
+      0.27999999999999997,
+      2.0999999999999996
+     ],
+     "sy": 0.5,
+     "a": [
+      0.95,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "lap-lanh",
+     "t": [
+      0,
+      0.75
+     ],
+     "s": [
+      0.27999999999999997,
+      0.098
+     ],
+     "n": 6,
+     "spread": 0.1,
+     "burst": 1.3299999999999998,
+     "sy": 0.7,
+     "jit": 0.4,
+     "rj": 0.3,
+     "norot": true
+    },
+    {
+     "f": "khoi",
+     "t": [
+      0.05,
+      0.7
+     ],
+     "s": [
+      0.63,
+      1.19
+     ],
+     "a": [
+      0.25,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "sao",
+     "t": [
+      0.05,
+      0.4
+     ],
+     "s": [
+      0.3,
+      1.6
+     ],
+     "e": "pop",
+     "a": [
+      0.8,
+      0
+     ],
+     "r": [
+      0.12,
+      0.2
+     ]
+    }
+   ]
+  },
+  "dan-lua": {
+   "dur": 0.45,
+   "loop": true,
+   "layers": [
+    {
+     "f": "lua",
+     "s": 1.0,
+     "r": [
+      0.15,
+      0.15
+     ],
+     "a": 0.85
+    },
+    {
+     "f": "lua-2",
+     "x": -0.55,
+     "s": 0.18,
+     "n": 2,
+     "spread": 0.3,
+     "jit": 0.5,
+     "rj": 0.5,
+     "flick": 2,
+     "a": 0.7
+    }
+   ]
+  },
+  "dan-bang": {
+   "dur": 0.45,
+   "loop": true,
+   "layers": [
+    {
+     "f": "tinh-the-2",
+     "s": 0.95,
+     "r": [
+      0.17,
+      0.17
+     ],
+     "a": 0.85
+    },
+    {
+     "f": "lap-lanh",
+     "x": -0.55,
+     "s": 0.18,
+     "n": 2,
+     "spread": 0.3,
+     "jit": 0.5,
+     "rj": 0.5,
+     "flick": 2,
+     "a": 0.7
+    }
+   ]
+  },
+  "dan-gio": {
+   "dur": 0.45,
+   "loop": true,
+   "layers": [
+    {
+     "f": "trang",
+     "s": 0.95,
+     "r": [
+      0,
+      -3
+     ],
+     "a": 0.85
+    },
+    {
+     "f": "la",
+     "x": -0.55,
+     "s": 0.18,
+     "n": 2,
+     "spread": 0.3,
+     "jit": 0.5,
+     "rj": 0.5,
+     "flick": 2,
+     "a": 0.7
+    }
+   ]
+  },
+  "dan-phuong": {
+   "dur": 0.5,
+   "loop": true,
+   "layers": [
+    {
+     "f": "phuong",
+     "s": 1.25,
+     "glow": 0.45
+    },
+    {
+     "f": "long-vu",
+     "x": -0.6,
+     "s": 0.3,
+     "n": 5,
+     "spread": 0.35,
+     "rj": 0.6,
+     "flick": 2
+    }
+   ]
+  },
+  "dan-rong": {
+   "dur": 0.5,
+   "loop": true,
+   "layers": [
+    {
+     "f": "rong-2",
+     "s": 1.3,
+     "flip": true,
+     "glow": 0.5
+    },
+    {
+     "f": "set",
+     "x": -0.3,
+     "s": 0.4,
+     "n": 3,
+     "spread": 0.4,
+     "rj": 0.8,
+     "flick": 3
+    }
+   ]
+  },
+  "dan-kiem": {
+   "dur": 0.45,
+   "loop": true,
+   "layers": [
+    {
+     "f": "kiem",
+     "s": 1.0,
+     "r": [
+      0.25,
+      0.25
+     ],
+     "a": 0.85
+    },
+    {
+     "f": "lap-lanh",
+     "x": -0.55,
+     "s": 0.18,
+     "n": 2,
+     "spread": 0.3,
+     "jit": 0.5,
+     "rj": 0.5,
+     "flick": 2,
+     "a": 0.7
+    }
+   ]
+  },
+  "dan-la": {
+   "dur": 0.45,
+   "loop": true,
+   "layers": [
+    {
+     "f": "la",
+     "s": 0.85,
+     "r": [
+      0.11,
+      0.11
+     ],
+     "a": 0.85
+    },
+    {
+     "f": "la",
+     "x": -0.55,
+     "s": 0.18,
+     "n": 2,
+     "spread": 0.3,
+     "jit": 0.5,
+     "rj": 0.5,
+     "flick": 2,
+     "a": 0.7
+    }
+   ]
+  },
+  "dan-giot": {
+   "dur": 0.45,
+   "loop": true,
+   "layers": [
+    {
+     "f": "giot",
+     "s": 0.8,
+     "r": [
+      0.25,
+      0.25
+     ],
+     "a": 0.85
+    },
+    {
+     "f": "lap-lanh",
+     "x": -0.55,
+     "s": 0.18,
+     "n": 2,
+     "spread": 0.3,
+     "jit": 0.5,
+     "rj": 0.5,
+     "flick": 2,
+     "a": 0.7
+    }
+   ]
+  },
+  "dan-hon": {
+   "dur": 0.6,
+   "loop": true,
+   "layers": [
+    {
+     "f": "lua-2",
+     "s": 0.9,
+     "r": [
+      0.15,
+      0.15
+     ],
+     "glow": 0.6,
+     "flick": 3
+    },
+    {
+     "f": "cau",
+     "s": 0.4,
+     "a": 0.6
+    }
+   ]
+  },
+  "dan-set": {
+   "dur": 0.45,
+   "loop": true,
+   "layers": [
+    {
+     "f": "set",
+     "s": 1.0,
+     "r": [
+      0.15,
+      0.15
+     ],
+     "a": 0.85
+    },
+    {
+     "f": "set",
+     "x": -0.55,
+     "s": 0.18,
+     "n": 2,
+     "spread": 0.3,
+     "jit": 0.5,
+     "rj": 0.5,
+     "flick": 2,
+     "a": 0.7
+    }
+   ]
+  },
+  "dan-da": {
+   "dur": 0.45,
+   "loop": true,
+   "layers": [
+    {
+     "f": "tinh-the",
+     "s": 0.8,
+     "r": [
+      0.25,
+      0.25
+     ],
+     "a": 0.85
+    },
+    {
+     "f": "khoi",
+     "x": -0.55,
+     "s": 0.18,
+     "n": 2,
+     "spread": 0.3,
+     "jit": 0.5,
+     "rj": 0.5,
+     "flick": 2,
+     "a": 0.7
+    }
+   ]
+  },
+  "dan-sao": {
+   "dur": 0.45,
+   "loop": true,
+   "layers": [
+    {
+     "f": "lap-lanh",
+     "s": 0.8,
+     "r": [
+      0,
+      2
+     ],
+     "a": 0.85
+    },
+    {
+     "f": "lap-lanh",
+     "x": -0.55,
+     "s": 0.18,
+     "n": 2,
+     "spread": 0.3,
+     "jit": 0.5,
+     "rj": 0.5,
+     "flick": 2,
+     "a": 0.7
+    }
+   ]
+  },
+  "phong-ra": {
+   "dur": 0.3,
+   "layers": [
+    {
+     "f": "sao",
+     "t": [
+      0,
+      0.6
+     ],
+     "s": [
+      0.3,
+      0.9
+     ],
+     "e": "pop",
+     "a": [
+      1,
+      0
+     ]
+    },
+    {
+     "f": "vong",
+     "t": [
+      0,
+      1
+     ],
+     "s": [
+      0.2,
+      0.9
+     ],
+     "sy": 0.6,
+     "a": [
+      0.8,
+      0
+     ],
+     "norot": true
+    }
+   ]
+  },
+  "gai": {
+   "dur": 0.75,
+   "layers": [
+    {
+     "f": "vong",
+     "t": [
+      0,
+      0.55
+     ],
+     "s": [
+      0.3,
+      1.5
+     ],
+     "sy": 0.4,
+     "a": [
+      0.9,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "tinh-the",
+     "t": [
+      0,
+      0.75
+     ],
+     "s": [
+      0.2,
+      1.0
+     ],
+     "e": "pop",
+     "ground": true,
+     "y": 0.42,
+     "glow": 0.4,
+     "norot": true
+    },
+    {
+     "f": "tinh-the",
+     "t": [
+      0.06,
+      0.7
+     ],
+     "s": [
+      0.1,
+      0.55
+     ],
+     "e": "pop",
+     "ground": true,
+     "n": 4,
+     "spread": 0.55,
+     "sy": 0.45,
+     "y": 0.42,
+     "jit": 0.3,
+     "norot": true
+    },
+    {
+     "f": "khoi",
+     "t": [
+      0,
+      0.6
+     ],
+     "s": [
+      0.5,
+      1.0
+     ],
+     "a": [
+      0.5,
+      0
+     ],
+     "y": 0.3,
+     "norot": true
+    },
+    {
+     "f": "tinh-the-2",
+     "t": [
+      0.2,
+      1
+     ],
+     "s": [
+      0.12,
+      0.05
+     ],
+     "n": 8,
+     "spread": 0.15,
+     "burst": 0.9,
+     "rise": 0.5,
+     "rj": 0.5,
+     "norot": true
+    }
+   ]
+  },
+  "cot": {
+   "dur": 0.8,
+   "layers": [
+    {
+     "f": "cot",
+     "t": [
+      0,
+      0.65
+     ],
+     "s": [
+      1.6,
+      1.9
+     ],
+     "e": "out",
+     "ground": true,
+     "y": 0.4,
+     "glow": 0.25,
+     "a": [
+      0.9,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "set",
+     "t": [
+      0,
+      0.35
+     ],
+     "s": [
+      0.9,
+      1.3
+     ],
+     "ground": true,
+     "y": 0.4,
+     "flick": 4,
+     "norot": true
+    },
+    {
+     "f": "sao",
+     "t": [
+      0.05,
+      0.4
+     ],
+     "s": [
+      0.3,
+      1.2
+     ],
+     "e": "pop",
+     "y": 0.35,
+     "a": [
+      1,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "vong",
+     "t": [
+      0.05,
+      0.8
+     ],
+     "s": [
+      0.3,
+      1.8
+     ],
+     "sy": 0.38,
+     "y": 0.38,
+     "a": [
+      0.9,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "lap-lanh",
+     "t": [
+      0.1,
+      0.9
+     ],
+     "s": [
+      0.2,
+      0.06
+     ],
+     "n": 10,
+     "spread": 0.25,
+     "burst": 0.9,
+     "sy": 0.5,
+     "y": 0.35,
+     "rise": 0.3,
+     "norot": true
+    }
+   ]
+  },
+  "hodem": {
+   "dur": 1.0,
+   "layers": [
+    {
+     "f": "vong",
+     "t": [
+      0,
+      0.7
+     ],
+     "s": [
+      1.8,
+      0.25
+     ],
+     "sy": 0.55,
+     "e": "in",
+     "a": [
+      0.2,
+      0.9
+     ],
+     "norot": true
+    },
+    {
+     "f": "xoay",
+     "t": [
+      0,
+      1
+     ],
+     "s": [
+      0.4,
+      1.2
+     ],
+     "sy": 0.62,
+     "r": [
+      0,
+      -1.6
+     ],
+     "glow": 0.5,
+     "a": [
+      0.2,
+      1
+     ],
+     "norot": true
+    },
+    {
+     "f": "thai-cuc",
+     "t": [
+      0.15,
+      1
+     ],
+     "s": [
+      0.3,
+      0.8
+     ],
+     "r": [
+      0,
+      1.2
+     ],
+     "a": [
+      0,
+      0.8
+     ],
+     "norot": true
+    },
+    {
+     "f": "lap-lanh",
+     "t": [
+      0,
+      0.9
+     ],
+     "s": [
+      0.18,
+      0.05
+     ],
+     "n": 12,
+     "spread": 1.2,
+     "burst": -1.1,
+     "sy": 0.6,
+     "norot": true
+    },
+    {
+     "f": "sao",
+     "t": [
+      0.8,
+      1
+     ],
+     "s": [
+      0.3,
+      1.3
+     ],
+     "e": "pop",
+     "a": [
+      1,
+      0
+     ],
+     "norot": true
+    }
+   ]
+  },
+  "dong-ho": {
+   "dur": 1.0,
+   "layers": [
+    {
+     "f": "an-2",
+     "t": [
+      0,
+      1
+     ],
+     "s": [
+      0.6,
+      1.5
+     ],
+     "sy": 0.45,
+     "r": [
+      0,
+      0.5
+     ],
+     "a": [
+      0.2,
+      1
+     ],
+     "glow": 0.4,
+     "norot": true
+    },
+    {
+     "f": "an-thai-cuc",
+     "t": [
+      0.1,
+      0.9
+     ],
+     "s": [
+      0.4,
+      1.0
+     ],
+     "r": [
+      0,
+      -1
+     ],
+     "a": [
+      0,
+      0.9
+     ],
+     "norot": true
+    },
+    {
+     "f": "cot",
+     "t": [
+      0.55,
+      1
+     ],
+     "s": [
+      1.2,
+      1.6
+     ],
+     "ground": true,
+     "y": 0.3,
+     "a": [
+      1,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "sao",
+     "t": [
+      0.6,
+      0.95
+     ],
+     "s": [
+      0.3,
+      1.4
+     ],
+     "e": "pop",
+     "a": [
+      1,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "lap-lanh",
+     "t": [
+      0.6,
+      1
+     ],
+     "s": [
+      0.2,
+      0.05
+     ],
+     "n": 12,
+     "burst": 1.1,
+     "sy": 0.5,
+     "norot": true
+    }
+   ]
+  },
+  "bang-nguc": {
+   "dur": 0.9,
+   "layers": [
+    {
+     "f": "vong",
+     "t": [
+      0,
+      0.6
+     ],
+     "s": [
+      0.4,
+      1.7
+     ],
+     "sy": 0.4,
+     "y": 0.35,
+     "a": [
+      1,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "tinh-the-2",
+     "t": [
+      0,
+      0.8
+     ],
+     "s": [
+      0.3,
+      1.35
+     ],
+     "e": "pop",
+     "ground": true,
+     "y": 0.4,
+     "glow": 0.5,
+     "norot": true
+    },
+    {
+     "f": "tinh-the",
+     "t": [
+      0.05,
+      0.8
+     ],
+     "s": [
+      0.15,
+      0.6
+     ],
+     "e": "pop",
+     "ground": true,
+     "ring": 0.55,
+     "n": 6,
+     "sy": 0.45,
+     "y": 0.4,
+     "norot": true
+    },
+    {
+     "f": "tinh-the-2",
+     "t": [
+      0.4,
+      1
+     ],
+     "s": [
+      0.15,
+      0.05
+     ],
+     "n": 12,
+     "burst": 1.1,
+     "rise": 0.6,
+     "rj": 0.6,
+     "norot": true
+    },
+    {
+     "f": "sao",
+     "t": [
+      0.05,
+      0.4
+     ],
+     "s": [
+      0.3,
+      1.3
+     ],
+     "e": "pop",
+     "a": [
+      1,
+      0
+     ],
+     "norot": true
+    }
+   ]
+  },
+  "trao": {
+   "dur": 0.7,
+   "layers": [
+    {
+     "f": "dau-rong",
+     "t": [
+      0,
+      0.7
+     ],
+     "s": [
+      0.5,
+      1.3
+     ],
+     "e": "pop",
+     "flip": true,
+     "glow": 0.4,
+     "a": [
+      1,
+      0
+     ]
+    },
+    {
+     "f": "xoay",
+     "t": [
+      0,
+      0.8
+     ],
+     "s": [
+      0.4,
+      1.1
+     ],
+     "sy": 0.6,
+     "r": [
+      0,
+      -1
+     ],
+     "a": [
+      0.9,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "lap-lanh",
+     "t": [
+      0,
+      0.8
+     ],
+     "s": [
+      0.18,
+      0.05
+     ],
+     "n": 10,
+     "spread": 1,
+     "burst": -0.9,
+     "sy": 0.6,
+     "norot": true
+    }
+   ]
+  },
+  "nova": {
+   "dur": 0.75,
+   "layers": [
+    {
+     "f": "vong",
+     "t": [
+      0,
+      0.7
+     ],
+     "s": [
+      0.3,
+      2.1
+     ],
+     "sy": 0.48,
+     "a": [
+      1,
+      0
+     ],
+     "glow": 0.4,
+     "norot": true
+    },
+    {
+     "f": "vong",
+     "t": [
+      0.12,
+      0.85
+     ],
+     "s": [
+      0.2,
+      1.5
+     ],
+     "sy": 0.48,
+     "a": [
+      0.7,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "xoay",
+     "t": [
+      0,
+      0.6
+     ],
+     "s": [
+      0.5,
+      1.3
+     ],
+     "sy": 0.5,
+     "r": [
+      0,
+      1
+     ],
+     "a": [
+      0.9,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "sao",
+     "t": [
+      0,
+      0.35
+     ],
+     "s": [
+      0.3,
+      1.2
+     ],
+     "e": "pop",
+     "a": [
+      1,
+      0
+     ],
+     "y": -0.15,
+     "norot": true
+    },
+    {
+     "f": "lap-lanh",
+     "t": [
+      0,
+      0.8
+     ],
+     "s": [
+      0.2,
+      0.05
+     ],
+     "n": 14,
+     "burst": 1.15,
+     "sy": 0.5,
+     "rj": 0.5,
+     "norot": true
+    }
+   ]
+  },
+  "nova-bang": {
+   "dur": 0.85,
+   "layers": [
+    {
+     "f": "vong",
+     "t": [
+      0,
+      0.7
+     ],
+     "s": [
+      0.3,
+      2.1
+     ],
+     "sy": 0.48,
+     "a": [
+      1,
+      0
+     ],
+     "glow": 0.4,
+     "norot": true
+    },
+    {
+     "f": "tinh-the",
+     "t": [
+      0,
+      0.75
+     ],
+     "s": [
+      0.15,
+      0.5
+     ],
+     "e": "pop",
+     "ground": true,
+     "ring": 0.75,
+     "n": 8,
+     "sy": 0.5,
+     "norot": true
+    },
+    {
+     "f": "may-2",
+     "t": [
+      0,
+      0.8
+     ],
+     "s": [
+      0.6,
+      1.2
+     ],
+     "ring": 0.4,
+     "n": 4,
+     "sy": 0.5,
+     "a": [
+      0.7,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "sao",
+     "t": [
+      0,
+      0.35
+     ],
+     "s": [
+      0.3,
+      1.2
+     ],
+     "e": "pop",
+     "a": [
+      1,
+      0
+     ],
+     "y": -0.15,
+     "norot": true
+    },
+    {
+     "f": "tinh-the-2",
+     "t": [
+      0.1,
+      0.9
+     ],
+     "s": [
+      0.14,
+      0.04
+     ],
+     "n": 14,
+     "burst": 1.2,
+     "sy": 0.5,
+     "rj": 0.5,
+     "norot": true
+    }
+   ]
+  },
+  "mua-kiem": {
+   "dur": 1.0,
+   "layers": [
+    {
+     "f": "an-rong",
+     "t": [
+      0,
+      1
+     ],
+     "s": [
+      0.8,
+      1.7
+     ],
+     "sy": 0.45,
+     "r": [
+      0,
+      0.3
+     ],
+     "a": [
+      0.9,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "vet",
+     "t": [
+      0,
+      0.5
+     ],
+     "s": 0.5,
+     "r": 0.305,
+     "fall": 1.1,
+     "n": 7,
+     "spread": 0.85,
+     "sy": 0.5,
+     "e": "in",
+     "jit": 0.25,
+     "norot": true,
+     "a": [
+      1,
+      1
+     ]
+    },
+    {
+     "f": "sao",
+     "t": [
+      0.4,
+      0.8
+     ],
+     "s": [
+      0.15,
+      0.5
+     ],
+     "n": 10,
+     "spread": 0.85,
+     "sy": 0.5,
+     "e": "pop",
+     "a": [
+      1,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "mua-kiem",
+     "t": [
+      0.1,
+      0.8
+     ],
+     "s": [
+      0.8,
+      1.4
+     ],
+     "ground": true,
+     "y": 0.3,
+     "a": [
+      0.9,
+      0
+     ],
+     "glow": 0.4,
+     "norot": true
+    },
+    {
+     "f": "vong",
+     "t": [
+      0.35,
+      1
+     ],
+     "s": [
+      0.4,
+      2.0
+     ],
+     "sy": 0.45,
+     "a": [
+      0.9,
+      0
+     ],
+     "norot": true
+    }
+   ]
+  },
+  "sen-bang": {
+   "dur": 1.0,
+   "layers": [
+    {
+     "f": "vong",
+     "t": [
+      0,
+      0.8
+     ],
+     "s": [
+      0.4,
+      2.0
+     ],
+     "sy": 0.45,
+     "y": 0.25,
+     "a": [
+      1,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "sen-2",
+     "t": [
+      0,
+      0.9
+     ],
+     "s": [
+      0.3,
+      1.4
+     ],
+     "e": "pop",
+     "ground": true,
+     "y": 0.35,
+     "glow": 0.5,
+     "norot": true
+    },
+    {
+     "f": "tinh-the-2",
+     "t": [
+      0.1,
+      0.8
+     ],
+     "s": [
+      0.12,
+      0.5
+     ],
+     "e": "pop",
+     "ground": true,
+     "ring": 0.8,
+     "n": 6,
+     "sy": 0.5,
+     "y": 0.3,
+     "norot": true
+    },
+    {
+     "f": "lap-lanh",
+     "t": [
+      0.2,
+      1
+     ],
+     "s": [
+      0.18,
+      0.04
+     ],
+     "n": 12,
+     "burst": 1.1,
+     "rise": 0.4,
+     "sy": 0.5,
+     "norot": true
+    }
+   ]
+  },
+  "thoi-ngung": {
+   "dur": 1.1,
+   "layers": [
+    {
+     "f": "an-thai-cuc",
+     "t": [
+      0,
+      1
+     ],
+     "s": [
+      0.5,
+      1.8
+     ],
+     "sy": 0.45,
+     "r": [
+      0,
+      0.6
+     ],
+     "a": [
+      1,
+      0
+     ],
+     "glow": 0.4,
+     "norot": true
+    },
+    {
+     "f": "an-2",
+     "t": [
+      0.05,
+      1
+     ],
+     "s": [
+      0.3,
+      1.2
+     ],
+     "r": [
+      0,
+      -0.8
+     ],
+     "a": [
+      0.9,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "vong",
+     "t": [
+      0,
+      0.9
+     ],
+     "s": [
+      0.3,
+      2.1
+     ],
+     "sy": 0.45,
+     "a": [
+      0.9,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "lap-lanh",
+     "t": [
+      0,
+      1
+     ],
+     "s": [
+      0.18,
+      0.05
+     ],
+     "ring": 1.0,
+     "ring_r": [
+      0,
+      0.5
+     ],
+     "n": 12,
+     "sy": 0.45,
+     "norot": true
+    }
+   ]
+  },
+  "hoi-sen": {
+   "dur": 1.1,
+   "layers": [
+    {
+     "f": "ho-sen",
+     "t": [
+      0,
+      0.9
+     ],
+     "s": [
+      0.4,
+      1.3
+     ],
+     "e": "pop",
+     "ground": true,
+     "y": 0.35,
+     "glow": 0.4,
+     "norot": true
+    },
+    {
+     "f": "cot",
+     "t": [
+      0.1,
+      0.9
+     ],
+     "s": [
+      1.0,
+      1.3
+     ],
+     "ground": true,
+     "y": 0.35,
+     "a": [
+      0.6,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "la",
+     "t": [
+      0,
+      1
+     ],
+     "s": [
+      0.22,
+      0.12
+     ],
+     "n": 8,
+     "spread": 0.5,
+     "sy": 0.5,
+     "rise": 1.1,
+     "rj": 0.6,
+     "norot": true
+    },
+    {
+     "f": "lap-lanh",
+     "t": [
+      0.1,
+      1
+     ],
+     "s": [
+      0.18,
+      0.05
+     ],
+     "n": 10,
+     "spread": 0.6,
+     "sy": 0.5,
+     "rise": 1.3,
+     "flick": 2,
+     "norot": true
+    }
+   ]
+  },
+  "hoi-cay": {
+   "dur": 1.2,
+   "layers": [
+    {
+     "f": "cay",
+     "t": [
+      0,
+      0.95
+     ],
+     "s": [
+      0.3,
+      1.5
+     ],
+     "e": "pop",
+     "ground": true,
+     "y": 0.35,
+     "glow": 0.4,
+     "norot": true
+    },
+    {
+     "f": "vong",
+     "t": [
+      0,
+      0.8
+     ],
+     "s": [
+      0.4,
+      1.9
+     ],
+     "sy": 0.45,
+     "y": 0.3,
+     "a": [
+      0.8,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": [
+      "la",
+      "hoa"
+     ],
+     "t": [
+      0,
+      1
+     ],
+     "s": [
+      0.24,
+      0.12
+     ],
+     "n": 12,
+     "spread": 0.8,
+     "sy": 0.5,
+     "rise": 1.3,
+     "rj": 0.7,
+     "norot": true
+    },
+    {
+     "f": "lap-lanh",
+     "t": [
+      0.1,
+      1
+     ],
+     "s": [
+      0.18,
+      0.05
+     ],
+     "n": 10,
+     "spread": 0.8,
+     "sy": 0.5,
+     "rise": 1.5,
+     "flick": 2,
+     "norot": true
+    }
+   ]
+  },
+  "khien-canh": {
+   "dur": 1.0,
+   "layers": [
+    {
+     "f": "canh",
+     "t": [
+      0,
+      1
+     ],
+     "s": [
+      0.5,
+      1.5
+     ],
+     "e": "pop",
+     "y": -0.35,
+     "glow": 0.4,
+     "norot": true
+    },
+    {
+     "f": "vong",
+     "t": [
+      0,
+      0.8
+     ],
+     "s": [
+      0.3,
+      1.6
+     ],
+     "sy": 0.45,
+     "y": 0.25,
+     "a": [
+      1,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "sao",
+     "t": [
+      0,
+      0.4
+     ],
+     "s": [
+      0.3,
+      1.2
+     ],
+     "e": "pop",
+     "a": [
+      1,
+      0
+     ],
+     "y": -0.4,
+     "norot": true
+    },
+    {
+     "f": "long-vu",
+     "t": [
+      0.1,
+      1
+     ],
+     "s": [
+      0.2,
+      0.1
+     ],
+     "n": 8,
+     "spread": 0.6,
+     "rise": 1.0,
+     "rj": 0.7,
+     "norot": true
+    }
+   ]
+  },
+  "song-dat": {
+   "dur": 0.7,
+   "layers": [
+    {
+     "f": "tinh-the",
+     "t": [
+      0,
+      0.7
+     ],
+     "s": [
+      0.2,
+      0.9
+     ],
+     "e": "pop",
+     "ground": true,
+     "y": 0.4,
+     "norot": true
+    },
+    {
+     "f": "khoi",
+     "t": [
+      0,
+      0.7
+     ],
+     "s": [
+      0.5,
+      1.1
+     ],
+     "a": [
+      0.6,
+      0
+     ],
+     "y": 0.3,
+     "norot": true
+    },
+    {
+     "f": "vong",
+     "t": [
+      0,
+      0.6
+     ],
+     "s": [
+      0.3,
+      1.2
+     ],
+     "sy": 0.4,
+     "y": 0.38,
+     "a": [
+      0.8,
+      0
+     ],
+     "norot": true
+    }
+   ]
+  },
+  "song-gio": {
+   "dur": 0.7,
+   "layers": [
+    {
+     "f": "may-2",
+     "t": [
+      0,
+      0.9
+     ],
+     "s": [
+      0.5,
+      1.2
+     ],
+     "dx": [
+      -0.2,
+      0.4
+     ],
+     "a": [
+      1,
+      0
+     ],
+     "glow": 0.3
+    },
+    {
+     "f": "vet",
+     "t": [
+      0,
+      0.8
+     ],
+     "s": [
+      0.6,
+      1.3
+     ],
+     "n": 3,
+     "spread": 0.35,
+     "r": 0.055,
+     "dx": [
+      -0.3,
+      0.5
+     ],
+     "a": [
+      1,
+      0
+     ]
+    },
+    {
+     "f": "la",
+     "t": [
+      0,
+      1
+     ],
+     "s": [
+      0.2,
+      0.1
+     ],
+     "n": 5,
+     "spread": 0.4,
+     "dx": [
+      0,
+      0.6
+     ],
+     "rj": 0.8
+    }
+   ]
+  },
+  "song-hu": {
+   "dur": 0.7,
+   "layers": [
+    {
+     "f": "liem",
+     "t": [
+      0,
+      0.7
+     ],
+     "s": [
+      0.5,
+      1.3
+     ],
+     "a": [
+      1,
+      0
+     ],
+     "glow": 0.5
+    },
+    {
+     "f": "vet",
+     "t": [
+      0,
+      0.8
+     ],
+     "s": [
+      0.6,
+      1.2
+     ],
+     "n": 3,
+     "spread": 0.3,
+     "r": 0.055,
+     "dx": [
+      -0.2,
+      0.5
+     ],
+     "a": [
+      1,
+      0
+     ]
+    },
+    {
+     "f": "xoay",
+     "t": [
+      0.2,
+      1
+     ],
+     "s": [
+      0.3,
+      0.8
+     ],
+     "r": [
+      0,
+      -1
+     ],
+     "a": [
+      0.8,
+      0
+     ]
+    }
+   ]
+  },
+  "loc": {
+   "dur": 0.6,
+   "loop": true,
+   "layers": [
+    {
+     "f": "loc-2",
+     "s": 1.2,
+     "ground": true,
+     "y": 0.42,
+     "glow": 0.4,
+     "flick": 3
+    },
+    {
+     "f": "loc",
+     "s": 1.0,
+     "ground": true,
+     "y": 0.42,
+     "a": 0.6
+    },
+    {
+     "f": "vong",
+     "s": 0.9,
+     "sy": 0.35,
+     "y": 0.38,
+     "r": [
+      0,
+      1
+     ]
+    },
+    {
+     "f": [
+      "la",
+      "may"
+     ],
+     "s": 0.2,
+     "ring": 0.45,
+     "ring_r": [
+      0,
+      1
+     ],
+     "n": 6,
+     "sy": 0.6,
+     "y": -0.1,
+     "rj": 0.6
+    }
+   ]
+  },
+  "loc-nhe": {
+   "dur": 0.6,
+   "loop": true,
+   "layers": [
+    {
+     "f": "loc-2",
+     "s": 1.0,
+     "ground": true,
+     "y": 0.42,
+     "a": 0.55,
+     "flick": 3
+    },
+    {
+     "f": "vong",
+     "s": 0.8,
+     "sy": 0.35,
+     "y": 0.38,
+     "r": [
+      0,
+      1
+     ],
+     "a": 0.5
+    }
+   ]
+  },
+  "chop": {
+   "dur": 0.45,
+   "layers": [
+    {
+     "f": "set",
+     "t": [
+      0,
+      0.6
+     ],
+     "s": [
+      0.5,
+      1.2
+     ],
+     "e": "pop",
+     "a": [
+      1,
+      0
+     ],
+     "flick": 4,
+     "glow": 0.5
+    },
+    {
+     "f": "sao",
+     "t": [
+      0,
+      0.4
+     ],
+     "s": [
+      0.3,
+      1.1
+     ],
+     "e": "pop",
+     "a": [
+      1,
+      0
+     ]
+    },
+    {
+     "f": "vet",
+     "t": [
+      0,
+      0.7
+     ],
+     "s": [
+      0.6,
+      1.2
+     ],
+     "n": 4,
+     "spread": 0.3,
+     "r": 0.055,
+     "a": [
+      1,
+      0
+     ]
+    }
+   ]
+  },
+  "tia-set": {
+   "dur": 0.3,
+   "layers": [
+    {
+     "f": "set",
+     "t": [
+      0,
+      1
+     ],
+     "s": [
+      0.5,
+      0.7
+     ],
+     "a": [
+      0.75,
+      0
+     ],
+     "flick": 4,
+     "rj": 0.15,
+     "norot": true
+    },
+    {
+     "f": "lap-lanh",
+     "t": [
+      0,
+      0.6
+     ],
+     "s": [
+      0.25,
+      0.1
+     ],
+     "a": [
+      0.7,
+      0
+     ],
+     "norot": true
+    }
+   ]
+  },
+  "tu-khi": {
+   "dur": 1.0,
+   "layers": [
+    {
+     "f": "an-2",
+     "t": [
+      0,
+      1
+     ],
+     "s": [
+      0.6,
+      1.5
+     ],
+     "sy": 0.45,
+     "y": 0.3,
+     "r": [
+      0,
+      0.7
+     ],
+     "a": [
+      0.2,
+      1
+     ],
+     "glow": 0.4,
+     "norot": true
+    },
+    {
+     "f": "cot",
+     "t": [
+      0.2,
+      1
+     ],
+     "s": [
+      1.0,
+      1.4
+     ],
+     "ground": true,
+     "y": 0.3,
+     "a": [
+      0,
+      0.8
+     ],
+     "norot": true
+    },
+    {
+     "f": "lap-lanh",
+     "t": [
+      0,
+      1
+     ],
+     "s": [
+      0.18,
+      0.05
+     ],
+     "n": 14,
+     "spread": 1.2,
+     "burst": -1.1,
+     "sy": 0.5,
+     "norot": true
+    }
+   ]
+  },
+  "tam-kiem-hien": {
+   "dur": 0.8,
+   "layers": [
+    {
+     "f": "tam-kiem",
+     "t": [
+      0,
+      0.9
+     ],
+     "s": [
+      0.4,
+      1.2
+     ],
+     "e": "pop",
+     "ground": true,
+     "y": 0.3,
+     "glow": 0.5,
+     "norot": true
+    },
+    {
+     "f": "vong",
+     "t": [
+      0,
+      0.8
+     ],
+     "s": [
+      0.3,
+      1.8
+     ],
+     "sy": 0.45,
+     "y": 0.25,
+     "a": [
+      1,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "lap-lanh",
+     "t": [
+      0.1,
+      1
+     ],
+     "s": [
+      0.18,
+      0.05
+     ],
+     "n": 10,
+     "burst": 1,
+     "sy": 0.5,
+     "norot": true
+    }
+   ]
+  },
+  "cau-sen-hien": {
+   "dur": 0.8,
+   "layers": [
+    {
+     "f": "cau-sen",
+     "t": [
+      0,
+      0.9
+     ],
+     "s": [
+      0.4,
+      1.2
+     ],
+     "e": "pop",
+     "y": -0.1,
+     "glow": 0.5,
+     "norot": true
+    },
+    {
+     "f": "vong",
+     "t": [
+      0,
+      0.8
+     ],
+     "s": [
+      0.3,
+      1.8
+     ],
+     "sy": 0.45,
+     "y": 0.25,
+     "a": [
+      1,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "giot",
+     "t": [
+      0.1,
+      1
+     ],
+     "s": [
+      0.2,
+      0.08
+     ],
+     "n": 8,
+     "burst": 1,
+     "rise": 0.3,
+     "sy": 0.5,
+     "norot": true
+    }
+   ]
+  },
+  "phun-lua": {
+   "dur": 0.6,
+   "layers": [
+    {
+     "f": "lua",
+     "t": [
+      0,
+      1
+     ],
+     "s": [
+      0.4,
+      1.0
+     ],
+     "r": 0.15,
+     "dx": [
+      0,
+      0.6
+     ],
+     "a": [
+      1,
+      0
+     ],
+     "glow": 0.4
+    },
+    {
+     "f": "lua-2",
+     "t": [
+      0,
+      1
+     ],
+     "s": [
+      0.2,
+      0.5
+     ],
+     "n": 4,
+     "spread": 0.3,
+     "r": 0.15,
+     "dx": [
+      0,
+      0.9
+     ],
+     "a": [
+      1,
+      0
+     ]
+    }
+   ]
+  },
+  "dinh-hien": {
+   "dur": 0.9,
+   "layers": [
+    {
+     "f": "dinh",
+     "t": [
+      0,
+      0.9
+     ],
+     "s": [
+      0.4,
+      1.2
+     ],
+     "e": "pop",
+     "ground": true,
+     "y": 0.3,
+     "glow": 0.4,
+     "norot": true
+    },
+    {
+     "f": "vong",
+     "t": [
+      0,
+      0.8
+     ],
+     "s": [
+      0.3,
+      1.8
+     ],
+     "sy": 0.45,
+     "y": 0.25,
+     "a": [
+      1,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": [
+      "la",
+      "hoa"
+     ],
+     "t": [
+      0,
+      1
+     ],
+     "s": [
+      0.22,
+      0.1
+     ],
+     "n": 10,
+     "spread": 0.5,
+     "rise": 1.1,
+     "sy": 0.5,
+     "rj": 0.6,
+     "norot": true
+    }
+   ]
+  },
+  "nui-dap": {
+   "dur": 0.9,
+   "layers": [
+    {
+     "f": "nui",
+     "t": [
+      0,
+      0.35
+     ],
+     "s": 1.0,
+     "dy": [
+      -1.1,
+      0
+     ],
+     "e": "in",
+     "a": [
+      0.4,
+      1
+     ],
+     "glow": 0.3,
+     "norot": true
+    },
+    {
+     "f": "nui",
+     "t": [
+      0.35,
+      0.9
+     ],
+     "s": [
+      1.0,
+      1.1
+     ],
+     "a": [
+      1,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "vong",
+     "t": [
+      0.33,
+      1
+     ],
+     "s": [
+      0.3,
+      1.9
+     ],
+     "sy": 0.4,
+     "y": 0.38,
+     "a": [
+      1,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "khoi",
+     "t": [
+      0.33,
+      0.95
+     ],
+     "s": [
+      0.5,
+      1.3
+     ],
+     "n": 3,
+     "spread": 0.4,
+     "sy": 0.4,
+     "y": 0.3,
+     "a": [
+      0.7,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "tinh-the",
+     "t": [
+      0.33,
+      0.9
+     ],
+     "s": [
+      0.15,
+      0.45
+     ],
+     "e": "pop",
+     "ground": true,
+     "ring": 0.6,
+     "n": 5,
+     "sy": 0.45,
+     "y": 0.38,
+     "norot": true
+    }
+   ]
+  },
+  "roi-kiem": {
+   "dur": 0.55,
+   "layers": [
+    {
+     "f": "kiem",
+     "t": [
+      0,
+      0.4
+     ],
+     "s": 0.7,
+     "r": 0.5,
+     "dy": [
+      -1.0,
+      0
+     ],
+     "e": "in",
+     "a": [
+      0.6,
+      1
+     ],
+     "norot": true
+    },
+    {
+     "f": "sao",
+     "t": [
+      0.38,
+      0.7
+     ],
+     "s": [
+      0.2,
+      0.8
+     ],
+     "e": "pop",
+     "a": [
+      1,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "vong",
+     "t": [
+      0.38,
+      1
+     ],
+     "s": [
+      0.2,
+      1.0
+     ],
+     "sy": 0.45,
+     "y": 0.2,
+     "a": [
+      0.8,
+      0
+     ],
+     "norot": true
+    }
+   ]
+  },
+  "chay": {
+   "dur": 0.8,
+   "loop": true,
+   "layers": [
+    {
+     "f": "lua-2",
+     "s": 0.55,
+     "n": 5,
+     "spread": 0.55,
+     "sy": 0.45,
+     "ground": true,
+     "y": 0.2,
+     "flick": 3,
+     "jit": 0.3
+    },
+    {
+     "f": "vong",
+     "s": 1.1,
+     "sy": 0.4,
+     "y": 0.2,
+     "a": 0.5,
+     "r": [
+      0,
+      0.3
+     ]
+    }
+   ]
+  },
+  "len-tang": {
+   "dur": 1.0,
+   "layers": [
+    {
+     "f": "cot",
+     "t": [
+      0,
+      0.9
+     ],
+     "s": [
+      1.2,
+      1.6
+     ],
+     "ground": true,
+     "y": 0.35,
+     "a": [
+      1,
+      0
+     ],
+     "glow": 0.4,
+     "norot": true
+    },
+    {
+     "f": "vong",
+     "t": [
+      0,
+      0.8
+     ],
+     "s": [
+      0.3,
+      1.6
+     ],
+     "sy": 0.45,
+     "y": 0.3,
+     "a": [
+      1,
+      0
+     ],
+     "norot": true
+    },
+    {
+     "f": "lap-lanh",
+     "t": [
+      0,
+      1
+     ],
+     "s": [
+      0.2,
+      0.05
+     ],
+     "n": 12,
+     "spread": 0.5,
+     "rise": 1.2,
+     "sy": 0.5,
+     "norot": true
+    }
+   ]
+  }
+ },
+ "skills": {
+  "hoa-cau": {
+   "fx": "dan-lua",
+   "hit_fx": "no",
+   "cast_fx": "phong-ra",
+   "fx_size": 30,
+   "hit_h": 46
+  },
+  "bang-tien": {
+   "fx": "dan-bang",
+   "hit_fx": "no",
+   "cast_fx": "phong-ra",
+   "fx_size": 28,
+   "hit_h": 44
+  },
+  "phong-nhan": {
+   "fx": "dan-gio",
+   "hit_fx": "no",
+   "cast_fx": "phong-ra",
+   "fx_size": 32,
+   "hit_h": 44
+  },
+  "phuong-hoang": {
+   "fx": "dan-phuong",
+   "hit_fx": "no-lon",
+   "cast_fx": "phong-ra",
+   "fx_size": 66,
+   "hit_h": 70
+  },
+  "loi-long-pha-khong": {
+   "fx": "dan-rong",
+   "hit_fx": "no-lon",
+   "cast_fx": "tu-khi",
+   "fx_size": 78,
+   "hit_h": 80
+  },
+  "moc-lien": {
+   "fx": "hoi-sen",
+   "fx_h": 70
+  },
+  "van-moc": {
+   "fx": "hoi-cay",
+   "fx_h": 90
+  },
+  "dia-thu": {
+   "fx": "gai",
+   "fx_h": 70
+  },
+  "hac-dong": {
+   "fx": "hodem",
+   "fx_h": 100
+  },
+  "thanh-quang-phan-quyet": {
+   "fx": "cot",
+   "charge_fx": "tu-khi",
+   "fx_h": 130
+  },
+  "bang-phach-thien-nguc": {
+   "fx": "bang-nguc",
+   "charge_fx": "tu-khi",
+   "fx_h": 120
+  },
+  "thien-thu-nhat-thuan": {
+   "fx": "dong-ho",
+   "charge_fx": "tu-khi",
+   "fx_h": 130
+  },
+  "van-kiem": {
+   "fx": "mua-kiem",
+   "fx_h": 110
+  },
+  "bang-phong": {
+   "fx": "nova-bang",
+   "fx_h": 110
+  },
+  "huyen-bang-lien-hoa": {
+   "fx": "sen-bang",
+   "fx_h": 100
+  },
+  "tue-nguyet-dinh-chi": {
+   "fx": "thoi-ngung",
+   "fx_h": 110
+  },
+  "trieu-duong-ho-the": {
+   "fx": "khien-canh",
+   "fx_h": 80
+  },
+  "dia-liet": {
+   "fx": "song-dat",
+   "fx_h": 60
+  },
+  "thanh-phong-toai-anh": {
+   "fx": "song-gio",
+   "fx_h": 64
+  },
+  "tich-diet-tram": {
+   "fx": "song-hu",
+   "fx_h": 70
+  },
+  "cuu-u-phong-bao": {
+   "fx": "loc",
+   "charge_fx": "tu-khi",
+   "fx_h": 110
+  },
+  "u-minh-trao": {
+   "fx": "trao",
+   "fx_h": 80
+  },
+  "hu-khong-thon-phe": {
+   "fx": "hodem",
+   "charge_fx": "tu-khi",
+   "fx_h": 130
+  },
+  "tu-dien-bo": {
+   "fx": "chop",
+   "fx_h": 60
+  }
+ },
+ "treasures": {
+  "pb.phi-kiem": {
+   "fx": "dan-kiem",
+   "cast_fx": "tam-kiem-hien",
+   "size": 24
+  },
+  "pb.hon-phien": {
+   "cast_fx": "hodem"
+  },
+  "pb.thuong-hai-chau": {
+   "fx": "dan-giot",
+   "cast_fx": "cau-sen-hien",
+   "size": 26
+  },
+  "pb.xich-ho-lo": {
+   "fx": "dan-lua",
+   "cast_fx": "phun-lua",
+   "size": 22
+  },
+  "pb.thanh-moc-dinh": {
+   "cast_fx": "dinh-hien"
+  },
+  "pb.tran-son-an": {
+   "fx": "nui-dap",
+   "cast_fx": "nui-dap"
+  }
+ },
+ "thien": {
+  "pb.dai-nhat-kim-luan": {
+   "xoay": "dan-sao",
+   "trieu": "tu-khi",
+   "luan": "nova",
+   "no": "no-lon"
+  },
+  "pb.tu-dien-loi-ky": {
+   "vong": "tu-khi",
+   "phien": "loc-nhe",
+   "set": "tia-set"
+  },
+  "pb.luu-ly-tran": {
+   "do": "tu-khi",
+   "tia": "dan-bang",
+   "tran": "nova-bang",
+   "no": "no-lon"
+  },
+  "pb.phong-an-phien": {
+   "do": "tu-khi",
+   "song": "song-gio",
+   "loc": "loc-nhe",
+   "no": "no"
+  },
+  "pb.hu-khong-ban": {
+   "do": "tu-khi",
+   "tia": "song-hu",
+   "tran": "hodem",
+   "no": "no-lon"
+  },
+  "pb.tue-nguyet-sa-lau": {
+   "trieu": "tu-khi",
+   "dong": "song-hu",
+   "ha": "thoi-ngung",
+   "hoi": "hoi-sen"
+  }
+ },
+ "daovan": {
+  "bolt": {
+   "Kim": "dan-kiem",
+   "Ám": "dan-hon",
+   "Thủy": "dan-giot",
+   "Hỏa": "dan-lua",
+   "Mộc": "dan-la",
+   "Thổ": "dan-da",
+   "Quang": "dan-sao",
+   "Lôi": "dan-set",
+   "Băng": "dan-bang",
+   "Phong": "dan-gio",
+   "Hư": "dan-hon",
+   "Thời": "dan-sao"
+  },
+  "hit": "no",
+  "rain": {
+   "v.van-kiem": "roi-kiem",
+   "v.thuy-ba": "no-lon",
+   "v.no-hoa": "no-lon",
+   "v.dia-thu": "gai"
+  }
+ },
+ "remap": {
+  "vong-lua": "x.len-tang.vang",
+  "v.dan-am": "x.dan-hon.am",
+  "k.loi-lien": "x.tia-set.loi",
+  "k.dai-thanh": "x.tu-khi.vang",
+  "k.dat-chay": "x.chay.hoa",
+  "k.bao-tho": "x.song-dat.tho",
+  "v.no-hoa": "x.no-lon.hoa",
+  "v.hac-dong": "x.hodem.am",
+  "v.moc-lien": "x.hoi-sen.moc",
+  "v.tran-phap": "x.tu-khi.vang",
+  "chem-x": "x.no.trang",
+  "set-danh": "x.cot.loi",
+  "v.am-gai": "x.gai.tim",
+  "v.hoa-xoay": "x.loc.do",
+  "v.huyet-chu": "x.hodem.do",
+  "v.loi-tru": "x.cot.loi",
+  "v.no-bang": "x.no-lon.bang",
+  "v.xich-tran": "x.nova.do"
+ }
+}

@@ -8,3 +8,5 @@ export { cardArt } from './card-art.js';
 export { loadNpcArt, drawNpc, drawNpcLabel, drawShield } from './npc-draw.js';
 export { fxForHe } from './slashfx.js';
 export { drawVignette, groundLight, setLighting } from './lighting.js';
+export { loadVfx } from './vfx.js';
+export { setFxRemap } from './sprites.js';

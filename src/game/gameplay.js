@@ -8,6 +8,7 @@ import { createItemInfo } from './iteminfo.js';
 import { createForgedArt } from './forged-art.js';
 import { createFxQueue } from './fxqueue.js';
 import { fxOf, weaponHe } from '../entity/slashfx.js';
+import { applyVfx } from './vfxapply.js';
 import { createCpEffects } from './cp-effects.js';
 import { createProgress } from './progress.js';
 import { createStats } from './stats.js';
@@ -62,6 +63,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const [recipes, shop, artIdx] = await Promise.all([loadJSON('data/items/recipes.json'), loadJSON('data/shop.json'), loadJSON('data/equipment/art.json')]);
   const [curDef, lifeDef, premium, dvDef, misc] = await Promise.all(['data/currency.json', 'data/lifespan.json', 'data/items/premium.json', 'data/build/dao-van.json', 'data/items/misc.json'].map((p) => loadJSON(p)));
   const [pbDef, bcDef] = await Promise.all(['data/build/phap-bao.json', 'data/build/bi-canh.json'].map((p) => loadJSON(p))); // pháp bảo, cấm chế, bí cảnh
+  applyVfx({ S: gp.skills, pbDef, dvDef, vfx: await loadJSON('data/vfx.json').catch(() => null) }); // hiệu ứng ghép từ mảnh sáng (src/game/vfxapply.js)
   const artDef = await loadJSON('data/art/sprites.json');
   await Promise.all([loadSprites(artDef), loadNpcArt(artDef.npc)]); // hình quái, hiệu ứng, icon, NPC (thử nghiệm)
   const progress = createProgress(userId, gp);
@@ -233,7 +235,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const guide = createGuide({ hopNhat, learn, dvDef, pbDef, items: itemsJson.items, S, dv, cards, bag, progress, loadout, stageName: progress.stageName,
     art: (a) => artInfo(a)?.file || artFile(a), equip: (id) => itemAction(`bag:${id}`, 'equip'), toast }); // nút + bảng Cẩm nang Đạo Vận
   const usable = createConsumables({ itemDefs, progress, wallet, cards, cardDef: dvDef.cards, treasure, biCanh, heOrder: dvDef.he_order, play, me, recompute });
-  const skills = createSkills({ fam: gp.fx_families, sin: new Set(Object.values(dvDef.hop_nhat.he).map((h) => h.skill_sin)), heColor: (he) => dv.heOf(he)?.color, hopOn: () => !!hopNhat.active(), useTreasure: (q) => treasure.use(q, { soft: !!hopNhat.active() }), S, me, mobs, map, pt, cds, toast, say, play, fx, bolts, strike, target, buffs, recompute, mods: dv.mods, fire: barrage.fire, maybeEcho: barrage.maybeEcho, mover: barrage.mover, schedule: barrage.schedule, healPets: (f) => tame.healAll(f),
+  const skills = createSkills({ sin: new Set(Object.values(dvDef.hop_nhat.he).map((h) => h.skill_sin)), heColor: (he) => dv.heOf(he)?.color, hopOn: () => !!hopNhat.active(), useTreasure: (q) => treasure.use(q, { soft: !!hopNhat.active() }), S, me, mobs, map, pt, cds, toast, say, play, fx, bolts, strike, target, buffs, recompute, mods: dv.mods, fire: barrage.fire, maybeEcho: barrage.maybeEcho, mover: barrage.mover, schedule: barrage.schedule, healPets: (f) => tame.healAll(f),
     get bar() { return bar; }, heal: (n) => { if (dead) return; hp = Math.min(ps.hp, hp + n); say(me.x, me.y - HEAD, `+${Math.round(n)} khí huyết`, '#5dff7a', true); },
     maxHp: () => ps.hp, now: () => now, dead: () => dead,
     swing(id, s) { const k = gp.skill_swing.by_id[id] || gp.skill_swing.by_kind[s.kind], m = k && target(s.range_px || s.radius_px || 200); if (!k) return; if (m) me.facing = mobs.rel(m, me).dx >= 0 ? 1 : -1; me.onSkillSwing?.(k); }, // xoay mặt về mục tiêu rồi vung kiếm

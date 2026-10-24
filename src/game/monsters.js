@@ -110,7 +110,7 @@ export function createMonsters({ gp, mdef, map }) {
       const d = distTo(m, me);
       if (m.state === 'dead') { m.deadT -= dt; if (m.deadT <= 0) list.splice(i, 1); continue; }
       if (m.void ? Date.now() > m.until : d > P.despawn_px) { list.splice(i, 1); continue; } // Âm Hư: tan biến khi hết giờ
-      if (m.hitT > 0) m.hitT -= dt;
+      if (m.hitT > 0) m.hitT -= dt; if (m.flashCd > 0) m.flashCd -= dt;
       if (m.atkT > 0) m.atkT -= dt;
       m.moving = false;
       if (m.stun > 0) { m.stun -= dt; continue; }
@@ -156,7 +156,7 @@ export function createMonsters({ gp, mdef, map }) {
   // Người chơi đánh trúng: quái bị kéo vào trận; trả về true nếu chết
   function damage(m, dmg) {
     if (m.state === 'dead') return false;
-    m.hp -= dmg; m.hitT = 0.15;
+    m.hp -= dmg; if (!(m.flashCd > 0)) { m.hitT = 0.15; m.flashCd = 0.35; } // loé trắng tối đa ~3 lần/giây: bị đánh liên tục không thành bóng trắng
     if (m.state === 'idle' || m.state === 'return') m.state = 'chase';
     if (m.hp <= 0) { m.hp = 0; m.state = 'dead'; m.deadT = 0.9; return true; }
     return false;
