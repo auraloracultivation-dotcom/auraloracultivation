@@ -73,7 +73,6 @@ export function createHud(opts) {
     const id = b.dataset.menu;
     if (id === 'map') opts.onOpenMap();
     else if (id === 'settings') opts.onSettings();
-    else if (id === 'quests') quest.toggle();
     else if (!opts.onMenu?.(id)) toast(`${b.getAttribute('aria-label')}: sắp có`);
   });
   right.querySelector('.h3-round').addEventListener('click', (e) => {

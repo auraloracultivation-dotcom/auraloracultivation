@@ -130,7 +130,11 @@ export function createDaoTam(c) {
     if (g.type === 'skill' || g.type === 'card' || g.type === 'pb' || g.type === 'hopnhat') { c.hopNhat.wear(S().he); if (g.type === 'pb' || g.type === 'hopnhat') slotIn('phap-bao'); return true; }
     if (g.type === 'obtain') { buy(g.item); return true; }
     if (g.type === 'use') { c.usePill(g.item); return true; }
-    if (g.type === 'level' && progress.atPeak() && progress.nextStageDef()) { c.breakthrough(); return true; }
+    if (g.type === 'level' && progress.atPeak() && progress.nextStageDef()) {
+      const pill = c.breakthroughPill?.(); // bước đột phá của chuỗi: hết đan (vd. lần trước thất bại) thì Chưởng giáo tặng thêm — không bao giờ kẹt
+      if (pill && !progress.count(pill)) { progress.add(pill, 1); progress.changed(); toast(`Chưởng giáo gửi thêm 1 ${c.itemDefs.get(pill)?.name || 'đan đột phá'} — thử lại nhé!`, 2400); }
+      c.breakthrough(); return true;
+    }
     return !!r && false;
   }
   // Xếp một kỹ năng vào ô: ô trống trước, hết thì thay ô không thuộc bộ Đạo Tâm
@@ -163,5 +167,5 @@ export function createDaoTam(c) {
     return { id: 'dt', tag: 'Đạo Tâm', title: s.title, goal: `${s.tip || s.title}${cnt}`.slice(0, 80), color: '#ffd23a', ready: false, nav: !!place() };
   }
   return { tick, emit, place, doHere, chooseHe, render, brief, cur, he: () => S().he, done: () => !cur(), setAuto: (v) => { auto = v; },
-    talking: () => talking, progress: () => ({ i: S().i, n: steps.length, chapter: cur()?.chapter }) };
+    talking: () => talking, progress: () => ({ i: S().i, n: steps.length, chapter: cur()?.chapter, p: S().p }), steps: () => steps };
 }

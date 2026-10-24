@@ -17,7 +17,7 @@ const FIGHTING = new Set(['chase', 'windup', 'cast']);
 
 // zone(): { x, y, r } khi đang ở bí cảnh — chỉ đánh quái trong vòng (thay neo). hpFrac(): khí huyết hiện / tối đa.
 export function createAutoPlay({ me, mobs, gather, map, cfg, reach, canFly = () => false, zone = () => null, hpFrac = () => 1 }) {
-  let mode = null, focus = null, anchor = null, goal = null, repick = 0, idleT = 0, resting = false;
+  let mode = null, focus = null, anchor = null, goal = null, repick = 0, idleT = 0, resting = false, hungryT = 0; // hungryT: giây liền không có quái / nguyên liệu để làm
   let stuckT = 0, lx = me.x, ly = me.y, fly = false, flyT = 0, side = 1, sideT = 0;
   const skip = new Map(); // mục tiêu tạm bỏ → hết hạn lúc
   const rel = (o) => ({ dx: wrapDelta(o.x - me.x, map.width), dy: wrapDelta(o.y - me.y, map.height) });
@@ -64,6 +64,7 @@ export function createAutoPlay({ me, mobs, gather, map, cfg, reach, canFly = () 
       if (g?.o !== goal?.o) stuckT = 0;
       goal = g; repick = cfg.repick_s;
     }
+    hungryT = goal && goal.kind !== 'spot' ? 0 : hungryT + dt;
     if (!goal) { idleT += dt; return fly ? { x: 0, y: 0, fly } : { x: 0, y: 0, idle: true }; }
     if (resting && !(goal.kind === 'mob' && FIGHTING.has(goal.o.state))) return { x: 0, y: 0, rest: true };
     if (fly) { flyT += dt; if (flyT > 1 && map.canStand(me.x, me.y, 6) && (flyT > 6 || mobs.distTo(goal.o, me) < reach * 2)) fly = false; }
@@ -86,11 +87,12 @@ export function createAutoPlay({ me, mobs, gather, map, cfg, reach, canFly = () 
 
   function start(m, f = null, at = null) {
     mode = m; focus = f; anchor = { x: at?.x ?? me.x, y: at?.y ?? me.y, r: cfg.anchor_radius_px };
-    resting = false; goal = null; stuckT = 0; idleT = 0; fly = false; sideT = -1; skip.clear();
+    resting = false; goal = null; stuckT = 0; idleT = 0; hungryT = 0; fly = false; sideT = -1; skip.clear();
   }
   return {
     step, start,
     mode: () => mode,
+    hungry: () => (mode ? hungryT : 0),
     snapshot: () => (mode ? { mode, focus, at: anchor && { x: anchor.x, y: anchor.y } } : null),
     reset() { mode = null; focus = null; anchor = null; goal = null; stuckT = 0; fly = false; },
     moved() { if (anchor) { anchor.x = me.x; anchor.y = me.y; goal = null; } }, // người chơi tự kéo cần: neo đi theo

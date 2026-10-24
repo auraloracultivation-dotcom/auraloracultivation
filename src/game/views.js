@@ -2,6 +2,7 @@
 import { showSheet, escapeHtml as E } from '../ui/index.js';
 import { iconUrl } from '../entity/index.js';
 import { compactNum as N } from '../core/index.js';
+import { openQuestSheet } from './questsheet.js';
 
 const GOAL = { talk: 'Nói chuyện', reach: 'Đến', collect: 'Thu thập', craft: 'Luyện', kill: 'Hạ', boss: 'Hạ boss', dodge_heavy: 'Né đòn nặng',
   discover: 'Khám phá', complete_daily: 'Hoàn thành nhiệm vụ ngày', awaken: 'Thức tỉnh trang bị', use: 'Dùng',
@@ -47,13 +48,12 @@ export function createViews(o) {
     const goals = q.goals.map((g, i) => {
       const cur = a ? a.p[i] : 0, ok = cur >= g.count;
       const what = g.label ? ` ${E(g.label)}` : g.target === 'any' || g.type.endsWith('unique') ? '' : ` ${E(name(g.target))}`;
-      const fake = a && !ok && quests.isPlaceholder(g.target) ? btn('fake', `${q.id}|${i}`, 'Hoàn thành tạm') : '';
-      return `<li class="${ok ? 'ok' : ''}">${GOAL[g.type] || g.type}${what} <b>${cur}/${g.count}</b> ${fake}</li>`;
+      return `<li class="${ok ? 'ok' : ''}">${GOAL[g.type] || g.type}${what} <b>${cur}/${g.count}</b></li>`;
     }).join('');
     const action = !a ? btn('accept', q.id, 'Nhận') : quests.complete(q.id) ? btn('claim', q.id, 'Nhận thưởng')
       : goalPlace(q, a) ? btn('go', q.id, '➤ Đi tới — tự động làm') : ''; // dẫn đường từ bảng đầy đủ (giống chạm dòng ở khung nhỏ)
     return `<div class="row"><div class="row-h"><b style="color:${QCOL[q.tier] || ''}">${E(q.title)}</b><em>${TYPE[q.type] || q.type}</em></div>
-      <p>${E(q.desc)}</p><ul>${goals}</ul><p class="rw">Thưởng: ${rewardText(q.rewards)}</p>${action}</div>`;
+      <ul>${goals}</ul><p class="rw">Thưởng: ${rewardText(q.rewards)}</p>${action}</div>`;
   }
   // Khung Nhiệm vụ trên HUD: tối đa 3 nhiệm vụ đang làm (chính tuyến trước), mục tiêu chưa xong đầu tiên, màu theo tier (độ hiếm / khó)
   const QCOL = { luc: '#6fdc76', lam: '#6aa8ff', tim: '#c58cff', cam: '#ffa94d', vang: '#ffd84a', do: '#ff5a4a', den: '#ff4f7a' };
@@ -61,7 +61,7 @@ export function createViews(o) {
   const monById = new Map(o.monsters.map((m) => [m.id, m]));
   const matZone = (id) => o.mats.materials.find((m) => m.id === id)?.zone;
   const MZ = ['xanh', 'cam', 'xam', 'trang', 'than', 'den', 'tim'];
-  let tracked = null, goTo = null; // goTo(id): main.js gắn dẫn đường (navi.start)
+  let tracked = null, goTo = null, qa = null; // qa: Tự làm nhiệm vụ (questauto.js) — main.js gắn; // goTo(id): main.js gắn dẫn đường (navi.start)
   function goalPlace(q, a) {
     const i = Math.max(0, q.goals.findIndex((g, k) => a.p[k] < g.count)), g = q.goals[i];
     if (g.type === 'kill_zone') return { zone: g.target, rank: g.rank || 'thuong' };
@@ -101,27 +101,10 @@ export function createViews(o) {
   // Đan dùng nhanh: đan đang có trong kho dùng được (data/gameplay.json → pills)
   const pillChoices = () => Object.keys(gp.pills).filter((id) => typeof gp.pills[id] === 'object' && progress.count(id) > 0)
     .map((id) => ({ key: id, name: `${name(id)} ×${progress.count(id)}`, thumb: iconUrl(id) || '' }));
-  function openQuests() {
-    showSheet({
-      title: 'Nhiệm vụ', note: 'Thử nghiệm: tiến độ lưu trên máy này. "Hoàn thành tạm" dành cho NPC/địa điểm chưa có trong game.',
-      tabs: [{ id: 'active', name: 'Đang làm' }, { id: 'avail', name: 'Có thể nhận' }, { id: 'done', name: 'Đã xong' }, { id: 'bc', name: 'Bí Cảnh' }],
-      render(tab) {
-        if (tab === 'bc') return biCanhTab();
-        const ORD = { ladder: 0, daily: 1, weekly: 2, main: 3 };
-        const rows = tab === 'active' ? quests.active().sort((x, y) => (ORD[x.q.type] ?? 4) - (ORD[y.q.type] ?? 4)).map(({ q, a }) => questRow(q, a))
-          : tab === 'avail' ? quests.available().map((q) => questRow(q, null))
-            : quests.done().map((q) => `<div class="row done"><b>${E(q.title)}</b> <em>✓</em></div>`);
-        return rows.join('') || '<p class="bag-empty">Trống</p>';
-      },
-      onAction(act, arg, close) {
-        if (act === 'bc-start') { const e = o.biCanh.start(arg); if (e) toast(e, 1800); else close(); return; }
-        if (act === 'bc-quit') { o.biCanh.quit(); return; }
-        if (act === 'accept') quests.accept(arg);
-        if (act === 'fake') { const [id, i] = arg.split('|'); quests.fakeGoal(id, +i); }
-        if (act === 'go') { close(); goTo?.(arg); return; }
-        if (act === 'claim') { const r = quests.claim(arg); if (r) { o.onReward(r); toast('Đã nhận thưởng nhiệm vụ', 1500); } }
-      },
-    });
+  function openQuests() { // src/game/questsheet.js
+    openQuestSheet({ daotam: o.daotam, he: () => o.daotam?.he(), quests, questRow, biCanhTab, name, goTo, onReward: o.onReward, toast,
+      onAuto: () => { if (qa && !qa.on()) qa.toggle(); }, autoOn: () => !!qa?.on(),
+      biCanhAction(act, arg, close) { if (act === 'bc-start') { const e = o.biCanh.start(arg); if (e) toast(e, 1800); else close(); } else if (act === 'bc-quit') o.biCanh.quit(); } });
   }
 
   // ---------- Bí cảnh (bicanh.js) ----------
@@ -324,5 +307,5 @@ export function createViews(o) {
     });
   }
 
-  return { setGo: (fn) => { goTo = fn; }, openQuests, questBrief, naviGoal, track, pillChoices, openCultivate, openShop, statValue, refreshDock: null };
+  return { setGo: (fn) => { goTo = fn; }, setQuestAuto: (x) => { qa = x; }, openQuests, questBrief, naviGoal, track, pillChoices, openCultivate, openShop, statValue, refreshDock: null };
 }

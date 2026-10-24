@@ -302,3 +302,17 @@
 @media (orientation: landscape) {
   .action-left { left: calc(max(6px, env(safe-area-inset-left)) + 100px); bottom: max(6px, env(safe-area-inset-bottom)); }
 }
+
+/* ---- Bảng Nhiệm vụ · mục Đạo Tâm (src/game/questsheet.js) ---- */
+.qs-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin: 2px 2px 6px; }
+.qs-head b { color: #ffd23a; font-size: 16px; } .qs-head em { font-style: normal; color: #b9bdd8; font-size: 12px; }
+.qs-bar { height: 8px; border-radius: 4px; background: #232a4a; border: 1px solid #5a4632; overflow: hidden; margin-bottom: 10px; }
+.qs-bar i { display: block; height: 100%; background: linear-gradient(90deg, #f8ad3a, #ffd27a); }
+.qs-card { padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255, 210, 58, .6); background: rgba(255, 210, 58, .07); display: flex; flex-direction: column; gap: 6px; }
+.qs-card > b { color: #fff1cf; font-size: 15px; } .qs-card > b em { font-style: normal; color: #9ff0a8; margin-left: 6px; }
+.qs-card p { margin: 0; color: #d9d3ea; font-size: 13px; line-height: 1.4; }
+.qs-card .bag-act { align-self: flex-start; }
+.qs-gift { color: #ffd23a; }
+.qs-steps { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 3px; font-size: 13px; color: #9aa0bf; }
+.qs-steps li { padding: 4px 8px; border-radius: 6px; }
+.qs-steps li.ok { color: #7fd08a; } .qs-steps li.on { color: #fff1cf; background: rgba(255, 210, 58, .1); font-weight: 700; }
