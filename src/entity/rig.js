@@ -182,7 +182,7 @@ function drawTrail(ctx, st, tip, now, CH) {
 // Bắt đầu cú chém (chỉ hình ảnh)
 export function rigAttack(p, kind = 'chem', gap = 0) { // kind: chem | choc | xoay (src/entity/moves.js); gap: nhịp đánh (giây)
   const st = (p.rig ||= {}); st.move = MOVES[kind] ? kind : 'chem';
-  st.from = st.atk >= 0 ? st.last : null; // đòn trước chưa xong: pha tiếp từ tư thế đang dở, không giật về đầu
+  st.from = st.atk >= 0 ? st.pose : null; // đòn trước chưa xong: pha tiếp từ tư thế đang dở, không giật về đầu
   st.atk = 0; st.tp = tempo(st.move, gap); st.trail = [];
 }
 
@@ -218,7 +218,7 @@ export function drawRig(ctx, p, look, drawFallbackBody) {
     st.atk += dt / (st.tp?.dur || MOVES[st.move]?.dur || ATTACK_S);
     const t = Math.min(1, st.atk);
     pz = blendPose(st.from, calmPose(pose(st.move || 'chem', t, rest, P.tay.hold), st.tp?.calm ?? 1), easeBlend(t));
-    st.last = pz;
+    st.pose = pz; // (không dùng st.last — đó là mốc thời gian khung trước, ghi đè làm mọi thứ thành NaN: mất đầu, cánh, tay)
     sq += pz.sq; hL += pz.head * 40 * f; sw = pz.ang; kk = pz.kk; // cộng vào nhịp đi / thở, không thay hẳn (bớt khựng khi vừa đi vừa đánh)
     if (st.atk >= 1) { st.atk = -1; st.trail = []; st.from = null; }
   }
