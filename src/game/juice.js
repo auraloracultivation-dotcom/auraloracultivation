@@ -3,12 +3,15 @@
 //  - shake(amp, s): rung màn hình khi chiêu lớn nổ (main.js cộng offset() vào camera)
 //  - later(s, fn): chạy fn sau s giây (gồng xong mới phóng)
 // Thông số từng chiêu: data/gameplay.json → skills.<id>.charge_s / dim / shake.
-let dimT = 0, dimLife = 0, dimMax = 0, shakeT = 0, shakeLife = 0, shakeAmp = 0, last = 0;
+let dimT = 0, dimLife = 0, dimMax = 0, shakeT = 0, shakeLife = 0, shakeAmp = 0, last = 0, stopT = 0;
 const tasks = [];
 
 export const juice = {
   dim(s, a = 0.5) { dimLife = dimT = Math.max(dimT, s); dimMax = Math.max(a, dimT > 0 ? dimMax : 0); },
-  shake(amp, s = 0.25) { if (amp > shakeAmp * (shakeT / (shakeLife || 1))) { shakeAmp = amp; shakeLife = shakeT = s; } },
+  shake(amp, s = 0.25) { if (amp > shakeAmp * (shakeT / (shakeLife || 1))) { shakeAmp = amp; shakeLife = shakeT = s; } this.stop(Math.min(0.08, amp * 0.012)); },
+  // khựng hình (hit-stop): thế giới gần như đứng lại vài phần trăm giây khi đòn nặng trúng — cảm giác "đã tay" kiểu My Heroes
+  stop(s) { stopT = Math.max(stopT, s); },
+  slow(dt) { if (stopT <= 0) return dt; stopT -= dt; return dt * 0.06; }, // main.js: game.update(juice.slow(dt))
   later(s, fn) { tasks.push({ t: s, fn }); },
   // gọi mỗi khung trong gameplay.renderAbove (trước lớp hiệu ứng): chạy hẹn giờ + phủ tối
   frame(ctx, now, cx, cy) {

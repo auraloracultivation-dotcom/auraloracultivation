@@ -304,7 +304,7 @@ async function boot() {
     flight.tick(dt);
     const mpNow = Math.round(pt.mp);
     if (mpNow !== shownMp) { shownMp = mpNow; hud.setBar('mp', mpNow, pt.max); }
-    game.update(dt); stations.tick(dt);
+    game.update(juice.slow(dt)); stations.tick(dt); // khựng hình khi đòn nặng trúng (juice.stop)
     rank.tick(dt);
     others.update(dt);
     for (const tap of input.takeTaps()) { // chạm vào nhân vật khác → chọn / bỏ chọn
