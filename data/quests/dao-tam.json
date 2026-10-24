@@ -10,6 +10,7 @@
   "tran-su": { "name": "Trận sư Phong Dao", "prop": "truyen-tong", "dx": 50, "dy": 40, "outfit": 15, "weapon": 0 },
   "te-tu": { "name": "Tế tư Huyền Quang", "prop": "te-dan", "dx": -50, "dy": 40, "outfit": 18, "weapon": 0 }
  },
+ "restock": { "_ghi_chu": "Tự làm nhiệm vụ giữ tối thiểu chừng này đan trong kho, thiếu thì tự mua thêm 10 (đủ tiền) — chơi thử 24/10: hết đan máu là chết khi gặp tinh anh", "item.dan.tieu-hoi-huyet.001": 5, "item.dan.hoi-linh.001": 5 },
  "zones": ["xanh", "cam", "xam", "trang", "than", "den"],
  "chapters": [
   {

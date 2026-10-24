@@ -7,7 +7,7 @@
 import { wrapDelta } from '../map/index.js';
 
 export function createQuestAuto({ game, navi, map, me, toast, progress }) {
-  let on = false, t = 0, hereT = 0, still = 0, sx = 0, sy = 0, sk = ''; // still: giây đứng yên không tiến triển (lưới an toàn)
+  let on = false, t = 0, hereT = 0, stockT = 0, still = 0, sx = 0, sy = 0, sk = ''; // still: giây đứng yên không tiến triển (lưới an toàn)
   const dt = () => game.daotam;
   const far = (p) => Math.hypot(wrapDelta(p.x - me.x, map.width), wrapDelta(p.y - me.y, map.height));
 
@@ -23,6 +23,7 @@ export function createQuestAuto({ game, navi, map, me, toast, progress }) {
     t -= d; hereT -= d; if (t > 0) return; t = 0.5;
     const D = dt();
     if (game.dead || D.talking()) return;
+    if ((stockT -= 0.5) <= 0) { stockT = 5; D.restock(); } // giữ đủ đan máu / linh lực
     if (D.done()) { toast('Đã hoàn thành Con đường Đạo Tâm!', 3000); return set(false, true); }
     const pl = D.place();
     // Lưới an toàn: 20 giây không đi được 30 px và nhiệm vụ không nhích → bỏ hết, dò đường mới (mọi kiểu kẹt chưa lường trước)

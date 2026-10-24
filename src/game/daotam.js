@@ -144,13 +144,21 @@ export function createDaoTam(c) {
     let i = ids.findIndex((x) => !x); if (i < 0) i = ids.findIndex((x) => !keep.has(x));
     if (i >= 0) L.set(i, id);
   }
-  function buy(id) {
+  // Tự làm nhiệm vụ: giữ đan máu / đan linh lực tối thiểu (dao-tam.json → restock), thiếu thì mua thêm 10
+  function restock() {
+    for (const [id, min] of Object.entries(def.restock || {})) {
+      if (id.startsWith('_') || progress.count(id) >= min) continue;
+      for (let k = 0; k < 10 && progress.count(id) < min + 10; k++) if (!buy(id, true)) break;
+    }
+  }
+  function buy(id, quiet = false) {
     const s = c.shop.stock.find((x) => x.id === id), W = c.wallet;
-    if (!s) return;
+    if (!s) return false;
     const k = ['vang', 'linh-thach'].find((x) => W.price(s, x) !== null && W.can(s, x));
-    if (!k) return toast('Chưa đủ tiền mua — đánh quái kiếm thêm Vàng', 1800);
+    if (!k) { if (!quiet) toast('Chưa đủ tiền mua — đánh quái kiếm thêm Vàng', 1800); return false; }
     W.pay(s, k); progress.add(id, s.stack || 1); emit('gain', { id, n: s.stack || 1 }); progress.changed();
     toast(`Đã mua ${c.itemDefs.get(id)?.name || id}`, 1400);
+    return true;
   }
 
   // Dấu "!" vàng trên đầu NPC / trận nhãn cần tới
@@ -167,5 +175,5 @@ export function createDaoTam(c) {
     return { id: 'dt', tag: 'Đạo Tâm', title: s.title, goal: `${s.tip || s.title}${cnt}`.slice(0, 80), color: '#ffd23a', ready: false, nav: !!place() };
   }
   return { tick, emit, place, doHere, chooseHe, render, brief, cur, he: () => S().he, done: () => !cur(), setAuto: (v) => { auto = v; },
-    talking: () => talking, progress: () => ({ i: S().i, n: steps.length, chapter: cur()?.chapter, p: S().p }), steps: () => steps };
+    restock, talking: () => talking, progress: () => ({ i: S().i, n: steps.length, chapter: cur()?.chapter, p: S().p }), steps: () => steps };
 }
