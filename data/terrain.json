@@ -98,7 +98,8 @@
           "thac",
           "bien-go"
         ]
-      }
+      },
+      "grade": "#98a49a"
     },
     {
       "id": "cat",
@@ -182,7 +183,8 @@
           "xe-hong",
           "tuong-pha"
         ]
-      }
+      },
+      "grade": "#a39886"
     },
     {
       "id": "da_lat",
@@ -247,7 +249,8 @@
           "dai-cot",
           "tuong-pha-b"
         ]
-      }
+      },
+      "grade": "#b4b0bc"
     },
     {
       "id": "tuyet",
@@ -322,7 +325,8 @@
           "nha-hoang-5b",
           "dai-tron"
         ]
-      }
+      },
+      "grade": "#949db2"
     },
     {
       "id": "soi",
@@ -403,7 +407,8 @@
           "tuong-pha",
           "xe-hong-b"
         ]
-      }
+      },
+      "grade": "#a6a2b0"
     },
     {
       "id": "dat_den",
@@ -477,7 +482,8 @@
           "tuong-pha-b",
           "dinh-tram"
         ]
-      }
+      },
+      "grade": "#c8c6d0"
     },
     {
       "id": "dung_nham",
@@ -506,7 +512,8 @@
         "small": [
           "soi"
         ]
-      }
+      },
+      "grade": "none"
     },
     {
       "id": "hac_thach",
@@ -581,7 +588,8 @@
           "dai-cot"
         ]
       },
-      "_ghi_chu": "Vùng Đen (Anh Biến) — ô vẽ bằng code (tools/gen_tiles_code.py), cây đá mượn vùng Than"
+      "_ghi_chu": "Vùng Đen (Anh Biến) — ô vẽ bằng code (tools/gen_tiles_code.py), cây đá mượn vùng Than",
+      "grade": "#d2d0da"
     },
     {
       "id": "tu_vuc",
@@ -653,7 +661,8 @@
           "cong-cot"
         ]
       },
-      "_ghi_chu": "Vùng Tím (Vấn Đỉnh) — ô vẽ bằng code (tools/gen_tiles_code.py), cây đá mượn"
+      "_ghi_chu": "Vùng Tím (Vấn Đỉnh) — ô vẽ bằng code (tools/gen_tiles_code.py), cây đá mượn",
+      "grade": "#aaa2b8"
     },
     {
       "id": "nuoc_sau",
@@ -684,7 +693,8 @@
           "v2-nuoc-16",
           1
         ]
-      ]
+      ],
+      "grade": "#b4bccc"
     },
     {
       "id": "nuoc_nong",
@@ -715,7 +725,8 @@
           "v2-nuoc-6",
           1
         ]
-      ]
+      ],
+      "grade": "#aab4c6"
     },
     {
       "id": "duong",
@@ -746,7 +757,8 @@
           "v3-duong-4",
           1
         ]
-      ]
+      ],
+      "grade": "#a8a090"
     },
     {
       "id": "cau",
@@ -770,7 +782,8 @@
           "v2-nuoc-2",
           1
         ]
-      ]
+      ],
+      "grade": "#aab4c6"
     }
   ],
   "_note_zone": "zone = vùng quái (chốt 23/10): xanh=cỏ (Luyện Khí), cam=cát + đá lát cổ (Trúc Cơ), xam=sỏi đá \"Xám Khói\" (Kết Đan), trang=băng tuyết (Nguyên Anh), than=hắc thổ + dung nham \"Xám Than\" (Hóa Thần), den=hắc thạch (Anh Biến), tim=tử vực (Vấn Đỉnh). Âm Hư (hư vô) xuất hiện ở bất kỳ vùng nào. Nước không có quái. duong / cau: đường nối các vùng. Không có quái, cây, đá trên đường.",
@@ -798,5 +811,7 @@
     "big_road_margin": 3,
     "_ghi_chu_big": "Công trình (big): chỉ mọc ở tâm lưới big_grid ô, xác suất big_chance; dọn cây đá trong ±big_clear ô quanh nó; cách đường big_road_margin ô."
   },
-  "_note_tiles_v2": "Ô đất 23/10 (bản 4): mỗi khối 2×2 ảnh chủ dự án = 1 ô 32 điểm, nhạt màu, mép hoà liền; mỗi vùng 4 ô trơn (lọc bỏ sỏi/cỏ) trọng số 6 + 4 ô chi tiết trọng số 1 → ~80% ô trơn. Đá lát cổ (quảng trường thành) giữ ô gốc. tools/tiles_v2.py rồi tools/atlas_compact.py."
+  "_note_tiles_v2": "Ô đất 23/10 (bản 4): mỗi khối 2×2 ảnh chủ dự án = 1 ô 32 điểm, nhạt màu, mép hoà liền; mỗi vùng 4 ô trơn (lọc bỏ sỏi/cỏ) trọng số 6 + 4 ô chi tiết trọng số 1 → ~80% ô trơn. Đá lát cổ (quảng trường thành) giữ ô gốc. tools/tiles_v2.py rồi tools/atlas_compact.py.",
+  "_note_grade": "Nền dịu kiểu My Heroes (chủ dự án 25/10/2026): mỗi ô nhân màu (multiply) lúc nạp. grade: mặc định; types[].grade: riêng từng loại ('none' = giữ nguyên). Màu càng tối nền càng trầm.",
+  "grade": "#a6a2b4"
 }
