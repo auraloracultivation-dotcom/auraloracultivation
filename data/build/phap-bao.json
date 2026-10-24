@@ -81,8 +81,8 @@
    "name": "Thương Hải Châu",
    "he": "Thủy",
    "kind": "sweep",
-   "hop_mul": 0.8,
-   "_can_bang_hop": "24/10 chơi thử: mạnh nhất (72k/giây một mục tiêu) → hạ nhẹ cho đều.",
+   "hop_mul": 4.0,
+   "_can_bang_hop": "24/10: mạnh nhất → hạ nhẹ. 25/10 chủ dự án: \"mạnh, nhanh, nhiều quá, che mất đầu và đòn chém\". Gốc rễ: khi Hợp Nhất, mỗi lượt 20 đạn × 5 (Đạo Vận nhân đạn) × nảy 7 lần, cả đường tự phóng lẫn đường dùng chiêu → hơn 140 đạn cùng lúc. Nay khi Hợp Nhất: 8 đạn/lượt (hop_n_mul 0.4), không nhân đạn, không nảy (hop_single), đạn xuyên 5 con (hop_pierce) để vẫn đánh đám, đạn nhỏ hơn (hop_size), hop_mul 4.0 bù. Còn ~16 đạn trên màn. Đo 60 khung/giây: một mục tiêu 77k → ~45k, đám 6 con 580k → ~330k (ngang các hệ khác 39–63k / 259–407k).",
    "mp": 22,
    "cd_s": 12,
    "mul": 0.9,
@@ -95,7 +95,11 @@
     0
    ],
    "desc": "Quét {n} dòng thủy tiễn hình quạt trong {s} giây",
-   "cast_fx": "k.pb-thuong-hai"
+   "cast_fx": "k.pb-thuong-hai",
+   "hop_n_mul": 0.4,
+   "hop_size": 22,
+   "hop_single": true,
+   "hop_pierce": 5
   },
   {
    "id": "pb.xich-ho-lo",

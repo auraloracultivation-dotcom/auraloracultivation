@@ -41,14 +41,15 @@ export function createTreasure(c) {
   function use(quiet, o = {}) {
     const t = on(), d = t && byId.get(t.id);
     if (!d) { if (!quiet) toast('Chưa đeo pháp bảo (Kho → Pháp Bảo)', 1400); return false; }
-    const mul = d.mul * scale(t) * (o.mul || 1) * (o.hop ? d.hop_mul || 1 : 1), n = // hop_mul: bù riêng khi Thiên Cơ Hợp Nhất tự phóng (pháp bảo đánh vùng không ăn thưởng đạn Đạo Vận)
-      (d.n || 0) + more(t), tgt = c.target(260);
+    const H = o.hop || (o.soft && d.hop_single); // đang Hợp Nhất (tự phóng, hoặc bấm/tự dùng khi Hợp Nhất làm hồi chiêu gần 0)
+    const mul = d.mul * scale(t) * (o.mul || 1) * (H ? d.hop_mul || 1 : 1), n = // hop_mul: bù riêng khi Thiên Cơ Hợp Nhất tự phóng (pháp bảo đánh vùng không ăn thưởng đạn Đạo Vận)
+      Math.max(1, Math.round(((d.n || 0) + more(t)) * (H ? d.hop_n_mul || 1 : 1))), tgt = c.target(260); // hop_n_mul: Hợp Nhất phóng liên tục → ít đạn mỗi lượt cho đỡ rối mắt
     const he = c.heOf(d.he);
     const aim = (m) => { if (!m) return { dx: me.facing, dy: 0 }; const r = mobs.rel(m, me), L = Math.hypot(r.dx, r.dy - 10) || 1; return { dx: r.dx / L, dy: (r.dy - 10) / L }; };
-    const shot = (dx, dy, extra = {}) => barrage.fire({ id: 'pb', x: me.x, y: me.y - 14, dx, dy, speed: 420, range: 260, fx: d.fx || he.bolt, size: d.size || 18, mul, color: he.color, ...extra });
+    const shot = (dx, dy, extra = {}) => barrage.fire({ id: 'pb', x: me.x + dx * 26, y: me.y - 14 + dy * 26, dx, dy, speed: 420, range: 260, fx: d.fx || he.bolt, size: (H && d.hop_size) || d.size || 18, mul, color: he.color, single: !!(H && d.hop_single), pierce: (H && d.hop_pierce) || 0, ...extra }); // xuất phát trước người một đoạn: không che đầu, đòn chém; hop_single: Hợp Nhất tự phóng không nhân đạn Đạo Vận — bắn liên tục ×5 đạn che kín nhân vật
     if (!o.quietName) c.say(me.x, me.y - 44, d.name, he.color, true);
     sound(o.hop || o.soft ? 'sfx.hop-nhat.ban' : 'sfx.phap-bao'); // soft: Hợp Nhất làm pháp bảo không hồi chiêu → tiếng nhỏ, không dồn dập
-    if (d.cast_fx && !['stream', 'seal', 'shield', 'storm'].includes(d.kind)) play(d.cast_fx, me.x, me.y + 4, 52, { ground: true }); // ảnh hoạt ảnh pháp bảo
+    if (d.cast_fx && !o.hop && !o.soft && !['stream', 'seal', 'shield', 'storm'].includes(d.kind)) play(d.cast_fx, me.x, me.y + 4, 52, { ground: true }); // ảnh hoạt ảnh pháp bảo (Hợp Nhất bắn liên tục: bỏ, kẻo hình to che kín nhân vật)
     if (d.shake) juice.later(0.15, () => juice.shake(d.shake, 0.25)); if (d.dim) juice.dim(0.6, d.dim); // cảm giác đòn kiểu My Heroes
     if (thien.has(d.kind)) return thien.cast(d, { mul, n, tgt, color: he.color, auto: !!o.quietName });
     switch (d.kind) {
