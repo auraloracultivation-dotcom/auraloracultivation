@@ -6,12 +6,10 @@
 //      mods() (Đạo Vận: hồi chiêu, linh lực), fire(spec) + maybeEcho(fn) (barrage.js: đạn xoè quạt, nảy, tách…) }
 import { juice } from './juice.js';
 import { skillSound } from '../audio/index.js';
-import { applyFamilies } from './fxfamily.js';
 import { cutin } from './cutin.js';
 
 export function createSkills(c) {
   const { S, me, mobs, pt, cds, toast, say, play, fx } = c;
-  applyFamilies(S, c.fam); // họ hiệu ứng thống nhất (src/game/fxfamily.js)
 
   function ready(id, quiet = false) {
     const s = S[id], now = c.now();

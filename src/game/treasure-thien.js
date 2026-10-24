@@ -26,16 +26,17 @@ export function createThien(c) {
     },
     render(ctx, at, now) {
       for (const b of beams) {
-        const p = at(b), grow = Math.min(1, b.t / 0.15), fade = Math.min(1, (b.life - b.t) / 0.25), h = b.len / fxRatio(b.fx);
+        const p = at(b), grow = Math.min(1, b.t / 0.15), fade = Math.min(1, (b.life - b.t) / 0.25), vx = String(b.fx).startsWith('x.'), h = vx ? 48 : b.len / fxRatio(b.fx); // hiệu ứng ghép (x.*): rải từng đoạn dọc tia, không phóng một hình to bằng cả tia
         ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(b.ang);
         if (Math.cos(b.ang) < 0) ctx.scale(1, -1); // tia bắn sang trái: lật dọc để hình không lộn ngược
         ctx.beginPath(); ctx.rect(-8, -h, b.len * grow + 8, h * 2); ctx.clip();
-        ctx.globalAlpha = fade * (0.9 + 0.1 * Math.sin(now / 50)); drawEffect(ctx, b.fx, 0, b.len / 2, 0, h); // hình có "glow" → drawEffect tự cộng sáng
+        ctx.globalAlpha = fade * (0.9 + 0.1 * Math.sin(now / 50));
+        if (vx) { ctx.globalAlpha *= 0.65; for (let d = h * 0.5; d < b.len; d += h * 1.05) drawEffect(ctx, b.fx, Math.min(0.99, b.t / b.life + d / b.len * 0.2), d, 0, h); } else drawEffect(ctx, b.fx, 0, b.len / 2, 0, h); // hình có "glow" → drawEffect tự cộng sáng
         ctx.restore();
         const n = 5; // quầng sáng rải dọc tia
         for (let k = 0; k < n; k++) {
           const d = (b.len * grow * (k + 0.5)) / n;
-          glow(ctx, p.x + Math.cos(b.ang) * d, p.y + Math.sin(b.ang) * d + 10, h * 0.9, b.color, 0.45 * fade, 0.5);
+          glow(ctx, p.x + Math.cos(b.ang) * d, p.y + Math.sin(b.ang) * d + 10, h * 0.9, b.color, (vx ? 0.25 : 0.45) * fade, 0.5);
         }
       }
     },
