@@ -8,6 +8,7 @@
 import { juice } from './juice.js';
 import { fxIconUrl, loadFx, iconUrl } from '../entity/index.js';
 import { createThien } from './treasure-thien.js'; // chiêu mới 6 pháp bảo Thiên hệ (24/10/2026)
+import { sound } from '../audio/index.js';
 
 const STAT = { hp: 'Khí huyết', linh: 'Tấn công', def: 'Phòng thủ', xuyen: 'Xuyên giáp', crit: 'Bạo kích %', hut: 'Hút máu %', phan: 'Phản đòn %' };
 
@@ -46,6 +47,7 @@ export function createTreasure(c) {
     const aim = (m) => { if (!m) return { dx: me.facing, dy: 0 }; const r = mobs.rel(m, me), L = Math.hypot(r.dx, r.dy - 10) || 1; return { dx: r.dx / L, dy: (r.dy - 10) / L }; };
     const shot = (dx, dy, extra = {}) => barrage.fire({ id: 'pb', x: me.x, y: me.y - 14, dx, dy, speed: 420, range: 260, fx: d.fx || he.bolt, size: d.size || 18, mul, color: he.color, ...extra });
     if (!o.quietName) c.say(me.x, me.y - 44, d.name, he.color, true);
+    sound(o.hop || o.soft ? 'sfx.hop-nhat.ban' : 'sfx.phap-bao'); // soft: Hợp Nhất làm pháp bảo không hồi chiêu → tiếng nhỏ, không dồn dập
     if (d.cast_fx && !['stream', 'seal', 'shield', 'storm'].includes(d.kind)) play(d.cast_fx, me.x, me.y + 4, 52, { ground: true }); // ảnh hoạt ảnh pháp bảo
     if (d.shake) juice.later(0.15, () => juice.shake(d.shake, 0.25)); if (d.dim) juice.dim(0.6, d.dim); // cảm giác đòn kiểu My Heroes
     if (thien.has(d.kind)) return thien.cast(d, { mul, n, tgt, color: he.color, auto: !!o.quietName });

@@ -3,7 +3,7 @@ import { juice } from './game/juice.js';
 import { loadJSON, prefetchJSON, startLoop, createScreen, createCamera, followCamera, createInput, drawStick, createSaver, sha256 } from './core/index.js';
 import { createMap, wrapDelta } from './map/index.js';
 import { createLocalPlayer, createRemotePlayers, drawPlayer, drawLabel, drawSlash, setTextScale, loadRig, rigAttack, artInfo, renderPortrait, avatarFx, iconUrl, loadSprites } from './entity/index.js';
-import { createAudio } from './audio/index.js';
+import { createAudio, attachAudio } from './audio/index.js';
 import { createPhapTuong } from './combat/index.js';
 import { createGameplay, createRankReporter, createFlight, hudActions, createNavi, createQuickPill, createStations, createQuestAuto } from './game/index.js';
 
@@ -60,7 +60,8 @@ async function boot() {
   const [itemsDef, codesDef, , audioDef, ptDef] = await Promise.all([loadJSON('data/items/items.json'), loadJSON('data/codes.json'),
     loadRig(loadJSON), loadJSON('data/audio.json'), loadJSON('data/skills/phap-tuong.json')]);
   const audio = createAudio(audioDef, loadSettings()); // tiếng chỉ phát sau lần chạm đầu (luật trình duyệt)
-  audio.music('bgm.tuchan');
+  attachAudio(audio, audioDef); audio.music('bgm.tuchan'); // bus âm thanh: module game gọi sound('…') (src/audio/bus.js)
+  document.getElementById('ui').addEventListener('pointerdown', (e) => { const b = e.target.closest('button'); if (b && !b.closest('.action-pad, .action-left')) audio.play(b.disabled ? 'sfx.ui.loi' : 'sfx.ui.cham'); }, true); // tiếng chạm nút (nút đánh / kỹ năng có tiếng riêng)
   const pt = createPhapTuong(ptDef); // kỹ năng Pháp tướng: đeo rồi phải bấm mới hiện, hiện thì hao linh lực
   avatarFx(ptDef);
   const me = createLocalPlayer(character);
@@ -123,7 +124,7 @@ async function boot() {
   function attack() { if (game.attack()) swing(); }
   function swing() {
     if (me.look?.outfit || me.look?.weapon) rigAttack(me); // nhân vật ghép lớp: đưa tay (và xoay kiếm nếu có)
-    if (me.look?.weapon) audio.play('sfx.kiem.chem'); // tiếng kiếm 0,1 giây lúc chém ra
+    audio.play(me.look?.weapon ? 'sfx.kiem.chem' : 'sfx.danh.tay'); // tiếng chém kiếm / đấm tay không lúc ra đòn
     if (!me.look?.weapon) me.slashT = 0.22; // tay không: vẫn có vệt chém nhỏ
   }
   // Mã quà tặng: so dấu SHA-256 với data/codes.json (mã gốc không nằm trong mã nguồn)

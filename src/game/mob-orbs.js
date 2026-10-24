@@ -2,6 +2,7 @@
 // Tinh anh / boss đứng xa người chơi thì bắn quả cầu sáng CHẬM (≈ 65% tốc độ chạy) — nhìn thấy và né được bằng cách đi ngang.
 // Vẽ bằng code, 3 tông màu theo vùng (viền mờ · thân · lõi sáng) + vệt đuôi ngắn. Số ở data/gameplay.json → monster.orb.
 import { wrapDelta } from '../map/index.js';
+import { sound } from '../audio/index.js';
 
 export function createMobOrbs({ cfg, map }) {
   const orbs = [];
@@ -20,7 +21,7 @@ export function createMobOrbs({ cfg, map }) {
       orbs.push({ m, x: m.x, y: m.y - m.r, vx: Math.cos(a) * cfg.speed_px_per_s, vy: Math.sin(a) * cfg.speed_px_per_s,
         left: cfg.range_px / cfg.speed_px_per_s + 0.6, col: cfg.colors[m.def.zone] || cfg.colors.default, t: 0 });
     }
-    m.atkT = 0.4;
+    m.atkT = 0.4; if (d < 400) sound('sfx.linh-cau');
     return true;
   }
 

@@ -3,6 +3,7 @@
 // Chỗ xuất hiện: bốc ngẫu nhiên CỐ ĐỊNH theo (seed, con, lượt) ở bất kỳ đâu đứng được, ngoài vùng quanh thành.
 // Giới hạn hiện tại: máu Âm Hư chưa chung giữa người chơi (mỗi máy đánh con của mình) — Mốc 3 chuyển lên máy chủ.
 import { wrapDelta } from '../map/index.js';
+import { sound } from '../audio/index.js';
 
 // PRNG cố định theo số hạt giống (mọi máy ra cùng dãy số)
 function rng(seed) {
@@ -76,7 +77,7 @@ export function createVoid({ mdef, mobs, map, progress, toast, me, serverNow = (
       mobs.addVoid(a.def, a.x, a.y, Date.now() + a.left * 1000, a.key, V);
       if (!announced.has(a.key)) {
         announced.add(a.key);
-        toast(`⚠ Âm Hư xuất thế: ${a.def.name} — ${dirText(a.x, a.y)} · còn ${Math.ceil(a.left / 60)} phút`, 4200);
+        sound('sfx.am-hu'); toast(`⚠ Âm Hư xuất thế: ${a.def.name} — ${dirText(a.x, a.y)} · còn ${Math.ceil(a.left / 60)} phút`, 4200);
       }
     }
   }

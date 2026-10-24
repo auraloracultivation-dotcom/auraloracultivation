@@ -2,6 +2,7 @@
 // Thông số: data/monsters/monsters.json → skills (sinh bằng tools/gen_balance.py), quái nào có gì: monster.skills.
 // Boss đứng vận chiêu windup_s giây, vùng trúng hiện đỏ trên đất (vòng / dải) — chạy ra khỏi vùng là né.
 import { wrapDelta } from '../map/index.js';
+import { sound } from '../audio/index.js';
 
 export function createMobSkills({ lib, map }) {
   const wd = (d, n) => wrapDelta(d, n);
@@ -27,7 +28,7 @@ export function createMobSkills({ lib, map }) {
         const dx = wd(me.x - m.x, map.width), dy = wd(me.y - m.y, map.height), L = Math.hypot(dx, dy) || 1;
         cast.line = { x: m.x, y: m.y, ux: dx / L, uy: dy / L };
       }
-      m.cast = cast; m.state = 'cast'; m.moving = false;
+      m.cast = cast; m.state = 'cast'; m.moving = false; if (d < 420) sound('sfx.don-nang');
       if (cast.line?.ux) m.facing = cast.line.ux > 0 ? 1 : -1;
       return true;
     }

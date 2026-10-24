@@ -48,6 +48,7 @@ import { createSkillLearn } from './skill-learn.js';
 import { simulateDuel } from './spar.js';
 import { placeholderIcon, showRevive, showDialog, showHeChooser } from '../ui/index.js';
 import { artInfo, iconUrl, fxIconUrl, cardArt } from '../entity/index.js';
+import { sound } from '../audio/index.js';
 
 const HEAL_PILL = 'item.dan.tieu-hoi-huyet.001', MP_PILL = 'item.dan.hoi-linh.001';
 
@@ -131,6 +132,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     const sup = gapR.mul(m.stage, progress.stageDef.tier), r = stats.hit(ps, stats.monster(m), { atkMul: mul * ptMul() * cpBonus(skill) * sup });
     const top = m.y - (m.def.art?.h || m.r * 2) - 4;
     if (r.miss) { say(m.x, top, 'Trượt', '#cfd6e6'); return; }
+    sound(r.crit ? 'sfx.bao-kich' : 'sfx.trung');
     say(m.x, top, `${r.crit ? 'Bạo kích ' : ''}-${r.dmg}${sup < 1 ? ' · bị áp chế' : ''}`, sup < 1 ? '#b9a6d6' : r.crit ? '#ffd23a' : '#ffffff', r.crit);
     const hf = HIT_FX[skill];
     if (hf) play(hf[0], m.x, midY(m), hf[1] * (r.crit ? 1.4 : 1));
@@ -172,7 +174,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   }
   function onKill(m) {
     if (targetUid === m.uid) targetUid = null;
-    play('khoi', m.x, m.y, Math.max(16, (m.def.art?.h || 20) * 0.7), { ground: true, delay: 0.4 });
+    play('khoi', m.x, m.y, Math.max(16, (m.def.art?.h || 20) * 0.7), { ground: true, delay: 0.4 }); sound(m.def.rank === 'boss' || m.void ? 'sfx.boss.chet' : 'sfx.quai.chet');
     const rank = m.def.rank, k = gp.monster.exp_mul[rank];
     const KR = gp.kill_rewards, fr = (x) => Math.floor(x) + (Math.random() < x % 1 ? 1 : 0); // giết quái nhận ít (tu tiên + idle, chủ dự án 23/10) — phần lẻ thành xác suất
     const exp = gapR.daily(gapR.capExp(Math.round((m.maxHp / 10) * k * cpFx.expMul() * KR.exp_mul), m, progress.stageDef.exp_need), progress.stageDef.exp_need, progress.stageDef.id), stone = fr((m.stone || 1) * KR.stone_mul); // Linh thạch theo tầng quái × stone_mul
@@ -184,12 +186,12 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     tame.tryTame(m); if (Math.random() < KR.gear_drop_mul) { cards.onKill(m); treasure.onKill(m); dv.onKill(m, toast); } learn.onKill(m); // linh thú · Thần Phù / phôi pháp bảo / đồ ngũ hành (giảm theo gear_drop_mul)
     quests.emit('kill', { id: m.def.id, rank, zone: m.def.zone });
     say(m.x, m.y - m.r * 3, `+${exp} tu vi${stone ? ` · +${stone} Linh thạch` : ''}${gold ? ` · +${gold} Vàng` : ''}`, '#9fe8ff');
-    if (got.length) toast(`Nhặt: ${got.map((g) => g.label).join(', ')}`, 1800);
+    if (got.length) { toast(`Nhặt: ${got.map((g) => g.label).join(', ')}`, 1800); sound('sfx.nhat'); }
     progress.changed();
   }
   function addExp(n) {
     const ups = progress.addExp(n); late.tick();
-    if (ups.length) { hp = Infinity; play('vong-lua', me.x, me.y - 8, 40); toast(`Đột phá tầng: ${ups[ups.length - 1].name}`, 2200); }
+    if (ups.length) { hp = Infinity; play('vong-lua', me.x, me.y - 8, 40); sound('sfx.len-cap'); toast(`Đột phá tầng: ${ups[ups.length - 1].name}`, 2200); }
     if (progress.atPeak()) toast('Tu vi đã đến đỉnh — chạm nút Đột phá', 2200);
     recompute(); hp = Math.min(hp, ps.hp);
   }
@@ -201,10 +203,10 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     if (dead) return; // nhiều đòn cùng khung: chỉ chết một lần (không trừ tu vi 2 lần, không mất Tự động bật lại)
     hp = 0; dead = true; mobs.calmAll(); resumeAuto = auto ? autoPlay.snapshot() : null; auto = false; hud.setActive('auto', false); autoDir = null; autoPlay.reset(); const dmsg = late.death(); if (dmsg) toast(dmsg, 3000); // mất tu vi khi chết: late-realm.js (Anh Biến: trọng thương / thụt cảnh giới)
     if (pt.active) pt.cancel();
-    soul.start();
+    soul.start(); sound('sfx.chet');
   }
   function revive(here) { // here: hồi sinh tại chỗ linh hồn đang đứng (đã trả Linh thạch); không thì về trận pháp giữa thành
-    soul.end(); dead = false; hp = ps.hp; guardUntil = now + PV.revive_guard_s;
+    soul.end(); dead = false; hp = ps.hp; guardUntil = now + PV.revive_guard_s; sound('sfx.hoi-sinh');
     if (!here && map.town) { me.x = map.town.cx; me.y = map.town.cy + 30; onRespawn(me.x, me.y); }
     else if (!map.canStand(me.x, me.y, 4)) ({ x: me.x, y: me.y } = map.nearestStand(me.x, me.y, 4, 30));
     play('vong-lua', me.x, me.y - 8, 40); toast(`Hồi sinh${here ? ' tại chỗ' : ` tại trận pháp ${map.town?.name || ''}`} — được bảo vệ ${PV.revive_guard_s} giây`, 2000); if (resumeAuto) { const r = resumeAuto; resumeAuto = null; auto = true; autoPlay.start(r.mode, r.focus, here ? null : r.at); if (r.mode === 'farm') hud.setActive('auto', true); toast('Tự động bật lại — quay về chỗ farm cũ', 1800); } // về thành thì tự đi lại vùng neo cũ
@@ -228,7 +230,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
   const guide = createGuide({ hopNhat, learn, dvDef, ccDef, pbDef, items: itemsJson.items, S, dv, cards, bag, progress, loadout, stageName: progress.stageName,
     art: (a) => artInfo(a)?.file || artFile(a), equip: (id) => itemAction(`bag:${id}`, 'equip'), toast }); // nút + bảng Cẩm nang Đạo Vận
   const usable = createConsumables({ itemDefs, progress, wallet, cards, cardDef: dvDef.cards, treasure, biCanh, heOrder: dvDef.he_order, play, me, recompute });
-  const skills = createSkills({ hopOn: () => !!hopNhat.active(), useTreasure: (q) => treasure.use(q), camChe: (s) => camChe.cast(s), S, me, mobs, map, pt, cds, toast, say, play, fx, bolts, strike, target, buffs, recompute, mods: dv.mods, fire: barrage.fire, maybeEcho: barrage.maybeEcho, mover: barrage.mover, schedule: barrage.schedule, healPets: (f) => tame.healAll(f),
+  const skills = createSkills({ hopOn: () => !!hopNhat.active(), useTreasure: (q) => treasure.use(q, { soft: !!hopNhat.active() }), camChe: (s) => camChe.cast(s), S, me, mobs, map, pt, cds, toast, say, play, fx, bolts, strike, target, buffs, recompute, mods: dv.mods, fire: barrage.fire, maybeEcho: barrage.maybeEcho, mover: barrage.mover, schedule: barrage.schedule, healPets: (f) => tame.healAll(f),
     get bar() { return bar; }, heal: (n) => { if (dead) return; hp = Math.min(ps.hp, hp + n); say(me.x, me.y - HEAD, `+${Math.round(n)} khí huyết`, '#5dff7a', true); },
     maxHp: () => ps.hp, now: () => now, dead: () => dead,
     summonPet() { const a = bag.equippedItem('linh-thu')?.art || progress.equipped().find((x) => x.slot === 'linh-thu')?.art, f = a && artFile(a); // hình thú hồn đang mặc
@@ -255,7 +257,7 @@ export async function createGameplay({ onRespawn = () => {}, loadJSON, map, me, 
     env.alive = !dead;
     mobs.update(dt, env); voids.update(dt); tame.update(dt, !dead); // Âm Hư theo lịch chung (src/game/void.js)
     npcs.update(dt, { me, playerCanFight: canFight, hitPlayer: hitByNpc });
-    for (const n of gather.update(dt, me, !dead)) { gain(n.item.id, n.n); say(n.x, n.y - 10, `+${n.n} ${n.item.name}`, n.group === 'thao' ? '#9dff8a' : '#d6dbe8'); progress.changed(); }
+    for (const n of gather.update(dt, me, !dead)) { gain(n.item.id, n.n); sound('sfx.nhat'); say(n.x, n.y - 10, `+${n.n} ${n.item.name}`, n.group === 'thao' ? '#9dff8a' : '#d6dbe8'); progress.changed(); }
     if (auto && !dead) { // Tự động: uống đan khi máu thấp, đi tới quái / nguyên liệu gần nhất, đánh
       if (hp < ps.hp * gp.auto.hp_pill_below && progress.count(HEAL_PILL) && (cds.pill || 0) <= now) usePill(HEAL_PILL); else if (pt.mp < pt.max * (gp.auto.mp_pill_below ?? 0.3) && progress.count(MP_PILL) && (cds.pill || 0) <= now) usePill(MP_PILL); // linh lực dưới 30%: tự uống Hồi Linh Đan; hết đan vẫn đánh thường
       autoDir = autoPlay.step(dt, now);

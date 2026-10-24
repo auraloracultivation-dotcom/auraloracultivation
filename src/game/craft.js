@@ -1,5 +1,6 @@
 // Luyện đan, luyện phôi, thức tỉnh, rã, luyện công pháp — THỬ NGHIỆM phía máy khách.
 // Đan/phôi/công pháp chỉ tốn nguyên liệu; thức tỉnh tốn Linh thạch (Lab). Thất bại mất 30–50% nguyên liệu.
+import { sound } from '../audio/index.js';
 const rnd = (a, b) => a + Math.random() * (b - a);
 
 // owns(id): người chơi có đan phương / công thức / bí kíp dạy món id trong kho chưa (data/items/recipes.json)
@@ -103,6 +104,7 @@ export function createCraft({ progress, pills, blanks, awaken, skills, gp, owns 
     g.tier = bestTier(g);
     progress.changed();
     const full = g.lines.length >= g.cap;
+    sound(ti >= 3 ? 'sfx.thuc-tinh.hiem' : 'sfx.thuc-tinh'); // Cam trở lên: tiếng dòng hiếm
     return { ok: true, msg: `${reveal ? 'Phôi lộ hình! ' : ''}Dòng ${g.lines.length}: phẩm ${awaken.tiers[ti].name}${full ? ' — đã đạt giới hạn!' : ''}`, event: ['awaken', {}] };
   }
 

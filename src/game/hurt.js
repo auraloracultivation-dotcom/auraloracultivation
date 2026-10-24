@@ -1,6 +1,7 @@
 // Quái / NPC đánh người chơi (tách khỏi gameplay.js 24/10/2026 để gameplay.js dưới 400 dòng).
 // env: đối tượng monsters.js dùng mỗi khung (hitPlayer, dodged, fx, stunPlayer; alive do gameplay.js gán).
 // c: { me, stats, S, pt, mobs, npcs, quests, say, play, toast, HEAD, onKill(m), die(), get() → { hp, dead, ps }, setHp(v), hurt(), stun(s) }
+import { sound } from '../audio/index.js';
 export function createHurt(c) {
   const { me, stats, S, pt, mobs, say, play, HEAD } = c;
   const defMul = () => (pt.active ? S['phap-tuong'].def_mul : 1);
@@ -10,7 +11,8 @@ export function createHurt(c) {
       const { dead, ps, hp } = c.get();
       if (dead) return; const r = stats.hit(stats.monster(m), ps, { atkMul: mul, defMul: defMul() });
       c.hurt();
-      if (r.miss) { say(me.x, me.y - HEAD, 'Né', '#9fe8ff'); return; }
+      if (r.miss) { say(me.x, me.y - HEAD, 'Né', '#9fe8ff'); sound('sfx.ne'); return; }
+      sound('sfx.bi-danh');
       c.setHp(hp - r.dmg);
       say(me.x, me.y - HEAD, `${skillName ? `${skillName} ` : mul > 1 ? 'Đòn nặng ' : r.crit ? 'Bạo kích ' : ''}-${r.dmg}`, mul > 1 ? '#ff5a3a' : '#ff9a8a', mul > 1 || r.crit);
       if (mul > 1 && !skillName) play(m.def.rank === 'boss' ? 'hoa-cot' : 'sao-den', me.x, me.y, m.def.rank === 'boss' ? 46 : 34, { ground: m.def.rank === 'boss' });
@@ -18,7 +20,7 @@ export function createHurt(c) {
       if (r.reflect) { say(m.x, m.y - (m.def.art?.h || m.r * 2) - 4, `Phản đòn -${r.reflect}`, '#c58cff'); if (mobs.damage(m, r.reflect)) c.onKill(m); }
       if (c.get().hp <= 0) c.die();
     },
-    dodged(m, skillName) { say(me.x, me.y - HEAD, skillName ? `Né ${skillName}!` : 'Né đòn nặng!', '#7dff8a', true); c.quests.emit('dodge'); },
+    dodged(m, skillName) { sound('sfx.ne'); say(me.x, me.y - HEAD, skillName ? `Né ${skillName}!` : 'Né đòn nặng!', '#7dff8a', true); c.quests.emit('dodge'); },
     fx: (id, x, y, h, ground, rot = 0) => play(id, x, y, h, { ground, rot }), // hiệu ứng chiêu boss
     stunPlayer(s) { c.stun(s); say(me.x, me.y - HEAD - 10, 'Bị trói!', '#ffe36a', true); },
   };

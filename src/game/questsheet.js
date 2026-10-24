@@ -6,6 +6,7 @@
 // Bỏ: mục "Đã xong", ghi chú thử nghiệm, nút "Hoàn thành tạm".
 import { showSheet, escapeHtml as E } from '../ui/index.js';
 import { compactNum as N } from '../core/index.js';
+import { sound } from '../audio/index.js';
 
 const SLOT = { 'mat-na': 'Mặt nạ', 'trang-phuc': 'Trang phục', 'vu-khi': 'Vũ khí', nhan: 'Nhẫn', canh: 'Cánh', 'linh-thu': 'Thú hồn',
   'day-chuyen': 'Dây chuyền', 'phap-tuong': 'Pháp tướng' };
@@ -51,7 +52,7 @@ export function openQuestSheet(d) {
       if (act.startsWith('bc-')) { d.biCanhAction(act, arg, close); return; }
       if (act === 'accept') quests.accept(arg);
       if (act === 'go') { close(); d.goTo?.(arg); return; }
-      if (act === 'claim') { const r = quests.claim(arg); if (r) { d.onReward(r); d.toast('Đã nhận thưởng nhiệm vụ', 1500); } }
+      if (act === 'claim') { const r = quests.claim(arg); if (r) { d.onReward(r); d.toast('Đã nhận thưởng nhiệm vụ', 1500); sound('sfx.nv.xong'); } }
     },
   });
 }

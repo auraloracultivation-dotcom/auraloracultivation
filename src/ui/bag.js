@@ -2,11 +2,12 @@
 import { el } from './stage.js';
 import { escapeHtml, showConfirm, toast } from './screens.js';
 import { quickSellPanel } from './quicksell.js';
+import { sound } from '../audio/index.js';
 
 function overlay(cls) {
   const wrap = el(`<div class="overlay modal-wrap ${cls}"></div>`);
-  document.getElementById('ui').appendChild(wrap);
-  const close = () => { wrap.classList.add('fade-out'); setTimeout(() => wrap.remove(), 180); };
+  document.getElementById('ui').appendChild(wrap); sound('sfx.ui.mo');
+  const close = () => { sound('sfx.ui.dong'); wrap.classList.add('fade-out'); setTimeout(() => wrap.remove(), 180); };
   wrap.addEventListener('pointerdown', (e) => { if (e.target === wrap) close(); });
   return { wrap, close };
 }

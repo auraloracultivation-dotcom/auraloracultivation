@@ -3,6 +3,7 @@
 // + 1 pháp bảo cùng hệ đang đeo + 1 Thần Phù chỉ định + 1 kỹ năng "sịn" + 1 kỹ năng "cùi" chỉ định trong ô kỹ năng.
 // Khi kích: chỉ PHÁP BẢO được buff — tự phóng liên tục, không tốn linh lực; kỹ năng khác không được buff gì.
 // Công thức từng hệ: data/build/dao-van.json → hop_nhat. THỬ NGHIỆM phía máy khách.
+import { sound } from '../audio/index.js';
 const SLOTS = ['mat-na', 'trang-phuc', 'vu-khi', 'nhan', 'canh', 'phap-tuong', 'linh-thu', 'day-chuyen'];
 
 // c: { def (hop_nhat), bag, treasure, cards, loadout, S, learned(id), cardName(id), target(r), pt, ps(), dead(), toast }
@@ -41,6 +42,7 @@ export function createHopNhat(c) {
   function update(dt) {
     const he = c.dead() ? null : active();
     if (he !== wasOn) {
+      if (he) sound('sfx.hop-nhat');
       if (he) c.toast(`✦ ${def.name} — ${def.he[he].name}: pháp bảo bắn liên thanh không nghỉ!`, 3500);
       wasOn = he;
     }

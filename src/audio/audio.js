@@ -5,6 +5,9 @@ export function createAudio(def, settings) {
   const AC = window.AudioContext || window.webkitAudioContext;
   const entries = { ...def.music, ...def.sfx };
   const raw = new Map(); // id → ArrayBuffer (tải trước khi chạm)
+  const last = new Map(); // id → lần phát gần nhất (giây, đồng hồ âm thanh)
+  const lead = new Map(); // id → giây im lặng đầu file (MP3 tự chèn ~25 ms) — bỏ qua khi phát để tiếng chém khớp cú đánh
+  const leadIn = (b) => { const d = b.getChannelData(0); let i = 0; while (i < d.length && Math.abs(d[i]) < 0.001) i++; return Math.min(i, d.length - 1) / b.sampleRate; };
   const buf = new Map(); // id → AudioBuffer (giải mã sau khi mở khoá)
   const on = { sound: settings.sound !== false, music: settings.music !== false };
   let ctx = null, sfxGain = null, musicGain = null, musicSrc = null, musicId = null, vol = { sfx: settings.soundVol ?? 1, music: settings.musicVol ?? 1 }; // âm lượng từ Cài đặt (0..1)
@@ -31,7 +34,7 @@ export function createAudio(def, settings) {
       musicGain = ctx.createGain(); musicGain.connect(ctx.destination);
       await loading;
       await Promise.all([...raw].map(async ([id, data]) => {
-        try { buf.set(id, await decode(data)); } catch (e) { console.warn('Không giải mã được âm thanh', id, e); }
+        try { const b = await decode(data); buf.set(id, b); if (!def.music[id]) lead.set(id, leadIn(b)); } catch (e) { console.warn('Không giải mã được âm thanh', id, e); }
       }));
       raw.clear();
       if (musicId) startMusic(musicId);
@@ -57,6 +60,12 @@ export function createAudio(def, settings) {
   }
 
   function startMusic(id) {
+    if (musicSrc && musicId !== id) { // đổi bài (thám hiểm ↔ phó bản): tắt dần bài cũ rồi vào bài mới
+      const old = musicSrc, g = musicGain;
+      try { g.gain.setTargetAtTime(0, ctx.currentTime, 0.35); old.stop(ctx.currentTime + 1.2); } catch { /* đã dừng */ }
+      musicGain = ctx.createGain(); musicGain.connect(ctx.destination);
+      musicSrc = null;
+    }
     musicId = id;
     if (!ctx || !on.music || musicSrc) return;
     const b = buf.get(id), e = entries[id];
@@ -81,13 +90,17 @@ export function createAudio(def, settings) {
     // Phát một tiếng hiệu ứng; vol nhân thêm (vd. người khác ở xa nghe nhỏ hơn). Trả về hàm dừng sớm.
     play(id, vol = 1) {
       if (!ctx || !on.sound || ctx.state !== 'running') return () => {};
-      const b = buf.get(id);
+      const b = buf.get(id), e = entries[id];
       if (!b) return () => {};
+      const now = ctx.currentTime;
+      if (e?.gap_s && now - (last.get(id) ?? -9) < e.gap_s) return () => {}; // giãn cách: tiếng phát dồn dập (trúng đòn, linh cầu…) không chồng chói tai
+      last.set(id, now);
       const src = ctx.createBufferSource(), g = ctx.createGain();
       src.buffer = b;
+      if (e?.vary) src.playbackRate.value = 1 + (Math.random() * 2 - 1) * e.vary; // lệch cao độ nhẹ cho đỡ nhàm
       g.gain.value = (entries[id]?.volume ?? 1) * vol;
       src.connect(g); g.connect(sfxGain);
-      src.start();
+      src.start(0, lead.get(id) || 0);
       return (fade = 0.25) => { // tắt dần (vd. pháp tướng bị thu lại giữa chừng)
         try { g.gain.setTargetAtTime(0, ctx.currentTime, fade / 3); src.stop(ctx.currentTime + fade); } catch { /* đã dừng */ }
       };

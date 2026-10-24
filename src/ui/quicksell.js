@@ -3,6 +3,7 @@
 // qs: { tiers: [{ id, name, on }], run(tierIds, dry) → { n, gold, stone, msg } }; onDone(): vẽ lại Kho.
 import { el } from './stage.js';
 import { escapeHtml as E, showConfirm, toast } from './screens.js';
+import { sound } from '../audio/index.js';
 
 const N = (v) => Number(v).toLocaleString('vi');
 
@@ -24,7 +25,7 @@ export function quickSellPanel(qs, onDone) {
     if (!e.target.closest('.qs-go')) return;
     const pre = qs.run([...pick], true); if (!pre.n) return;
     if (!(await showConfirm('Bán nhanh', `Bán ${pre.n} món pháp khí? Không lấy lại được.`, { yes: 'Bán', no: 'Thôi' }))) return;
-    toast(qs.run([...pick]).msg, 2200); paint(); onDone();
+    toast(qs.run([...pick]).msg, 2200); sound('sfx.vang'); paint(); onDone();
   });
   paint();
   return box;

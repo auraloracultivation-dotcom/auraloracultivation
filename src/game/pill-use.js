@@ -1,6 +1,7 @@
 // Dùng đan dược + đột phá cảnh giới (tách khỏi gameplay.js). Thông số: data/gameplay.json → pills, data/realms.json → breakthrough.
 // c: { gp, realms, progress, itemDefs, life, quests, pt, buffs, cds, me, HEAD, toast, say, play, addExp, recompute,
 //      now(), dead(), hp(), setHp(v), ps() }
+import { sound } from '../audio/index.js';
 export function createPillUse(c) {
   const { gp, realms, progress, itemDefs, life, quests, pt, buffs, cds, me, toast, say, play } = c;
   function usePill(id) {
@@ -43,12 +44,12 @@ export function createPillUse(c) {
     if (charm) toast('Bảo hộ phù sáng lên — vận khí tăng', 1500);
     if (Math.random() < rate) {
       progress.advanceStage(); c.setHp(Infinity); c.recompute(); c.setHp(c.ps().hp);
-      toast(`Đột phá thành công: ${progress.stageDef.name}! Thọ nguyên tối đa ${life.max()} năm`, 3000);
+      sound('sfx.dot-pha'); toast(`Đột phá thành công: ${progress.stageDef.name}! Thọ nguyên tối đa ${life.max()} năm`, 3000);
     } else if (realm.breakthrough.fail_to) { // Anh Biến: thất bại rơi thẳng về tầng chỉ định (Hóa Thần Trung kỳ), tu vi về 0
       const i = progress.stageIndex(realm.breakthrough.fail_to); progress.setStage(i, 0); c.recompute(); c.setHp(Math.min(c.hp(), c.ps().hp));
-      toast(`Đột phá thất bại — thiên kiếp đánh nát đạo cơ: rơi về ${progress.stageDef.name}`, 4000);
+      sound('sfx.dot-pha.loi'); toast(`Đột phá thất bại — thiên kiếp đánh nát đạo cơ: rơi về ${progress.stageDef.name}`, 4000);
     } else { const lost = Math.floor(progress.state.exp * (gp.breakthrough_fail_exp_loss ?? 0.5)); progress.state.exp -= lost; progress.changed?.();
-      toast(`Đột phá thất bại — thiên kiếp phản phệ: mất ${pill.name} và ${lost.toLocaleString('vi')} tu vi`, 3500); }
+      sound('sfx.dot-pha.loi'); toast(`Đột phá thất bại — thiên kiếp phản phệ: mất ${pill.name} và ${lost.toLocaleString('vi')} tu vi`, 3500); }
     progress.changed();
   }
   // Đan cần cho lần đột phá đại cảnh giới kế tiếp (null = không cần / chưa tới đỉnh) — Đạo Tâm dùng để bù đan khi đột phá thất bại

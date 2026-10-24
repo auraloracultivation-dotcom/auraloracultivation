@@ -1,5 +1,6 @@
 // Ngự kiếm phi hành: bật/tắt (nút Bay hoặc Tự động khi bị kẹt), hạ cánh bắt buộc khi hết linh lực / tháo kiếm.
 // Phải cầm kiếm; đang bay mất player.fly_mp_per_s linh lực mỗi giây (data/config.json). Trên nước/núi không hạ được.
+import { sound } from '../audio/index.js';
 export function createFlight({ me, map, hud, pt, toast, sendMove, radius, cfg }) {
   // on = true: cất cánh; false: hạ xuống. quiet: không báo (Tự động). Trả về false nếu không làm được.
   function set(on, quiet = false) {
@@ -7,7 +8,7 @@ export function createFlight({ me, map, hud, pt, toast, sendMove, radius, cfg })
     if (on && !me.look?.weapon) { if (!quiet) toast('Cần cầm kiếm mới ngự kiếm phi hành được', 1600); return false; }
     if (on && pt.mp < 5) { if (!quiet) toast('Linh lực không đủ để ngự kiếm', 1400); return false; }
     if (!on && !map.canStand(me.x, me.y, radius)) { if (!quiet) toast('Không thể hạ xuống ở đây', 1400); return false; }
-    me.flying = on;
+    me.flying = on; sound(on ? 'sfx.bay' : 'sfx.ha-canh');
     hud.setToggle('bay', on ? 1 : 0);
     sendMove(me.flying);
     if (!quiet) toast(on ? 'Ngự khí phi hành' : 'Hạ xuống mặt đất', 1200);

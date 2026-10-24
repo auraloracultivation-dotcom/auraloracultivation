@@ -3,6 +3,7 @@
 // Hết đợt → đợt sau mạnh hơn; đợt 5 có tinh anh, đợt 10 có boss. Thua: chết / ra khỏi vòng / hết giờ đợt. Thưởng theo đợt đã qua.
 // Số liệu: data/build/bi-canh.json. Quái chết vẫn đi qua onKill thường (tu vi, rơi đồ, Thần Phù…).
 import { wrapDelta } from '../map/index.js';
+import { sound, music } from '../audio/index.js';
 
 // c: { def, mdef, mobs, map, me, progress, life, wallet, cards, cardDef, dv, pbItem, toast, play, say, dead(), stageId() }
 // Nhiều bí cảnh (chủ dự án 23/10 23h28): bi-canh.json là Huyết Sát; extra[] thêm bí cảnh khác, thiếu trường nào lấy theo Huyết Sát.
@@ -40,7 +41,7 @@ export function createBiCanh(c) {
     t.n++; progress.state[K] = t; progress.changed();
     run = { x: me.x, y: me.y, wave: 0, left: 0, mobs: new Set(), pause: 1.2 };
     c.play('v.tran-phap', me.x, me.y + 8, def.radius_px * 0.9, { ground: true });
-    c.toast(`${def.name}: giữ vững trong vòng cấm chế, vượt ${def.waves} đợt!`, 2600);
+    music('bgm.chien'); c.toast(`${def.name}: giữ vững trong vòng cấm chế, vượt ${def.waves} đợt!`, 2600);
     return null;
   }
 
@@ -56,7 +57,7 @@ export function createBiCanh(c) {
     if (w === def.elite_wave) { const e = pool('elite'); for (let k = 0; k < 2; k++) put(e.arr[k % e.arr.length], e.stage, k, 2); }
     if (w === def.boss_wave) { const b = pool('boss'); put(b.arr[0], b.stage, 0, 1); }
     run.left = def.wave_time_s;
-    c.toast(`Đợt ${w}/${def.waves}${w === def.boss_wave ? ' — BOSS!' : w === def.elite_wave ? ' — tinh anh' : ''}`, 1600);
+    sound('sfx.bc.dot'); c.toast(`Đợt ${w}/${def.waves}${w === def.boss_wave ? ' — BOSS!' : w === def.elite_wave ? ' — tinh anh' : ''}`, 1600);
   }
 
   function end(win, why) {
@@ -82,6 +83,7 @@ export function createBiCanh(c) {
       if (cleared >= R.set_item_at && !R.thien_item && !R.thien_skill) c.dv.onKill({ void: true, def: {}, src: 'bicanh' }, (t) => got.push(/Thiên/.test(t) ? 'đồ Thiên hệ' : /Linh thạch/.test(t) ? 'Linh thạch (đã đủ bộ)' : 'đồ ngũ hành'));
       progress.changed();
     }
+    music('bgm.tuchan'); sound(win ? 'sfx.bc.thang' : 'sfx.bc.thua');
     c.toast(`${win ? 'Vượt' : why} ${def.name} — qua ${cleared}/${def.waves} đợt${got.length ? `. Thưởng: ${got.join(', ')}` : ''}`, 5000);
   }
 
