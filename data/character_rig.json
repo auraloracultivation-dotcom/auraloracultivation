@@ -83,9 +83,10 @@
   "size_mul_ui": 0.45
  },
  "slash_fx": {
-  "_ghi_chu": "Chủ dự án 25/10/2026: vệt chém vẽ tay kiểu My Heroes (GPT vẽ, tools/fx_slash.py). Tâm vệt đặt ở chuôi kiếm, dời dx/dy theo chiều dài kiếm L; cao 2·r·L. t0..t1: phần của đòn mà vệt chạy đủ 6 khung. follow: vệt quay theo kiếm (Xoay). rot: xoay ảnh (độ). Chọc không dùng (giữ vệt nét thẳng).",
+  "_ghi_chu": "Chủ dự án 25/10/2026: hiệu ứng vẽ tay kiểu My Heroes (GPT vẽ, tools/fx_slash.py → s.<fx>.<hệ>). Tâm ở chuôi kiếm, dời dx/dy theo chiều dài kiếm L, cao 2·r·L. t0..t1: phần của đòn mà hiệu ứng chạy đủ 6 khung. follow: quay theo kiếm; along: xoay theo hướng kiếm (cú đâm); body: tâm ở thân, dy theo CH (vòng Xoay ôm người). Nổ khi trúng đòn thường: s.no.<hệ> (src/game/gameplay.js).",
   "moves": {
    "chem": {
+    "fx": "chem",
     "dx": 0.3,
     "dy": -0.08,
     "r": 0.42,
@@ -94,15 +95,25 @@
     "t1": 0.72,
     "a": 0.9
    },
-   "xoay": {
-    "dx": 0.3,
+   "choc": {
+    "fx": "choc",
+    "along": true,
+    "dx": 0.7,
     "dy": 0,
-    "r": 0.4,
-    "rot": -60,
-    "t0": 0.1,
-    "t1": 0.86,
-    "follow": true,
-    "a": 0.85
+    "r": 0.24,
+    "t0": 0.22,
+    "t1": 0.8,
+    "a": 0.95
+   },
+   "xoay": {
+    "fx": "xoay",
+    "body": true,
+    "dx": 0,
+    "dy": -0.32,
+    "r": 0.36,
+    "t0": 0.06,
+    "t1": 0.9,
+    "a": 0.9
    }
   }
  }
