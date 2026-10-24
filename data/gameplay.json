@@ -1216,7 +1216,7 @@
    "kind": "heal",
    "unlock": "lk8",
    "mp": 20,
-   "cd_s": 25,
+   "cd_s": 12,
    "heal": 0.25,
    "fx": "v.moc-lien",
    "fx_h": 40,
@@ -1224,10 +1224,13 @@
     "v.moc-lien",
     1
    ],
-   "desc": "Sen xanh nở dưới chân, hồi {heal%} khí huyết",
+   "desc": "Sen xanh nở dưới chân: hồi {heal%} khí huyết, rễ sen quật quái quanh mình (bán kính {radius_px})",
    "he": "Mộc",
    "medal": "assets/ui/skills/m/moc-lien.png",
-   "icon_url": "assets/ui/skills/moc-lien.png"
+   "icon_url": "assets/ui/skills/moc-lien.png",
+   "mul": 1.4,
+   "radius_px": 90,
+   "_can_bang_25_10": "Chủ dự án 25/10: mỗi hệ chỉ còn 2 kỹ năng — Mộc cả 2 đều hồi máu nên không đánh được; thêm sát thương quanh mình kiểu thầy thuốc My Heroes."
   },
   "phong-nhan": {
    "name": "Phong Nhận Trảm",
@@ -1422,15 +1425,18 @@
    "kind": "heal",
    "unlock": "tc_trung",
    "mp": 26,
-   "cd_s": 22,
+   "cd_s": 16,
    "heal": 0.3,
    "pets": true,
    "fx": "k.van-moc",
    "fx_h": 56,
-   "desc": "Hồi {heal%} khí huyết cho mình và linh thú (Mộc)",
+   "desc": "Cây thần mọc lên: hồi {heal%} khí huyết cho mình và linh thú, cành lá quật quái quanh mình (bán kính {radius_px})",
    "icon_url": "assets/ui/skills/van-moc.png",
    "he": "Mộc",
-   "medal": "assets/ui/skills/m/van-moc.png"
+   "medal": "assets/ui/skills/m/van-moc.png",
+   "mul": 2.2,
+   "radius_px": 130,
+   "_can_bang_25_10": "Như Mộc Liên: thêm sát thương vùng."
   },
   "dia-liet": {
    "name": "Địa Liệt Thiên Băng",

@@ -109,6 +109,7 @@ export function createSkills(c) {
       play(s.fx, me.x, me.y + 4, s.fx_h, { ground: true });
       if (s.pets) c.healPets?.(s.heal);
       c.heal(c.maxHp() * s.heal);
+      if (s.mul && s.radius_px) hitAround(me.x, me.y, s); // Mộc: hồi máu kèm quật quái quanh mình (25/10/2026)
     } else if (s.kind === 'buff') {
       c.buffs[s.buff] = { mul: s.buff_mul, until: now + s.last_s }; c.recompute();
       play(s.fx, me.x, me.y - 14, s.fx_h);
@@ -123,7 +124,7 @@ export function createSkills(c) {
     for (const id of ids) {
       const s = S[id];
       if (!s || SKIP.has(id)) continue;
-      if (s.kind === 'heal' ? hpFrac > 0.55 : s.kind === 'buff' ? !c.target(120) : !c.target(s.range_px || s.radius_px || 120)) continue;
+      if (s.kind === 'heal' ? hpFrac > 0.55 && !(s.mul && c.target(s.radius_px || 100)) : s.kind === 'buff' ? !c.target(120) : !c.target(s.range_px || s.radius_px || 120)) continue;
       if ((c.cds[id] || 0) > c.now() || pt.mp < (s.mp || 0) * (c.mods().mp_mul ?? 1) || c.bar.blocked(id)) continue;
       if (cast(id, true)) return id;
     }
